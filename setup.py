@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2021-09-15 23:34:25 (ywatanabe)"
+# Time-stamp: "2021-09-16 01:01:50 (ywatanabe)"
 
-from setuptools import setup
+from setuptools import setup, find_packages
+
 from codecs import open
 from os import path
 import re
@@ -10,6 +11,9 @@ import re
 
 ################################################################################
 PACKAGE_NAME = "mngs"
+# PACKAGE_DATA = {'data': ['']}
+# DATA_FILES = [('my_data, [data/data_file']),]
+PACKAGES = find_packages(where="src")
 DESCRIPTION = (
     "For lazy python users (monogusa people in Japanse), especially in ML/DSP fields"
 )
@@ -37,7 +41,7 @@ def _test_requirements():
     ]
 
 
-with open(path.join(root_dir, PACKAGE_NAME, "__init__.py")) as f:
+with open(path.join(root_dir, "src", PACKAGE_NAME, "__init__.py")) as f:
     init_text = f.read()
     version = re.search(r"__version__\s*=\s*[\'\"](.+?)[\'\"]", init_text).group(1)
     license = re.search(r"__license__\s*=\s*[\'\"](.+?)[\'\"]", init_text).group(1)
@@ -57,8 +61,12 @@ with open("README.rst", encoding="utf-8") as f:
     long_description = f.read()
 
 setup(
+    package_dir={"": "src"},
     name=PACKAGE_NAME,
-    packages=[PACKAGE_NAME],
+    packages=PACKAGES,
+    # py_modules=PY_MODULES,
+    # package_data=PACKAGE_DATA,
+    # data_files=DATA_FILES,
     version=version,
     license=license,
     install_requires=_requirements(),
