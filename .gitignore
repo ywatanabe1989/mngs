@@ -11,19 +11,11 @@
 *flycheck*.py
 *.pth
 
-
-## octave
-octave-workspace
-
-
 ## for convenience
 *.old*
 *old*
 
 #################################################################33333
-
-
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
