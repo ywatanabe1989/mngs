@@ -1,3 +1,4 @@
+## Installation
 ``` bash
 $ pip install -y mngs
 ```
