@@ -57,6 +57,11 @@ def load(lpath, show=False):
         import pymatreader
 
         obj = pymatreader.read_mat(lpath)
+    # xml
+    if lpath.endswith("xml"):
+        from ._xml2dict import xml2dict
+
+        obj = xml2dict(lpath)
 
     if show:
         print("\nLoaded: {}\n".format(lpath))
@@ -76,3 +81,14 @@ def check_encoding(file_path):
     detector.close()
     enc = detector.result["encoding"]
     return enc
+
+
+def get_data_path_from_a_package(package_str, resource):
+    import importlib
+    import os
+    import sys
+
+    spec = importlib.util.find_spec(package_str)
+    data_dir = os.path.join(spec.origin.split("src")[0], "data")
+    resource_path = os.path.join(data_dir, resource)
+    return resource_path

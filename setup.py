@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2021-09-16 01:01:50 (ywatanabe)"
+# Time-stamp: "2021-09-16 01:59:45 (ywatanabe)"
 
 from setuptools import setup, find_packages
 
