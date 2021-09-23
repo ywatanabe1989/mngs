@@ -12,5 +12,6 @@ twine upload -r pypi dist/*
 
 # pip install --no-cache-dir --upgrade ./dist/mngs-*-py3-none-any.whl --force-reinstall
 
+pip install mngs --upgrade
 cd $dir_orig
 ## EOF
