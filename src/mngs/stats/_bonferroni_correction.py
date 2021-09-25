@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Time-stamp: "2021-09-25 15:16:57 (ylab)"
+# Time-stamp: "2021-09-25 15:39:51 (ylab)"
 
 import numpy as np
 import torch
@@ -7,6 +7,7 @@ import mngs
 
 
 def bonferroni_correction(pval, alpha=0.05):
+    # https://github.com/mne-tools/mne-python/blob/main/mne/stats/multi_comp.py
     """P-value correction with Bonferroni method.
 
     Parameters
@@ -68,4 +69,4 @@ if __name__ == "__main__":
 
     arr = pvals_corrected.astype(float)
     tor = pvals_corrected_torch.numpy().astype(float)
-    print([mngs.general.isclose(a, t) for a, t in zip(arr, tor)])
+    print(mngs.general.isclose(arr, tor))
