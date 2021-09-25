@@ -1,6 +1,5 @@
 GitPython
 PyYAML
-bisect
 catboost
 chardet
 h5py
@@ -13,5 +12,4 @@ scipy
 seaborn
 sklearn
 torch
-xml
-yaml
+xmltodict

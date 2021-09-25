@@ -1,6 +1,5 @@
 GitPython
 PyYAML
-bisect
 chardet
 h5py
 joblib
@@ -12,5 +11,4 @@ scipy
 seaborn
 sklearn
 torch
-xml
-yaml
+xmltodict
