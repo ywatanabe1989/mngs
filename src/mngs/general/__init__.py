@@ -15,6 +15,7 @@ from .misc import (
     squeeze_spaces,
     take_the_closest,
     fmt_size,
+    isclose,
 )
 from .pandas import col_to_last, col_to_top
 from .path import *
