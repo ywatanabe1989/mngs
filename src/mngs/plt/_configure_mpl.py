@@ -12,8 +12,6 @@ def configure_mpl(
     tick_size="auto",
     tick_width="auto",
     hide_spines=False,
-    n_xticks="auto",
-    n_yticks="auto",
 ):
     """
     Configures matplotlib for often used format.
@@ -79,12 +77,12 @@ def configure_mpl(
     """
     ## scientific notation
     g = lambda x,pos : "${}$".format(f._formatSciNotation('%1.10e' % x))
-    ax.xaxis.set_major_formatter(mticker.FuncFormatter(g))        
+    ax.xaxis.set_major_formatter(mticker.FuncFormatter(g))
     ax.yaxis.set_major_formatter(mticker.FuncFormatter(g))
 
     # plt.ticklabel_format(axis="both", style="plain", scilimits=(-3, 3))
 
-    
+
     """
 
     ## Summarize the props as updater_dict
@@ -118,7 +116,7 @@ def configure_mpl(
     """
     ## As the example below, number of ticks can be set for each "ax" object.
     max_n_xticks = 4
-    max_n_yticks = 4    
+    max_n_yticks = 4
     for ax in axes:
         ax.xaxis.set_major_locator(matplotlib.ticker.MaxNLocator(max_n_xticks))
         ax.yaxis.set_major_locator(matplotlib.ticker.MaxNLocator(max_n_yticks))
