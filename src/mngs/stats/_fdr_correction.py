@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-# Time-stamp: "2021-09-25 10:05:40 (ylab)"
+# Time-stamp: "2021-09-25 10:56:51 (ylab)"
+
+import numpy as np
+import torch
+import mngs
 
 
 def fdr_correction(pvals, alpha=0.05, method="indep"):
@@ -222,19 +226,10 @@ if __name__ == "__main__":
 
     reject, pvals_corrected = fdr_correction(pvals, alpha=0.05, method="indep")
 
-    # out = fdr_correction_torch(pvals, alpha=0.05, method="indep")
-
-    # goal
     reject_torch, pvals_corrected_torch = fdr_correction_torch(
         pvals, alpha=0.05, method="indep"
     )
 
-    import math
-
-    print((reject == reject_torch.numpy()).all())
-
     arr = pvals_corrected.astype(float)
     tor = pvals_corrected_torch.numpy().astype(float)
-    print([math.isclose(a, t) for a, t in zip(arr, tor)])
-
-    isclose(arr, tor)
+    print([mngs.isclose(a, t) for a, t in zip(arr, tor)])
