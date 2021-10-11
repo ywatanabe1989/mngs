@@ -6,6 +6,7 @@ from .latex import add_hat_in_the_latex_style, to_the_latex_style
 from .load import get_data_path_from_a_package, load
 from .mat2py import *
 from .misc import (
+    decapitalize,
     connect_nums,
     connect_strs,
     does_exist,
