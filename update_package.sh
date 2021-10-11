@@ -1,10 +1,10 @@
 #!/bin/bash
 
-dir_orig=`pwd`
-mngs_root='/mnt/md0/mngs/'
-cd $mngs_root
+# dir_orig=`pwd`
+# mngs_root='/mnt/md0/mngs/'
+# cd $mngs_root
 rm -rf build dist/* src/mngs.egg-info
-pip uninstall mngs -y
+# pip uninstall mngs -y
 # pip install -e mngs
 python3 setup.py sdist bdist_wheel
 # twine upload -r testpypi dist/*
@@ -13,5 +13,5 @@ twine upload -r pypi dist/*
 # pip install --no-cache-dir --upgrade ./dist/mngs-*-py3-none-any.whl --force-reinstall
 
 pip install mngs --upgrade
-cd $dir_orig
+# cd $dir_orig
 ## EOF
