@@ -3,18 +3,20 @@
 from .cuda_collect_env import main as cuda_collect_env
 from .debug import paste, reload
 from .latex import add_hat_in_the_latex_style, to_the_latex_style
-from .load import load, get_data_path_from_a_package
+from .load import get_data_path_from_a_package, load
 from .mat2py import *
 from .misc import (
     connect_nums,
     connect_strs,
     does_exist,
+    fmt_size,
     grep,
+    isclose,
     listed_dict,
     pop_keys,
+    search,
     squeeze_spaces,
     take_the_closest,
-    fmt_size,
 )
 from .pandas import col_to_last, col_to_top
 from .path import *

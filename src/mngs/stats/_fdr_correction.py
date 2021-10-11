@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Time-stamp: "2021-09-25 10:56:51 (ylab)"
+# Time-stamp: "2021-09-25 15:39:38 (ylab)"
 
 import numpy as np
 import torch
@@ -167,8 +167,7 @@ def fdr_correction_torch(pvals, alpha=0.05, method="indep"):
     ----------
     .. footbibliography::
     """
-    # pvals = np.asarray(pvals)
-    pvals = torch.tensor(pvals)
+
     shape_init = pvals.shape
     pvals = pvals.ravel()
 
@@ -179,14 +178,15 @@ def fdr_correction_torch(pvals, alpha=0.05, method="indep"):
     if method in ["i", "indep", "p", "poscorr"]:
         ecdffactor = _ecdf_torch(pvals_sorted)
     elif method in ["n", "negcorr"]:
-        # cm = np.sum(1.0 / np.arange(1, len(pvals_sorted) + 1))
-        cm = torch.sum(1.0 / torch.arange(1, len(pvals_sorted) + 1))  # fixme
+        cm = torch.sum(1.0 / torch.arange(1, len(pvals_sorted) + 1))
         ecdffactor = _ecdf_torch(pvals_sorted) / cm
     else:
         raise ValueError("Method should be 'indep' and 'negcorr'")
 
-    ## koko
+    ecdffactor = ecdffactor.type_as(pvals_sorted)
+
     reject = pvals_sorted < (ecdffactor * alpha)
+
     if reject.any():
         rejectmax = max(torch.nonzero(reject)[0])
     else:
@@ -194,20 +194,6 @@ def fdr_correction_torch(pvals, alpha=0.05, method="indep"):
     reject[:rejectmax] = True
 
     pvals_corrected_raw = pvals_sorted / ecdffactor
-
-    pvals_corrected = np.minimum.accumulate(pvals_corrected_raw.numpy()[::-1])[::-1]
-
-    # pvals_corrected_raw.numpy()
-    # array([0.06 , 0.045, 0.05 ], dtype=float32)
-
-    # pvals_corrected_raw.numpy()[::-1]
-    # array([0.05 , 0.045, 0.06 ], dtype=float32)
-    # pvals_corrected_raw_flipped
-
-    # np.minimum.accumulate(pvals_corrected_raw.numpy()[::-1])[::-1]
-    # array([0.045, 0.045, 0.05 ], dtype=float32)
-
-    # pvals_corrected_raw # tensor([0.0600, 0.0450, 0.0500])
     pvals_corrected_raw_flipped = pvals_corrected_raw.flip(0)
     pvals_cum_min = torch.zeros_like(pvals_corrected_raw_flipped)
     for ii in range(len(pvals_cum_min)):
@@ -232,4 +218,4 @@ if __name__ == "__main__":
 
     arr = pvals_corrected.astype(float)
     tor = pvals_corrected_torch.numpy().astype(float)
-    print([mngs.isclose(a, t) for a, t in zip(arr, tor)])
+    print(mngs.general.isclose(arr, tor))

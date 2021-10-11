@@ -55,6 +55,39 @@ def squeeze_spaces(string, pattern=" +", repl=" "):
     return re.sub(pattern, repl, string)
 
 
+def search(patterns, strings):
+    """
+    Example:
+        patterns = ['orange', 'banana']
+        strings = ['apple', 'orange', 'apple', 'apple_juice', 'banana', 'orange_juice']
+        print(search(patterns, strings))
+        # ([1, 4, 5], ['orange', 'banana', 'orange_juice'])
+
+        patterns = 'orange'
+        strings = ['apple', 'orange', 'apple', 'apple_juice', 'banana', 'orange_juice']
+        print(search(patterns, strings))
+        # ([1, 5], ['orange', 'orange_juice'])
+    """
+    ## For single string objects
+    if not isinstance(strings, (list, tuple)):
+        strings = [strings]
+    if not isinstance(patterns, (list, tuple)):
+        patterns = [patterns]
+
+    ## Main
+    indi_matched = []
+    for pattern in patterns:
+        for i_str, string in enumerate(strings):
+            m = re.search(pattern, string)
+            if m is not None:
+                indi_matched.append(i_str)
+
+    ## Sorts the indices according to the original strings
+    indi_matched = natsort.natsorted(indi_matched)
+    keys_matched = list(np.array(strings)[indi_matched])
+    return indi_matched, keys_matched
+
+
 def grep(str_list, search_key):
     """
     Example:
