@@ -7,12 +7,20 @@ from bisect import bisect_left, bisect_right
 from collections import defaultdict
 
 import numpy as np
+from natsort import natsorted
 import torch
+import pandas as pd
 
 
 ################################################################################
 ## strings
 ################################################################################
+def decapitalize(s):
+    if not s:  # check that s is not empty string
+        return s
+    return s[0].lower() + s[1:]
+
+
 def connect_strs(strs, filler="_"):  # connect_nums also works as connect_strs
     """
     Example:
@@ -69,9 +77,9 @@ def search(patterns, strings):
         # ([1, 5], ['orange', 'orange_juice'])
     """
     ## For single string objects
-    if not isinstance(strings, (list, tuple)):
+    if not isinstance(strings, (list, tuple, pd.core.indexes.base.Index)):
         strings = [strings]
-    if not isinstance(patterns, (list, tuple)):
+    if not isinstance(patterns, (list, tuple, pd.core.indexes.base.Index)):
         patterns = [patterns]
 
     ## Main
@@ -83,7 +91,7 @@ def search(patterns, strings):
                 indi_matched.append(i_str)
 
     ## Sorts the indices according to the original strings
-    indi_matched = natsort.natsorted(indi_matched)
+    indi_matched = natsorted(indi_matched)
     keys_matched = list(np.array(strings)[indi_matched])
     return indi_matched, keys_matched
 
