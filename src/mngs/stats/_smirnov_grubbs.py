@@ -2,8 +2,16 @@ import numpy as np
 from scipy import stats
 
 
-def smirnov_grubbs(data, alpha=0.05):
-    in_data, out_data = list(data), []
+def smirnov_grubbs(data_arr, alpha=0.05):
+    """
+    Find outliers based on Smirnov-Grubbs test.
+
+    Arguments:
+
+    Returns | indices of outliers
+    """
+    data_1D_sorted = sorted(np.array(data_arr).reshape(-1))
+    in_data, out_data = list(data_1D_sorted), []
     while True:
         n = len(in_data)
         t = stats.t.isf(q=(alpha / n) / 2, df=n - 2)
@@ -20,4 +28,17 @@ def smirnov_grubbs(data, alpha=0.05):
         if tau_far < tau:
             break
         out_data.append(in_data.pop(i_far))
-    return (np.array(in_data), np.array(out_data))
+
+    if len(out_data) == 0:
+        return None
+
+    else:
+        out_data_uq = np.unique(out_data)
+        indi_outliers = np.vstack(
+            [
+                np.vstack(np.where(data_arr == out_data_uq[i_out])).T
+                for i_out in range(len(out_data_uq))
+            ]
+        )
+
+        return np.array(indi_outliers).squeeze()
