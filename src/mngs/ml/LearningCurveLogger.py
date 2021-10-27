@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
+import re
+from collections import defaultdict
 from pprint import pprint
 
 import matplotlib
-import pandas as pd
-import numpy as np
 import mngs
-from collections import defaultdict
-import re
+import pandas as pd
 
 
 class LearningCurveLogger(object):
@@ -58,7 +57,7 @@ class LearningCurveLogger(object):
             return renamed
 
         if isinstance(keys, str):
-            keys = list(keys)
+            keys = [keys]
 
         out = []
         for key in keys:
@@ -67,7 +66,7 @@ class LearningCurveLogger(object):
             else:
                 out.append(key)
 
-        if len(out) == 0:
+        if len(out) == 1:
             out = out[0]
 
         return out
@@ -75,8 +74,7 @@ class LearningCurveLogger(object):
     def plot_learning_curves(
         self,
         plt,
-        i_fold=None,
-        window_size_sec=None,
+        title=None,
         max_n_ticks=4,
         linewidth=3,
         scattersize=150,
@@ -100,7 +98,6 @@ class LearningCurveLogger(object):
         ########################################
         fig, axes = plt.subplots(len(keys_to_plot), 1, sharex=True, sharey=False)
         axes[-1].set_xlabel("Iteration#")
-        title = f"fold#{i_fold}; MAX EPOCHS = {max(self.logged_dict['Training']['i_epoch'])+1}; WINDOW SIZE = {window_size_sec} [sec]"
         fig.text(0.5, 0.95, title, ha="center")
 
         for i_plt, plt_k in enumerate(keys_to_plot):
@@ -174,10 +171,10 @@ class LearningCurveLogger(object):
 
         df = df.set_index(pd.Series(self._rename_if_key_to_plot(list(df.index))))
 
-        print(f"\n----------------------------------------\n")
+        print("\n----------------------------------------\n")
         print(f"\n{step}:\n")
         pprint(df)
-        print(f"\n----------------------------------------\n")
+        print("\n----------------------------------------\n")
 
     def _finds_keys_to_plot(self):
         ########################################
@@ -205,18 +202,23 @@ class LearningCurveLogger(object):
 
 
 if __name__ == "__main__":
-    from torch.utils.data import DataLoader, TensorDataset
-    from torchvision.datasets import MNIST
-    from torchvision import datasets
-    from torch.utils.data.dataset import Subset
+    import warnings
 
     import matplotlib.pyplot as plt
     import torch
-
-    # from scipy.special import softmax
     import torch.nn as nn
     from sklearn.metrics import balanced_accuracy_score
-    import warnings
+    from torch.utils.data import DataLoader, TensorDataset
+    from torch.utils.data.dataset import Subset
+    from torchvision import datasets
+
+    import sys
+
+    ################################################################################
+    ## Sets tee
+    ################################################################################
+    sdir = mngs.general.path.mk_spath("")  # "/tmp/sdir/"
+    sys.stdout, sys.stderr = mngs.general.tee(sys, sdir)
 
     ################################################################################
     ## NN
@@ -293,7 +295,6 @@ if __name__ == "__main__":
     model = Perceptron()
     loss_func = nn.CrossEntropyLoss()
     optimizer = torch.optim.SGD(model.parameters(), lr=1e-3)
-    # sigmoid = nn.Sigmoid()
     softmax = nn.Softmax(dim=-1)
 
     ################################################################################
@@ -330,6 +331,7 @@ if __name__ == "__main__":
                 "i_global": i_global,
             }
             lc_logger(dict_to_log, step)
+
         lc_logger.print_learning_curves_in_digits(step)
 
         step = "Training"
@@ -400,9 +402,6 @@ if __name__ == "__main__":
     #     tick_width=0.2,
     # )
 
-    fig = lc_logger.plot_learning_curves(
-        plt,
-        i_fold=i_fold,
-        window_size_sec=1024,
-    )
-    fig.show()
+    fig = lc_logger.plot_learning_curves(plt, title=f"fold#{i_fold}")
+    # fig.show()
+    mngs.general.save(fig, sdir + f"fold#{i_fold}.png")
