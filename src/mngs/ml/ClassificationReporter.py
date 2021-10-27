@@ -353,7 +353,7 @@ class ClassificationReporter(object):
             title = f"Test fold#{i_fold}"
             fig_conf_mat_fold = __plot_conf_mat(plt, cm, title)
             mngs.general.save(
-                fig_conf_mat_fold, self.sdir + f"conf_mat/fold#{i_fold}.png"
+                fig_conf_mat_fold, self.sdir + f"conf_mat_figs/fold#{i_fold}.png"
             )
             plt.close()
 
@@ -364,7 +364,7 @@ class ClassificationReporter(object):
         fig_conf_mat_overall_sum = __plot_conf_mat(plt, conf_mat_overall_sum, title)
         mngs.general.save(
             fig_conf_mat_overall_sum,
-            self.sdir + f"conf_mat/k-fold_cv_overall-sum.png",
+            self.sdir + f"conf_mat_figs/k-fold_cv_overall-sum.png",
         )
         plt.close()
 
@@ -385,6 +385,17 @@ if __name__ == "__main__":
     from sklearn.datasets import load_digits
     from sklearn.model_selection import StratifiedKFold
 
+    import sys
+
+    ################################################################################
+    ## Sets tee
+    ################################################################################
+    sdir = mngs.general.path.mk_spath("")  # "/tmp/sdir/"
+    sys.stdout, sys.stderr = mngs.general.tee(sys, sdir)
+
+    ################################################################################
+    ## Fixes seeds
+    ################################################################################
     mngs.general.fix_seeds(np=np)
 
     ## Loads
@@ -392,14 +403,8 @@ if __name__ == "__main__":
     X, T = mnist.data, mnist.target
     labels = mnist.target_names.astype(str)
 
-    ## Make save dir
-    # sdir =
-    sdir = mngs.general.path.mk_spath("")  # "/tmp/sdir/"
-    print(sdir)
-
-    skf = StratifiedKFold(n_splits=5, shuffle=True)
-
     ## Main
+    skf = StratifiedKFold(n_splits=5, shuffle=True)
     reporter = ClassificationReporter(sdir)
     for i_fold, (indi_tra, indi_tes) in enumerate(skf.split(X, T)):
         X_tra, T_tra = X[indi_tra], T[indi_tra]
