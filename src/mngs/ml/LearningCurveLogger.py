@@ -2,204 +2,407 @@
 
 from pprint import pprint
 
-# import matplotlib.pyplot as plt
 import matplotlib
 import pandas as pd
+import numpy as np
 import mngs
+from collections import defaultdict
+import re
 
 
 class LearningCurveLogger(object):
     def __init__(
         self,
     ):
-        self.steps_str = ("Training", "Test")
-        self.logged_dict = mngs.general.listed_dict(self.steps_str)
-        for k in self.steps_str:
-            self.logged_dict[k] = {}
+        self.logged_dict = defaultdict(dict)
 
-    def __call__(self, log_dict, step="Training"):
-        for k in log_dict.keys():
+    def __call__(self, dict_to_log, step):
+        """
+        dict_to_log | str
+            Example:
+                dict_to_log = {
+                    "loss_plot": float(loss),
+                    "balanced_ACC_plot": float(bACC),
+                    "pred_proba": pred_proba.detach().cpu().numpy(),
+                    "gt_label": T.cpu().numpy(),
+                    "i_fold": i_fold,
+                    "i_epoch": i_epoch,
+                    "i_global": i_global,
+                }
+
+        step | str
+            "Training", "Validation", or "Test"
+        """
+        assert step in ["Training", "Validation", "Test"]
+
+        for k in dict_to_log.keys():
             try:
-                self.logged_dict[step][k].append(log_dict[k])
+                self.logged_dict[step][k].append(dict_to_log[k])
             except:
-                self.logged_dict[step][k] = []
-                self.logged_dict[step][k].append(log_dict[k])
+                self.logged_dict[step].update({k: []})
+                self.logged_dict[step][k].append(dict_to_log[k])
 
-    def to_dfs(self, steps_str=["Training", "Test"]):  # fixme
-        self.dfs = {}
-        self.dfs_pivot = {}
-        for step in steps_str:
-            logged_dict = self.logged_dict[step]
-            length = len(logged_dict["i_epoch"])
-            df = pd.DataFrame(
-                {
-                    "step": [step for _ in range(length)],
-                    "i_mouse_test": logged_dict["i_mouse_test"],
-                    "i_epoch": logged_dict["i_epoch"],
-                    "i_global": logged_dict["i_global"],
-                    "loss": logged_dict["loss"],
-                    "Balanced ACC": logged_dict["balanced_ACC"],
-                    "pred_proba": [logged_dict["pred_proba"][i] for i in range(length)],
-                    "gt_label": [logged_dict["gt_label"][i] for i in range(length)],
-                }
-            )  # fixme
+    @staticmethod
+    def _rename_if_key_to_plot(keys):
+        def _rename_key_to_plot(key_to_plot):
+            renamed = key_to_plot[:-5]
+            renamed = renamed.replace("_", " ")
+            capitalized = []
+            for s in renamed.split(" "):
+                if not re.search("[A-Z]", s[0]):
+                    capitalized.append(s.capitalize())
+                else:
+                    capitalized.append(s)
 
-            self.dfs[step] = df
+            renamed = mngs.general.connect_strs(capitalized, filler=" ")
+            return renamed
 
-            # pivot version to plot
-            self.dfs_pivot[step] = (
-                self.dfs[step][
-                    [
-                        "i_global",
-                        "Balanced ACC",
-                        "loss",
-                    ]
-                ]
-                .pivot_table(columns=["i_global"], aggfunc="mean")
-                .T
-            )
+        if isinstance(keys, str):
+            keys = list(keys)
 
-    def print_learning_curves_in_digits(self, step="Training"):
-        print(step)
+        out = []
+        for key in keys:
+            if key[-5:] == "_plot":
+                out.append(_rename_key_to_plot(key))
+            else:
+                out.append(key)
 
-        try:
-            df = pd.DataFrame(
-                {
-                    "i_epoch": self.logged_dict[step]["i_epoch"],
-                    "Balanced ACC": self.logged_dict[step]["balanced_ACC"],
-                }
-            ).pivot_table(columns=["i_epoch"], aggfunc="mean")
-            pprint(df)
-        except:
-            pass
+        if len(out) == 0:
+            out = out[0]
 
-        print()
+        return out
 
     def plot_learning_curves(
         self,
         plt,
-        i_mouse_test=None,
-        max_epochs=None,
+        i_fold=None,
         window_size_sec=None,
         max_n_ticks=4,
+        linewidth=3,
+        scattersize=150,
     ):
 
-        self.to_dfs()
+        self._to_dfs()
 
-        ## Plot
-        fig, ax = plt.subplots(2, 1, sharex=True, sharey=False)
-        title = "fold#{}; MAX EPOCHS = {}; WINDOW SIZE = {} [sec]".format(
-            i_mouse_test, max_epochs, window_size_sec
-        )
-        fig.text(0.5, 0.95, title, ha="center")
-
-        keys_to_plot = ["loss", "Balanced ACC"]
-
+        ########################################
+        ## Parameters
+        ########################################
         COLOR_DICT = {
             "Training": "blue",
-            "Test": "green",
+            "Validation": "green",
+            "Test": "red",
         }
 
+        keys_to_plot = self._finds_keys_to_plot()
+
+        ########################################
+        ## Plot
+        ########################################
+        fig, axes = plt.subplots(len(keys_to_plot), 1, sharex=True, sharey=False)
+        axes[-1].set_xlabel("Iteration#")
+        title = f"fold#{i_fold}; MAX EPOCHS = {max(self.logged_dict['Training']['i_epoch'])+1}; WINDOW SIZE = {window_size_sec} [sec]"
+        fig.text(0.5, 0.95, title, ha="center")
+
         for i_plt, plt_k in enumerate(keys_to_plot):
+            ax = axes[i_plt]
+            ax.set_ylabel(self._rename_if_key_to_plot(plt_k))
+            ax.xaxis.set_major_locator(matplotlib.ticker.MaxNLocator(max_n_ticks))
+            ax.yaxis.set_major_locator(matplotlib.ticker.MaxNLocator(max_n_ticks))
+
+            if re.search("[aA][cC][cC]", plt_k):  # acc, ylim, yticks
+                ax.set_ylim(0, 1)
+                ax.set_yticks([0, 0.5, 1.0])
+
             for step_k in self.dfs_pivot.keys():
+
                 if step_k == "Training":  # line
-                    ax[i_plt].plot(
+                    ax.plot(
                         self.dfs_pivot[step_k].index,
                         self.dfs_pivot[step_k][plt_k],
                         label=step_k,
-                        color=COLOR_DICT[step_k],
-                        linewidth=1,
-                        # linewidth=3,
+                        color=mngs.plt.colors.to_RGBA(COLOR_DICT[step_k], alpha=0.9),
+                        linewidth=linewidth,
+                    )
+                    ax.legend()
+
+                    ## Epoch starts ponts
+                    epoch_starts = abs(
+                        self.dfs_pivot[step_k]["i_epoch"]
+                        - self.dfs_pivot[step_k]["i_epoch"].shift(-1)
+                    )
+                    indi_global_epoch_starts = [0] + list(
+                        epoch_starts[epoch_starts == 1].index
                     )
 
-                if step_k == "Test":  # scatter
-                    ax[i_plt].scatter(
+                    for i_epoch, i_global_epoch_start in enumerate(
+                        indi_global_epoch_starts
+                    ):
+                        ax.axvline(
+                            x=i_global_epoch_start,
+                            ymin=ax.get_ylim()[0],
+                            ymax=ax.get_ylim()[1],
+                            linestyle="--",
+                            color=mngs.plt.colors.to_RGBA("gray", alpha=0.5),
+                        )
+                        ax.text(
+                            i_global_epoch_start,
+                            ax.get_ylim()[1] * 1.0,
+                            f"epoch#{i_epoch}",
+                        )
+
+                if (step_k == "Validation") or (step_k == "Test"):  # scatter
+                    ax.scatter(
                         self.dfs_pivot[step_k].index,
                         self.dfs_pivot[step_k][plt_k],
                         label=step_k,
-                        color=COLOR_DICT[step_k],
-                        # s=150,
-                        s=50,
+                        color=mngs.plt.colors.to_RGBA(COLOR_DICT[step_k], alpha=0.9),
+                        s=scattersize,
                         alpha=0.9,
                     )
-
-                if "Balanced ACC" in plt_k:
-                    ax[i_plt].set_ylim(0, 1)
-
-        ax[0].legend()
-        ax[1].legend()
-
-        ax[1].set_xlabel("Iteration#")
-
-        ax[0].set_ylabel("Loss")
-        ax[1].set_ylabel("Balanced Accuracy")
-
-        for a in ax:
-            a.xaxis.set_major_locator(matplotlib.ticker.MaxNLocator(max_n_ticks))
-            a.yaxis.set_major_locator(matplotlib.ticker.MaxNLocator(max_n_ticks))
+                    ax.legend()
 
         return fig
 
+    def print_learning_curves_in_digits(self, step):
+
+        df = pd.DataFrame(
+            {
+                k: self.logged_dict[step][k]
+                for k in ["i_epoch"] + self._finds_keys_to_plot()
+            }
+        ).pivot_table(columns=["i_epoch"], aggfunc="mean")
+
+        df = df.set_index(pd.Series(self._rename_if_key_to_plot(list(df.index))))
+
+        print(f"\n----------------------------------------\n")
+        print(f"\n{step}:\n")
+        pprint(df)
+        print(f"\n----------------------------------------\n")
+
+    def _finds_keys_to_plot(self):
+        ########################################
+        ## finds keys to plot
+        ########################################
+        _steps_str = list(self.logged_dict.keys())
+        _, keys_to_plot = mngs.general.search(
+            # ["_plot"],
+            "_plot",
+            list(self.logged_dict[_steps_str[0]].keys()),
+        )
+        return keys_to_plot
+
+    def _to_dfs(self):
+        self.dfs = {}
+        self.dfs_pivot = {}
+        for step in self.logged_dict.keys():
+            df_s = mngs.general.pandas.force_dataframe(self.logged_dict[step])
+            df_s_pvt_on_i_global = df_s.pivot_table(
+                columns="i_global", aggfunc="mean"
+            ).T
+
+            self.dfs[step] = df_s
+            self.dfs_pivot[step] = df_s_pvt_on_i_global
+
 
 if __name__ == "__main__":
+    from torch.utils.data import DataLoader, TensorDataset
+    from torchvision.datasets import MNIST
+    from torchvision import datasets
+    from torch.utils.data.dataset import Subset
+
     import matplotlib.pyplot as plt
     import torch
-    from scipy.special import softmax
 
+    # from scipy.special import softmax
+    import torch.nn as nn
+    from sklearn.metrics import balanced_accuracy_score
+    import warnings
+
+    ################################################################################
+    ## NN
+    ################################################################################
+    class Perceptron(nn.Module):
+        def __init__(self):
+            super().__init__()
+            self.l1 = nn.Linear(28 * 28, 50)
+            self.l2 = nn.Linear(50, 10)
+
+        def forward(self, x):
+            x = x.view(-1, 28 * 28)
+            x = self.l1(x)
+            x = self.l2(x)
+            return x
+
+    ################################################################################
+    ## Prepaires demo data
+    ################################################################################
+    ## Downloads
+    _ds_tra_val = datasets.MNIST("/tmp/mnist", train=True, download=True)
+    _ds_tes = datasets.MNIST("/tmp/mnist", train=False, download=True)
+
+    ## Training-Validation splitting
+    n_samples = len(_ds_tra_val)  # n_samples is 60000
+    train_size = int(n_samples * 0.8)  # train_size is 48000
+
+    subset1_indices = list(range(0, train_size))  # [0,1,.....47999]
+    subset2_indices = list(range(train_size, n_samples))  # [48000,48001,.....59999]
+
+    _ds_tra = Subset(_ds_tra_val, subset1_indices)
+    _ds_val = Subset(_ds_tra_val, subset2_indices)
+
+    ## to tensors
+    ds_tra = TensorDataset(
+        _ds_tra.dataset.data.to(torch.float32),
+        _ds_tra.dataset.targets,
+    )
+    ds_val = TensorDataset(
+        _ds_val.dataset.data.to(torch.float32),
+        _ds_val.dataset.targets,
+    )
+    ds_tes = TensorDataset(
+        _ds_tes.data.to(torch.float32),
+        _ds_tes.targets,
+    )
+
+    ## to dataloaders
+    batch_size = 64
+    dl_tra = DataLoader(
+        dataset=ds_tra,
+        batch_size=batch_size,
+        shuffle=True,
+        drop_last=True,
+    )
+
+    dl_val = DataLoader(
+        dataset=ds_val,
+        batch_size=batch_size,
+        shuffle=False,
+        drop_last=True,
+    )
+
+    dl_tes = DataLoader(
+        dataset=ds_tes,
+        batch_size=batch_size,
+        shuffle=False,
+        drop_last=True,
+    )
+
+    ################################################################################
+    ## Preparation
+    ################################################################################
+    model = Perceptron()
+    loss_func = nn.CrossEntropyLoss()
+    optimizer = torch.optim.SGD(model.parameters(), lr=1e-3)
+    # sigmoid = nn.Sigmoid()
+    softmax = nn.Softmax(dim=-1)
+
+    ################################################################################
+    ## Main
+    ################################################################################
     lc_logger = LearningCurveLogger()
     i_global = 0
-    batch_size = 64
-    n_classes = 2
-    i_mouse_test = 0
+
+    n_classes = len(dl_tra.dataset.tensors[1].unique())
+    i_fold = 0
     max_epochs = 3
 
     for i_epoch in range(max_epochs):
-        step = "Training"
-        for i_batch in enumerate(range(1000)):
+        step = "Validation"
+        for i_batch, batch in enumerate(dl_val):
 
-            log_dict = {
-                "loss": float(np.random.rand(1)),
-                "balanced_ACC": float(np.random.rand(1)),
-                "pred_proba": softmax(np.random.rand(batch_size, n_classes), axis=-1),
-                "gt_label": np.random.randint(n_classes, size=batch_size),
-                "i_mouse_test": i_mouse_test,
+            X, T = batch
+            logits = model(X)
+            pred_proba = softmax(logits)
+            pred_class = pred_proba.argmax(dim=-1)
+            loss = loss_func(logits, T)
+
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", UserWarning)
+                bACC = balanced_accuracy_score(T, pred_class)
+
+            dict_to_log = {
+                "loss_plot": float(loss),
+                "balanced_ACC_plot": float(bACC),
+                "pred_proba": pred_proba.detach().cpu().numpy(),
+                "gt_label": T.cpu().numpy(),
+                "i_fold": i_fold,
                 "i_epoch": i_epoch,
                 "i_global": i_global,
             }
+            lc_logger(dict_to_log, step)
+        lc_logger.print_learning_curves_in_digits(step)
 
-            lc_logger(log_dict, step=step)
+        step = "Training"
+        for i_batch, batch in enumerate(dl_tra):
+            optimizer.zero_grad()
+
+            X, T = batch
+            logits = model(X)
+            pred_proba = softmax(logits)
+            pred_class = pred_proba.argmax(dim=-1)
+            loss = loss_func(logits, T)
+
+            loss.backward()
+            optimizer.step()
+
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", UserWarning)
+                bACC = balanced_accuracy_score(T, pred_class)
+
+            dict_to_log = {
+                "loss_plot": float(loss),
+                "balanced_ACC_plot": float(bACC),
+                "pred_proba": pred_proba.detach().cpu().numpy(),
+                "gt_label": T.cpu().numpy(),
+                "i_fold": i_fold,
+                "i_epoch": i_epoch,
+                "i_global": i_global,
+            }
+            lc_logger(dict_to_log, step)
 
             i_global += 1
 
-    step = "Test"
-    for i_batch in enumerate(range(1000)):
+        lc_logger.print_learning_curves_in_digits(step)
 
-        log_dict = {
-            "loss": float(np.random.rand(1)),
-            "balanced_ACC": float(np.random.rand(1)),
-            "pred_proba": softmax(np.random.rand(batch_size, n_classes), axis=-1),
-            "gt_label": np.random.randint(n_classes, size=batch_size),
-            "i_mouse_test": i_mouse_test,
+    step = "Test"
+    for i_batch, batch in enumerate(dl_tes):
+
+        X, T = batch
+        logits = model(X)
+        pred_proba = softmax(logits)
+        pred_class = pred_proba.argmax(dim=-1)
+        loss = loss_func(logits, T)
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", UserWarning)
+            bACC = balanced_accuracy_score(T, pred_class)
+
+        dict_to_log = {
+            "loss_plot": float(loss),
+            "balanced_ACC_plot": float(bACC),
+            "pred_proba": pred_proba.detach().cpu().numpy(),
+            "gt_label": T.cpu().numpy(),
+            "i_fold": i_fold,
             "i_epoch": i_epoch,
             "i_global": i_global,
         }
+        lc_logger(dict_to_log, step)
 
-        lc_logger(log_dict, step=step)
+    lc_logger.print_learning_curves_in_digits(step)
 
-    mngs.plt.configure_mpl(
-        plt,
-        figsize=(8.7, 10),
-        labelsize=8,
-        fontsize=7,
-        legendfontsize=6,
-        tick_size=0.8,
-        tick_width=0.2,
-    )
+    # mngs.plt.configure_mpl(
+    #     plt,
+    #     figsize=(8.7, 10),
+    #     labelsize=8,
+    #     fontsize=7,
+    #     legendfontsize=6,
+    #     tick_size=0.8,
+    #     tick_width=0.2,
+    # )
 
     fig = lc_logger.plot_learning_curves(
         plt,
-        i_mouse_test=i_mouse_test,
-        max_epochs=max_epochs,
+        i_fold=i_fold,
         window_size_sec=1024,
     )
     fig.show()
