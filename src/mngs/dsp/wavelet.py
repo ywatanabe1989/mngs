@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+from obspy.signal.tf_misfit import cwt
+
 
 def wavelet(wave, samp_rate, f_min=100, f_max=None, plot=False):
     dt = 1.0 / samp_rate

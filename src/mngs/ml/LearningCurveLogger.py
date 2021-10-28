@@ -160,7 +160,7 @@ class LearningCurveLogger(object):
 
         return fig
 
-    def print_learning_curves_in_digits(self, step):
+    def print(self, step):
 
         df = pd.DataFrame(
             {
@@ -332,7 +332,7 @@ if __name__ == "__main__":
             }
             lc_logger(dict_to_log, step)
 
-        lc_logger.print_learning_curves_in_digits(step)
+        lc_logger.print(step)
 
         step = "Training"
         for i_batch, batch in enumerate(dl_tra):
@@ -364,7 +364,7 @@ if __name__ == "__main__":
 
             i_global += 1
 
-        lc_logger.print_learning_curves_in_digits(step)
+        lc_logger.print(step)
 
     step = "Test"
     for i_batch, batch in enumerate(dl_tes):
@@ -390,7 +390,7 @@ if __name__ == "__main__":
         }
         lc_logger(dict_to_log, step)
 
-    lc_logger.print_learning_curves_in_digits(step)
+    lc_logger.print(step)
 
     # mngs.plt.configure_mpl(
     #     plt,

@@ -1,15 +1,2 @@
-GitPython
-PyYAML
-catboost
-chardet
-h5py
-joblib
-matplotlib
-numpy
-pandas
-pymatreader
-scipy
-seaborn
-sklearn
-torch
-xmltodict
+pytest
+pytest-cov

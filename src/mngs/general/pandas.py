@@ -54,3 +54,22 @@ class IDAllocator(object):
     def __call__(self, x):
         allocated = np.array(self.correspondence_table.loc[x]).squeeze()
         return allocated
+
+
+def force_dataframe(permutable_dict, filler=""):
+    ## Deep copy
+    permutable_dict = permutable_dict.copy()
+
+    ## Get the lengths
+    max_len = 0
+    for k, v in permutable_dict.items():
+        max_len = max(max_len, len(v))
+
+    ## Replace with 0 filled list
+    for k, v in permutable_dict.items():
+        permutable_dict[k] = list(v) + (max_len - len(v)) * [filler]
+
+    ## Puts them into a DataFrame
+    out_df = pd.DataFrame(permutable_dict)
+
+    return out_df

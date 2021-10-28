@@ -267,7 +267,26 @@ class ClassificationReporter(object):
 
     def save(
         self,
+        meta_dict=None,
     ):
+        """
+        1) Saves the content of self.folds_dict.
+        2) Plots the colormap of confusion matrices and saves them.
+        3) Saves passed meta_dict under self.sdir
+
+        Example:
+            meta_df_1 = pd.DataFrame(data=np.random.rand(3,3))
+            meta_dict_1 = {"a": 0}
+            meta_dict_2 = {"b": 0}
+            meta_dict = {"meta_1.csv": meta_df_1,
+                         "meta_1.yaml": meta_dict_1,
+                         "meta_2.yaml": meta_dict_1,
+            }
+
+        """
+        if meta_dict is not None:
+            for k, v in meta_dict.items():
+                mngs.general.save(v, self.sdir + k)
 
         for k in self.folds_dict.keys():
 
