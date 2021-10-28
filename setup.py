@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2021-09-16 01:59:45 (ywatanabe)"
+# Time-stamp: "2021-10-26 21:17:18 (ylab)"
 
-from setuptools import setup, find_packages
-
+import re
 from codecs import open
 from os import path
-import re
 
+from setuptools import find_packages, setup
 
 ################################################################################
 PACKAGE_NAME = "mngs"
@@ -57,7 +56,8 @@ assert author
 assert author_email
 assert url
 
-with open("README.rst", encoding="utf-8") as f:
+# with open("README.rst", encoding="utf-8") as f:
+with open("README.md", encoding="utf-8") as f:
     long_description = f.read()
 
 setup(
@@ -71,11 +71,13 @@ setup(
     license=license,
     install_requires=_requirements(),
     tests_require=_test_requirements(),
+    setup_requires=["pytest-runner"],
     author=author,
     author_email=author_email,
     url=url,
     description=DESCRIPTION,
     long_description=long_description,
+    long_description_content_type="text/markdown",
     keywords=KEYWORDS,
     classifiers=CLASSIFIERS,
     python_requires=">=3.0",

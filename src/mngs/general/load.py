@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 
-def load(lpath, show=False):
+def load(lpath, show=False, **kwargs):
     import pickle
 
     import h5py
@@ -12,7 +12,7 @@ def load(lpath, show=False):
 
     # csv
     if lpath.endswith(".csv"):
-        obj = pd.read_csv(lpath)
+        obj = pd.read_csv(lpath, **kwargs)
     # numpy
     if lpath.endswith(".npy"):
         obj = np.load(lpath)
