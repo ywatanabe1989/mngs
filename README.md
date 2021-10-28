@@ -20,8 +20,13 @@ xmltodict
 
 ## Installation
 ``` bash
-$ pip install -y mngs
+$ pip install mngs
+
+or
+
+$ pip install git+https://github.com/ywatanabe1989/mngs.git@develop
 ```
+
 
 
 ## mngs.general.save
