@@ -18,6 +18,7 @@ from .misc import (
     search,
     squeeze_spaces,
     take_the_closest,
+    is_later_or_equal,
 )
 from .pandas import col_to_last, col_to_top, force_dataframe
 from .path import *

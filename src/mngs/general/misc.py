@@ -245,3 +245,48 @@ def does_exist(suspicious_var_str):
         # True
     """
     return suspicious_var_str in globals()
+
+
+################################################################################
+## versioning
+################################################################################
+def is_later_or_equal(package, tgt_version, format="MAJOR.MINOR.PATCH"):
+    import numpy as np
+    import mngs
+
+    indi, matched = mngs.general.search(["MAJOR", "MINOR", "PATCH"], format.split("."))
+    imp_major, imp_minor, imp_patch = [
+        int(v) for v in np.array(package.__version__.split("."))[indi]
+    ]
+    tgt_major, tgt_minor, tgt_patch = [
+        int(v) for v in np.array(tgt_version.split("."))[indi]
+    ]
+
+    print(f"\ntarget_version: {tgt_version}")
+    print(f"imported_version: {imp_major}.{imp_minor}.{imp_patch}\n")
+
+    ## Mjorr
+    if imp_major > tgt_major:
+        return True
+
+    if imp_major < tgt_major:
+        return False
+
+    if imp_major == tgt_major:
+
+        ## Minor
+        if imp_minor > tgt_minor:
+            return True
+
+        if imp_minor < tgt_minor:
+            return False
+
+        if imp_minor == tgt_minor:
+
+            ## Patch
+            if imp_patch > tgt_patch:
+                return True
+            if imp_patch < tgt_patch:
+                return False
+            if imp_patch == tgt_patch:
+                return True
