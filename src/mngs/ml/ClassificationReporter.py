@@ -315,46 +315,33 @@ class ClassificationReporter(object):
                 print(f"{k} was not saved")
                 print(type(self.folds_dict[k]))
 
-        self._plot_and_save_conf_mats()
+        # self._plot_and_save_conf_mats()  # fixme
 
-    def _plot_and_save_conf_mats(self):
-        def __plot_conf_mat(plt, cm_df, title):
-            try:
-                assert np.all(cm_df.columns == cm_df.index)
-            except:
-                import ipdb
-
-                ipdb.set_trace()
-
+    def plot_and_save_conf_mats(
+        self, plt, extend_ratio=1.0, colorbar=True, sci_notation_kwargs=None
+    ):  # koko
+        def _plot_conf_mat(
+            plt, cm_df, title, extend_ratio=1.0, colorbar=True, sci_notation_kwargs=None
+        ):
             labels = list(cm_df.columns)
             fig_conf_mat = mngs.ml.plt.confusion_matrix(
                 plt,
                 cm_df,
                 labels=labels,
                 title=title,
-                extend_ratio=0.4,
-                colorbar=True,
+                extend_ratio=extend_ratio,
+                colorbar=colorbar,
             )
 
-            fig_conf_mat.axes[-1] = mngs.plt.ax_scientific_notation(
-                fig_conf_mat.axes[-1],
-                3,
-                fformat="%3.1f",
-                y=True,
-            )  # fixme
+            if sci_notation_kwargs is not None:
+                fig_conf_mat.axes[-1] = mngs.plt.ax_scientific_notation(
+                    fig_conf_mat.axes[-1], **sci_notation_kwargs
+                )
             return fig_conf_mat
 
-        ## fixme
-        mngs.plt.configure_mpl(
-            plt,
-            figsize=(8, 8),
-            labelsize=8,
-            fontsize=6,
-            legendfontsize=6,
-            tick_size=0.8,
-            tick_width=0.2,
-        )
-
+        ########################################
+        ## Prepares confmats dfs
+        ########################################
         ## Drops mean and std for the folds
         try:
             conf_mats = self.folds_dict["conf_mat"][-self.n_folds :]
@@ -366,33 +353,39 @@ class ClassificationReporter(object):
         conf_mat_overall_sum = conf_mat_zero + np.stack(conf_mats).sum(axis=0)
 
         ########################################
-        ## plots each fold's conf mat and save it
+        ## Plots & Saves
         ########################################
+        # each fold's conf
         for i_fold, cm in enumerate(conf_mats):
             title = f"Test fold#{i_fold}"
-            fig_conf_mat_fold = __plot_conf_mat(plt, cm, title)
+            fig_conf_mat_fold = _plot_conf_mat(
+                plt,
+                cm,
+                title,
+                extend_ratio=extend_ratio,
+                colorbar=colorbar,
+                sci_notation_kwargs=sci_notation_kwargs,
+            )
             mngs.general.save(
                 fig_conf_mat_fold, self.sdir + f"conf_mat_figs/fold#{i_fold}.png"
             )
             plt.close()
 
-        ########################################
-        ## plots overall_sum conf_mat and save it
-        ########################################
+        ## overall_sum conf_mat
         title = f"{self.n_folds}-CV overall sum"
-        fig_conf_mat_overall_sum = __plot_conf_mat(plt, conf_mat_overall_sum, title)
+        fig_conf_mat_overall_sum = _plot_conf_mat(
+            plt,
+            conf_mat_overall_sum,
+            title,
+            extend_ratio=extend_ratio,
+            colorbar=colorbar,
+            sci_notation_kwargs=sci_notation_kwargs,
+        )
         mngs.general.save(
             fig_conf_mat_overall_sum,
             self.sdir + f"conf_mat_figs/k-fold_cv_overall-sum.png",
         )
         plt.close()
-
-    #     ####################
-    #     ## Others dict
-    #     ####################
-    #     if isinstance(others_dict, dict):
-    #         for sfname, obj in others_dict.items():
-    #             mngs.general.save(obj, self.sdir + sfname, makedirs=makedirs)
 
 
 if __name__ == "__main__":
@@ -469,5 +462,30 @@ if __name__ == "__main__":
 
     reporter.summarize(show=True)
     reporter.save()
+
+    ## Configures mpl for confmats
+    mngs.plt.configure_mpl(
+        plt,
+        figsize=(8, 8),
+        # labelsize=8,
+        # fontsize=6,
+        # legendfontsize=6,
+        figscale=2,
+        tick_size=0.8,
+        tick_width=0.2,
+    )
+
+    sci_notation_kwargs = dict(
+        order=1,
+        fformat="%1.0d",
+        scilimits=(-3, 3),
+        x=False,
+        y=True,
+    )  # "%3.1f"
+
+    # sci_notation_kwargs = None
+    reporter.plot_and_save_conf_mats(
+        plt, extend_ratio=1.0, sci_notation_kwargs=sci_notation_kwargs
+    )
 
     ## EOF
