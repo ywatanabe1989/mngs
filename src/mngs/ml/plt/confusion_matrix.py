@@ -29,7 +29,7 @@ def confusion_matrix(
             in the vertical direction.
 
     """
-    df = pd.DataFrame(data=cm)
+    df = pd.DataFrame(data=cm).copy()
     vmax = np.array(df).max().astype(int)
 
     # x- and y-ticklabels
@@ -103,7 +103,7 @@ def confusion_matrix(
         fig.add_axes(cax)
 
         """
-        axpos = ax.get_position()        
+        axpos = ax.get_position()
         caxpos = cax.get_position()
 
         AddAxesBBoxRect(fig, ax, ec="r")

@@ -1,7 +1,33 @@
+## Requirements
+```
+chardet
+GitPython
+h5py
+joblib
+matplotlib
+natsort
+numpy
+pandas
+pymatreader
+PyYAML
+scipy
+seaborn
+sklearn
+statsmodels
+torch
+xmltodict
+```
+
 ## Installation
 ``` bash
-$ pip install -y mngs
+$ pip install mngs
+
+or
+
+$ pip install git+https://github.com/ywatanabe1989/mngs.git@develop
 ```
+
+
 
 ## mngs.general.save
 ``` python
@@ -75,3 +101,46 @@ configure_mpl(
 - mngs.plt.ax_scientific_notation
 - mngs.plt.ax_set_position
 
+## mngs.ml.Reporter
+Now, classification task is available.
+``` python
+reporter = mngs.ml.Reporter(sdir=log_dir)
+for i_fold in range(N_FOLDS):
+    ...
+    print("\n--- Metrics ---\n")
+    reporter.calc_metrics(
+        T_tes,
+        pred_class_tes,
+        pred_proba_tes,
+        labels=[class_0, class_1, class_2],
+        i_fold=i_fold,
+    )
+    print("\n---------------\n")
+
+reporter.summarize()
+reporter.save()
+```
+
+The above lines makes reportes and figures.
+``` bash
+$ tree $log_dir
+├── aucs.csv
+├── bACCs.csv
+├── balanced_accs.csv
+├── clf_reports.csv
+├── conf_mat
+│   ├── conf_mats.csv
+│   ├── fold#0.png
+│   ├── fold#1.png
+│   ├── fold#2.png
+│   └── overall_sum.png
+├── mccs.csv
+├── pre_rec_curves
+│   ├── fold#0.png
+│   ├── fold#1.png
+│   └── fold#2.png
+└── roc_curves
+    ├── fold#0.png
+    ├── fold#1.png
+    └── fold#2.png
+```
