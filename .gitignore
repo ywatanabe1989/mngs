@@ -1,4 +1,4 @@
-## Data
+## Large files
 *.mat
 *.npy
 *.pkl
@@ -6,10 +6,18 @@
 *.csv
 *.mp4
 *.tiff
-*.png
+# *.png
 *.tar.gz
 *flycheck*.py
 *.pth
+singularity
+
+## Exceptions
+!src/mngs/ml/ClassificationReporter/*
+!src/mngs/ml/ClassificationReporter/**/*.png
+
+
+
 
 ## for convenience
 *.old*

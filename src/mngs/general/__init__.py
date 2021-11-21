@@ -19,7 +19,7 @@ from .misc import (
     squeeze_spaces,
     take_the_closest,
 )
-from .pandas import col_to_last, col_to_top
+from .pandas import col_to_last, col_to_top, force_dataframe
 from .path import *
 from .repro import *
 from .save import is_listed_X, save, save_listed_dfs_as_csv, save_listed_scalars_as_csv
