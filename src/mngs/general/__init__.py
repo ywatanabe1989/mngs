@@ -23,7 +23,13 @@ from .misc import (
     copy_the_file,
 )
 from .pandas import col_to_last, col_to_top, force_dataframe
-from .path import *
+from .path import (
+    get_this_file_name,
+    mk_spath,
+    find_the_git_root_dir,
+    split_fpath,
+)
+
 from .repro import *
 from .save import is_listed_X, save, save_listed_dfs_as_csv, save_listed_scalars_as_csv
 from .TimeStamper import *

@@ -6,22 +6,20 @@ import pandas as pd
 import mngs
 import numpy as np
 
+import warnings
 
-def deprecation_warning():
-    warnings.warn(
-        '\n"mngs.general.save" and "mngs.general.load" will be removed. '
-        'Please use "mngs.io.save" and "mngs.io.load" instead.',
-        PendingDeprecationWarning,
-        # stacklevel=3,
-    )
+
+if "general" in __file__:
+    with warnings.catch_warnings():
+        warnings.simplefilter("always")
+        warnings.warn(
+            '\n"mngs.general.save" will be removed. '
+            'Please use "mngs.io.save" instead.',
+            PendingDeprecationWarning,
+        )
 
 
 def save(obj, sfname_or_spath, makedirs=True, show=True, **kwargs):
-    if "general" in __file__:
-        with warnings.catch_warnings():
-            warnings.simplefilter("always")
-            deprecation_warning()
-
     """
     Example
       save(arr, 'data.npy')
@@ -64,6 +62,13 @@ def save(obj, sfname_or_spath, makedirs=True, show=True, **kwargs):
         os.makedirs(sdir, exist_ok=True)
 
     ## Saves
+    ## copy files
+    is_copying_files = (isinstance(obj, str) or is_listed_X(obj, str)) and (
+        isinstance(spath, str) or is_listed_X(spath, str)
+    )
+    if is_copying_files:
+        mngs.general.copy_files(obj, spath)
+
     # csv
     if spath.endswith(".csv"):
         if isinstance(obj, pd.DataFrame):  # DataFrame
@@ -118,11 +123,11 @@ def save(obj, sfname_or_spath, makedirs=True, show=True, **kwargs):
                 hf.create_dataset(name, data=obj)
     # pth
     if spath.endswith(".pth"):
-        # torch.save(obj.state_dict(), spath)
         torch.save(obj, spath)
 
-    if show:
-        print("\nSaved to: {s}\n".format(s=spath))
+    if show and mngs.general.is_defined(obj) and not is_copying_files:
+        # if show:
+        print(f"\nSaved to: {spath}\n")
 
 
 def check_encoding(file_path):

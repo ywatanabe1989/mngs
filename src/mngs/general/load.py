@@ -4,21 +4,17 @@ import mngs
 import warnings
 
 
-def deprecation_warning():
-    warnings.warn(
-        '\n"mngs.general.save" and "mngs.general.load" will be removed. '
-        'Please use "mngs.io.save" and "mngs.io.load" instead.',
-        PendingDeprecationWarning,
-        # stacklevel=3,
-    )
+if "general" in __file__:
+    with warnings.catch_warnings():
+        warnings.simplefilter("always")
+        warnings.warn(
+            '\n"mngs.general.load" will be removed. '
+            'Please use "mngs.io.load" instead.',
+            PendingDeprecationWarning,
+        )
 
 
 def load(lpath, show=False, **kwargs):
-    if "general" in __file__:
-        with warnings.catch_warnings():
-            warnings.simplefilter("always")
-            deprecation_warning()
-
     import pickle
 
     import h5py

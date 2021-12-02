@@ -4,18 +4,48 @@ import inspect
 import os
 
 import mngs
+import warnings
 
-# import git
+
+if "general" in __file__:
+    with warnings.catch_warnings():
+        warnings.simplefilter("always")
+        warnings.warn(
+            '\n"mngs.general.path" will be removed. '
+            'Please use "mngs.io.path" instead.',
+            PendingDeprecationWarning,
+        )
+
+# def deprecation_warning():
+#     warnings.warn(
+#         '\n"mngs.general.path" will be removed. ' 'Please use "mngs.io.path" instead.',
+#         PendingDeprecationWarning,
+#         # stacklevel=3,
+#     )
+
+
+# with warnings.catch_warnings():
+#     warnings.simplefilter("always")
+#     deprecation_warning()
 
 
 ################################################################################
 ## PATH
 ################################################################################
+def get_this_file_name():
+    __file__ = inspect.stack()[1].filename
+    if "ipython" in __file__:  # for ipython
+        __file__ = "/tmp/fake.py"
+    return __file__
+
+
 def mk_spath(sfname, makedirs=False):
 
     __file__ = inspect.stack()[1].filename
     if "ipython" in __file__:  # for ipython
         __file__ = "/tmp/fake.py"
+
+    # __file__ = get_current_file_name()
 
     ## spath
     fpath = __file__
@@ -30,6 +60,8 @@ def mk_spath(sfname, makedirs=False):
 
 
 def find_the_git_root_dir():
+    import git
+
     repo = git.Repo(".", search_parent_directories=True)
     return repo.working_tree_dir
 
