@@ -1,7 +1,24 @@
 #!/usr/bin/env python3
 
+import mngs
+import warnings
+
+
+def deprecation_warning():
+    warnings.warn(
+        '\n"mngs.general.save" and "mngs.general.load" will be removed. '
+        'Please use "mngs.io.save" and "mngs.io.load" instead.',
+        PendingDeprecationWarning,
+        # stacklevel=3,
+    )
+
 
 def load(lpath, show=False, **kwargs):
+    if "general" in __file__:
+        with warnings.catch_warnings():
+            warnings.simplefilter("always")
+            deprecation_warning()
+
     import pickle
 
     import h5py
@@ -63,10 +80,11 @@ def load(lpath, show=False, **kwargs):
 
         obj = xml2dict(lpath)
 
-    if show:
-        print("\nLoaded: {}\n".format(lpath))
-
-    return obj
+    if mngs.general.is_defined("obj"):
+        print("\nLoaded from: {}\n".format(lpath))
+        return obj
+    else:
+        return None
 
 
 def check_encoding(file_path):

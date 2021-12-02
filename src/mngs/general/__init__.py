@@ -9,7 +9,7 @@ from .misc import (
     decapitalize,
     connect_nums,
     connect_strs,
-    does_exist,
+    is_defined,
     fmt_size,
     grep,
     isclose,
@@ -19,6 +19,8 @@ from .misc import (
     squeeze_spaces,
     take_the_closest,
     is_later_or_equal,
+    copy_files,
+    copy_the_file,
 )
 from .pandas import col_to_last, col_to_top, force_dataframe
 from .path import *
