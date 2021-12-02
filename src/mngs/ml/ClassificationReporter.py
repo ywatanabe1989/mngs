@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 
 import os
+import random
 import sys
+from collections import defaultdict
+from pprint import pprint
 
 import matplotlib
 import matplotlib.pyplot as plt
@@ -18,8 +21,6 @@ from sklearn.metrics import (
     matthews_corrcoef,
     roc_auc_score,
 )
-from collections import defaultdict
-from pprint import pprint
 
 
 class ClassificationReporter(object):
@@ -66,6 +67,7 @@ class ClassificationReporter(object):
         # self.ts = mngs.general.TimeStamper()
 
         self.folds_dict = defaultdict(list)
+        mngs.general.fix_seeds(os=os, random=random, np=np, torch=torch, show=False)
 
         # print("\n{}\n".format(mngs.general.gen_timestamp()))
         # self.ts("\nReporter has been initialized.\n")
@@ -91,22 +93,22 @@ class ClassificationReporter(object):
         self.labels = labels
 
         true_class, pred_class, pred_proba = (
-            mngs.general.torch_to_arr(true_class),
-            mngs.general.torch_to_arr(pred_class),
-            mngs.general.torch_to_arr(pred_proba),
+            mngs.general.torch_to_arr(true_class).adtype(np.float64),
+            mngs.general.torch_to_arr(pred_class).adtype(np.float64),
+            mngs.general.torch_to_arr(pred_proba).adtype(np.float64),
         )
 
         ####################
         ## Scalar metrices
         ####################
-        acc = (true_class.reshape(-1) == pred_class.reshape(-1)).mean()
+        # acc = (true_class.reshape(-1) == pred_class.reshape(-1)).mean()
         balanced_acc = balanced_accuracy_score(
             true_class.reshape(-1), pred_class.reshape(-1)
         )
         mcc = float(matthews_corrcoef(true_class.reshape(-1), pred_class.reshape(-1)))
 
         if show:
-            print(f"\nACC in fold#{i_fold} was {acc:.3f}\n")
+            # print(f"\nACC in fold#{i_fold} was {acc:.3f}\n")
             print(f"\nBalanced ACC in fold#{i_fold} was {balanced_acc:.3f}\n")
             print(f"\nMCC in fold#{i_fold} was {mcc:.3f}\n")
 
@@ -390,14 +392,13 @@ class ClassificationReporter(object):
 
 if __name__ == "__main__":
     import random
+    import sys
 
     import mngs
     import numpy as np
     from catboost import CatBoostClassifier, Pool
     from sklearn.datasets import load_digits
     from sklearn.model_selection import StratifiedKFold
-
-    import sys
 
     ################################################################################
     ## Sets tee

@@ -7,7 +7,21 @@ import mngs
 import numpy as np
 
 
+def deprecation_warning():
+    warnings.warn(
+        '\n"mngs.general.save" and "mngs.general.load" will be removed. '
+        'Please use "mngs.io.save" and "mngs.io.load" instead.',
+        PendingDeprecationWarning,
+        # stacklevel=3,
+    )
+
+
 def save(obj, sfname_or_spath, makedirs=True, show=True, **kwargs):
+    if "general" in __file__:
+        with warnings.catch_warnings():
+            warnings.simplefilter("always")
+            deprecation_warning()
+
     """
     Example
       save(arr, 'data.npy')

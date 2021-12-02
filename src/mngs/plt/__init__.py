@@ -9,3 +9,4 @@ from ._configure_mpl import configure_mpl
 from ._draw_a_cube import draw_a_cube
 from ._get_RGBA_from_colormap import get_RGBA_from_colormap
 from .annotated_heatmap import annotated_heatmap
+from ._mk_patches import mk_patches
