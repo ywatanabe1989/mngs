@@ -12,14 +12,11 @@ import mngs
 import numpy as np
 import pandas as pd
 import torch
-import yaml
-from natsort import natsorted
 from sklearn.metrics import (
     balanced_accuracy_score,
     classification_report,
     confusion_matrix,
     matthews_corrcoef,
-    roc_auc_score,
 )
 
 
@@ -32,51 +29,33 @@ class ClassificationReporter(object):
        - ROC AUC score / curve
        - PRE-REC AUC score / curve
 
-    Manual adding example:
-        ##############################
-        ## fig
-        ##############################
-        fig, ax = plt.subplots()
-        ax.plot(np.random.rand(10))
-        reporter.add(
-            "manu_figs",
-            fig,
-            {
-                "dirname": "manu_fig_dir/",
-                "ext": ".png",
-            },
-        )
-        ##############################
-        ## DataFrame
-        ##############################
-        df = pd.DataFrame(np.random.rand(5, 3))
-        reporter.add("manu_dfs", df, {"fname": "manu_dfs.csv", "method": "mean"})
-        ##############################
-        ## scalar
-        ##############################
-        scalar = random.random()
-        reporter.add(
-            "manu_scalars",
-            scalar,
-            {"fname": "manu_scalars.csv", "column_name": "manu_column_name"},
-        )
+    Example is described in this file.
     """
 
     def __init__(self, sdir):
         self.sdir = sdir
-        # self.ts = mngs.general.TimeStamper()
-
         self.folds_dict = defaultdict(list)
         mngs.general.fix_seeds(os=os, random=random, np=np, torch=torch, show=False)
-
-        # print("\n{}\n".format(mngs.general.gen_timestamp()))
-        # self.ts("\nReporter has been initialized.\n")
 
     def add(
         self,
         obj_name,
         obj,
     ):
+        """
+        ## fig
+        fig, ax = plt.subplots()
+        ax.plot(np.random.rand(10))
+        reporter.add("manu_figs", fig)
+
+        ## DataFrame
+        df = pd.DataFrame(np.random.rand(5, 3))
+        reporter.add("manu_dfs", df)
+
+        ## scalar
+        scalar = random.random()
+        reporter.add("manu_scalers", scalar)
+        """
         assert isinstance(obj_name, str)
         self.folds_dict[obj_name].append(obj)
 
@@ -88,27 +67,33 @@ class ClassificationReporter(object):
         labels=None,
         i_fold=None,
         show=True,
+        auc_plt_config=dict(
+            figsize=(7, 7),
+            labelsize=8,
+            fontsize=7,
+            legendfontsize=6,
+            tick_size=0.8,
+            tick_width=0.2,
+        ),
     ):
         """Calculates ACC, Confusion Matrix, Classification Report, and ROC-AUC score."""
         self.labels = labels
 
-        true_class, pred_class, pred_proba = (
-            mngs.general.torch_to_arr(true_class).adtype(np.float64),
-            mngs.general.torch_to_arr(pred_class).adtype(np.float64),
-            mngs.general.torch_to_arr(pred_proba).adtype(np.float64),
+        true_class = (
+            mngs.general.torch_to_arr(true_class).astype(int).reshape(-1)
         )
+        pred_class = (
+            mngs.general.torch_to_arr(pred_class).astype(np.float64).reshape(-1)
+        )
+        pred_proba = mngs.general.torch_to_arr(pred_proba).astype(np.float64)
 
         ####################
         ## Scalar metrices
         ####################
-        # acc = (true_class.reshape(-1) == pred_class.reshape(-1)).mean()
-        balanced_acc = balanced_accuracy_score(
-            true_class.reshape(-1), pred_class.reshape(-1)
-        )
-        mcc = float(matthews_corrcoef(true_class.reshape(-1), pred_class.reshape(-1)))
+        balanced_acc = balanced_accuracy_score(true_class, pred_class)
+        mcc = float(matthews_corrcoef(true_class, pred_class))
 
         if show:
-            # print(f"\nACC in fold#{i_fold} was {acc:.3f}\n")
             print(f"\nBalanced ACC in fold#{i_fold} was {balanced_acc:.3f}\n")
             print(f"\nMCC in fold#{i_fold} was {mcc:.3f}\n")
 
@@ -153,12 +138,7 @@ class ClassificationReporter(object):
         ####################
         mngs.plt.configure_mpl(
             plt,
-            figsize=(7, 7),
-            labelsize=8,
-            fontsize=7,
-            legendfontsize=6,
-            tick_size=0.8,
-            tick_width=0.2,
+            **auc_plt_config,
         )
 
         fig_roc, metrics_roc_auc_dict = mngs.ml.plt.roc_auc(
@@ -249,15 +229,15 @@ class ClassificationReporter(object):
                 ]
 
                 if show:
-                    print("\n----------------------------------------\n")
-                    print(f"\n{k}\n")
-                    print(f"\n{n_folds}-fold-CV mean:\n")
+                    print(
+                        "\n----------------------------------------\n"
+                        f"\n{k}\n"
+                        f"\n{n_folds}-fold-CV mean:\n"
+                    )
                     pprint(self.folds_dict[k][0])
-                    print()
-                    print(f"\n{n_folds}-fold-CV std.:\n")
+                    print(f"\n\n{n_folds}-fold-CV std.:\n")
                     pprint(self.folds_dict[k][1])
-                    print()
-                    print("\n----------------------------------------\n")
+                    print("\n\n----------------------------------------\n")
 
             ## listed figures
             elif mngs.general.is_listed_X(self.folds_dict[k], matplotlib.figure.Figure):
@@ -269,6 +249,7 @@ class ClassificationReporter(object):
 
     def save(
         self,
+        files_to_reproduce=None,
         meta_dict=None,
     ):
         """
@@ -288,7 +269,7 @@ class ClassificationReporter(object):
         """
         if meta_dict is not None:
             for k, v in meta_dict.items():
-                mngs.general.save(v, self.sdir + k)
+                mngs.io.save(v, self.sdir + k)
 
         for k in self.folds_dict.keys():
 
@@ -296,11 +277,11 @@ class ClassificationReporter(object):
             if isinstance(self.folds_dict[k], pd.Series) or isinstance(
                 self.folds_dict[k], pd.DataFrame
             ):
-                mngs.general.save(self.folds_dict[k], self.sdir + f"{k}.csv")
+                mngs.io.save(self.folds_dict[k], self.sdir + f"{k}.csv")
 
             ## listed pd.DataFrame
             elif mngs.general.is_listed_X(self.folds_dict[k], pd.DataFrame):
-                mngs.general.save(
+                mngs.io.save(
                     self.folds_dict[k],
                     self.sdir + f"{k}.csv",
                     indi_suffix=self.cv_index,
@@ -309,7 +290,7 @@ class ClassificationReporter(object):
             ## listed figures
             elif mngs.general.is_listed_X(self.folds_dict[k], matplotlib.figure.Figure):
                 for i_fold, fig in enumerate(self.folds_dict[k]):
-                    mngs.general.save(
+                    mngs.io.save(
                         self.folds_dict[k][i_fold], self.sdir + f"{k}/fold#{i_fold}.png"
                     )
 
@@ -317,11 +298,19 @@ class ClassificationReporter(object):
                 print(f"{k} was not saved")
                 print(type(self.folds_dict[k]))
 
-        # self._plot_and_save_conf_mats()  # fixme
+        if files_to_reproduce is not None:
+            if isinstance(files_to_reproduce, list):
+                files_to_reproduce = [files_to_reproduce]
+            for f in files_to_reproduce:
+                mngs.io.save(f, self.sdir)
 
     def plot_and_save_conf_mats(
-        self, plt, extend_ratio=1.0, colorbar=True, sci_notation_kwargs=None
-    ):  # koko
+            self,
+            plt,
+            extend_ratio=1.0,
+            colorbar=True,
+            confmat_plt_config=None, sci_notation_kwargs=None
+    ):
         def _plot_conf_mat(
             plt, cm_df, title, extend_ratio=1.0, colorbar=True, sci_notation_kwargs=None
         ):
@@ -341,13 +330,21 @@ class ClassificationReporter(object):
                 )
             return fig_conf_mat
 
+        ## Configures mpl
+        mngs.plt.configure_mpl(
+            plt,
+            **confmat_plt_config,
+        )
+
         ########################################
         ## Prepares confmats dfs
         ########################################
         ## Drops mean and std for the folds
         try:
             conf_mats = self.folds_dict["conf_mat"][-self.n_folds :]
-        except:
+
+        except Exception as e:
+            print(e)
             conf_mats = self.folds_dict["conf_mat"]
 
         ## Prepaires conf_mat_overall_sum
@@ -368,7 +365,7 @@ class ClassificationReporter(object):
                 colorbar=colorbar,
                 sci_notation_kwargs=sci_notation_kwargs,
             )
-            mngs.general.save(
+            mngs.io.save(
                 fig_conf_mat_fold, self.sdir + f"conf_mat_figs/fold#{i_fold}.png"
             )
             plt.close()
@@ -383,9 +380,9 @@ class ClassificationReporter(object):
             colorbar=colorbar,
             sci_notation_kwargs=sci_notation_kwargs,
         )
-        mngs.general.save(
+        mngs.io.save(
             fig_conf_mat_overall_sum,
-            self.sdir + f"conf_mat_figs/k-fold_cv_overall-sum.png",
+            self.sdir + "conf_mat_figs/k-fold_cv_overall-sum.png",
         )
         plt.close()
 
@@ -403,7 +400,7 @@ if __name__ == "__main__":
     ################################################################################
     ## Sets tee
     ################################################################################
-    sdir = mngs.general.path.mk_spath("")  # "/tmp/sdir/"
+    sdir = mngs.io.mk_spath("")  # "/tmp/sdir/"
     sys.stdout, sys.stderr = mngs.general.tee(sys, sdir)
 
     ################################################################################
@@ -462,11 +459,17 @@ if __name__ == "__main__":
         )
 
     reporter.summarize(show=True)
-    reporter.save()
 
-    ## Configures mpl for confmats
-    mngs.plt.configure_mpl(
-        plt,
+    fake_fpaths = ["fake_file_1.txt", "fake_file_2.txt"]
+    for ff in fake_fpaths:
+        mngs.io.touch(ff)
+
+    files_to_reproduce = [mngs.general.get_this_fpath(when_ipython="/dev/null"),
+                          *fake_fpaths,
+                          ]
+    reporter.save(files_to_reproduce=files_to_reproduce)
+
+    confmat_plt_config = dict(
         figsize=(8, 8),
         # labelsize=8,
         # fontsize=6,
@@ -486,7 +489,10 @@ if __name__ == "__main__":
 
     # sci_notation_kwargs = None
     reporter.plot_and_save_conf_mats(
-        plt, extend_ratio=1.0, sci_notation_kwargs=sci_notation_kwargs
+        plt,
+        extend_ratio=1.0,
+        confmat_plt_config=confmat_plt_config,
+        sci_notation_kwargs=sci_notation_kwargs
     )
 
     ## EOF
