@@ -8,12 +8,19 @@ import matplotlib
 import mngs
 import pandas as pd
 
+import warnings
+
 
 class LearningCurveLogger(object):
     def __init__(
         self,
     ):
         self.logged_dict = defaultdict(dict)
+
+        warnings.warn(
+            '\n"gt_label" will be removed in the feature. Please use "true_class" instead.\n',
+            DeprecationWarning,
+        )
 
     def __call__(self, dict_to_log, step):
         """
@@ -23,7 +30,7 @@ class LearningCurveLogger(object):
                     "loss_plot": float(loss),
                     "balanced_ACC_plot": float(bACC),
                     "pred_proba": pred_proba.detach().cpu().numpy(),
-                    "gt_label": T.cpu().numpy(),
+                    "true_class": T.cpu().numpy(),
                     "i_fold": i_fold,
                     "i_epoch": i_epoch,
                     "i_global": i_global,
@@ -32,14 +39,165 @@ class LearningCurveLogger(object):
         step | str
             "Training", "Validation", or "Test"
         """
+        ########################################
+        ## delete here in the future
+        ## rename "gt_label" to "true_class"
+        if "gt_label" in dict_to_log.keys():
+            dict_to_log["true_class"] = dict_to_log.pop("gt_label")
+            # del dict_to_log["gt_label"]
+        ########################################
+
         assert step in ["Training", "Validation", "Test"]
 
-        for k in dict_to_log.keys():
+        ## Initialize self.logged_dict
+        for k_to_log in dict_to_log.keys():
             try:
-                self.logged_dict[step][k].append(dict_to_log[k])
+                self.logged_dict[step][k_to_log].append(dict_to_log[k_to_log])
             except:
-                self.logged_dict[step].update({k: []})
-                self.logged_dict[step][k].append(dict_to_log[k])
+                self.logged_dict[step].update({k_to_log: []})
+                self.logged_dict[step][k_to_log].append(dict_to_log[k_to_log])
+
+    @property
+    def dfs(self):
+        return self._to_dfs_pivot(
+            self.logged_dict,
+            pivot_column=None,
+        )
+
+    def plot_learning_curves(
+        self,
+        plt,
+        plt_config_dict=None,
+        title=None,
+        max_n_ticks=4,
+        linewidth=1,
+        scattersize=50,
+    ):
+        """
+        Plots learning curves from self.logged_dict
+        """
+        if plt_config_dict is not None:
+            mngs.plt.configure_mpl(plt, **plt_config_dict)
+
+        self.dfs_pivot_i_global = self._to_dfs_pivot(
+            self.logged_dict, pivot_column="i_global"
+        )
+
+        ########################################
+        ## Parameters
+        ########################################
+        COLOR_DICT = {
+            "Training": "blue",
+            "Validation": "green",
+            "Test": "red",
+        }
+
+        keys_to_plot = self._find_keys_to_plot(self.logged_dict)
+
+        ########################################
+        ## Plots
+        ########################################
+        fig, axes = plt.subplots(len(keys_to_plot), 1, sharex=True, sharey=False)
+        axes[-1].set_xlabel("Iteration#")
+        fig.text(0.5, 0.95, title, ha="center")
+
+        for i_plt, plt_k in enumerate(keys_to_plot):
+            ax = axes[i_plt]
+            ax.set_ylabel(self._rename_if_key_to_plot(plt_k))
+            ax.xaxis.set_major_locator(matplotlib.ticker.MaxNLocator(max_n_ticks))
+            ax.yaxis.set_major_locator(matplotlib.ticker.MaxNLocator(max_n_ticks))
+
+            if re.search("[aA][cC][cC]", plt_k):  # acc, ylim, yticks
+                ax.set_ylim(0, 1)
+                ax.set_yticks([0, 0.5, 1.0])
+
+            for step_k in self.dfs_pivot_i_global.keys():
+
+                if step_k == "Training":  # line
+                    ax.plot(
+                        self.dfs_pivot_i_global[step_k].index,
+                        self.dfs_pivot_i_global[step_k][plt_k],
+                        label=step_k,
+                        color=mngs.plt.colors.to_RGBA(COLOR_DICT[step_k], alpha=0.9),
+                        linewidth=linewidth,
+                    )
+                    ax.legend()
+
+                    ########################################
+                    ## Epoch starts points; just in "Training" not to b duplicated
+                    ########################################
+                    epoch_starts = abs(
+                        self.dfs_pivot_i_global[step_k]["i_epoch"]
+                        - self.dfs_pivot_i_global[step_k]["i_epoch"].shift(-1)
+                    )
+                    indi_global_epoch_starts = [0] + list(
+                        epoch_starts[epoch_starts == 1].index
+                    )
+
+                    for i_epoch, i_global_epoch_start in enumerate(
+                        indi_global_epoch_starts
+                    ):
+                        ax.axvline(
+                            x=i_global_epoch_start,
+                            ymin=-1e4,  # ax.get_ylim()[0],
+                            ymax=1e4,  # ax.get_ylim()[1],
+                            linestyle="--",
+                            color=mngs.plt.colors.to_RGBA("gray", alpha=0.5),
+                        )
+                        ax.text(
+                            i_global_epoch_start,
+                            ax.get_ylim()[1] * 1.0,
+                            f"epoch#{i_epoch}",
+                        )
+                    ########################################
+
+                if (step_k == "Validation") or (step_k == "Test"):  # scatter
+                    ax.scatter(
+                        self.dfs_pivot_i_global[step_k].index,
+                        self.dfs_pivot_i_global[step_k][plt_k],
+                        label=step_k,
+                        color=mngs.plt.colors.to_RGBA(COLOR_DICT[step_k], alpha=0.9),
+                        s=scattersize,
+                        alpha=0.9,
+                    )
+                    ax.legend()
+
+        return fig
+
+    def print(self, step):
+        df_pivot_i_epoch = self._to_dfs_pivot(self.logged_dict, pivot_column="i_epoch")
+        df_pivot_i_epoch_step = df_pivot_i_epoch[step]
+        df_pivot_i_epoch_step.columns = self._rename_if_key_to_plot(
+            df_pivot_i_epoch_step.columns
+        )
+        print("\n----------------------------------------\n")
+        print(f"\n{step}: (estimated)\n")
+        pprint(df_pivot_i_epoch_step)
+        print("\n----------------------------------------\n")
+
+    # def print(self, step):
+    #     df = pd.DataFrame(
+    #         {
+    #             k: self.logged_dict[step][k]
+    #             for k in ["i_epoch"] + self._find_keys_to_plot(self.logged_dict)
+    #         }
+    #     ).pivot_table(columns=["i_epoch"], aggfunc="mean")
+
+    #     df = df.set_index(pd.Series(self._rename_if_key_to_plot(list(df.index))))
+
+    #     print("\n----------------------------------------\n")
+    #     print(f"\n{step}: (estimated)\n")
+    #     pprint(df)
+    #     print("\n----------------------------------------\n")
+
+    @staticmethod
+    def _find_keys_to_plot(logged_dict):
+        _steps_str = list(logged_dict.keys())
+        _, keys_to_plot = mngs.general.search(
+            "_plot",
+            list(logged_dict[_steps_str[0]].keys()),
+        )
+        return keys_to_plot
 
     @staticmethod
     def _rename_if_key_to_plot(keys):
@@ -48,11 +206,10 @@ class LearningCurveLogger(object):
             renamed = renamed.replace("_", " ")
             capitalized = []
             for s in renamed.split(" "):
-                if not re.search("[A-Z]", s[0]):
+                if not re.search("^[A-Z]", s):
                     capitalized.append(s.capitalize())
                 else:
                     capitalized.append(s)
-
             renamed = mngs.general.connect_strs(capitalized, filler=" ")
             return renamed
 
@@ -71,134 +228,31 @@ class LearningCurveLogger(object):
 
         return out
 
-    def plot_learning_curves(
-        self,
-        plt,
-        title=None,
-        max_n_ticks=4,
-        linewidth=3,
-        scattersize=150,
-    ):
+    # @staticmethod
+    # def _to_dfs_pivot_i_global(logged_dict):
+    #     dfs_pivot_i_global = {}
+    #     for step in logged_dict.keys():
+    #         df_step = mngs.general.pandas.force_dataframe(logged_dict[step])
+    #         df_step_pvt_on_i_global = df_step.pivot_table(
+    #             columns="i_global", aggfunc="mean"
+    #         ).T
+    #         dfs_pivot_i_global[step] = df_step_pvt_on_i_global
 
-        self._to_dfs()
+    #     return dfs_pivot_i_global
 
-        ########################################
-        ## Parameters
-        ########################################
-        COLOR_DICT = {
-            "Training": "blue",
-            "Validation": "green",
-            "Test": "red",
-        }
+    @staticmethod
+    def _to_dfs_pivot(logged_dict, pivot_column=None):
+        dfs_pivot = {}
+        for step in logged_dict.keys():
+            df_step = mngs.general.pandas.force_dataframe(logged_dict[step])
+            if pivot_column is not None:
+                dfs_pivot[step] = df_step.pivot_table(
+                    columns=pivot_column, aggfunc="mean"
+                ).T
+            else:
+                dfs_pivot[step] = df_step
 
-        keys_to_plot = self._finds_keys_to_plot()
-
-        ########################################
-        ## Plot
-        ########################################
-        fig, axes = plt.subplots(len(keys_to_plot), 1, sharex=True, sharey=False)
-        axes[-1].set_xlabel("Iteration#")
-        fig.text(0.5, 0.95, title, ha="center")
-
-        for i_plt, plt_k in enumerate(keys_to_plot):
-            ax = axes[i_plt]
-            ax.set_ylabel(self._rename_if_key_to_plot(plt_k))
-            ax.xaxis.set_major_locator(matplotlib.ticker.MaxNLocator(max_n_ticks))
-            ax.yaxis.set_major_locator(matplotlib.ticker.MaxNLocator(max_n_ticks))
-
-            if re.search("[aA][cC][cC]", plt_k):  # acc, ylim, yticks
-                ax.set_ylim(0, 1)
-                ax.set_yticks([0, 0.5, 1.0])
-
-            for step_k in self.dfs_pivot.keys():
-
-                if step_k == "Training":  # line
-                    ax.plot(
-                        self.dfs_pivot[step_k].index,
-                        self.dfs_pivot[step_k][plt_k],
-                        label=step_k,
-                        color=mngs.plt.colors.to_RGBA(COLOR_DICT[step_k], alpha=0.9),
-                        linewidth=linewidth,
-                    )
-                    ax.legend()
-
-                    ## Epoch starts ponts
-                    epoch_starts = abs(
-                        self.dfs_pivot[step_k]["i_epoch"]
-                        - self.dfs_pivot[step_k]["i_epoch"].shift(-1)
-                    )
-                    indi_global_epoch_starts = [0] + list(
-                        epoch_starts[epoch_starts == 1].index
-                    )
-
-                    for i_epoch, i_global_epoch_start in enumerate(
-                        indi_global_epoch_starts
-                    ):
-                        ax.axvline(
-                            x=i_global_epoch_start,
-                            ymin=ax.get_ylim()[0],
-                            ymax=ax.get_ylim()[1],
-                            linestyle="--",
-                            color=mngs.plt.colors.to_RGBA("gray", alpha=0.5),
-                        )
-                        ax.text(
-                            i_global_epoch_start,
-                            ax.get_ylim()[1] * 1.0,
-                            f"epoch#{i_epoch}",
-                        )
-
-                if (step_k == "Validation") or (step_k == "Test"):  # scatter
-                    ax.scatter(
-                        self.dfs_pivot[step_k].index,
-                        self.dfs_pivot[step_k][plt_k],
-                        label=step_k,
-                        color=mngs.plt.colors.to_RGBA(COLOR_DICT[step_k], alpha=0.9),
-                        s=scattersize,
-                        alpha=0.9,
-                    )
-                    ax.legend()
-
-        return fig
-
-    def print(self, step):
-
-        df = pd.DataFrame(
-            {
-                k: self.logged_dict[step][k]
-                for k in ["i_epoch"] + self._finds_keys_to_plot()
-            }
-        ).pivot_table(columns=["i_epoch"], aggfunc="mean")
-
-        df = df.set_index(pd.Series(self._rename_if_key_to_plot(list(df.index))))
-
-        print("\n----------------------------------------\n")
-        print(f"\n{step}:\n")
-        pprint(df)
-        print("\n----------------------------------------\n")
-
-    def _finds_keys_to_plot(self):
-        ########################################
-        ## finds keys to plot
-        ########################################
-        _steps_str = list(self.logged_dict.keys())
-        _, keys_to_plot = mngs.general.search(
-            # ["_plot"],
-            "_plot",
-            list(self.logged_dict[_steps_str[0]].keys()),
-        )
-        return keys_to_plot
-
-    def _to_dfs(self):
-        self.dfs = {}
-        self.dfs_pivot = {}
-        for step in self.logged_dict.keys():
-            df_s = mngs.general.pandas.force_dataframe(self.logged_dict[step])
-            df_s_pvt_on_i_global = df_s.pivot_table(
-                columns="i_global", aggfunc="mean"
-            ).T
-
-            self.dfs[step] = df_s
-            self.dfs_pivot[step] = df_s_pvt_on_i_global
+        return dfs_pivot
 
 
 if __name__ == "__main__":
@@ -326,6 +380,7 @@ if __name__ == "__main__":
                 "balanced_ACC_plot": float(bACC),
                 "pred_proba": pred_proba.detach().cpu().numpy(),
                 "gt_label": T.cpu().numpy(),
+                # "true_class": T.cpu().numpy(),
                 "i_fold": i_fold,
                 "i_epoch": i_epoch,
                 "i_global": i_global,
@@ -356,6 +411,7 @@ if __name__ == "__main__":
                 "balanced_ACC_plot": float(bACC),
                 "pred_proba": pred_proba.detach().cpu().numpy(),
                 "gt_label": T.cpu().numpy(),
+                # "true_class": T.cpu().numpy(),
                 "i_fold": i_fold,
                 "i_epoch": i_epoch,
                 "i_global": i_global,
@@ -383,7 +439,8 @@ if __name__ == "__main__":
             "loss_plot": float(loss),
             "balanced_ACC_plot": float(bACC),
             "pred_proba": pred_proba.detach().cpu().numpy(),
-            "gt_label": T.cpu().numpy(),
+            # "gt_label": T.cpu().numpy(),
+            "true_class": T.cpu().numpy(),
             "i_fold": i_fold,
             "i_epoch": i_epoch,
             "i_global": i_global,
@@ -392,16 +449,22 @@ if __name__ == "__main__":
 
     lc_logger.print(step)
 
-    # mngs.plt.configure_mpl(
-    #     plt,
-    #     figsize=(8.7, 10),
-    #     labelsize=8,
-    #     fontsize=7,
-    #     legendfontsize=6,
-    #     tick_size=0.8,
-    #     tick_width=0.2,
-    # )
+    plt_config_dict = dict(
+        # figsize=(8.7, 10),
+        figscale=2.5,
+        labelsize=16,
+        fontsize=12,
+        legendfontsize=12,
+        tick_size=0.8,
+        tick_width=0.2,
+    )
 
-    fig = lc_logger.plot_learning_curves(plt, title=f"fold#{i_fold}")
-    # fig.show()
-    mngs.general.save(fig, sdir + f"fold#{i_fold}.png")
+    fig = lc_logger.plot_learning_curves(
+        plt,
+        plt_config_dict=plt_config_dict,
+        title=f"fold#{i_fold}",
+        linewidth=1,
+        scattersize=50,
+    )
+    fig.show()
+    # mngs.general.save(fig, sdir + f"fold#{i_fold}.png")

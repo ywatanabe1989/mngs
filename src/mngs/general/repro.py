@@ -24,6 +24,7 @@ def fix_seeds(os=None, random=None, np=None, torch=None, tf=None, seed=42, show=
         torch.cuda.manual_seed(seed)
         torch.cuda.manual_seed_all(seed)
         torch.backends.cudnn.deterministic = True
+        # torch.use_deterministic_algorithms(True)
 
     if tf is not None:
         tf.random.set_seed(seed)

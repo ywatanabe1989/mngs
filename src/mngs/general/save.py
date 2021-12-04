@@ -6,6 +6,18 @@ import pandas as pd
 import mngs
 import numpy as np
 
+import warnings
+
+
+if "general" in __file__:
+    with warnings.catch_warnings():
+        warnings.simplefilter("always")
+        warnings.warn(
+            '\n"mngs.general.save" will be removed. '
+            'Please use "mngs.io.save" instead.',
+            PendingDeprecationWarning,
+        )
+
 
 def save(obj, sfname_or_spath, makedirs=True, show=True, **kwargs):
     """
@@ -50,65 +62,82 @@ def save(obj, sfname_or_spath, makedirs=True, show=True, **kwargs):
         os.makedirs(sdir, exist_ok=True)
 
     ## Saves
-    # csv
-    if spath.endswith(".csv"):
-        if isinstance(obj, pd.DataFrame):  # DataFrame
-            obj.to_csv(spath)
-        if is_listed_X(obj, [int, float]):  # listed scalars
-            save_listed_scalars_as_csv(
-                obj,
-                spath,
-                **kwargs,
-            )
-        if is_listed_X(obj, pd.DataFrame):  # listed DataFrame
-            # save_listed_dfs_as_csv(obj, spath, indi_suffix=None, overwrite=False)
-            save_listed_dfs_as_csv(obj, spath, **kwargs)
-    # numpy
-    if spath.endswith(".npy"):
-        np.save(spath, obj)
-    # pkl
-    if spath.endswith(".pkl"):
-        with open(spath, "wb") as s:  # 'w'
-            pickle.dump(obj, s)
-    # joblib
-    if spath.endswith(".joblib"):
-        with open(spath, "wb") as s:  # 'w'
-            joblib.dump(obj, s, compress=3)
-    # png
-    if spath.endswith(".png"):
-        try:
-            obj.savefig(spath)
-        except:
-            obj.figure.savefig(spath)
-        del obj
-    # tiff
-    if spath.endswith(".tiff") or spath.endswith(".tif"):
-        obj.savefig(spath, dpi=300, format="tiff")  # obj is matplotlib.pyplot object
-        del obj
-    # mp4
-    if spath.endswith(".mp4"):
-        mk_mp4(obj, spath)  # obj is matplotlib.pyplot.figure object
-        del obj
-    # yaml
-    if spath.endswith(".yaml"):
-        with open(spath, "w") as f:
-            yaml.dump(obj, f)
-    # hdf5
-    if spath.endswith(".hdf5"):
-        name_list, obj_list = []
-        for k, v in obj.items():
-            name_list.append(k)
-            obj_list.append(v)
-        with h5py.File(spath, "w") as hf:
-            for (name, obj) in zip(name_list, obj_list):
-                hf.create_dataset(name, data=obj)
-    # pth
-    if spath.endswith(".pth"):
-        # torch.save(obj.state_dict(), spath)
-        torch.save(obj, spath)
+    try:
+        ## copy files
+        is_copying_files = (isinstance(obj, str) or is_listed_X(obj, str)) and (
+            isinstance(spath, str) or is_listed_X(spath, str)
+        )
+        if is_copying_files:
+            mngs.general.copy_files(obj, spath)
 
-    if show:
-        print("\nSaved to: {s}\n".format(s=spath))
+        # csv
+        elif spath.endswith(".csv"):
+            if isinstance(obj, pd.DataFrame):  # DataFrame
+                obj.to_csv(spath)
+            if is_listed_X(obj, [int, float]):  # listed scalars
+                save_listed_scalars_as_csv(
+                    obj,
+                    spath,
+                    **kwargs,
+                )
+            if is_listed_X(obj, pd.DataFrame):  # listed DataFrame
+                # save_listed_dfs_as_csv(obj, spath, indi_suffix=None, overwrite=False)
+                save_listed_dfs_as_csv(obj, spath, **kwargs)
+        # numpy
+        elif spath.endswith(".npy"):
+            np.save(spath, obj)
+        # pkl
+        elif spath.endswith(".pkl"):
+            with open(spath, "wb") as s:  # 'w'
+                pickle.dump(obj, s)
+        # joblib
+        elif spath.endswith(".joblib"):
+            with open(spath, "wb") as s:  # 'w'
+                joblib.dump(obj, s, compress=3)
+        # png
+        elif spath.endswith(".png"):
+            try:
+                obj.savefig(spath)
+            except:
+                obj.figure.savefig(spath)
+            del obj
+        # tiff
+        elif spath.endswith(".tiff") or spath.endswith(".tif"):
+            obj.savefig(
+                spath, dpi=300, format="tiff"
+            )  # obj is matplotlib.pyplot object
+            del obj
+        # mp4
+        elif spath.endswith(".mp4"):
+            mk_mp4(obj, spath)  # obj is matplotlib.pyplot.figure object
+            del obj
+        # yaml
+        elif spath.endswith(".yaml"):
+            with open(spath, "w") as f:
+                yaml.dump(obj, f)
+        # hdf5
+        elif spath.endswith(".hdf5"):
+            name_list, obj_list = []
+            for k, v in obj.items():
+                name_list.append(k)
+                obj_list.append(v)
+            with h5py.File(spath, "w") as hf:
+                for (name, obj) in zip(name_list, obj_list):
+                    hf.create_dataset(name, data=obj)
+        # pth
+        elif spath.endswith(".pth"):
+            torch.save(obj, spath)
+
+        else:
+            raise ValueError("obj was not saved.")
+
+    except Exception as e:
+        print(e)
+
+    else:
+        if show and not is_copying_files:
+            # if show:
+            print(f"\nSaved to: {spath}\n")
 
 
 def check_encoding(file_path):
