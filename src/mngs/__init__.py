@@ -7,7 +7,7 @@ from .general.debug import *
 # from .auto_ipdb import auto_ipdb
 
 __copyright__ = "Copyright (C) 2021 Yusuke Watanabe"
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 __license__ = "GPL3.0"
 __author__ = "ywatanabe1989"
 __author_email__ = "ywata1989@gmail.com"
