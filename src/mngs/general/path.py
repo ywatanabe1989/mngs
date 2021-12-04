@@ -16,26 +16,14 @@ if "general" in __file__:
             PendingDeprecationWarning,
         )
 
-# def deprecation_warning():
-#     warnings.warn(
-#         '\n"mngs.general.path" will be removed. ' 'Please use "mngs.io.path" instead.',
-#         PendingDeprecationWarning,
-#         # stacklevel=3,
-#     )
-
-
-# with warnings.catch_warnings():
-#     warnings.simplefilter("always")
-#     deprecation_warning()
-
 
 ################################################################################
 ## PATH
 ################################################################################
-def get_this_file_name():
+def get_this_fpath(when_ipython="/tmp/fake.py"):
     __file__ = inspect.stack()[1].filename
     if "ipython" in __file__:  # for ipython
-        __file__ = "/tmp/fake.py"
+        __file__ = when_ipython  # "/tmp/fake.py"
     return __file__
 
 
@@ -78,3 +66,8 @@ def split_fpath(fpath):
     base = os.path.basename(fpath)
     fname, ext = os.path.splitext(base)
     return dirname, fname, ext
+
+def touch(fpath):
+    import pathlib
+    return pathlib.Path(fpath).touch()
+    

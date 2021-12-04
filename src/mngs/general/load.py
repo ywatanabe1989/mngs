@@ -76,7 +76,8 @@ def load(lpath, show=False, **kwargs):
 
         obj = xml2dict(lpath)
 
-    if mngs.general.is_defined("obj"):
+    # if mngs.general.is_defined_local("obj"):
+    if "obj" in locals():
         print("\nLoaded from: {}\n".format(lpath))
         return obj
     else:

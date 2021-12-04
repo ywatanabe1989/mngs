@@ -260,7 +260,7 @@ def listed_dict(keys=None):  # Is there a better name?
 ################################################################################
 ## variables
 ################################################################################
-def is_defined(x_str):
+def is_defined_global(x_str):
     """
     Example:
         print(is_defined('a'))
@@ -271,6 +271,19 @@ def is_defined(x_str):
         # True
     """
     return x_str in globals()
+
+
+def is_defined_local(x_str):
+    """
+    Example:
+        print(is_defined('a'))
+        # False
+
+        a = 5
+        print(is_defined('a'))
+        # True
+    """
+    return x_str in locals()
 
 
 # def does_exist(suspicious_var_str):
@@ -329,22 +342,27 @@ def is_later_or_equal(package, tgt_version, format="MAJOR.MINOR.PATCH"):
 ## File
 ################################################################################
 def _copy_a_file(src, dst, allow_overwrite=False):
-    if dst.endswith("/"):
-        _, src, src_ext = mngs.general.split_fpath(src)
-        src = src + src_ext
-        dst = dst + src
-
-    if not os.path.exists(dst):
-        shutil.copyfile(src, dst)
-        print(f'\nCopied "{src}" to "{dst}".\n')
+    if src == "/dev/null":
+        print(f"\n/dev/null was not copied.\n")
 
     else:
-        if allow_overwrite:
-            shutil.copyfile(src, dst)
-            print(f'\nCopied "{src}" to "{dst}" (overwritten).\n')
 
-        if not allow_overwrite:
-            print(f'\n"{dst}" exists and copying from "{src}" was aborted.\n')
+        if dst.endswith("/"):
+            _, src_fname, src_ext = mngs.general.split_fpath(src)
+            # src_fname = src + src_ext
+            dst = dst + src_fname + src_ext
+
+        if not os.path.exists(dst):
+            shutil.copyfile(src, dst)
+            print(f'\nCopied "{src}" to "{dst}".\n')
+
+        else:
+            if allow_overwrite:
+                shutil.copyfile(src, dst)
+                print(f'\nCopied "{src}" to "{dst}" (overwritten).\n')
+
+            if not allow_overwrite:
+                print(f'\n"{dst}" exists and copying from "{src}" was aborted.\n')
 
 
 def copy_files(src_files, dists, allow_overwrite=False):
