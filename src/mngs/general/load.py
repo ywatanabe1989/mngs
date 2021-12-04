@@ -1,5 +1,18 @@
 #!/usr/bin/env python3
 
+import mngs
+import warnings
+
+
+if "general" in __file__:
+    with warnings.catch_warnings():
+        warnings.simplefilter("always")
+        warnings.warn(
+            '\n"mngs.general.load" will be removed. '
+            'Please use "mngs.io.load" instead.',
+            PendingDeprecationWarning,
+        )
+
 
 def load(lpath, show=False, **kwargs):
     import pickle
@@ -63,10 +76,12 @@ def load(lpath, show=False, **kwargs):
 
         obj = xml2dict(lpath)
 
-    if show:
-        print("\nLoaded: {}\n".format(lpath))
-
-    return obj
+    # if mngs.general.is_defined_local("obj"):
+    if "obj" in locals():
+        print("\nLoaded from: {}\n".format(lpath))
+        return obj
+    else:
+        return None
 
 
 def check_encoding(file_path):

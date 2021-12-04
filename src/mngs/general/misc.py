@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import collections
 import math
 import re
 import time
@@ -7,10 +8,13 @@ from bisect import bisect_left, bisect_right
 from collections import defaultdict
 
 import numpy as np
-from natsort import natsorted
-import torch
 import pandas as pd
+import torch
+from natsort import natsorted
 
+import mngs
+import os
+import shutil
 
 ################################################################################
 ## strings
@@ -65,6 +69,8 @@ def squeeze_spaces(string, pattern=" +", repl=" "):
 
 def search(patterns, strings):
     """
+    regular expression is acceptable for patterns.
+
     Example:
         patterns = ['orange', 'banana']
         strings = ['apple', 'orange', 'apple', 'apple_juice', 'banana', 'orange_juice']
@@ -76,11 +82,31 @@ def search(patterns, strings):
         print(search(patterns, strings))
         # ([1, 5], ['orange', 'orange_juice'])
     """
+
     ## For single string objects
-    if not isinstance(strings, (list, tuple, pd.core.indexes.base.Index)):
-        strings = [strings]
-    if not isinstance(patterns, (list, tuple, pd.core.indexes.base.Index)):
-        patterns = [patterns]
+    def to_list(s_or_p):
+        if isinstance(s_or_p, collections.abc.KeysView):
+            s_or_p = list(s_or_p)
+
+        elif not isinstance(s_or_p, (list, tuple, pd.core.indexes.base.Index)):
+            s_or_p = [s_or_p]
+
+        return s_or_p
+
+    patterns = to_list(patterns)
+    strings = to_list(strings)
+
+    # if not isinstance(strings, (list, tuple, pd.core.indexes.base.Index)):
+    #     strings = [strings]
+
+    # if isinstance(strings, collections.abc.KeysView):
+    #     strings = list(strings)
+
+    # if not isinstance(patterns, (list, tuple, pd.core.indexes.base.Index)):
+    #     patterns = [patterns]
+
+    # if isinstance(strings, collections.abc.KeysView):
+    #     patterns = list(patterns)
 
     ## Main
     indi_matched = []
@@ -234,14 +260,130 @@ def listed_dict(keys=None):  # Is there a better name?
 ################################################################################
 ## variables
 ################################################################################
-def does_exist(suspicious_var_str):
+def is_defined_global(x_str):
     """
     Example:
-        print(does_exist('a'))
+        print(is_defined('a'))
         # False
 
         a = 5
-        print(does_exist('a'))
+        print(is_defined('a'))
         # True
     """
-    return suspicious_var_str in globals()
+    return x_str in globals()
+
+
+def is_defined_local(x_str):
+    """
+    Example:
+        print(is_defined('a'))
+        # False
+
+        a = 5
+        print(is_defined('a'))
+        # True
+    """
+    return x_str in locals()
+
+
+# def does_exist(suspicious_var_str):
+#     return suspicious_var_str in globals()
+
+
+################################################################################
+## versioning
+################################################################################
+def is_later_or_equal(package, tgt_version, format="MAJOR.MINOR.PATCH"):
+    import mngs
+    import numpy as np
+
+    indi, matched = mngs.general.search(["MAJOR", "MINOR", "PATCH"], format.split("."))
+    imp_major, imp_minor, imp_patch = [
+        int(v) for v in np.array(package.__version__.split("."))[indi]
+    ]
+    tgt_major, tgt_minor, tgt_patch = [
+        int(v) for v in np.array(tgt_version.split("."))[indi]
+    ]
+
+    print(
+        f"\npackage: {package.__name__}\n"
+        f"target_version: {tgt_version}\n"
+        f"imported_version: {imp_major}.{imp_minor}.{imp_patch}\n"
+    )
+
+    ## Mjorr
+    if imp_major > tgt_major:
+        return True
+
+    if imp_major < tgt_major:
+        return False
+
+    if imp_major == tgt_major:
+
+        ## Minor
+        if imp_minor > tgt_minor:
+            return True
+
+        if imp_minor < tgt_minor:
+            return False
+
+        if imp_minor == tgt_minor:
+
+            ## Patch
+            if imp_patch > tgt_patch:
+                return True
+            if imp_patch < tgt_patch:
+                return False
+            if imp_patch == tgt_patch:
+                return True
+
+
+################################################################################
+## File
+################################################################################
+def _copy_a_file(src, dst, allow_overwrite=False):
+    if src == "/dev/null":
+        print(f"\n/dev/null was not copied.\n")
+
+    else:
+
+        if dst.endswith("/"):
+            _, src_fname, src_ext = mngs.general.split_fpath(src)
+            # src_fname = src + src_ext
+            dst = dst + src_fname + src_ext
+
+        if not os.path.exists(dst):
+            shutil.copyfile(src, dst)
+            print(f'\nCopied "{src}" to "{dst}".\n')
+
+        else:
+            if allow_overwrite:
+                shutil.copyfile(src, dst)
+                print(f'\nCopied "{src}" to "{dst}" (overwritten).\n')
+
+            if not allow_overwrite:
+                print(f'\n"{dst}" exists and copying from "{src}" was aborted.\n')
+
+
+def copy_files(src_files, dists, allow_overwrite=False):
+    if isinstance(src_files, str):
+        src_files = [src_files]
+
+    if isinstance(dists, str):
+        dists = [dists]
+
+    for sf in src_files:
+        for dst in dists:
+            _copy_a_file(sf, dst, allow_overwrite=allow_overwrite)
+
+
+def copy_the_file(sdir):  # dst
+    __file__ = inspect.stack()[1].filename
+    _, fname, ext = mngs.general.split_fpath(__file__)
+
+    dst = sdir + fname + ext
+
+    if "ipython" not in __file__:  # for ipython
+        # shutil.copyfile(__file__, dst)
+        # print(f"Saved to: {dst}")
+        _copy_a_file(__file__, dst)
