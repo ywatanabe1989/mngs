@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Time-stamp: "2021-11-30 13:13:02 (ylab)"
+# Time-stamp: "2021-12-13 01:04:27 (ywatanabe)"
 
 import torch
 import torch.nn as nn
@@ -36,6 +36,7 @@ class FeatureExtractor(nn.Module):
             "rfft_bands",
             "beyond_r_sigma_ratio",
         ],
+        batch_size=None,
     ):
         super().__init__()
 
@@ -51,13 +52,36 @@ class FeatureExtractor(nn.Module):
             rfft_bands=partial(mngs.dsp.rfft_bands, samp_rate=samp_rate),
             beyond_r_sigma_ratio=mngs.dsp.beyond_r_sigma_ratio,
         )
+
         self.features_list = features_list
 
+        self.batch_size = batch_size
+
     def forward(self, x):
-        conc = torch.cat(
-            [self.func_dict[f_str](x) for f_str in self.features_list], dim=-1
-        )
-        return conc
+        if self.batch_size is None:
+            conc = torch.cat(
+                [self.func_dict[f_str](x) for f_str in self.features_list], dim=-1
+            )
+            return conc
+        else:
+            conc = []
+            n_batches = len(x) // self.batch_size + 1
+            for i_batch in range(n_batches):
+                try:
+                    start = i_batch * self.batch_size
+                    end = (i_batch + 1) * self.batch_size
+                    conc.append(
+                        torch.cat(
+                            [
+                                self.func_dict[f_str](x[start:end].cuda())
+                                for f_str in self.features_list
+                            ],
+                            dim=-1,
+                        ).cpu()
+                    )
+                except Exception as e:
+                    print(e)
+            return torch.cat(conc)
 
 
 def main():
@@ -69,7 +93,8 @@ def main():
 
     x = torch.randn(BS, N_CHS, SEQ_LEN).cuda()
 
-    m = FeatureExtractor(SAMP_RATE)
+    m = FeatureExtractor(SAMP_RATE, batch_size=8)
+
     out = m(x)  # 15 features
 
 
