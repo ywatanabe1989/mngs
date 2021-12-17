@@ -7,7 +7,7 @@ from pprint import pprint
 import matplotlib
 import mngs
 import pandas as pd
-
+import numpy as np
 import warnings
 
 
@@ -63,6 +63,17 @@ class LearningCurveLogger(object):
             self.logged_dict,
             pivot_column=None,
         )
+
+    def get_x_of_i_epoch(self, x, step, i_epoch):
+        """
+        lc_logger.get_x_of_i_epoch("true_label_diag", "Validation", 3)
+        """
+        assert step in ['Training', "Validation", "Test"]
+        indi = self.dfs[step]['i_epoch'] == i_epoch
+        x_all_arr = np.array(self.dfs[step][x])
+        assert len(indi) == len(x_all_arr)
+        return x_all_arr[indi]
+
 
     def plot_learning_curves(
         self,
@@ -171,24 +182,10 @@ class LearningCurveLogger(object):
             df_pivot_i_epoch_step.columns
         )
         print("\n----------------------------------------\n")
-        print(f"\n{step}: (estimated)\n")
+        print(f"\n{step}: (mean of batches)\n")
         pprint(df_pivot_i_epoch_step)
         print("\n----------------------------------------\n")
 
-    # def print(self, step):
-    #     df = pd.DataFrame(
-    #         {
-    #             k: self.logged_dict[step][k]
-    #             for k in ["i_epoch"] + self._find_keys_to_plot(self.logged_dict)
-    #         }
-    #     ).pivot_table(columns=["i_epoch"], aggfunc="mean")
-
-    #     df = df.set_index(pd.Series(self._rename_if_key_to_plot(list(df.index))))
-
-    #     print("\n----------------------------------------\n")
-    #     print(f"\n{step}: (estimated)\n")
-    #     pprint(df)
-    #     print("\n----------------------------------------\n")
 
     @staticmethod
     def _find_keys_to_plot(logged_dict):

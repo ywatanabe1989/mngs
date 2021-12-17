@@ -29,3 +29,4 @@ from .feature_extractions import (
     fft,
     bandpass,
 )
+from ._BANDS_LIM_HZ_DICT import BANDS_LIM_HZ_DICT

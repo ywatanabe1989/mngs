@@ -76,6 +76,10 @@ def load(lpath, show=False, **kwargs):
 
         obj = xml2dict(lpath)
 
+    # catboost model
+    if lpath.endswith(".cbm"):
+        obj = obj.load_model(lpath)
+        
     # if mngs.general.is_defined_local("obj"):
     if "obj" in locals():
         print("\nLoaded from: {}\n".format(lpath))
@@ -107,3 +111,35 @@ def get_data_path_from_a_package(package_str, resource):
     data_dir = os.path.join(spec.origin.split("src")[0], "data")
     resource_path = os.path.join(data_dir, resource)
     return resource_path
+
+def load_yaml_as_an_optuna_dict(fpath_yaml, trial):
+    # _d = mngs.io.load(fpath_yaml)
+    _d = load(fpath_yaml)    
+    
+    for k, v in _d.items():
+        
+        dist = v["distribution"]
+
+        if dist == "categorical":
+            _d[k] = trial.suggest_categorical(k, v["values"])
+
+        if dist == "loguniform":
+            _d[k] = trial.suggest_loguniform(k, float(v["min"]), float(v["max"]))
+
+    return _d
+
+def load_study_rdb(study_name, rdb_raw_bytes_url):
+    """
+    study = load_study_rdb(
+        study_name="YOUR_STUDY_NAME",
+        rdb_raw_bytes_url="sqlite:///*.db"
+    )
+    """
+    import optuna
+    # rdb_raw_bytes_url = "sqlite:////tmp/fake/ywatanabe/_MicroNN_WindowSize-1.0-sec_MaxEpochs_100_2021-1216-1844/optuna_study_test_file#0.db"
+    storage = optuna.storages.RDBStorage(url=rdb_raw_bytes_url)
+    study = optuna.load_study(study_name=study_name, storage=storage)
+    print(f"\nLoaded: {rdb_raw_bytes_url}\n")
+    return study
+    
+    

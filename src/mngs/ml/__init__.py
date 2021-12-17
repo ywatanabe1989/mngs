@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 
-from . import plt
+from . import plt, layer, optim, act, utils
 from .LearningCurveLogger import LearningCurveLogger
-from .merge_labels import merge_labels
+
 from .ClassificationReporter import ClassificationReporter
-from .under_sample import under_sample
+
 from .ClassifierServer import ClassifierServer
-from ._get_params import get_params
+# from ._switchers import switch_layer, switch_act, switch_optim
+from .loss.MultiTaskLoss import MultiTaskLoss
+from .EarlyStopping import EarlyStopping
