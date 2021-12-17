@@ -67,7 +67,7 @@ def squeeze_spaces(string, pattern=" +", repl=" "):
     return re.sub(pattern, repl, string)
 
 
-def search(patterns, strings):
+def search(patterns, strings, only_perfect_match=False):
     """
     regular expression is acceptable for patterns.
 
@@ -96,25 +96,20 @@ def search(patterns, strings):
     patterns = to_list(patterns)
     strings = to_list(strings)
 
-    # if not isinstance(strings, (list, tuple, pd.core.indexes.base.Index)):
-    #     strings = [strings]
-
-    # if isinstance(strings, collections.abc.KeysView):
-    #     strings = list(strings)
-
-    # if not isinstance(patterns, (list, tuple, pd.core.indexes.base.Index)):
-    #     patterns = [patterns]
-
-    # if isinstance(strings, collections.abc.KeysView):
-    #     patterns = list(patterns)
-
     ## Main
-    indi_matched = []
-    for pattern in patterns:
-        for i_str, string in enumerate(strings):
-            m = re.search(pattern, string)
-            if m is not None:
-                indi_matched.append(i_str)
+    if not only_perfect_match:
+        indi_matched = []
+        for pattern in patterns:
+            for i_str, string in enumerate(strings):
+                m = re.search(pattern, string)
+                if m is not None:
+                    indi_matched.append(i_str)
+    else:
+        indi_matched = []
+        for pattern in patterns:
+            for i_str, string in enumerate(strings):
+                if pattern == string:
+                    indi_matched.append(i_str)
 
     ## Sorts the indices according to the original strings
     indi_matched = natsorted(indi_matched)
@@ -224,6 +219,14 @@ def isclose(mutable_a, mutable_b):
 ################################################################################
 ## dictionary
 ################################################################################
+def merge_dicts_wo_overlaps(*dicts):
+    merged_dict = {} # init
+    for dict in dicts:
+        assert mngs.general.search(merged_dict.keys(), dict.keys(), only_perfect_match=True) == ([], [])
+        merged_dict.update(dict)
+    return merged_dict
+
+
 def listed_dict(keys=None):  # Is there a better name?
     """
     Example 1:
