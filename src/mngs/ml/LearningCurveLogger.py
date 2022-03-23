@@ -69,8 +69,8 @@ class LearningCurveLogger(object):
         lc_logger.get_x_of_i_epoch("true_label_diag", "Validation", 3)
         """
         assert step in ['Training', "Validation", "Test"]
-        indi = self.dfs[step]['i_epoch'] == i_epoch
-        x_all_arr = np.array(self.dfs[step][x])
+        indi = np.array(self.logged_dict[step]['i_epoch']) == i_epoch
+        x_all_arr = np.array(self.logged_dict[step][x])
         assert len(indi) == len(x_all_arr)
         return x_all_arr[indi]
 
@@ -268,7 +268,7 @@ if __name__ == "__main__":
     ################################################################################
     ## Sets tee
     ################################################################################
-    sdir = mngs.general.path.mk_spath("")  # "/tmp/sdir/"
+    sdir = mngs.io.path.mk_spath("")  # "/tmp/sdir/"
     sys.stdout, sys.stderr = mngs.general.tee(sys, sdir)
 
     ################################################################################

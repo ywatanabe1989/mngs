@@ -1,22 +1,10 @@
 #!/usr/bin/env python3
-# Time-stamp: "2021-12-13 01:04:27 (ywatanabe)"
+# Time-stamp: "2021-12-21 21:41:38 (ywatanabe)"
 
 import torch
 import torch.nn as nn
 import mngs
 
-# from mngs.dsp import (
-#     mean,
-#     std,
-#     skewness,
-#     kurtosis,
-#     median,
-#     q25,
-#     q75,
-#     rms,
-#     rfft_bands,
-#     beyond_r_sigma_ratio,
-# )
 from functools import partial
 
 

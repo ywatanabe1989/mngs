@@ -2,19 +2,19 @@
 
 import collections
 import math
+import os
 import re
+import shutil
 import time
 from bisect import bisect_left, bisect_right
 from collections import defaultdict
 
+import mngs
 import numpy as np
 import pandas as pd
 import torch
 from natsort import natsorted
 
-import mngs
-import os
-import shutil
 
 ################################################################################
 ## strings
@@ -390,3 +390,18 @@ def copy_the_file(sdir):  # dst
         # shutil.copyfile(__file__, dst)
         # print(f"Saved to: {dst}")
         _copy_a_file(__file__, dst)
+
+def is_nan(X):
+    if isinstance(X, pd.DataFrame):
+        if X.isna().any().any():
+            raise ValueError("NaN was found in X")
+    elif isinstance(X, np.ndarray):
+        if np.isnan(X).any():        
+            raise ValueError("NaN was found in X")
+    elif torch.is_tensor(X):
+        if X.isnan().any():        
+            raise ValueError("NaN was found in X")
+    elif isinstance(X, (float, int)):
+        if math.isnan(X):
+            raise ValueError("X was NaN")
+

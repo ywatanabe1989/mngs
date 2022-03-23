@@ -113,7 +113,6 @@ def get_data_path_from_a_package(package_str, resource):
     return resource_path
 
 def load_yaml_as_an_optuna_dict(fpath_yaml, trial):
-    # _d = mngs.io.load(fpath_yaml)
     _d = load(fpath_yaml)    
     
     for k, v in _d.items():
@@ -123,9 +122,12 @@ def load_yaml_as_an_optuna_dict(fpath_yaml, trial):
         if dist == "categorical":
             _d[k] = trial.suggest_categorical(k, v["values"])
 
-        if dist == "loguniform":
+        elif dist == "uniform":
+            _d[k] = trial.suggest_int(k, float(v["min"]), float(v["max"]))
+            
+        elif dist == "loguniform":
             _d[k] = trial.suggest_loguniform(k, float(v["min"]), float(v["max"]))
-
+            
     return _d
 
 def load_study_rdb(study_name, rdb_raw_bytes_url):
