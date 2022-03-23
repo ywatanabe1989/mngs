@@ -47,7 +47,7 @@ def save(obj, sfname_or_spath, makedirs=True, show=True, **kwargs):
         ## for ipython
         __file__ = inspect.stack()[1].filename
         if "ipython" in __file__:
-            __file__ = "/tmp/fake.py"
+            __file__ = f'/tmp/fake-{os.getenv("USER")}.py'
 
         ## spath
         fpath = __file__

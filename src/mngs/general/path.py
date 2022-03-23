@@ -31,7 +31,7 @@ def mk_spath(sfname, makedirs=False):
 
     __file__ = inspect.stack()[1].filename
     if "ipython" in __file__:  # for ipython
-        __file__ = "/tmp/fake.py"
+        __file__ = f'/tmp/fake-{os.getenv("USER")}.py'
 
     # __file__ = get_current_file_name()
 
