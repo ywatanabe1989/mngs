@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Time-stamp: "2021-12-10 13:08:12 (ywatanabe)"
+# Time-stamp: "2021-12-18 16:58:11 (ywatanabe)"
 
 import numpy as np
 import mngs
@@ -75,7 +75,11 @@ class EarlyStopping:
             )
 
         for spath, model in spaths_and_models_dict.items():
-            mngs.general.save(model.state_dict(), spath)
+            try:
+                mngs.io.save(model.state_dict(), spath) # torch
+            except Exception as e:
+                print(e)
+                mngs.io.save(model, spath)
 
         self.i_epoch = i_epoch
         self.i_global = i_global
