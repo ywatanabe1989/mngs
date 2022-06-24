@@ -127,6 +127,9 @@ def load_yaml_as_an_optuna_dict(fpath_yaml, trial):
             
         elif dist == "loguniform":
             _d[k] = trial.suggest_loguniform(k, float(v["min"]), float(v["max"]))
+
+        elif dist == "intloguniform":
+            _d[k] = trial.suggest_int(k, float(v["min"]), float(v["max"]), log=True)
             
     return _d
 
