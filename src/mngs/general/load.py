@@ -26,6 +26,14 @@ def load(lpath, show=False, **kwargs):
     # csv
     if lpath.endswith(".csv"):
         obj = pd.read_csv(lpath, **kwargs)
+    # excel
+    if (
+        lpath.endswith(".xls")
+        or lpath.endswith(".xlsx")
+        or lpath.endswith(".xlsm")
+        or lpath.endswith(".xlsb")
+    ):
+        obj = pd.read_excel(lpath, **kwargs)
     # numpy
     if lpath.endswith(".npy"):
         obj = np.load(lpath)
@@ -79,10 +87,11 @@ def load(lpath, show=False, **kwargs):
     # catboost model
     if lpath.endswith(".cbm"):
         obj = obj.load_model(lpath)
-        
+
     # if mngs.general.is_defined_local("obj"):
     if "obj" in locals():
-        print("\nLoaded from: {}\n".format(lpath))
+        if show:
+            print("\nLoaded from: {}\n".format(lpath))
         return obj
     else:
         return None
@@ -112,11 +121,12 @@ def get_data_path_from_a_package(package_str, resource):
     resource_path = os.path.join(data_dir, resource)
     return resource_path
 
+
 def load_yaml_as_an_optuna_dict(fpath_yaml, trial):
-    _d = load(fpath_yaml)    
-    
+    _d = load(fpath_yaml)
+
     for k, v in _d.items():
-        
+
         dist = v["distribution"]
 
         if dist == "categorical":
@@ -124,14 +134,15 @@ def load_yaml_as_an_optuna_dict(fpath_yaml, trial):
 
         elif dist == "uniform":
             _d[k] = trial.suggest_int(k, float(v["min"]), float(v["max"]))
-            
+
         elif dist == "loguniform":
             _d[k] = trial.suggest_loguniform(k, float(v["min"]), float(v["max"]))
 
         elif dist == "intloguniform":
             _d[k] = trial.suggest_int(k, float(v["min"]), float(v["max"]), log=True)
-            
+
     return _d
+
 
 def load_study_rdb(study_name, rdb_raw_bytes_url):
     """
@@ -141,10 +152,9 @@ def load_study_rdb(study_name, rdb_raw_bytes_url):
     )
     """
     import optuna
+
     # rdb_raw_bytes_url = "sqlite:////tmp/fake/ywatanabe/_MicroNN_WindowSize-1.0-sec_MaxEpochs_100_2021-1216-1844/optuna_study_test_file#0.db"
     storage = optuna.storages.RDBStorage(url=rdb_raw_bytes_url)
     study = optuna.load_study(study_name=study_name, storage=storage)
     print(f"\nLoaded: {rdb_raw_bytes_url}\n")
     return study
-    
-    
