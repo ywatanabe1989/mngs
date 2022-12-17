@@ -12,16 +12,23 @@ def confusion_matrix(
     plt,
     cm,
     labels=None,
+    pred_labels=None,
+    true_labels=None,
     label_rotation_xy=(0, 0),
     title=None,
     colorbar=True,
-    extend_ratio=1.0,
+    x_extend_ratio=1.0,
+    y_extend_ratio=1.0,        
 ):
     """
     Inverse the y-axis and plot the confusion matrix as a heatmap.
     The predicted labels (in x-axis) is symboled with hat (^).
     The plt object is passed to adjust the figure size
 
+    cm = np.random.randint(low=0, high=10, size=[3,4])
+    x: predicted labels
+    y: true_labels
+    
     kwargs:
 
         "extend_ratio":
@@ -29,16 +36,26 @@ def confusion_matrix(
             in the vertical direction.
 
     """
-    df = pd.DataFrame(data=cm).copy()
+    df = pd.DataFrame(data=cm).copy().T
     vmax = np.array(df).max().astype(int)
 
-    # x- and y-ticklabels
-    if labels is not None:
-        df.index = [mngs.general.to_the_latex_style(l) for l in labels]  # true labels
-        df.columns = [
-            mngs.general.add_hat_in_the_latex_style(l) for l in labels
-        ]  # predicted labels
+    if (labels is not None) and (pred_labels is None):
+        df.columns = [mngs.general.to_the_latex_style(l) for l in labels] # pred_labels
+    if pred_labels is not None:
+        df.columns = [mngs.general.to_the_latex_style(l) for l in pred_labels]
 
+    if (labels is not None) and (true_labels is None):
+        df.index = [mngs.general.to_the_latex_style(l) for l in labels] # true_labels
+    if true_labels is not None:
+        df.index = [mngs.general.to_the_latex_style(l) for l in true_labels]
+        
+    # # x- and y-ticklabels
+    # if labels is not None:
+        
+    #     df.columns = [
+    #         mngs.general.add_hat_in_the_latex_style(l) for l in labels
+    #     ]  # predicted labels
+        
     fig, ax = plt.subplots()
     res = sns.heatmap(
         df,
@@ -58,15 +75,17 @@ def confusion_matrix(
 
     # Makes the frame visible
     for _, spine in res.spines.items():
-        spine.set_visible(True)
+        # spine.set_visible(True)
+        spine.set_visible(False)        
 
     ax.set_xlabel("Predicted label")
     ax.set_ylabel("True label")
     ax.set_title(title)
 
-    ax = mngs.plt.ax_extend(ax, 1, extend_ratio)
+    ax = mngs.plt.ax_extend(ax, x_extend_ratio, y_extend_ratio)
 
-    ax.set_box_aspect(1)
+    if df.shape[0] == df.shape[1]:
+        ax.set_box_aspect(1)
 
     ax.set_xticklabels(
         ax.get_xticklabels(),
@@ -87,7 +106,7 @@ def confusion_matrix(
     left_orig = bbox.x0
     width_orig = bbox.x1 - bbox.x0
     g_x_orig = left_orig + width_orig / 2.0
-    width_tgt = width_orig * extend_ratio  # x_extend_ratio
+    width_tgt = width_orig * x_extend_ratio  # x_extend_ratio
     dx = width_orig - width_tgt
     # print(dx)
 
@@ -133,6 +152,8 @@ def confusion_matrix(
         )
         cbar.locator = ticker.MaxNLocator(nbins=4)  # tick_locator
         cbar.update_ticks()
+        # cbar.outline.set_edgecolor("#f9f2d7")
+        cbar.outline.set_edgecolor("white")        
 
     return fig
 
@@ -188,6 +209,8 @@ if __name__ == "__main__":
     cm = sklearn.metrics.confusion_matrix(y_test, y_pred)
     cm **= 3
 
+    cm = np.random.randint(low=0, high=10, size=[3,4])
+    
     mngs.plt.configure_mpl(
         plt,
         # figsize=(4, 8),
@@ -199,14 +222,18 @@ if __name__ == "__main__":
         tick_width=0.2,
     )
 
-    labels = class_names
+    # labels = class_names
+    pred_labels = ["A", "B", "C"]
+    true_labels = ["a", "b", "c", "d"]    
 
     fig = confusion_matrix(
         plt,
         cm,
-        labels=class_names,
+        # labels=class_names,
+        pred_labels=pred_labels,
+        true_labels=true_labels,
         label_rotation_xy=(60, 60),
-        extend_ratio=0.5,
+        x_extend_ratio=1.,
         colorbar=True,
     )
 

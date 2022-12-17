@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import warnings
 from itertools import cycle
 
 import numpy as np
@@ -17,24 +18,25 @@ def solve_the_intersection_of_a_line_and_iso_f1_curve(f1, a, b):
     _b = -a * f1 + 2 * b - f1
     _c = -b * f1
 
-    x_f = (-_b + np.sqrt(_b ** 2 - 4 * _a * _c)) / (2 * _a)
+    x_f = (-_b + np.sqrt(_b**2 - 4 * _a * _c)) / (2 * _a)
     y_f = a * x_f + b
 
     return (x_f, y_f)
+
+
+def to_onehot(labels, n_classes):
+    eye = np.eye(n_classes, dtype=int)
+    return eye[labels]
 
 
 def pre_rec_auc(plt, true_class, pred_proba, labels):
     """
     Calculates the precision recall curve.
     """
-    ## One-hot encoding
-    def to_onehot(labels, n_classes):
-        eye = np.eye(n_classes, dtype=int)
-        return eye[labels]
 
     # Use label_binarize to be multi-label like settings
     n_classes = len(labels)
-    true_class = to_onehot(true_class, n_classes)
+    true_class_onehot = to_onehot(true_class, n_classes)
 
     # For each class
     precision = dict()
@@ -42,40 +44,55 @@ def pre_rec_auc(plt, true_class, pred_proba, labels):
     threshold = dict()
     pre_rec_auc = dict()
     for i in range(n_classes):
-        precision[i], recall[i], threshold[i] = precision_recall_curve(
-            true_class[:, i], pred_proba[:, i]
-        )
-        pre_rec_auc[i] = average_precision_score(true_class[:, i], pred_proba[:, i])
+        true_class_i_onehot = true_class_onehot[:, i]
+        pred_proba_i = pred_proba[:, i]
 
-    ################################################################################
+        try:
+            precision[i], recall[i], threshold[i] = precision_recall_curve(
+                true_class_i_onehot,
+                pred_proba_i,
+            )
+            pre_rec_auc[i] = average_precision_score(true_class_i_onehot, pred_proba_i)
+        except Exception as e:
+            print(e)
+            precision[i], recall[i], threshold[i], pre_rec_auc[i] = (
+                np.nan,
+                np.nan,
+                np.nan,
+                np.nan,
+            )
+
     ## Average precision: micro and macro
-    ################################################################################
+
     # A "micro-average": quantifying score on all classes jointly
     precision["micro"], recall["micro"], threshold["micro"] = precision_recall_curve(
-        true_class.ravel(), pred_proba.ravel()
+        true_class_onehot.ravel(), pred_proba.ravel()
     )
     pre_rec_auc["micro"] = average_precision_score(
-        true_class, pred_proba, average="micro"
+        true_class_onehot, pred_proba, average="micro"
     )
-    # print(
-    #     "Average precision score, micro-averaged over all classes: {0:0.2f}".format(
-    #         pre_rec_auc["micro"]
-    #     )
-    # )
 
     # macro
-    pre_rec_auc["macro"] = average_precision_score(
-        true_class, pred_proba, average="macro"
-    )
-    # print(
-    #     "Average precision score, macro-averaged over all classes: {0:0.2f}".format(
-    #         pre_rec_auc["macro"]
-    #     )
+    _pre_rec_aucs = []
+    for i in range(n_classes):
+        try:
+            _pre_rec_aucs.append(
+                average_precision_score(
+                    true_class_onehot[:, i], pred_proba[:, i], average="macro"
+                )
+            )
+        except Exception as e:
+            print(
+                f'\nPRE-REC-AUC for "{labels[i]}" was not defined and NaN-filled '
+                "for a calculation purpose (for the macro avg.)\n"
+            )
+            _pre_rec_aucs.append(np.nan)
+    pre_rec_auc["macro"] = np.nanmean(_pre_rec_aucs)
+
+    # pre_rec_auc["macro"] = average_precision_score(
+    #     true_class_onehot, pred_proba, average="macro"
     # )
 
-    ################################################################################
-    ## Plot
-    ################################################################################
     # Plot Precision-Recall curve for each class and iso-f1 curves
     colors = cycle(["navy", "turquoise", "darkorange", "cornflowerblue", "teal"])
     fig, ax = plt.subplots()

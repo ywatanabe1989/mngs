@@ -3,7 +3,7 @@
 from . import plt, layer, optim, act, utils
 from .LearningCurveLogger import LearningCurveLogger
 
-from .ClassificationReporter import ClassificationReporter
+from .ClassificationReporter import ClassificationReporter, MultiClassificationReporter
 
 from .ClassifierServer import ClassifierServer
 # from ._switchers import switch_layer, switch_act, switch_optim

@@ -14,6 +14,7 @@ import numpy as np
 import pandas as pd
 import torch
 from natsort import natsorted
+from functools import partial, wraps
 
 
 ################################################################################
@@ -67,7 +68,7 @@ def squeeze_spaces(string, pattern=" +", repl=" "):
     return re.sub(pattern, repl, string)
 
 
-def search(patterns, strings, only_perfect_match=False):
+def search(patterns, strings, only_perfect_match=False, as_bool=False):
     """
     regular expression is acceptable for patterns.
 
@@ -88,7 +89,9 @@ def search(patterns, strings, only_perfect_match=False):
         if isinstance(s_or_p, collections.abc.KeysView):
             s_or_p = list(s_or_p)
 
-        elif not isinstance(s_or_p, (list, tuple, pd.core.indexes.base.Index)):
+        elif not isinstance(
+            s_or_p, (list, tuple, pd.core.indexes.base.Index, pd.core.series.Series)
+        ):
             s_or_p = [s_or_p]
 
         return s_or_p
@@ -114,7 +117,15 @@ def search(patterns, strings, only_perfect_match=False):
     ## Sorts the indices according to the original strings
     indi_matched = natsorted(indi_matched)
     keys_matched = list(np.array(strings)[indi_matched])
-    return indi_matched, keys_matched
+
+    if as_bool:
+        bool_matched = np.zeros(len(strings), dtype=bool)
+        if np.unique(indi_matched).size != 0:
+            bool_matched[np.unique(indi_matched)] = True
+        return bool_matched, keys_matched
+
+    else:
+        return indi_matched, keys_matched
 
 
 def grep(str_list, search_key):
@@ -220,9 +231,11 @@ def isclose(mutable_a, mutable_b):
 ## dictionary
 ################################################################################
 def merge_dicts_wo_overlaps(*dicts):
-    merged_dict = {} # init
+    merged_dict = {}  # init
     for dict in dicts:
-        assert mngs.general.search(merged_dict.keys(), dict.keys(), only_perfect_match=True) == ([], [])
+        assert mngs.general.search(
+            merged_dict.keys(), dict.keys(), only_perfect_match=True
+        ) == ([], [])
         merged_dict.update(dict)
     return merged_dict
 
@@ -391,17 +404,29 @@ def copy_the_file(sdir):  # dst
         # print(f"Saved to: {dst}")
         _copy_a_file(__file__, dst)
 
+
 def is_nan(X):
     if isinstance(X, pd.DataFrame):
         if X.isna().any().any():
             raise ValueError("NaN was found in X")
     elif isinstance(X, np.ndarray):
-        if np.isnan(X).any():        
+        if np.isnan(X).any():
             raise ValueError("NaN was found in X")
     elif torch.is_tensor(X):
-        if X.isnan().any():        
+        if X.isnan().any():
             raise ValueError("NaN was found in X")
     elif isinstance(X, (float, int)):
         if math.isnan(X):
             raise ValueError("X was NaN")
 
+
+def partial_at(func, index, value):
+    @wraps(func)
+    def result(*rest, **kwargs):
+        args = []
+        args.extend(rest[:index])
+        args.append(value)
+        args.extend(rest[index:])
+        return func(*args, **kwargs)
+
+    return result

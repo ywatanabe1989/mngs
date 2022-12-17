@@ -14,3 +14,4 @@ sklearn
 statsmodels
 torch
 xmltodict
+openpyxl
