@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Time-stamp: "2021-11-30 17:09:22 (ylab)"
+# Time-stamp: "2022-10-07 13:35:38 (ywatanabe)"
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -127,7 +127,7 @@ def _fft_1d(x, samp_rate, return_freq=True):
 
 
 def rfft_bands(
-    x, samp_rate, bands_str=["delta", "theta", "lalpha", "halpha", "beta", "gamma"]
+        x, samp_rate, bands_str=["delta", "theta", "lalpha", "halpha", "beta", "gamma"], normalize=False,
 ):
     """
     Returns mean absolute rfft coefficients of bands.
@@ -141,17 +141,23 @@ def rfft_bands(
         "beta": [13, 32],
         "gamma": [32, 75],
     }
+    
+    rfft_bands_p = partial(mngs.dsp.rfft_bands, samp_rate=samp_rate)
     """
     coef, freq = rfft(x, samp_rate)
+    amp = coef.abs()
+    
+    if normalize:
+        amp /= amp.sum(axis=-1, keepdims=True)
 
-    coef_bands_abs_mean = []
+    amp_bands_abs_mean = []
     for band_str in bands_str:
         low, high = BANDS_LIM_HZ_DICT[band_str]
         indi_band = (low <= freq) & (freq <= high)
-        coef_band_abs_mean = coef[..., indi_band].abs().mean(dim=-1)
-        coef_bands_abs_mean.append(coef_band_abs_mean)
+        amp_band_abs_mean = amp[..., indi_band].mean(dim=-1)
+        amp_bands_abs_mean.append(amp_band_abs_mean)
 
-    return torch.stack(coef_bands_abs_mean, dim=-1)
+    return torch.stack(amp_bands_abs_mean, dim=-1)
 
 
 def rfft(x, samp_rate):
@@ -328,3 +334,6 @@ if __name__ == "__main__":
     SAMP_RATE = 1000
     x = demo_sig(freqs_hz=[2, 3, 5, 10], samp_rate=SAMP_RATE, len_sec=2)
     # x = torch.tensor(chirp(time, 3, 500, 100))
+    coef, freq = rfft(x, SAMP_RATE)
+    amp = coef.abs()
+    

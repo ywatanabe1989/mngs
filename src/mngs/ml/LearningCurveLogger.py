@@ -47,7 +47,7 @@ class LearningCurveLogger(object):
             # del dict_to_log["gt_label"]
         ########################################
 
-        assert step in ["Training", "Validation", "Test"]
+        # assert step in ["Training", "Validation", "Test"]
 
         ## Initialize self.logged_dict
         for k_to_log in dict_to_log.keys():
@@ -68,12 +68,11 @@ class LearningCurveLogger(object):
         """
         lc_logger.get_x_of_i_epoch("true_label_diag", "Validation", 3)
         """
-        assert step in ['Training', "Validation", "Test"]
-        indi = np.array(self.logged_dict[step]['i_epoch']) == i_epoch
+        # assert step in ['Training', "Validation", "Test"]
+        indi = np.array(self.logged_dict[step]["i_epoch"]) == i_epoch
         x_all_arr = np.array(self.logged_dict[step][x])
         assert len(indi) == len(x_all_arr)
         return x_all_arr[indi]
-
 
     def plot_learning_curves(
         self,
@@ -124,7 +123,8 @@ class LearningCurveLogger(object):
 
             for step_k in self.dfs_pivot_i_global.keys():
 
-                if step_k == "Training":  # line
+                if step_k == re.search("^[Tt]rain", step_k):  # line
+                    # if step_k == "Training":  # line
                     ax.plot(
                         self.dfs_pivot_i_global[step_k].index,
                         self.dfs_pivot_i_global[step_k][plt_k],
@@ -155,11 +155,11 @@ class LearningCurveLogger(object):
                             linestyle="--",
                             color=mngs.plt.colors.to_RGBA("gray", alpha=0.5),
                         )
-                        ax.text(
-                            i_global_epoch_start,
-                            ax.get_ylim()[1] * 1.0,
-                            f"epoch#{i_epoch}",
-                        )
+                        # ax.text(
+                        #     i_global_epoch_start,
+                        #     ax.get_ylim()[1] * 1.0,
+                        #     f"epoch#{i_epoch}",
+                        # )
                     ########################################
 
                 if (step_k == "Validation") or (step_k == "Test"):  # scatter
@@ -186,7 +186,6 @@ class LearningCurveLogger(object):
         pprint(df_pivot_i_epoch_step)
         print("\n----------------------------------------\n")
 
-
     @staticmethod
     def _find_keys_to_plot(logged_dict):
         _steps_str = list(logged_dict.keys())
@@ -199,8 +198,9 @@ class LearningCurveLogger(object):
     @staticmethod
     def _rename_if_key_to_plot(keys):
         def _rename_key_to_plot(key_to_plot):
-            renamed = key_to_plot[:-5]
-            renamed = renamed.replace("_", " ")
+            # renamed = key_to_plot[:-5]
+            renamed = re.sub("_plot", "", key_to_plot).replace("_", " ")
+            # renamed = renamed.replace("_", " ")
             capitalized = []
             for s in renamed.split(" "):
                 if not re.search("^[A-Z]", s):

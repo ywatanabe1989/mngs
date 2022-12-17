@@ -18,9 +18,24 @@ RGB_d = {
     "gray": [128, 128, 128],
     "purple": [200, 50, 255],
     "light_blue": [20, 200, 200],
-    "blown": [128, 0, 0],
+    "brown": [128, 0, 0],
     "navy": [0, 0, 100],
+    "dan": [228, 94, 50],            
 }
+
+hex_d = {
+    "blue": "#0080C0",
+    "red": "#FF4632",
+    "pink": "#FF96C8",
+    "green": "#14B414",
+    "yellow": "#E6A014",
+    "gray": "#808080",
+    "purple": "#C832FF",
+    "light_blue": "#14C8C8",
+    "brown": "#800000",
+    "navy": "#000064",
+    "dan": "#E45E32",
+    }
 
 
 def cycle_color(i_color):
@@ -41,6 +56,7 @@ def to_RGB(c):
         "light_blue": [20, 200, 200],
         "blown": [128, 0, 0],
         "navy": [0, 0, 100],
+        "dan": [228, 94, 50],        
     }
     return RGB_d[c]
 
@@ -57,5 +73,23 @@ def to_RGBA(c, alpha=0.5):
         "light_blue": (0.078, 0.784, 0.784, alpha),
         "blown": (0.502, 0.0, 0.0, alpha),
         "navy": (0.0, 0.0, 0.392, alpha),
+        "dan": (228, 94, 50, alpha),                
     }
     return RGBA_d[c]
+
+def to_hex_code(c):
+    hex_d = {
+        "blue": "#0080C0",
+        "red": "#FF4632",
+        "pink": "#FF96C8",
+        "green": "#14B414",
+        "yellow": "#E6A014",
+        "gray": "#808080",
+        "purple": "#C832FF",
+        "light_blue": "#14C8C8",
+        "brown": "#800000",
+        "navy": "#000064",
+        "dan": "#E45E32",
+        }
+    return hex_d[c]
+    

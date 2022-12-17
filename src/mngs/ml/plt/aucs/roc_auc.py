@@ -1,61 +1,129 @@
 #!/usr/bin/env python3
 
+import warnings
 from itertools import cycle
 
 import numpy as np
 from sklearn.metrics import roc_auc_score, roc_curve
+import pandas as pd
+
+import mngs
+
+def interpolate_roc_data_points(df):
+    df_new = pd.DataFrame({
+        "x": np.arange(1001)/1000,
+        "y": np.nan,
+        "threshold": np.nan,    
+    })
+
+    for i_row in range(len(df)-1):
+        x_pre = df.iloc[i_row]["fpr"]
+        x_post = df.iloc[i_row+1]["fpr"]
+
+        indi = (x_pre <= df_new["x"]) * (df_new["x"] <= x_post)
+
+        y_pre = df.iloc[i_row]["tpr"]
+        y_post = df.iloc[i_row+1]["tpr"]
+
+        t_pre = df.iloc[i_row]["threshold"]
+        t_post = df.iloc[i_row+1]["threshold"]
+
+        df_new["y"][indi] = y_pre
+        df_new["threshold"][indi] = t_pre
+
+    df_new["y"].iloc[0] = df["tpr"].iloc[0]
+    df_new["y"].iloc[-1] = df["tpr"].iloc[-1]
+
+    df_new["threshold"].iloc[0] = df["threshold"].iloc[0]
+    df_new["threshold"].iloc[-1] = df["threshold"].iloc[-1]
+
+    df_new["roc_auc"] = df["roc_auc"].iloc[0]
+
+    # import ipdb; ipdb.set_trace()
+    # assert df_new["y"].isna().sum() == 0
+    return df_new
 
 
-def roc_auc(plt, true_class, pred_proba, labels):
+def to_onehot(labels, n_classes):
+    eye = np.eye(n_classes, dtype=int)
+    return eye[labels]
+
+
+def roc_auc(plt, true_class, pred_proba, labels, sdir_for_csv=None):
     """
     Calculates ROC-AUC curve.
     Return: fig, metrics (dict)
     """
 
-    ## One-hot encoding
-    def to_onehot(labels, n_classes):
-        eye = np.eye(n_classes, dtype=int)
-        return eye[labels]
-
     # Use label_binarize to be multi-label like settings
     n_classes = len(labels)
-    true_class = to_onehot(true_class, n_classes)
+    true_class_onehot = to_onehot(true_class, n_classes)
 
     # For each class
     fpr = dict()
     tpr = dict()
     threshold = dict()
-    roc_auc = dict()  # fixme; auc
+    roc_auc = dict()
     for i in range(n_classes):
-        fpr[i], tpr[i], threshold[i] = roc_curve(true_class[:, i], pred_proba[:, i])
-        roc_auc[i] = roc_auc_score(true_class[:, i], pred_proba[:, i])
+        true_class_i_onehot = true_class_onehot[:, i]
+        pred_proba_i = pred_proba[:, i]
 
-    ################################################################################
+        try:
+            fpr[i], tpr[i], threshold[i] = roc_curve(true_class_i_onehot, pred_proba_i)
+            roc_auc[i] = roc_auc_score(true_class_i_onehot, pred_proba_i)
+        except Exception as e:
+            print(e)
+            fpr[i], tpr[i], threshold[i], roc_auc[i] = (
+                [np.nan],
+                [np.nan],
+                [np.nan],
+                np.nan,
+            )
+
     ## Average fpr: micro and macro
-    ################################################################################
+
     # A "micro-average": quantifying score on all classes jointly
     fpr["micro"], tpr["micro"], threshold["micro"] = roc_curve(
-        true_class.ravel(), pred_proba.ravel()
+        true_class_onehot.ravel(), pred_proba.ravel()
     )
-    roc_auc["micro"] = roc_auc_score(true_class, pred_proba, average="micro")
-    # print(
-    #     "Average fpr score, micro-averaged over all classes: {0:0.2f}".format(
-    #         roc_auc["micro"]
-    #     )
-    # )
+    roc_auc["micro"] = roc_auc_score(true_class_onehot, pred_proba, average="micro")
 
     # macro
-    roc_auc["macro"] = roc_auc_score(true_class, pred_proba, average="macro")
-    # print(
-    #     "Average fpr score, macro-averaged over all classes: {0:0.2f}".format(
-    #         roc_auc["macro"]
-    #     )
-    # )
+    _roc_aucs = []
+    for i in range(n_classes):
+        try:
+            _roc_aucs.append(
+                roc_auc_score(
+                    true_class_onehot[:, i], pred_proba[:, i], average="macro"
+                )
+            )
+        except Exception as e:
+            print(
+                f'\nROC-AUC for "{labels[i]}" was not defined and NaN-filled '
+                "for a calculation purpose (for the macro avg.)\n"
+            )
+            _roc_aucs.append(np.nan)
+    roc_auc["macro"] = np.nanmean(_roc_aucs)
 
-    ################################################################################
-    ## Plot
-    ################################################################################
-    # Plot Fpr-Tpr curve for each class and iso-f1 curves
+    if sdir_for_csv is not None:
+        # to dfs
+        for i in range(n_classes):
+            class_name = labels[i].replace(" ", "_")
+            df = pd.DataFrame(
+                data={
+                    "fpr": fpr[i],
+                    "tpr": tpr[i],
+                    "threshold": threshold[i],
+                    "roc_auc": [roc_auc[i] for _ in range(len(fpr[i]))],
+                },
+                index=pd.Index(data=np.arange(len(fpr[i])), name=class_name),
+            )
+            df = interpolate_roc_data_points(df)
+            spath = f"{sdir_for_csv}{class_name}.csv"
+            mngs.io.save(df, spath)
+
+
+    # Plot FPR-TPR curve for each class and iso-f1 curves
     colors = cycle(["navy", "turquoise", "darkorange", "cornflowerblue", "teal"])
 
     fig, ax = plt.subplots()
@@ -161,8 +229,12 @@ if __name__ == "__main__":
     plt.rcParams["legend.fontsize"] = "xx-small"
     plt.rcParams["figure.figsize"] = (16 * 1.2, 9 * 1.2)
 
+    np.unique(y_test)
+    np.unique(predicted_proba)
+
+    y_test[y_test == 9] = 8  # override 9 as 8
     ## Main
-    fig, metrics_dict = roc_auc(plt, y_test, predicted_proba, labels)
+    fig, metrics_dict = roc_auc(plt, y_test, predicted_proba, labels, sdir_for_csv="./tmp/roc_test/")
 
     fig.show()
 
