@@ -11,3 +11,7 @@ from ._draw_a_cube import draw_a_cube
 from ._get_RGBA_from_colormap import get_RGBA_from_colormap
 from .annotated_heatmap import annotated_heatmap
 from ._mk_patches import mk_patches
+from ._mk_colorbar import mk_colorbar
+from ._add_hue import add_hue
+from ._ax_fill_between import ax_fill_between
+from ._ax_circular_hist import ax_circular_hist

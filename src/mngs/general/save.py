@@ -5,6 +5,7 @@ import csv
 import pandas as pd
 import mngs
 import numpy as np
+import scipy
 
 import warnings
 
@@ -132,6 +133,10 @@ def save(obj, sfname_or_spath, makedirs=True, show=True, **kwargs):
         # pth
         elif spath.endswith(".pth"):
             torch.save(obj, spath)
+
+        # mat
+        elif spath.endswith(".mat"):
+            scipy.io.savemat(spath, obj)
 
         # catboost model
         elif spath.endswith(".cbm"):

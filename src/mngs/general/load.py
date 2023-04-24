@@ -22,6 +22,7 @@ def load(lpath, show=False, **kwargs):
     import pandas as pd
     import torch
     import yaml
+    import mne
 
     # csv
     if lpath.endswith(".csv"):
@@ -70,10 +71,11 @@ def load(lpath, show=False, **kwargs):
         obj = [l.strip("\n\r") for l in f]
         f.close()
     # pth
-    if lpath.endswith(".pth"):
+    if lpath.endswith(".pth") or lpath.endswith(".pt"):
         # return model.load_state_dict(torch.load(lpath))
         obj = torch.load(lpath)
 
+    # mat
     if lpath.endswith(".mat"):
         import pymatreader
 
@@ -83,6 +85,17 @@ def load(lpath, show=False, **kwargs):
         from ._xml2dict import xml2dict
 
         obj = xml2dict(lpath)
+    # edf
+    if lpath.endswith("edf"):
+        obj = mne.io.read_raw_edf(lpath)
+    # con    
+    if lpath.endswith("con"):
+        _obj = mne.io.read_raw(lpath)
+        obj = _obj.to_data_frame()
+        obj["samp_rate"] = _obj.info.get("sfreq")
+    # mrk
+    if lpath.endswith("mrk"):
+        obj = mne.io.kit.read_mrk(lpath)
 
     # catboost model
     if lpath.endswith(".cbm"):

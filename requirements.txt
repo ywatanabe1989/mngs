@@ -15,3 +15,9 @@ statsmodels
 torch
 xmltodict
 openpyxl
+obspy
+pyro-ppl
+torchaudio
+scikit-learn
+psutil
+pyedflib
