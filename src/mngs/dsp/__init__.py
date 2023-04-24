@@ -33,3 +33,4 @@ from ._BANDS_LIM_HZ_DICT import BANDS_LIM_HZ_DICT
 from ._normalize_time import normalize_time
 from ._common_average import common_average
 from ._take_random_references import take_random_references
+from ._gaussian_filter1d import gaussian_filter1d
