@@ -15,7 +15,9 @@ import pandas as pd
 import torch
 from natsort import natsorted
 from functools import partial, wraps
-
+import warnings
+import readchar
+import threading
 
 ################################################################################
 ## strings
@@ -430,3 +432,91 @@ def partial_at(func, index, value):
         return func(*args, **kwargs)
 
     return result
+
+
+def describe(df, method="mean", factor=1):
+    df = pd.DataFrame(df)
+    # df = df[~df[0].isna()]
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", RuntimeWarning)
+        if method == "mean":
+            return round(np.nanmean(df), 3), round(np.nanstd(df) / factor, 3)
+        if method == "median":
+            med = df.describe().T["50%"].iloc[0]
+            IQR = df.describe().T["75%"].iloc[0] - df.describe().T["25%"].iloc[0]
+            return round(med, 3), round(IQR / factor, 3)
+
+
+# def describe(arr, method="mean", factor=1):
+#     arr = pd.DataFrame(arr)
+#     arr = np.hstack(arr[~np.isnan(arr)])
+
+#     with warnings.catch_warnings():
+#         warnings.simplefilter("ignore", RuntimeWarning)
+#         if method == "mean":
+#             return np.nanmean(df), np.nanstd(df) / factor
+#         if method == "median":
+#             med = df.describe().T["50%"].iloc[0]
+#             IQR = df.describe().T["75%"].iloc[0] - df.describe().T["25%"].iloc[0]
+#             return med, IQR / factor
+
+# def count():
+#     counter = 0
+#     while True:
+#         print(counter)
+#         time.sleep(1)
+#         counter += 1
+def _return_counting_process():
+    import multiprocessing
+
+    def _count():
+        counter = 0
+        while True:
+            print(counter)
+            time.sleep(1)
+            counter += 1
+
+    p1 = multiprocessing.Process(target=_count)
+    p1.start()
+    return p1
+
+
+def wait_key(process, tgt_key="q"):
+    """
+    Example:
+        import mngs
+        p1 = mngs.general._return_counting_process()
+        mngs.gen.wait_key(p1)
+        # press q
+    """
+    pressed_key = None
+    while pressed_key != tgt_key:  # "q"
+        pressed_key = readchar.readchar()
+        print(pressed_key)
+    process.terminate()
+
+
+class ThreadWithReturnValue(threading.Thread):
+    """
+    Example:
+        t = ThreadWithReturnValue(
+            target=func, args=(,), kwargs={key: val}
+        )
+        t.start()
+        out = t.join()
+    
+    """
+    def __init__(
+        self, group=None, target=None, name=None, args=(), kwargs={}, Verbose=None
+    ):
+        Thread.__init__(self, group, target, name, args, kwargs)
+        self._return = None
+
+    def run(self):
+        if self._target is not None:
+            self._return = self._target(*self._args, **self._kwargs)
+
+    def join(self, *args):
+        ### fixme
+        Thread.join(self, *args)
+        return self._return

@@ -10,6 +10,8 @@ def RGB2RGBA(RGB, alpha=0, round=3):
 
 
 RGB_d = {
+    "white": [255, 255, 255],
+    "black": [0, 0, 0],
     "blue": [0, 128, 192],
     "red": [255, 70, 50],
     "pink": [255, 150, 200],
@@ -71,7 +73,7 @@ def to_RGBA(c, alpha=0.5):
         "gray": (0.502, 0.502, 0.502, alpha),
         "purple": (0.784, 0.196, 1.0, alpha),
         "light_blue": (0.078, 0.784, 0.784, alpha),
-        "blown": (0.502, 0.0, 0.0, alpha),
+        "brown": (0.502, 0.0, 0.0, alpha),
         "navy": (0.0, 0.0, 0.392, alpha),
         "dan": (228, 94, 50, alpha),                
     }
