@@ -10,7 +10,7 @@ pymatreader
 PyYAML
 scipy
 seaborn
-sklearn
+scikit-learn
 statsmodels
 torch
 xmltodict
@@ -21,3 +21,4 @@ torchaudio
 scikit-learn
 psutil
 pyedflib
+julius
