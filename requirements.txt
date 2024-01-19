@@ -16,7 +16,7 @@ torch
 xmltodict
 openpyxl
 obspy
-pyro-ppl
+# pyro-ppl
 torchaudio
 scikit-learn
 psutil
@@ -44,7 +44,7 @@ torch
 xmltodict
 openpyxl
 obspy
-pyro-ppl
+# pyro-ppl
 torchaudio
 psutil
 pyEDFlib
