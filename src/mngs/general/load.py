@@ -66,7 +66,7 @@ def load(lpath, show=False, **kwargs):
             obj_tmp = yaml.safe_load(f)
             obj.update(obj_tmp)
     # txt
-    if lpath.endswith(".txt"):
+    if (lpath.endswith(".txt")) or (lpath.endswith(".log")):
         f = open(lpath, "r")
         obj = [l.strip("\n\r") for l in f]
         f.close()

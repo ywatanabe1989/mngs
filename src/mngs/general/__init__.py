@@ -13,7 +13,7 @@ from .misc import (connect_nums, connect_strs, copy_files, copy_the_file,
                    is_defined_local, is_later_or_equal, isclose, listed_dict,
                    merge_dicts_wo_overlaps, pop_keys, search, squeeze_spaces,
                    take_the_closest, is_nan, partial_at, describe, wait_key, _return_counting_process)
-from .pandas import col_to_last, col_to_top, force_dataframe, merge_columns
+from .pandas import col_to_last, col_to_top, force_dataframe, merge_columns, ignore_SettingWithCopyWarning
 from .repro import *
 from .TimeStamper import *
 from .torch import *

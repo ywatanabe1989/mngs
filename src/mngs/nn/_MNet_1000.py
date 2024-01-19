@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2023-04-23 09:48:20 (ywatanabe)"
+# Time-stamp: "2023-05-04 16:54:55 (ywatanabe)"
 
 #!/usr/bin/env python
 
@@ -26,33 +26,61 @@ class MNet_1000(nn.Module):
 
         # basic
         self.config = config
+        # fc
+        N_FC_IN = 15950
+
 
         # conv
-        self.conv1 = nn.Conv2d(1, 40, kernel_size=(config["n_chs"], 4))
-        self.act1 = nn.Mish()
+        self.backborn = nn.Sequential(*[
+            
+            nn.Conv2d(1, 40, kernel_size=(config["n_chs"], 4)),
+            nn.Mish(),
 
-        self.conv2 = nn.Conv2d(40, 40, kernel_size=(1, 4))
-        self.bn2 = nn.BatchNorm2d(40)
-        self.pool2 = nn.MaxPool2d((1, 5))
-        self.act2 = nn.Mish()
+            nn.Conv2d(40, 40, kernel_size=(1, 4)),
+            nn.BatchNorm2d(40),
+            nn.MaxPool2d((1, 5)),
+            nn.Mish(),
 
-        self.swap = SwapLayer()
+            SwapLayer(),
 
-        self.conv3 = nn.Conv2d(1, 50, kernel_size=(8, 12))
-        self.bn3 = nn.BatchNorm2d(50)
-        self.pool3 = nn.MaxPool2d((3, 3))
-        self.act3 = nn.Mish()
+            nn.Conv2d(1, 50, kernel_size=(8, 12)),
+            nn.BatchNorm2d(50),
+            nn.MaxPool2d((3, 3)),
+            nn.Mish(),
 
-        self.conv4 = nn.Conv2d(50, 50, kernel_size=(1, 5))
-        self.bn4 = nn.BatchNorm2d(50)
-        self.pool4 = nn.MaxPool2d((1, 2))
-        self.act4 = nn.Mish()
+            nn.Conv2d(50, 50, kernel_size=(1, 5)),
+            nn.BatchNorm2d(50),
+            nn.MaxPool2d((1, 2)),
+            nn.Mish(),
 
-        # fc
-        n_fc_in = 15950
+            ReshapeLayer(),
+            nn.Linear(N_FC_IN, config["n_fc1"]),
+            ])
+        
+        # # conv
+        # self.conv1 = nn.Conv2d(1, 40, kernel_size=(config["n_chs"], 4))
+        # self.act1 = nn.Mish()
+
+        # self.conv2 = nn.Conv2d(40, 40, kernel_size=(1, 4))
+        # self.bn2 = nn.BatchNorm2d(40)
+        # self.pool2 = nn.MaxPool2d((1, 5))
+        # self.act2 = nn.Mish()
+
+        # self.swap = SwapLayer()
+
+        # self.conv3 = nn.Conv2d(1, 50, kernel_size=(8, 12))
+        # self.bn3 = nn.BatchNorm2d(50)
+        # self.pool3 = nn.MaxPool2d((3, 3))
+        # self.act3 = nn.Mish()
+
+        # self.conv4 = nn.Conv2d(50, 50, kernel_size=(1, 5))
+        # self.bn4 = nn.BatchNorm2d(50)
+        # self.pool4 = nn.MaxPool2d((1, 2))
+        # self.act4 = nn.Mish()
+
 
         self.fc = nn.Sequential(
-            nn.Linear(n_fc_in, config["n_fc1"]),
+            # nn.Linear(N_FC_IN, config["n_fc1"]),
             nn.Mish(),
             nn.Dropout(config["d_ratio1"]),
             nn.Linear(config["n_fc1"], config["n_fc2"]),
@@ -74,26 +102,32 @@ class MNet_1000(nn.Module):
         return x
 
     @staticmethod
-    def _znorm_along_time(x):
+    def _znorm_along_the_last_dim(x):
         return (x - x.mean(dim=-1, keepdims=True)) / x.std(dim=-1, keepdims=True)
 
     def forward(self, x):
-        # time-wise normalization
-        x = self._znorm_along_time(x)
-        x = self._reshape_input(x, self.config["n_chs"])
+        # # time-wise normalization
+        # x = self._znorm_along_the_last_dim(x)
+        # x = self._reshape_input(x, self.config["n_chs"])
 
-        x = self.act1(self.conv1(x))
-        x = self.act2(self.pool2(self.bn2(self.conv2(x))))
-        x = self.swap(x)
+        # x = self.backborn(x)
+        x = self.forward_bb(x)
 
-        x = self.act3(self.pool3(self.bn3(self.conv3(x))))
-        x = self.act4(self.pool4(self.bn4(self.conv4(x))))
-
-        x = x.reshape(len(x), -1)
+        # x = x.reshape(len(x), -1)
 
         x = self.fc(x)
+
         return x
 
+    def forward_bb(self, x):
+        # time-wise normalization
+        x = self._znorm_along_the_last_dim(x)
+        x = self._reshape_input(x, self.config["n_chs"])
+        x = self.backborn(x)
+        return x
+        
+
+    
 
 class SwapLayer(nn.Module):
     def __init__(
@@ -103,6 +137,15 @@ class SwapLayer(nn.Module):
 
     def forward(self, x):
         return x.transpose(1, 2)
+    
+class ReshapeLayer(nn.Module):
+    def __init__(
+        self,
+    ):
+        super().__init__()
+
+    def forward(self, x):
+        return x.reshape(len(x), -1)
 
 
 if __name__ == "__main__":

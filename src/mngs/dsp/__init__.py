@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from ._bandpassfilter import bandpassfilter
-from .fft_amps import calc_fft_amps, calc_fft_powers
+from .fft_amps import calc_fft_amps, calc_fft_powers, calc_psd
 from .wavelet import wavelet
 from .FeatureExtractor import FeatureExtractor
 from .feature_extractions import (
@@ -34,3 +34,4 @@ from ._normalize_time import normalize_time
 from ._common_average import common_average
 from ._take_random_references import take_random_references
 from ._gaussian_filter1d import gaussian_filter1d
+from ._load_BIDS import load_BIDS
