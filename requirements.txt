@@ -10,7 +10,6 @@ pymatreader
 PyYAML
 scipy
 seaborn
-sklearn
 statsmodels
 torch
 xmltodict
