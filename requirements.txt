@@ -15,7 +15,6 @@ torch
 xmltodict
 openpyxl
 obspy
-# pyro-ppl
 torchaudio
 scikit-learn
 psutil
@@ -24,31 +23,5 @@ readchar
 torchsummary
 julius
 sympy
-h5py
-chardet
-GitPython
-h5py
-joblib
-matplotlib
-natsort
-numpy
-pandas
-pymatreader
-PyYAML
-scipy
-seaborn
-scikit-learn
-statsmodels
-torch
-xmltodict
-openpyxl
-obspy
-# pyro-ppl
-torchaudio
-psutil
-pyEDFlib
-julius
-readchar
-torchsummary
-julius
 mne
+wheel
