@@ -5,64 +5,11 @@ import pandas as pd
 import torch
 from scipy import fftpack
 
-
-def calc_psd_np_torch(signals_2d, samp_rate, normalize=True):
-    """
-    Calculate the Power Spectral Density (PSD) of each signal in a 2D array, tensor, or DataFrame.
-
-    Arguments:
-        signals_2d (numpy.ndarray, torch.Tensor, or pandas.DataFrame): A 2D collection containing multiple signals,
-                                                                       where each row represents a signal.
-        samp_rate (float): The sampling rate of the signals.
-        normalize (bool, optional): If True, normalize the PSD by the sum of powers for each signal.
-                                    Defaults to True.
-
-    Returns:
-        pandas.DataFrame: A DataFrame containing the PSD for each signal. The columns represent the
-                          frequencies, and the rows represent the individual signals.
-
-    Data Types:
-        Input can be either numpy.ndarray, torch.Tensor, or pandas.DataFrame. Output is always a pandas.DataFrame.
-
-    Data Shapes:
-        - signals_2d: (n_signals, signal_length)
-        - Output DataFrame: (n_signals, n_frequencies)
-
-    References:
-        - NumPy documentation for FFT: https://numpy.org/doc/stable/reference/routines.fft.html
-        - PyTorch documentation for FFT: https://pytorch.org/docs/stable/fft.html
-        - pandas.DataFrame documentation: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html
-    """
-    # Convert input to NumPy array if it is a pandas DataFrame or PyTorch tensor
-    if isinstance(signals_2d, pd.DataFrame):
-        signals_2d = signals_2d.values
-    elif isinstance(signals_2d, torch.Tensor):
-        signals_2d = signals_2d.numpy()
-
-    # Calculate the FFT for each signal
-    fft_results = np.fft.rfft(signals_2d, axis=1)
-
-    # Calculate the PSD by taking the absolute square of the FFT results
-    psd = np.abs(fft_results) ** 2
-
-    # Normalize the PSD if requested
-    if normalize:
-        psd /= np.sum(psd, axis=1, keepdims=True)
-
-    # Calculate the frequency bins
-    freqs = np.fft.rfftfreq(signals_2d.shape[1], d=1 / samp_rate)
-
-    # Create a DataFrame for the PSD with frequency labels
-    psd_df = pd.DataFrame(data=psd, columns=freqs)
-
-    return psd_df
-
-
-# def calc_psd(signals_2d, samp_rate, normalize=True):
+# def psd(signals_2d, samp_rate, normalize=True):
 #     return calc_fft_amps(signals_2d, samp_rate, normalize=normalize)
 
 
-def calc_fft_powers_np_torch(signals_2d, samp_rate, normalize=True):
+def fft_powers(signals_2d, samp_rate, normalize=True):
     """
     Calculate the power spectrum of the FFT (Fast Fourier Transform) for each signal in a 2D array or tensor.
 
@@ -97,12 +44,10 @@ def calc_fft_powers_np_torch(signals_2d, samp_rate, normalize=True):
         - pandas.DataFrame documentation: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html
     """
 
-    return calc_fft_amps_np_torch_2d(
-        signals_2d, samp_rate, normalize=normalize
-    )
+    return calc_fft_amps_2d(signals_2d, samp_rate, normalize=normalize)
 
 
-# def calc_fft_amps(signals_2d, samp_rate, normalize=True):
+# def fft_amps(signals_2d, samp_rate, normalize=True):
 #     """
 #     Example:
 #         sig_len = 1024
@@ -124,7 +69,7 @@ def calc_fft_powers_np_torch(signals_2d, samp_rate, normalize=True):
 #     return fft_df
 
 
-def calc_fft_amps_np_torch(signals_2d, samp_rate, normalize=True):
+def fft_amps(signals_2d, samp_rate, normalize=True):
     """
     Calculate the amplitude of the FFT (Fast Fourier Transform) for each signal in a 2D array or tensor.
 

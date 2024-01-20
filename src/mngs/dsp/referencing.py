@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-01-20 12:04:12 (ywatanabe)"
+# Time-stamp: "2024-01-20 23:36:39 (ywatanabe)"
 
+import numpy as np
+import pandas as pd
+import torch
 
 def common_average(sig_2D):
     """
@@ -45,3 +48,45 @@ def common_average(sig_2D):
 
     """
     return (sig_2D - sig_2D.mean()) / sig_2D.std()
+
+
+def subtract_from_random_column(data, random_state=42, rename=False):
+    np.random.seed(random_state)
+
+    if torch.is_tensor(data):
+        data = data.numpy()
+    
+    if isinstance(data, np.ndarray):
+        data = pd.DataFrame(data)
+
+    cols_orig = data.columns.tolist()
+    cols_shuffled = np.random.permutation(cols_orig)
+    cols_diff = [f"{co} - {cs}" for co, cs in zip(cols_orig, cols_shuffled)]
+
+    diff_df = data[cols_orig].copy()
+    diff_df -= data[cols_shuffled].values
+
+    if rename:
+        diff_df.columns = cols_diff
+    else:
+        diff_df.columns = cols_orig
+
+    return diff_df
+
+    
+    # np.random.seed(random_state)
+    # data_values = data.values
+    # shuffled_indices = np.random.permutation(data_values.shape[1])
+    # subtracted_data = data_values - data_values[:, shuffled_indices]
+
+    # # Create new column names based on the subtraction
+    # new_column_names = [
+    #     f"{data.columns[i]} - {data.columns[shuffled_indices[i]]}"
+    #     for i in range(len(data.columns))
+    # ]
+
+    # # Create a new DataFrame with the subtracted data and new column names
+    # subtracted_df = pd.DataFrame(
+    #     subtracted_data, index=data.index, columns=new_column_names
+    # )
+    # return subtracted_df
