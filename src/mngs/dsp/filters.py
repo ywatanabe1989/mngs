@@ -1,3 +1,61 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Time-stamp: "2024-01-20 14:17:34 (ywatanabe)"
+
+import numpy as np
+import pandas as pd
+import scipy.ndimage
+import torch
+
+
+def gaussian_filter1d(xx, radius):
+    """
+    Apply a one-dimensional Gaussian filter to an input array, tensor, or DataFrame.
+
+    Arguments:
+        xx (numpy.ndarray, torch.Tensor, or pandas.DataFrame): The input data to filter. It can be a 1D or 2D array/tensor/DataFrame.
+        radius (int): The radius of the Gaussian kernel. The standard deviation of the Gaussian kernel is implicitly set to 1.
+
+    Returns:
+        numpy.ndarray, torch.Tensor, or pandas.DataFrame: The filtered data, with the same type as the input.
+
+    Data Types:
+        Input can be either numpy.ndarray, torch.Tensor, or pandas.DataFrame. Output will match the input data type.
+
+    Data Shapes:
+        - Input xx: If 1D, shape (n,), if 2D, shape (m, n)
+        - Output: Same shape as input xx
+
+    References:
+        - SciPy documentation for gaussian_filter1d: https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.gaussian_filter1d.html
+    """
+    sigma = 1
+    truncate = radius / sigma
+
+    # Convert input to NumPy array if it is a pandas DataFrame or PyTorch tensor
+    if isinstance(xx, pd.DataFrame):
+        values = xx.values
+        result = scipy.ndimage.gaussian_filter1d(
+            values, sigma, truncate=truncate
+        )
+        return pd.DataFrame(result, index=xx.index, columns=xx.columns)
+    elif isinstance(xx, torch.Tensor):
+        values = xx.numpy()
+        result = scipy.ndimage.gaussian_filter1d(
+            values, sigma, truncate=truncate
+        )
+        return torch.from_numpy(result)
+    else:
+        # Assume input is a NumPy array
+        return scipy.ndimage.gaussian_filter1d(xx, sigma, truncate=truncate)
+
+
+def down_sample_1d(x, src_fs, tgt_fs):
+    factor = int(src_fs / tgt_fs)
+    assert factor == int(factor)
+    return scipy.signal.decimate(x, factor)
+
+
 #!/usr/bin/env python
 
 
@@ -196,84 +254,6 @@ class BandPasserCPUTorch:
         return sos
 
 
-def wavelet_np(wave, samp_rate, f_min=100, f_max=None, plot=False, title=None):
-    """
-    Perform a continuous wavelet transform on a signal and optionally plot the scalogram.
-
-    Parameters:
-        wave (numpy.ndarray): The input signal. Shape should be (n_samples,).
-        samp_rate (float): The sampling rate of the signal in Hz.
-        f_min (float): The minimum frequency for the wavelet transform. Defaults to 100 Hz.
-        f_max (float, optional): The maximum frequency for the wavelet transform. Defaults to half the sampling rate.
-        plot (bool): If True, plot the scalogram. Defaults to False.
-        title (str, optional): The title for the plot if plot is True.
-
-    Returns:
-        pandas.DataFrame: A DataFrame containing the wavelet transform scalogram with frequencies as the index.
-
-    Data Types:
-        Input:
-            wave: numpy.ndarray (typically float32 or float64)
-            samp_rate: float
-            f_min: float
-            f_max: float or None
-            plot: bool
-            title: str or None
-        Output:
-            pandas.DataFrame
-
-    Data Shapes:
-        Input:
-            wave: (n_samples,)
-        Output:
-            DataFrame: (n_frequencies, n_samples)
-
-    References:
-        - Continuous wavelet transform: https://en.wikipedia.org/wiki/Continuous_wavelet_transform
-        - scipy.signal.cwt: https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.cwt.html
-        - obspy.imaging.cm.obspy_sequential: https://docs.obspy.org/packages/autogen/obspy.imaging.cm.obspy_sequential.html
-        - pandas.DataFrame: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html
-        - matplotlib.pyplot: https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.html
-
-    Raises:
-        ValueError: If the input signal is not a 1D numpy.ndarray.
-    """
-
-    dt = 1.0 / samp_rate
-    npts = len(wave)
-    t = np.linspace(0, dt * npts, npts)
-    if f_min is None:
-        f_min = 0.1
-    if f_max is None:
-        f_max = int(samp_rate / 2)
-        scalogram = cwt(wave, dt, 8, f_min, f_max)
-
-    if plot:
-        fig = plt.figure()
-        ax = fig.add_subplot(111)
-        x, y = np.meshgrid(
-            t,
-            np.logspace(np.log10(f_min), np.log10(f_max), scalogram.shape[0]),
-        )
-
-        ax.pcolormesh(x, y, np.abs(scalogram), cmap=obspy_sequential)
-        ax.set_xlabel("Time [s]")
-        ax.set_ylabel("Frequency [Hz]")
-        ax.set_yscale("log")
-        ax.set_title(title)
-        ax.set_ylim(f_min, f_max)
-        fig.show()
-
-    Hz = pd.Series(
-        np.logspace(np.log10(f_min), np.log10(f_max), scalogram.shape[0])
-    )
-    df = pd.DataFrame(np.abs(scalogram))
-    df["Hz"] = Hz
-    df.set_index("Hz", inplace=True)
-
-    return df
-
-
 # from here, not important
 
 
@@ -456,3 +436,13 @@ def bandpassfilter_np(data, lo_hz, hi_hz, fs, order=5):
     return y
 
     # EOF
+
+
+# import scipy
+
+
+# def gaussian_filter1d(xx, radius):
+#     # radius = round(truncate * sigma)
+#     sigma = 1
+#     truncate = radius / sigma
+#     return scipy.ndimage.gaussian_filter1d(xx, sigma, truncate=truncate)
