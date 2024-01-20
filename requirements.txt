@@ -25,3 +25,4 @@ julius
 sympy
 mne
 wheel
+pybids
