@@ -1,23 +1,3 @@
-## Requirements
-```
-chardet
-GitPython
-h5py
-joblib
-matplotlib
-natsort
-numpy
-pandas
-pymatreader
-PyYAML
-scipy
-seaborn
-sklearn
-statsmodels
-torch
-xmltodict
-```
-
 ## Installation
 ``` bash
 $ pip install mngs
@@ -26,7 +6,6 @@ or
 
 $ pip install git+https://github.com/ywatanabe1989/mngs.git@develop
 ```
-
 
 
 ## mngs.general.save
