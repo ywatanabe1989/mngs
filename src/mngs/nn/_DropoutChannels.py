@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2023-05-04 21:21:19 (ywatanabe)"
+# Time-stamp: "2023-05-04 21:50:22 (ywatanabe)"
 
 import torch
 import torch.nn as nn
@@ -11,7 +11,7 @@ import numpy as np
 import random
 
 
-class SwapChannels(nn.Module):
+class DropoutChannels(nn.Module):
     def __init__(
         self,
         dropout=0.5
@@ -27,12 +27,14 @@ class SwapChannels(nn.Module):
             indi_orig = self.dropout(torch.ones(x.shape[1])).bool()
             chs_to_shuffle = orig_chs[~indi_orig]
 
-            rand_chs = random.sample(list(np.array(chs_to_shuffle)), len(chs_to_shuffle))
+            x[:, chs_to_shuffle] = torch.randn(x[:, chs_to_shuffle].shape).to(x.device)
 
-            swapped_chs = orig_chs.clone()
-            swapped_chs[~indi_orig] = torch.LongTensor(rand_chs)
+            # rand_chs = random.sample(list(np.array(chs_to_shuffle)), len(chs_to_shuffle))
 
-            x = x[:, swapped_chs.long(), :]
+            # swapped_chs = orig_chs.clone()
+            # swapped_chs[~indi_orig] = torch.LongTensor(rand_chs)
+
+            # x = x[:, swapped_chs.long(), :]
 
         return x
 
@@ -42,8 +44,8 @@ if __name__ == "__main__":
     bs, n_chs, seq_len = 16, 360, 1000
     x = torch.rand(bs, n_chs, seq_len)
 
-    sc = SwapChannels()
-    print(sc(x).shape)  # [16, 19, 1000]
+    dc = DropoutChannels(dropout=0.1)
+    print(dc(x).shape)  # [16, 19, 1000]
 
     # sb = SubjectBlock(n_chs=n_chs)
     # print(sb(x, s).shape) # [16, 270, 1000]

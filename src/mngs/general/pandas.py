@@ -169,3 +169,12 @@ def force_dataframe(permutable_dict, filler=""):
     out_df = pd.DataFrame(permutable_dict)
 
     return out_df
+
+def ignore_SettingWithCopyWarning():
+    import warnings
+    try:
+        from pandas.errors import SettingWithCopyWarning
+    except:
+        from pandas.core.common import SettingWithCopyWarning
+    warnings.simplefilter(action="ignore", category=SettingWithCopyWarning)        
+    # return SettingWithCopyWarning

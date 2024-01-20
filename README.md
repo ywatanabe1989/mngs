@@ -1,22 +1,4 @@
-## Requirements
-```
-chardet
-GitPython
-h5py
-joblib
-matplotlib
-natsort
-numpy
-pandas
-pymatreader
-PyYAML
-scipy
-seaborn
-sklearn
-statsmodels
-torch
-xmltodict
-```
+![CI](https://github.com/ywatanabe1989/mngs/actions/workflows/pip_install.yml/badge.svg)
 
 ## Installation
 ``` bash
@@ -26,7 +8,6 @@ or
 
 $ pip install git+https://github.com/ywatanabe1989/mngs.git@develop
 ```
-
 
 
 ## mngs.general.save

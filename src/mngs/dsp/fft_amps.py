@@ -4,6 +4,9 @@ import numpy as np
 import pandas as pd
 from scipy import fftpack
 
+def calc_psd(signals_2d, samp_rate, normalize=True):
+    return calc_fft_amps(signals_2d, samp_rate, normalize=normalize)
+
 def calc_fft_powers(signals_2d, samp_rate, normalize=True):
     return calc_fft_amps(signals_2d, samp_rate, normalize=normalize)
 

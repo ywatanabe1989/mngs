@@ -3,11 +3,11 @@
 
 import matplotlib.pyplot as plt
 import numpy as np
-import pyro
+# import pyro
 import torch
 import torch.nn.functional as F
 import torchaudio
-from pyro.ops.stats import autocorrelation as pyro_acf
+# from pyro.ops.stats import autocorrelation as pyro_acf
 from scipy.signal import chirp, firwin
 from functools import partial
 from mngs.dsp.HilbertTransformation import HilbertTransformer
@@ -265,8 +265,8 @@ def beyond_r_sigma_ratio(x, r=2.0):
     return (sigma < x).float().mean(dim=-1, keepdims=True)
 
 
-def acf(x):
-    return pyro_acf(x, dim=-1)
+# def acf(x):
+#    return pyro_acf(x, dim=-1)
 
 
 def _apply_to_the_time_dim(fn, x):
