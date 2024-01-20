@@ -13,4 +13,4 @@ jobs:
     - uses: actions/checkout@v2
       
     - name: Install mngs
-      run: pip install git+ssh://git@github.com/ywatanabe1989/mngs.git@develop
+      run: pip install git+https://git@github.com/ywatanabe1989/mngs.git@develop
