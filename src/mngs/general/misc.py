@@ -5,19 +5,21 @@ import math
 import os
 import re
 import shutil
+import threading
 import time
+import warnings
 from bisect import bisect_left, bisect_right
 from collections import defaultdict
+from functools import partial, wraps
 
 import mngs
 import numpy as np
+import readchar
+from natsort import natsorted
+
 import pandas as pd
 import torch
-from natsort import natsorted
-from functools import partial, wraps
-import warnings
-import readchar
-import threading
+
 
 ################################################################################
 ## strings
@@ -92,7 +94,8 @@ def search(patterns, strings, only_perfect_match=False, as_bool=False):
             s_or_p = list(s_or_p)
 
         elif not isinstance(
-            s_or_p, (list, tuple, pd.core.indexes.base.Index, pd.core.series.Series)
+            s_or_p,
+            (list, tuple, pd.core.indexes.base.Index, pd.core.series.Series),
         ):
             s_or_p = [s_or_p]
 
@@ -198,7 +201,9 @@ def take_the_closest(list_obj, num_insert):
         closest_num = list_obj[0]
         closest_pos = pos_num_insert  # 0
 
-    if pos_num_insert == len(list_obj):  # When the insertion is at the last position
+    if pos_num_insert == len(
+        list_obj
+    ):  # When the insertion is at the last position
         closest_num = list_obj[-1]
         closest_pos = pos_num_insert  # len(list_obj)
 
@@ -315,7 +320,9 @@ def is_later_or_equal(package, tgt_version, format="MAJOR.MINOR.PATCH"):
     import mngs
     import numpy as np
 
-    indi, matched = mngs.general.search(["MAJOR", "MINOR", "PATCH"], format.split("."))
+    indi, matched = mngs.general.search(
+        ["MAJOR", "MINOR", "PATCH"], format.split(".")
+    )
     imp_major, imp_minor, imp_patch = [
         int(v) for v in np.array(package.__version__.split("."))[indi]
     ]
@@ -380,7 +387,9 @@ def _copy_a_file(src, dst, allow_overwrite=False):
                 print(f'\nCopied "{src}" to "{dst}" (overwritten).\n')
 
             if not allow_overwrite:
-                print(f'\n"{dst}" exists and copying from "{src}" was aborted.\n')
+                print(
+                    f'\n"{dst}" exists and copying from "{src}" was aborted.\n'
+                )
 
 
 def copy_files(src_files, dists, allow_overwrite=False):
@@ -443,7 +452,9 @@ def describe(df, method="mean", factor=1):
             return round(np.nanmean(df), 3), round(np.nanstd(df) / factor, 3)
         if method == "median":
             med = df.describe().T["50%"].iloc[0]
-            IQR = df.describe().T["75%"].iloc[0] - df.describe().T["25%"].iloc[0]
+            IQR = (
+                df.describe().T["75%"].iloc[0] - df.describe().T["25%"].iloc[0]
+            )
             return round(med, 3), round(IQR / factor, 3)
 
 
@@ -504,10 +515,17 @@ class ThreadWithReturnValue(threading.Thread):
         )
         t.start()
         out = t.join()
-    
+
     """
+
     def __init__(
-        self, group=None, target=None, name=None, args=(), kwargs={}, Verbose=None
+        self,
+        group=None,
+        target=None,
+        name=None,
+        args=(),
+        kwargs={},
+        Verbose=None,
     ):
         Thread.__init__(self, group, target, name, args, kwargs)
         self._return = None

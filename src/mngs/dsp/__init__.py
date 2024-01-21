@@ -1,37 +1,39 @@
 #!/usr/bin/env python3
 
-from ._bandpassfilter import bandpassfilter
-from .fft_amps import calc_fft_amps, calc_fft_powers, calc_psd
-from .wavelet import wavelet
-from .FeatureExtractor import FeatureExtractor
-from .feature_extractions import (
-    rfft_bands,
-    rfft,
-    bandstop,
-    spectrogram,
-    mean,
-    std,
-    zscore,
-    kurtosis,
-    skewness,
-    median,
-    q25,
-    q75,
-    rms,
-    beyond_r_sigma_ratio,
-    acf,
-    demo_sig,
-    phase,
-    phase_band,
+# from .wavelet import wavelet
+from .demo_sig import demo_sig_np, demo_sig_torch
+from .feature_extractors import (
+    FeatureExtractorTorch,
     amp,
     amp_band,
-    hilbert,
-    fft,
     bandpass,
+    bandstop,
+    beyond_r_sigma_ratio,
+    fft,
+    hilbert,
+    kurtosis,
+    mean,
+    median,
+    phase,
+    phase_band,
+    q25,
+    q75,
+    rfft,
+    rfft_bands,
+    rms,
+    skewness,
+    spectrogram,
+    std,
+    zscore,
 )
-from ._BANDS_LIM_HZ_DICT import BANDS_LIM_HZ_DICT
-from ._normalize_time import normalize_time
-from ._common_average import common_average
-from ._take_random_references import take_random_references
-from ._gaussian_filter1d import gaussian_filter1d
-from ._load_BIDS import load_BIDS
+from .fft import fft_amps, fft_powers
+from .filters import (
+    BandPasserCPUTorch,
+    BandPassFilterTorch,
+    bandpassfilter_np,
+    gaussian_filter1d,
+)
+from .PARAMS import BANDS_LIM_HZ_DICT
+from .referencing import common_average, subtract_from_random_column # random_reference
+from .sampling import down_sample_1d
+from .transform import psd, to_z, wavelet, wavelet_np, arr2skdf
