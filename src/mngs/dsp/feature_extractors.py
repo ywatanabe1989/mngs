@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Time-stamp: "2024-01-20 19:32:20 (ywatanabe)"
+# Time-stamp: "2024-01-21 19:17:13 (ywatanabe)"
 
 from functools import partial
 
