@@ -27,6 +27,10 @@ def load(lpath, show=False, **kwargs):
     # csv
     if lpath.endswith(".csv"):
         obj = pd.read_csv(lpath, **kwargs)
+    # tsv
+    if lpath.endswith(".tsv"):
+        obj = pd.read_csv(lpath, sep='\t', **kwargs)  # [REVISED]
+        
     # excel
     if (
         lpath.endswith(".xls")
