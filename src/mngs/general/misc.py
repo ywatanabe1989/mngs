@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import collections
+import contextlib
 import math
 import os
 import re
@@ -10,15 +11,15 @@ import time
 import warnings
 from bisect import bisect_left, bisect_right
 from collections import defaultdict
+from contextlib import contextmanager
 from functools import partial, wraps
 
 import mngs
 import numpy as np
-import readchar
-from natsort import natsorted
-
 import pandas as pd
+import readchar
 import torch
+from natsort import natsorted
 
 
 ################################################################################
@@ -538,3 +539,30 @@ class ThreadWithReturnValue(threading.Thread):
         ### fixme
         Thread.join(self, *args)
         return self._return
+
+
+# @contextmanager
+# def suppress_output():
+#     """A context manager that suppresses stdout and stderr."""
+#     with open(os.devnull, "w") as fnull:
+#         with contextlib.redirect_stdout(fnull), contextlib.redirect_stderr(
+#             fnull
+#         ):
+#             yield
+@contextmanager
+def suppress_output():
+    """
+    A context manager that suppresses stdout and stderr.
+
+    Example:
+        with suppress_output():
+            print("This will not be printed to the console.")
+    """
+    # Open a file descriptor that points to os.devnull (a black hole for data)
+    with open(os.devnull, "w") as fnull:
+        # Temporarily redirect stdout to the file descriptor fnull
+        with contextlib.redirect_stdout(fnull):
+            # Temporarily redirect stderr to the file descriptor fnull
+            with contextlib.redirect_stderr(fnull):
+                # Yield control back to the context block
+                yield

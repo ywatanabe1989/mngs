@@ -26,3 +26,4 @@ sympy
 mne
 wheel
 pybids
+scikit-image
