@@ -14,6 +14,7 @@ from .converters import (
 )
 from .cuda_collect_env import main as cuda_collect_env
 from .debug import *
+from .email import notify, send_gmail
 from .latex import add_hat_in_the_latex_style, to_the_latex_style
 from .mat2py import *
 from .misc import (
