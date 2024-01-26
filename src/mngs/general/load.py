@@ -1,8 +1,16 @@
 #!/usr/bin/env python3
 
-import mngs
+import json
+import pickle
 import warnings
 
+import h5py
+import mne
+import mngs
+import numpy as np
+import pandas as pd
+import torch
+import yaml
 
 if "general" in __file__:
     with warnings.catch_warnings():
@@ -15,22 +23,55 @@ if "general" in __file__:
 
 
 def load(lpath, show=False, **kwargs):
-    import pickle
+    """
+    Load data from a file with various extensions into an appropriate Python object.
 
-    import h5py
-    import numpy as np
-    import pandas as pd
-    import torch
-    import yaml
-    import mne
+    Arguments:
+        lpath (str): Path to the file to be loaded.
+        show (bool, optional): If True, prints the path of the loaded file. Defaults to False.
+        **kwargs: Additional keyword arguments to pass to the underlying loading functions.
+
+    Returns:
+        object: The loaded data as a Python object (e.g., DataFrame, NumPy array, etc.),
+                or None if the file type is not supported or the file cannot be loaded.
+
+    Supported file types and their corresponding return types:
+        - `.cbm`: CatBoost model (requires CatBoost library)
+        - `.con`: pandas.DataFrame with an additional 'samp_rate' key
+        - `.csv`: pandas.DataFrame
+        - `.edf`: mne.io.Raw (MNE-Python Raw object)
+        - `.hdf5`: dict of numpy.ndarrays
+        - `.joblib`: object loaded via joblib
+        - `.json`: dict or list, depending on the JSON structure
+        - `.log`: list of str
+        - `.mat`: dict (loaded using pymatreader)
+        - `.mrk`: mne.io.kit.mrk (MNE-Python MRK object)
+        - `.npy`: numpy.ndarray
+        - `.pkl`: object loaded via pickle
+        - `.pth`, `.pt`: torch.nn.Module (state dict) or tensor
+        - `.tsv`: pandas.DataFrame
+        - `.txt`: list of str
+        - `.xls`, `.xlsx`, `.xlsm`, `.xlsb`: pandas.DataFrame
+        - `.xml`: dict (requires xml2dict implementation)
+        - `.yaml`: dict
+
+    Note:
+        - The function does not handle image files (.png, .tiff, .tif) and will return None for these types.
+        - The function assumes that the xml2dict module is available for XML files.
+        - For .pth and .pt files, the function loads the entire object, not just the state dict.
+        - For .cbm files, the CatBoost library must be installed, and the object must be a CatBoost model.
+    """
 
     # csv
     if lpath.endswith(".csv"):
         obj = pd.read_csv(lpath, **kwargs)
+        unnamed_cols = mngs.gen.search("Unnamed", obj.columns)[1]
+        for unnamed_col in unnamed_cols:
+            del obj[unnamed_col]
     # tsv
     if lpath.endswith(".tsv"):
-        obj = pd.read_csv(lpath, sep='\t', **kwargs)  # [REVISED]
-        
+        obj = pd.read_csv(lpath, sep="\t", **kwargs)  # [REVISED]
+
     # excel
     if (
         lpath.endswith(".xls")
@@ -57,6 +98,10 @@ def load(lpath, show=False, **kwargs):
             for name in name_list:
                 obj_tmp = hf[name][:]
                 obj[name] = obj_tmp
+    # json
+    elif lpath.endswith(".json"):
+        with open(lpath, "r") as f:
+            obj = json.load(f)
     # png
     if lpath.endswith(".png"):
         pass
@@ -92,7 +137,7 @@ def load(lpath, show=False, **kwargs):
     # edf
     if lpath.endswith("edf"):
         obj = mne.io.read_raw_edf(lpath)
-    # con    
+    # con
     if lpath.endswith("con"):
         _obj = mne.io.read_raw(lpath)
         obj = _obj.to_data_frame()
@@ -153,10 +198,14 @@ def load_yaml_as_an_optuna_dict(fpath_yaml, trial):
             _d[k] = trial.suggest_int(k, float(v["min"]), float(v["max"]))
 
         elif dist == "loguniform":
-            _d[k] = trial.suggest_loguniform(k, float(v["min"]), float(v["max"]))
+            _d[k] = trial.suggest_loguniform(
+                k, float(v["min"]), float(v["max"])
+            )
 
         elif dist == "intloguniform":
-            _d[k] = trial.suggest_int(k, float(v["min"]), float(v["max"]), log=True)
+            _d[k] = trial.suggest_int(
+                k, float(v["min"]), float(v["max"]), log=True
+            )
 
     return _d
 

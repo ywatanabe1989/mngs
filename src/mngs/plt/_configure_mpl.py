@@ -4,14 +4,16 @@
 def configure_mpl(
     plt,
     dpi=100,
+    save_dpi=300,
     figsize=(16.2, 10),
-    figscale=1.0,
-    fontsize=16,
+    figscale=2.0,
+    fontsize=10,
     labelsize="same",
     legendfontsize="xx-small",
     tick_size="auto",
     tick_width="auto",
     hide_spines=False,
+    show=True,
 ):
     """
     Configures matplotlib for often used format.
@@ -65,7 +67,7 @@ def configure_mpl(
     )
 
     ## Calculates tick size and width from mm unit.
-    dots_on_1_inch_line = dpi ** 0.5
+    dots_on_1_inch_line = dpi**0.5
     dots_on_1_cm_line = dots_on_1_inch_line / 2.54
     dots_on_1_mm_line = dots_on_1_cm_line / 10.0
 
@@ -88,7 +90,7 @@ def configure_mpl(
     ## Summarize the props as updater_dict
     updater_dict = {
         "figure.dpi": dpi,
-        "savefig.dpi": 300,
+        "savefig.dpi": save_dpi,
         "figure.figsize": (
             figsize_inch[0] * shrink_scale,
             figsize_inch[1] * shrink_scale,
@@ -127,7 +129,13 @@ def configure_mpl(
 
     updater_dict["figure.figsize"] = str(figsize_cm) + " [cm]"
 
-    print("\nMatplotilb has been configured as follows:\n{}.\n".format(updater_dict))
+    if show:
+        print(f"\n{'-'*40}")
+        print(f"\nMatplotilb has been configured as follows:\n")
+
+        for k, v in updater_dict.items():
+            print(k, v)
+        print(f"\n{'-'*40}")
 
 
 if __name__ == "__main__":

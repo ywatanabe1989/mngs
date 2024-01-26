@@ -27,3 +27,4 @@ mne
 wheel
 pybids
 scikit-image
+icecream

@@ -1,19 +1,37 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-01-25 18:26:49 (ywatanabe)"
+# Time-stamp: "2024-01-26 09:54:59 (ywatanabe)"
 
+import inspect
 import os
 import smtplib
+import sys
+from email import encoders
+from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from io import StringIO
+
+import mngs
+
+# # Function to capture stdout and stderr
+# def capture_stdout_stderr():
+#     sys.stdout = StringIO()  # Capture stdout
+#     sys.stderr = StringIO()  # Capture stderr
 
 
-def notify(
-    subject="mngs notification", message="Notification sent from your script"
-):
+# def release_stdout_stderr():
+#     output = sys.stdout.getvalue()
+#     error = sys.stderr.getvalue()
+#     sys.stdout = sys.__stdout__  # Release stdout
+#     sys.stderr = sys.__stderr__  # Release stderr
+#     return output, error
+
+
+def notify(subject="", message=":)", log_paths=None, show=False):
     """
     Usage:
-        notify(subject="Hello world from mngs", message="This is a test email")
+        notify("mngs.gen.notify()", "Hello world from mngs.")
 
     Note:
         This function operates correctly when a Gmail address is configured as follows:
@@ -39,41 +57,103 @@ def notify(
                export MNGS_RECIPIENT_GMAIL="YOUR_GMAIL_ADDRESS"
                ```
     """
+    # Get the script name from sys.argv or inspect the stack
+    if sys.argv[0]:
+        script_name = os.path.basename(sys.argv[0])
+    else:
+        frames = inspect.stack()
+        script_name = (
+            os.path.basename(frames[-1].filename)
+            if frames
+            else "No script name available."
+        )
+
+    full_message = f"{message}"
+    full_subject = f"{script_name} | {subject}"
+
     # Environmental variables
     mngs_sender_gmail = os.getenv("MNGS_SENDER_GMAIL")
     mngs_sender_password = os.getenv("MNGS_SENDER_GMAIL_PASSWORD")
     mngs_recipient_gmail = os.getenv("MNGS_RECIPIENT_GMAIL")
+
+    if mngs_sender_gmail is None or mngs_sender_password is None:
+        print(
+            f"""
+        Please set environmental variables to use this function:
+        
+        $ export MNGS_SENDER_GMAIL="mngs.notification@gmail.com"
+        $ export MNGS_SENDER_GMAIL_PASSWORD="YOUR_APP_PASSWORD"
+        $ export MNGS_RECIPIENT_GMAIL="YOUR_GMAIL_ADDRESS"
+        """
+        )
+        # raise ValueError(
+        #     "Sender email or password not set in environment variables."
+        # )
+
     send_gmail(
         mngs_sender_gmail,
         mngs_sender_password,
         mngs_recipient_gmail,
-        subject,
-        message,
+        full_subject,
+        full_message,
+        log_paths=log_paths,
+        show=show,
     )
 
 
 def send_gmail(
-    sender_gmail, sender_password, recipient_gmail, subject, message
+    sender_gmail,
+    sender_password,
+    recipient_gmail,
+    subject,
+    message,
+    log_paths=None,
+    show=True,
 ):
 
-    # Set up the gmail server
-    server = smtplib.SMTP("smtp.gmail.com", 587)
-    server.starttls()
-    # SMTPAuthenticationError: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials l2-20020a056a00140200b006db0c82959asm14956248pfu.43 - gsmtp')
+    ID = mngs.gen.gen_ID().split("_")[-1]
 
-    # Login to the gmail account
-    server.login(sender_gmail, sender_password)  # Corrected variable name here
+    try:
+        # Set up the gmail server
+        server = smtplib.SMTP("smtp.gmail.com", 587)
+        server.starttls()
 
-    # Create the gmail
-    gmail = MIMEMultipart()
-    gmail["From"] = sender_gmail
-    gmail["To"] = recipient_gmail
-    gmail["Subject"] = subject
-    gmail_body = MIMEText(message, "plain")
-    gmail.attach(gmail_body)
+        # Login to the gmail account
+        server.login(
+            sender_gmail, sender_password
+        )  # Corrected variable name here
 
-    # Send the gmail
-    server.send_message(gmail)
+        # Create the gmail
+        gmail = MIMEMultipart()
+        gmail["From"] = sender_gmail
+        gmail["To"] = recipient_gmail
+        gmail["Subject"] = f"{subject} (ID: {ID})"
+        gmail_body = MIMEText(message, "plain")
+        gmail.attach(gmail_body)
 
-    # Quit the server
-    server.quit()
+        # Attach log files if provided
+        if log_paths:
+            for path in log_paths:
+                with open(path, "rb") as file:
+                    part = MIMEBase("application", "octet-stream")
+                    part.set_payload(file.read())
+                    encoders.encode_base64(part)
+                    part.add_header(
+                        "Content-Disposition",
+                        f"attachment; filename= {os.path.basename(path)}",
+                    )
+                    gmail.attach(part)
+
+        # Send the gmail
+        server.send_message(gmail)
+
+        # Quit the server
+        server.quit()
+
+        if show:
+            print(
+                f"\nEmail was sent: {sender_gmail} -> {recipient_gmail} (ID: {ID})"
+            )
+
+    except Exception as e:
+        print(f"Email was not sent: {e}")
