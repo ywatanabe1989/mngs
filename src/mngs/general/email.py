@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-01-26 09:54:59 (ywatanabe)"
+# Time-stamp: "2024-01-26 16:13:56 (ywatanabe)"
 
 import inspect
 import os
@@ -28,7 +28,7 @@ import mngs
 #     return output, error
 
 
-def notify(subject="", message=":)", log_paths=None, show=False):
+def notify(subject="", message=":)", ID=None, log_paths=None, show=False):
     """
     Usage:
         notify("mngs.gen.notify()", "Hello world from mngs.")
@@ -69,7 +69,7 @@ def notify(subject="", message=":)", log_paths=None, show=False):
         )
 
     full_message = f"{message}"
-    full_subject = f"{script_name} | {subject}"
+    full_subject = f"{script_name} from {os.getenv('USER')}@{os.getenv('HOSTNAME')} | {subject}"
 
     # Environmental variables
     mngs_sender_gmail = os.getenv("MNGS_SENDER_GMAIL")
@@ -96,6 +96,7 @@ def notify(subject="", message=":)", log_paths=None, show=False):
         mngs_recipient_gmail,
         full_subject,
         full_message,
+        ID=ID,
         log_paths=log_paths,
         show=show,
     )
@@ -107,11 +108,13 @@ def send_gmail(
     recipient_gmail,
     subject,
     message,
+    ID=None,
     log_paths=None,
     show=True,
 ):
 
-    ID = mngs.gen.gen_ID().split("_")[-1]
+    if ID is None:
+        ID = mngs.gen.gen_ID()  # .split("_")[-1]
 
     try:
         # Set up the gmail server
