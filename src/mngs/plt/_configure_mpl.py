@@ -137,6 +137,8 @@ def configure_mpl(
             print(k, v)
         print(f"\n{'-'*40}")
 
+    return plt
+
 
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
