@@ -52,7 +52,7 @@ def gen_ID(N=8):
     from datetime import datetime
 
     now = datetime.now()
-    now_str = now.strftime("%Y-%m%d-%H:%M")
+    now_str = now.strftime("%Y-%m-%d-%H-%M")
     # today_str = now.strftime("%Y-%m%d")
     randlst = [
         random.choice(string.ascii_letters + string.digits) for i in range(N)
