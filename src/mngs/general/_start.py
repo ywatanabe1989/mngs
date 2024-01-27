@@ -1,14 +1,40 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-01-26 11:19:55 (ywatanabe)"
+# Time-stamp: "2024-01-27 19:53:28 (ywatanabe)"
 
 import inspect
 import os as _os
 from datetime import datetime
 from glob import glob
 from pprint import pprint
+from time import sleep
 
 import mngs
+
+
+def load_configs(is_debug=False):
+    CONFIGS = {}
+    for lpath in glob("./config/*.yaml"):
+        CONFIG = mngs.io.load(lpath)
+        # ???
+        # fname = mngs.gen.split_fpath(lpath)[1]
+        # CONFIGS[fname] = CONFIG
+        # Update parameters for debugging
+        if is_debug:
+            debug_keys = mngs.gen.search("^DEBUG_", list(CONFIG.keys()))[1]
+            for dk in debug_keys:
+                dk_wo_debug_prefix = dk.split("DEBUG_")[1]
+                CONFIG[dk_wo_debug_prefix] = CONFIG[dk]
+                print(f"\n{dk} -> {dk_wo_debug_prefix}\n")
+            sleep(1)
+
+        CONFIGS.update(CONFIG)
+
+    # # If only one CONFIG files are found, it should be treated as CONFIG's'
+    # if len(CONFIGS) == 1:
+    #     CONFIGS = CONFIGS[list(CONFIGS.keys())[0]]
+
+    return CONFIGS
 
 
 def start(
@@ -41,12 +67,27 @@ def start(
     import mngs
 
     CONFIG, sys.stdout, sys.stderr, plt = mngs.gen.start(sys, plt)
+
+    # YOUR CODE HERE
+
+    mngs.gen.close(CONFIG)
     """
-    # Starts timer
+    # Timer
     start_time = datetime.now()
 
-    ID = mngs.gen.gen_ID()
+    # Debug mode check
+    try:
+        is_debug = mngs.io.load("./config/is_debug.yaml").get("DEBUG", False)
+    except Exception as e:
+        is_debug = False
 
+    # ID
+    ID = mngs.gen.gen_ID()
+    ID = ID if not is_debug else "[DEBUG] " + ID
+    print(f"\n{'#'*40}\n## {ID}\n{'#'*40}\n")
+    sleep(1)
+
+    # Defines SDIR
     if sdir is None:
         __file__ = inspect.stack()[1].filename
         if "ipython" in __file__:
@@ -56,11 +97,25 @@ def start(
         sdir = _sdir + sfname + "/" + ID + "/"  # " # + "/log/"
     _os.makedirs(sdir, exist_ok=True)
 
-    if sys is not None:
-        sys.stdout, sys.stderr = mngs.general.tee(
-            sys, sdir=sdir + "/logs/", show=show
-        )
+    # CONFIGs
+    CONFIGS = load_configs(is_debug)
+    CONFIGS["ID"] = ID
+    CONFIGS["START_TIME"] = start_time
+    CONFIGS["SDIR"] = sdir
+    if show:
+        print(f"\n{'-'*40}\n")
+        print(f"CONFIG:")
+        for k, v in CONFIGS.items():
+            print(f"\n{k}:\n{v}\n")
+            sleep(0.3)
+        # pprint(CONFIGS)
+        print(f"\n{'-'*40}\n")
 
+    # Logging (tee)
+    if sys is not None:
+        sys.stdout, sys.stderr = mngs.general.tee(sys, sdir=sdir, show=show)
+
+    # Random seeds
     if (
         (os is not None)
         or (random is not None)
@@ -78,6 +133,7 @@ def start(
             show=show,
         )
 
+    # Matplotlib configuration
     if plt is not None:
         plt = mngs.plt.configure_mpl(
             plt,
@@ -94,24 +150,6 @@ def start(
             show=show,
         )
 
-    # Saves as CONFIG
-    CONFIGS = {}
-    for lpath in glob("./config/*.yaml"):
-        CONFIG = mngs.io.load(lpath)
-        fname = mngs.gen.split_fpath(lpath)[1]
-        CONFIGS[fname] = CONFIG
-    if len(CONFIGS) == 1:
-        CONFIGS = CONFIGS[list(CONFIGS.keys())[0]]
-    CONFIGS["ID"] = ID
-    CONFIGS["SDIR"] = sdir
-    CONFIGS["START_TIME"] = start_time
-
-    if show:
-        print(f"\n{'-'*40}\n")
-        print(f"CONFIG:")
-        pprint(CONFIGS)
-        print(f"\n{'-'*40}\n")
-
     return CONFIGS, sys.stdout, sys.stderr, plt
 
 
@@ -121,8 +159,15 @@ if __name__ == "__main__":
     import matplotlib.pyplot as plt
     import mngs
 
-    CONFIG, sys.stdout, sys.stderr, plt = mngs.gen.start(sys, plt, show=False)
+    # --------------------------------------------------------------------------- #
+    CONFIG, sys.stdout, sys.stderr, plt = mngs.gen.start(sys, plt)
+    # --------------------------------------------------------------------------- #
 
-    ic("aaa")
-    ic("bbb")
-    ic("ccc")
+    # YOUR CODE HERE
+    print("Hello world from mngs.")
+
+    # --------------------------------------------------------------------------- #
+    mngs.gen.close(CONFIG)
+    # --------------------------------------------------------------------------- #
+
+    # EOF
