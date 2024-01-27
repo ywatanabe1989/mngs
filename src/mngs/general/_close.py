@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-01-26 16:14:14 (ywatanabe)"
+# Time-stamp: "2024-01-27 19:24:23 (ywatanabe)"
 
 from datetime import datetime, timedelta
 from glob import glob
@@ -23,7 +23,7 @@ def format_diff_time(diff_time):
     return diff_time_str
 
 
-def close(CONFIG, show=True):
+def close(CONFIG, message=":)", show=True):
     try:
         end_time = datetime.now()
         diff_time = format_diff_time(end_time - CONFIG["START_TIME"])
@@ -37,8 +37,9 @@ def close(CONFIG, show=True):
     try:
         sleep(3)
         mngs.gen.notify(
-            ID=CONFG["ID"],
-            log_paths=glob(CONFIG["SDIR"] + "logs/*"),
+            message=f"[DEBUG]\n" + message,
+            ID=CONFIG["ID"],
+            log_paths=glob(CONFIG["SDIR"] + "*.log"),
             show=show,
         )
     except Exception as e:
