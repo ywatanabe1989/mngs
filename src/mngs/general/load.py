@@ -1,8 +1,17 @@
 #!/usr/bin/env python3
 
-import mngs
+import json
+import os
+import pickle
 import warnings
 
+import h5py
+import joblib  # [REVISED]
+import mne
+import numpy as np
+import pandas as pd
+import torch
+import yaml
 
 if "general" in __file__:
     with warnings.catch_warnings():
@@ -15,99 +24,173 @@ if "general" in __file__:
 
 
 def load(lpath, show=False, **kwargs):
-    import pickle
-
-    import h5py
-    import numpy as np
-    import pandas as pd
-    import torch
-    import yaml
-    import mne
+    extension = "." + lpath.split(".")[-1]  # [REVISED]
 
     # csv
-    if lpath.endswith(".csv"):
+    if extension == ".csv":
         obj = pd.read_csv(lpath, **kwargs)
+        obj = obj.loc[:, ~obj.columns.str.contains("^Unnamed")]  # [REVISED]
+    # tsv
+    elif extension == ".tsv":
+        obj = pd.read_csv(lpath, sep="\t", **kwargs)
+
     # excel
-    if (
-        lpath.endswith(".xls")
-        or lpath.endswith(".xlsx")
-        or lpath.endswith(".xlsm")
-        or lpath.endswith(".xlsb")
-    ):
+    elif extension in [".xls", ".xlsx", ".xlsm", ".xlsb"]:  # [REVISED]
         obj = pd.read_excel(lpath, **kwargs)
+
     # numpy
-    if lpath.endswith(".npy"):
-        obj = np.load(lpath)
+    elif extension == ".npy":
+        obj = np.load(lpath, allow_pickle=True)  # [REVISED]
     # pkl
-    if lpath.endswith(".pkl"):
+    elif extension == ".pkl":
         with open(lpath, "rb") as l:
             obj = pickle.load(l)
     # joblib
-    if lpath.endswith(".joblib"):
+    elif extension == ".joblib":
         with open(lpath, "rb") as l:
             obj = joblib.load(l)
     # hdf5
-    if lpath.endswith(".hdf5"):
+    elif extension == ".hdf5":
         obj = {}
-        with h5py.File(fpath, "r") as hf:
-            for name in name_list:
-                obj_tmp = hf[name][:]
-                obj[name] = obj_tmp
+        with h5py.File(lpath, "r") as hf:
+            for name in hf:  # [REVISED]
+                obj[name] = hf[name][:]
+    # json
+    elif extension == ".json":
+        with open(lpath, "r") as f:
+            obj = json.load(f)
     # png
-    if lpath.endswith(".png"):
+    elif extension == ".png":
         pass
     # tiff
-    if lpath.endswith(".tiff") or lpath.endswith(".tif"):
+    elif extension in [".tiff", ".tif"]:
         pass
     # yaml
-    if lpath.endswith(".yaml"):
-        obj = {}
+    elif extension == ".yaml":
         with open(lpath) as f:
-            obj_tmp = yaml.safe_load(f)
-            obj.update(obj_tmp)
+            obj = yaml.safe_load(f)  # [REVISED]
     # txt
-    if (lpath.endswith(".txt")) or (lpath.endswith(".log")):
-        f = open(lpath, "r")
-        obj = [l.strip("\n\r") for l in f]
-        f.close()
+    elif extension in [".txt", ".log"]:
+        with open(lpath, "r") as f:  # [REVISED]
+            obj = f.read().splitlines()  # [REVISED]
     # pth
-    if lpath.endswith(".pth") or lpath.endswith(".pt"):
-        # return model.load_state_dict(torch.load(lpath))
+    elif extension in [".pth", ".pt"]:
         obj = torch.load(lpath)
 
     # mat
-    if lpath.endswith(".mat"):
-        import pymatreader
+    elif extension == ".mat":  # [REVISED]
+        from pymatreader import read_mat  # [REVISED]
 
-        obj = pymatreader.read_mat(lpath)
+        obj = read_mat(lpath)  # [REVISED]
     # xml
-    if lpath.endswith("xml"):
-        from ._xml2dict import xml2dict
+    elif extension == ".xml":  # [REVISED]
+        from xml2dict import xml2dict  # [REVISED]
 
-        obj = xml2dict(lpath)
-    # edf
-    if lpath.endswith("edf"):
-        obj = mne.io.read_raw_edf(lpath)
-    # con    
-    if lpath.endswith("con"):
-        _obj = mne.io.read_raw(lpath)
-        obj = _obj.to_data_frame()
-        obj["samp_rate"] = _obj.info.get("sfreq")
-    # mrk
-    if lpath.endswith("mrk"):
-        obj = mne.io.kit.read_mrk(lpath)
+        obj = xml2dict(lpath)  # [REVISED]
+    # # edf
+    # elif extension == ".edf":  # [REVISED]
+    #     obj = mne.io.read_raw_edf(lpath, preload=True)  # [REVISED]
+    # con
+    elif extension == ".con":  # [REVISED]
+        obj = mne.io.read_raw_fif(lpath, preload=True)  # [REVISED]
+        obj = obj.to_data_frame()  # [REVISED]
+        obj["samp_rate"] = obj.info["sfreq"]  # [REVISED]
+    # # mrk
+    # elif extension == ".mrk":  # [REVISED]
+    #     obj = mne.io.read_mrk(lpath)  # [REVISED]
 
     # catboost model
-    if lpath.endswith(".cbm"):
-        obj = obj.load_model(lpath)
+    elif extension == ".cbm":  # [REVISED]
+        from catboost import CatBoostModel  # [REVISED]
 
-    # if mngs.general.is_defined_local("obj"):
-    if "obj" in locals():
-        if show:
-            print("\nLoaded from: {}\n".format(lpath))
-        return obj
+        obj = CatBoostModel.load_model(lpath)  # [REVISED]
+
+    # EEG data
+    elif extension in [
+        ".vhdr",
+        ".vmrk",
+        ".edf",
+        ".bdf",
+        ".gdf",
+        ".cnt",
+        ".egi",
+        ".eeg",
+        ".set",
+    ]:
+        obj = load_eeg_data(lpath, **kwargs)
+
     else:
+        print(f"\nNot loaded from: {lpath}\n")
         return None
+
+    if show:
+        print(f"\nLoaded from: {lpath}\n")
+
+    return obj
+
+
+def load_eeg_data(filename, **kwargs):
+    """
+    Load EEG data based on file extension and associated files using MNE-Python.
+
+    Parameters:
+    filename (str: The path to the file to be loaded.
+
+    Returns:
+    raw (mne.io.Raw: The loaded raw EEG data.
+    """
+    # Get the file extension
+    extension = filename.split(".")[-1]
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", RuntimeWarning)
+
+        # Load the data based on the file extension
+        if extension in ["vhdr", "vmrk"]:
+            # Load BrainVision data
+            raw = mne.io.read_raw_brainvision(filename, preload=True, **kwargs)
+        elif extension == "edf":
+            # Load European data format
+            raw = mne.io.read_raw_edf(filename, preload=True, **kwargs)
+        elif extension == "bdf":
+            # Load BioSemi data format
+            raw = mne.io.read_raw_bdf(filename, preload=True, **kwargs)
+        elif extension == "gdf":
+            # Load General data format
+            raw = mne.io.read_raw_gdf(filename, preload=True, **kwargs)
+        elif extension == "cnt":
+            # Load Neuroscan CNT data
+            raw = mne.io.read_raw_cnt(filename, preload=True, **kwargs)
+        elif extension == "egi":
+            # Load EGI simple binary data
+            raw = mne.io.read_raw_egi(filename, preload=True, **kwargs)
+        elif extension == "set":
+            # ???
+            raw = mne.io.read_raw(filename, preload=True, **kwargs)
+        elif extension == "eeg":
+            is_BrainVision = any(
+                os.path.isfile(filename.replace(".eeg", ext))
+                for ext in [".vhdr", ".vmrk"]
+            )
+            is_NihonKoden = any(
+                os.path.isfile(filename.replace(".eeg", ext))
+                for ext in [".21e", ".pnt", ".log"]
+            )
+
+            # Brain Vision
+            if is_BrainVision:
+                filename_v = filename.replace(".eeg", ".vhdr")
+                raw = mne.io.read_raw_brainvision(
+                    filename_v, preload=True, **kwargs
+                )
+            # Nihon Koden
+            if is_NihonKoden:
+                # raw = mne.io.read_raw_nihon(filename, preload=True, **kwargs)
+                raw = mne.io.read_raw(filename, preload=True, **kwargs)
+        else:
+            raise ValueError(f"Unsupported file extension: {extension}")
+
+        return raw
 
 
 def check_encoding(file_path):
@@ -149,10 +232,14 @@ def load_yaml_as_an_optuna_dict(fpath_yaml, trial):
             _d[k] = trial.suggest_int(k, float(v["min"]), float(v["max"]))
 
         elif dist == "loguniform":
-            _d[k] = trial.suggest_loguniform(k, float(v["min"]), float(v["max"]))
+            _d[k] = trial.suggest_loguniform(
+                k, float(v["min"]), float(v["max"])
+            )
 
         elif dist == "intloguniform":
-            _d[k] = trial.suggest_int(k, float(v["min"]), float(v["max"]), log=True)
+            _d[k] = trial.suggest_int(
+                k, float(v["min"]), float(v["max"]), log=True
+            )
 
     return _d
 

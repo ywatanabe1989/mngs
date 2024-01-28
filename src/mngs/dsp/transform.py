@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-01-21 00:21:08 (ywatanabe)"#!/usr/bin/env python3
+# Time-stamp: "2024-01-24 05:56:27 (ywatanabe)"#!/usr/bin/env python3
 
 
 import warnings
@@ -8,6 +8,7 @@ import warnings
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import skimage
 import torch
 from obspy.signal.tf_misfit import cwt
 
@@ -313,6 +314,22 @@ def arr2skdf(data):
         sktime_df.iloc[i, 0] = combined_series
 
     return sktime_df
+
+
+def crop(data, window_size_pts, overlap_factor=1):
+    assert data.ndim == 2
+
+    cropped = skimage.util.view_as_windows(
+        data,
+        (len(data), window_size_pts),
+        int(window_size_pts / overlap_factor),
+    )
+
+    if cropped.ndim != 3:
+        cropped = cropped.squeeze(0)
+    assert cropped.ndim == 3
+
+    return cropped
 
 
 # def normalize_time(x):
