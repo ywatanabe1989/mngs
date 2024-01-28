@@ -4,6 +4,9 @@
 # from .load import get_data_path_from_a_package, load
 # from .save import is_listed_X, save, save_listed_dfs_as_csv, save_listed_scalars_as_csv
 from ..io.__init__ import *
+from ._close import close
+from ._start import start
+from .calc import to_z
 from .converters import (
     KeepPD,
     my2array,
@@ -13,6 +16,7 @@ from .converters import (
 )
 from .cuda_collect_env import main as cuda_collect_env
 from .debug import *
+from .email import notify, send_gmail
 from .latex import add_hat_in_the_latex_style, to_the_latex_style
 from .mat2py import *
 from .misc import (
@@ -36,6 +40,7 @@ from .misc import (
     pop_keys,
     search,
     squeeze_spaces,
+    suppress_output,
     take_the_closest,
     wait_key,
 )
@@ -49,4 +54,3 @@ from .pandas import (
 from .repro import *
 from .TimeStamper import *
 from .torch import *
-from .calc import to_z

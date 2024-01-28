@@ -5,6 +5,7 @@ import os
 
 import mngs
 import warnings
+from glob import glob
 
 
 if "general" in __file__:
@@ -70,4 +71,8 @@ def split_fpath(fpath):
 def touch(fpath):
     import pathlib
     return pathlib.Path(fpath).touch()
+    
+def find(directory, pattern):
+    search_pattern = os.path.join(directory, '**', pattern)
+    return glob(search_pattern, recursive=True)
     

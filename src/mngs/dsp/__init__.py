@@ -33,7 +33,9 @@ from .filters import (
     bandpassfilter_np,
     gaussian_filter1d,
 )
+from .mne import to_dig_montage
 from .PARAMS import BANDS_LIM_HZ_DICT
-from .referencing import common_average, subtract_from_random_column # random_reference
+from .referencing import common_average  # random_reference
+from .referencing import subtract_from_random_column
 from .sampling import down_sample_1d
-from .transform import psd, to_z, wavelet, wavelet_np, arr2skdf
+from .transform import arr2skdf, crop, psd, to_z, wavelet, wavelet_np
