@@ -4,10 +4,12 @@ import json
 import os
 import pickle
 import warnings
+from glob import glob
 
 import h5py
 import joblib  # [REVISED]
 import mne
+import mngs
 import numpy as np
 import pandas as pd
 import torch
@@ -258,3 +260,30 @@ def load_study_rdb(study_name, rdb_raw_bytes_url):
     study = optuna.load_study(study_name=study_name, storage=storage)
     print(f"\nLoaded: {rdb_raw_bytes_url}\n")
     return study
+
+
+def load_configs(is_debug=None):
+    def update_debug(config, is_debug):
+        if is_debug:
+            debug_keys = mngs.gen.search("^DEBUG_", list(config.keys()))[1]
+            for dk in debug_keys:
+                dk_wo_debug_prefix = dk.split("DEBUG_")[1]
+                config[dk_wo_debug_prefix] = config[dk]
+                print(f"\n{dk} -> {dk_wo_debug_prefix}\n")
+        return config
+
+    # Check ./config/is_debug.yaml file if is_debug argument is not passed
+    if is_debug is None:
+        try:
+            is_debug = mngs.io.load("./config/is_debug.yaml")["DEBUG"]
+        except Exception as e:
+            print(e)
+            is_debug = False
+
+    # Main
+    CONFIGS = {}
+    for lpath in glob("./config/*.yaml"):
+        CONFIG = update_debug(mngs.io.load(lpath), is_debug)
+        CONFIGS.update(CONFIG)
+
+    return CONFIGS
