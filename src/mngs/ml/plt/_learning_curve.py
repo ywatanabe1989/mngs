@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-01-26 16:17:42 (ywatanabe)"
+# Time-stamp: "2024-01-29 09:38:40 (ywatanabe)"
 
 import re
 
@@ -24,6 +24,18 @@ def learning_curve(
         "Validation": "green",
         "Test": "red",
     }
+
+    if metrics_df.index.name != "i_global":
+        try:
+            metrics_df = metrics_df.set_index("i_global")
+        except KeyError:
+            print(
+                "Error: The DataFrame does not contain a column named 'i_global'. Please check the column names."
+            )
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}")
+    else:
+        print("The index is already set to 'i_global'.")
 
     fig, axes = plt.subplots(len(keys_to_plot), 1, sharex=True, sharey=False)
 
@@ -99,10 +111,7 @@ def learning_curve(
 
 
 if __name__ == "__main__":
-    sdir = "./scripts/train_EEGPT/2024-0126-09:25_bvYp7bIr/"
+    sdir = "./scripts/train_EEGPT/[DEBUG] 2024-01-29-07-27_A5HS3f0e/"
     metrics = mngs.io.load(sdir + "metrics.csv")
-    # del metrics["Unnamed: 0"]
-    metrics = metrics.set_index("i_global")
     fig = learning_curve(metrics, yscale="log")
-
     mngs.io.save(fig, sdir + "learning_curve.png")

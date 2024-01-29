@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-01-27 19:53:28 (ywatanabe)"
+# Time-stamp: "2024-01-29 15:41:58 (ywatanabe)"
 
 import inspect
 import os as _os
@@ -12,37 +12,12 @@ from time import sleep
 import mngs
 
 
-def load_configs(is_debug=False):
-    CONFIGS = {}
-    for lpath in glob("./config/*.yaml"):
-        CONFIG = mngs.io.load(lpath)
-        # ???
-        # fname = mngs.gen.split_fpath(lpath)[1]
-        # CONFIGS[fname] = CONFIG
-        # Update parameters for debugging
-        if is_debug:
-            debug_keys = mngs.gen.search("^DEBUG_", list(CONFIG.keys()))[1]
-            for dk in debug_keys:
-                dk_wo_debug_prefix = dk.split("DEBUG_")[1]
-                CONFIG[dk_wo_debug_prefix] = CONFIG[dk]
-                print(f"\n{dk} -> {dk_wo_debug_prefix}\n")
-            sleep(1)
-
-        CONFIGS.update(CONFIG)
-
-    # # If only one CONFIG files are found, it should be treated as CONFIG's'
-    # if len(CONFIGS) == 1:
-    #     CONFIGS = CONFIGS[list(CONFIGS.keys())[0]]
-
-    return CONFIGS
-
-
 def start(
     sys=None,
     plt=None,
     sdir=None,
     show=True,
-    # seeds
+    # Random seeds
     os=None,
     random=None,
     np=None,
@@ -98,7 +73,7 @@ def start(
     _os.makedirs(sdir, exist_ok=True)
 
     # CONFIGs
-    CONFIGS = load_configs(is_debug)
+    CONFIGS = mngs.io.load_configs(is_debug)
     CONFIGS["ID"] = ID
     CONFIGS["START_TIME"] = start_time
     CONFIGS["SDIR"] = sdir
@@ -107,8 +82,7 @@ def start(
         print(f"CONFIG:")
         for k, v in CONFIGS.items():
             print(f"\n{k}:\n{v}\n")
-            sleep(0.3)
-        # pprint(CONFIGS)
+            sleep(0.1)
         print(f"\n{'-'*40}\n")
 
     # Logging (tee)
