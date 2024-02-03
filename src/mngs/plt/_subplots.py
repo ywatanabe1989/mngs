@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-02-03 14:45:54 (ywatanabe)"
+# Time-stamp: "2024-02-03 16:09:19 (ywatanabe)"
 
 from collections import OrderedDict
 
@@ -18,8 +18,9 @@ def set_n_ticks(axis, n_xticks=4, n_yticks=4):
 
 class SubplotsManager:
     """
-    A manager class tracks plotted data from the ax methods of matplotlib.pyplot.
-    The collected data can be transformed into a CSV file with a SigmaPlot-friendly style.
+    A manager class monitors data plotted using the ax methods from matplotlib.pyplot.
+    This data can be converted into a CSV file formatted for SigmaPlot compatibility.
+    Additionally, refer to the SigmaPlot macros available at mngs.gists (https://github.com/ywatanabe1989/mngs/tree/main/src/mngs/gists).
 
     Currently, available methods are as follows:
         ax.plot, ax.scatter, ax.boxplot, and ax.bar
