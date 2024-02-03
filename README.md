@@ -4,8 +4,9 @@
 ``` bash
 $ pip install mngs
 
+```
 or
-
+``` bash
 $ pip install git+https://github.com/ywatanabe1989/mngs.git@develop
 ```
 

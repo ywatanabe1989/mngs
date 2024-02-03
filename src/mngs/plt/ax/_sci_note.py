@@ -23,7 +23,7 @@ class OOMFormatter(matplotlib.ticker.ScalarFormatter):
             self.format = r"$\mathdefault{%s}$" % self.format
 
 
-def ax_scientific_notation(
+def sci_note(
     ax,
     order,
     fformat="%1.0d",
@@ -37,7 +37,7 @@ def ax_scientific_notation(
 
     Example:
         order = 4 # 10^4
-        ax = ax_scientific_notation(
+        ax = sci_note(
                  ax,
                  order,
                  fformat="%1.0d",
@@ -47,10 +47,14 @@ def ax_scientific_notation(
     """
 
     if x == True:
-        ax.xaxis.set_major_formatter(OOMFormatter(order=order, fformat=fformat))
+        ax.xaxis.set_major_formatter(
+            OOMFormatter(order=order, fformat=fformat)
+        )
         ax.ticklabel_format(axis="x", style="sci", scilimits=scilimits)
     if y == True:
-        ax.yaxis.set_major_formatter(OOMFormatter(order=order, fformat=fformat))
+        ax.yaxis.set_major_formatter(
+            OOMFormatter(order=order, fformat=fformat)
+        )
         ax.ticklabel_format(axis="y", style="sci", scilimits=scilimits)
 
     return ax

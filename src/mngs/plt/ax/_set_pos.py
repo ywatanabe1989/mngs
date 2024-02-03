@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 
-def ax_set_position(
+def set_pos(
     fig,
     ax,
     x_delta_offset_cm,
@@ -33,7 +33,7 @@ def ax_set_position(
     if dragv:
         height -= y_delta_offset_ratio
 
-    ax.set_position(
+    ax.set_pos(
         [
             left,
             bottom,
