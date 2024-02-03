@@ -35,6 +35,10 @@
 │   ├── TimeStamper.py
 │   ├── torch.py
 │   └── _xml2dict.py
+├── gists
+│   ├── __init__.py
+│   ├── _SigMacro_processFigure_S.py
+│   └── _SigMacro_toBlue.py
 ├── #__init__.py#
 ├── __init__.py
 ├── io
@@ -169,7 +173,6 @@
 │   │   ├── _set_pos.py
 │   │   └── _set_size.py
 │   ├── colors.py
-│   ├── _configure_mpl_old.py
 │   ├── _configure_mpl.py
 │   ├── _draw_a_cube.py
 │   ├── get_mpl_color.py
@@ -194,4 +197,4 @@
     ├── _smirnov_grubbs.py
     └── _to_asterisks.py
 
-27 directories, 167 files
+28 directories, 169 files
