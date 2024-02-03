@@ -1,0 +1,197 @@
+./src/mngs
+├── dsp
+│   ├── demo_sig.py
+│   ├── feature_extractors.py
+│   ├── fft.py
+│   ├── filters.py
+│   ├── HilbertTransformationTorch.py
+│   ├── __init__.py
+│   ├── _load_BIDS.py
+│   ├── mne.py
+│   ├── PARAMS.py
+│   ├── referencing.py
+│   ├── sampling.py
+│   └── transform.py
+├── etc
+│   └── wait_key.py
+├── general
+│   ├── calc.py
+│   ├── _close.py
+│   ├── converters.py
+│   ├── cuda_collect_env.py
+│   ├── debug.py
+│   ├── email.py
+│   ├── __init__.py
+│   ├── latex.py
+│   ├── load.py
+│   ├── mat2py.py
+│   ├── misc.py
+│   ├── pandas.py
+│   ├── path.py
+│   ├── repro.py
+│   ├── save.py
+│   ├── _shell.py
+│   ├── _start.py
+│   ├── TimeStamper.py
+│   ├── torch.py
+│   └── _xml2dict.py
+├── #__init__.py#
+├── __init__.py
+├── io
+│   ├── __init__.py
+│   ├── load.py -> ../general/load.py
+│   ├── path.py -> ../general/path.py
+│   └── save.py -> ../general/save.py
+├── linalg
+│   ├── __init__.py
+│   └── _misc.py
+├── ml
+│   ├── act
+│   │   ├── _define.py
+│   │   └── __init__.py
+│   ├── ClassificationReporter
+│   │   ├── balanced_acc.csv
+│   │   ├── clf_report.csv
+│   │   ├── conf_mat.csv
+│   │   ├── conf_mat_figs
+│   │   │   ├── fold#0.png
+│   │   │   ├── fold#1.png
+│   │   │   ├── fold#2.png
+│   │   │   ├── fold#3.png
+│   │   │   ├── fold#4.png
+│   │   │   └── k-fold_cv_overall-sum.png
+│   │   ├── manu_dfs.csv
+│   │   ├── manu_figs
+│   │   │   ├── fold#0.png
+│   │   │   ├── fold#1.png
+│   │   │   ├── fold#2.png
+│   │   │   ├── fold#3.png
+│   │   │   └── fold#4.png
+│   │   ├── manu_scalars.csv
+│   │   ├── mcc.csv
+│   │   ├── pre_rec_auc_fig
+│   │   │   ├── fold#0.png
+│   │   │   ├── fold#1.png
+│   │   │   ├── fold#2.png
+│   │   │   ├── fold#3.png
+│   │   │   └── fold#4.png
+│   │   ├── pre_rec_auc_macro.csv
+│   │   ├── pre_rec_auc_micro.csv
+│   │   ├── roc_auc_fig
+│   │   │   ├── fold#0.png
+│   │   │   ├── fold#1.png
+│   │   │   ├── fold#2.png
+│   │   │   ├── fold#3.png
+│   │   │   └── fold#4.png
+│   │   ├── roc_auc_macro.csv
+│   │   ├── roc_auc_micro.csv
+│   │   ├── stderr.log
+│   │   └── stdout.log
+│   ├── ClassificationReporter.py
+│   ├── ClassifierServer.py
+│   ├── __Classifiers.py
+│   ├── EarlyStopping.py
+│   ├── __init__.py
+│   ├── layer
+│   │   ├── __init__.py
+│   │   ├── _Pass.py
+│   │   └── _switch.py
+│   ├── LearningCurveLogger
+│   │   ├── fold#0.png
+│   │   ├── log
+│   │   │   ├── stderr.log
+│   │   │   └── stdout.log
+│   │   ├── stderr.log
+│   │   └── stdout.log
+│   ├── LearningCurveLogger.py
+│   ├── loss
+│   │   ├── __init__.py
+│   │   ├── _L1L2Losses.py
+│   │   └── MultiTaskLoss.py
+│   ├── optim
+│   │   ├── _get_set.py
+│   │   ├── __init__.py
+│   │   └── Ranger_Deep_Learning_Optimizer
+│   │       ├── __init__.py
+│   │       ├── LICENSE
+│   │       ├── ranger
+│   │       │   ├── __init__.py
+│   │       │   ├── ranger2020.py
+│   │       │   ├── ranger913A.py
+│   │       │   ├── ranger.py
+│   │       │   └── rangerqh.py
+│   │       ├── ranger-init.jpg
+│   │       ├── ranger-with-gc-options.jpg
+│   │       ├── README.md
+│   │       └── setup.py
+│   ├── plt
+│   │   ├── aucs
+│   │   │   ├── example.py
+│   │   │   ├── __init__.py
+│   │   │   ├── pre_rec_auc.py
+│   │   │   └── roc_auc.py
+│   │   ├── confusion_matrix.py
+│   │   ├── __init__.py
+│   │   └── _learning_curve.py
+│   ├── silhoute_score_block.py
+│   └── utils
+│       ├── _DefaultDataset.py
+│       ├── _format_samples_for_sktime.py
+│       ├── _get_params.py
+│       ├── __init__.py
+│       ├── _merge_labels.py
+│       ├── _sliding_window_data_augmentation.py
+│       ├── _under_sample.py
+│       └── _verify_n_gpus.py
+├── nn
+│   ├── _BNet.py
+│   ├── _BNet_Res.py
+│   ├── _ChannelGainChanger.py
+│   ├── _DropoutChannels.py
+│   ├── _FreqGainChanger.py
+│   ├── __init__.py
+│   ├── _MNet_1000.py
+│   ├── _ResNet1D.py
+│   ├── _SpatialAttention.py
+│   └── _SwapChannels.py
+├── plt
+│   ├── _add_hue.py
+│   ├── _annotated_heatmap.py
+│   ├── ax
+│   │   ├── _circular_hist.py
+│   │   ├── _extend.py
+│   │   ├── _fill_between.py
+│   │   ├── __init__.py
+│   │   ├── _map_ticks.py
+│   │   ├── _panel.py
+│   │   ├── _sci_note.py
+│   │   ├── _set_n_ticks.py
+│   │   ├── _set_pos.py
+│   │   └── _set_size.py
+│   ├── colors.py
+│   ├── _configure_mpl_old.py
+│   ├── _configure_mpl.py
+│   ├── _draw_a_cube.py
+│   ├── get_mpl_color.py
+│   ├── _get_RGBA_from_colormap.py
+│   ├── __init__.py
+│   ├── _mk_colorbar.py
+│   ├── _mk_patches.py
+│   └── _subplots.py
+├── resource
+│   ├── get.py
+│   ├── __init__.py
+│   └── limit_RAM.py
+└── stats
+    ├── _bonferroni_correction.py
+    ├── _brunner_munzel_test.py
+    ├── _calc_partial_corr.py
+    ├── _corr_test.py
+    ├── _fdr_correction.py
+    ├── __init__.py
+    ├── _multicompair.py
+    ├── _nocorrelation_test.py
+    ├── _smirnov_grubbs.py
+    └── _to_asterisks.py
+
+27 directories, 167 files
