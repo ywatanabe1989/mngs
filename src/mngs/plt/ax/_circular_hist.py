@@ -1,15 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2023-03-22 16:57:33 (ywatanabe)"
+# Time-stamp: "2024-02-03 13:10:50 (ywatanabe)"
 import numpy as np
 
-def ax_circular_hist(
-    ax, rads, bins=16, density=True, offset=0, gaps=True, color=None, range_bias=0
+
+def circular_hist(
+    ax,
+    rads,
+    bins=16,
+    density=True,
+    offset=0,
+    gaps=True,
+    color=None,
+    range_bias=0,
 ):
     """
     Example:
         fig, ax = plt.subplots(subplot_kw=dict(projection="polar"))
-        ax = mngs.plt.ax_circular_hist(ax, rads)
+        ax = mngs.plt.circular_hist(ax, rads)
     Produce a circular histogram of angles on ax.
 
     Parameters
@@ -76,10 +84,9 @@ def ax_circular_hist(
     # med_val = np.pi/2#
     # med_val = np.nanmedian(rads)
     mean_val = np.nanmean(rads)
-    std_val = np.nanstd(rads)    
+    std_val = np.nanstd(rads)
     ax.axvline(mean_val, color=color)
     ax.text(mean_val, 1, std_val)
-    
 
     # Plot data on ax
     patches = ax.bar(

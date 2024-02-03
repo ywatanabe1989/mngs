@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 
-def ax_extend(ax, x_extend_ratio=1.0, y_extend_ratio=1.0):
+def extend(ax, x_extend_ratio=1.0, y_extend_ratio=1.0):
     ## Original coordinates
     bbox = ax.get_position()
     left_orig = bbox.x0
@@ -75,7 +75,7 @@ def ax_extend(ax, x_extend_ratio=1.0, y_extend_ratio=1.0):
 # plt.show()
 
 
-# def ax_extend(
+# def extend(
 #     fig,
 #     ax,
 #     x_extend_ratio=1.00,
@@ -133,5 +133,5 @@ if __name__ == "__main__":
 
     fig, axes = plt.subplots(1, 2)
     ax = axes[1]
-    ax = ax_extend(ax, 0.75, 1.1)
+    ax = extend(ax, 0.75, 1.1)
     fig.show()

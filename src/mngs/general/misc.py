@@ -90,20 +90,28 @@ def search(patterns, strings, only_perfect_match=False, as_bool=False):
     """
 
     ## For single string objects
-    def to_list(s_or_p):
-        if isinstance(s_or_p, collections.abc.KeysView):
-            s_or_p = list(s_or_p)
+    def to_str_list(data):
+        data_arr = np.array(data).astype(str)
+        if data_arr.ndim == 0:
+            data_arr = data_arr[np.newaxis]
+        return list(data_arr)
 
-        elif not isinstance(
-            s_or_p,
-            (list, tuple, pd.core.indexes.base.Index, pd.core.series.Series),
-        ):
-            s_or_p = [s_or_p]
+    # def to_list(s_or_p):
+    #     if isinstance(s_or_p, collections.abc.KeysView):
+    #         s_or_p = list(s_or_p)
 
-        return s_or_p
+    #     elif not isinstance(
+    #         s_or_p,
+    #         (list, tuple, pd.core.indexes.base.Index, pd.core.series.Series),
+    #     ):
+    #         s_or_p = [s_or_p]
 
-    patterns = to_list(patterns)
-    strings = to_list(strings)
+    #     return s_or_p
+
+    # patterns = to_list(patterns)
+    # strings = to_list(strings)
+    patterns = to_str_list(patterns)
+    strings = to_str_list(strings)
 
     ## Main
     if not only_perfect_match:

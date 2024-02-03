@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-01-27 19:24:23 (ywatanabe)"
+# Time-stamp: "2024-01-29 15:44:06 (ywatanabe)"
 
 from datetime import datetime, timedelta
 from glob import glob
@@ -35,9 +35,11 @@ def close(CONFIG, message=":)", show=True):
     mngs.io.save(CONFIG, CONFIG["SDIR"] + "CONFIG.pkl")
 
     try:
+        if CONFIG.get("DEBUG", False):
+            message = f"[DEBUG]\n" + message
         sleep(3)
         mngs.gen.notify(
-            message=f"[DEBUG]\n" + message,
+            message=message,
             ID=CONFIG["ID"],
             log_paths=glob(CONFIG["SDIR"] + "*.log"),
             show=show,

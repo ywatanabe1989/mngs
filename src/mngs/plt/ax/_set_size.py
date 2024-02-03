@@ -3,7 +3,7 @@
 # Time-stamp: "2022-12-09 13:38:11 (ywatanabe)"
 
 
-def ax_set_size(ax, w, h):
+def set_size(ax, w, h):
     """w, h: width, height in inches"""
     # if not ax: ax=plt.gca()
     l = ax.figure.subplotpars.left
