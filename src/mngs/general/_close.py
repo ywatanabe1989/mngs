@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-01-29 15:44:06 (ywatanabe)"
+# Time-stamp: "2024-03-08 20:13:59 (ywatanabe)"
 
+import os
+import shutil
 from datetime import datetime, timedelta
 from glob import glob
 from time import sleep
@@ -23,27 +25,43 @@ def format_diff_time(diff_time):
     return diff_time_str
 
 
-def close(CONFIG, message=":)", show=True):
+def close(CONFIG, message=":)", notify=True, show=True):
     try:
-        end_time = datetime.now()
-        diff_time = format_diff_time(end_time - CONFIG["START_TIME"])
-        CONFIG["TimeSpent"] = diff_time
-        del CONFIG["START_TIME"]
+        CONFIG["END_TIME"] = datetime.now()
+        CONFIG["SPENT_TIME"] = format_diff_time(
+            CONFIG["END_TIME"] - CONFIG["START_TIME"]
+        )
+        if show:
+            print(f"\nEND TIME: {CONFIG['END_TIME']}")
+            print(f"\nSPENT TIME: {CONFIG['SPENT_TIME']}")
+
     except Exception as e:
         print(e)
 
     mngs.io.save(CONFIG, CONFIG["SDIR"] + "CONFIG.pkl")
+    mngs.io.save(CONFIG, CONFIG["SDIR"] + "CONFIG.yaml")
 
     try:
         if CONFIG.get("DEBUG", False):
             message = f"[DEBUG]\n" + message
         sleep(3)
-        mngs.gen.notify(
-            message=message,
-            ID=CONFIG["ID"],
-            log_paths=glob(CONFIG["SDIR"] + "*.log"),
-            show=show,
-        )
+        if notify:
+            mngs.gen.notify(
+                message=message,
+                ID=CONFIG["ID"],
+                log_paths=glob(CONFIG["SDIR"] + "*.log"),
+                show=show,
+            )
+    except Exception as e:
+        print(e)
+
+    # RUNNING to FINISHED
+    src_dir = CONFIG["SDIR"]
+    dest_dir = src_dir.replace("RUNNING", "FINISHED")
+    os.makedirs(dest_dir, exist_ok=True)
+    try:
+        os.rename(src_dir, dest_dir)
+        print(f"\nRenamed from: {src_dir} to {dest_dir}")
     except Exception as e:
         print(e)
 
@@ -53,8 +71,11 @@ if __name__ == "__main__":
 
     import matplotlib.pyplot as plt
     import mngs
+    from icecream import ic
 
-    CONFIG, sys.stdout, sys.stderr, plt = mngs.gen.start(sys, plt, show=False)
+    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
+        sys, plt, show=False
+    )
 
     ic("aaa")
     ic("bbb")

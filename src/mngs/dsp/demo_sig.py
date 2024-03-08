@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-01-20 13:58:43 (ywatanabe)"#!/usr/bin/env python3
+# Time-stamp: "2024-02-14 20:04:18 (ywatanabe)"#!/usr/bin/env python3
 
 import numpy as np
 import torch
@@ -53,14 +53,59 @@ def demo_sig_np(
     return data
 
 
+# def demo_sig_torch(
+#     batch_size=64, n_chs=19, samp_rate=1000, len_sec=10, freqs_hz=[2, 5, 10]
+# ):
+#     time = torch.arange(0, len_sec, 1 / samp_rate)
+#     sig = torch.vstack(
+#         [torch.sin(f * 2 * torch.pi * time) for f in freqs_hz]
+#     ).sum(dim=0)
+#     sig = sig.unsqueeze(0).unsqueeze(0).repeat(batch_size, n_chs, 1)
+#     return sig
+
+
 def demo_sig_torch(
-    batch_size=64, n_chs=19, samp_rate=1000, len_sec=10, freqs_hz=[2, 5, 10]
+    batch_size=64, n_chs=19, samp_rate=128, len_sec=1, freqs_hz=[2, 5, 10]
 ):
+    """
+    Generate a batch of demo signals with varying phase shifts and amplitudes,
+    and add some noise to simulate more realistic data.
+
+    Parameters:
+    - batch_size: Number of samples in the batch.
+    - n_chs: Number of channels per sample.
+    - samp_rate: Sampling rate in Hz.
+    - len_sec: Length of the signal in seconds.
+    - freqs_hz: List of frequencies in Hz to include in the signal.
+
+    Returns:
+    - sig: Tensor of shape (batch_size, n_chs, samp_rate * len_sec) containing the generated signals.
+    """
     time = torch.arange(0, len_sec, 1 / samp_rate)
-    sig = torch.vstack(
-        [torch.sin(f * 2 * torch.pi * time) for f in freqs_hz]
-    ).sum(dim=0)
-    sig = sig.unsqueeze(0).unsqueeze(0).repeat(batch_size, n_chs, 1)
+    # Initialize an empty signal tensor
+    sig = torch.zeros(batch_size, n_chs, len(time))
+
+    # Loop over each frequency and add a sinusoid with a random phase shift and amplitude
+    for f in freqs_hz:
+        # Generate a random phase shift for each sample in the batch
+        phase_shifts = torch.rand(batch_size, 1, 1) * 2 * torch.pi
+        # Generate a random amplitude for each sample in the batch
+        amplitudes = (
+            torch.rand(batch_size, 1, 1) * 0.5 + 0.5
+        )  # Amplitudes between 0.5 and 1.0
+        # Create the sinusoid with the phase shift and amplitude
+        sinusoid = amplitudes * torch.sin(
+            f * 2 * torch.pi * time + phase_shifts
+        )
+        # Repeat the sinusoid across channels
+        sinusoid = sinusoid.repeat(1, n_chs, 1)
+        # Add the sinusoid to the signal
+        sig += sinusoid
+
+    # Add some Gaussian noise to the signal
+    noise = torch.randn_like(sig) * 0.1  # Noise level can be adjusted
+    sig += noise
+
     return sig
 
 

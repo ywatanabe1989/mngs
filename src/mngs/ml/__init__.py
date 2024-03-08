@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from . import act, layer, optim, plt, utils
+from . import act, clustering, layer, metrics, optim, plt, sk, utils
 from .ClassificationReporter import (
     ClassificationReporter,
     MultiClassificationReporter,

@@ -574,3 +574,122 @@ def suppress_output():
             with contextlib.redirect_stderr(fnull):
                 # Yield control back to the context block
                 yield
+
+
+def unique(data, axis=None):
+    """
+    Identifies unique elements in the data along the specified axis and their counts, returning a DataFrame.
+
+    Parameters:
+    - data (array-like): The input data to analyze for unique elements.
+    - axis (int, optional): The axis along which to find the unique elements. Defaults to None.
+
+    Returns:
+    - df (pandas.DataFrame): DataFrame with unique elements and their counts.
+    """
+    if axis is None:
+        uqs, counts = np.unique(data, return_counts=True)
+    else:
+        uqs, counts = np.unique(data, axis=axis, return_counts=True)
+
+    if axis is None:
+        df = pd.DataFrame({"uq": uqs, "n": counts})
+    else:
+        df = pd.DataFrame(
+            uqs, columns=[f"axis_{i}" for i in range(uqs.shape[1])]
+        )
+        df["n"] = counts
+
+    df["n"] = df["n"].apply(lambda x: f"{int(x):,}")
+
+    return df
+
+
+def unique(data, axis=None):
+    """
+    Identifies unique elements in the data along the specified axis and their counts, returning a DataFrame.
+
+    Parameters:
+    - data (array-like): The input data to analyze for unique elements.
+    - axis (int, optional): The axis along which to find the unique elements. Defaults to None.
+
+    Returns:
+    - df (pandas.DataFrame): DataFrame with unique elements and their counts.
+    """
+    # Find unique elements and their counts
+    if axis is None:
+        uqs, counts = np.unique(data, return_counts=True)
+        df = pd.DataFrame({"Unique Elements": uqs, "Counts": counts})
+    else:
+        uqs, counts = np.unique(data, axis=axis, return_counts=True)
+        # Create a DataFrame with unique elements
+        df = pd.DataFrame(
+            uqs,
+            columns=[f"Unique Elements Axis {i}" for i in range(uqs.shape[1])],
+        )
+        # Add a column for counts
+        df["Counts"] = counts
+
+    # Format the 'Counts' column with commas for thousands
+    df["Counts"] = df["Counts"].apply(lambda x: f"{x:,}")
+
+    return df
+
+
+def uq(*args, **kwargs):
+    return unique(*args, **kwargs)
+
+
+# def uq(data, axis=None):
+#     def _uq(data):
+#         uqs, counts = np.unique(data, return_counts=True)
+#         df = pd.DataFrame({"uq": uqs, "n": counts})
+#         # Format the 'Counts' column with commas for thousands
+#         df["n"] = df["n"].apply(lambda x: f"{x:,}")
+#         return df
+
+#     data = pd.DataFrame(data)
+
+#     if axis == 1:
+#         dfs = {}
+#         for col in data.columns:
+#             df = _uq(data[col])
+#             dfs[col] = df
+#         return dfs
+
+#     if axis == 0:
+#         dfs = {}
+#         for col in data.T.columns:
+#             df = _uq(data.T[col])
+#             dfs[col] = df
+#         return dfs
+
+#     if axis is None:
+#         return _uq(data)
+
+
+# def unique(data, axis=None):
+#     """
+#     Identifies unique elements in the data and their counts, returning a DataFrame.
+
+#     Parameters:
+#     - data (array-like): The input data to analyze for unique elements.
+#     - show (bool, optional): If True, prints the DataFrame. Defaults to True.
+
+#     Returns:
+#     - df (pandas.DataFrame): DataFrame with unique elements and their counts.
+#     """
+#     uqs, counts = np.unique(data, return_counts=True)  # [REVISED]
+#     df = pd.DataFrame(
+#         np.vstack([uqs, counts]).T, columns=["uq", "n"]  # [REVISED]
+#     ).set_index(
+#         "uq"
+#     )  # [REVISED]
+
+#     df_show = df.copy()
+#     df_show["n"] = df_show["n"].apply(lambda x: f"{int(x):,}")  # [REVISED]
+
+#     return df_show
+def print_block(message, char="-", n=40):
+    border = char * n
+    print(f"\n{border}\n{message}\n{border}\n")

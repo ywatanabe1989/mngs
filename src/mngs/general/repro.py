@@ -46,13 +46,15 @@ def fix_seeds(
         print(f"\n{'-'*40}\n")
 
 
-def gen_ID(N=8):
+def gen_ID(time_format="%YY-%mM-%dD-%Hh%Mm%Ss", N=8):
     import random
     import string
     from datetime import datetime
 
     now = datetime.now()
-    now_str = now.strftime("%Y-%m-%d-%H-%M")
+    # now_str = now.strftime("%Y-%m-%d-%H-%M")
+    now_str = now.strftime(time_format)
+
     # today_str = now.strftime("%Y-%m%d")
     randlst = [
         random.choice(string.ascii_letters + string.digits) for i in range(N)

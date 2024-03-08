@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-02-03 15:15:48 (ywatanabe)"
+# Time-stamp: "2024-03-08 02:07:41 (ywatanabe)"
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -112,6 +112,8 @@ def configure_mpl(
         "brown": (128, 0, 0, alpha),
         "darkblue": (0, 0, 100, alpha),
         "orange": (228, 94, 50, alpha),
+        "white": (255, 255, 255, alpha),
+        "black": (0, 0, 0, alpha),
     }
     COLORS_HEX = {k: rgba_to_hex(v) for k, v in COLORS_RGBA.items()}
     COLORS_RGBA_NORM = {c: normalize_rgba(v) for c, v in COLORS_RGBA.items()}

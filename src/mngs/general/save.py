@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 
 import csv
-
-import pandas as pd
-import mngs
-import numpy as np
-import scipy
-
 import warnings
 
+import mngs
+import numpy as np
+import pandas as pd
+import scipy
 
 if "general" in __file__:
     with warnings.catch_warnings():
@@ -28,6 +26,7 @@ def save(obj, sfname_or_spath, makedirs=True, show=True, **kwargs):
       save(serializable, 'serializable.pkl')
     """
     import inspect
+    import json
     import os
     import pickle
 
@@ -65,9 +64,9 @@ def save(obj, sfname_or_spath, makedirs=True, show=True, **kwargs):
     ## Saves
     try:
         ## copy files
-        is_copying_files = (isinstance(obj, str) or is_listed_X(obj, str)) and (
-            isinstance(spath, str) or is_listed_X(spath, str)
-        )
+        is_copying_files = (
+            isinstance(obj, str) or is_listed_X(obj, str)
+        ) and (isinstance(spath, str) or is_listed_X(spath, str))
         if is_copying_files:
             mngs.general.copy_files(obj, spath)
 
@@ -117,10 +116,27 @@ def save(obj, sfname_or_spath, makedirs=True, show=True, **kwargs):
         elif spath.endswith(".mp4"):
             mk_mp4(obj, spath)  # obj is matplotlib.pyplot.figure object
             del obj
+
         # yaml
         elif spath.endswith(".yaml"):
+            from ruamel.yaml import YAML
+
+            yaml = YAML()
+            yaml.preserve_quotes = (
+                True  # Optional: if you want to preserve quotes
+            )
+            yaml.indent(
+                mapping=4, sequence=4, offset=4
+            )  # Optional: set indentation
+
             with open(spath, "w") as f:
                 yaml.dump(obj, f)
+
+        # json
+        elif spath.endswith(".json"):
+            with open(spath, "w") as f:
+                json.dump(obj, f, indent=4)
+
         # hdf5
         elif spath.endswith(".hdf5"):
             name_list, obj_list = []
@@ -212,7 +228,9 @@ def save_listed_scalars_as_csv(
 
     if overwrite == True:
         mv_to_tmp(spath_csv, L=2)
-    indi_suffix = np.arange(len(listed_scalars)) if indi_suffix is None else indi_suffix
+    indi_suffix = (
+        np.arange(len(listed_scalars)) if indi_suffix is None else indi_suffix
+    )
     df = pd.DataFrame(
         {"{}".format(column_name): listed_scalars}, index=indi_suffix
     ).round(round)
@@ -244,7 +262,9 @@ def save_listed_dfs_as_csv(
     if overwrite == True:
         mv_to_tmp(spath_csv, L=2)
 
-    indi_suffix = np.arange(len(listed_dfs)) if indi_suffix is None else indi_suffix
+    indi_suffix = (
+        np.arange(len(listed_dfs)) if indi_suffix is None else indi_suffix
+    )
     for i, df in enumerate(listed_dfs):
         with open(spath_csv, mode="a") as f:
             f_writer = csv.writer(f)
@@ -275,7 +295,9 @@ def mk_mp4(fig, spath_mp4):
         fig, animate, init_func=init, frames=360, interval=20, blit=True
     )
 
-    writermp4 = animation.FFMpegWriter(fps=60, extra_args=["-vcodec", "libx264"])
+    writermp4 = animation.FFMpegWriter(
+        fps=60, extra_args=["-vcodec", "libx264"]
+    )
     anim.save(spath_mp4, writer=writermp4)
     print("\nSaving to: {}\n".format(spath_mp4))
 
@@ -302,12 +324,16 @@ def save_optuna_study_as_csv_and_pngs(study, sdir):
     ## Figures
     hparams_keys = list(study.best_params.keys())
     slice_plot = optuna.visualization.plot_slice(study, params=hparams_keys)
-    contour_plot = optuna.visualization.plot_contour(study, params=hparams_keys)
+    contour_plot = optuna.visualization.plot_contour(
+        study, params=hparams_keys
+    )
     optim_hist_plot = optuna.visualization.plot_optimization_history(study)
     parallel_coord_plot = optuna.visualization.plot_parallel_coordinate(
         study, params=hparams_keys
     )
-    hparam_importances_plot = optuna.visualization.plot_param_importances(study)
+    hparam_importances_plot = optuna.visualization.plot_param_importances(
+        study
+    )
     figs_dict = dict(
         slice_plot=slice_plot,
         contour_plot=contour_plot,

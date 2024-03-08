@@ -9,8 +9,10 @@ from .load import (
 )
 from .path import (
     find,
+    find_latest,
     find_the_git_root_dir,
     get_this_fpath,
+    increment_version,
     mk_spath,
     split_fpath,
     touch,
