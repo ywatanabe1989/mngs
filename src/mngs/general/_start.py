@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-01-29 15:41:58 (ywatanabe)"
+# Time-stamp: "2024-03-08 19:55:48 (ywatanabe)"
 
 import inspect
 import os as _os
@@ -25,23 +25,24 @@ def start(
     tf=None,
     seed=42,
     # matplotlib
-    dpi=100,
-    save_dpi=300,
-    figsize=(16.2, 10),
-    figscale=1.0,
-    fontsize=16,
-    labelsize="same",
-    legendfontsize="xx-small",
-    tick_size="auto",
-    tick_width="auto",
-    hide_spines=False,
+    fig_size_mm=(160, 100),
+    fig_scale=1.0,
+    dpi_display=100,
+    dpi_save=300,
+    font_size_base=8,
+    font_size_title=8,
+    font_size_axis_label=8,
+    font_size_tick_label=7,
+    font_size_legend=6,
+    hide_top_right_spines=True,
+    alpha=0.75,
 ):
     """
     import sys
     import matplotlib.pyplot as plt
     import mngs
 
-    CONFIG, sys.stdout, sys.stderr, plt = mngs.gen.start(sys, plt)
+    CONFIG, sys.stdout, sys.stderr, plt, cc = mngs.gen.start(sys, plt)
 
     # YOUR CODE HERE
 
@@ -52,13 +53,15 @@ def start(
 
     # Debug mode check
     try:
-        is_debug = mngs.io.load("./config/is_debug.yaml").get("DEBUG", False)
+        IS_DEBUG = mngs.io.load("./config/IS_DEBUG.yaml").get(
+            "IS_DEBUG", False
+        )
     except Exception as e:
-        is_debug = False
+        IS_DEBUG = False
 
     # ID
-    ID = mngs.gen.gen_ID()
-    ID = ID if not is_debug else "[DEBUG] " + ID
+    ID = mngs.gen.gen_ID(N=4)
+    ID = ID if not IS_DEBUG else "DEBUG_" + ID
     print(f"\n{'#'*40}\n## {ID}\n{'#'*40}\n")
     sleep(1)
 
@@ -69,20 +72,22 @@ def start(
             __file__ = "/tmp/fake.py"
         spath = __file__
         _sdir, sfname, _ = mngs.general.split_fpath(spath)
-        sdir = _sdir + sfname + "/" + ID + "/"  # " # + "/log/"
+        sdir = (
+            _sdir + sfname + "/" + "RUNNING" + "/" + ID + "/"
+        )  # " # + "/log/"
     _os.makedirs(sdir, exist_ok=True)
 
     # CONFIGs
-    CONFIGS = mngs.io.load_configs(is_debug)
+    CONFIGS = mngs.io.load_configs(IS_DEBUG)
     CONFIGS["ID"] = ID
     CONFIGS["START_TIME"] = start_time
-    CONFIGS["SDIR"] = sdir
+    CONFIGS["SDIR"] = sdir.replace("/./", "/")
     if show:
         print(f"\n{'-'*40}\n")
         print(f"CONFIG:")
         for k, v in CONFIGS.items():
             print(f"\n{k}:\n{v}\n")
-            sleep(0.1)
+            # sleep(0.1)
         print(f"\n{'-'*40}\n")
 
     # Logging (tee)
@@ -109,22 +114,23 @@ def start(
 
     # Matplotlib configuration
     if plt is not None:
-        plt = mngs.plt.configure_mpl(
+        plt, cc = mngs.plt.configure_mpl(
             plt,
-            dpi=dpi,
-            save_dpi=save_dpi,
-            figsize=figsize,
-            figscale=figscale,
-            fontsize=fontsize,
-            labelsize=labelsize,
-            legendfontsize=legendfontsize,
-            tick_size=tick_size,
-            tick_width=tick_width,
-            hide_spines=hide_spines,
+            fig_size_mm=(160, 100),
+            fig_scale=fig_scale,
+            dpi_display=dpi_display,
+            dpi_save=dpi_save,
+            font_size_base=font_size_base,
+            font_size_title=font_size_title,
+            font_size_axis_label=font_size_axis_label,
+            font_size_tick_label=font_size_tick_label,
+            font_size_legend=font_size_legend,
+            hide_top_right_spines=hide_top_right_spines,
+            alpha=alpha,
             show=show,
         )
 
-    return CONFIGS, sys.stdout, sys.stderr, plt
+    return CONFIGS, sys.stdout, sys.stderr, plt, cc
 
 
 if __name__ == "__main__":
@@ -134,7 +140,7 @@ if __name__ == "__main__":
     import mngs
 
     # --------------------------------------------------------------------------- #
-    CONFIG, sys.stdout, sys.stderr, plt = mngs.gen.start(sys, plt)
+    CONFIG, sys.stdout, sys.stderr, plt, cc = mngs.gen.start(sys, plt)
     # --------------------------------------------------------------------------- #
 
     # YOUR CODE HERE

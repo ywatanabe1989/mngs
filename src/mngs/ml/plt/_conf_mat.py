@@ -1,34 +1,45 @@
 #!/usr/bin/env python3
 import matplotlib
+import mngs
 import numpy as np
 import pandas as pd
 import seaborn as sns
-import mngs
 from matplotlib import ticker
 from mpl_toolkits.axes_grid1 import make_axes_locatable
+from sklearn.metrics import confusion_matrix as sklearn_confusion_matrix
 
 
-def confusion_matrix(
+def conf_mat(
     plt,
-    cm,
+    cm=None,
+    y_true=None,
+    y_pred=None,
+    y_pred_proba=None,
     labels=None,
+    sorted_labels=None,
     pred_labels=None,
+    sorted_pred_labels=None,
     true_labels=None,
-    label_rotation_xy=(0, 0),
+    sorted_true_labels=None,
+    label_rotation_xy=(15, 15),
     title=None,
     colorbar=True,
     x_extend_ratio=1.0,
-    y_extend_ratio=1.0,        
+    y_extend_ratio=1.0,
 ):
     """
     Inverse the y-axis and plot the confusion matrix as a heatmap.
     The predicted labels (in x-axis) is symboled with hat (^).
     The plt object is passed to adjust the figure size
 
+    cm = sklearn.metrics.confusion_matrix(y_test, y_pred)
+
+
     cm = np.random.randint(low=0, high=10, size=[3,4])
     x: predicted labels
     y: true_labels
-    
+
+
     kwargs:
 
         "extend_ratio":
@@ -36,26 +47,48 @@ def confusion_matrix(
             in the vertical direction.
 
     """
-    df = pd.DataFrame(data=cm).copy().T
-    vmax = np.array(df).max().astype(int)
 
-    if (labels is not None) and (pred_labels is None):
-        df.columns = [mngs.general.to_the_latex_style(l) for l in labels] # pred_labels
+    if (y_pred_proba is not None) and (y_pred is None):
+        y_pred = y_pred_proba.argmax(axis=-1)
+
+    assert (cm is not None) or ((y_true is not None) and (y_pred is not None))
+
+    if not cm:
+        cm = sklearn_confusion_matrix(y_true, y_pred)
+
+    # Dataframe
+    df = pd.DataFrame(data=cm).copy()
+
+    # To LaTeX styles
     if pred_labels is not None:
-        df.columns = [mngs.general.to_the_latex_style(l) for l in pred_labels]
-
-    if (labels is not None) and (true_labels is None):
-        df.index = [mngs.general.to_the_latex_style(l) for l in labels] # true_labels
+        pred_labels = [mngs.general.to_the_latex_style(l) for l in pred_labels]
     if true_labels is not None:
-        df.index = [mngs.general.to_the_latex_style(l) for l in true_labels]
-        
-    # # x- and y-ticklabels
-    # if labels is not None:
-        
-    #     df.columns = [
-    #         mngs.general.add_hat_in_the_latex_style(l) for l in labels
-    #     ]  # predicted labels
-        
+        true_labels = [mngs.general.to_the_latex_style(l) for l in true_labels]
+    if labels is not None:
+        labels = [mngs.general.to_the_latex_style(l) for l in labels]
+    if sorted_labels is not None:
+        sorted_labels = [
+            mngs.general.to_the_latex_style(l) for l in sorted_labels
+        ]
+
+    # Prediction Labels: columns
+    if pred_labels is not None:
+        df.columns = pred_labels
+    elif (pred_labels is None) and (labels is not None):
+        df.columns = labels
+
+    # Ground Truth Labels: index
+    if true_labels is not None:
+        df.index = true_labels
+    elif (true_labels is None) and (labels is not None):
+        df.index = labels
+
+    # Sort based on sorted_labels here
+    if sorted_labels is not None:
+        assert set(sorted_labels) == set(labels)
+        df = df.reindex(index=sorted_labels, columns=sorted_labels)
+
+    # Main
     fig, ax = plt.subplots()
     res = sns.heatmap(
         df,
@@ -66,7 +99,7 @@ def confusion_matrix(
         cbar=False,
     )  # Here, don't plot color bar.
 
-    ## Adds comma separator for the annotated int texts
+    # Adds comma separator for the annotated int texts
     for t in ax.texts:
         t.set_text("{:,d}".format(int(t.get_text())))
 
@@ -75,50 +108,41 @@ def confusion_matrix(
 
     # Makes the frame visible
     for _, spine in res.spines.items():
-        # spine.set_visible(True)
-        spine.set_visible(False)        
+        spine.set_visible(False)
 
+    # Labels
     ax.set_xlabel("Predicted label")
     ax.set_ylabel("True label")
     ax.set_title(title)
 
-    ax = mngs.plt.ax_extend(ax, x_extend_ratio, y_extend_ratio)
-
+    # Appearances
+    ax = mngs.plt.ax.extend(ax, x_extend_ratio, y_extend_ratio)
     if df.shape[0] == df.shape[1]:
         ax.set_box_aspect(1)
-
     ax.set_xticklabels(
         ax.get_xticklabels(),
         rotation=label_rotation_xy[0],
         fontdict={"verticalalignment": "top"},
     )
-
     ax.set_yticklabels(
         ax.get_yticklabels(),
         rotation=label_rotation_xy[1],
         fontdict={"horizontalalignment": "right"},
     )
-
-    # The size of the confusion matrix
-
-    # Calculates the dx
+    # The size
     bbox = ax.get_position()
     left_orig = bbox.x0
     width_orig = bbox.x1 - bbox.x0
     g_x_orig = left_orig + width_orig / 2.0
     width_tgt = width_orig * x_extend_ratio  # x_extend_ratio
     dx = width_orig - width_tgt
-    # print(dx)
 
-    """
-    The axes objects of the confusion matrix and colorbar are different.
-    Here, their sizes are adjusted one by one.
-    """
+    # Adjusts the sizes of the confusion matrix and colorbar
     if colorbar == True:  # fixme
         divider = make_axes_locatable(ax)  # Gets region from the ax
         cax = divider.append_axes("right", size="5%", pad=0.1)
         # cax = divider.new_horizontal(size="5%", pad=1, pack_start=True)
-        cax = mngs.plt.ax_set_position(fig, cax, -dx * 2.54, 0)
+        cax = mngs.plt.ax.set_pos(fig, cax, -dx * 2.54, 0)
         fig.add_axes(cax)
 
         """
@@ -144,6 +168,7 @@ def confusion_matrix(
         """
 
         # Plots colorbar and adjusts the size
+        vmax = np.array(df).max().astype(int)
         norm = matplotlib.colors.Normalize(vmin=0, vmax=vmax)
         cbar = fig.colorbar(
             plt.cm.ScalarMappable(norm=norm, cmap="Blues"),
@@ -153,9 +178,9 @@ def confusion_matrix(
         cbar.locator = ticker.MaxNLocator(nbins=4)  # tick_locator
         cbar.update_ticks()
         # cbar.outline.set_edgecolor("#f9f2d7")
-        cbar.outline.set_edgecolor("white")        
+        cbar.outline.set_edgecolor("white")
 
-    return fig
+    return fig, cm
 
 
 # def AddAxesBBoxRect(fig, ax, ec="k"):
@@ -178,6 +203,13 @@ def confusion_matrix(
 
 
 if __name__ == "__main__":
+
+    import mngs
+
+    y_true, y_pred = mngs.io.load("/tmp/tmp.pkl")
+
+    fig, cm = conf_mat(plt, y_true=y_true, y_pred=y_pred)
+
     # https://scikit-learn.org/stable/auto_examples/model_selection/plot_confusion_matrix.html#sphx-glr-auto-examples-model-selection-plot-confusion-matrix-py
     import sys
 
@@ -185,7 +217,8 @@ if __name__ == "__main__":
     import numpy as np
     import sklearn
     from sklearn import datasets, svm
-    from sklearn.metrics import plot_confusion_matrix
+
+    # from sklearn.metrics import plot_confusion_matrix
     from sklearn.model_selection import train_test_split
 
     sys.path.append(".")
@@ -209,35 +242,35 @@ if __name__ == "__main__":
     cm = sklearn.metrics.confusion_matrix(y_test, y_pred)
     cm **= 3
 
-    cm = np.random.randint(low=0, high=10, size=[3,4])
-    
+    cm = np.random.randint(low=0, high=10, size=[3, 4])
+
     mngs.plt.configure_mpl(
         plt,
         # figsize=(4, 8),
-        figsize=(4, 8),
-        fontsize=6,
-        labelsize=8,
-        legendfontsize=7,
-        tick_size=0.8,
-        tick_width=0.2,
+        # figsize=(4, 8),
+        # fontsize=6,
+        # labelsize=8,
+        # legendfontsize=7,
+        # tick_size=0.8,
+        # tick_width=0.2,
     )
 
     # labels = class_names
     pred_labels = ["A", "B", "C"]
-    true_labels = ["a", "b", "c", "d"]    
+    true_labels = ["a", "b", "c", "d"]
 
-    fig = confusion_matrix(
+    fig, cm = conf_mat(
         plt,
         cm,
         # labels=class_names,
         pred_labels=pred_labels,
         true_labels=true_labels,
         label_rotation_xy=(60, 60),
-        x_extend_ratio=1.,
+        x_extend_ratio=1.0,
         colorbar=True,
     )
 
-    fig.axes[-1] = mngs.plt.ax_scientific_notation(
+    fig.axes[-1] = mngs.plt.ax.sci_note(
         fig.axes[-1],
         3,
         fformat="%3.1f",
