@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 # from .wavelet import wavelet
+from ._psd import psd_torch
 from .demo_sig import demo_sig_np, demo_sig_torch
 from .feature_extractors import (
     FeatureExtractorTorch,

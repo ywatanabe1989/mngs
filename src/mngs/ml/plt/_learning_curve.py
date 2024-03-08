@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-02-02 09:25:07 (ywatanabe)"
+# Time-stamp: "2024-03-07 19:50:02 (ywatanabe)"
 
 import re
 
 import matplotlib
 import matplotlib.pyplot as plt
 import mngs
+import numpy as np
 import pandas as pd
 
 
@@ -33,7 +34,7 @@ def set_yaxis_for_acc(ax, key_plt):
     return ax
 
 
-def plot_tra(ax, metrics_df, key_plt, lw=1):
+def plot_tra(ax, metrics_df, key_plt, lw=1, color="blue"):
     indi_step = mngs.gen.search(
         "^[Tt]rain(ing)?", metrics_df.step, as_bool=True
     )[0]
@@ -44,8 +45,7 @@ def plot_tra(ax, metrics_df, key_plt, lw=1):
             step_df.index,  # i_global
             step_df[key_plt],
             label="Training",
-            # color=COLORS_DICT["tra"],
-            color=mngs.plt.colors.to_RGBA("blue", alpha=0.9),
+            color=color,
             linewidth=lw,
         )
         ax.legend()
@@ -53,7 +53,7 @@ def plot_tra(ax, metrics_df, key_plt, lw=1):
     return ax
 
 
-def scatter_val(ax, metrics_df, key_plt, s=3):
+def scatter_val(ax, metrics_df, key_plt, s=3, color="green"):
     indi_step = mngs.gen.search(
         "^[Vv]alid(ation)?", metrics_df.step, as_bool=True
     )[0]
@@ -63,7 +63,7 @@ def scatter_val(ax, metrics_df, key_plt, s=3):
             step_df.index,
             step_df[key_plt],
             label="Validation",
-            color=mngs.plt.colors.to_RGBA("green", alpha=0.9),
+            color=color,
             s=s,
             alpha=0.9,
         )
@@ -71,7 +71,7 @@ def scatter_val(ax, metrics_df, key_plt, s=3):
     return ax
 
 
-def scatter_tes(ax, metrics_df, key_plt, s=3):
+def scatter_tes(ax, metrics_df, key_plt, s=3, color="red"):
     indi_step = mngs.gen.search("^[Tt]est", metrics_df.step, as_bool=True)[0]
     step_df = metrics_df[indi_step]
     if len(step_df) != 0:
@@ -79,8 +79,7 @@ def scatter_tes(ax, metrics_df, key_plt, s=3):
             step_df.index,
             step_df[key_plt],
             label="Test",
-            color=mngs.plt.colors.to_RGBA("red", alpha=0.9),
-            # color=COLORS_DICT["tes"],
+            color=color,
             s=s,
             alpha=0.9,
         )
@@ -88,7 +87,7 @@ def scatter_tes(ax, metrics_df, key_plt, s=3):
     return ax
 
 
-def vline_at_epochs(ax, metrics_df):
+def vline_at_epochs(ax, metrics_df, color="grey"):
     # Determine the global iteration values where new epochs start
     epoch_starts = metrics_df[metrics_df["i_batch"] == 0].index.values
     epoch_labels = metrics_df[metrics_df["i_batch"] == 0].index.values
@@ -97,7 +96,7 @@ def vline_at_epochs(ax, metrics_df):
         ymin=-1e4,  # ax.get_ylim()[0],
         ymax=1e4,  # ax.get_ylim()[1],
         linestyle="--",
-        color=mngs.plt.colors.to_RGBA("gray", alpha=0.1),
+        color=color,
     )
     return ax
 
@@ -137,13 +136,34 @@ def learning_curve(
     linewidth=1,
     yscale="linear",
 ):
+    _plt, cc = mngs.plt.configure_mpl(plt, show=False)
+    """
+    Example:
+        print(metrics_df)
+        #                 step  i_global  i_epoch  i_batch      loss
+        # 0       Training         0        0        0  0.717023
+        # 1       Training         1        0        1  0.703844
+        # 2       Training         2        0        2  0.696279
+        # 3       Training         3        0        3  0.685384
+        # 4       Training         4        0        4  0.670675
+        # ...          ...       ...      ...      ...       ...
+        # 123266      Test     66900      299      866  0.000067
+        # 123267      Test     66900      299      867  0.000067
+        # 123268      Test     66900      299      868  0.000067
+        # 123269      Test     66900      299      869  0.000067
+        # 123270      Test     66900      299      870  0.000068
+
+        # [123271 rows x 5 columns]
+    """
     metrics_df = process_i_global(metrics_df)
     selected_ticks, selected_labels = select_ticks(metrics_df)
 
-    fig, axes = plt.subplots(len(keys_to_plot), 1, sharex=True, sharey=False)
+    # fig, axes = plt.subplots(len(keys_to_plot), 1, sharex=True, sharey=False)
+    fig, axes = mngs.plt.subplots(
+        len(keys_to_plot), 1, sharex=True, sharey=False
+    )
     axes = axes if len(keys_to_plot) != 1 else [axes]
 
-    # axes[-1].set_xlabel("Iteration#")
     axes[-1].set_xlabel("Epoch #")
     fig.text(0.5, 0.95, title, ha="center")
 
@@ -151,33 +171,31 @@ def learning_curve(
         ax = axes[i_plt]
         ax.set_yscale(yscale)
         ax.set_ylabel(key_plt)
-        ax = mngs.plt.ax_set_n_ticks(ax)
-        ax = set_yaxis_for_acc(ax, key_plt)
-        ax = plot_tra(ax, metrics_df, key_plt, lw=linewidth)
-        ax = scatter_val(ax, metrics_df, key_plt, s=scattersize)
-        ax = scatter_tes(ax, metrics_df, key_plt, s=scattersize)
-        # ax = vline_at_epochs(ax, metrics_df)
 
-        # Custom tick marks
-        ax = mngs.plt.ax_set_n_ticks(ax)
-        ax = mngs.plt.ax_map_ticks(
-            ax, selected_ticks, selected_labels, axis="x"
+        ax = set_yaxis_for_acc(ax, key_plt)
+        ax = plot_tra(ax, metrics_df, key_plt, lw=linewidth, color=cc["blue"])
+        ax = scatter_val(
+            ax, metrics_df, key_plt, s=scattersize, color=cc["green"]
+        )
+        ax = scatter_tes(
+            ax, metrics_df, key_plt, s=scattersize, color=cc["red"]
         )
 
-        # # ax.xaxis.set_major_locator(ticker.MaxNLocator(nbins=max_n_ticks))
-        # # ax.yaxis.set_major_locator(ticker.MaxNLocator(nbins=max_n_ticks))
-        # # Set custom tick positions and labels to reflect selected epoch starts
-        # ax.set_xticks(selected_ticks)
-        # ax.set_xticklabels(selected_labels, rotation=45, ha="right")
+        # # Custom tick marks
+        # ax = mngs.plt.ax.map_ticks(
+        #     ax, selected_ticks, selected_labels, axis="x"
+        # )
 
     return fig
 
 
 if __name__ == "__main__":
 
-    lpath = "./scripts/train_EEGPT/2024-01-29-12-04_eDflsnWv_v8/metrics.csv"
+    plt, cc = mngs.plt.configure_mpl(plt)
+    # lpath = "./scripts/ml/.old/pretrain_EEGPT_old/2024-01-29-12-04_eDflsnWv_v8/metrics.csv"
+    lpath = "./scripts/ml/pretrain_EEGPT/[DEBUG] 2024-02-11-06-45_4uUpdfpb/metrics.csv"
+
     sdir, _, _ = mngs.gen.split_fpath(lpath)
-    # sdir = "./scripts/train_EEGPT/[DEBUG] 2024-01-29-07-27_A5HS3f0e/"
     metrics_df = mngs.io.load(lpath)
     fig = learning_curve(
         metrics_df, title="Pretraining on db_v8", yscale="log"

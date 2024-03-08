@@ -28,3 +28,10 @@ wheel
 pybids
 scikit-image
 icecream
+Pyarrow
+ruamel.yaml
+pytest
+pytest-cov
+pytest-xdist
+pytest-env
+umap-learn

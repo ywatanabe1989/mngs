@@ -39,10 +39,13 @@ from .misc import (
     merge_dicts_wo_overlaps,
     partial_at,
     pop_keys,
+    print_block,
     search,
     squeeze_spaces,
     suppress_output,
     take_the_closest,
+    unique,
+    uq,
     wait_key,
 )
 from .pandas import (

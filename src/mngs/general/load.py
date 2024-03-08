@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import json
+import logging
 import os
 import pickle
 import warnings
@@ -26,109 +27,134 @@ if "general" in __file__:
 
 
 def load(lpath, show=False, **kwargs):
-    extension = "." + lpath.split(".")[-1]  # [REVISED]
+    try:
+        extension = "." + lpath.split(".")[-1]  # [REVISED]
 
-    # csv
-    if extension == ".csv":
-        obj = pd.read_csv(lpath, **kwargs)
-        obj = obj.loc[:, ~obj.columns.str.contains("^Unnamed")]  # [REVISED]
-    # tsv
-    elif extension == ".tsv":
-        obj = pd.read_csv(lpath, sep="\t", **kwargs)
+        # csv
+        if extension == ".csv":
+            obj = pd.read_csv(lpath, **kwargs)
+            obj = obj.loc[
+                :, ~obj.columns.str.contains("^Unnamed")
+            ]  # [REVISED]
+        # tsv
+        elif extension == ".tsv":
+            obj = pd.read_csv(lpath, sep="\t", **kwargs)
 
-    # excel
-    elif extension in [".xls", ".xlsx", ".xlsm", ".xlsb"]:  # [REVISED]
-        obj = pd.read_excel(lpath, **kwargs)
+        # excel
+        elif extension in [".xls", ".xlsx", ".xlsm", ".xlsb"]:  # [REVISED]
+            obj = pd.read_excel(lpath, **kwargs)
 
-    # numpy
-    elif extension == ".npy":
-        obj = np.load(lpath, allow_pickle=True)  # [REVISED]
-    # pkl
-    elif extension == ".pkl":
-        with open(lpath, "rb") as l:
-            obj = pickle.load(l)
-    # joblib
-    elif extension == ".joblib":
-        with open(lpath, "rb") as l:
-            obj = joblib.load(l)
-    # hdf5
-    elif extension == ".hdf5":
-        obj = {}
-        with h5py.File(lpath, "r") as hf:
-            for name in hf:  # [REVISED]
-                obj[name] = hf[name][:]
-    # json
-    elif extension == ".json":
-        with open(lpath, "r") as f:
-            obj = json.load(f)
-    # png
-    elif extension == ".png":
-        pass
-    # tiff
-    elif extension in [".tiff", ".tif"]:
-        pass
-    # yaml
-    elif extension == ".yaml":
-        with open(lpath) as f:
-            obj = yaml.safe_load(f)  # [REVISED]
-    # txt
-    elif extension in [".txt", ".log"]:
-        with open(lpath, "r") as f:  # [REVISED]
-            obj = f.read().splitlines()  # [REVISED]
-    # pth
-    elif extension in [".pth", ".pt"]:
-        obj = torch.load(lpath)
+        # numpy
+        elif extension == ".npy":
+            obj = np.load(lpath, allow_pickle=True, **kwargs)  # [REVISED]
+        # pkl
+        elif extension == ".pkl":
+            with open(lpath, "rb") as l:
+                obj = pickle.load(l, **kwargs)
+        # joblib
+        elif extension == ".joblib":
+            with open(lpath, "rb") as l:
+                obj = joblib.load(l, **kwargs)
+        # hdf5
+        elif extension == ".hdf5":
+            obj = {}
+            with h5py.File(lpath, "r") as hf:
+                for name in hf:  # [REVISED]
+                    obj[name] = hf[name][:]
+        # json
+        elif extension == ".json":
+            with open(lpath, "r") as f:
+                obj = json.load(f)
+        # png
+        elif extension == ".png":
+            pass
+        # tiff
+        elif extension in [".tiff", ".tif"]:
+            pass
+        # yaml
+        elif extension == ".yaml":
+            # from ruamel.yaml import YAML
 
-    # mat
-    elif extension == ".mat":  # [REVISED]
-        from pymatreader import read_mat  # [REVISED]
+            # yaml = YAML()
+            # yaml.preserve_quotes = (
+            #     True  # Optional: if you want to preserve quotes
+            # )
+            # yaml.indent(
+            #     mapping=2, sequence=4, offset=2
+            # )  # Optional: set indentation
 
-        obj = read_mat(lpath)  # [REVISED]
-    # xml
-    elif extension == ".xml":  # [REVISED]
-        from xml2dict import xml2dict  # [REVISED]
+            lower = kwargs.pop("lower", False)
 
-        obj = xml2dict(lpath)  # [REVISED]
-    # # edf
-    # elif extension == ".edf":  # [REVISED]
-    #     obj = mne.io.read_raw_edf(lpath, preload=True)  # [REVISED]
-    # con
-    elif extension == ".con":  # [REVISED]
-        obj = mne.io.read_raw_fif(lpath, preload=True)  # [REVISED]
-        obj = obj.to_data_frame()  # [REVISED]
-        obj["samp_rate"] = obj.info["sfreq"]  # [REVISED]
-    # # mrk
-    # elif extension == ".mrk":  # [REVISED]
-    #     obj = mne.io.read_mrk(lpath)  # [REVISED]
+            with open(lpath) as f:
+                obj = yaml.safe_load(f, **kwargs)  # [REVISED]
 
-    # catboost model
-    elif extension == ".cbm":  # [REVISED]
-        from catboost import CatBoostModel  # [REVISED]
+            if lower:
+                obj = {k.lower(): v for k, v in obj.items()}
 
-        obj = CatBoostModel.load_model(lpath)  # [REVISED]
+        # txt
+        elif extension in [".txt", ".log", ".event"]:
+            with open(lpath, "r") as f:  # [REVISED]
+                obj = f.read().splitlines()  # [REVISED]
+        # pth
+        elif extension in [".pth", ".pt"]:
+            obj = torch.load(lpath, **kwargs)
 
-    # EEG data
-    elif extension in [
-        ".vhdr",
-        ".vmrk",
-        ".edf",
-        ".bdf",
-        ".gdf",
-        ".cnt",
-        ".egi",
-        ".eeg",
-        ".set",
-    ]:
-        obj = load_eeg_data(lpath, **kwargs)
+        # mat
+        elif extension == ".mat":  # [REVISED]
+            from pymatreader import read_mat  # [REVISED]
 
-    else:
-        print(f"\nNot loaded from: {lpath}\n")
+            obj = read_mat(lpath, **kwargs)  # [REVISED]
+        # xml
+        elif extension == ".xml":  # [REVISED]
+            from xml2dict import xml2dict  # [REVISED]
+
+            obj = xml2dict(lpath, **kwargs)  # [REVISED]
+        # # edf
+        # elif extension == ".edf":  # [REVISED]
+        #     obj = mne.io.read_raw_edf(lpath, preload=True)  # [REVISED]
+        # con
+        elif extension == ".con":  # [REVISED]
+            obj = mne.io.read_raw_fif(
+                lpath, preload=True, **kwargs
+            )  # [REVISED]
+            obj = obj.to_data_frame()  # [REVISED]
+            obj["samp_rate"] = obj.info["sfreq"]  # [REVISED]
+        # # mrk
+        # elif extension == ".mrk":  # [REVISED]
+        #     obj = mne.io.read_mrk(lpath)  # [REVISED]
+
+        # catboost model
+        elif extension == ".cbm":  # [REVISED]
+            from catboost import CatBoostModel  # [REVISED]
+
+            obj = CatBoostModel.load_model(lpath, **kwargs)  # [REVISED]
+
+        # EEG data
+        elif extension in [
+            ".vhdr",
+            ".vmrk",
+            ".edf",
+            ".bdf",
+            ".gdf",
+            ".cnt",
+            ".egi",
+            ".eeg",
+            ".set",
+        ]:
+            obj = load_eeg_data(lpath, **kwargs)
+
+        else:
+            print(f"\nNot loaded from: {lpath}\n")
+            return None
+
+        if show:
+            print(f"\nLoaded from: {lpath}\n")
+
+        return obj
+
+    except Exception as e:
+        logging.error(f"\n{lpath} was not loaded:\n{e}")
         return None
-
-    if show:
-        print(f"\nLoaded from: {lpath}\n")
-
-    return obj
 
 
 def load_eeg_data(filename, **kwargs):
@@ -262,28 +288,32 @@ def load_study_rdb(study_name, rdb_raw_bytes_url):
     return study
 
 
-def load_configs(is_debug=None):
-    def update_debug(config, is_debug):
-        if is_debug:
+def load_configs(IS_DEBUG=None, show=False):
+    if os.getenv("CI") == "true":
+        IS_DEBUG = True
+
+    def update_debug(config, IS_DEBUG):
+        if IS_DEBUG:
             debug_keys = mngs.gen.search("^DEBUG_", list(config.keys()))[1]
             for dk in debug_keys:
                 dk_wo_debug_prefix = dk.split("DEBUG_")[1]
                 config[dk_wo_debug_prefix] = config[dk]
-                print(f"\n{dk} -> {dk_wo_debug_prefix}\n")
+                if show:
+                    print(f"\n{dk} -> {dk_wo_debug_prefix}\n")
         return config
 
-    # Check ./config/is_debug.yaml file if is_debug argument is not passed
-    if is_debug is None:
+    # Check ./config/IS_DEBUG.yaml file if IS_DEBUG argument is not passed
+    if IS_DEBUG is None:
         try:
-            is_debug = mngs.io.load("./config/is_debug.yaml")["DEBUG"]
+            IS_DEBUG = mngs.io.load("./config/IS_DEBUG.yaml")["IS_DEBUG"]
         except Exception as e:
             print(e)
-            is_debug = False
+            IS_DEBUG = False
 
     # Main
     CONFIGS = {}
     for lpath in glob("./config/*.yaml"):
-        CONFIG = update_debug(mngs.io.load(lpath), is_debug)
+        CONFIG = update_debug(mngs.io.load(lpath), IS_DEBUG)
         CONFIGS.update(CONFIG)
 
     return CONFIGS

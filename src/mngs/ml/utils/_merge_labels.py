@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-import numpy as np
 import mngs
+import numpy as np
 
 # y1, y2 = T_tra, M_tra
 # def merge_labels(y1, y2):
@@ -12,8 +12,11 @@ import mngs
 
 
 def merge_labels(*ys, to_int=False):
-    y = [mngs.general.connect_nums(zs) for zs in zip(*ys)]
-    if to_int:
-        conv_d = {z: i for i, z in enumerate(np.unique(y))}
-        y = [conv_d[z] for z in y]
-    return np.array(y)
+    if not len(ys) > 1:  # Check if more than two arguments are passed
+        return ys[0]
+    else:
+        y = [mngs.general.connect_nums(zs) for zs in zip(*ys)]
+        if to_int:
+            conv_d = {z: i for i, z in enumerate(np.unique(y))}
+            y = [conv_d[z] for z in y]
+        return np.array(y)
