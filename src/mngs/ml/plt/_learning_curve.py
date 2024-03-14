@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-03-07 19:50:02 (ywatanabe)"
+# Time-stamp: "2024-03-12 19:52:48 (ywatanabe)"
 
 import re
 
@@ -129,12 +129,13 @@ def select_ticks(metrics_df, max_n_ticks=4):
 
 def learning_curve(
     metrics_df,
-    keys_to_plot=["loss"],
+    keys,
     title="Title",
     max_n_ticks=4,
     scattersize=3,
     linewidth=1,
     yscale="linear",
+    spath=None,
 ):
     _plt, cc = mngs.plt.configure_mpl(plt, show=False)
     """
@@ -158,16 +159,14 @@ def learning_curve(
     metrics_df = process_i_global(metrics_df)
     selected_ticks, selected_labels = select_ticks(metrics_df)
 
-    # fig, axes = plt.subplots(len(keys_to_plot), 1, sharex=True, sharey=False)
-    fig, axes = mngs.plt.subplots(
-        len(keys_to_plot), 1, sharex=True, sharey=False
-    )
-    axes = axes if len(keys_to_plot) != 1 else [axes]
+    # fig, axes = plt.subplots(len(keys), 1, sharex=True, sharey=False)
+    fig, axes = mngs.plt.subplots(len(keys), 1, sharex=True, sharey=False)
+    axes = axes if len(keys) != 1 else [axes]
 
-    axes[-1].set_xlabel("Epoch #")
+    axes[-1].set_xlabel("Iteration #")
     fig.text(0.5, 0.95, title, ha="center")
 
-    for i_plt, key_plt in enumerate(keys_to_plot):
+    for i_plt, key_plt in enumerate(keys):
         ax = axes[i_plt]
         ax.set_yscale(yscale)
         ax.set_ylabel(key_plt)
@@ -185,6 +184,9 @@ def learning_curve(
         # ax = mngs.plt.ax.map_ticks(
         #     ax, selected_ticks, selected_labels, axis="x"
         # )
+
+    if spath is not None:
+        mngs.io.save(fig, spath)
 
     return fig
 

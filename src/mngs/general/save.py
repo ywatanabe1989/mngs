@@ -33,6 +33,7 @@ def save(obj, sfname_or_spath, makedirs=True, show=True, **kwargs):
     import h5py
     import numpy as np
     import pandas as pd
+    import plotly
     import torch
     import yaml
 
@@ -97,7 +98,8 @@ def save(obj, sfname_or_spath, makedirs=True, show=True, **kwargs):
         # png
         elif spath.endswith(".png"):
             # plotly
-            if str(type(obj)) == "<class 'plotly.graph_objs._figure.Figure'>":
+            # if str(type(obj)) == "<class 'plotly.graph_objs._figure.Figure'>":
+            if isinstance(obj, plotly.graph_objs.Figure):
                 obj.write_image(file=spath, format="png")
             # matplotlib
             else:
@@ -106,6 +108,13 @@ def save(obj, sfname_or_spath, makedirs=True, show=True, **kwargs):
                 except:
                     obj.figure.savefig(spath)
             del obj
+        # html
+        elif spath.endswith(".html"):
+            # plotly
+            if isinstance(obj, plotly.graph_objs.Figure):
+                obj.write_html(file=spath)
+            # if str(type(obj)) == "<class 'plotly.graph_objs._figure.Figure'>":
+            #     obj.write_image(file=spath, format="html")
         # tiff
         elif spath.endswith(".tiff") or spath.endswith(".tif"):
             obj.savefig(
@@ -167,7 +176,7 @@ def save(obj, sfname_or_spath, makedirs=True, show=True, **kwargs):
     else:
         if show and not is_copying_files:
             # if show:
-            print(f"\nSaved to: {spath}\n")
+            print(mngs.gen.ct(f"\nSaved to: {spath}\n", c="yellow"))
 
 
 def check_encoding(file_path):

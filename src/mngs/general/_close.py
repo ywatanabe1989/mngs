@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-03-08 20:13:59 (ywatanabe)"
+# Time-stamp: "2024-03-11 14:28:22 (ywatanabe)"
 
 import os
 import shutil
@@ -56,14 +56,18 @@ def close(CONFIG, message=":)", notify=True, show=True):
         print(e)
 
     # RUNNING to FINISHED
-    src_dir = CONFIG["SDIR"]
+    finish(CONFIG["SDIR"])
+
+
+def finish(src_dir):
     dest_dir = src_dir.replace("RUNNING", "FINISHED")
     os.makedirs(dest_dir, exist_ok=True)
     try:
         os.rename(src_dir, dest_dir)
         print(f"\nRenamed from: {src_dir} to {dest_dir}")
     except Exception as e:
-        print(e)
+        pass
+        # print(e)
 
 
 if __name__ == "__main__":

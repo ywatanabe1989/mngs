@@ -690,6 +690,40 @@ def uq(*args, **kwargs):
 #     df_show["n"] = df_show["n"].apply(lambda x: f"{int(x):,}")  # [REVISED]
 
 #     return df_show
-def print_block(message, char="-", n=40):
+def print_block(message, char="-", n=40, c=None):
     border = char * n
-    print(f"\n{border}\n{message}\n{border}\n")
+    text = f"\n{border}\n{message}\n{border}\n"
+    if c is not None:
+        text = color_text(text, c)
+    print(text)
+
+
+def color_text(text, c="green"):
+    ANSI_COLORS = {
+        "red": "\033[91m",
+        "green": "\033[92m",
+        "yellow": "\033[93m",
+        "blue": "\033[94m",
+        "magenta": "\033[95m",
+        "cyan": "\033[96m",
+        "white": "\033[97m",
+        "grey": "\033[90m",  # Added grey color
+        "reset": "\033[0m",
+    }
+    ANSI_COLORS["tra"] = ANSI_COLORS["white"]
+    ANSI_COLORS["val"] = ANSI_COLORS["green"]
+    ANSI_COLORS["tes"] = ANSI_COLORS["red"]
+
+    start_code = ANSI_COLORS.get(c, ANSI_COLORS["reset"])
+    end_code = ANSI_COLORS["reset"]
+    return f"{start_code}{text}{end_code}"
+
+
+ct = color_text
+
+
+def mv_col(dataframe, column_name, position):
+    temp_col = dataframe[column_name]
+    dataframe.drop(labels=[column_name], axis=1, inplace=True)
+    dataframe.insert(loc=position, column=column_name, value=temp_col)
+    return dataframe
