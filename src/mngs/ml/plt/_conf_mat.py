@@ -26,6 +26,7 @@ def conf_mat(
     colorbar=True,
     x_extend_ratio=1.0,
     y_extend_ratio=1.0,
+    spath=None,
 ):
     """
     Inverse the y-axis and plot the confusion matrix as a heatmap.
@@ -179,6 +180,9 @@ def conf_mat(
         cbar.update_ticks()
         # cbar.outline.set_edgecolor("#f9f2d7")
         cbar.outline.set_edgecolor("white")
+
+    if spath is not None:
+        mngs.io.save(fig, spath)
 
     return fig, cm
 

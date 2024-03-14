@@ -22,10 +22,12 @@ from .latex import add_hat_in_the_latex_style, to_the_latex_style
 from .mat2py import *
 from .misc import (
     _return_counting_process,
+    color_text,
     connect_nums,
     connect_strs,
     copy_files,
     copy_the_file,
+    ct,
     decapitalize,
     describe,
     fmt_size,
@@ -37,6 +39,7 @@ from .misc import (
     isclose,
     listed_dict,
     merge_dicts_wo_overlaps,
+    mv_col,
     partial_at,
     pop_keys,
     print_block,

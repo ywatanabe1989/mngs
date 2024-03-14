@@ -39,10 +39,12 @@ def load(lpath, show=False, **kwargs):
         # tsv
         elif extension == ".tsv":
             obj = pd.read_csv(lpath, sep="\t", **kwargs)
-
         # excel
-        elif extension in [".xls", ".xlsx", ".xlsm", ".xlsb"]:  # [REVISED]
+        elif extension in [".xls", ".xlsx", ".xlsm", ".xlsb"]:
             obj = pd.read_excel(lpath, **kwargs)
+        # parquet
+        elif extension == ".parquet":
+            obj = pd.read_parquet(lpath, **kwargs)
 
         # numpy
         elif extension == ".npy":
