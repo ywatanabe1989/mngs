@@ -35,3 +35,4 @@ pytest-cov
 pytest-xdist
 pytest-env
 umap-learn
+optuna
