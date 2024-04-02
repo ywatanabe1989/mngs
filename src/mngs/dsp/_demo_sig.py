@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-03-31 13:11:45 (ywatanabe)"
+# Time-stamp: "2024-04-02 21:25:50 (ywatanabe)"
 
 import random
 
@@ -30,7 +30,7 @@ def demo_sig(
     if type == "meg":
         return _demo_sig_meg(
             batch_size=batch_size, n_chs=n_chs, t_sec=t_sec, fs=fs
-        )
+        ).astype(np.float32)
 
     else:
         fn_1d = {
@@ -39,16 +39,20 @@ def demo_sig(
             "ripple": _demo_sig_ripple_1d,
         }.get(type)
 
-        return np.array(
-            [
-                fn_1d(
-                    t_sec=t_sec,
-                    fs=fs,
-                    freqs_hz=freqs_hz,
-                )
-                for _ in range(int(batch_size * n_chs))
-            ]
-        ).reshape(batch_size, n_chs, -1)
+        return (
+            np.array(
+                [
+                    fn_1d(
+                        t_sec=t_sec,
+                        fs=fs,
+                        freqs_hz=freqs_hz,
+                    )
+                    for _ in range(int(batch_size * n_chs))
+                ]
+            )
+            .reshape(batch_size, n_chs, -1)
+            .astype(np.float32)
+        )
 
 
 def _demo_sig_meg(batch_size=8, n_chs=19, t_sec=10, fs=512, **kwargs):

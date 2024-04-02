@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-01-25 15:41:31 (ywatanabe)"
+# Time-stamp: "2024-04-02 21:34:33 (ywatanabe)"
 
 import mngs
 import numpy as np
 import torch
+from mngs.general import torch_fn
 
 
 def to_z(x, axis):
@@ -16,6 +17,26 @@ def to_z(x, axis):
         return (x - x.mean(axis=axis, keepdims=True)) / x.std(
             axis=axis, keepdims=True
         )
+
+
+@torch_fn
+def to_z(x, dim=-1):
+    return (x - x.mean(dim=dim, keepdim=True)) / x.std(dim=dim, keepdim=True)
+
+
+@torch_fn
+def to_1_1(x, amp=1.0, dim=-1, fn="mean"):
+    MM = x.max(dim=dim, keepdims=True)[0].abs()
+    mm = x.min(dim=dim, keepdims=True)[0].abs()
+    return amp * x / torch.maximum(MM, mm)
+
+
+@torch_fn
+def unbias(x, dim=-1, fn="mean"):
+    if fn == "mean":
+        return x - x.mean(dim=dim, keepdims=True)
+    if fn == "min":
+        return x - x.min(dim=dim, keepdims=True)[0]
 
 
 # def to_z(x, axis):

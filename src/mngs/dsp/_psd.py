@@ -1,51 +1,31 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-02-21 08:58:35 (ywatanabe)"
+# Time-stamp: "2024-04-03 00:17:07 (ywatanabe)"
 
 import torch
+import torch.nn as nn
+from mngs.general import torch_fn
+from mngs.nn import PSD
 
 
-def psd_torch(signal, samp_rate):
-    """
-    # Example usage:
-    samp_rate = 480  # Sampling rate in Hz
-    signal = torch.randn(480)  # Example signal with 480 samples
-    freqs, psd = calculate_psd(signal, samp_rate)
+@torch_fn
+def psd(x, fs, dim=-1, cuda=True):
+    psd, freqs = PSD(fs, dim=dim)(x)
+    return psd, freqs
 
-    # Plot the PSD (if you have matplotlib installed)
+
+if __name__ == "__main__":
     import matplotlib.pyplot as plt
+    import mngs
 
-    plt.plot(freqs.numpy(), psd.numpy())
-    plt.xlabel('Frequency (Hz)')
-    plt.ylabel('Power/Frequency (V^2/Hz)')
-    plt.title('Power Spectral Density')
+    fs = 512
+    freqs_hz = [30, 100, 200]
+    x = mngs.dsp.demo_sig(fs=fs, freqs_hz=freqs_hz)  # (8, 19, 384)
+    pp, ff = psd(x, fs)
+    print(pp.shape)
+    print(ff.shape)
+
+    plt, CC = mngs.plt.configure_mpl(plt)
+    fig, ax = mngs.plt.subplots()
+    ax.plot(ff, pp[0, 0])
     plt.show()
-    """
-    # Apply window function to the signal (e.g., Hanning window)
-    window = torch.hann_window(signal.size(-1))
-    signal = signal * window
-
-    # Perform the FFT
-    fft_output = torch.fft.fft(signal)
-
-    # Compute the power spectrum (magnitude squared of the FFT output)
-    power_spectrum = torch.abs(fft_output) ** 2
-
-    # Normalize the power spectrum to get the PSD
-    # Usually, we divide by the length of the signal and the sum of the window squared
-    # to get the power in terms of physical units (e.g., V^2/Hz)
-    psd = power_spectrum / (samp_rate * (window**2).sum())
-
-    # Since the signal is real, we only need the positive half of the FFT output
-    # The factor of 2 accounts for the energy in the negative frequencies that we're discarding
-    psd = psd[: len(psd) // 2] * 2
-
-    # Adjust the DC component (0 Hz) and Nyquist component (if applicable)
-    psd[0] /= 2
-    if len(psd) % 2 == 0:  # Even length, Nyquist freq component is included
-        psd[-1] /= 2
-
-    # Frequency axis
-    freqs = torch.fft.fftfreq(signal.size(-1), 1 / samp_rate)[: len(psd)]
-
-    return freqs, psd

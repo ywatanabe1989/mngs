@@ -13,9 +13,9 @@ from ._converters import (
     torch_fn,
     unsqueeze_if,
 )
+from ._norm import to_1_1, to_z, unbias
 from ._shell import run_shellcommand, run_shellscript
 from ._start import start
-from .calc import to_z
 from .cuda_collect_env import main as cuda_collect_env
 from .debug import *
 from .email import notify, send_gmail
