@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
-# Time-stamp: "2021-12-18 16:58:11 (ywatanabe)"
+# Time-stamp: "2024-03-25 14:52:31 (ywatanabe)"
 
-import numpy as np
-import mngs
 import os
+
+import mngs
+import numpy as np
 
 
 class EarlyStopping:
-    """Early stops the training if validation score doesn't improve after a given patience."""
+    """
+    Early stops the training if the validation score doesn't improve after a given patience period.
+
+    """
 
     def __init__(
-        self, patience=7, verbose=False, delta=0, trace_func=print
+        self, patience=7, verbose=False, delta=1e-5, direction="minimize"
     ):
         """
         Args:
@@ -20,79 +24,128 @@ class EarlyStopping:
                             Default: False
             delta (float): Minimum change in the monitored quantity to qualify as an improvement.
                             Default: 0
-            trace_func (function): trace print function.
-                            Default: print
         """
         self.patience = patience
         self.verbose = verbose
-        self.counter = 0
-        self.best_score = None
-        self.early_stop = False
-        self.val_score_min = np.Inf
+        self.direction = direction
+
         self.delta = delta
 
-        self.spaths_and_models_dict = {None: None, None: None}
+        # default
+        self.counter = 0
+        self.best_score = np.Inf if direction == "minimize" else -np.Inf
+        self.best_i_global = None
+        self.models_spaths_dict = {}
 
-        self.i_epoch = 0
-        self.i_global = 0
-        self.trace_func = trace_func
+    def is_best(self, val_score):
+        is_smaller = val_score < self.best_score - abs(self.delta)
+        is_larger = self.best_score + abs(self.delta) < val_score
+        return is_smaller if self.direction == "minimize" else is_larger
 
-    def __call__(
-        self, val_score, spaths_and_models_dict, i_epoch, i_global
-    ):
-
-        score = -val_score
-
+    def __call__(self, current_score, models_spaths_dict, i_global):
+        # The 1st call
         if self.best_score is None:
-            self.best_score = score
-            self.save_checkpoint(
-                val_score, spaths_and_models_dict, i_epoch, i_global
-            )
+            self.save(current_score, models_spaths_dict, i_global)
+            return False
 
-        elif score < self.best_score + self.delta:
-            self.counter += 1
-            self.trace_func(
-                f"\nEarlyStopping counter: {self.counter} out of {self.patience}\n"
-            )
-            if self.counter >= self.patience:
-                self.early_stop = True
+        # After the 2nd call
+        if self.is_best(current_score):
+            self.save(current_score, models_spaths_dict, i_global)
+            self.counter = 0
+            return False
 
         else:
-            self.best_score = score
-            self.save_checkpoint(
-                val_score, spaths_and_models_dict, i_epoch, i_global
-            )
-            self.counter = 0
+            self.counter += 1
+            if self.verbose:
+                print(
+                    f"\nEarlyStopping counter: {self.counter} out of {self.patience}\n"
+                )
+            if self.counter >= self.patience:
+                if self.verbose:
+                    mngs.gen.print_block("Early-stopped.", c="yellow")
+                return True
 
-    def save_checkpoint(
-        self, val_score, spaths_and_models_dict, i_epoch, i_global
-    ):
+    def save(self, current_score, models_spaths_dict, i_global):
         """Saves model when validation score decrease."""
+
         if self.verbose:
-            self.trace_func(
-                f"\nValidation score decreased ({self.val_score_min:.6f} --> "
-                f"{val_score:.6f}).  Saving model ...\n"
+            print(
+                f"\nUpdate the best score: ({self.best_score:.6f} --> {current_score:.6f})"
             )
 
-        for spath, model in spaths_and_models_dict.items():
-            try:
-                mngs.io.save(model.state_dict(), spath) # torch
-            except Exception as e:
-                print(e)
-                mngs.io.save(model, spath)
+        self.best_score = current_score
+        self.best_i_global = i_global
 
-        self.i_epoch = i_epoch
-        self.i_global = i_global
+        for model, spath in models_spaths_dict.items():
+            mngs.io.save(model.state_dict(), spath)
 
-        ## Update file
-        try:
-            # rm one-step-old spath
-            for spath in list(self.spaths_and_models_dict.keys()):
-                os.remove(spath)
-                print(f"\nRemoved {spath}\n")
-        except Exception as e:
-            print(e)
+        self.models_spaths_dict = models_spaths_dict
 
-        self.spaths_and_models_dict = spaths_and_models_dict
 
-        self.val_score_min = val_score
+if __name__ == "__main__":
+    pass
+    # # starts the current fold's loop
+    # i_global = 0
+    # lc_logger = mngs.ml.LearningCurveLogger()
+    # early_stopping = utils.EarlyStopping(patience=50, verbose=True)
+    # for i_epoch, epoch in enumerate(tqdm(range(merged_conf["MAX_EPOCHS"]))):
+
+    #     dlf.fill(i_fold, reset_fill_counter=False)
+
+    #     step_str = "Validation"
+    #     for i_batch, batch in enumerate(dlf.dl_val):
+    #         _, loss_diag_val = utils.base_step(
+    #             step_str,
+    #             model,
+    #             mtl,
+    #             batch,
+    #             device,
+    #             i_fold,
+    #             i_epoch,
+    #             i_batch,
+    #             i_global,
+    #             lc_logger,
+    #             no_mtl=args.no_mtl,
+    #             print_batch_interval=False,
+    #         )
+    #     lc_logger.print(step_str)
+
+    #     step_str = "Training"
+    #     for i_batch, batch in enumerate(dlf.dl_tra):
+    #         optimizer.zero_grad()
+    #         loss, _ = utils.base_step(
+    #             step_str,
+    #             model,
+    #             mtl,
+    #             batch,
+    #             device,
+    #             i_fold,
+    #             i_epoch,
+    #             i_batch,
+    #             i_global,
+    #             lc_logger,
+    #             no_mtl=args.no_mtl,
+    #             print_batch_interval=False,
+    #         )
+    #         loss.backward()
+    #         optimizer.step()
+    #         i_global += 1
+    #     lc_logger.print(step_str)
+
+    #     bACC_val = np.array(lc_logger.logged_dict["Validation"]["bACC_diag_plot"])[
+    #         np.array(lc_logger.logged_dict["Validation"]["i_epoch"]) == i_epoch
+    #     ].mean()
+
+    #     model_spath = (
+    #         merged_conf["sdir"]
+    #         + f"checkpoints/model_fold#{i_fold}_epoch#{i_epoch:03d}.pth"
+    #     )
+    #     mtl_spath = model_spath.replace("model_fold", "mtl_fold")
+    #     models_spaths_dict = {model_spath: model, mtl_spath: mtl}
+
+    #     early_stopping(loss_diag_val, models_spaths_dict, i_epoch, i_global)
+    #     # early_stopping(-bACC_val, models_spaths_dict, i_epoch, i_global)
+
+    #     if early_stopping.early_stop:
+    #         print("Early stopping")
+    #         break

@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-03-13 14:13:54 (ywatanabe)"
+# Time-stamp: "2024-03-30 08:24:55 (ywatanabe)"
+import os
 
 
-def optuna_study(lpath, value_str):
+def optuna_study(lpath, value_str, sort=False):
     """
     Loads an Optuna study and generates various visualizations for each target metric.
 
@@ -24,6 +25,8 @@ def optuna_study(lpath, value_str):
 
     plt, CC = mngs.plt.configure_mpl(plt, fig_scale=3)
 
+    lpath = lpath.replace("./", "/")
+
     study = optuna.load_study(study_name=None, storage=lpath)
 
     sdir = lpath.replace("sqlite:///", "./").replace(".db", "/")
@@ -36,11 +39,15 @@ def optuna_study(lpath, value_str):
     print(f"Best trial user attributes: {best_trial.user_attrs}")
 
     # Merge the user attributes into the study history DataFrame
-    study_history = (
-        study.trials_dataframe()
-        .sort_values(["value"])
-        .rename(columns={"value": value_str})
+    study_history = study.trials_dataframe().rename(
+        columns={"value": value_str}
     )
+
+    if sort:
+        ascending = "MINIMIZE" in str(study.directions[0])  # [REVISED]
+        study_history = study_history.sort_values(
+            [value_str], ascending=ascending
+        )
 
     # Add user attributes to the study history DataFrame
     attrs_df = []
@@ -54,7 +61,15 @@ def optuna_study(lpath, value_str):
     study_history = study_history.merge(
         attrs_df, left_index=True, right_index=True, how="left"
     ).set_index("number")
-    # study_history = mngs.gen.mv_col(study_history, "bACC", 1)
+    try:
+        study_history = mngs.gen.mv_col(study_history, "SDIR", 1)
+        study_history["SDIR"] = study_history["SDIR"].apply(
+            lambda x: str(x).replace("RUNNING", "FINISHED")
+        )
+        best_trial_dir = study_history["SDIR"].iloc[0]
+        mngs.gen.symlink(best_trial_dir, sdir + "best_trial", force=True)
+    except Exception as e:
+        print(e)
     mngs.io.save(study_history, sdir + "study_history.csv")
     print(study_history)
 
@@ -97,6 +112,10 @@ def optuna_study(lpath, value_str):
 
 if __name__ == "__main__":
     mngs.plt.configure_mpl(plt, fig_scale=3)
-    lpath = "sqlite:///scripts/ml/clf/sub_conv_transformer/optuna_studies/optuna_study_v032.db"
-    optuna_study(lpath, "Validation loss")
+    lpath = "sqlite:///scripts/ml/clf/sub_conv_transformer_optuna/optuna_studies/optuna_study_v001.db"
+    lpath = "sqlite:///scripts/ml/clf/rocket_optuna/optuna_studies/optuna_study_v001.db"
+    optuna_study(lpath, "Validation bACC")
     # scripts/ml/clf/sub_conv_transformer/optuna_studies/optuna_study_v032
+
+    lpath = "sqlite:///scripts/ml/clf/sub_conv_transformer_optuna/optuna_studies/optuna_study_v020.db"
+    mngs.ml.plt.optuna_study(lpath, "val_loss", sort=True)

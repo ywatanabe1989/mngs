@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-02 08:35:32 (ywatanabe)"#!/usr/bin/env python3
+# Time-stamp: "2024-04-02 10:12:06 (ywatanabe)"#!/usr/bin/env python3
 
 import warnings
 from functools import wraps
@@ -28,11 +28,11 @@ def squeeze_if(arr_or_tensor, ndim=3, axis=0):
         raise TypeError("Input must be a NumPy array or a PyTorch tensor.")
 
 
-def is_single(args):
-    if isinstance(args, (list, tuple)):
-        if len(args) == 1:
-            args = args[0]
-    return [args]
+# def is_single(args):
+#     if isinstance(args, (list, tuple)):
+#         if len(args) == 1:
+#             args = args[0]
+#     return [args]
 
 
 def is_torch(*args, **kwargs):

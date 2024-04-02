@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-03-09 08:22:31 (ywatanabe)"
+# Time-stamp: "2024-03-25 12:12:15 (ywatanabe)"
 
 import inspect
 import os as _os
@@ -140,7 +140,9 @@ if __name__ == "__main__":
     import mngs
 
     # --------------------------------------------------------------------------- #
-    CONFIG, sys.stdout, sys.stderr, plt, cc = mngs.gen.start(sys, plt)
+    CONFIG, sys.stdout, sys.stderr, plt, cc = mngs.gen.start(
+        sys, plt, sdir=None
+    )
     # --------------------------------------------------------------------------- #
 
     # YOUR CODE HERE

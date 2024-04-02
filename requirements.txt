@@ -36,3 +36,6 @@ pytest-xdist
 pytest-env
 umap-learn
 optuna
+ripple_detection
+termplotlib
+git+https://github.com/ywatanabe1989/PyTorchWavelets.git@master
