@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Time-stamp: "2024-01-21 19:17:13 (ywatanabe)"
+# Time-stamp: "2024-04-01 14:02:40 (ywatanabe)"
 
 from functools import partial
 
@@ -8,7 +8,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torchaudio
-from mngs.dsp.HilbertTransformationTorch import HilbertTransformerTorch
+from mngs.general import numpy_fn, torch_fn
 
 # Global definitions
 BANDS_LIM_HZ_DICT = {
@@ -21,16 +21,21 @@ BANDS_LIM_HZ_DICT = {
 }
 
 
-def phase(x, axis=-1):
-    x, x_type = mngs.gen.my2tensor(x)
+@torch_fn
+def phase(x, dim=-1):
+    # x, x_type = mngs.gen.my2tensor(x)
 
-    analytical_x = hilbert(x, axis=axis)
-    out = analytical_x[..., 0]
-
-    if x_type == "numpy":
-        return mngs.gen.my2array(out)[0]
-    else:
+    def fn(x, dim=-1):
+        analytical_x = hilbert(x, axis=dim)
+        out = analytical_x[..., 0]
         return out
+
+    return fn(x, dim=dim)
+
+    # if x_type == "numpy":
+    #     return mngs.gen.my2array(out)[0]
+    # else:
+    #     return out
 
 
 def phase_band(x, samp_rate, band_str="delta", l=None, h=None):
@@ -120,25 +125,11 @@ def amp_band(x, samp_rate, band_str="delta", l=None, h=None):
         return out
 
 
-def hilbert(x, axis=-1):
-    x, x_type = mngs.gen.my2tensor(x)
-
-    if axis == -1:
-        axis = x.ndim - 1
-
-    out = HilbertTransformerTorch(axis=axis).to(x.device)(x)
-
-    if x_type == "numpy":
-        return mngs.gen.my2array(out)[0]
-    else:
-        return out
-
-
 def fft(x, samp_rate, time_dim=-1):
     x, x_type = mngs.gen.my2tensor(x)
 
     fn = partial(_fft_1d, samp_rate=samp_rate, return_freq=False)
-    fft_coef = _apply_to_the_time_dim(fn, x, time_dim)
+    fft_coef = mngs.torch.apply_to(fn, x, time_dim)
     freq = torch.fft.fftfreq(x.shape[-1], d=1 / samp_rate)
 
     if x_type == "numpy":
@@ -205,7 +196,7 @@ def rfft(x, samp_rate, time_dim=-1):
     x, x_type = mngs.gen.my2tensor(x)
 
     fn = partial(_rfft_1d, samp_rate=samp_rate, return_freq=False)
-    fft_coef = _apply_to_the_time_dim(fn, x, time_dim)
+    fft_coef = mngs.torch.apply_to(fn, x, time_dim)
     freq = torch.fft.rfftfreq(x.shape[-1], d=1 / samp_rate)
 
     if x_type == "numpy":
@@ -224,48 +215,6 @@ def _rfft_1d(x, samp_rate, return_freq=True):
         return fft_coef
 
 
-def bandstop(x, samp_rate, low_hz=55, high_hz=65, time_dim=-1):
-    x, x_type = mngs.gen.my2tensor(x)
-
-    fn = partial(
-        _bandstop_1d, samp_rate=samp_rate, low_hz=low_hz, high_hz=high_hz
-    )
-    out = _apply_to_the_time_dim(fn, x, time_dim)
-
-    if x_type == "numpy":
-        return mngs.gen.my2array(out)[0]
-    else:
-        return out
-
-
-def _bandstop_1d(x, samp_rate, low_hz=55, high_hz=65):
-    fft_coef, freq = _rfft_1d(x, samp_rate)
-    indi_to_cut = (low_hz < freq) & (freq < high_hz)
-    fft_coef[indi_to_cut] = 0
-    return torch.fft.irfft(fft_coef)
-
-
-def bandpass(x, samp_rate, low_hz=55, high_hz=65, time_dim=-1):
-    x, x_type = mngs.gen.my2tensor(x)
-
-    fn = partial(
-        _bandpass_1d, samp_rate=samp_rate, low_hz=low_hz, high_hz=high_hz
-    )
-    out = _apply_to_the_time_dim(fn, x, time_dim)
-
-    if x_type == "numpy":
-        return mngs.gen.my2array(out)[0]
-    else:
-        return out
-
-
-def _bandpass_1d(x, samp_rate, low_hz=55, high_hz=65):
-    fft_coef, freq = _rfft_1d(x, samp_rate)
-    indi_to_cut = (freq < low_hz) + (high_hz < freq)
-    fft_coef[indi_to_cut] = 0
-    return torch.fft.irfft(fft_coef)
-
-
 def spectrogram(x, fft_size, device="cuda"):
     """
     Short-time FFT for signals.
@@ -280,86 +229,6 @@ def spectrogram(x, fft_size, device="cuda"):
 
     transform = torchaudio.transforms.Spectrogram(n_fft=fft_size).to(device)
     out = transform(x)
-
-    if x_type == "numpy":
-        return mngs.gen.my2array(out)[0]
-    else:
-        return out
-
-
-def mean(x):
-    return x.mean(-1, keepdims=True)
-
-
-def std(x):
-    return x.std(-1, keepdims=True)
-
-
-def zscore(x):
-    x, x_type = mngs.gen.my2tensor(x)
-
-    _mean = mean(x)
-    diffs = x - _mean
-    var = torch.mean(torch.pow(diffs, 2.0), dim=-1, keepdims=True)
-    std = torch.pow(var, 0.5)
-    out = diffs / std
-
-    if x_type == "numpy":
-        return mngs.gen.my2array(out)[0]
-    else:
-        return out
-
-
-def kurtosis(x):
-    x, x_type = mngs.gen.my2tensor(x)
-
-    zscores = zscore(x)
-    out = torch.mean(torch.pow(zscores, 4.0), dim=-1, keepdims=True) - 3.0
-
-    if x_type == "numpy":
-        return mngs.gen.my2array(out)[0]
-    else:
-        return out
-
-
-def skewness(x):
-    x, x_type = mngs.gen.my2tensor(x)
-
-    zscores = zscore(x)
-    out = torch.mean(torch.pow(zscores, 3.0), dim=-1, keepdims=True)
-
-    if x_type == "numpy":
-        return mngs.gen.my2array(out)[0]
-    else:
-        return out
-
-
-def median(x):
-    x, x_type = mngs.gen.my2tensor(x)
-
-    out = torch.median(x, dim=-1, keepdims=True)[0]
-
-    if x_type == "numpy":
-        return mngs.gen.my2array(out)[0]
-    else:
-        return out
-
-
-def q25(x, q=0.25):
-    x, x_type = mngs.gen.my2tensor(x)
-
-    out = torch.quantile(x, q, dim=-1, keepdims=True)
-
-    if x_type == "numpy":
-        return mngs.gen.my2array(out)[0]
-    else:
-        return out
-
-
-def q75(x, q=0.75):
-    x, x_type = mngs.gen.my2tensor(x)
-
-    out = torch.quantile(x, q, dim=-1, keepdims=True)
 
     if x_type == "numpy":
         return mngs.gen.my2array(out)[0]
@@ -388,93 +257,6 @@ def beyond_r_sigma_ratio(x, r=2.0):
         return mngs.gen.my2array(out)[0]
     else:
         return out
-
-
-def _apply_to_the_time_dim(fn, x, time_dim):
-    # Permute the tensor to bring the time dimension to the last position if it's not already
-    if time_dim != -1:
-        dims = list(range(x.dim()))
-        dims[-1], dims[time_dim] = dims[time_dim], dims[-1]
-        x = x.permute(*dims)
-
-    # Flatten the tensor along the time dimension
-    shape = x.shape
-    x = x.reshape(-1, shape[-1])
-
-    # Apply the function to each slice along the time dimension
-    applied = torch.stack([fn(x_i) for x_i in torch.unbind(x, dim=0)], dim=0)
-
-    # Reshape the tensor to its original shape (with the time dimension at the end)
-    applied = applied.reshape(*shape[:-1], -1)
-
-    # Permute back to the original dimension order if necessary
-    if time_dim != -1:
-        applied = applied.permute(*dims)
-
-    return applied
-
-
-# def _apply_to_the_time_dim(fn, x):
-#     """
-#     x: [BS, N_CHS, SEQ_LEN]
-#     When fn(x[0,0]) works, _apply_to_the_time_dim(fn, x) works.
-#     """
-#     shape = x.shape
-#     x = x.reshape(-1, shape[-1])
-#     dim = 0
-#     applied = torch.stack(
-#         [fn(x_i) for x_i in torch.unbind(x, dim=dim)], dim=dim
-#     )
-#     return applied.reshape(shape[0], shape[1], -1)
-
-
-# def _test_notch_filter_1d():
-#     time = torch.linspace(0, 1, 999)
-#     sig = (
-#         torch.cos(60 * 2 * torch.pi * time)
-#         + torch.cos(200 * 2 * torch.pi * time)
-#         + torch.cos(300 * 2 * torch.pi * time)
-#     )
-
-#     sig_filted = notch_filter_1d(sig, SAMP_RATE, cutoff_hz=60, width_hz=5)
-#     fig, axes = plt.subplots(4, 1)
-#     axes[0].plot(sig, label="sig")
-#     fft_coef_sig, freq_sig = _rfft_1d(sig, SAMP_RATE)
-#     axes[1].plot(freq_sig, fft_coef_sig.abs(), label="fft_coef_sig")
-#     axes[2].plot(sig_filted, label="sig_filted")
-
-#     fft_coef_sig_filted, freq_sig_filted = _rfft_1d(sig_filted, SAMP_RATE)
-#     axes[3].plot(
-#         freq_sig_filted, fft_coef_sig_filted.abs(), label="fft_coef_sig_filted"
-#     )
-#     for ax in axes:
-#         ax.legend()
-#     fig.show()
-
-
-# def test_phase_amp_bandpass():
-#     samp_rate = 1000
-#     len_seq = 10
-#     time = torch.arange(0, len_seq, 1 / samp_rate)
-#     freqs_hz = [2, 5, 10]
-#     sig = torch.vstack(
-#         [torch.sin(f * 2 * torch.pi * time) for f in freqs_hz]
-#     ).sum(dim=0)
-#     # sig = _bandstop_1d(sig, samp_rate, low_hz=4, high_hz=12)
-#     sig = sig.unsqueeze(0).unsqueeze(0).repeat(BS, N_CHS, 1)
-#     sig = bandpass(sig, samp_rate, low_hz=0, high_hz=3)
-
-#     phase = _phase_1d(sig)
-#     amp = _amp_1d(sig)
-
-#     fig, axes = plt.subplots(3, 1, sharex=True, sharey=True)
-#     axes[0].plot(sig[0, 0], label="sig")
-#     axes[0].legend()
-#     axes[1].plot(phase[0, 0], label="phase")
-#     axes[1].legend()
-#     axes[2].plot(amp[0, 0], label="amp")
-#     axes[2].legend()
-#     fig.show()
 
 
 class FeatureExtractorTorch(nn.Module):
@@ -553,8 +335,8 @@ def main():
 
     m = FeatureExtractorTorch(SAMP_RATE, batch_size=8)
 
-
     out = m(x)  # 15 features
+
 
 if __name__ == "__main__":
     import mngs

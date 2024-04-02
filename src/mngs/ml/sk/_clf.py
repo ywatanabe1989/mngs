@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-03-13 12:04:30 (ywatanabe)"
+# Time-stamp: "2024-03-23 17:36:05 (ywatanabe)"
 
 import numpy as np
 from sklearn.decomposition import PCA
 from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier
 from sklearn.feature_selection import SelectKBest, f_classif
-from sklearn.linear_model import RidgeClassifierCV
+from sklearn.linear_model import LogisticRegression, RidgeClassifierCV
 from sklearn.pipeline import make_pipeline
 from sklearn.svm import SVC, LinearSVC
 from sktime.classification.deep_learning.cnn import CNNClassifier
@@ -35,7 +35,10 @@ from sktime.transformations.panel.rocket import Rocket
 def rocket_pipeline(*args, **kwargs):
     return make_pipeline(
         Rocket(*args, **kwargs),
-        RidgeClassifierCV(alphas=np.logspace(-3, 3, 10)),
+        LogisticRegression(
+            max_iter=1000
+        ),  # Increase max_iter if needed for convergence
+        # RidgeClassifierCV(alphas=np.logspace(-3, 3, 10)),
         # SVC(probability=True, kernel="linear"),
     )
 

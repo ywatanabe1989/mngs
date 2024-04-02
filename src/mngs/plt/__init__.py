@@ -10,3 +10,4 @@ from ._get_RGBA_from_colormap import get_RGBA_from_colormap
 from ._mk_colorbar import mk_colorbar
 from ._mk_patches import mk_patches
 from ._subplots import subplots
+from ._tpl import termplot

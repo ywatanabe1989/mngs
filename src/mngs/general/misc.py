@@ -727,3 +727,41 @@ def mv_col(dataframe, column_name, position):
     dataframe.drop(labels=[column_name], axis=1, inplace=True)
     dataframe.insert(loc=position, column=column_name, value=temp_col)
     return dataframe
+
+
+def symlink(tgt, src, force=False):
+    if force:
+        try:
+            os.remove(src)
+        except FileNotFoundError:
+            pass
+
+    # Calculate the relative path from src to tgt
+    src_dir = os.path.dirname(src)
+    relative_tgt = os.path.relpath(tgt, src_dir)
+
+    os.symlink(relative_tgt, src)
+    print(
+        mngs.gen.ct(
+            f"\nSymlink was created: {src} -> {relative_tgt}\n", c="yellow"
+        )
+    )
+
+
+#     os.symlink(tgt, src)
+#     print(mngs.gen.ct(f"\nSymlink was created: {src} -> {tgt}\n", c="yellow"))
+# Symlink was created: ./scripts/ml/clf/sct_optuna/optuna_studies/optuna_study_stent_3_classes/best_trial -> /home/ywatanabe/proj/ecog_stent_sheep_visual/scripts/ml/clf/sct_optuna/RUNNING/2024Y-03M-29D-21h55m09s_IBSy/objective/Trial#00068/
+
+
+def to_even(n):
+    if n % 2 == 0:
+        return n
+    else:
+        return n - 1
+
+
+def to_odd(n):
+    if n % 2 == 0:
+        return n - 1
+    else:
+        return n
