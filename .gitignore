@@ -23,7 +23,9 @@ singularity
 *.old*
 *old*
 
-#################################################################33333
+#################################################################
+## Python
+#################################################################
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -162,3 +164,61 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+
+#################################################################
+## Emacs
+#################################################################
+# -*- mode: gitignore; -*-
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# Org-mode
+.org-id-locations
+*_archive
+
+# flymake-mode
+*_flymake.*
+
+# eshell files
+/eshell/history
+/eshell/lastdir
+
+# elpa packages
+/elpa/
+
+# reftex files
+*.rel
+
+# AUCTeX auto folder
+/auto/
+
+# cask packages
+.cask/
+dist/
+
+# Flycheck
+flycheck_*.el
+
+# server auth directory
+/server/
+
+# projectiles files
+.projectile
+
+# directory configuration
+.dir-locals.el
+
+# network security
+/network-security.data
+
+
+# for f in `find . -name "*~" -o -name ".#*"`; do
+#     echo $f
+#     git_rm_eternal $f
+# done
