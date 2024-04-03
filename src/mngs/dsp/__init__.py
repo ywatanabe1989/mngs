@@ -28,4 +28,4 @@ from ._psd import psd
 from .mne import to_dig_montage
 from .referencing import common_average  # random_reference
 from .referencing import subtract_from_random_column
-from .transform import arr2skdf, crop, psd
+from .transform import arr2skdf, crop
