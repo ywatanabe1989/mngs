@@ -39,3 +39,4 @@ torchsummary
 umap-learn
 wheel
 xmltodict
+sktime
