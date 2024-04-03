@@ -28,6 +28,7 @@ ripple_detection
 ruamel.yaml
 scikit-image
 scikit-learn
+sktime
 scipy
 seaborn
 statsmodels

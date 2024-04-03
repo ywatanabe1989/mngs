@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-02 20:25:14 (ywatanabe)"
+# Time-stamp: "2024-04-03 01:06:30 (ywatanabe)"
 
 import math
 import warnings
@@ -32,7 +32,8 @@ class BaseFilter1D(nn.Module):
     def radius(
         self,
     ):
-        return mngs.gen.to_even(self.kernel_size // 2)
+        # return mngs.gen.to_even(self.kernel_size // 2)
+        return self.kernel_size // 2
 
     def forward(self, x):
         """Apply the filter to input signal x with shape: (batch_size, n_chs, seq_len)"""
@@ -85,48 +86,50 @@ class GaussianFilter(BaseFilter1D):
 
 
 class BandPassFilter(BaseFilter1D):
-    def __init__(
-        self, low_freq, high_freq, sampling_rate, kernel_size=None
-    ):  # kernel_size,
+    def __init__(self, low_hz, high_hz, fs, kernel_size=None):
         super().__init__()
 
+        assert 0 < low_hz
+        assert low_hz < high_hz
+        assert high_hz <= fs / 2
+
         kernel_size = (
-            mngs.gen.to_even(int(1 / low_freq * sampling_rate * 3))
+            mngs.gen.to_even(int(1 / low_hz * fs * 3))
             if kernel_size is None
             else mngs.gen.to_even(kernel_size)
         )
 
-        self.low_freq = low_freq
-        self.high_freq = high_freq
-        self.sampling_rate = sampling_rate
+        self.low_hz = low_hz
+        self.high_hz = high_hz
+        self.fs = fs
         self.init_kernel(kernel_size)
 
     def init_kernel(self, kernel_size):
-        freqs = torch.fft.fftfreq(kernel_size, d=1 / self.sampling_rate)
+        freqs = torch.fft.fftfreq(kernel_size, d=1 / self.fs)
         kernel = torch.zeros(kernel_size)
-        kernel[(freqs >= self.low_freq) & (freqs <= self.high_freq)] = 1
+        kernel[(freqs >= self.low_hz) & (freqs <= self.high_hz)] = 1
         kernel = torch.fft.ifft(kernel).real
         kernel /= kernel.sum()
         self.kernel = kernel.unsqueeze(0).unsqueeze(0)
 
 
 class BandStopFilter(BaseFilter1D):
-    def __init__(self, low_freq, high_freq, sampling_rate, kernel_size=None):
+    def __init__(self, low_hz, high_hz, fs, kernel_size=None):
         super().__init__()
         kernel_size = (
-            mngs.gen.to_even(int(1 / low_freq * sampling_rate * 3))
+            mngs.gen.to_even(int(1 / low_hz * fs * 3))
             if kernel_size is None
             else mngs.gen.to_even(kernel_size)
         )
-        self.low_freq = low_freq
-        self.high_freq = high_freq
-        self.sampling_rate = sampling_rate
+        self.low_hz = low_hz
+        self.high_hz = high_hz
+        self.fs = fs
         self.init_kernel(kernel_size)
 
     def init_kernel(self, kernel_size):
-        freqs = torch.fft.fftfreq(kernel_size, d=1 / self.sampling_rate)
+        freqs = torch.fft.fftfreq(kernel_size, d=1 / self.fs)
         kernel = torch.ones(kernel_size)
-        kernel[(freqs >= self.low_freq) & (freqs <= self.high_freq)] = 0
+        kernel[(freqs >= self.low_hz) & (freqs <= self.high_hz)] = 0
         kernel = torch.fft.ifft(
             kernel
         ).real  # Inverse FFT to get the time-domain kernel

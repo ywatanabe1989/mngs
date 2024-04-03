@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Time-stamp: "2024-04-01 14:02:40 (ywatanabe)"
+# Time-stamp: "2024-04-03 00:50:51 (ywatanabe)"
 
 from functools import partial
 
@@ -8,34 +8,15 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torchaudio
+from mngs.dsp.PARAMS import BANDS_LIM_HZ_DICT
 from mngs.general import numpy_fn, torch_fn
-
-# Global definitions
-BANDS_LIM_HZ_DICT = {
-    "delta": [0.5, 4],
-    "theta": [4, 8],
-    "lalpha": [8, 10],
-    "halpha": [10, 13],
-    "beta": [13, 32],
-    "gamma": [32, 75],
-}
 
 
 @torch_fn
 def phase(x, dim=-1):
-    # x, x_type = mngs.gen.my2tensor(x)
-
-    def fn(x, dim=-1):
-        analytical_x = hilbert(x, axis=dim)
-        out = analytical_x[..., 0]
-        return out
-
-    return fn(x, dim=dim)
-
-    # if x_type == "numpy":
-    #     return mngs.gen.my2array(out)[0]
-    # else:
-    #     return out
+    analytical_x = hilbert(x, dim=dim)
+    out = analytical_x[..., 0]
+    return out
 
 
 def phase_band(x, samp_rate, band_str="delta", l=None, h=None):
