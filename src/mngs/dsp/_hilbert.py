@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-02 23:51:13 (ywatanabe)"
+# Time-stamp: "2024-04-03 13:06:54 (ywatanabe)"
 
 import mngs
 from mngs.general import torch_fn

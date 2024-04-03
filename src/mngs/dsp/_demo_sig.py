@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-02 21:25:50 (ywatanabe)"
+# Time-stamp: "2024-04-03 13:08:41 (ywatanabe)"
 
 import random
 
@@ -27,10 +27,15 @@ def demo_sig(
     freqs_hz="random",
     type="periodic",
 ):
+    tt = np.linspace(0, t_sec, int(t_sec * fs))
     if type == "meg":
-        return _demo_sig_meg(
-            batch_size=batch_size, n_chs=n_chs, t_sec=t_sec, fs=fs
-        ).astype(np.float32)
+        return (
+            _demo_sig_meg(
+                batch_size=batch_size, n_chs=n_chs, t_sec=t_sec, fs=fs
+            ).astype(np.float32),
+            tt,
+            fs,
+        )
 
     else:
         fn_1d = {
@@ -40,18 +45,22 @@ def demo_sig(
         }.get(type)
 
         return (
-            np.array(
-                [
-                    fn_1d(
-                        t_sec=t_sec,
-                        fs=fs,
-                        freqs_hz=freqs_hz,
-                    )
-                    for _ in range(int(batch_size * n_chs))
-                ]
-            )
-            .reshape(batch_size, n_chs, -1)
-            .astype(np.float32)
+            (
+                np.array(
+                    [
+                        fn_1d(
+                            t_sec=t_sec,
+                            fs=fs,
+                            freqs_hz=freqs_hz,
+                        )
+                        for _ in range(int(batch_size * n_chs))
+                    ]
+                )
+                .reshape(batch_size, n_chs, -1)
+                .astype(np.float32)
+            ),
+            tt,
+            fs,
         )
 
 
