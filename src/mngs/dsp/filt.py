@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-03 01:21:26 (ywatanabe)"
+# Time-stamp: "2024-04-03 13:19:54 (ywatanabe)"
 
 
 import time
@@ -24,13 +24,7 @@ from scipy.signal import butter, sosfilt, sosfreqz
 
 
 @torch_fn
-def resample(x, src_fs, tgt_fs):
-    """
-    tgt_fs=512
-    src_fs=128
-    x = mngs.dsp.np.demo_sig(fs=tgt_fs)
-    x = resample(x, tgt_fs, src_fs)
-    """
+def resample(x, src_fs, tgt_fs, cuda=True):
     resampler = T.Resample(src_fs, tgt_fs, dtype=x.dtype).to(x.device)
     return resampler(x)
 
