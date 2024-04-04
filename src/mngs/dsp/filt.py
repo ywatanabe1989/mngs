@@ -1,18 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-04 13:23:08 (ywatanabe)"
+# Time-stamp: "2024-04-04 20:02:43 (ywatanabe)"
 
 
 import mngs
-import scipy.ndimage
-import torch
 from mngs.general import torch_fn
 from mngs.nn import BandPassFilter, GaussianFilter
-
-# @torch_fn
-# def resample(x, src_fs, tgt_fs):
-#     resampler = T.Resample(src_fs, tgt_fs, dtype=x.dtype).to(x.device)
-#     return resampler(x)
 
 
 @torch_fn
@@ -35,6 +28,8 @@ def _custom_print(x):
 
 
 if __name__ == "__main__":
+    import torch
+
     t_sec = 10
     src_fs = 1024
     tgt_fs = 128
