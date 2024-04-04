@@ -1,49 +1,40 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-03 00:15:24 (ywatanabe)"
+# Time-stamp: "2024-04-04 19:03:07 (ywatanabe)"
 
 import torch
 import torch.nn as nn
 
 
 class PSD(nn.Module):
-    def __init__(self, sample_rate, dim=-1):
+    def __init__(self, sample_rate, prob=False, dim=-1):
         super(PSD, self).__init__()
         self.sample_rate = sample_rate
         self.dim = dim
+        self.prob = prob
 
     def forward(self, signal):
-        """
-        Calculate the Power Spectral Density (PSD) of a batched multi-channel signal.
 
-        Parameters:
-        - signal (torch.Tensor): The time-domain signal tensor with shape (batch_size, n_chs, seq_len).
+        is_complex = signal.is_complex()
+        if is_complex:
+            signal_fft = torch.fft.fft(signal, dim=self.dim)
+            freqs = torch.fft.fftfreq(
+                signal.size(self.dim), 1 / self.sample_rate
+            ).to(signal.device)
 
-        Returns:
-        - psd (torch.Tensor): The power spectral density of the signal with shape (batch_size, n_chs, seq_len//2).
-        - freqs (torch.Tensor): The frequency bins with shape (seq_len//2,).
-        """
-        # Perform the FFT along the last dimension
-        signal_fft = torch.fft.fft(signal, dim=self.dim)
+        else:
+            signal_fft = torch.fft.rfft(signal, dim=self.dim)
+            freqs = torch.fft.rfftfreq(
+                signal.size(self.dim), 1 / self.sample_rate
+            ).to(signal.device)
 
-        # Calculate the power spectrum
         power_spectrum = torch.abs(signal_fft) ** 2
-
-        # Normalize the power spectrum
         power_spectrum = power_spectrum / signal.size(self.dim)
 
-        # Get the corresponding frequency bins
-        freqs = torch.fft.fftfreq(signal.size(self.dim), 1 / self.sample_rate)
+        psd = power_spectrum * (1.0 / self.sample_rate)
 
-        # Take the one-sided spectrum for real signal
-        half = signal.size(self.dim) // 2
-        psd = power_spectrum[..., :half]
-
-        # Scale the power spectrum by the frequency resolution to get the PSD
-        psd = psd * (1.0 / self.sample_rate)
-
-        # Since freqs is symmetric, take the first half for the one-sided spectrum
-        freqs = freqs[:half]
-        self.freqs = freqs
+        # To probability if specified
+        if self.prob:
+            psd /= psd.sum(dim=self.dim, keepdims=True)
 
         return psd, freqs

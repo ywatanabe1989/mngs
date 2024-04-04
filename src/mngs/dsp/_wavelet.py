@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-03 12:55:57 (ywatanabe)"
+# Time-stamp: "2024-04-04 07:26:57 (ywatanabe)"
 
 import mngs
 from mngs.general import torch_fn
@@ -8,7 +8,12 @@ from mngs.nn import Wavelet
 
 
 @torch_fn
-def wavelet(x, fs, freq_scale="linear", out_scale="log", cuda=True):
+def wavelet(
+    x,
+    fs,
+    freq_scale="linear",
+    out_scale="log",
+):
     m = Wavelet(fs, freq_scale=freq_scale, out_scale=out_scale)
     return m(x), m.freqs
 
@@ -19,14 +24,20 @@ if __name__ == "__main__":
     fs = 1024  # Sampling rate in Hz
     freqs_hz = [30, 100, 250]
     x = mngs.dsp.np.demo_sig(fs=fs, freqs_hz=freqs_hz, type="ripple")
-    y, freqs = wavelet(x, fs, cuda=True)
+    y, freqs = wavelet(
+        x,
+        fs,
+    )
 
     plt, CC = mngs.plt.configure_mpl(plt)
     fig, axes = plt.subplots(nrows=2, ncols=1, sharex=True)
     axes[0].plot(x[0, 0])
     axes[1].imshow(y[0, 0])
     # axes[1].imshow(np.log(y[0, 0] + 1e-5))
-    y, freqs = wavelet(x, fs, cuda=True)
+    y, freqs = wavelet(
+        x,
+        fs,
+    )
     axes[1].invert_yaxis()
     axes[1] = mngs.plt.ax.set_n_ticks(axes[1], n_xticks=4, n_yticks=4)
 
@@ -38,7 +49,7 @@ if __name__ == "__main__":
     # from wavelets_pytorch.transform import WaveletTransformTorch
     # dt = 1 / fs
     # dj = 0.125
-    # wa_torch = WaveletTransformTorch(dt, dj, cuda=True)
+    # wa_torch = WaveletTransformTorch(dt, dj, )
     # cwt_torch = wa_torch.cwt(x[0, 0])
     # sns.heatmap(np.abs(cwt_torch).astype(np.float32))
     # plt.show()

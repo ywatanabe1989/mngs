@@ -1,15 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-03 13:06:54 (ywatanabe)"
+# Time-stamp: "2024-04-04 08:02:10 (ywatanabe)"
 
 import mngs
 from mngs.general import torch_fn
 from mngs.nn import Hilbert
 
+from .filt import bandpass
+
 
 @torch_fn
-def hilbert(x, dim=-1, cuda=True):
-    return Hilbert(dim=dim)(x)
+def hilbert(
+    x,
+    dim=-1,
+):
+    y = Hilbert(dim=dim)(x)
+    return y[..., 0], y[..., 1]
 
 
 def _get_scipy_x(t_sec, fs):
@@ -32,7 +38,9 @@ def _get_scipy_x(t_sec, fs):
 
     x = mngs.dsp.ensure_3d(x)
 
-    return x
+    t = torch.linspace(0, T_SEC, x.shape[-1])
+
+    return x, t, fs
 
 
 if __name__ == "__main__":
@@ -44,26 +52,13 @@ if __name__ == "__main__":
     T_SEC = 1.0  # 0
     FS = 400  # 128
 
-    x = _get_scipy_x(T_SEC, FS)
+    # x, t, f = _get_scipy_x(T_SEC, FS)
+    x, t, f = mngs.dsp.demo_sig(t_sec=T_SEC, fs=FS, type="chirp")
 
-    # x = torch.tensor(
-    #     mngs.dsp.demo_sig(t_sec=T_SEC, fs=FS, type="chirp")
-    # ).cuda()
-    t = torch.linspace(0, T_SEC, x.shape[-1])
-
-    y = hilbert(x, dim=-1, cuda=True)  # (32, 19, 1280, 2)
-
-    try:
-        x = x.cpu().numpy()
-    except:
-        pass
-
-    try:
-        y = y.cpu().numpy()
-    except:
-        pass
-
-    pha, amp = y[..., 0], y[..., 1]
+    pha, amp = hilbert(
+        x,
+        dim=-1,
+    )  # (32, 19, 1280, 2)
 
     fig, axes = mngs.plt.subplots(nrows=2)
     axes[0].plot(x[0, 0], label="orig")

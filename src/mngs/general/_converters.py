@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-02 10:12:06 (ywatanabe)"#!/usr/bin/env python3
+# Time-stamp: "2024-04-04 13:22:40 (ywatanabe)"#!/usr/bin/env python3
 
 import warnings
 from functools import wraps
@@ -26,13 +26,6 @@ def squeeze_if(arr_or_tensor, ndim=3, axis=0):
         return torch.squeeze(arr_or_tensor, dim=axis)
     else:
         raise TypeError("Input must be a NumPy array or a PyTorch tensor.")
-
-
-# def is_single(args):
-#     if isinstance(args, (list, tuple)):
-#         if len(args) == 1:
-#             args = args[0]
-#     return [args]
 
 
 def is_torch(*args, **kwargs):
@@ -65,21 +58,25 @@ def return_if(*args, **kwargs):
 
 
 def to_torch(*args, return_fn=return_if, **kwargs):
-    def _to_torch(x, cuda=kwargs.get("cuda")):
-        device = "cuda" if cuda else "cpu"
+    def _to_torch(x, device=kwargs.get("device")):
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         if isinstance(x, (pd.Series, pd.DataFrame)):
+            x_new = torch.tensor(x.to_numpy()).squeeze().float().to(device)
             warnings.warn(
-                f"Converted from  {type(x)} to torch.Tensor ({device})",
+                f"Converted from  {type(x)} to {type(x_new)} ({x_new.device})",
                 category=UserWarning,
             )
-            return torch.tensor(x.to_numpy()).squeeze().float().to(device)
+            return x_new
 
         elif isinstance(x, (np.ndarray, list)):
+            x_new = torch.tensor(x).float().to(device)
             warnings.warn(
-                f"Converted from  {type(x)} to torch.Tensor ({device})",
+                f"Converted from  {type(x)} to {type(x_new)} ({x_new.device})",
                 category=UserWarning,
             )
-            return torch.tensor(x).float().to(device)
+            return x_new
 
         else:
             return x
@@ -91,36 +88,6 @@ def to_torch(*args, return_fn=return_if, **kwargs):
         c_kwargs["dim"] = c_kwargs.pop("axis")
 
     return return_fn(*c_args, **c_kwargs)
-
-
-# def to_torch_cuda(*args, return_fn=return_if, **kwargs):
-#     def _to_torch_cuda(x):
-#         if isinstance(x, (pd.Series, pd.DataFrame)):
-#             warnings.warn(
-#                 f"Converted from  {type(x)} to torch.Tensor",
-#                 category=UserWarning,
-#             )
-#             return torch.tensor(x.to_numpy()).squeeze().float().cuda()
-
-#         elif isinstance(x, (np.ndarray, list)):
-#             return torch.tensor(x).float().cuda()
-
-#         elif isinstance(x, tuple):
-#             return [_to_torch(_x) for _x in x if _x is not None]
-
-#         else:
-#             return x
-
-#     c_args = [_to_torch_cuda(arg) for arg in args if arg is not None]
-#     c_kwargs = {
-#         k: _to_torch_cuda(v) for k, v in kwargs.items() if v is not None
-#     }
-
-#     if "axis" in c_kwargs:
-#         c_kwargs["dim"] = c_kwargs.pop("axis")
-
-#     return return_fn(*c_args, **c_kwargs)
-#     # return return_if(*c_args, **c_kwargs)
 
 
 def to_numpy(*args, return_fn=return_if, **kwargs):
@@ -183,18 +150,11 @@ def torch_fn(func):
     def wrapper(*args, **kwargs):
         # Buffers the input types
         is_torch_input = is_torch(*args, **kwargs)
-        is_cuda_input = is_cuda(*args, **kwargs)
+        # is_cuda_input = is_cuda(*args, **kwargs)
+
         # Runs the func
         c_args, c_kwargs = to_torch(*args, return_fn=return_always, **kwargs)
 
-        # if kwargs.get("cuda"):
-        #     c_args, c_kwargs = to_torch_cuda(
-        #         *args, return_fn=return_always, **kwargs
-        #     )
-        # else:
-        #     c_args, c_kwargs = to_torch(
-        #         *args, return_fn=return_always, **kwargs
-        #     )
         results = func(*c_args, **c_kwargs)
 
         # Reverts to the original data type
@@ -245,6 +205,7 @@ def numpy_fn(func):
         # Buffers the input types
         is_torch_input = is_torch(*args, **kwargs)
         is_cuda_input = is_cuda(*args, **kwargs)
+        device = "cuda" if is_cuda_input else "cpu"
 
         # Runs the func
         c_args, c_kwargs = to_numpy(*args, return_fn=return_always, **kwargs)
@@ -255,9 +216,9 @@ def numpy_fn(func):
             return results
         elif is_torch_input:
             if not is_cuda_input:
-                return to_torch(results, return_fn=return_if)[0]
+                return to_torch(results, return_fn=return_if, device=device)[0]
             elif is_cuda_input:
-                return to_torch_cuda(results, return_fn=return_if)[0]
+                return to_torch(results, return_fn=return_if, device=device)[0]
 
     return wrapper
 
