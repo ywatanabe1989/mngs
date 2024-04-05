@@ -6,8 +6,8 @@ import matplotlib
 
 def set_n_ticks(
     ax,
-    n_xticks=None,
-    n_yticks=None,
+    n_xticks=4,
+    n_yticks=4,
 ):
     """
     Example:

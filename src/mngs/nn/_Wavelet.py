@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-02 20:35:03 (ywatanabe)"
+# Time-stamp: "2024-04-05 12:09:22 (ywatanabe)"
 
 
 import mngs
@@ -195,6 +195,10 @@ class Wavelet(nn.Module):
         filtered_x = filtered_x.view(
             x.shape[0], x.shape[1], kernel_batched.shape[0], -1
         )
+
+        filtered_x = filtered_x[..., :seq_len]
+
+        assert filtered_x.shape[-1] == seq_len
 
         if self.out_scale == "log":
             return torch.log(filtered_x + 1e-5)

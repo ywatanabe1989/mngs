@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-02 23:32:59 (ywatanabe)"
+# Time-stamp: "2024-04-05 12:14:08 (ywatanabe)"
 
 from mngs.general import torch_fn
 
@@ -12,3 +12,11 @@ def ensure_3d(x):
     elif x.ndim == 2:  # assumes (batch_siize, seq_len)
         x = x.unsqueeze(1)
     return x
+
+
+# @torch_fn
+# def unbias(x, dim=-1, fn="mean"):
+#     if fn == "mean":
+#         return x - x.mean(dim=dim, keepdims=True)
+#     if fn == "min":
+#         return x - x.min(dim=dim, keepdims=True)[0]

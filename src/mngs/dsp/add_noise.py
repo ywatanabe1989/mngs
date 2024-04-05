@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-02 22:21:02 (ywatanabe)"
+# Time-stamp: "2024-04-05 14:19:18 (ywatanabe)"
 
 import mngs
 
@@ -54,8 +54,7 @@ def pink(x, amp=1.0, dim=-1):
 def brown(x, amp=1.0, dim=-1):
     noise = _uniform(x.shape, amp=amp)
     noise = torch.cumsum(noise, dim=dim)
-    noise = mngs.gen.unbias(noise, dim=dim)
-    noise = mngs.gen.to_1_1(noise, amp=amp, dim=dim)
+    noise = mngs.dsp.norm.minmax(noise, amp=amp, dim=dim)
     return x + noise.to(x.device)
 
 
@@ -66,8 +65,9 @@ if __name__ == "__main__":
 
     t_sec = 1
     fs = 128
-    x = torch.tensor(mngs.dsp.demo_sig(t_sec=t_sec, fs=fs))
-    t = np.linspace(0, t_sec, x.shape[-1])
+    xx, tt, fs = mngs.dsp.demo_sig(t_sec=t_sec, fs=fs)
+
+    # t = np.linspace(0, t_sec, x.shape[-1])
 
     funcs = {
         "orig": lambda x: x,
@@ -84,9 +84,9 @@ if __name__ == "__main__":
     for (k, fn), axes_row in zip(funcs.items(), axes):
         for ax in axes_row:
             if count % 2 == 0:
-                ax.plot(t, fn(x)[0, 0], label=k, c="blue")
+                ax.plot(tt, fn(xx)[0, 0], label=k, c="blue")
             else:
-                ax.plot(t, (fn(x) - x)[0, 0], label=f"{k} - orig", c="red")
+                ax.plot(tt, (fn(xx) - xx)[0, 0], label=f"{k} - orig", c="red")
             count += 1
             ax.legend(loc="upper right")
     plt.show()
