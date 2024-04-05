@@ -1,200 +1,378 @@
-./src/mngs
-├── dsp
-│   ├── demo_sig.py
-│   ├── feature_extractors.py
-│   ├── fft.py
-│   ├── filters.py
-│   ├── HilbertTransformationTorch.py
-│   ├── __init__.py
-│   ├── _load_BIDS.py
-│   ├── mne.py
-│   ├── PARAMS.py
-│   ├── referencing.py
-│   ├── sampling.py
-│   └── transform.py
-├── etc
-│   └── wait_key.py
-├── general
-│   ├── calc.py
-│   ├── _close.py
-│   ├── converters.py
-│   ├── cuda_collect_env.py
-│   ├── debug.py
-│   ├── email.py
-│   ├── __init__.py
-│   ├── latex.py
-│   ├── load.py
-│   ├── mat2py.py
-│   ├── misc.py
-│   ├── pandas.py
-│   ├── path.py
-│   ├── repro.py
-│   ├── save.py
-│   ├── _shell.py
-│   ├── _start.py
-│   ├── TimeStamper.py
-│   ├── torch.py
-│   └── _xml2dict.py
-├── gists
-│   ├── __init__.py
-│   ├── _SigMacro_processFigure_S.py
-│   └── _SigMacro_toBlue.py
-├── #__init__.py#
-├── __init__.py
-├── io
-│   ├── __init__.py
-│   ├── load.py -> ../general/load.py
-│   ├── path.py -> ../general/path.py
-│   └── save.py -> ../general/save.py
-├── linalg
-│   ├── __init__.py
-│   └── _misc.py
-├── ml
-│   ├── act
-│   │   ├── _define.py
-│   │   └── __init__.py
-│   ├── ClassificationReporter
-│   │   ├── balanced_acc.csv
-│   │   ├── clf_report.csv
-│   │   ├── conf_mat.csv
-│   │   ├── conf_mat_figs
-│   │   │   ├── fold#0.png
-│   │   │   ├── fold#1.png
-│   │   │   ├── fold#2.png
-│   │   │   ├── fold#3.png
-│   │   │   ├── fold#4.png
-│   │   │   └── k-fold_cv_overall-sum.png
-│   │   ├── manu_dfs.csv
-│   │   ├── manu_figs
-│   │   │   ├── fold#0.png
-│   │   │   ├── fold#1.png
-│   │   │   ├── fold#2.png
-│   │   │   ├── fold#3.png
-│   │   │   └── fold#4.png
-│   │   ├── manu_scalars.csv
-│   │   ├── mcc.csv
-│   │   ├── pre_rec_auc_fig
-│   │   │   ├── fold#0.png
-│   │   │   ├── fold#1.png
-│   │   │   ├── fold#2.png
-│   │   │   ├── fold#3.png
-│   │   │   └── fold#4.png
-│   │   ├── pre_rec_auc_macro.csv
-│   │   ├── pre_rec_auc_micro.csv
-│   │   ├── roc_auc_fig
-│   │   │   ├── fold#0.png
-│   │   │   ├── fold#1.png
-│   │   │   ├── fold#2.png
-│   │   │   ├── fold#3.png
-│   │   │   └── fold#4.png
-│   │   ├── roc_auc_macro.csv
-│   │   ├── roc_auc_micro.csv
-│   │   ├── stderr.log
-│   │   └── stdout.log
-│   ├── ClassificationReporter.py
-│   ├── ClassifierServer.py
-│   ├── __Classifiers.py
-│   ├── EarlyStopping.py
-│   ├── __init__.py
-│   ├── layer
-│   │   ├── __init__.py
-│   │   ├── _Pass.py
-│   │   └── _switch.py
-│   ├── LearningCurveLogger
-│   │   ├── fold#0.png
-│   │   ├── log
-│   │   │   ├── stderr.log
-│   │   │   └── stdout.log
-│   │   ├── stderr.log
-│   │   └── stdout.log
-│   ├── LearningCurveLogger.py
-│   ├── loss
-│   │   ├── __init__.py
-│   │   ├── _L1L2Losses.py
-│   │   └── MultiTaskLoss.py
-│   ├── optim
-│   │   ├── _get_set.py
-│   │   ├── __init__.py
-│   │   └── Ranger_Deep_Learning_Optimizer
-│   │       ├── __init__.py
-│   │       ├── LICENSE
-│   │       ├── ranger
-│   │       │   ├── __init__.py
-│   │       │   ├── ranger2020.py
-│   │       │   ├── ranger913A.py
-│   │       │   ├── ranger.py
-│   │       │   └── rangerqh.py
-│   │       ├── ranger-init.jpg
-│   │       ├── ranger-with-gc-options.jpg
-│   │       ├── README.md
-│   │       └── setup.py
-│   ├── plt
-│   │   ├── aucs
-│   │   │   ├── example.py
-│   │   │   ├── __init__.py
-│   │   │   ├── pre_rec_auc.py
-│   │   │   └── roc_auc.py
-│   │   ├── confusion_matrix.py
-│   │   ├── __init__.py
-│   │   └── _learning_curve.py
-│   ├── silhoute_score_block.py
-│   └── utils
-│       ├── _DefaultDataset.py
-│       ├── _format_samples_for_sktime.py
-│       ├── _get_params.py
-│       ├── __init__.py
-│       ├── _merge_labels.py
-│       ├── _sliding_window_data_augmentation.py
-│       ├── _under_sample.py
-│       └── _verify_n_gpus.py
-├── nn
-│   ├── _BNet.py
-│   ├── _BNet_Res.py
-│   ├── _ChannelGainChanger.py
-│   ├── _DropoutChannels.py
-│   ├── _FreqGainChanger.py
-│   ├── __init__.py
-│   ├── _MNet_1000.py
-│   ├── _ResNet1D.py
-│   ├── _SpatialAttention.py
-│   └── _SwapChannels.py
-├── plt
-│   ├── _add_hue.py
-│   ├── _annotated_heatmap.py
-│   ├── ax
-│   │   ├── _circular_hist.py
-│   │   ├── _extend.py
-│   │   ├── _fill_between.py
-│   │   ├── __init__.py
-│   │   ├── _map_ticks.py
-│   │   ├── _panel.py
-│   │   ├── _sci_note.py
-│   │   ├── _set_n_ticks.py
-│   │   ├── _set_pos.py
-│   │   └── _set_size.py
-│   ├── colors.py
-│   ├── _configure_mpl.py
-│   ├── _draw_a_cube.py
-│   ├── get_mpl_color.py
-│   ├── _get_RGBA_from_colormap.py
-│   ├── __init__.py
-│   ├── _mk_colorbar.py
-│   ├── _mk_patches.py
-│   └── _subplots.py
-├── resource
-│   ├── get.py
-│   ├── __init__.py
-│   └── limit_RAM.py
-└── stats
-    ├── _bonferroni_correction.py
-    ├── _brunner_munzel_test.py
-    ├── _calc_partial_corr.py
-    ├── _corr_test.py
-    ├── _fdr_correction.py
+src
+└── mngs
+    ├── dsp
+    │   ├── add_noise.py
+    │   ├── _demo_sig.py
+    │   ├── example
+    │   │   ├── chirp_1_signals.png
+    │   │   ├── chirp_2_wavelet_bandpass_filted (20 - 50 Hz).png
+    │   │   ├── chirp_2_wavelet_bandstop_filted (20 - 50 Hz).png
+    │   │   ├── chirp_2_wavelet_bandstop_gauss (sigma = 10).png
+    │   │   ├── chirp_2_wavelet_brown_noise_added.png
+    │   │   ├── chirp_2_wavelet_gaussian_noise_added.png
+    │   │   ├── chirp_2_wavelet_minmax_normed.png
+    │   │   ├── chirp_2_wavelet_orig.png
+    │   │   ├── chirp_2_wavelet_pink_noise_added.png
+    │   │   ├── chirp_2_wavelet_resampled.png
+    │   │   ├── chirp_2_wavelet_white_noise_added.png
+    │   │   ├── chirp_2_wavelet_z_normed.png
+    │   │   ├── chirp_3_psd_bandpass_filted (20 - 50 Hz).png
+    │   │   ├── chirp_3_psd_bandstop_filted (20 - 50 Hz).png
+    │   │   ├── chirp_3_psd_bandstop_gauss (sigma = 10).png
+    │   │   ├── chirp_3_psd_brown_noise_added.png
+    │   │   ├── chirp_3_psd_gaussian_noise_added.png
+    │   │   ├── chirp_3_psd_minmax_normed.png
+    │   │   ├── chirp_3_psd_orig.png
+    │   │   ├── chirp_3_psd_pink_noise_added.png
+    │   │   ├── chirp_3_psd_resampled.png
+    │   │   ├── chirp_3_psd_white_noise_added.png
+    │   │   ├── chirp_3_psd_z_normed.png
+    │   │   ├── gauss_1_signals.png
+    │   │   ├── gauss_2_wavelet_bandpass_filted (20 - 50 Hz).png
+    │   │   ├── gauss_2_wavelet_bandstop_filted (20 - 50 Hz).png
+    │   │   ├── gauss_2_wavelet_bandstop_gauss (sigma = 10).png
+    │   │   ├── gauss_2_wavelet_brown_noise_added.png
+    │   │   ├── gauss_2_wavelet_gaussian_noise_added.png
+    │   │   ├── gauss_2_wavelet_minmax_normed.png
+    │   │   ├── gauss_2_wavelet_orig.png
+    │   │   ├── gauss_2_wavelet_pink_noise_added.png
+    │   │   ├── gauss_2_wavelet_resampled.png
+    │   │   ├── gauss_2_wavelet_white_noise_added.png
+    │   │   ├── gauss_2_wavelet_z_normed.png
+    │   │   ├── gauss_3_psd_bandpass_filted (20 - 50 Hz).png
+    │   │   ├── gauss_3_psd_bandstop_filted (20 - 50 Hz).png
+    │   │   ├── gauss_3_psd_bandstop_gauss (sigma = 10).png
+    │   │   ├── gauss_3_psd_brown_noise_added.png
+    │   │   ├── gauss_3_psd_gaussian_noise_added.png
+    │   │   ├── gauss_3_psd_minmax_normed.png
+    │   │   ├── gauss_3_psd_orig.png
+    │   │   ├── gauss_3_psd_pink_noise_added.png
+    │   │   ├── gauss_3_psd_resampled.png
+    │   │   ├── gauss_3_psd_white_noise_added.png
+    │   │   ├── gauss_3_psd_z_normed.png
+    │   │   ├── meg_1_signals.png
+    │   │   ├── meg_2_wavelet_bandpass_filted (20 - 50 Hz).png
+    │   │   ├── meg_2_wavelet_bandstop_filted (20 - 50 Hz).png
+    │   │   ├── meg_2_wavelet_bandstop_gauss (sigma = 10).png
+    │   │   ├── meg_2_wavelet_brown_noise_added.png
+    │   │   ├── meg_2_wavelet_gaussian_noise_added.png
+    │   │   ├── meg_2_wavelet_minmax_normed.png
+    │   │   ├── meg_2_wavelet_orig.png
+    │   │   ├── meg_2_wavelet_pink_noise_added.png
+    │   │   ├── meg_2_wavelet_resampled.png
+    │   │   ├── meg_2_wavelet_white_noise_added.png
+    │   │   ├── meg_2_wavelet_z_normed.png
+    │   │   ├── meg_3_psd_bandpass_filted (20 - 50 Hz).png
+    │   │   ├── meg_3_psd_bandstop_filted (20 - 50 Hz).png
+    │   │   ├── meg_3_psd_bandstop_gauss (sigma = 10).png
+    │   │   ├── meg_3_psd_brown_noise_added.png
+    │   │   ├── meg_3_psd_gaussian_noise_added.png
+    │   │   ├── meg_3_psd_minmax_normed.png
+    │   │   ├── meg_3_psd_orig.png
+    │   │   ├── meg_3_psd_pink_noise_added.png
+    │   │   ├── meg_3_psd_resampled.png
+    │   │   ├── meg_3_psd_white_noise_added.png
+    │   │   ├── meg_3_psd_z_normed.png
+    │   │   ├── periodic_1_signals.png
+    │   │   ├── periodic_2_wavelet_bandpass_filted (20 - 50 Hz).png
+    │   │   ├── periodic_2_wavelet_bandstop_filted (20 - 50 Hz).png
+    │   │   ├── periodic_2_wavelet_bandstop_gauss (sigma = 10).png
+    │   │   ├── periodic_2_wavelet_brown_noise_added.png
+    │   │   ├── periodic_2_wavelet_gaussian_noise_added.png
+    │   │   ├── periodic_2_wavelet_minmax_normed.png
+    │   │   ├── periodic_2_wavelet_orig.png
+    │   │   ├── periodic_2_wavelet_pink_noise_added.png
+    │   │   ├── periodic_2_wavelet_resampled.png
+    │   │   ├── periodic_2_wavelet_white_noise_added.png
+    │   │   ├── periodic_2_wavelet_z_normed.png
+    │   │   ├── periodic_3_psd_bandpass_filted (20 - 50 Hz).png
+    │   │   ├── periodic_3_psd_bandstop_filted (20 - 50 Hz).png
+    │   │   ├── periodic_3_psd_bandstop_gauss (sigma = 10).png
+    │   │   ├── periodic_3_psd_brown_noise_added.png
+    │   │   ├── periodic_3_psd_gaussian_noise_added.png
+    │   │   ├── periodic_3_psd_minmax_normed.png
+    │   │   ├── periodic_3_psd_orig.png
+    │   │   ├── periodic_3_psd_pink_noise_added.png
+    │   │   ├── periodic_3_psd_resampled.png
+    │   │   ├── periodic_3_psd_white_noise_added.png
+    │   │   ├── periodic_3_psd_z_normed.png
+    │   │   ├── ripple_1_signals.png
+    │   │   ├── ripple_2_wavelet_bandpass_filted (20 - 50 Hz).png
+    │   │   ├── ripple_2_wavelet_bandstop_filted (20 - 50 Hz).png
+    │   │   ├── ripple_2_wavelet_bandstop_gauss (sigma = 10).png
+    │   │   ├── ripple_2_wavelet_brown_noise_added.png
+    │   │   ├── ripple_2_wavelet_gaussian_noise_added.png
+    │   │   ├── ripple_2_wavelet_minmax_normed.png
+    │   │   ├── ripple_2_wavelet_orig.png
+    │   │   ├── ripple_2_wavelet_pink_noise_added.png
+    │   │   ├── ripple_2_wavelet_resampled.png
+    │   │   ├── ripple_2_wavelet_white_noise_added.png
+    │   │   ├── ripple_2_wavelet_z_normed.png
+    │   │   ├── ripple_3_psd_bandpass_filted (20 - 50 Hz).png
+    │   │   ├── ripple_3_psd_bandstop_filted (20 - 50 Hz).png
+    │   │   ├── ripple_3_psd_bandstop_gauss (sigma = 10).png
+    │   │   ├── ripple_3_psd_brown_noise_added.png
+    │   │   ├── ripple_3_psd_gaussian_noise_added.png
+    │   │   ├── ripple_3_psd_minmax_normed.png
+    │   │   ├── ripple_3_psd_orig.png
+    │   │   ├── ripple_3_psd_pink_noise_added.png
+    │   │   ├── ripple_3_psd_resampled.png
+    │   │   ├── ripple_3_psd_white_noise_added.png
+    │   │   ├── ripple_3_psd_z_normed.png
+    │   │   ├── uniform_1_signals.png
+    │   │   ├── uniform_2_wavelet_bandpass_filted (20 - 50 Hz).png
+    │   │   ├── uniform_2_wavelet_bandstop_filted (20 - 50 Hz).png
+    │   │   ├── uniform_2_wavelet_bandstop_gauss (sigma = 10).png
+    │   │   ├── uniform_2_wavelet_brown_noise_added.png
+    │   │   ├── uniform_2_wavelet_gaussian_noise_added.png
+    │   │   ├── uniform_2_wavelet_minmax_normed.png
+    │   │   ├── uniform_2_wavelet_orig.png
+    │   │   ├── uniform_2_wavelet_pink_noise_added.png
+    │   │   ├── uniform_2_wavelet_resampled.png
+    │   │   ├── uniform_2_wavelet_white_noise_added.png
+    │   │   ├── uniform_2_wavelet_z_normed.png
+    │   │   ├── uniform_3_psd_bandpass_filted (20 - 50 Hz).png
+    │   │   ├── uniform_3_psd_bandstop_filted (20 - 50 Hz).png
+    │   │   ├── uniform_3_psd_bandstop_gauss (sigma = 10).png
+    │   │   ├── uniform_3_psd_brown_noise_added.png
+    │   │   ├── uniform_3_psd_gaussian_noise_added.png
+    │   │   ├── uniform_3_psd_minmax_normed.png
+    │   │   ├── uniform_3_psd_orig.png
+    │   │   ├── uniform_3_psd_pink_noise_added.png
+    │   │   ├── uniform_3_psd_resampled.png
+    │   │   ├── uniform_3_psd_white_noise_added.png
+    │   │   └── uniform_3_psd_z_normed.png
+    │   ├── example.py
+    │   ├── filt.py
+    │   ├── _hilbert.py
+    │   ├── __init__.py
+    │   ├── _misc.py
+    │   ├── _mne.py
+    │   ├── nn -> ../nn
+    │   ├── norm.py
+    │   ├── not_confirmed
+    │   │   ├── fft.py
+    │   │   ├── _load_BIDS.py
+    │   │   └── sampling.py
+    │   ├── PARAMS.py
+    │   ├── _psd.py
+    │   ├── ref.py
+    │   ├── _resample.py
+    │   ├── _transform.py
+    │   └── _wavelet.py
+    ├── etc
+    │   └── wait_key.py
+    ├── general
+    │   ├── _close.py
+    │   ├── _converters.py
+    │   ├── cuda_collect_env.py
+    │   ├── debug.py
+    │   ├── email.py
+    │   ├── __init__.py
+    │   ├── latex.py
+    │   ├── load.py
+    │   ├── mat2py.py
+    │   ├── misc.py
+    │   ├── _norm.py
+    │   ├── pandas.py
+    │   ├── path.py
+    │   ├── repro.py
+    │   ├── save.py
+    │   ├── _shell.py
+    │   ├── _start.py
+    │   ├── TimeStamper.py
+    │   ├── torch.py
+    │   └── _xml2dict.py
+    ├── gists
+    │   ├── __init__.py
+    │   ├── _SigMacro_processFigure_S.py
+    │   └── _SigMacro_toBlue.py
     ├── __init__.py
-    ├── _multicompair.py
-    ├── _nocorrelation_test.py
-    ├── _smirnov_grubbs.py
-    └── _to_asterisks.py
+    ├── io
+    │   ├── __init__.py
+    │   ├── load.py -> ../general/load.py
+    │   ├── path.py -> ../general/path.py
+    │   └── save.py -> ../general/save.py
+    ├── linalg
+    │   ├── __init__.py
+    │   └── _misc.py
+    ├── ml
+    │   ├── act
+    │   │   ├── _define.py
+    │   │   └── __init__.py
+    │   ├── ClassificationReporter
+    │   │   ├── balanced_acc.csv
+    │   │   ├── clf_report.csv
+    │   │   ├── conf_mat.csv
+    │   │   ├── conf_mat_figs
+    │   │   │   ├── fold#0.png
+    │   │   │   ├── fold#1.png
+    │   │   │   ├── fold#2.png
+    │   │   │   ├── fold#3.png
+    │   │   │   ├── fold#4.png
+    │   │   │   └── k-fold_cv_overall-sum.png
+    │   │   ├── manu_dfs.csv
+    │   │   ├── manu_figs
+    │   │   │   ├── fold#0.png
+    │   │   │   ├── fold#1.png
+    │   │   │   ├── fold#2.png
+    │   │   │   ├── fold#3.png
+    │   │   │   └── fold#4.png
+    │   │   ├── manu_scalars.csv
+    │   │   ├── mcc.csv
+    │   │   ├── pre_rec_auc_fig
+    │   │   │   ├── fold#0.png
+    │   │   │   ├── fold#1.png
+    │   │   │   ├── fold#2.png
+    │   │   │   ├── fold#3.png
+    │   │   │   └── fold#4.png
+    │   │   ├── pre_rec_auc_macro.csv
+    │   │   ├── pre_rec_auc_micro.csv
+    │   │   ├── roc_auc_fig
+    │   │   │   ├── fold#0.png
+    │   │   │   ├── fold#1.png
+    │   │   │   ├── fold#2.png
+    │   │   │   ├── fold#3.png
+    │   │   │   └── fold#4.png
+    │   │   ├── roc_auc_macro.csv
+    │   │   ├── roc_auc_micro.csv
+    │   │   ├── stderr.log
+    │   │   └── stdout.log
+    │   ├── ClassificationReporter.py
+    │   ├── ClassifierServer.py
+    │   ├── __Classifiers.py
+    │   ├── clustering
+    │   │   ├── __init__.py
+    │   │   ├── _umap.py
+    │   │   └── _UMAP.py
+    │   ├── EarlyStopping.py
+    │   ├── __init__.py
+    │   ├── layer
+    │   │   ├── __init__.py
+    │   │   ├── _Pass.py
+    │   │   └── _switch.py
+    │   ├── LearningCurveLogger
+    │   │   ├── fold#0.png
+    │   │   ├── log
+    │   │   │   ├── stderr.log
+    │   │   │   └── stdout.log
+    │   │   ├── stderr.log
+    │   │   └── stdout.log
+    │   ├── LearningCurveLogger.py
+    │   ├── loss
+    │   │   ├── __init__.py
+    │   │   ├── _L1L2Losses.py
+    │   │   └── MultiTaskLoss.py
+    │   ├── metrics
+    │   │   ├── _bACC.py
+    │   │   └── __init__.py
+    │   ├── optim
+    │   │   ├── _get_set.py
+    │   │   ├── __init__.py
+    │   │   └── Ranger_Deep_Learning_Optimizer
+    │   │       ├── __init__.py
+    │   │       ├── LICENSE
+    │   │       ├── ranger
+    │   │       │   ├── __init__.py
+    │   │       │   ├── ranger2020.py
+    │   │       │   ├── ranger913A.py
+    │   │       │   ├── ranger.py
+    │   │       │   └── rangerqh.py
+    │   │       ├── ranger-init.jpg
+    │   │       ├── ranger-with-gc-options.jpg
+    │   │       ├── README.md
+    │   │       └── setup.py
+    │   ├── plt
+    │   │   ├── aucs
+    │   │   │   ├── example.py
+    │   │   │   ├── __init__.py
+    │   │   │   ├── pre_rec_auc.py
+    │   │   │   └── roc_auc.py
+    │   │   ├── _conf_mat.py
+    │   │   ├── __init__.py
+    │   │   ├── _learning_curve.py
+    │   │   └── _optuna_study.py
+    │   ├── silhoute_score_block.py
+    │   ├── sk
+    │   │   ├── _clf.py
+    │   │   ├── __init__.py
+    │   │   └── _to_sktime.py
+    │   └── utils
+    │       ├── _check_params.py
+    │       ├── _DefaultDataset.py
+    │       ├── _format_samples_for_sktime.py
+    │       ├── __init__.py
+    │       ├── _LabelEncoder.py
+    │       ├── _merge_labels.py
+    │       ├── _sliding_window_data_augmentation.py
+    │       ├── _under_sample.py
+    │       └── _verify_n_gpus.py
+    ├── mngs -> /home/ywatanabe/proj/mngs
+    ├── nn
+    │   ├── _AxiswiseDropout.py
+    │   ├── _BNet.py
+    │   ├── _BNet_Res.py
+    │   ├── _ChannelGainChanger.py
+    │   ├── _DropoutChannels.py
+    │   ├── _Filters.py
+    │   ├── _FreqGainChanger.py
+    │   ├── _GaussianFilter.py
+    │   ├── _Hilbert.py
+    │   ├── __init__.py
+    │   ├── _MNet_1000.py
+    │   ├── _PSD.py
+    │   ├── _ResNet1D.py
+    │   ├── _SpatialAttention.py
+    │   ├── _Spectrogram.py
+    │   ├── _SwapChannels.py
+    │   ├── _TransposeLayer.py
+    │   └── _Wavelet.py
+    ├── os
+    │   ├── __init__.py
+    │   └── _mv.py
+    ├── plt
+    │   ├── _add_hue.py
+    │   ├── _annotated_heatmap.py
+    │   ├── ax
+    │   │   ├── _circular_hist.py
+    │   │   ├── _extend.py
+    │   │   ├── _fill_between.py
+    │   │   ├── _hide_spines.py
+    │   │   ├── __init__.py
+    │   │   ├── _map_ticks.py
+    │   │   ├── _panel.py
+    │   │   ├── _sci_note.py
+    │   │   ├── _set_n_ticks.py
+    │   │   ├── _set_pos.py
+    │   │   └── _set_size.py
+    │   ├── colors.py
+    │   ├── _configure_mpl.py
+    │   ├── _draw_a_cube.py
+    │   ├── get_mpl_color.py
+    │   ├── _get_RGBA_from_colormap.py
+    │   ├── __init__.py
+    │   ├── _mk_colorbar.py
+    │   ├── _mk_patches.py
+    │   ├── _subplots.py
+    │   └── _tpl.py
+    ├── resource
+    │   ├── get.py
+    │   ├── __init__.py
+    │   └── limit_RAM.py
+    ├── stats
+    │   ├── _bonferroni_correction.py
+    │   ├── _brunner_munzel_test.py
+    │   ├── _calc_partial_corr.py
+    │   ├── _corr_test.py
+    │   ├── _fdr_correction.py
+    │   ├── _general.py
+    │   ├── __init__.py
+    │   ├── _multicompair.py
+    │   ├── _nocorrelation_test.py
+    │   ├── _smirnov_grubbs.py
+    │   └── _to_asterisks.py
+    └── torch
+        ├── _apply_to.py
+        └── __init__.py
 
-28 directories, 169 files
+38 directories, 337 files

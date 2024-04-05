@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-03-08 02:07:41 (ywatanabe)"
+# Time-stamp: "2024-04-05 17:07:26 (ywatanabe)"
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -38,10 +38,13 @@ def configure_mpl(
     font_size_legend=6,
     # Hide spines
     hide_top_right_spines=True,
+    # line
+    line_width=0.1,
     # Color transparency
     alpha=0.75,
     # Whether to print configurations or not
-    show=True,
+    verbose=False,
+    **kwargs,
 ):
     """
     Configures Matplotlib and Seaborn settings for publication-quality plots.
@@ -93,7 +96,7 @@ def configure_mpl(
         alpha (float, optional):
             Color transparency. Defaults to 0.75.
 
-        show (bool, optional):
+        verbose (bool, optional):
             If True, prints the configuration settings. Defaults to True.
 
     Returns:
@@ -145,10 +148,12 @@ def configure_mpl(
             "axes.spines.right": not hide_top_right_spines,
             # Custom color cycle
             "axes.prop_cycle": plt.cycler(color=COLORS_RGBA_NORM.values()),
+            # Line
+            "lines.linewidth": line_width,
         }
     )
 
-    if show:
+    if verbose:
         print("\n" + "-" * 40)
         print("Matplotlib has been configured as follows:\n")
         print(f"Figure DPI (Display): {dpi_display} DPI")
