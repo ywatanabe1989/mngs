@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-05 16:12:58 (ywatanabe)"
+# Time-stamp: "2024-04-05 17:19:43 (ywatanabe)"
 
-try:
-    import mngs
-except ImportError:
-    !pip uninstall mngs -y
-    !pip install -U git+https://github.com/ywatanabe1989/mngs.git@develop
-finally:
-    import mngs
+import matplotlib
 
+# try:
+#     import mngs
+# except ImportError:
+#     !pip uninstall mngs -y
+#     !pip install -U git+https://github.com/ywatanabe1989/mngs.git@develop
+# finally:
+#     import mngs
+import mngs
+
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-import panda as pd
+import pandas as pd
 
 
 # Functions
@@ -69,7 +73,6 @@ def calc_norm_resample_filt_hilbert(xx, tt, fs, sig_type, verbose=True):
 
 
 def plot_signals(plt, sigs, sig_type):
-    plt, CC = mngs.plt.configure_mpl(plt, fig_scale=3)
     fig, axes = plt.subplots(nrows=len(sigs.columns), sharex=True)
 
     i_batch = 0
@@ -113,7 +116,6 @@ def plot_signals(plt, sigs, sig_type):
 
 
 def plot_wavelet(plt, sigs, sig_col, sig_type):
-    plt, CC = mngs.plt.configure_mpl(plt, fig_scale=3)
 
     xx, tt, fs = sigs[sig_col]
 
@@ -157,7 +159,6 @@ def plot_wavelet(plt, sigs, sig_col, sig_type):
 
 
 def plot_psd(plt, sigs, sig_col, sig_type):
-    plt, CC = mngs.plt.configure_mpl(plt, fig_scale=3)
 
     xx, tt, fs = sigs[sig_col]
 
@@ -193,7 +194,8 @@ def plot_psd(plt, sigs, sig_col, sig_type):
 
     return fig
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     # Parameters
     T_SEC = 4
     SIG_TYPES = ["uniform", "gauss", "periodic", "chirp", "ripple", "meg"]
@@ -204,6 +206,7 @@ if __name__ == '__main__':
     HIGH_HZ = 50
     SIGMA = 10
 
+    plt, CC = mngs.plt.configure_mpl(plt, fig_scale=10)
 
     for sig_type in SIG_TYPES:
         # Demo Signal
@@ -216,6 +219,7 @@ if __name__ == '__main__':
 
         # Plots signals
         fig = plot_signals(plt, sigs, sig_type)
+        mngs.io.save(fig, f"{sig_type}_1_signals.png")
 
         # Plots wavelet coefficients and PSD
         for sig_col in sigs.columns:
@@ -223,7 +227,14 @@ if __name__ == '__main__':
             if "hilbert" in sig_col:
                 continue
 
-            fig_wavelet = plot_wavelet(plt, sigs, sig_col, sig_type)
-            fig_psd = plot_psd(plt, sigs, sig_col, sig_type)
+            fig = plot_wavelet(plt, sigs, sig_col, sig_type)
+            mngs.io.save(fig, f"{sig_type}_2_wavelet_{sig_col}.png")
 
-    plt.show()
+            fig = plot_psd(plt, sigs, sig_col, sig_type)
+            mngs.io.save(fig, f"{sig_type}_3_psd_{sig_col}.png")
+
+    # plt.show()
+
+    """
+    python /home/ywatanabe/proj/entrance/mngs/dsp/example.py
+    """

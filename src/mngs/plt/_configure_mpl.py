@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-05 16:14:53 (ywatanabe)"
+# Time-stamp: "2024-04-05 17:07:26 (ywatanabe)"
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -38,6 +38,8 @@ def configure_mpl(
     font_size_legend=6,
     # Hide spines
     hide_top_right_spines=True,
+    # line
+    line_width=0.1,
     # Color transparency
     alpha=0.75,
     # Whether to print configurations or not
@@ -146,6 +148,8 @@ def configure_mpl(
             "axes.spines.right": not hide_top_right_spines,
             # Custom color cycle
             "axes.prop_cycle": plt.cycler(color=COLORS_RGBA_NORM.values()),
+            # Line
+            "lines.linewidth": line_width,
         }
     )
 
