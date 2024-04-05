@@ -1,8 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-05 16:05:02 (ywatanabe)"
+# Time-stamp: "2024-04-05 16:12:58 (ywatanabe)"
+
+try:
+    import mngs
+except ImportError:
+    !pip uninstall mngs -y
+    !pip install -U git+https://github.com/ywatanabe1989/mngs.git@develop
+finally:
+    import mngs
 
 import matplotlib.pyplot as plt
+import panda as pd
 
 
 # Functions
@@ -184,37 +193,37 @@ def plot_psd(plt, sigs, sig_col, sig_type):
 
     return fig
 
+if __name__ == '__main__':
+    # Parameters
+    T_SEC = 4
+    SIG_TYPES = ["uniform", "gauss", "periodic", "chirp", "ripple", "meg"]
+    SRC_FS = 1024
+    TGT_FS = 512
+    FREQS_HZ = [10, 30, 100]
+    LOW_HZ = 20
+    HIGH_HZ = 50
+    SIGMA = 10
 
-# Parameters
-T_SEC = 4
-SIG_TYPES = ["uniform", "gauss", "periodic", "chirp", "ripple", "meg"]
-SRC_FS = 1024
-TGT_FS = 512
-FREQS_HZ = [10, 30, 100]
-LOW_HZ = 20
-HIGH_HZ = 50
-SIGMA = 10
 
+    for sig_type in SIG_TYPES:
+        # Demo Signal
+        xx, tt, fs = mngs.dsp.demo_sig(
+            t_sec=T_SEC, fs=SRC_FS, freqs_hz=FREQS_HZ, sig_type=sig_type
+        )
 
-for sig_type in SIG_TYPES:
-    # Demo Signal
-    xx, tt, fs = mngs.dsp.demo_sig(
-        t_sec=T_SEC, fs=SRC_FS, freqs_hz=FREQS_HZ, sig_type=sig_type
-    )
+        # Apply calculations on the original signal
+        sigs = calc_norm_resample_filt_hilbert(xx, tt, fs, sig_type)
 
-    # Apply calculations on the original signal
-    sigs = calc_norm_resample_filt_hilbert(xx, tt, fs, sig_type)
+        # Plots signals
+        fig = plot_signals(plt, sigs, sig_type)
 
-    # Plots signals
-    fig = plot_signals(plt, sigs, sig_type)
+        # Plots wavelet coefficients and PSD
+        for sig_col in sigs.columns:
 
-    # Plots wavelet coefficients and PSD
-    for sig_col in sigs.columns:
+            if "hilbert" in sig_col:
+                continue
 
-        if "hilbert" in sig_col:
-            continue
+            fig_wavelet = plot_wavelet(plt, sigs, sig_col, sig_type)
+            fig_psd = plot_psd(plt, sigs, sig_col, sig_type)
 
-        fig_wavelet = plot_wavelet(plt, sigs, sig_col, sig_type)
-        fig_psd = plot_psd(plt, sigs, sig_col, sig_type)
-
-plt.show()
+    plt.show()
