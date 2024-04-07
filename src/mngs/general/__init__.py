@@ -3,6 +3,7 @@
 # from .path import find_the_git_root_dir, get_this_fpath, mk_spath, split_fpath
 # from .load import get_data_path_from_a_package, load
 # from .save import is_listed_X, save, save_listed_dfs_as_csv, save_listed_scalars_as_csv
+# from .debug import *
 from ..io.__init__ import *
 from ._close import close
 from ._converters import (
@@ -13,11 +14,12 @@ from ._converters import (
     torch_fn,
     unsqueeze_if,
 )
+from ._cuda_collect_env import main as cuda_collect_env
 from ._norm import to_z
+from ._reload import reload
 from ._shell import run_shellcommand, run_shellscript
 from ._start import start
-from .cuda_collect_env import main as cuda_collect_env
-from .debug import *
+from ._TimeStamper import TimeStamper
 from .email import notify, send_gmail
 from .latex import add_hat_in_the_latex_style, to_the_latex_style
 from .mat2py import *
@@ -63,5 +65,4 @@ from .pandas import (
     merge_columns,
 )
 from .repro import *
-from .TimeStamper import *
 from .torch import *

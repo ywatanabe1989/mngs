@@ -1,17 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-05 17:19:43 (ywatanabe)"
+# Time-stamp: "2024-04-06 01:36:18 (ywatanabe)"
 
 import matplotlib
-
-# try:
-#     import mngs
-# except ImportError:
-#     !pip uninstall mngs -y
-#     !pip install -U git+https://github.com/ywatanabe1989/mngs.git@develop
-# finally:
-#     import mngs
-import mngs
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -21,6 +12,10 @@ import pandas as pd
 # Functions
 def calc_norm_resample_filt_hilbert(xx, tt, fs, sig_type, verbose=True):
     sigs = {"index": ("signal", "time", "fs")}  # Collector
+
+    if sig_type == "tensorpac":
+        xx = xx[:, :, 0]
+
     sigs[f"orig"] = (xx, tt, fs)
 
     # Normalization
@@ -90,6 +85,9 @@ def plot_signals(plt, sigs, sig_type):
 
         # Main
         xx, tt, fs = sigs[col]
+        # if sig_type == "tensorpac":
+        #     xx = xx[:, :, 0]
+
         try:
             ax.plot(
                 tt,
@@ -118,6 +116,8 @@ def plot_signals(plt, sigs, sig_type):
 def plot_wavelet(plt, sigs, sig_col, sig_type):
 
     xx, tt, fs = sigs[sig_col]
+    # if sig_type == "tensorpac":
+    #     xx = xx[:, :, 0]
 
     # Wavelet Transformation
     wavelet_coef, ff_ww = mngs.dsp.wavelet(xx, fs)
@@ -162,6 +162,9 @@ def plot_psd(plt, sigs, sig_col, sig_type):
 
     xx, tt, fs = sigs[sig_col]
 
+    # if sig_type == "tensorpac":
+    #     xx = xx[:, :, 0]
+
     # Power Spetrum Density
     psd, ff_pp = mngs.dsp.psd(xx, fs)
 
@@ -196,9 +199,19 @@ def plot_psd(plt, sigs, sig_col, sig_type):
 
 
 if __name__ == "__main__":
+    import mngs
+
     # Parameters
     T_SEC = 4
-    SIG_TYPES = ["uniform", "gauss", "periodic", "chirp", "ripple", "meg"]
+    SIG_TYPES = [
+        # "uniform",
+        # "gauss",
+        # "periodic",
+        # "chirp",
+        # "ripple",
+        # "meg",
+        "tensorpac",
+    ]
     SRC_FS = 1024
     TGT_FS = 512
     FREQS_HZ = [10, 30, 100]
@@ -207,6 +220,7 @@ if __name__ == "__main__":
     SIGMA = 10
 
     plt, CC = mngs.plt.configure_mpl(plt, fig_scale=10)
+    sdir = "/home/ywatanabe/proj/entrance/mngs/dsp/example/"
 
     for sig_type in SIG_TYPES:
         # Demo Signal
@@ -219,7 +233,7 @@ if __name__ == "__main__":
 
         # Plots signals
         fig = plot_signals(plt, sigs, sig_type)
-        mngs.io.save(fig, f"{sig_type}_1_signals.png")
+        mngs.io.save(fig, sdir + f"{sig_type}/1_signals.png")
 
         # Plots wavelet coefficients and PSD
         for sig_col in sigs.columns:
@@ -228,13 +242,13 @@ if __name__ == "__main__":
                 continue
 
             fig = plot_wavelet(plt, sigs, sig_col, sig_type)
-            mngs.io.save(fig, f"{sig_type}_2_wavelet_{sig_col}.png")
+            mngs.io.save(fig, sdir + f"{sig_type}/2_wavelet_{sig_col}.png")
 
             fig = plot_psd(plt, sigs, sig_col, sig_type)
-            mngs.io.save(fig, f"{sig_type}_3_psd_{sig_col}.png")
+            mngs.io.save(fig, sdir + f"{sig_type}/3_psd_{sig_col}.png")
 
     # plt.show()
 
     """
-    python /home/ywatanabe/proj/entrance/mngs/dsp/example.py
+    python ./dsp/example.py
     """

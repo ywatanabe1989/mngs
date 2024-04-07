@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-04 13:22:40 (ywatanabe)"#!/usr/bin/env python3
+# Time-stamp: "2024-04-07 21:54:06 (ywatanabe)"#!/usr/bin/env python3
 
 import warnings
 from functools import wraps
@@ -214,11 +214,8 @@ def numpy_fn(func):
         # Reverts to the original data type
         if not is_torch_input:
             return results
-        elif is_torch_input:
-            if not is_cuda_input:
-                return to_torch(results, return_fn=return_if, device=device)[0]
-            elif is_cuda_input:
-                return to_torch(results, return_fn=return_if, device=device)[0]
+        else:
+            return to_torch(results, return_fn=return_if, device=device)[0][0]
 
     return wrapper
 

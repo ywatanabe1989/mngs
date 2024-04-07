@@ -20,4 +20,7 @@ def set_n_ticks(
     if n_yticks is not None:
         ax.yaxis.set_major_locator(matplotlib.ticker.MaxNLocator(n_yticks))
 
+    # Force the figure to redraw to reflect changes
+    ax.figure.canvas.draw()
+
     return ax

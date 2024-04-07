@@ -41,3 +41,7 @@ umap-learn
 wheel
 xmltodict
 sktime
+tensorpac
+ipython==8.0.0
+ipdb
+plotly
