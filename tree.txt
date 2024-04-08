@@ -119,6 +119,30 @@ src
     │   │   ├── ripple_3_psd_resampled.png
     │   │   ├── ripple_3_psd_white_noise_added.png
     │   │   ├── ripple_3_psd_z_normed.png
+    │   │   ├── tensorpac
+    │   │   │   ├── 1_signals.png
+    │   │   │   ├── 2_wavelet_bandpass_filted (20 - 50 Hz).png
+    │   │   │   ├── 2_wavelet_bandstop_filted (20 - 50 Hz).png
+    │   │   │   ├── 2_wavelet_bandstop_gauss (sigma = 10).png
+    │   │   │   ├── 2_wavelet_brown_noise_added.png
+    │   │   │   ├── 2_wavelet_gaussian_noise_added.png
+    │   │   │   ├── 2_wavelet_minmax_normed.png
+    │   │   │   ├── 2_wavelet_orig.png
+    │   │   │   ├── 2_wavelet_pink_noise_added.png
+    │   │   │   ├── 2_wavelet_resampled.png
+    │   │   │   ├── 2_wavelet_white_noise_added.png
+    │   │   │   ├── 2_wavelet_z_normed.png
+    │   │   │   ├── 3_psd_bandpass_filted (20 - 50 Hz).png
+    │   │   │   ├── 3_psd_bandstop_filted (20 - 50 Hz).png
+    │   │   │   ├── 3_psd_bandstop_gauss (sigma = 10).png
+    │   │   │   ├── 3_psd_brown_noise_added.png
+    │   │   │   ├── 3_psd_gaussian_noise_added.png
+    │   │   │   ├── 3_psd_minmax_normed.png
+    │   │   │   ├── 3_psd_orig.png
+    │   │   │   ├── 3_psd_pink_noise_added.png
+    │   │   │   ├── 3_psd_resampled.png
+    │   │   │   ├── 3_psd_white_noise_added.png
+    │   │   │   └── 3_psd_z_normed.png
     │   │   ├── uniform_1_signals.png
     │   │   ├── uniform_2_wavelet_bandpass_filted (20 - 50 Hz).png
     │   │   ├── uniform_2_wavelet_bandstop_filted (20 - 50 Hz).png
@@ -144,16 +168,20 @@ src
     │   │   └── uniform_3_psd_z_normed.png
     │   ├── example.py
     │   ├── filt.py
+    │   ├── fx
+    │   │   └── __init__.py
     │   ├── _hilbert.py
     │   ├── __init__.py
     │   ├── _misc.py
     │   ├── _mne.py
+    │   ├── _modulation_index.py
     │   ├── nn -> ../nn
     │   ├── norm.py
     │   ├── not_confirmed
     │   │   ├── fft.py
     │   │   ├── _load_BIDS.py
     │   │   └── sampling.py
+    │   ├── _pac.py
     │   ├── PARAMS.py
     │   ├── _psd.py
     │   ├── ref.py
@@ -165,8 +193,7 @@ src
     ├── general
     │   ├── _close.py
     │   ├── _converters.py
-    │   ├── cuda_collect_env.py
-    │   ├── debug.py
+    │   ├── _cuda_collect_env.py
     │   ├── email.py
     │   ├── __init__.py
     │   ├── latex.py
@@ -176,11 +203,12 @@ src
     │   ├── _norm.py
     │   ├── pandas.py
     │   ├── path.py
+    │   ├── _reload.py
     │   ├── repro.py
     │   ├── save.py
     │   ├── _shell.py
     │   ├── _start.py
-    │   ├── TimeStamper.py
+    │   ├── _TimeStamper.py
     │   ├── torch.py
     │   └── _xml2dict.py
     ├── gists
@@ -320,6 +348,9 @@ src
     │   ├── _Hilbert.py
     │   ├── __init__.py
     │   ├── _MNet_1000.py
+    │   ├── _ModulationIndex.py
+    │   ├── _PAC.py
+    │   ├── _PAC_working.py
     │   ├── _PSD.py
     │   ├── _ResNet1D.py
     │   ├── _SpatialAttention.py
@@ -344,7 +375,8 @@ src
     │   │   ├── _sci_note.py
     │   │   ├── _set_n_ticks.py
     │   │   ├── _set_pos.py
-    │   │   └── _set_size.py
+    │   │   ├── _set_size.py
+    │   │   └── _set_ticks.py
     │   ├── colors.py
     │   ├── _configure_mpl.py
     │   ├── _draw_a_cube.py
@@ -375,4 +407,4 @@ src
         ├── _apply_to.py
         └── __init__.py
 
-38 directories, 337 files
+40 directories, 367 files

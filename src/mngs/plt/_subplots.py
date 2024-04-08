@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-08 11:23:37 (ywatanabe)"
+# Time-stamp: "2024-04-09 00:14:37 (ywatanabe)"
 
 from collections import OrderedDict
 
@@ -9,11 +9,10 @@ import mngs
 import numpy as np
 import pandas as pd
 
-
-def set_n_ticks(axis, n_xticks=4, n_yticks=4):
-    axis.xaxis.set_major_locator(plt.MaxNLocator(n_xticks))
-    axis.yaxis.set_major_locator(plt.MaxNLocator(n_yticks))
-    return axis
+# def set_n_ticks(axis, n_xticks=4, n_yticks=4):
+#     axis.xaxis.set_major_locator(plt.MaxNLocator(n_xticks))
+#     axis.yaxis.set_major_locator(plt.MaxNLocator(n_yticks))
+#     return axis
 
 
 class SubplotsManager:
@@ -153,7 +152,7 @@ class AxisDataCollector:
 
                 # Apply set_n_ticks after the plotting method is called
                 if attr in ["plot", "scatter", "bar", "boxplot"]:
-                    set_n_ticks(
+                    mngs.plt.ax.set_n_ticks(
                         self.axis, n_xticks=n_xticks, n_yticks=n_yticks
                     )
 
@@ -213,12 +212,21 @@ class AxisDataCollector:
         track=True,
         cbar_label=None,
         cmap="viridis",
+        vmin=None,
+        vmax=None,
     ):
-        # Call the original ax.imshow() method
-        arr_2d = arr_2d.T  # Transpose the array to match imshow's expectations
-        im = self.axis.imshow(arr_2d, cmap=cmap)
+        """
+        Imshows an two-dimensional array with theese two conditions:
+        1) The first dimension represents the x dim, from left to right.
+        2) The second dimension represents the y dim, from bottom to top
+        """
 
-        # Create a colorbar
+        assert arr_2d.ndim == 2
+
+        # Cals the original ax.imshow() method on the transposed array
+        im = self.axis.imshow(arr_2d.T, cmap=cmap, vmin=vmin, vmax=vmax)
+
+        # Creates a colorbar
         fig = self.axis.get_figure()
         cbar = fig.colorbar(im, ax=self.axis)
         if cbar_label:
