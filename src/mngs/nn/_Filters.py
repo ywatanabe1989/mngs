@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-05 13:45:11 (ywatanabe)"
+# Time-stamp: "2024-04-08 04:06:50 (ywatanabe)"
 
 import math
 import warnings
 
 import mngs
 import numpy as np
-import pywt
 import seaborn as sns
 import torch
 import torch.nn as nn
@@ -66,10 +65,12 @@ class BaseFilter1D(nn.Module):
 
         assert x.shape == x_filted_extended.shape
 
-        # Remove edges
-        x_filted_extended[..., : self.radius] *= 0
-        x_filted_extended[..., -self.radius :] *= 0
+        # # Remove edges
+        # x_filted_extended[..., : self.radius] *= 0
+        # x_filted_extended[..., -self.radius :] *= 0
 
+        nn_remove = x_filted_extended.shape[-1] // 4
+        x_filted_extended = x_filted_extended[..., nn_remove:-nn_remove]
         return x_filted_extended
 
 

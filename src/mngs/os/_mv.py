@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-03-02 21:35:41 (ywatanabe)"
+# Time-stamp: "2024-04-06 09:00:45 (ywatanabe)"
 
-import os
-import shutil
+# import os
+# import shutil
 
 # def mv(src, tgt):
 #     successful = True
@@ -36,6 +36,9 @@ import shutil
 
 
 def mv(src, tgt):
+    import os
+    import shutil
+
     successful = True
     os.makedirs(tgt, exist_ok=True)
 

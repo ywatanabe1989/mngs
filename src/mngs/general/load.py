@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 
 import json
-import logging
 import os
 import pickle
 import warnings
 from glob import glob
 
 import h5py
-import joblib  # [REVISED]
+import joblib
 import mne
 import mngs
 import numpy as np
@@ -27,6 +26,8 @@ if "general" in __file__:
 
 
 def load(lpath, show=False, **kwargs):
+    import logging
+
     try:
         extension = "." + lpath.split(".")[-1]  # [REVISED]
 

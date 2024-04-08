@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-05 16:01:37 (ywatanabe)"
+# Time-stamp: "2024-04-08 11:35:43 (ywatanabe)"
 
 import random
 import warnings
 
 import mne
+import mngs
 import numpy as np
 from mne import Epochs, compute_covariance, find_events, make_ad_hoc_cov
 from mne.datasets import sample
@@ -18,6 +19,32 @@ from mne.simulation import (
 )
 from ripple_detection.simulate import simulate_LFP, simulate_time
 from scipy.signal import chirp
+from tensorpac.signals import pac_signals_wavelet
+
+
+def _demo_sig_tensorpac(
+    batch_size=8,
+    n_chs=19,
+    t_sec=4,
+    fs=512,
+    f_pha=10,
+    f_amp=100,
+    noise=0.8,
+    n_segments=20,
+    verbose=False,
+):
+    n_times = int(t_sec * fs)
+    x_2d, tt = pac_signals_wavelet(
+        sf=fs,
+        f_pha=f_pha,
+        f_amp=f_amp,
+        noise=noise,
+        n_epochs=n_segments,
+        n_times=n_times,
+    )
+    x_3d = np.stack([x_2d for _ in range(batch_size)], axis=0)
+    x_4d = np.stack([x_3d for _ in range(n_chs)], axis=1)
+    return x_4d, tt
 
 
 def demo_sig(
@@ -37,6 +64,7 @@ def demo_sig(
         "chirp",
         "ripple",
         "meg",
+        "tensorpac",
     ]
     tt = np.linspace(0, t_sec, int(t_sec * fs), endpoint=False)
 
@@ -49,7 +77,7 @@ def demo_sig(
             fs,
         )
 
-    if sig_type == "gauss":
+    elif sig_type == "gauss":
         return np.random.randn(batch_size, n_chs, len(tt)), tt, fs
 
     elif sig_type == "meg":
@@ -64,6 +92,15 @@ def demo_sig(
             tt,
             fs,
         )
+
+    elif sig_type == "tensorpac":
+        xx, tt = _demo_sig_tensorpac(
+            batch_size=batch_size,
+            n_chs=n_chs,
+            t_sec=t_sec,
+            fs=fs,
+        )
+        return xx.astype(np.float32)[..., : len(tt)], tt, fs
 
     else:
         fn_1d = {
@@ -171,14 +208,16 @@ if __name__ == "__main__":
     pp, tt, fs = demo_sig(sig_type="periodic")
     cc, tt, fs = demo_sig(sig_type="chirp")
     rr, tt, fs = demo_sig(sig_type="ripple")
+    tp, tt, fs = demo_sig(sig_type="tensorpac")
 
-    fig, axes = mngs.plt.subplots(nrows=6)
+    fig, axes = mngs.plt.subplots(nrows=7)
     axes[0].plot(uu[0, 0], label="uniform")
     axes[1].plot(gg[0, 0], label="gauss")
     axes[2].plot(mm[0, 0], label="meg")
     axes[3].plot(pp[0, 0], label="periodic")
     axes[4].plot(cc[0, 0], label="chirp")
     axes[5].plot(rr[0, 0], label="ripple")
+    axes[6].plot(tp[0, 0, 0], label="tensorpac")
     for ax in axes:
         ax.legend(loc="upper right")
 

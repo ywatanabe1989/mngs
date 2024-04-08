@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-02-04 13:05:40 (ywatanabe)"
+# Time-stamp: "2024-04-08 11:23:37 (ywatanabe)"
 
 from collections import OrderedDict
 
@@ -128,19 +128,11 @@ class SubplotsManager:
 class AxisDataCollector:
     """
     A wrapper class for a Matplotlib axis that collects plotting data.
-
-    Attributes:
-        axis (matplotlib.axes.Axes): The Matplotlib axis being wrapped.
-        _history (dict): A reference to the history dictionary from SubplotsManager.
     """
 
     def __init__(self, axis, history, track):
         """
         Initialize the AxisDataCollector with a given axis and history reference.
-
-        Arguments:
-            axis (matplotlib.axes.Axes): The Matplotlib axis to wrap.
-            history (dict): A reference to the SubplotsManager's history dictionary.
         """
         self.axis = axis
         self._history = history
@@ -148,32 +140,32 @@ class AxisDataCollector:
 
     def __getattr__(self, attr):
         """
-        Wrap the axis attribute access to collect plot calls.
-
-        Returns:
-            function: A wrapper function that calls the axis method and stores the history.
+        Wrap the axis attribute access to collect plot calls or return the attribute directly.
         """
+        original_attr = getattr(self.axis, attr)
 
-        def wrapper(
-            *args, id=None, track=True, n_xticks=4, n_yticks=4, **kwargs
-        ):
-            method = getattr(self.axis, attr)
-            result = method(*args, **kwargs)
+        if callable(original_attr):
 
-            # Apply set_n_ticks after the plotting method is called
-            if method in ["plot", "scatter"]:
-                self.axis = set_n_ticks(
-                    self.axis,
-                    n_xticks=n_xticks,
-                    n_yticks=n_yticks,
-                )
+            def wrapper(
+                *args, id=None, track=True, n_xticks=4, n_yticks=4, **kwargs
+            ):
+                result = original_attr(*args, **kwargs)
 
-            # Only store the history if tracking is enabled and an ID is provided
-            if self.track and (id is not None):
-                self._history[id] = (id, attr, args, kwargs)
-            return result
+                # Apply set_n_ticks after the plotting method is called
+                if attr in ["plot", "scatter", "bar", "boxplot"]:
+                    set_n_ticks(
+                        self.axis, n_xticks=n_xticks, n_yticks=n_yticks
+                    )
 
-        return wrapper
+                # Only store the history if tracking is enabled and an ID is provided
+                if self.track and (id is not None):
+                    self._history[id] = (id, attr, args, kwargs)
+                return result
+
+            return wrapper
+        else:
+            # Return the attribute directly if it's not callable
+            return original_attr
 
     @property
     def history(self):
@@ -214,6 +206,152 @@ class AxisDataCollector:
 
         return combined_data
 
+    def imshow2d(
+        self,
+        arr_2d,
+        id=None,
+        track=True,
+        cbar_label=None,
+        cmap="viridis",
+    ):
+        # Call the original ax.imshow() method
+        arr_2d = arr_2d.T  # Transpose the array to match imshow's expectations
+        im = self.axis.imshow(arr_2d, cmap=cmap)
+
+        # Create a colorbar
+        fig = self.axis.get_figure()
+        cbar = fig.colorbar(im, ax=self.axis)
+        if cbar_label:
+            cbar.set_label(cbar_label)
+
+        # Invert y-axis to match typical image orientation
+        self.axis.invert_yaxis()
+
+        # Store the history if tracking is enabled and an ID is provided
+        if track and id is not None:
+            self._history[id] = (id, "imshow2d", arr_2d, None)
+
+        return fig  # Return the figure object
+
+
+# def imshow2d(
+#     ax,
+#     *args,
+#     cbar_label=None,
+#     xticks=None,
+#     yticks=None,
+#     n_xticks=4,
+#     n_yticks=4,
+#     xlabel=None,
+#     ylabel=None,
+#     title=None,
+#     **kwargs,
+# ):
+#     arr = args[0]
+#     arr = arr.T
+#     cmap = kwargs.get("cmap" "viridis")
+#     im = ax.imshow(arr, cmap=cmap)
+#     fig = ax.get_figure()
+#     cbar = fig.colorbar(im, ax=ax)
+#     cbar.set_label(cbar_label)
+#     ax = mngs.plt.ax.set_ticks(ax, xticks=xticks, yticks=yticks)
+#     ax = mngs.plt.ax.set_n_ticks(ax, n_xticks=n_xticks, n_yticks=n_yticks)
+#     ax.invert_yaxis()
+#     ax.set_xlabel(xlabel)
+#     ax.set_ylabel(ylabel)
+#     ax.set_title(title)
+#     return fig
+
+
+# class AxisDataCollector:
+#     """
+#     A wrapper class for a Matplotlib axis that collects plotting data.
+
+#     Attributes:
+#         axis (matplotlib.axes.Axes): The Matplotlib axis being wrapped.
+#         _history (dict): A reference to the history dictionary from SubplotsManager.
+#     """
+
+#     def __init__(self, axis, history, track):
+#         """
+#         Initialize the AxisDataCollector with a given axis and history reference.
+
+#         Arguments:
+#             axis (matplotlib.axes.Axes): The Matplotlib axis to wrap.
+#             history (dict): A reference to the SubplotsManager's history dictionary.
+#         """
+#         self.axis = axis
+#         self._history = history
+#         self.track = track
+
+#     def __getattr__(self, attr):
+#         """
+#         Wrap the axis attribute access to collect plot calls.
+
+#         Returns:
+#             function: A wrapper function that calls the axis method and stores the history.
+#         """
+
+#         def wrapper(
+#             *args, id=None, track=True, n_xticks=4, n_yticks=4, **kwargs
+#         ):
+#             method = getattr(self.axis, attr)
+#             result = method(*args, **kwargs)
+
+#             # Apply set_n_ticks after the plotting method is called
+#             if method in ["plot", "scatter"]:
+#                 self.axis = set_n_ticks(
+#                     self.axis,
+#                     n_xticks=n_xticks,
+#                     n_yticks=n_yticks,
+#                 )
+
+#             # Only store the history if tracking is enabled and an ID is provided
+#             if self.track and (id is not None):
+#                 self._history[id] = (id, attr, args, kwargs)
+#             return result
+
+#         return wrapper
+
+#     @property
+#     def history(self):
+#         """
+#         Get the sorted history for this axis.
+
+#         Returns:
+#             dict: The sorted history for this axis.
+#         """
+#         return {k: self._history[k] for k in self._history}
+
+#     def reset_history(self):
+#         """Reset the history for this axis."""
+#         self._history = {}
+
+#     def to_sigma(self, lpath=None):
+#         """
+#         Convert the axis history to a sigma format DataFrame.
+
+#         Returns:
+#             DataFrame: The axis history in sigma format.
+#         """
+#         try:
+#             data_frames = [
+#                 to_sigmaplot_format(v) for v in self.history.values()
+#             ]
+#             combined_data = pd.concat(data_frames)
+#             combined_data = combined_data.apply(
+#                 lambda col: col.dropna().reset_index(drop=True)
+#             )
+
+#         except Exception as e:
+#             print(e)
+#             combined_data = pd.DataFrame()
+
+#         if lpath is not None:
+#             mngs.io.save(combined_data, lpath)
+
+#         return combined_data
+
 
 def to_sigmaplot_format(record):
     """
@@ -246,7 +384,7 @@ if __name__ == "__main__":
     import matplotlib
     import mngs
 
-    matplotlib.use("Agg")  # "TkAgg"
+    matplotlib.use("TkAgg")  # "TkAgg"
 
     fig, ax = subplots()
     ax.plot([1, 2, 3], [4, 5, 6], id="plot1")
