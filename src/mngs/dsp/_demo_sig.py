@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-06 00:43:57 (ywatanabe)"
+# Time-stamp: "2024-04-08 11:35:43 (ywatanabe)"
 
 import random
 import warnings
@@ -95,11 +95,10 @@ def demo_sig(
 
     elif sig_type == "tensorpac":
         xx, tt = _demo_sig_tensorpac(
+            batch_size=batch_size,
+            n_chs=n_chs,
+            t_sec=t_sec,
             fs=fs,
-            f_pha=10,
-            f_amp=100,
-            noise=0.8,
-            n_segments=20,
         )
         return xx.astype(np.float32)[..., : len(tt)], tt, fs
 

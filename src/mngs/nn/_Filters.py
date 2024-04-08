@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-07 01:22:27 (ywatanabe)"
+# Time-stamp: "2024-04-08 04:06:50 (ywatanabe)"
 
 import math
 import warnings
@@ -65,10 +65,12 @@ class BaseFilter1D(nn.Module):
 
         assert x.shape == x_filted_extended.shape
 
-        # Remove edges
-        x_filted_extended[..., : self.radius] *= 0
-        x_filted_extended[..., -self.radius :] *= 0
+        # # Remove edges
+        # x_filted_extended[..., : self.radius] *= 0
+        # x_filted_extended[..., -self.radius :] *= 0
 
+        nn_remove = x_filted_extended.shape[-1] // 4
+        x_filted_extended = x_filted_extended[..., nn_remove:-nn_remove]
         return x_filted_extended
 
 

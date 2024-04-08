@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-07 19:48:09 (ywatanabe)"
+# Time-stamp: "2024-04-08 11:30:02 (ywatanabe)"
 
 
 import math
@@ -34,7 +34,9 @@ class ModulationIndex(nn.Module):
         Returns:
         - MI (torch.Tensor): The Modulation Index for each batch and channel.
         """
+        assert pha.ndim == amp.ndim == 5
 
+        pha, amp = pha.float().contiguous(), amp.float().contiguous()
         device = pha.device
 
         pha_masks = self._phase_to_masks(pha, self.pha_bin_cutoffs.to(device))
@@ -58,16 +60,27 @@ class ModulationIndex(nn.Module):
         amp_sums = amp_bins.sum(dim=i_time, keepdims=True)
         counts = pha_masks.sum(dim=i_time, keepdims=True)
         amp_means = amp_sums / (counts + epsilon)
+
         amp_probs = amp_means / (
             amp_means.sum(dim=-1, keepdims=True) + epsilon
         )
 
         MI = (
-            torch.log(torch.tensor(self.n_bins, device=device))
+            torch.log(torch.tensor(self.n_bins, device=device) + epsilon)
             + (amp_probs * (amp_probs + epsilon).log()).sum(dim=-1)
-        ) / torch.log(torch.tensor(self.n_bins, device=device))
+        ) / (
+            torch.log(torch.tensor(self.n_bins, device=device) + epsilon)
+            + epsilon
+        )
 
-        return MI.squeeze(-1).mean(axis=-1)
+        MI = MI.squeeze(-1).mean(axis=-1)
+
+        if MI.isnan().any():
+            raise ValueError(
+                "NaN values detected in Modulation Index calculation."
+            )
+
+        return MI
 
     @staticmethod
     def _phase_to_masks(pha, phase_bin_cutoffs):

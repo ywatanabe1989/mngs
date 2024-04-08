@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-07 20:04:46 (ywatanabe)"
+# Time-stamp: "2024-04-08 10:40:23 (ywatanabe)"
 
 import torch
 from mngs.general import torch_fn
@@ -9,6 +9,10 @@ from mngs.nn import ModulationIndex
 
 @torch_fn
 def modulation_index(pha, amp, n_bins=18):
+    """
+    pha: (batch_size, n_chs, n_freqs_pha, n_segments, seq_len)
+    amp: (batch_size, n_chs, n_freqs_amp, n_segments, seq_len)
+    """
     return ModulationIndex(n_bins=n_bins)(pha, amp)
 
 
@@ -46,6 +50,9 @@ def plot_comodulogram_tensorpac(xx, fs, t_sec, ts=None):
         pac, title=p.method.replace(" (", f" ({k})\n("), cmap="viridis"
     )
     ax = mngs.plt.ax.set_n_ticks(ax)
+    import ipdb
+
+    ipdb.set_trace()
     freqs_amp = p.f_amp.mean(axis=-1)
     freqs_pha = p.f_pha.mean(axis=-1)
 

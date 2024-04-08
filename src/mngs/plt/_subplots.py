@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-07 19:22:49 (ywatanabe)"
+# Time-stamp: "2024-04-08 11:23:37 (ywatanabe)"
 
 from collections import OrderedDict
 
@@ -208,24 +208,15 @@ class AxisDataCollector:
 
     def imshow2d(
         self,
-        *args,
+        arr_2d,
         id=None,
         track=True,
         cbar_label=None,
-        xticks=None,
-        yticks=None,
-        n_xticks=4,
-        n_yticks=4,
-        xlabel=None,
-        ylabel=None,
-        title=None,
-        **kwargs,
+        cmap="viridis",
     ):
         # Call the original ax.imshow() method
-        arr = args[0]
-        arr = arr.T  # Transpose the array to match imshow's expectations
-        cmap = kwargs.pop("cmap", "viridis")
-        im = self.axis.imshow(arr, cmap=cmap, **kwargs)
+        arr_2d = arr_2d.T  # Transpose the array to match imshow's expectations
+        im = self.axis.imshow(arr_2d, cmap=cmap)
 
         # Create a colorbar
         fig = self.axis.get_figure()
@@ -233,30 +224,12 @@ class AxisDataCollector:
         if cbar_label:
             cbar.set_label(cbar_label)
 
-        # # Set ticks if provided
-        # if xticks is not None:
-        #     self.axis.set_xticks(xticks)
-        # if yticks is not None:
-        #     self.axis.set_yticks(yticks)
-
-        # # Set number of ticks
-        # self.axis.xaxis.set_major_locator(plt.MaxNLocator(n_xticks))
-        # self.axis.yaxis.set_major_locator(plt.MaxNLocator(n_yticks))
-
-        # # Set labels and title
-        # if xlabel:
-        #     self.axis.set_xlabel(xlabel)
-        # if ylabel:
-        #     self.axis.set_ylabel(ylabel)
-        # if title:
-        #     self.axis.set_title(title)
-
         # Invert y-axis to match typical image orientation
         self.axis.invert_yaxis()
 
         # Store the history if tracking is enabled and an ID is provided
         if track and id is not None:
-            self._history[id] = (id, "imshow2d", args, kwargs)
+            self._history[id] = (id, "imshow2d", arr_2d, None)
 
         return fig  # Return the figure object
 
