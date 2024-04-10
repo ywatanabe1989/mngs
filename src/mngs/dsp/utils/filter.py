@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-10 11:16:25 (ywatanabe)"
+# Time-stamp: "2024-04-11 08:20:27 (ywatanabe)"
 
 import matplotlib.pyplot as plt
 import mngs
@@ -79,26 +79,33 @@ def design_filter(
         return low_freq
 
     def determine_order(filter_mode, fs, low_freq, sig_len, cycle):
-        order = cycle * (fs // low_freq)
+        order = cycle * int((fs // low_freq))
         if 3 * order < sig_len:
             order = (sig_len - 1) // 3
-        order = order if order % 2 == 0 else order + 1  # Ensure order is even
+        order = mngs.gen.to_even(order)
         return order
 
+    fs, low_hz, high_hz = int(fs), float(low_hz), float(high_hz)
     filter_mode = estimate_filter_type(low_hz, high_hz, is_bandstop)
     cutoff = determine_cutoff_frequencies(filter_mode, low_hz, high_hz)
     low_freq = determine_low_freq(filter_mode, low_hz, high_hz)
     order = determine_order(filter_mode, fs, low_freq, sig_len, cycle)
     numtaps = order + 1
 
-    h = firwin(
-        numtaps=numtaps,
-        cutoff=cutoff,
-        pass_zero=(filter_mode in ["highpass", "bandstop"]),
-        window="hamming",
-        fs=fs,
-        scale=True,
-    )
+    try:
+        h = firwin(
+            numtaps=numtaps,
+            cutoff=cutoff,
+            pass_zero=(filter_mode in ["highpass", "bandstop"]),
+            window="hamming",
+            fs=fs,
+            scale=True,
+        )
+    except Exception as e:
+        print(e)
+        import ipdb
+
+        ipdb.set_trace()
 
     return h
 

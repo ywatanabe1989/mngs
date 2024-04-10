@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-10 15:55:58 (ywatanabe)"
+# Time-stamp: "2024-04-10 23:50:27 (ywatanabe)"
 
 
 import mngs
