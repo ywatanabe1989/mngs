@@ -1,14 +1,23 @@
-#!/usr/bin/env python3
+#!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-05 14:19:18 (ywatanabe)"
+# Time-stamp: "2024-04-10 17:16:27 (ywatanabe)"
 
+"""
+Functions to add noise to signals.
+"""
+
+# Imports
+import sys
+
+import matplotlib.pyplot as plt
 import mngs
-
-# import numpy as np
+import numpy as np
+import pandas as pd
 import torch
 from mngs.general import torch_fn
 
 
+# Functions
 def _uniform(shape, amp=1.0):
     a, b = -amp, amp
     return -amp + (2 * amp) * torch.rand(shape)
@@ -59,15 +68,15 @@ def brown(x, amp=1.0, dim=-1):
 
 
 if __name__ == "__main__":
-    import matplotlib.pyplot as plt
+    # Start
+    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt)
 
-    plt, CC = mngs.plt.configure_mpl(plt)
-
+    # Parameters
     t_sec = 1
     fs = 128
-    xx, tt, fs = mngs.dsp.demo_sig(t_sec=t_sec, fs=fs)
 
-    # t = np.linspace(0, t_sec, x.shape[-1])
+    # Demo signal
+    xx, tt, fs = mngs.dsp.demo_sig(t_sec=t_sec, fs=fs)
 
     funcs = {
         "orig": lambda x: x,
@@ -77,7 +86,8 @@ if __name__ == "__main__":
         "brown": brown,
     }
 
-    fig, axes = plt.subplots(
+    # Plots
+    fig, axes = mngs.plt.subplots(
         nrows=len(funcs), ncols=2, sharex=True, sharey=True
     )
     count = 0
@@ -89,11 +99,13 @@ if __name__ == "__main__":
                 ax.plot(tt, (fn(xx) - xx)[0, 0], label=f"{k} - orig", c="red")
             count += 1
             ax.legend(loc="upper right")
-    plt.show()
+    mngs.io.save(fig, CONFIG["SDIR"] + "traces.py")
 
-    # fig, axes = plt.subplots(nrows=len(funcs), sharex=True, sharey=True)
-    # for (k, fn), ax in zip(funcs.items(), axes):
-    #     ax.plot(t, fn(x)[0, 0], label=k, c="blue")
-    #     ax.plot(t, (fn(x) - x)[0, 0], label=f"{k} - orig", c="red")
-    #     ax.legend(loc="upper right")
-    # plt.show()
+    # Close
+    mngs.gen.close(CONFIG)
+
+# EOF
+
+"""
+/home/ywatanabe/proj/entrance/mngs/dsp/add_noise.py
+"""

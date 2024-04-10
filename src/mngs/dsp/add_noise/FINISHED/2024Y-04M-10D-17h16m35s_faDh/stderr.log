@@ -1,0 +1,2 @@
+/home/ywatanabe/proj/mngs/src/mngs/general/_converters.py:75: UserWarning: Converted from  <class 'numpy.ndarray'> to <class 'torch.Tensor'> (cuda:0)
+  warnings.warn(

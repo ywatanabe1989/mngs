@@ -1,0 +1,63 @@
+[0;31mSignature:[0m
+[0mmngs[0m[0;34m.[0m[0mgen[0m[0;34m.[0m[0mstart[0m[0;34m([0m[0;34m[0m
+[0;34m[0m    [0msys[0m[0;34m=[0m[0;32mNone[0m[0;34m,[0m[0;34m[0m
+[0;34m[0m    [0mplt[0m[0;34m=[0m[0;32mNone[0m[0;34m,[0m[0;34m[0m
+[0;34m[0m    [0msdir[0m[0;34m=[0m[0;32mNone[0m[0;34m,[0m[0;34m[0m
+[0;34m[0m    [0mverbose[0m[0;34m=[0m[0;32mTrue[0m[0;34m,[0m[0;34m[0m
+[0;34m[0m    [0mos[0m[0;34m=[0m[0;32mNone[0m[0;34m,[0m[0;34m[0m
+[0;34m[0m    [0mrandom[0m[0;34m=[0m[0;32mNone[0m[0;34m,[0m[0;34m[0m
+[0;34m[0m    [0mnp[0m[0;34m=[0m[0;32mNone[0m[0;34m,[0m[0;34m[0m
+[0;34m[0m    [0mtorch[0m[0;34m=[0m[0;32mNone[0m[0;34m,[0m[0;34m[0m
+[0;34m[0m    [0mtf[0m[0;34m=[0m[0;32mNone[0m[0;34m,[0m[0;34m[0m
+[0;34m[0m    [0mseed[0m[0;34m=[0m[0;36m42[0m[0;34m,[0m[0;34m[0m
+[0;34m[0m    [0mfig_size_mm[0m[0;34m=[0m[0;34m([0m[0;36m160[0m[0;34m,[0m [0;36m100[0m[0;34m)[0m[0;34m,[0m[0;34m[0m
+[0;34m[0m    [0mfig_scale[0m[0;34m=[0m[0;36m1.0[0m[0;34m,[0m[0;34m[0m
+[0;34m[0m    [0mdpi_display[0m[0;34m=[0m[0;36m100[0m[0;34m,[0m[0;34m[0m
+[0;34m[0m    [0mdpi_save[0m[0;34m=[0m[0;36m300[0m[0;34m,[0m[0;34m[0m
+[0;34m[0m    [0mfont_size_base[0m[0;34m=[0m[0;36m8[0m[0;34m,[0m[0;34m[0m
+[0;34m[0m    [0mfont_size_title[0m[0;34m=[0m[0;36m8[0m[0;34m,[0m[0;34m[0m
+[0;34m[0m    [0mfont_size_axis_label[0m[0;34m=[0m[0;36m8[0m[0;34m,[0m[0;34m[0m
+[0;34m[0m    [0mfont_size_tick_label[0m[0;34m=[0m[0;36m7[0m[0;34m,[0m[0;34m[0m
+[0;34m[0m    [0mfont_size_legend[0m[0;34m=[0m[0;36m6[0m[0;34m,[0m[0;34m[0m
+[0;34m[0m    [0mhide_top_right_spines[0m[0;34m=[0m[0;32mTrue[0m[0;34m,[0m[0;34m[0m
+[0;34m[0m    [0malpha[0m[0;34m=[0m[0;36m0.9[0m[0;34m,[0m[0;34m[0m
+[0;34m[0m    [0mline_width[0m[0;34m=[0m[0;36m0.5[0m[0;34m,[0m[0;34m[0m
+[0;34m[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;31mDocstring:[0m
+Example:
+
+"""
+This script does XYZ.
+"""
+
+# Imports
+import mngs
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+# Config
+CONFIG = mngs.gen.load_configs()
+
+# Functions
+# (Your awesome code here)
+
+if __name__ == '__main__':
+    # Start
+    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt)
+
+    # (Your awesome code here)
+
+    # Close
+    mngs.gen.close(CONFIG)
+
+# EOF
+
+"""
+/home/ywatanabe/template.py
+"""
+[0;31mFile:[0m      ~/proj/mngs/src/mngs/general/_start.py
+[0;31mType:[0m      function

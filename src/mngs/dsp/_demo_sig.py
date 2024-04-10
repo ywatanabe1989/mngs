@@ -1,14 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-08 11:35:43 (ywatanabe)"
+# Time-stamp: "2024-04-10 18:41:15 (ywatanabe)"
 
+
+"""
+This script does XYZ.
+"""
+
+# Imports
 import random
+import sys
 import warnings
 
+import matplotlib.pyplot as plt
 import mne
 import mngs
 import numpy as np
-from mne import Epochs, compute_covariance, find_events, make_ad_hoc_cov
 from mne.datasets import sample
 from mne.simulation import (
     add_ecg,
@@ -21,32 +28,10 @@ from ripple_detection.simulate import simulate_LFP, simulate_time
 from scipy.signal import chirp
 from tensorpac.signals import pac_signals_wavelet
 
+# Config
+CONFIG = mngs.gen.load_configs(verbose=False)
 
-def _demo_sig_tensorpac(
-    batch_size=8,
-    n_chs=19,
-    t_sec=4,
-    fs=512,
-    f_pha=10,
-    f_amp=100,
-    noise=0.8,
-    n_segments=20,
-    verbose=False,
-):
-    n_times = int(t_sec * fs)
-    x_2d, tt = pac_signals_wavelet(
-        sf=fs,
-        f_pha=f_pha,
-        f_amp=f_amp,
-        noise=noise,
-        n_epochs=n_segments,
-        n_times=n_times,
-    )
-    x_3d = np.stack([x_2d for _ in range(batch_size)], axis=0)
-    x_4d = np.stack([x_3d for _ in range(n_chs)], axis=1)
-    return x_4d, tt
-
-
+# Functions
 def demo_sig(
     batch_size=8,
     n_chs=19,
@@ -130,6 +115,31 @@ def demo_sig(
         )
 
 
+def _demo_sig_tensorpac(
+    batch_size=8,
+    n_chs=19,
+    t_sec=4,
+    fs=512,
+    f_pha=10,
+    f_amp=100,
+    noise=0.8,
+    n_segments=20,
+    verbose=False,
+):
+    n_times = int(t_sec * fs)
+    x_2d, tt = pac_signals_wavelet(
+        sf=fs,
+        f_pha=f_pha,
+        f_amp=f_amp,
+        noise=noise,
+        n_epochs=n_segments,
+        n_times=n_times,
+    )
+    x_3d = np.stack([x_2d for _ in range(batch_size)], axis=0)
+    x_4d = np.stack([x_3d for _ in range(n_chs)], axis=1)
+    return x_4d, tt
+
+
 def _demo_sig_meg(
     batch_size=8, n_chs=19, t_sec=10, fs=512, verbose=False, **kwargs
 ):
@@ -202,23 +212,35 @@ def _demo_sig_ripple_1d(t_sec=10, fs=512, **kwargs):
 
 
 if __name__ == "__main__":
-    uu, tt, fs = demo_sig(sig_type="uniform")
-    gg, tt, fs = demo_sig(sig_type="gauss")
-    mm, tt, fs = demo_sig(sig_type="meg")
-    pp, tt, fs = demo_sig(sig_type="periodic")
-    cc, tt, fs = demo_sig(sig_type="chirp")
-    rr, tt, fs = demo_sig(sig_type="ripple")
-    tp, tt, fs = demo_sig(sig_type="tensorpac")
+    # Start
+    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt)
 
-    fig, axes = mngs.plt.subplots(nrows=7)
-    axes[0].plot(uu[0, 0], label="uniform")
-    axes[1].plot(gg[0, 0], label="gauss")
-    axes[2].plot(mm[0, 0], label="meg")
-    axes[3].plot(pp[0, 0], label="periodic")
-    axes[4].plot(cc[0, 0], label="chirp")
-    axes[5].plot(rr[0, 0], label="ripple")
-    axes[6].plot(tp[0, 0, 0], label="tensorpac")
-    for ax in axes:
-        ax.legend(loc="upper right")
+    SIG_TYPES = [
+        "uniform",
+        "gauss",
+        "periodic",
+        "chirp",
+        "meg",
+        "ripple",
+        "tensorpac",
+    ]
 
-    plt.show()
+    i_batch, i_ch, i_segment = 0, 0, 0
+    fig, axes = mngs.plt.subplots(nrows=len(SIG_TYPES))
+    for ax, (i_sig_type, sig_type) in zip(axes, enumerate(SIG_TYPES)):
+        xx, tt, fs = demo_sig(sig_type=sig_type)
+        if sig_type != "tensorpac":
+            ax.plot(tt, xx[i_batch, i_ch], label=sig_type)
+        else:
+            ax.plot(tt, xx[i_batch, i_ch, i_segment], label=sig_type)
+        ax.legend(loc="upper left")
+    mngs.io.save(fig, CONFIG["SDIR"] + "traces.png")
+
+    # Close
+    mngs.gen.close(CONFIG)
+
+# EOF
+
+"""
+/home/ywatanabe/proj/entrance/mngs/dsp/_demo_sig.py
+"""

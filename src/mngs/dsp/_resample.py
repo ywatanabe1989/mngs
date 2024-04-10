@@ -1,16 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-05 08:38:57 (ywatanabe)"
+# Time-stamp: "2024-04-10 15:28:41 (ywatanabe)"
 
 
+import torch
 import torchaudio.transforms as T
 from mngs.general import torch_fn
 
 
 @torch_fn
-def resample(x, src_fs, tgt_fs):
-    resampler = T.Resample(src_fs, tgt_fs, dtype=x.dtype).to(x.device)
-    return resampler(x)
+def resample(x, src_fs, tgt_fs, t=None):
+    xr = T.Resample(src_fs, tgt_fs, dtype=x.dtype).to(x.device)(x)
+    if t is None:
+        return xr
+    if t is not None:
+        tr = torch.linspace(t[0], t[-1], xr.shape[-1])
+        return xr, tr
 
 
 if __name__ == "__main__":
@@ -23,12 +28,11 @@ if __name__ == "__main__":
 
     # Demo Signal
     xx, tt, fs = mngs.dsp.demo_sig(
-        t_sec=T_SEC, fs=SRC_FS, freqs_hz=FREQS_HZ, type=SIG_TYPE
+        t_sec=T_SEC, fs=SRC_FS, freqs_hz=FREQS_HZ, sig_type=SIG_TYPE
     )
 
     # Resampling
-    xx_resampled = mngs.dsp.resample(xx, fs, TGT_FS)
-    tt_resampled = mngs.dsp.resample(tt, fs, TGT_FS)
+    xx_resampled, tt_resampled = mngs.dsp.resample(xx, fs, TGT_FS, t=tt)
 
     # Filtering
     filted_bp = mngs.dsp.filt.bandpass(xx, fs, low_hz=20, high_hz=50)
