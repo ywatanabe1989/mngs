@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-11 09:16:27 (ywatanabe)"
+# Time-stamp: "2024-04-11 09:57:40 (ywatanabe)"
 
 """
 This script does XYZ.
@@ -23,9 +23,10 @@ CONFIG = mngs.gen.load_configs()
 
 # Functions
 class ModulationIndex(nn.Module):
-    def __init__(self, n_bins=18):
+    def __init__(self, n_bins=18, fp16=False):
         super(ModulationIndex, self).__init__()
         self.n_bins = n_bins
+        self.fp16 = fp16
         self.register_buffer(
             "pha_bin_cutoffs", torch.linspace(-np.pi, np.pi, n_bins + 1)
         )
@@ -45,7 +46,11 @@ class ModulationIndex(nn.Module):
         """
         assert pha.ndim == amp.ndim == 5
 
-        pha, amp = pha.float().contiguous(), amp.float().contiguous()
+        if self.fp16:
+            pha, amp = pha.half().contiguous(), amp.half().contiguous()
+        else:
+            pha, amp = pha.float().contiguous(), amp.float().contiguous()
+
         device = pha.device
 
         pha_masks = self._phase_to_masks(pha, self.pha_bin_cutoffs.to(device))

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-03-25 12:12:15 (ywatanabe)"
+# Time-stamp: "2024-04-10 19:46:21 (ywatanabe)"
 
 import inspect
 import os as _os
@@ -16,7 +16,7 @@ def start(
     sys=None,
     plt=None,
     sdir=None,
-    show=True,
+    verbose=True,
     # Random seeds
     os=None,
     random=None,
@@ -35,28 +35,60 @@ def start(
     font_size_tick_label=7,
     font_size_legend=6,
     hide_top_right_spines=True,
-    alpha=0.75,
+    alpha=0.9,
+    line_width=0.5,
 ):
     """
-    import sys
-    import matplotlib.pyplot as plt
+    Example:
+
+    \"""
+    This script does XYZ.
+    \"""
+
+    # Imports
     import mngs
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import pandas as pd
+    import torch
+    import torch.nn as nn
+    import torch.nn.functional as F
 
-    CONFIG, sys.stdout, sys.stderr, plt, cc = mngs.gen.start(sys, plt)
+    # Config
+    CONFIG = mngs.gen.load_configs()
 
-    # YOUR CODE HERE
+    # Functions
+    # (Your awesome code here)
 
-    mngs.gen.close(CONFIG)
+    if __name__ == '__main__':
+        # Start
+        CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt)
+
+        # (Your awesome code here)
+
+        # Close
+        mngs.gen.close(CONFIG)
+
+    # EOF
+
+    \"""
+    /home/ywatanabe/template.py
+    \"""
     """
+
     # Timer
     start_time = datetime.now()
 
     # Debug mode check
     try:
-        IS_DEBUG = mngs.io.load("./config/IS_DEBUG.yaml").get(
-            "IS_DEBUG", False
-        )
+        IS_DEBUG_PATH = "./config/IS_DEBUG.yaml"
+        if _os.path.exists(IS_DEBUG_PATH):
+            IS_DEBUG = mngs.io.load(IS_DEBUG_PATH).get("IS_DEBUG", False)
+        else:
+            IS_DEBUG = False
+
     except Exception as e:
+        print(e)
         IS_DEBUG = False
 
     # ID
@@ -72,9 +104,7 @@ def start(
             __file__ = "/tmp/fake.py"
         spath = __file__
         _sdir, sfname, _ = mngs.general.split_fpath(spath)
-        sdir = (
-            _sdir + sfname + "/" + "RUNNING" + "/" + ID + "/"
-        )  # " # + "/log/"
+        sdir = _sdir + sfname + "/" + "RUNNING" + "/" + ID + "/"
     _os.makedirs(sdir, exist_ok=True)
 
     # CONFIGs
@@ -82,17 +112,18 @@ def start(
     CONFIGS["ID"] = ID
     CONFIGS["START_TIME"] = start_time
     CONFIGS["SDIR"] = sdir.replace("/./", "/")
-    if show:
+    if verbose:
         print(f"\n{'-'*40}\n")
         print(f"CONFIG:")
         for k, v in CONFIGS.items():
             print(f"\n{k}:\n{v}\n")
-            # sleep(0.1)
         print(f"\n{'-'*40}\n")
 
     # Logging (tee)
     if sys is not None:
-        sys.stdout, sys.stderr = mngs.general.tee(sys, sdir=sdir, show=show)
+        sys.stdout, sys.stderr = mngs.general.tee(
+            sys, sdir=sdir, verbose=verbose
+        )
 
     # Random seeds
     if (
@@ -114,7 +145,7 @@ def start(
 
     # Matplotlib configuration
     if plt is not None:
-        plt, cc = mngs.plt.configure_mpl(
+        plt, CC = mngs.plt.configure_mpl(
             plt,
             fig_size_mm=(160, 100),
             fig_scale=fig_scale,
@@ -127,29 +158,47 @@ def start(
             font_size_legend=font_size_legend,
             hide_top_right_spines=hide_top_right_spines,
             alpha=alpha,
-            show=show,
+            line_width=line_width,
+            verbose=verbose,
         )
 
-    return CONFIGS, sys.stdout, sys.stderr, plt, cc
+    return CONFIGS, sys.stdout, sys.stderr, plt, CC
 
 
 if __name__ == "__main__":
+    """
+    This script does XYZ.
+    """
+
+    # Imports
+    import os
     import sys
 
     import matplotlib.pyplot as plt
     import mngs
+    import numpy as np
+    import pandas as pd
+    import torch
+    import torch.nn as nn
+    import torch.nn.functional as F
 
-    # --------------------------------------------------------------------------- #
-    CONFIG, sys.stdout, sys.stderr, plt, cc = mngs.gen.start(
-        sys, plt, sdir=None
-    )
-    # --------------------------------------------------------------------------- #
+    # Config
+    CONFIG = mngs.gen.load_configs()
 
-    # YOUR CODE HERE
-    print("Hello world from mngs.")
+    # Functions
+    # Your awesome code here :)
 
-    # --------------------------------------------------------------------------- #
-    mngs.gen.close(CONFIG)
-    # --------------------------------------------------------------------------- #
+    if __name__ == "__main__":
+        # Start
+        CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt)
 
-    # EOF
+        # Your awesome code here :)
+
+        # Close
+        mngs.gen.close(CONFIG)
+
+# EOF
+
+"""
+/home/ywatanabe/proj/entrance/mngs/general/_start.py
+"""

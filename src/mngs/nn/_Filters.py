@@ -1,25 +1,35 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-11 00:11:16 (ywatanabe)"
+# Time-stamp: "2024-04-11 15:55:25 (ywatanabe)"
+
+"""
+This script does XYZ.
+"""
 
 import math
+import os
+import sys
 import warnings
 from abc import ABC, abstractmethod
 
+import matplotlib.pyplot as plt
+
+# Imports
 import mngs
 import numpy as np
+import pandas as pd
 import seaborn as sns
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from mngs.general import torch_fn
+from mngs.nn import DifferentiableBandPassFilterInitializer
 
 
 class BaseFilter1D(nn.Module):
-    def __init__(
-        self,
-    ):
+    def __init__(self, fp16=False):
         super().__init__()
+        self.fp16 = fp16
 
     @abstractmethod
     def init_kernels(
@@ -35,6 +45,9 @@ class BaseFilter1D(nn.Module):
         """Apply the filter to input signal x with shape: (batch_size, n_chs, seq_len)"""
 
         # Shape check
+        if self.fp16:
+            x = x.half()
+
         x = mngs.dsp.ensure_3d(x)
         batch_size, n_chs, seq_len = x.shape
 
@@ -104,8 +117,10 @@ class BaseFilter1D(nn.Module):
 
 
 class BandPassFilter(BaseFilter1D):
-    def __init__(self, bands, fs, x_shape):
-        super().__init__()
+    def __init__(self, bands, fs, x_shape, fp16=False):
+        super().__init__(fp16=fp16)
+
+        self.fp16 = fp16
 
         # Ensures bands shape
         assert bands.ndim == 2
@@ -117,8 +132,13 @@ class BandPassFilter(BaseFilter1D):
             assert ll < hh
             assert hh < nyq
 
+        # Prepare kernels
+        kernels = self.init_kernels(x_shape[-1], fs, bands)
+        if fp16:
+            kernels = kernels.half()
         self.register_buffer(
-            "kernels", self.init_kernels(x_shape[-1], fs, bands)
+            "kernels",
+            kernels,
         )
 
     @staticmethod
@@ -136,7 +156,8 @@ class BandPassFilter(BaseFilter1D):
 
         kernels = mngs.dsp.utils.zero_pad(filters)
         kernels = mngs.dsp.utils.ensure_even_len(kernels)
-        return torch.tensor(kernels)
+        kernels = torch.tensor(kernels)
+        return kernels
 
 
 class BandStopFilter(BaseFilter1D):
@@ -250,8 +271,123 @@ class GaussianFilter(BaseFilter1D):
         return torch.tensor(kernels)
 
 
+class DifferentiableBandPassFilter(BaseFilter1D):
+    def __init__(
+        self,
+        sig_len,
+        fs,
+        pha_low_hz=2,
+        pha_high_hz=20,
+        pha_n_bands=30,
+        amp_low_hz=80,
+        amp_high_hz=160,
+        amp_n_bands=50,
+        cycle=3,
+        fp16=False,
+    ):
+        super().__init__(fp16=fp16)
+
+        self.fp16 = fp16
+
+        # Check bands definitions
+        nyq = fs / 2.0
+        assert pha_low_hz < pha_high_hz < nyq
+        assert amp_low_hz < amp_high_hz < nyq
+
+        # Prepare kernels
+        self.init_kernels = DifferentiableBandPassFilterInitializer
+        kernels, self.pha_bands, self.amp_bands = self.init_kernels(
+            sig_len,
+            fs,
+            pha_low_hz=pha_low_hz,
+            pha_high_hz=pha_high_hz,
+            pha_n_bands=pha_n_bands,
+            amp_low_hz=amp_low_hz,
+            amp_high_hz=amp_high_hz,
+            amp_n_bands=amp_n_bands,
+            cycle=cycle,
+        )()
+
+        if fp16:
+            kernels = kernels.half()
+        self.register_buffer(
+            "kernels",
+            kernels,
+        )
+
+
 if __name__ == "__main__":
-    xx, tt, fs = mngs.dsp.demo_sig()
-    bands = np.array([[2, 3], [3, 4]])
-    fs = 32
-    BandPassFilter(bands, fs, xx.shape)
+    # Start
+    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
+        sys, plt, fig_scale=5
+    )
+
+    xx, tt, fs = mngs.dsp.demo_sig(sig_type="chirp")
+    xx = torch.tensor(xx).cuda()
+    # bands = np.array([[2, 3], [3, 4]])
+    # BandPassFilter(bands, fs, xx.shape)
+    m = DifferentiableBandPassFilter(xx.shape[-1], fs).cuda()
+
+    xf = m(xx)  # (8, 19, 80, 2048)
+
+    m.pha_bands
+    # Parameter containing:
+    # tensor([ 2.0000,  2.6207,  3.2414,  3.8621,  4.4828,  5.1034,  5.7241,  6.3448,
+    #          6.9655,  7.5862,  8.2069,  8.8276,  9.4483, 10.0690, 10.6897, 11.3103,
+    #         11.9310, 12.5517, 13.1724, 13.7931, 14.4138, 15.0345, 15.6552, 16.2759,
+    #         16.8966, 17.5172, 18.1379, 18.7586, 19.3793, 20.0000],
+    #        requires_grad=True)
+    m.amp_bands
+    # Parameter containing:
+    # tensor([ 80.0000,  81.6327,  83.2653,  84.8980,  86.5306,  88.1633,  89.7959,
+    #          91.4286,  93.0612,  94.6939,  96.3265,  97.9592,  99.5918, 101.2245,
+    #         102.8571, 104.4898, 106.1225, 107.7551, 109.3878, 111.0204, 112.6531,
+    #         114.2857, 115.9184, 117.5510, 119.1837, 120.8163, 122.4490, 124.0816,
+    #         125.7143, 127.3469, 128.9796, 130.6122, 132.2449, 133.8775, 135.5102,
+    #         137.1429, 138.7755, 140.4082, 142.0408, 143.6735, 145.3061, 146.9388,
+    #         148.5714, 150.2041, 151.8367, 153.4694, 155.1020, 156.7347, 158.3673,
+    #         160.0000], requires_grad=True)
+
+    xf.sum().backward()  # OK
+
+    # PSD
+    bands = torch.hstack([m.pha_bands, m.amp_bands])
+
+    # Plots PSD
+    # matplotlib.use("TkAgg")
+    fig, axes = mngs.plt.subplots(nrows=1 + len(bands), ncols=2)
+
+    psd, ff = mngs.dsp.psd(xx, fs)  # Orig
+    axes[0, 0].plot(tt, xx[0, 0].detach().cpu().numpy(), label="orig")
+    axes[0, 1].plot(
+        ff.detach().cpu().numpy(),
+        psd[0, 0].detach().cpu().numpy(),
+        label="orig",
+    )
+
+    for i_filt in range(len(bands)):
+        mid_hz = int(bands[i_filt].item())
+        psd_f, ff_f = mngs.dsp.psd(xf[:, :, i_filt, :], fs)
+        axes[i_filt + 1, 0].plot(
+            tt,
+            xf[0, 0, i_filt].detach().cpu().numpy(),
+            label=f"filted at {mid_hz} Hz",
+        )
+
+        axes[i_filt + 1, 1].plot(
+            ff_f.detach().cpu().numpy(),
+            psd_f[0, 0].detach().cpu().numpy(),
+            label=f"filted at {mid_hz} Hz",
+        )
+    for ax in axes.ravel():
+        ax.legend(loc="upper left")
+
+    mngs.io.save(fig, CONFIG["SDIR"] + "traces.png")
+    # plt.show()
+
+    # Close
+    mngs.gen.close(CONFIG)
+
+"""
+/home/ywatanabe/proj/entrance/mngs/dsp/nn/_Filters.py
+"""

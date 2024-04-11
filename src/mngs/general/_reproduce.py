@@ -99,7 +99,7 @@ class Tee(object):
         return g
 
 
-def tee(sys, sdir=None, show=True):
+def tee(sys, sdir=None, verbose=True):
     """
     import sys
 
@@ -140,10 +140,12 @@ def tee(sys, sdir=None, show=True):
     # sys_stdout = Tee(sys.stdout, spath_stdout_def)
     # sys_stderr = Tee(sys.stderr, spath_stderr_def)
 
-    if show:
-        print(f"\n{'-'*40}\n")
-        print(
-            f"\nStandard Output/Error are going to be logged in the followings: \n  - {spath_stdout}\n  - {spath_stderr}\n"
-        )
-        print(f"\n{'-'*40}\n")
+    if verbose:
+        message = f"Standard Output/Error is being logged at:\n- {spath_stdout}\n- {spath_stderr}"
+        mngs.gen.print_block(message)
+        # print(f"\n{'-'*40}\n")
+        # print(
+        #     f"\nStandard Output/Error are going to be logged in the followings: \n  - {spath_stdout}\n  - {spath_stderr}\n"
+        # )
+        # print(f"\n{'-'*40}\n")
     return sys_stdout, sys_stderr

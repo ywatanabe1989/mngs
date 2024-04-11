@@ -11,15 +11,6 @@ from glob import glob
 
 import mngs
 
-if "general" in __file__:
-    with warnings.catch_warnings():
-        warnings.simplefilter("always")
-        warnings.warn(
-            '\n"mngs.general.path" will be removed. '
-            'Please use "mngs.io.path" instead.',
-            PendingDeprecationWarning,
-        )
-
 
 ################################################################################
 ## PATH
@@ -36,8 +27,6 @@ def mk_spath(sfname, makedirs=False):
     __file__ = inspect.stack()[1].filename
     if "ipython" in __file__:  # for ipython
         __file__ = f'/tmp/fake-{os.getenv("USER")}.py'
-
-    # __file__ = get_current_file_name()
 
     ## spath
     fpath = __file__

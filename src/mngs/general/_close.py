@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-03-11 14:28:22 (ywatanabe)"
+# Time-stamp: "2024-04-10 19:53:26 (ywatanabe)"
 
 import os
 import shutil
@@ -64,10 +64,12 @@ def finish(src_dir):
     os.makedirs(dest_dir, exist_ok=True)
     try:
         os.rename(src_dir, dest_dir)
-        print(f"\nRenamed from: {src_dir} to {dest_dir}")
+        mngs.gen.print_block(
+            f"Congratulations! Results have been moved from RUNNING to FINISHED.\n\n{src_dir}\n\nv\nv\n\n{dest_dir}",
+            c="yellow",
+        )
     except Exception as e:
-        pass
-        # print(e)
+        print(e)
 
 
 if __name__ == "__main__":

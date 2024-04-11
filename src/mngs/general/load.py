@@ -15,17 +15,8 @@ import pandas as pd
 import torch
 import yaml
 
-if "general" in __file__:
-    with warnings.catch_warnings():
-        warnings.simplefilter("always")
-        warnings.warn(
-            '\n"mngs.general.load" will be removed. '
-            'Please use "mngs.io.load" instead.',
-            PendingDeprecationWarning,
-        )
 
-
-def load(lpath, show=False, **kwargs):
+def load(lpath, show=False, verbose=False, **kwargs):
     import logging
 
     try:
@@ -150,14 +141,17 @@ def load(lpath, show=False, **kwargs):
             print(f"\nNot loaded from: {lpath}\n")
             return None
 
-        if show:
+        if show or verbose:
             print(f"\nLoaded from: {lpath}\n")
 
         return obj
 
     except Exception as e:
-        logging.error(f"\n{lpath} was not loaded:\n{e}")
-        return None
+        if verbose:
+            print(f"\n{lpath} was not loaded:\n{e}")
+
+        # logging.error(f"\n{lpath} was not loaded:\n{e}")
+        # return None
 
 
 def load_eeg_data(filename, **kwargs):
@@ -291,7 +285,8 @@ def load_study_rdb(study_name, rdb_raw_bytes_url):
     return study
 
 
-def load_configs(IS_DEBUG=None, show=False):
+def load_configs(IS_DEBUG=None, show=False, verbose=False):
+
     if os.getenv("CI") == "true":
         IS_DEBUG = True
 
@@ -301,16 +296,16 @@ def load_configs(IS_DEBUG=None, show=False):
             for dk in debug_keys:
                 dk_wo_debug_prefix = dk.split("DEBUG_")[1]
                 config[dk_wo_debug_prefix] = config[dk]
-                if show:
+                if show or verbose:
                     print(f"\n{dk} -> {dk_wo_debug_prefix}\n")
         return config
 
     # Check ./config/IS_DEBUG.yaml file if IS_DEBUG argument is not passed
     if IS_DEBUG is None:
-        try:
-            IS_DEBUG = mngs.io.load("./config/IS_DEBUG.yaml")["IS_DEBUG"]
-        except Exception as e:
-            print(e)
+        IS_DEBUG_PATH = "./config/IS_DEBUG.yaml"
+        if os.path.exists(IS_DEBUG_PATH):
+            IS_DEBUG = mngs.io.load("./config/IS_DEBUG.yaml").get("IS_DEBUG")
+        else:
             IS_DEBUG = False
 
     # Main

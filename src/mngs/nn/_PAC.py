@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-11 09:41:59 (ywatanabe)"
+# Time-stamp: "2024-04-11 12:04:15 (ywatanabe)"
 
 """
 This script does XYZ.
@@ -37,6 +37,8 @@ class PAC(nn.Module):
         amp_start_hz=60,
         amp_end_hz=160,
         amp_n_bands=30,
+        fp16=False,
+        trainable=False,
     ):
         super().__init__()
 
@@ -51,6 +53,11 @@ class PAC(nn.Module):
             end_hz=amp_end_hz,
             n_bands=amp_n_bands,
         )
+
+        if trainable:
+            self.BANDS_PHA = nn.Parameter(self.BANDS_PHA)
+            self.BANDS_AMP = nn.Parameter(self.BANDS_AMP)
+
         bands_all = torch.vstack([self.BANDS_PHA, self.BANDS_AMP])
 
         # Calculation Modules
@@ -58,9 +65,10 @@ class PAC(nn.Module):
             bands_all,
             fs,
             x_shape,
+            fp16=fp16,
         )
         self.hilbert = Hilbert(dim=-1)
-        self.modulation_index = ModulationIndex(n_bins=18)
+        self.modulation_index = ModulationIndex(n_bins=18, fp16=fp16)
 
     @property
     def dimensions(self):
@@ -157,8 +165,15 @@ if __name__ == "__main__":
     T_SEC = 4
 
     xx, tt, fs = mngs.dsp.demo_sig(
-        batch_size=1, n_chs=1, fs=FS, t_sec=T_SEC, sig_type="tensorpac"
+        batch_size=4,
+        n_chs=19,
+        n_segments=1,
+        fs=FS,
+        t_sec=T_SEC,
+        sig_type="tensorpac",
     )
+
+    # pac, ff_pha, ff_amp = mngs.dsp.pac(torch.tensor(xx).cuda().half(), fs, fp16=True)
 
     # Tensorpac
     (
@@ -196,14 +211,44 @@ if __name__ == "__main__":
     # Including instanciation of the PAC module
     %timeit mngs.dsp.pac(xx, fs, pha_n_bands=50, amp_n_bands=30, device="cuda")
     # 26.4 ms +- 81.9 us per loop (mean +- std. dev. of 7 runs, 10 loops each)
-    # pac_mngs.shape
+    # pac_mngs.shape (50, 30)
 
-    # After instanciation of the PAC module
-    xx = torch.tensor(xx).cuda()
-    m = PAC(xx.shape, fs).cuda()
-    %timeit m(xx)
-    # 11.5 ms +- 3.59 us per loop (mean +- std. dev. of 7 runs, 100 loops each)
+    # # CPU
+    # mngs.dsp.pac(torch.tensor(xx).float(), fs, pha_n_bands=50, amp_n_bands=30, device="cpu")
+    # %timeit mngs.dsp.pac(torch.tensor(xx).float(), fs, pha_n_bands=50, amp_n_bands=30, device="cpu")
+
+
+
+    # PAC calculation with mngs on cuda
+    xx = torch.tensor(xx).cuda().float()
+    m = PAC(xx.shape, fs, fp16=False, trainable=True).cuda()
+    mngs.ml.utils.check_params(m)
+    pac = m(xx)
+    %timeit pac = m(xx)
+    pac.shape # (4, 19, 50, 30)
+
+
+    | float | 13 GB | 44.5 ms |
+    | half  |  7 GB | 28.5 ms |
+
+
+    # PAC calculation with mngs on cuda
+    xx.shape # (4, 19, 1, 2048)
+    fs # 512
+    xx = torch.tensor(xx).float()
+    m = PAC(xx.shape, fs, fp16=False, trainable=True).cpu()
+    %timeit pac = m(xx)
+    pac.shape # (4, 19, 50, 30)
+
+    | half  | 0 GB | 1,970 ms |
+    | float | 0 GB |   931 ms |
+
+
+    VRAM: 0 GB at float
+    VRAM: 0 GB at half
     """
+
+    pac, ff_pha, ff_amp = mngs.dsp.pac(xx, fs, fp16)
 
 # EOF
 

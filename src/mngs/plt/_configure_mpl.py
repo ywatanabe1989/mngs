@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-05 17:07:26 (ywatanabe)"
+# Time-stamp: "2024-04-10 11:00:31 (ywatanabe)"
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -39,9 +39,9 @@ def configure_mpl(
     # Hide spines
     hide_top_right_spines=True,
     # line
-    line_width=0.1,
+    line_width=0.5,
     # Color transparency
-    alpha=0.75,
+    alpha=0.9,
     # Whether to print configurations or not
     verbose=False,
     **kwargs,
