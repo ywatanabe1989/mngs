@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-11 08:20:27 (ywatanabe)"
+# Time-stamp: "2024-04-11 12:46:14 (ywatanabe)"
 
 import matplotlib.pyplot as plt
 import mngs

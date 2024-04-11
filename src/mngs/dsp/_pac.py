@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-11 09:20:40 (ywatanabe)"
+# Time-stamp: "2024-04-11 10:04:38 (ywatanabe)"
 
 from mngs.general import torch_fn
 from mngs.nn import PAC
@@ -17,6 +17,7 @@ def pac(
     amp_end_hz=160,
     amp_n_bands=100,
     device="cuda",
+    fp16=False,
 ):
     """
     Compute the phase-amplitude coupling (PAC) for signals. This function automatically handles inputs as
@@ -54,8 +55,9 @@ def pac(
         amp_start_hz=amp_start_hz,
         amp_end_hz=amp_end_hz,
         amp_n_bands=amp_n_bands,
-    )
-    return m(x), m.BANDS_PHA, m.BANDS_AMP
+        fp16=fp16,
+    ).to(device)
+    return m(x.to(device)), m.BANDS_PHA, m.BANDS_AMP
 
 
 if __name__ == "__main__":

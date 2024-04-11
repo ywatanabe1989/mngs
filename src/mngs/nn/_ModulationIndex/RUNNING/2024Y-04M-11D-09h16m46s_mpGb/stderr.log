@@ -1,0 +1,24 @@
+Traceback (most recent call last):
+  File "/home/ywatanabe/proj/entrance/mngs/nn/_ModulationIndex.py", line 164, in <module>
+    fig = mngs.dsp.utils.pac.plot_PAC_mngs_vs_tensorpac(
+  File "/home/ywatanabe/proj/mngs/src/mngs/dsp/utils/pac.py", line 54, in plot_PAC_mngs_vs_tensorpac
+    fig, axes = mngs.plt.subplots(ncols=3)
+  File "/home/ywatanabe/proj/mngs/src/mngs/plt/_subplots.py", line 84, in __call__
+    fig, axes = plt.subplots(*args, **kwargs)
+  File "/home/ywatanabe/proj/mngs/src/mngs/dsp/env/lib64/python3.9/site-packages/matplotlib/pyplot.py", line 1613, in subplots
+    fig = figure(**fig_kw)
+  File "/home/ywatanabe/proj/mngs/src/mngs/dsp/env/lib64/python3.9/site-packages/matplotlib/pyplot.py", line 934, in figure
+    manager = new_figure_manager(
+  File "/home/ywatanabe/proj/mngs/src/mngs/dsp/env/lib64/python3.9/site-packages/matplotlib/pyplot.py", line 465, in new_figure_manager
+    return _get_backend_mod().new_figure_manager(*args, **kwargs)
+  File "/home/ywatanabe/proj/mngs/src/mngs/dsp/env/lib64/python3.9/site-packages/matplotlib/backend_bases.py", line 3411, in new_figure_manager
+    return cls.new_figure_manager_given_figure(num, fig)
+  File "/home/ywatanabe/proj/mngs/src/mngs/dsp/env/lib64/python3.9/site-packages/matplotlib/backend_bases.py", line 3416, in new_figure_manager_given_figure
+    return cls.FigureCanvas.new_manager(figure, num)
+  File "/home/ywatanabe/proj/mngs/src/mngs/dsp/env/lib64/python3.9/site-packages/matplotlib/backend_bases.py", line 1785, in new_manager
+    return cls.manager_class.create_with_canvas(cls, figure, num)
+  File "/home/ywatanabe/proj/mngs/src/mngs/dsp/env/lib64/python3.9/site-packages/matplotlib/backends/_backend_tk.py", line 483, in create_with_canvas
+    if cbook._get_running_interactive_framework() is None:
+  File "/home/ywatanabe/proj/mngs/src/mngs/dsp/env/lib64/python3.9/site-packages/matplotlib/cbook.py", line 80, in _get_running_interactive_framework
+    if not _c_internal_utils.display_is_valid():
+KeyboardInterrupt

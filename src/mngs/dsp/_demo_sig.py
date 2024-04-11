@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-10 18:41:15 (ywatanabe)"
+# Time-stamp: "2024-04-11 09:56:22 (ywatanabe)"
 
 
 """
@@ -35,6 +35,7 @@ CONFIG = mngs.gen.load_configs(verbose=False)
 def demo_sig(
     batch_size=8,
     n_chs=19,
+    n_segments=20,
     t_sec=4,
     fs=512,
     freqs_hz=None,
@@ -82,6 +83,7 @@ def demo_sig(
         xx, tt = _demo_sig_tensorpac(
             batch_size=batch_size,
             n_chs=n_chs,
+            n_segments=n_segments,
             t_sec=t_sec,
             fs=fs,
         )

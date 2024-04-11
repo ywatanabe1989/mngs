@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/home/ywatanabe/proj/entrance/mngs/nn/_ModulationIndex.py", line 200, in <module>
+    vmin = min(np.min(pac_ed), np.min(pac_tp), np.min(pac_ed - pac_tp))
+NameError: name 'pac_ed' is not defined
