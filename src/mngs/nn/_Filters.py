@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-11 15:55:25 (ywatanabe)"
+# Time-stamp: "2024-04-11 16:04:58 (ywatanabe)"
 
 """
 This script does XYZ.
@@ -23,7 +23,11 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from mngs.general import torch_fn
-from mngs.nn import DifferentiableBandPassFilterInitializer
+
+# from mngs.nn import DifferentiableBandPassFilterInitializer
+# from ._DifferentiableBandPassFilterInitializer import (
+#     DifferentiableBandPassFilterInitializer,
+# )
 
 
 class BaseFilter1D(nn.Module):
@@ -295,7 +299,7 @@ class DifferentiableBandPassFilter(BaseFilter1D):
         assert amp_low_hz < amp_high_hz < nyq
 
         # Prepare kernels
-        self.init_kernels = DifferentiableBandPassFilterInitializer
+        self.init_kernels = mngs.nn.DifferentiableBandPassFilterInitializer
         kernels, self.pha_bands, self.amp_bands = self.init_kernels(
             sig_len,
             fs,

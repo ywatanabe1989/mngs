@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-11 12:04:15 (ywatanabe)"
+# Time-stamp: "2024-04-11 16:14:27 (ywatanabe)"
 
 """
 This script does XYZ.
@@ -20,7 +20,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from mngs.general import torch_fn
-from mngs.nn import BandPassFilter, Hilbert, ModulationIndex
 
 # Config
 CONFIG = mngs.gen.load_configs()
@@ -43,32 +42,39 @@ class PAC(nn.Module):
         super().__init__()
 
         # Bands definitions
-        self.BANDS_PHA = self.calc_bands_pha(
-            start_hz=pha_start_hz,
-            end_hz=pha_end_hz,
-            n_bands=pha_n_bands,
-        )
-        self.BANDS_AMP = self.calc_bands_amp(
-            start_hz=amp_start_hz,
-            end_hz=amp_end_hz,
-            n_bands=amp_n_bands,
-        )
+        # self.BANDS_PHA = self.calc_bands_pha(
+        #     start_hz=pha_start_hz,
+        #     end_hz=pha_end_hz,
+        #     n_bands=pha_n_bands,
+        # )
+        # self.BANDS_AMP = self.calc_bands_amp(
+        #     start_hz=amp_start_hz,
+        #     end_hz=amp_end_hz,
+        #     n_bands=amp_n_bands,
+        # )
 
-        if trainable:
-            self.BANDS_PHA = nn.Parameter(self.BANDS_PHA)
-            self.BANDS_AMP = nn.Parameter(self.BANDS_AMP)
+        # if trainable:
+        #     self.BANDS_PHA = nn.Parameter(self.BANDS_PHA)
+        #     self.BANDS_AMP = nn.Parameter(self.BANDS_AMP)
 
-        bands_all = torch.vstack([self.BANDS_PHA, self.BANDS_AMP])
+        # bands_all = torch.vstack([self.BANDS_PHA, self.BANDS_AMP])
 
         # Calculation Modules
-        self.bandpass = BandPassFilter(
-            bands_all,
+        # self.bandpass = BandPassFilter(
+        #     bands_all,
+        #     fs,
+        #     x_shape,
+        #     fp16=fp16,
+        # )
+        self.bandpass = mngs.nn.DifferentiableBandPassFilter(
+            x_shape[-1],
             fs,
-            x_shape,
             fp16=fp16,
         )
-        self.hilbert = Hilbert(dim=-1)
-        self.modulation_index = ModulationIndex(n_bins=18, fp16=fp16)
+        self.BANDS_PHA = self.bandpass.pha_bands  # fixme
+        self.BANDS_AMP = self.bandpass.amp_bands
+        self.hilbert = mngs.nn.Hilbert(dim=-1)
+        self.modulation_index = mngs.nn.ModulationIndex(n_bins=18, fp16=fp16)
 
     @property
     def dimensions(self):
@@ -103,40 +109,40 @@ class PAC(nn.Module):
         x = x.transpose(2, 3)
         # (batch_size, n_chs, n_pha_bands + n_amp_bands, n_segments, pha + amp)
 
-        pha = x[:, :, : len(self.BANDS_PHA), :, :, 0]
+        pha = x[:, :, : len(self.bandpass.pha_bands), :, :, 0]
         # (batch_size, n_chs, n_freqs_pha, n_segments, sequence_length)
 
-        amp = x[:, :, len(self.BANDS_PHA) :, :, :, 1]
+        amp = x[:, :, -len(self.bandpass.amp_bands) :, :, :, 1]
         # (batch_size, n_chs, n_freqs_amp, n_segments, sequence_length)()
 
         pac = self.modulation_index(pha, amp)
         return pac
 
-    @staticmethod
-    def calc_bands_pha(start_hz=2, end_hz=20, n_bands=100):
-        start_hz = start_hz if start_hz is not None else 2
-        end_hz = end_hz if end_hz is not None else 20
-        mid_hz = torch.linspace(start_hz, end_hz, n_bands)
-        return torch.cat(
-            (
-                mid_hz.unsqueeze(1) - mid_hz.unsqueeze(1) / 4.0,
-                mid_hz.unsqueeze(1) + mid_hz.unsqueeze(1) / 4.0,
-            ),
-            dim=1,
-        )
+    # @staticmethod
+    # def calc_bands_pha(start_hz=2, end_hz=20, n_bands=100):
+    #     start_hz = start_hz if start_hz is not None else 2
+    #     end_hz = end_hz if end_hz is not None else 20
+    #     mid_hz = torch.linspace(start_hz, end_hz, n_bands)
+    #     return torch.cat(
+    #         (
+    #             mid_hz.unsqueeze(1) - mid_hz.unsqueeze(1) / 4.0,
+    #             mid_hz.unsqueeze(1) + mid_hz.unsqueeze(1) / 4.0,
+    #         ),
+    #         dim=1,
+    #     )
 
-    @staticmethod
-    def calc_bands_amp(start_hz=30, end_hz=160, n_bands=100):
-        start_hz = start_hz if start_hz is not None else 30
-        end_hz = end_hz if end_hz is not None else 160
-        mid_hz = torch.linspace(start_hz, end_hz, n_bands)
-        return torch.cat(
-            (
-                mid_hz.unsqueeze(1) - mid_hz.unsqueeze(1) / 8.0,
-                mid_hz.unsqueeze(1) + mid_hz.unsqueeze(1) / 8.0,
-            ),
-            dim=1,
-        )
+    # @staticmethod
+    # def calc_bands_amp(start_hz=30, end_hz=160, n_bands=100):
+    #     start_hz = start_hz if start_hz is not None else 30
+    #     end_hz = end_hz if end_hz is not None else 160
+    #     mid_hz = torch.linspace(start_hz, end_hz, n_bands)
+    #     return torch.cat(
+    #         (
+    #             mid_hz.unsqueeze(1) - mid_hz.unsqueeze(1) / 8.0,
+    #             mid_hz.unsqueeze(1) + mid_hz.unsqueeze(1) / 8.0,
+    #         ),
+    #         dim=1,
+    #     )
 
     @staticmethod
     def _ensure_4d_input(x):
@@ -172,22 +178,24 @@ if __name__ == "__main__":
         t_sec=T_SEC,
         sig_type="tensorpac",
     )
+    xx = torch.tensor(xx)
 
     # pac, ff_pha, ff_amp = mngs.dsp.pac(torch.tensor(xx).cuda().half(), fs, fp16=True)
 
-    # Tensorpac
-    (
-        _,
-        _,
-        _,
-        _,
-        pac_tp,
-    ) = mngs.dsp.utils.pac.calc_pac_with_tensorpac(xx, fs, t_sec=T_SEC)
+    # # Tensorpac
+    # (
+    #     _,
+    #     _,
+    #     _,
+    #     _,
+    #     pac_tp,
+    # ) = mngs.dsp.utils.pac.calc_pac_with_tensorpac(xx, fs, t_sec=T_SEC)
 
     # mngs
     pac_mngs, pha_bands, amp_bands = mngs.dsp.pac(
-        xx, fs, pha_n_bands=50, amp_n_bands=30, device="cuda"
+        xx.cuda(), fs, pha_n_bands=50, amp_n_bands=30, device="cuda"
     )
+    pac_mngs.sum().backward()  # OK
 
     fig = mngs.dsp.utils.pac.plot_PAC_mngs_vs_tensorpac(
         pac_mngs,

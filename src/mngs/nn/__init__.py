@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-11 15:01:33 (ywatanabe)"
+# Time-stamp: "2024-04-11 16:07:32 (ywatanabe)"
 
 from ._AxiswiseDropout import AxiswiseDropout
 
@@ -16,6 +16,7 @@ from ._DropoutChannels import DropoutChannels
 from ._Filters import (
     BandPassFilter,
     BandStopFilter,
+    DifferentiableBandPassFilter,
     GaussianFilter,
     HighPassFilter,
     LowPassFilter,
