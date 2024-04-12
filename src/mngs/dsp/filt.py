@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-13 02:49:22 (ywatanabe)"
+# Time-stamp: "2024-04-13 03:46:40 (ywatanabe)"
 
 
 import mngs
@@ -52,14 +52,14 @@ if __name__ == "__main__":
     import torch
 
     # Start
-    CONFIG, sys.stdout, sys.stderr, plt, cc = mngs.gen.start(sys, plt)
+    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt)
 
     # Parametes
     T_SEC = 1
     SRC_FS = 1024
-    FREQS_HZ = list(np.linspace(0, 500, 10, endpoint=False))
+    FREQS_HZ = list(np.linspace(0, 500, 10, endpoint=False).astype(int))
     SIG_TYPE = "periodic"
-    BANDS = np.vstack([[80, 300]])
+    BANDS = np.vstack([[80, 310]])
     SIGMA = 3
 
     # Demo Signal
@@ -135,18 +135,18 @@ if __name__ == "__main__":
         ax.legend(loc="upper left")
 
         for bb in np.hstack(BANDS):
-            ax.axvlines(x=bb, color="gray", line_style="--")
+            ax.axvline(x=bb, color=CC["grey"], linestyle="--")
 
-    fig.suptitle("Filtered")
+    fig.suptitle("PSD (power spectrum density) of filtered signals")
     fig.supxlabel("Frequency [Hz]")
-    fig.supylabel("Power Spectral Density")
+    fig.supylabel("log(Power [uV^2 / Hz]) [a.u.]")
     mngs.io.save(fig, "psd.png")
 
     # Close
     mngs.gen.close(CONFIG)
 
-    """
-    /home/ywatanabe/proj/mngs/src/mngs/dsp/filt.py
-    """
+# EOF
 
-    # EOF
+"""
+/home/ywatanabe/proj/mngs/src/mngs/dsp/filt.py
+"""
