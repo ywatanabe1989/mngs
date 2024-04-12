@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Confirmed
+
 from ._close import close
 from ._converters import (
     numpy_fn,
@@ -10,6 +10,10 @@ from ._converters import (
     torch_fn,
     unsqueeze_if,
 )
+from ._embed import embed
+
+# Confirmed
+from ._paste import paste
 from ._reload import reload
 
 _ = None

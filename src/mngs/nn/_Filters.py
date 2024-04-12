@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-11 16:04:58 (ywatanabe)"
+# Time-stamp: "2024-04-12 16:04:04 (ywatanabe)"
 
 """
 This script does XYZ.
@@ -85,8 +85,8 @@ class BaseFilter1D(nn.Module):
         self,
     ):
         ks = self.kernels.shape[-1]
-        if not ks % 2 == 0:
-            raise ValueError("Kernel size should be an even number.")
+        # if not ks % 2 == 0:
+        #     raise ValueError("Kernel size should be an even number.")
         return ks
 
     @staticmethod

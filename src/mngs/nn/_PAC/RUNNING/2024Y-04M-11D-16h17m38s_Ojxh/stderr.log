@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/home/ywatanabe/proj/entrance/mngs/dsp/nn/_PAC.py", line 198, in <module>
+    fig = mngs.dsp.utils.pac.plot_PAC_mngs_vs_tensorpac(
+  File "/home/ywatanabe/proj/mngs/src/mngs/dsp/utils/pac.py", line 57, in plot_PAC_mngs_vs_tensorpac
+    vmin = min(np.min(pac_mngs), np.min(pac_tp), np.min(pac_mngs - pac_tp))
+ValueError: operands could not be broadcast together with shapes (4,19,30,50) (50,30) 

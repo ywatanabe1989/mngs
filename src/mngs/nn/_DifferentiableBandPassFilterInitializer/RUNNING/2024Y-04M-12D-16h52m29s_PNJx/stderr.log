@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/home/ywatanabe/proj/entrance/mngs/nn/_DifferentiableBandPassFilterInitializer.py", line 136, in <module>
+    kernels, pha_bands, amp_bands = DifferentiableBandPassFilterInitializer(
+  File "/home/ywatanabe/proj/entrance/mngs/nn/_DifferentiableBandPassFilterInitializer.py", line 60, in __init__
+    pha_orders = self.define_orders(pha_lows, fs, sig_len, cycle)
+TypeError: define_orders() missing 1 required positional argument: 'cycle'

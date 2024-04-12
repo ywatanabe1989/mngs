@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-11 12:46:14 (ywatanabe)"
+# Time-stamp: "2024-04-12 16:59:43 (ywatanabe)"
 
 import matplotlib.pyplot as plt
 import mngs
@@ -111,7 +111,7 @@ def design_filter(
 
 
 @numpy_fn
-def plot_filter(filter, fs, worN=8000, title=None):
+def plot_filter_responses(filter, fs, worN=8000, title=None):
     """
     Plots the impulse and frequency response of an FIR filter using numpy arrays.
 
@@ -138,7 +138,7 @@ def plot_filter(filter, fs, worN=8000, title=None):
 
     # Frequency Response of FIR Filter
     ax = axes[1]
-    ax.plot(ww, 20 * np.log10(abs(hh)))
+    ax.plot(ww, 20 * np.log10(abs(hh) + 1e-5))
     ax.set_title("Frequency Response of FIR Filter")
     ax.set_xlabel("Frequency [Hz]")
     ax.set_ylabel("Gain [dB]")
@@ -158,10 +158,10 @@ if __name__ == "__main__":
         seq_len, fs, low_hz=30, high_hz=70, is_bandstop=True
     )
 
-    fig = plot_filter(lp_filter, fs, title="Lowpass Filter")
-    fig = plot_filter(hp_filter, fs, title="Highpass Filter")
-    fig = plot_filter(bp_filter, fs, title="Bandpass Filter")
-    fig = plot_filter(bs_filter, fs, title="Bandstop Filter")
+    fig = plot_filter_responses(lp_filter, fs, title="Lowpass Filter")
+    fig = plot_filter_responses(hp_filter, fs, title="Highpass Filter")
+    fig = plot_filter_responses(bp_filter, fs, title="Bandpass Filter")
+    fig = plot_filter_responses(bs_filter, fs, title="Bandstop Filter")
 
     # Figure
     fig, axes = plt.subplots(nrows=4, ncols=2)

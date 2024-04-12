@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/home/ywatanabe/proj/entrance/mngs/nn/_DifferentiableBandPassFilterInitializer.py", line 136, in <module>
+    kernels, pha_bands, amp_bands = DifferentiableBandPassFilterInitializer(
+  File "/home/ywatanabe/proj/entrance/mngs/nn/_DifferentiableBandPassFilterInitializer.py", line 69, in __init__
+    self.pha_mids = pha_mids
+NameError: name 'pha_mids' is not defined

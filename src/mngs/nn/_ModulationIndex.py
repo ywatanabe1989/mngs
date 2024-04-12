@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-11 09:57:40 (ywatanabe)"
+# Time-stamp: "2024-04-11 23:06:38 (ywatanabe)"
 
 """
 This script does XYZ.
@@ -145,7 +145,7 @@ if __name__ == "__main__":
     )
 
     # Parameters
-    FS = 128
+    FS = 512
     T_SEC = 5
 
     # Demo signal
@@ -164,6 +164,8 @@ if __name__ == "__main__":
     # GPU calculation with mngs.dsp.nn.ModulationIndex
     pha, amp = _reshape(pha), _reshape(amp)
     pac_mngs = mngs.dsp.modulation_index(pha, amp).cpu().numpy()
+    i_batch, i_ch = 0, 0
+    pac_mngs = pac_mngs[i_batch, i_ch]
 
     # Plots
     fig = mngs.dsp.utils.pac.plot_PAC_mngs_vs_tensorpac(

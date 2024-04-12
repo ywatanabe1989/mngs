@@ -1,8 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-10 19:58:14 (ywatanabe)"
+# Time-stamp: "2024-04-11 20:16:23 (ywatanabe)"
 
+"""
+This script does XYZ.
+"""
+
+# Imports
+
+import os
+import sys
+
+import matplotlib.pyplot as plt
+import mngs
+import numpy as np
+import pandas as pd
 import torch
+import torch.nn as nn
+import torch.nn.functional as F
 from mngs.general import torch_fn
 from mngs.nn import ModulationIndex
 
@@ -60,7 +75,7 @@ def calc_pac_with_tensorpac(xx, fs, t_sec):
 @torch_fn
 def _reshape(x, batch_size=1, n_chs=1):
     return (
-        torch.tensor(pha)
+        torch.tensor(x)
         .unsqueeze(0)
         .unsqueeze(0)
         .repeat(batch_size, n_chs, 1, 1, 1)
@@ -70,6 +85,17 @@ def _reshape(x, batch_size=1, n_chs=1):
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
     import mngs
+
+
+# Config
+CONFIG = mngs.gen.load_configs()
+
+# Functions
+# Your awesome code here :)
+
+if __name__ == "__main__":
+    # Start
+    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt)
 
     # Parameters
     FS = 128
@@ -107,5 +133,14 @@ if __name__ == "__main__":
     ax.set_xlabel("Frequency for phase [Hz]")
     ax.set_ylabel("Frequency for amplitude [Hz]")
     ax.set_title("GPU calculation")
+    mngs.io.save(fig, CONFIG["SDIR"] + "MI.png")
+    # plt.show()
 
-    plt.show()
+    # Close
+    mngs.gen.close(CONFIG)
+
+# EOF
+
+"""
+%s
+"""

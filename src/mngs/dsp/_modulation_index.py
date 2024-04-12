@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-08 10:40:23 (ywatanabe)"
+# Time-stamp: "2024-04-11 20:14:06 (ywatanabe)"
 
 import torch
 from mngs.general import torch_fn
@@ -50,9 +50,6 @@ def plot_comodulogram_tensorpac(xx, fs, t_sec, ts=None):
         pac, title=p.method.replace(" (", f" ({k})\n("), cmap="viridis"
     )
     ax = mngs.plt.ax.set_n_ticks(ax)
-    import ipdb
-
-    ipdb.set_trace()
     freqs_amp = p.f_amp.mean(axis=-1)
     freqs_pha = p.f_pha.mean(axis=-1)
 
@@ -121,4 +118,4 @@ if __name__ == "__main__":
     ax.set_ylabel("Frequency for amplitude [Hz]")
     ax.set_title("GPU calculation")
 
-    plt.show()
+    # plt.show()

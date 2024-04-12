@@ -12,12 +12,11 @@ import tensorpac
 
 
 # Functions
-def calc_pac_with_tensorpac(xx, fs, t_sec):
+def calc_pac_with_tensorpac(xx, fs, t_sec, i_batch=0, i_ch=0):
     # Morlet's Wavelet Transfrmation
     p = tensorpac.Pac(f_pha="hres", f_amp="mres", dcomplex="wavelet")
 
     # Bandpass Filtering and Hilbert Transformation
-    i_batch, i_ch = 0, 0
     phases = p.filter(
         fs, xx[i_batch, i_ch], ftype="phase", n_jobs=1
     )  # (50, 20, 2048)
@@ -31,12 +30,12 @@ def calc_pac_with_tensorpac(xx, fs, t_sec):
     xpac = p.fit(phases, amplitudes)  # (50, 50, 20)
     pac = xpac.mean(axis=-1)  # (50, 50)
 
-    ## Plot
-    fig, ax = plt.subplots()
-    ax = p.comodulogram(
-        pac, title=p.method.replace(" (", f" ({k})\n("), cmap="viridis"
-    )
-    ax = mngs.plt.ax.set_n_ticks(ax)
+    # ## Plot
+    # fig, ax = plt.subplots()
+    # ax = p.comodulogram(
+    #     pac, title=p.method.replace(" (", f" ({k})\n("), cmap="viridis"
+    # )
+    # ax = mngs.plt.ax.set_n_ticks(ax)
     freqs_amp = p.f_amp.mean(axis=-1)
     freqs_pha = p.f_pha.mean(axis=-1)
 
@@ -49,8 +48,9 @@ def calc_pac_with_tensorpac(xx, fs, t_sec):
 
 
 def plot_PAC_mngs_vs_tensorpac(pac_mngs, pac_tp, freqs_pha, freqs_amp):
+    assert pac_mngs.shape == pac_tp.shape
+
     # Plots
-    i_batch, i_ch = 0, 0
     fig, axes = mngs.plt.subplots(ncols=3)
 
     # To align scalebars
@@ -60,7 +60,7 @@ def plot_PAC_mngs_vs_tensorpac(pac_mngs, pac_tp, freqs_pha, freqs_amp):
     # mngs version
     ax = axes[0]
     ax.imshow2d(
-        pac_mngs[i_batch, i_ch],
+        pac_mngs,
         cbar=False,
         vmin=vmin,
         vmax=vmax,
@@ -80,7 +80,7 @@ def plot_PAC_mngs_vs_tensorpac(pac_mngs, pac_tp, freqs_pha, freqs_amp):
     # Diff.
     ax = axes[2]
     ax.imshow2d(
-        pac_mngs[i_batch, i_ch] - pac_tp,
+        pac_mngs - pac_tp,
         cbar_label="PAC values",
         cbar_shrink=0.5,
         vmin=vmin,
@@ -105,7 +105,25 @@ if __name__ == "__main__":
     # Start
     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt)
 
-    # Your awesome code here :)
+    # Parameters
+    FS = 512
+    T_SEC = 8
+
+    xx, tt, fs = mngs.dsp.demo_sig(
+        batch_size=4,
+        n_chs=19,
+        n_segments=2,
+        fs=FS,
+        t_sec=T_SEC,
+        sig_type="tensorpac",
+    )
+    xx = torch.tensor(xx)
+
+    phases, amplitudes, freqs_pha, freqs_amp, pac = calc_pac_with_tensorpac(
+        xx, fs, T_SEC, i_batch=0, i_ch=0
+    )
+
+    phases.shape
 
     # Close
     mngs.gen.close(CONFIG)

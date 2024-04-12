@@ -5,6 +5,7 @@ from ._demo_sig import demo_sig
 
 # from ._ensure_3d import ensure_3d
 from ._hilbert import hilbert
+from ._listen import listen
 from ._misc import ensure_3d
 from ._mne import get_eeg_pos
 from ._modulation_index import modulation_index

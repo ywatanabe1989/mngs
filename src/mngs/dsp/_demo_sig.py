@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-11 09:56:22 (ywatanabe)"
+# Time-stamp: "2024-04-12 14:13:26 (ywatanabe)"
 
 
 """
@@ -33,13 +33,13 @@ CONFIG = mngs.gen.load_configs(verbose=False)
 
 # Functions
 def demo_sig(
+    sig_type="periodic",
     batch_size=8,
     n_chs=19,
     n_segments=20,
     t_sec=4,
     fs=512,
     freqs_hz=None,
-    sig_type="periodic",
     verbose=False,
 ):
 
@@ -51,6 +51,7 @@ def demo_sig(
         "ripple",
         "meg",
         "tensorpac",
+        "pac",
     ]
     tt = np.linspace(0, t_sec, int(t_sec * fs), endpoint=False)
 
@@ -89,6 +90,16 @@ def demo_sig(
         )
         return xx.astype(np.float32)[..., : len(tt)], tt, fs
 
+    elif sig_type == "pac":
+        xx = _demo_sig_pac(
+            batch_size=batch_size,
+            n_chs=n_chs,
+            n_segments=n_segments,
+            t_sec=t_sec,
+            fs=fs,
+        )
+        return xx.astype(np.float32)[..., : len(tt)], tt, fs
+
     else:
         fn_1d = {
             "periodic": _demo_sig_periodic_1d,
@@ -115,6 +126,58 @@ def demo_sig(
             tt,
             fs,
         )
+
+
+def _demo_sig_pac(
+    batch_size=8,
+    n_chs=19,
+    t_sec=4,
+    fs=512,
+    f_pha=10,
+    f_amp=100,
+    noise=0.8,
+    n_segments=20,
+    verbose=False,
+):
+    """
+    Generate a demo signal with phase-amplitude coupling.
+
+    Parameters:
+        batch_size (int): Number of batches.
+        n_chs (int): Number of channels.
+        t_sec (int): Duration of the signal in seconds.
+        fs (int): Sampling frequency.
+        f_pha (float): Frequency of the phase-modulating signal.
+        f_amp (float): Frequency of the amplitude-modulated signal.
+        noise (float): Noise level added to the signal.
+        n_segments (int): Number of segments.
+        verbose (bool): If True, print additional information.
+
+    Returns:
+        np.array: Generated signals with shape (batch_size, n_chs, n_segments, seq_len).
+    """
+    seq_len = t_sec * fs
+    t = np.arange(seq_len) / fs
+    if verbose:
+        print(f"Generating signal with length: {seq_len}")
+
+    # Create empty array to store the signals
+    signals = np.zeros((batch_size, n_chs, n_segments, seq_len))
+
+    for b in range(batch_size):
+        for ch in range(n_chs):
+            for seg in range(n_segments):
+                # Phase signal
+                theta = np.sin(2 * np.pi * f_pha * t)
+                # Amplitude envelope
+                amplitude_env = 1 + np.sin(2 * np.pi * f_amp * t)
+                # Combine phase and amplitude modulation
+                signal = theta * amplitude_env
+                # Add Gaussian noise
+                signal += noise * np.random.randn(seq_len)
+                signals[b, ch, seg, :] = signal
+
+    return signals
 
 
 def _demo_sig_tensorpac(

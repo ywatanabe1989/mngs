@@ -1,120 +1,120 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-04 07:26:57 (ywatanabe)"
+# Time-stamp: "2024-04-12 09:59:59 (ywatanabe)"
+
+"""
+This script does XYZ.
+"""
 
 import mngs
 from mngs.general import torch_fn
 from mngs.nn import Wavelet
 
 
+# Functions
 @torch_fn
 def wavelet(
     x,
     fs,
     freq_scale="linear",
-    out_scale="log",
+    out_scale="linear",
+    device="cuda",
 ):
     m = Wavelet(fs, freq_scale=freq_scale, out_scale=out_scale)
-    return m(x), m.freqs
+    pha, amp, freqs = m(x)
+    return pha, amp, freqs
 
 
 if __name__ == "__main__":
+    import sys
+
     import matplotlib.pyplot as plt
 
-    fs = 1024  # Sampling rate in Hz
-    freqs_hz = [30, 100, 250]
-    x = mngs.dsp.np.demo_sig(fs=fs, freqs_hz=freqs_hz, type="ripple")
-    y, freqs = wavelet(
-        x,
-        fs,
+    # Start
+    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt)
+
+    # Parameters
+    FS = 1024
+    FREQS_HZ = [30, 100, 250]
+    SIG_TYPE = "tensorpac"
+    T_SEC = 4
+
+    # Demo signal
+    xx, tt, fs = mngs.dsp.demo_sig(
+        batch_size=2,
+        n_chs=2,
+        n_segments=2,
+        fs=FS,
+        freqs_hz=FREQS_HZ,
+        sig_type=SIG_TYPE,
     )
 
-    plt, CC = mngs.plt.configure_mpl(plt)
-    fig, axes = plt.subplots(nrows=2, ncols=1, sharex=True)
-    axes[0].plot(x[0, 0])
-    axes[1].imshow(y[0, 0])
-    # axes[1].imshow(np.log(y[0, 0] + 1e-5))
-    y, freqs = wavelet(
-        x,
-        fs,
-    )
-    axes[1].invert_yaxis()
-    axes[1] = mngs.plt.ax.set_n_ticks(axes[1], n_xticks=4, n_yticks=4)
+    if SIG_TYPE == "tensorpac":
+        xx = xx[:, :, 0, :]  # The first segment
 
-    plt.tight_layout()
-    plt.show()
+    # Main
+    pha, amp, freqs = wavelet(xx, fs, device="cuda")
 
-    ########################################
-    # # working
-    # from wavelets_pytorch.transform import WaveletTransformTorch
-    # dt = 1 / fs
-    # dj = 0.125
-    # wa_torch = WaveletTransformTorch(dt, dj, )
-    # cwt_torch = wa_torch.cwt(x[0, 0])
-    # sns.heatmap(np.abs(cwt_torch).astype(np.float32))
+    # Plots
+    fig, axes = mngs.plt.subplots(nrows=3, ncols=1)
+
+    # Trace
+    axes[0].plot(tt, xx[0, 0], label="orig")
+    axes[0].set_ylabel("Amplitude")
+    # Phase
+    axes[1].imshow2d(pha[0, 0].T, cbar_label="Phase")
+    axes[1] = mngs.plt.ax.set_ticks(axes[1], xticks=tt, yticks=freqs)
+    axes[1].set_ylabel("Frequency [Hz]")
+    # Amplitude
+    axes[2].imshow2d(np.log(amp[0, 0] + 1e-5).T, cbar_label="Amplitude")
+    axes[2] = mngs.plt.ax.set_ticks(axes[2], xticks=tt, yticks=freqs)
+    axes[2].set_ylabel("Frequency [Hz]")
+
+    for ax in axes:
+        ax.legend(loc="upper left")
+        ax = mngs.plt.ax.set_n_ticks(ax)
+
+    fig.suptitle("Wavelet Transformation")
+    fig.supxlabel("Time [s]")
+
+    mngs.io.save(fig, CONFIG["SDIR"] + "wavelet.png")
     # plt.show()
-    ########################################
 
-    # # Example usage
-    # m = WaveletFilter(fs, scale="linear").cuda()
+    # # Plots phase
+    # _freqs = freqs[freqs <= 20]
+    # fig, axes = mngs.plt.subplots(nrows=len(_freqs), sharex=True)
+    # for ax, (i_ff, ff) in zip(axes, enumerate(_freqs)):
+    #     ax.plot(tt, pha[0, 0, i_ff], label=f"{ff:.1f} Hz")
+    #     ax.legend(loc="upper left")
+    # plt.show()
 
-    # out = []
-    # for kk in m.kernel:
-    #     out.append(np.convolve(x[0, 0], kk.cpu().numpy()))
-    # out = np.array(out)
+    # # Plots phase from tensorpac
+    # (
+    #     phases,
+    #     amplitudes,
+    #     freqs_pha,
+    #     freqs_amp,
+    #     pac,
+    # ) = mngs.dsp.utils.pac.calc_pac_with_tensorpac(xx, fs, T_SEC)
 
-    # plt.plot(np.convolve(x[0, 0], m.kernel[0]))
-    # y = m(torch.tensor(x).float().cuda())
+    # _freqs = freqs_pha[freqs_pha <= 20]
+    # fig, axes = mngs.plt.subplots(nrows=len(_freqs), sharex=True)
+    # for ax, (i_ff, ff) in zip(axes, enumerate(_freqs)):
+    #     ax.plot(tt, phases[i_ff, 0], label=f"{ff:.1f} Hz")
+    #     ax.legend(loc="upper left")
+    # plt.show()
 
-    # y = y.detach().cpu().numpy()
-    # y = np.abs(y)
+    # tplot(tt, pha[0, 0][i_ff][:10], label=f"{ff:.1f} Hz")
 
-    # axes[1].set_yticklabels(freqs)
-    # sns.heatmap(
-    #     np.log(y[0, 0] + 1e-5),
-    #     ax=axes[1],
-    #     yticklabels=freqs,
-    #     xticklabels=np.arange(y.shape[-1]),
-    #     cbar=False,
-    #     # cbar_kws={"cbar", "aspect": 5},
-    # )
+    # ax.plot(tt, pha[0, 0][i_ff], label=f"{ff:.1f} Hz")
+    # ax.legend(loc="upper left")
+    # plt.show
 
+    # Close
+    mngs.gen.close(CONFIG)
 
-# print(morlets.shape)
-# print(freqs)
-# # plt.plot(morlets.T)
-# # plt.show()
+# EOF
 
-# # 2D heatmap
-# import seaborn as sns
-
-# sns.heatmap(morlets.real)
-# plt.show()
-
-
-# # 3D heatmap
-# wavelet_bank = morlets
-# # Creating the 3D plot
-# fig = plt.figure()
-# ax = fig.add_subplot(111, projection="3d")
-
-# # Create a meshgrid for the X and Y axes
-# x = np.linspace(0, wavelet_bank.shape[1], wavelet_bank.shape[1])
-# y = np.linspace(0, wavelet_bank.shape[0], wavelet_bank.shape[0])
-# X, Y = np.meshgrid(x, y)
-
-# # Z axis will be the magnitude of the wavelet coefficients
-# Z = wavelet_bank
-
-# # Create a surface plot
-# surf = ax.plot_surface(X, Y, Z, cmap="viridis")
-
-# # Add a color bar to indicate the magnitude
-# fig.colorbar(surf)
-
-# # Labels
-# ax.set_xlabel("Time or Spatial Dimension")
-# ax.set_ylabel("Wavelet Filter Index")
-# ax.set_zlabel("Magnitude")
-
-# plt.show()
+"""
+/home/ywatanabe/proj/entrance/mngs/dsp/_wavelet.py
+"""
