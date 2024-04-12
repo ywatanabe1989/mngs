@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-12 19:46:35 (ywatanabe)"
+# Time-stamp: "2024-04-12 23:27:11 (ywatanabe)"
 
 import inspect
 import os as _os
@@ -163,6 +163,7 @@ def start(
             line_width=line_width,
             verbose=verbose,
         )
+
     if agg:
         matplotlib.use("Agg")
 

@@ -42,6 +42,9 @@ wheel
 xmltodict
 sktime
 tensorpac
-ipython==8.0.0
+ipython<8.0.0
 ipdb
 plotly
+pyperclip
+textwrap
+sounddevice

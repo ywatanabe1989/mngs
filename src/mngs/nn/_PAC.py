@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-12 14:11:33 (ywatanabe)"
+# Time-stamp: "2024-04-12 23:29:16 (ywatanabe)"
 
 """
 This script does XYZ.
@@ -35,8 +35,9 @@ class PAC(nn.Module):
     ):
         super().__init__()
 
-        # Bands definitions
+        # A static, general purpose BandPassFilter
         if not trainable:
+            # First, bands definitions for phase and amplitude are declared
             self.BANDS_PHA = self.calc_bands_pha(
                 start_hz=pha_start_hz,
                 end_hz=pha_end_hz,
@@ -47,18 +48,19 @@ class PAC(nn.Module):
                 end_hz=amp_end_hz,
                 n_bands=amp_n_bands,
             )
-
             bands_all = torch.vstack([self.BANDS_PHA, self.BANDS_AMP])
 
-            # Calculation Modules
+            # Instanciation of the static bandpass filter module
             self.bandpass = mngs.nn.BandPassFilter(
                 bands_all,
                 fs,
                 x_shape,
                 fp16=fp16,
             )
-            self.BANDS_PHA = self.BANDS_PHA.mean(-1)
-            self.BANDS_AMP = self.BANDS_AMP.mean(-1)
+            self.PHA_MIDS_HZ = self.BANDS_PHA.mean(-1)
+            self.AMP_MIDS_HZ = self.BANDS_AMP.mean(-1)
+
+        # A trainable BandPassFilter specifically for PAC calculation. Bands will be optimized.
         else:
             self.bandpass = mngs.nn.DifferentiableBandPassFilter(
                 x_shape[-1],
@@ -71,8 +73,8 @@ class PAC(nn.Module):
                 amp_high_hz=amp_end_hz,
                 amp_n_bands=amp_n_bands,
             )
-            self.BANDS_PHA = self.bandpass.pha_bands  # fixme
-            self.BANDS_AMP = self.bandpass.amp_bands
+            self.PHA_MIDS_HZ = self.bandpass.pha_mids
+            self.AMP_MIDS_HZ = self.bandpass.amp_mids
         self.hilbert = mngs.nn.Hilbert(dim=-1)
         self.modulation_index = mngs.nn.ModulationIndex(n_bins=18, fp16=fp16)
 
@@ -109,10 +111,10 @@ class PAC(nn.Module):
         x = x.transpose(2, 3)
         # (batch_size, n_chs, n_pha_bands + n_amp_bands, n_segments, pha + amp)
 
-        pha = x[:, :, : len(self.BANDS_PHA), :, :, 0]
+        pha = x[:, :, : len(self.PHA_MIDS_HZ), :, :, 0]
         # (batch_size, n_chs, n_freqs_pha, n_segments, sequence_length)
 
-        amp = x[:, :, -len(self.BANDS_AMP) :, :, :, 1]
+        amp = x[:, :, -len(self.AMP_MIDS_HZ) :, :, :, 1]
         # (batch_size, n_chs, n_freqs_amp, n_segments, sequence_length)()
 
         edge_len = int(pha.shape[-1] // 8)
@@ -184,8 +186,6 @@ if __name__ == "__main__":
         sig_type="pac",
     )
     xx = torch.tensor(xx)
-
-    # pac, ff_pha, ff_amp = mngs.dsp.pac(torch.tensor(xx).cuda().half(), fs, fp16=True)
 
     # Tensorpac
     i_batch, i_ch = 0, 0

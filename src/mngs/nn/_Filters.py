@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-12 20:30:34 (ywatanabe)"
+# Time-stamp: "2024-04-12 23:29:54 (ywatanabe)"
 
 """
 This script does XYZ.
@@ -320,8 +320,8 @@ class DifferentiableBandPassFilter(BaseFilter1D):
 
         if fp16:
             self.kernels = self.kernels.half()
-            self.pha_mids = self.pha_mids.half()
-            self.amp_mids = self.amp_mids.half()
+            # self.pha_mids = self.pha_mids.half()
+            # self.amp_mids = self.amp_mids.half()
 
     def forward(self, x, t=None, edge_len=0):
         # Constrains the parameter spaces
