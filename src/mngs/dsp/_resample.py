@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-10 15:28:41 (ywatanabe)"
+# Time-stamp: "2024-04-13 01:47:58 (ywatanabe)"
 
 
 import torch
@@ -19,12 +19,16 @@ def resample(x, src_fs, tgt_fs, t=None):
 
 
 if __name__ == "__main__":
+    import matplotlib.pyplot as plt
+    import mngs
+
     # Parameters
-    T_SEC = 4
-    SIG_TYPE = ["periodic", "chirp", "ripple"][0]
-    SRC_FS = 1024
-    TGT_FS = 256
-    FREQS_HZ = [10, 30, 100]
+    T_SEC = 1
+    SIG_TYPE = "chirp"
+    SRC_FS = 128
+    TGT_FS_UP = 256
+    TGT_FS_DOWN = 64
+    FREQS_HZ = [10, 30, 100, 300]
 
     # Demo Signal
     xx, tt, fs = mngs.dsp.demo_sig(
@@ -32,31 +36,28 @@ if __name__ == "__main__":
     )
 
     # Resampling
-    xx_resampled, tt_resampled = mngs.dsp.resample(xx, fs, TGT_FS, t=tt)
-
-    # Filtering
-    filted_bp = mngs.dsp.filt.bandpass(xx, fs, low_hz=20, high_hz=50)
-    filted_bs = mngs.dsp.filt.bandstop(xx, fs, low_hz=20, high_hz=50)
-    filted_gauss = mngs.dsp.filt.gauss(xx, sigma=3)
-
-    # Power Spetrum Density
-    psd, ff_pp = mngs.dsp.psd(xx, fs)
-
-    # Wavelet Transformation
-    wvlt_coef, ff_ww = mngs.dsp.wavelet(xx, fs)
-
-    # Hilbert Transformation
-    pha, amp = mngs.dsp.hilbert(xx)
+    xd, td = mngs.dsp.resample(xx, fs, TGT_FS_DOWN, t=tt)
+    xu, tu = mngs.dsp.resample(xx, fs, TGT_FS_UP, t=tt)
 
     # Plots
-    i_batch = 0
-    i_ch = 0
-    fig, axes = plt.subplots(nrows=5, sharex=True, sharey=True)
-    axes[0].plot(tt, xx[i_batch, i_ch], label="Original")
-    axes[1].plot(tt_resampled, xx_resampled[i_batch, i_ch], label="Resampled")
-    axes[2].plot(tt, filted_bp[i_batch, i_ch], label="Bandpass-filtered")
-    axes[3].plot(tt, filted_bs[i_batch, i_ch], label="Bandstop-filtered")
-    axes[4].plot(tt, filted_gauss[i_batch, i_ch], label="Gaussian-filtered")
+    i_batch, i_ch = 0, 0
+    fig, axes = plt.subplots(nrows=3, sharex=True, sharey=True)
+    axes[0].plot(tt, xx[i_batch, i_ch], label=f"Original ({SRC_FS} Hz)")
+    axes[1].plot(
+        td, xd[i_batch, i_ch], label=f"Down-sampled ({TGT_FS_DOWN} Hz)"
+    )
+    axes[2].plot(tu, xu[i_batch, i_ch], label=f"Up-sampled ({TGT_FS_UP} Hz)")
     for ax in axes:
-        ax.legend()
-    plt.show()
+        ax.legend(loc="upper left")
+
+    axes[-1].set_xlabel("Time [s]")
+    fig.supylabel("Amplitude [?V]")
+    fig.suptitle("Resampling")
+    mngs.io.save(fig, "traces.png")
+    # plt.show()
+
+# EOF
+
+"""
+/home/ywatanabe/proj/entrance/mngs/dsp/_resample.py
+"""

@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-12 23:40:40 (ywatanabe)"
+# Time-stamp: "2024-04-13 01:18:23 (ywatanabe)"
 
 """
 Functions to add noise to signals.
@@ -68,6 +68,8 @@ def brown(x, amp=1.0, dim=-1):
 
 
 if __name__ == "__main__":
+    import mngs
+
     # Start
     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt)
 
@@ -99,7 +101,13 @@ if __name__ == "__main__":
                 ax.plot(tt, (fn(xx) - xx)[0, 0], label=f"{k} - orig", c="red")
             count += 1
             ax.legend(loc="upper right")
-    mngs.io.save(fig, "traces.py")
+
+    fig.supxlabel("Time [s]")
+    fig.supylabel("Amplitude [?V]")
+    axes[0, 0].set_title("Signal + Noise")
+    axes[0, 1].set_title("Noise")
+
+    mngs.io.save(fig, "traces.png")
 
     # Close
     mngs.gen.close(CONFIG)

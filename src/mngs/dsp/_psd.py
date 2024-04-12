@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-13 00:02:06 (ywatanabe)"
+# Time-stamp: "2024-04-13 01:32:37 (ywatanabe)"
 
 """
 This script does XYZ.
@@ -82,7 +82,7 @@ if __name__ == "__main__":
     # Plots
     fig, axes = mngs.plt.subplots(nrows=2)
 
-    axes[0].plot(tt, xx, label=SIG_TYPE)
+    axes[0].plot(tt, xx[0, 0], label=SIG_TYPE)
     axes[1].set_title("Signal")
     axes[0].set_xlabel("Time [s]")
     axes[0].set_ylabel("Amplitude [?V]")
