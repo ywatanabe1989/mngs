@@ -17,7 +17,7 @@ import mngs
 </div>
 
 <div align="center">
-  <img src="./_resampled/traces.png" height="400">
+  <img src="./_resample/traces.png" height="400">
 </div>
 
 <div align="center">
