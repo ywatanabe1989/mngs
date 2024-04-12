@@ -6,11 +6,6 @@ The mngs.dsp module is a digital signal processing toolbox developed in **PyTorc
 $ pip install mngs
 ```
 
-## Quick Start
-``` python
-import mngs
-```
-
 ## Galleries
 <div style="display: flex; justify-content: center; flex-wrap: wrap;">
   <img src="./_demo_sig/traces.png" height="300" style="border: 2px solid gray; margin: 5px;">
@@ -26,43 +21,11 @@ import mngs
   <img src="./_pac/pac_with_trainable_bandpass_fp32.png" height="300" style="border: 2px solid gray; margin: 5px;">
 </div>
 
-<!-- <div align="center">
- !--   <img src="./_demo_sig/traces.png" height="300" style="border: 2px solid gray;">
- !-- </div>
- !-- 
- !-- <div align="center">
- !--   <img src="./_resample/traces.png" height="300" style="border: 2px solid gray;">
- !-- </div>
- !-- 
- !-- <div align="center">
- !--   <img src="./filt/traces.png" height="300" style="border: 2px solid gray;">
- !-- </div>
- !-- 
- !-- <div align="center">
- !--   <img src="./filt/psd.png" height="300" style="border: 2px solid gray;">
- !-- </div>
- !-- 
- !-- <div align="center">
- !--   <img src="./_wavelet/wavelet.png" height="300" style="border: 2px solid gray;">
- !-- </div>
- !-- 
- !-- <div align="center">
- !--   <img src="./_hilbert/traces.png" height="300" style="border: 2px solid gray;">
- !-- </div>
- !-- 
- !-- <div align="center">
- !--   <img src="./_modulation_index/modulation_index.png" height="300" style="border: 2px solid gray;">
- !-- </div>
- !-- 
- !-- <div align="center">
- !--   <img src="./_pac/pac_with_trainable_bandpass_fp32.png" height="300" style="border: 2px solid gray;">
- !-- </div> -->
 
+## Quick Start
+``` python
+import mngs
 
-
-
-
-```python
 # Parameters
 SRC_FS = 1024  # Source sampling frequency
 TGT_FS = 512   # Target sampling frequency
@@ -115,7 +78,7 @@ wavelet_coef, wavelet_freqs = mngs.dsp.wavelet(xx, fs)
 psd, psd_freqs = mngs.dsp.psd(xx, fs)
 
 # Phase-Amplitude Coupling
-pac, freqs_pha, freqs_amp = mngs.dsp.pac(x_3d, fs) # This function is computationally demanding. Please monitor the RAM/VRAM usage.
+pac, freqs_pha, freqs_amp = mngs.dsp.pac(xx, fs) # This process is computationally intensive. Please monitor RAM/VRAM usage.
 ```
 
 ## Contact
