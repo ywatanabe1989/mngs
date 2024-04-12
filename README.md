@@ -1,3 +1,5 @@
+# monogusa (= lazy in Japanese): Python utilities for ML and DSP projects
+
 ![CI](https://github.com/ywatanabe1989/mngs/actions/workflows/pip_install.yml/badge.svg)
 
 ![Hard Working Sloth](./docs/hard_working_sloth.jpg)
