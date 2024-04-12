@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-13 03:36:43 (ywatanabe)"
+# Time-stamp: "2024-04-13 03:46:40 (ywatanabe)"
 
 
 import mngs
@@ -137,9 +137,9 @@ if __name__ == "__main__":
         for bb in np.hstack(BANDS):
             ax.axvline(x=bb, color=CC["grey"], linestyle="--")
 
-    fig.suptitle("Filtered")
+    fig.suptitle("PSD (power spectrum density) of filtered signals")
     fig.supxlabel("Frequency [Hz]")
-    fig.supylabel("Power Spectral Density")
+    fig.supylabel("log(Power [uV^2 / Hz]) [a.u.]")
     mngs.io.save(fig, "psd.png")
 
     # Close
