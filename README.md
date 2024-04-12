@@ -4,14 +4,10 @@
 ``` bash
 $ pip install mngs
 ```
-or
-``` bash
-$ pip install git+https://github.com/ywatanabe1989/mngs.git@develop
-```
 
+## Galleries
+[`mngs.dsp`](https://github.com/ywatanabe1989/mngs/tree/develop/src/mngs/dsp#readme)
 
-## [`tree.txt`](./tree.txt)
+## Contact
+Yusuke Watanabe (ywata1989@gmail.com).
 
-``` bash
-$ tree ./src/mngs > tree.txt
-```
