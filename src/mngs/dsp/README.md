@@ -41,7 +41,7 @@ import mngs
 </div>
 
 <div align="center">
-  <img src="./_pac/pac.png" height="400">
+  <img src="./_pac/pac_with_trainable_bandpass_fp32.png" height="400">
 </div>
 
 
