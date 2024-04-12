@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-10 23:50:27 (ywatanabe)"
+# Time-stamp: "2024-04-12 23:42:57 (ywatanabe)"
 
 
 import mngs
@@ -106,7 +106,7 @@ if __name__ == "__main__":
         ax.legend(loc="upper left")
     fig.supxlabel("Time [s]")
     fig.supylabel("Amplitude")
-    mngs.io.save(fig, CONFIG["SDIR"] + "traces.png")
+    mngs.io.save(fig, "traces.png")
 
     # Calculates and Plots PSD
     fig, axes = plt.subplots(
@@ -128,7 +128,7 @@ if __name__ == "__main__":
         ax.legend(loc="upper left")
     fig.supxlabel("Frequency [Hz]")
     fig.supylabel("Power Spectral Density")
-    mngs.io.save(fig, CONFIG["SDIR"] + "psd.png")
+    mngs.io.save(fig, "psd.png")
 
     # Close
     mngs.gen.close(CONFIG)

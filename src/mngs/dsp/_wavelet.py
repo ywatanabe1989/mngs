@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-12 09:59:59 (ywatanabe)"
+# Time-stamp: "2024-04-13 00:51:35 (ywatanabe)"
 
 """
 This script does XYZ.
@@ -29,14 +29,16 @@ if __name__ == "__main__":
     import sys
 
     import matplotlib.pyplot as plt
+    import numpy as np
 
     # Start
-    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt)
+    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
+        sys, plt, agg=True
+    )
 
     # Parameters
-    FS = 1024
-    FREQS_HZ = [30, 100, 250]
-    SIG_TYPE = "tensorpac"
+    FS = 512
+    SIG_TYPE = "chirp"
     T_SEC = 4
 
     # Demo signal
@@ -44,71 +46,66 @@ if __name__ == "__main__":
         batch_size=2,
         n_chs=2,
         n_segments=2,
+        t_sec=T_SEC,
         fs=FS,
-        freqs_hz=FREQS_HZ,
         sig_type=SIG_TYPE,
     )
 
-    if SIG_TYPE == "tensorpac":
-        xx = xx[:, :, 0, :]  # The first segment
+    if SIG_TYPE in ["tensorpac", "pac"]:
+        i_segment = 0
+        xx = xx[:, :, i_segment, :]
 
     # Main
     pha, amp, freqs = wavelet(xx, fs, device="cuda")
 
     # Plots
-    fig, axes = mngs.plt.subplots(nrows=3, ncols=1)
+    i_batch, i_ch = 0, 0
+    fig, axes = mngs.plt.subplots(nrows=3)
+
+    # # Time vector for x-axis extents
+    # time_extent = [tt.min(), tt.max()]
 
     # Trace
-    axes[0].plot(tt, xx[0, 0], label="orig")
-    axes[0].set_ylabel("Amplitude")
-    # Phase
-    axes[1].imshow2d(pha[0, 0].T, cbar_label="Phase")
+    axes[0].plot(tt, xx[i_batch, i_ch], label=SIG_TYPE)
+    axes[0].set_ylabel("Amplitude [?V]")
+    axes[0].legend(loc="upper left")
+    axes[0].set_title("Signal")
+
+    # Amplitude
+    # extent = [time_extent[0], time_extent[1], freqs.min(), freqs.max()]
+    axes[1].imshow2d(
+        np.log(amp[i_batch, i_ch] + 1e-5).T,
+        cbar_label="Log(amplitude [?V]) [a.u.]",
+        aspect="auto",
+        # extent=extent,
+        # origin="lower",
+    )
     axes[1] = mngs.plt.ax.set_ticks(axes[1], xticks=tt, yticks=freqs)
     axes[1].set_ylabel("Frequency [Hz]")
-    # Amplitude
-    axes[2].imshow2d(np.log(amp[0, 0] + 1e-5).T, cbar_label="Amplitude")
+    axes[1].set_title("Amplitude")
+
+    # Phase
+    axes[2].imshow2d(
+        pha[i_batch, i_ch].T,
+        cbar_label="Phase [rad]",
+        aspect="auto",
+        # extent=extent,
+        # origin="lower",
+    )
     axes[2] = mngs.plt.ax.set_ticks(axes[2], xticks=tt, yticks=freqs)
     axes[2].set_ylabel("Frequency [Hz]")
-
-    for ax in axes:
-        ax.legend(loc="upper left")
-        ax = mngs.plt.ax.set_n_ticks(ax)
+    axes[2].set_title("Phase")
 
     fig.suptitle("Wavelet Transformation")
     fig.supxlabel("Time [s]")
 
-    mngs.io.save(fig, CONFIG["SDIR"] + "wavelet.png")
-    # plt.show()
+    for ax in axes:
+        ax = mngs.plt.ax.set_n_ticks(ax)
+        # ax.set_xlim(time_extent[0], time_extent[1])
 
-    # # Plots phase
-    # _freqs = freqs[freqs <= 20]
-    # fig, axes = mngs.plt.subplots(nrows=len(_freqs), sharex=True)
-    # for ax, (i_ff, ff) in zip(axes, enumerate(_freqs)):
-    #     ax.plot(tt, pha[0, 0, i_ff], label=f"{ff:.1f} Hz")
-    #     ax.legend(loc="upper left")
-    # plt.show()
+    fig.tight_layout(rect=[0, 0.03, 1, 0.95])
 
-    # # Plots phase from tensorpac
-    # (
-    #     phases,
-    #     amplitudes,
-    #     freqs_pha,
-    #     freqs_amp,
-    #     pac,
-    # ) = mngs.dsp.utils.pac.calc_pac_with_tensorpac(xx, fs, T_SEC)
-
-    # _freqs = freqs_pha[freqs_pha <= 20]
-    # fig, axes = mngs.plt.subplots(nrows=len(_freqs), sharex=True)
-    # for ax, (i_ff, ff) in zip(axes, enumerate(_freqs)):
-    #     ax.plot(tt, phases[i_ff, 0], label=f"{ff:.1f} Hz")
-    #     ax.legend(loc="upper left")
-    # plt.show()
-
-    # tplot(tt, pha[0, 0][i_ff][:10], label=f"{ff:.1f} Hz")
-
-    # ax.plot(tt, pha[0, 0][i_ff], label=f"{ff:.1f} Hz")
-    # ax.legend(loc="upper left")
-    # plt.show
+    mngs.io.save(fig, "wavelet.png")
 
     # Close
     mngs.gen.close(CONFIG)

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-11 20:14:06 (ywatanabe)"
+# Time-stamp: "2024-04-12 23:51:37 (ywatanabe)"
 
 import torch
 from mngs.general import torch_fn
@@ -16,106 +16,66 @@ def modulation_index(pha, amp, n_bins=18):
     return ModulationIndex(n_bins=n_bins)(pha, amp)
 
 
-def plot_comodulogram_tensorpac(xx, fs, t_sec, ts=None):
-    import tensorpac
-    from tensorpac import Pac
-
-    # Morlet's Wavelet Transfrmation
-    p = tensorpac.Pac(f_pha="hres", f_amp="hres", dcomplex="wavelet")
-
-    # Bandpass Filtering and Hilbert Transformation
-    i_batch, i_ch = 0, 0
-    ts("Bandpassfiltering and Hilbert Transformation with Tensorpac starts.")
-    phases = p.filter(
-        fs, xx[i_batch, i_ch], ftype="phase", n_jobs=1
-    )  # (50, 20, 2048)
-    amplitudes = p.filter(
-        fs, xx[i_batch, i_ch], ftype="amplitude", n_jobs=1
-    )  # (50, 20, 2048)
-    ts("Bandpassfiltering and Hilbert Transformation with Tensorpac ends.")
-
-    # Calculates xpac
-    k = 2
-    p.idpac = (k, 0, 0)
-    ts("PAC Calculation with Tensorpac starts.")
-
-    xpac = p.fit(phases, amplitudes)  # (50, 50, 20)
-    pac = xpac.mean(axis=-1)  # (50, 50)
-
-    ts("PAC Calculation with Tensorpac ends.")
-
-    ## Plot
-    fig, ax = plt.subplots()
-    ax = p.comodulogram(
-        pac, title=p.method.replace(" (", f" ({k})\n("), cmap="viridis"
+def _reshape(x, batch_size=2, n_chs=4):
+    return (
+        torch.tensor(x)
+        .float()
+        .unsqueeze(0)
+        .unsqueeze(0)
+        .repeat(batch_size, n_chs, 1, 1, 1)
     )
-    ax = mngs.plt.ax.set_n_ticks(ax)
-    freqs_amp = p.f_amp.mean(axis=-1)
-    freqs_pha = p.f_pha.mean(axis=-1)
-
-    return phases, amplitudes, freqs_pha, freqs_amp
-    # return phases and amplitudes for future use in my implementation
-    # as the aim of this code is to confirm the calculation of Modulation Index only
-    # without considering bandpass filtering and hilbert transformation.
-
-
-@torch_fn
-def reshape_pha_amp(pha, amp, batch_size=2, n_chs=4):
-    pha = torch.tensor(pha).half()
-    amp = torch.tensor(amp).half()
-    pha = pha.unsqueeze(0).unsqueeze(0).repeat(batch_size, n_chs, 1, 1, 1)
-    amp = amp.unsqueeze(0).unsqueeze(0).repeat(batch_size, n_chs, 1, 1, 1)
-    return pha, amp
 
 
 if __name__ == "__main__":
+    import sys
+
     import matplotlib.pyplot as plt
     import mngs
+    import seaborn as sns
+    import tensorpac
+    from tensorpac import Pac
+    from tqdm import tqdm
+
+    # Start
+    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
+        sys, plt, fig_scale=3
+    )
 
     # Parameters
-    fs = 128
-    t_sec = 5
-
-    # Timestamper
-    ts = mngs.gen.TimeStamper()
+    FS = 512
+    T_SEC = 5
 
     # Demo signal
-    xx, tt, fs = mngs.dsp.demo_sig(fs=fs, t_sec=t_sec, sig_type="tensorpac")
+    xx, tt, fs = mngs.dsp.demo_sig(fs=FS, t_sec=T_SEC, sig_type="tensorpac")
     # xx.shape: (8, 19, 20, 512)
 
     # Tensorpac
-    pha, amp, freqs_pha, freqs_amp = plot_comodulogram_tensorpac(
-        xx,
-        fs,
-        t_sec=t_sec,
-        ts=ts,
-    )
-    # mngs.io.save((pha, amp, freqs_pha, freqs_amp), "/tmp/out.pkl")
-    # pha, amp, freqs_pha, freqs_amp = mngs.io.load("/tmp/out.pkl")
+    (
+        pha,
+        amp,
+        freqs_pha,
+        freqs_amp,
+        pac_tp,
+    ) = mngs.dsp.utils.pac.calc_pac_with_tensorpac(xx, fs, t_sec=T_SEC)
 
-    # GPU calculation
-    pha, amp = reshape_pha_amp(pha, amp)
-
-    ts("PAC Calculation with mngs.dsp starts.")
-
-    pac = mngs.dsp.modulation_index(pha, amp)
-
-    ts("PAC Calculation with mngs.dsp ends.")
-
-    ## Convert y-axis
+    # GPU calculation with mngs.dsp.nn.ModulationIndex
+    pha, amp = _reshape(pha), _reshape(amp)
+    pac_mngs = mngs.dsp.modulation_index(pha, amp).cpu().numpy()
     i_batch, i_ch = 0, 0
+    pac_mngs = pac_mngs[i_batch, i_ch]
 
-    fig, ax = mngs.plt.subplots()
-    ax.imshow2d(
-        pac[i_batch, i_ch],
-        cbar_label="PAC values",
+    # Plots
+    fig = mngs.dsp.utils.pac.plot_PAC_mngs_vs_tensorpac(
+        pac_mngs, pac_tp, freqs_pha, freqs_amp
     )
-    ax = mngs.plt.ax.set_ticks(
-        ax, xticks=freqs_pha.astype(int), yticks=freqs_amp.astype(int)
-    )
-    ax = mngs.plt.ax.set_n_ticks(ax)
-    ax.set_xlabel("Frequency for phase [Hz]")
-    ax.set_ylabel("Frequency for amplitude [Hz]")
-    ax.set_title("GPU calculation")
+    mngs.io.save(fig, "modulation_index.png")
 
-    # plt.show()
+    # Close
+    mngs.gen.close(CONFIG)
+
+
+# EOF
+
+"""
+/home/ywatanabe/proj/entrance/mngs/dsp/_modulation_index.py
+"""

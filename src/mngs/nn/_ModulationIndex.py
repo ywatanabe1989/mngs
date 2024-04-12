@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-11 23:06:38 (ywatanabe)"
+# Time-stamp: "2024-04-12 23:51:57 (ywatanabe)"
 
 """
 This script does XYZ.
@@ -124,11 +124,6 @@ def _reshape(x, batch_size=2, n_chs=4):
         .unsqueeze(0)
         .repeat(batch_size, n_chs, 1, 1, 1)
     )
-
-
-@torch_fn
-def modulation_index(pha, amp, n_bins=18):
-    return ModulationIndex(n_bins=n_bins)(pha, amp)
 
 
 if __name__ == "__main__":

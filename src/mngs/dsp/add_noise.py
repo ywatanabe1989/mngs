@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-10 17:16:27 (ywatanabe)"
+# Time-stamp: "2024-04-12 23:40:40 (ywatanabe)"
 
 """
 Functions to add noise to signals.
@@ -72,11 +72,11 @@ if __name__ == "__main__":
     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt)
 
     # Parameters
-    t_sec = 1
-    fs = 128
+    T_SEC = 1
+    FS = 128
 
     # Demo signal
-    xx, tt, fs = mngs.dsp.demo_sig(t_sec=t_sec, fs=fs)
+    xx, tt, fs = mngs.dsp.demo_sig(t_sec=T_SEC, fs=FS)
 
     funcs = {
         "orig": lambda x: x,
@@ -99,7 +99,7 @@ if __name__ == "__main__":
                 ax.plot(tt, (fn(xx) - xx)[0, 0], label=f"{k} - orig", c="red")
             count += 1
             ax.legend(loc="upper right")
-    mngs.io.save(fig, CONFIG["SDIR"] + "traces.py")
+    mngs.io.save(fig, "traces.py")
 
     # Close
     mngs.gen.close(CONFIG)

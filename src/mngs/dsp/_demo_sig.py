@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-12 14:13:26 (ywatanabe)"
+# Time-stamp: "2024-04-12 23:42:16 (ywatanabe)"
 
 
 """
@@ -288,18 +288,19 @@ if __name__ == "__main__":
         "meg",
         "ripple",
         "tensorpac",
+        "pac",
     ]
 
     i_batch, i_ch, i_segment = 0, 0, 0
     fig, axes = mngs.plt.subplots(nrows=len(SIG_TYPES))
     for ax, (i_sig_type, sig_type) in zip(axes, enumerate(SIG_TYPES)):
         xx, tt, fs = demo_sig(sig_type=sig_type)
-        if sig_type != "tensorpac":
+        if sig_type not in ["tensorpac", "pac"]:
             ax.plot(tt, xx[i_batch, i_ch], label=sig_type)
         else:
             ax.plot(tt, xx[i_batch, i_ch, i_segment], label=sig_type)
         ax.legend(loc="upper left")
-    mngs.io.save(fig, CONFIG["SDIR"] + "traces.png")
+    mngs.io.save(fig, "traces.png")
 
     # Close
     mngs.gen.close(CONFIG)

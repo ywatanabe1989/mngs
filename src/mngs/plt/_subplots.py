@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-10 20:30:24 (ywatanabe)"
+# Time-stamp: "2024-04-13 00:36:46 (ywatanabe)"
 
 from collections import OrderedDict
 
@@ -240,6 +240,7 @@ class AxisDataCollector:
         cmap="viridis",
         vmin=None,
         vmax=None,
+        **kwargs,
     ):
         """
         Imshows an two-dimensional array with theese two conditions:
@@ -250,7 +251,9 @@ class AxisDataCollector:
         assert arr_2d.ndim == 2
 
         # Cals the original ax.imshow() method on the transposed array
-        im = self.axis.imshow(arr_2d.T, cmap=cmap, vmin=vmin, vmax=vmax)
+        im = self.axis.imshow(
+            arr_2d.T, cmap=cmap, vmin=vmin, vmax=vmax, **kwargs
+        )
 
         # Creates a colorbar
         fig = self.axis.get_figure()

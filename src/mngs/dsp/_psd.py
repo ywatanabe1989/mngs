@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-04 19:07:30 (ywatanabe)"
+# Time-stamp: "2024-04-13 00:02:06 (ywatanabe)"
+
+"""
+This script does XYZ.
+"""
 
 import torch
 import torch.nn as nn
@@ -58,15 +62,43 @@ def band_powers(self, psd):
 
 
 if __name__ == "__main__":
+    import sys
+
     import matplotlib.pyplot as plt
     import mngs
 
-    x, t, f = mngs.dsp.demo_sig()  # (8, 19, 384)
-    BANDS = mngs.dsp.PARAMS.BANDS
+    # Start
+    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt)
 
-    pp, ff = psd(x, f, prob=True)
+    # Parameters
+    SIG_TYPE = "chirp"
 
-    plt, CC = mngs.plt.configure_mpl(plt)
-    fig, ax = mngs.plt.subplots()
-    ax.plot(ff, pp[0, 0])
-    plt.show()
+    # Demo signal
+    xx, tt, fs = mngs.dsp.demo_sig(SIG_TYPE)  # (8, 19, 384)
+
+    # PSD calculation
+    pp, ff = psd(xx, fs, prob=True)
+
+    # Plots
+    fig, axes = mngs.plt.subplots(nrows=2)
+
+    axes[0].plot(tt, xx, label=SIG_TYPE)
+    axes[1].set_title("Signal")
+    axes[0].set_xlabel("Time [s]")
+    axes[0].set_ylabel("Amplitude [?V]")
+
+    axes[1].plot(ff, pp[0, 0])
+    axes[1].set_title("PSD (power spectrum density)")
+    axes[1].set_xlabel("Frequency [Hz]")
+    axes[1].set_ylabel("Log(Power [?V^2 / Hz]) [a.u.]")
+
+    mngs.io.save(fig, "psd.png")
+
+    # Close
+    mngs.gen.close(CONFIG)
+
+# EOF
+
+"""
+/home/ywatanabe/proj/entrance/mngs/dsp/_psd.py
+"""

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-10 18:05:53 (ywatanabe)"
+# Time-stamp: "2024-04-13 00:17:52 (ywatanabe)"
 
 """
 This script does XYZ.
@@ -14,8 +14,6 @@ import torch
 from mngs.general import torch_fn
 from mngs.nn import Hilbert
 
-# Config
-CONFIG = mngs.gen.load_configs()
 
 # Functions
 @torch_fn
@@ -34,9 +32,10 @@ if __name__ == "__main__":
     # Parameters
     T_SEC = 1.0
     FS = 400
+    SIG_TYPE = "chirp"
 
     # Demo signal
-    xx, tt, fs = mngs.dsp.demo_sig(t_sec=T_SEC, fs=FS, sig_type="chirp")
+    xx, tt, fs = mngs.dsp.demo_sig(t_sec=T_SEC, fs=FS, sig_type=SIG_TYPE)
 
     # Main
     pha, amp = hilbert(
@@ -48,20 +47,20 @@ if __name__ == "__main__":
     # Plots
     fig, axes = mngs.plt.subplots(nrows=2, sharex=True)
 
-    axes[0].plot(tt, xx[0, 0], label="orig")
-    axes[0].plot(tt, amp[0, 0], label="amp")
+    axes[0].plot(tt, xx[0, 0], label=SIG_TYPE)
+    axes[0].plot(tt, amp[0, 0], label="Amplidue")
     axes[0].legend()
     # axes[0].set_xlabel("Time [s]")
-    axes[0].set_ylabel("Amplitude [?]")
+    axes[0].set_ylabel("Amplitude [?V]")
 
-    axes[1].plot(tt, pha[0, 0], label="phase")
+    axes[1].plot(tt, pha[0, 0], label="Phase")
     axes[1].legend()
 
     axes[1].set_xlabel("Time [s]")
-    axes[1].set_ylabel("Phase [radian]")
+    axes[1].set_ylabel("Phase [rad]")
 
     # plt.show()
-    mngs.io.save(fig, CONFIG["SDIR"] + "traces.png")
+    mngs.io.save(fig, "traces.png")
 
     # Close
     mngs.gen.close(CONFIG)
