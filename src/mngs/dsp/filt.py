@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-13 02:38:47 (ywatanabe)"
+# Time-stamp: "2024-04-13 02:49:22 (ywatanabe)"
 
 
 import mngs
@@ -112,6 +112,7 @@ if __name__ == "__main__":
     fig.suptitle("Filtered")
     fig.supxlabel("Time [s]")
     fig.supylabel("Amplitude")
+
     mngs.io.save(fig, "traces.png")
 
     # Calculates and Plots PSD
@@ -132,6 +133,9 @@ if __name__ == "__main__":
 
         ax.plot(ff, _psd, label=k)
         ax.legend(loc="upper left")
+
+        for bb in np.hstack(BANDS):
+            ax.axvlines(x=bb, color="gray", line_style="--")
 
     fig.suptitle("Filtered")
     fig.supxlabel("Frequency [Hz]")
