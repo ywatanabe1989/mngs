@@ -182,6 +182,36 @@ def fmt_size(num, suffix="B"):
 ################################################################################
 ## list
 ################################################################################
+def is_listed_X(obj, types):
+    """
+    Example:
+        obj = [3, 2, 1, 5]
+        _is_listed_X(obj,
+    """
+    import numpy as np
+
+    try:
+        conditions = []
+        condition_list = isinstance(obj, list)
+
+        if not (isinstance(types, list) or isinstance(types, tuple)):
+            types = [types]
+
+        _conditions_susp = []
+        for typ in types:
+            _conditions_susp.append(
+                (np.array([isinstance(o, typ) for o in obj]) == True).all()
+            )
+
+        condition_susp = np.any(_conditions_susp)
+
+        _is_listed_X = np.all([condition_list, condition_susp])
+        return _is_listed_X
+
+    except:
+        return False
+
+
 def take_the_closest(list_obj, num_insert):
     """
     Assumes list_obj is sorted. Returns the closest value to num.

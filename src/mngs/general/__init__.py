@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 
-# from .path import find_the_git_root_dir, get_this_fpath, mk_spath, split_fpath
-# from .load import get_data_path_from_a_package, load
-# from .save import is_listed_X, save, save_listed_dfs_as_csv, save_listed_scalars_as_csv
-# from .debug import *
-from ..io.__init__ import *
+
 from ._close import close
 from ._converters import (
     numpy_fn,
@@ -14,15 +10,24 @@ from ._converters import (
     torch_fn,
     unsqueeze_if,
 )
+from ._embed import embed
+
+# Confirmed
+from ._paste import paste
+from ._reload import reload
+
+_ = None
+from ..io.__init__ import *
 from ._cuda_collect_env import main as cuda_collect_env
 from ._norm import to_z
-from ._reload import reload
+from ._reproduce import fix_seeds, gen_ID, gen_timestamp, tee
 from ._shell import run_shellcommand, run_shellscript
 from ._start import start
 from ._TimeStamper import TimeStamper
 from .email import notify, send_gmail
 from .latex import add_hat_in_the_latex_style, to_the_latex_style
-from .mat2py import *
+
+# from .mat2py import *
 from .misc import (
     _return_counting_process,
     color_text,
@@ -38,6 +43,7 @@ from .misc import (
     is_defined_global,
     is_defined_local,
     is_later_or_equal,
+    is_listed_X,
     is_nan,
     isclose,
     listed_dict,
@@ -64,5 +70,3 @@ from .pandas import (
     ignore_SettingWithCopyWarning,
     merge_columns,
 )
-from .repro import *
-from .torch import *

@@ -1,14 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-04 08:02:10 (ywatanabe)"
+# Time-stamp: "2024-04-13 02:24:36 (ywatanabe)"
 
+"""
+This script does XYZ.
+"""
+
+import sys
+
+import matplotlib.pyplot as plt
 import mngs
+import torch
 from mngs.general import torch_fn
 from mngs.nn import Hilbert
 
-from .filt import bandpass
 
-
+# Functions
 @torch_fn
 def hilbert(
     x,
@@ -18,52 +25,49 @@ def hilbert(
     return y[..., 0], y[..., 1]
 
 
-def _get_scipy_x(t_sec, fs):
-    # https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.hilbert.html
-    import matplotlib.pyplot as plt
-    import numpy as np
-    from scipy.signal import chirp, hilbert
-
-    # duration = 1.0
-    # fs = 400.0
-
-    duration = t_sec
-    samples = int(fs * duration)
-    t = np.arange(samples) / fs
-
-    signal = chirp(t, 20.0, t[-1], 100.0)
-    signal *= 1.0 + 0.5 * np.sin(2.0 * np.pi * 3.0 * t)
-
-    x = signal
-
-    x = mngs.dsp.ensure_3d(x)
-
-    t = torch.linspace(0, T_SEC, x.shape[-1])
-
-    return x, t, fs
-
-
 if __name__ == "__main__":
-    import matplotlib
-    import matplotlib.pyplot as plt
-    import mngs
-    from scipy.signal import chirp
+    # Start
+    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt)
 
-    T_SEC = 1.0  # 0
-    FS = 400  # 128
+    # Parameters
+    T_SEC = 1.0
+    FS = 400
+    SIG_TYPE = "chirp"
 
-    # x, t, f = _get_scipy_x(T_SEC, FS)
-    x, t, f = mngs.dsp.demo_sig(t_sec=T_SEC, fs=FS, type="chirp")
+    # Demo signal
+    xx, tt, fs = mngs.dsp.demo_sig(t_sec=T_SEC, fs=FS, sig_type=SIG_TYPE)
 
+    # Main
     pha, amp = hilbert(
-        x,
+        xx,
         dim=-1,
-    )  # (32, 19, 1280, 2)
+    )
+    # (32, 19, 1280, 2)
 
-    fig, axes = mngs.plt.subplots(nrows=2)
-    axes[0].plot(x[0, 0], label="orig")
-    axes[0].plot(amp[0, 0], label="amp")
-    axes[1].plot(pha[0, 0], label="phase")
+    # Plots
+    fig, axes = mngs.plt.subplots(nrows=2, sharex=True)
+    fig.suptitle("Hilbert Transformation")
+
+    axes[0].plot(tt, xx[0, 0], label=SIG_TYPE)
+    axes[0].plot(tt, amp[0, 0], label="Amplidue")
     axes[0].legend()
+    # axes[0].set_xlabel("Time [s]")
+    axes[0].set_ylabel("Amplitude [?V]")
+
+    axes[1].plot(tt, pha[0, 0], label="Phase")
     axes[1].legend()
-    plt.show()
+
+    axes[1].set_xlabel("Time [s]")
+    axes[1].set_ylabel("Phase [rad]")
+
+    # plt.show()
+    mngs.io.save(fig, "traces.png")
+
+    # Close
+    mngs.gen.close(CONFIG)
+
+# EOF
+
+"""
+/home/ywatanabe/proj/entrance/mngs/dsp/_hilbert.py
+"""

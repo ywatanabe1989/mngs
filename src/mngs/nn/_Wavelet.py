@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-05 12:09:22 (ywatanabe)"
+# Time-stamp: "2024-04-11 22:28:40 (ywatanabe)"
 
 
 import mngs
@@ -8,142 +8,6 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-
-# # class BaseFilter1D(nn.Module):
-# #     def __init__(
-# #         self,
-# #     ):
-# #         super().__init__()
-# #         self.kernel = None
-
-# #     @property
-# #     def kernel_size(
-# #         self,
-# #     ):
-# #         return mngs.gen.to_even(self.kernel.shape[-1])
-
-# #     @property
-# #     def radius(
-# #         self,
-# #     ):
-# #         return mngs.gen.to_even(self.kernel_size // 2)
-
-# #     # def forward(self, x):
-# #     #     """Apply the filter to input signal x with shape: (batch_size, n_chs, seq_len)"""
-
-# #     #     x = mngs.dsp.ensure_3d(x)
-# #     #     seq_len = x.shape[-1]
-
-# #     #     # Ensure the kernel is initialized
-# #     #     if self.kernel is None:
-# #     #         self.init_kernel()
-# #     #         if self.kernel is None:
-# #     #             raise ValueError("Filter kernel has not been initialized.")
-
-# #     #     # Edge handling and convolution
-# #     #     extension_length = self.radius
-# #     #     first_segment = x[:, :, :extension_length].flip(dims=[-1])
-# #     #     last_segment = x[:, :, -extension_length:].flip(dims=[-1])
-# #     #     extended_x = torch.cat([first_segment, x, last_segment], dim=-1)
-
-# #     #     channels = extended_x.size(1)
-
-# #     #     kernel = (
-# #     #         self.kernel.expand(channels, 1, -1)
-# #     #         .to(extended_x.device)
-# #     #         .to(extended_x.dtype)
-# #     #     )
-
-# #     #     filtered_extended_x = F.conv1d(
-# #     #         extended_x, kernel, padding=0, groups=channels
-# #     #     )[..., :seq_len]
-
-# #     #     assert x.shape == filtered_extended_x.shape
-
-# #     #     return filtered_extended_x
-
-
-# class BaseFilter2D(nn.Module):
-#     def __init__(
-#         self,
-#     ):
-#         super().__init__()
-#         self.register_buffer("dummy", torch.tensor(0))
-#         self.kernel = None
-
-#     @property
-#     def kernel_size(
-#         self,
-#     ):
-#         return mngs.gen.to_even(self.kernel.shape[-1])
-
-#     @property
-#     def radius(
-#         self,
-#     ):
-#         return mngs.gen.to_even(self.kernel_size // 2)
-
-#     def forward(self, x):
-#         """Apply the 2D filter (n_filts, kernel_size) to input signal x with shape: (batch_size, n_chs, seq_len)"""
-#         x = mngs.dsp.ensure_3d(x).to(self.dummy.device)
-#         seq_len = x.shape[-1]
-
-#         # Ensure the kernel is initialized
-#         if self.kernel is None:
-#             self.init_kernel()
-#             if self.kernel is None:
-#                 raise ValueError("Filter kernel has not been initialized.")
-#         assert self.kernel.ndim == 2
-#         self.kernel = self.kernel.to(x.device)  # cuda, torch.complex128
-
-#         # Edge handling and convolution
-#         extension_length = self.radius
-#         first_segment = x[:, :, :extension_length].flip(dims=[-1])
-#         last_segment = x[:, :, -extension_length:].flip(dims=[-1])
-#         extended_x = torch.cat([first_segment, x, last_segment], dim=-1)
-
-#         # working??
-#         kernel_batched = self.kernel.unsqueeze(1)
-#         extended_x_reshaped = extended_x.view(-1, 1, extended_x.shape[-1])
-
-#         filtered_x_real = F.conv1d(
-#             extended_x_reshaped, kernel_batched.real.float(), groups=1
-#         )
-#         filtered_x_imag = F.conv1d(
-#             extended_x_reshaped, kernel_batched.imag.float(), groups=1
-#         )
-
-#         filtered_x = torch.sqrt(
-#             filtered_x_real.pow(2) + filtered_x_imag.pow(2)
-#         )
-
-#         filtered_x = filtered_x.view(
-#             x.shape[0], x.shape[1], kernel_batched.shape[0], -1
-#         )
-#         return filtered_x
-
-#         # ########################################
-#         # # working
-#         # channels = extended_x.size(1)
-
-#         # out = []
-#         # for kernel in self.kernel:
-#         #     kernel = (
-#         #         kernel.expand(channels, 1, -1)
-#         #     )
-#         #     real_out = F.conv1d(
-#         #         extended_x, kernel.real.float(), padding=0, groups=channels
-#         #     )
-#         #     im_out = F.conv1d(
-#         #         extended_x, kernel.imag.float(), padding=0, groups=channels
-#         #     )
-
-#         #     out.append(torch.sqrt(real_out**2 + im_out**2))
-
-#         # filted = torch.stack(out, axis=-2)[..., :seq_len]
-
-#         # return filted
-#         # ########################################
 
 
 class Wavelet(nn.Module):
@@ -188,22 +52,26 @@ class Wavelet(nn.Module):
             extended_x_reshaped, kernel_batched.imag.float(), groups=1
         )
 
-        filtered_x = torch.sqrt(
-            filtered_x_real.pow(2) + filtered_x_imag.pow(2)
+        filtered_x = torch.view_as_complex(
+            torch.stack([filtered_x_real, filtered_x_imag], dim=-1)
         )
 
         filtered_x = filtered_x.view(
             x.shape[0], x.shape[1], kernel_batched.shape[0], -1
         )
-
+        filtered_x = filtered_x.view(
+            x.shape[0], x.shape[1], kernel_batched.shape[0], -1
+        )
         filtered_x = filtered_x[..., :seq_len]
-
         assert filtered_x.shape[-1] == seq_len
 
+        pha = filtered_x.angle()
+        amp = filtered_x.abs()
+
         if self.out_scale == "log":
-            return torch.log(filtered_x + 1e-5)
+            return torch.log(pha + 1e-5), torch.log(amp + 1e-5), self.freqs
         else:
-            return filtered_x
+            return pha, amp, self.freqs
 
     def init_kernel(self, samp_rate, kernel_size=None, freq_scale="log"):
         device = self.dummy.device
@@ -287,3 +155,17 @@ class Wavelet(nn.Module):
         self,
     ):
         return mngs.gen.to_even(self.kernel_size // 2)
+
+
+if __name__ == "__main__":
+    import mngs
+
+    xx, tt, fs = mngs.dsp.demo_sig(sig_type="chirp")
+
+    ww, ff = mngs.dsp.wavelet(xx, fs)
+
+    fig, ax = mngs.plt.subplots()
+    ax.imshow2d(ww[0, 0].T)
+    ax = mngs.plt.ax.set_ticks(ax, xticks=tt, yticks=ff)
+    ax = mngs.plt.ax.set_n_ticks(ax)
+    plt.show()

@@ -8,15 +8,6 @@ import numpy as np
 import pandas as pd
 import scipy
 
-if "general" in __file__:
-    with warnings.catch_warnings():
-        warnings.simplefilter("always")
-        warnings.warn(
-            '\n"mngs.general.save" will be removed. '
-            'Please use "mngs.io.save" instead.',
-            PendingDeprecationWarning,
-        )
-
 
 def save(obj, sfname_or_spath, makedirs=True, show=True, **kwargs):
     """
@@ -66,8 +57,8 @@ def save(obj, sfname_or_spath, makedirs=True, show=True, **kwargs):
     try:
         ## copy files
         is_copying_files = (
-            isinstance(obj, str) or is_listed_X(obj, str)
-        ) and (isinstance(spath, str) or is_listed_X(spath, str))
+            isinstance(obj, str) or mngs.gen.is_listed_X(obj, str)
+        ) and (isinstance(spath, str) or mngs.gen.is_listed_X(spath, str))
         if is_copying_files:
             mngs.general.copy_files(obj, spath)
 
@@ -75,15 +66,14 @@ def save(obj, sfname_or_spath, makedirs=True, show=True, **kwargs):
         elif spath.endswith(".csv"):
             if isinstance(obj, pd.DataFrame):  # DataFrame
                 obj.to_csv(spath)
-            if is_listed_X(obj, [int, float]):  # listed scalars
-                save_listed_scalars_as_csv(
+            if mngs.gen.is_listed_X(obj, [int, float]):  # listed scalars
+                _save_listed_scalars_as_csv(
                     obj,
                     spath,
                     **kwargs,
                 )
-            if is_listed_X(obj, pd.DataFrame):  # listed DataFrame
-                # save_listed_dfs_as_csv(obj, spath, indi_suffix=None, overwrite=False)
-                save_listed_dfs_as_csv(obj, spath, **kwargs)
+            if mngs.gen.is_listed_X(obj, pd.DataFrame):  # listed DataFrame
+                _save_listed_dfs_as_csv(obj, spath, **kwargs)
         # numpy
         elif spath.endswith(".npy"):
             np.save(spath, obj)
@@ -123,7 +113,7 @@ def save(obj, sfname_or_spath, makedirs=True, show=True, **kwargs):
             del obj
         # mp4
         elif spath.endswith(".mp4"):
-            mk_mp4(obj, spath)  # obj is matplotlib.pyplot.figure object
+            _mk_mp4(obj, spath)  # obj is matplotlib.pyplot.figure object
             del obj
 
         # yaml
@@ -193,37 +183,7 @@ def check_encoding(file_path):
     return enc
 
 
-def is_listed_X(obj, types):
-    """
-    Example:
-        obj = [3, 2, 1, 5]
-        is_listed_X(obj,
-    """
-    import numpy as np
-
-    try:
-        conditions = []
-        condition_list = isinstance(obj, list)
-
-        if not (isinstance(types, list) or isinstance(types, tuple)):
-            types = [types]
-
-        _conditions_susp = []
-        for typ in types:
-            _conditions_susp.append(
-                (np.array([isinstance(o, typ) for o in obj]) == True).all()
-            )
-
-        condition_susp = np.any(_conditions_susp)
-
-        is_listed_X = np.all([condition_list, condition_susp])
-        return is_listed_X
-
-    except:
-        return False
-
-
-def save_listed_scalars_as_csv(
+def _save_listed_scalars_as_csv(
     listed_scalars,
     spath_csv,
     column_name="_",
@@ -236,7 +196,7 @@ def save_listed_scalars_as_csv(
     import numpy as np
 
     if overwrite == True:
-        mv_to_tmp(spath_csv, L=2)
+        _mv_to_tmp(spath_csv, L=2)
     indi_suffix = (
         np.arange(len(listed_scalars)) if indi_suffix is None else indi_suffix
     )
@@ -248,7 +208,7 @@ def save_listed_scalars_as_csv(
         print("\nSaved to: {}\n".format(spath_csv))
 
 
-def save_listed_dfs_as_csv(
+def _save_listed_dfs_as_csv(
     listed_dfs,
     spath_csv,
     indi_suffix=None,
@@ -269,7 +229,7 @@ def save_listed_dfs_as_csv(
     import numpy as np
 
     if overwrite == True:
-        mv_to_tmp(spath_csv, L=2)
+        _mv_to_tmp(spath_csv, L=2)
 
     indi_suffix = (
         np.arange(len(listed_dfs)) if indi_suffix is None else indi_suffix
@@ -287,7 +247,20 @@ def save_listed_dfs_as_csv(
         print("Saved to: {}".format(spath_csv))
 
 
-def mk_mp4(fig, spath_mp4):
+def _mv_to_tmp(fpath, L=2):
+    import os
+    from shutil import move
+
+    try:
+        tgt_fname = connect_strs_with_hyphens(fpath.split("/")[-L:])
+        tgt_fpath = "/tmp/{}".format(tgt_fname)
+        move(fpath, tgt_fpath)
+        print("Moved to: {}".format(tgt_fpath))
+    except:
+        pass
+
+
+def _mk_mp4(fig, spath_mp4):
     from matplotlib import animation
 
     axes = fig.get_axes()
@@ -309,19 +282,6 @@ def mk_mp4(fig, spath_mp4):
     )
     anim.save(spath_mp4, writer=writermp4)
     print("\nSaving to: {}\n".format(spath_mp4))
-
-
-def mv_to_tmp(fpath, L=2):
-    import os
-    from shutil import move
-
-    try:
-        tgt_fname = connect_strs_with_hyphens(fpath.split("/")[-L:])
-        tgt_fpath = "/tmp/{}".format(tgt_fname)
-        move(fpath, tgt_fpath)
-        print("Moved to: {}".format(tgt_fpath))
-    except:
-        pass
 
 
 def save_optuna_study_as_csv_and_pngs(study, sdir):
