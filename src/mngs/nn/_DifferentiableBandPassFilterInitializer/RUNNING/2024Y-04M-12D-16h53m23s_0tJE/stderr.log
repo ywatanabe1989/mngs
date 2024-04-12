@@ -1,4 +1,0 @@
-Traceback (most recent call last):
-  File "/home/ywatanabe/proj/entrance/mngs/nn/_DifferentiableBandPassFilterInitializer.py", line 140, in <module>
-    mngs.dsp.utils.filter.plot_filter(kernels[0].detach().cpu().numpy(), fs)
-AttributeError: module 'mngs.dsp.utils.filter' has no attribute 'plot_filter'

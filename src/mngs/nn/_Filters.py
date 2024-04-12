@@ -1,33 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-12 16:04:04 (ywatanabe)"
+# Time-stamp: "2024-04-12 20:30:34 (ywatanabe)"
 
 """
 This script does XYZ.
 """
 
-import math
-import os
+# Imports
 import sys
-import warnings
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 
 import matplotlib.pyplot as plt
-
-# Imports
 import mngs
-import numpy as np
-import pandas as pd
-import seaborn as sns
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from mngs.general import torch_fn
-
-# from mngs.nn import DifferentiableBandPassFilterInitializer
-# from ._DifferentiableBandPassFilterInitializer import (
-#     DifferentiableBandPassFilterInitializer,
-# )
+from mngs.dsp.utils import build_bandpass_filters, init_bandpass_filters
 
 
 class BaseFilter1D(nn.Module):
@@ -291,6 +279,14 @@ class DifferentiableBandPassFilter(BaseFilter1D):
     ):
         super().__init__(fp16=fp16)
 
+        # Attributes
+        self.pha_low_hz = pha_low_hz
+        self.pha_high_hz = pha_high_hz
+        self.amp_low_hz = amp_low_hz
+        self.amp_high_hz = amp_high_hz
+        self.sig_len = sig_len
+        self.fs = fs
+        self.cycle = cycle
         self.fp16 = fp16
 
         # Check bands definitions
@@ -299,10 +295,11 @@ class DifferentiableBandPassFilter(BaseFilter1D):
         assert amp_low_hz < amp_high_hz < nyq
 
         # Prepare kernels
-        self.init_kernels = mngs.nn.DifferentiableBandPassFilterInitializer
-        kernels, self.pha_bands, self.amp_bands = self.init_kernels(
-            sig_len,
-            fs,
+        self.init_kernels = init_bandpass_filters
+        self.build_bandpass_filters = build_bandpass_filters
+        kernels, self.pha_mids, self.amp_mids = self.init_kernels(
+            sig_len=sig_len,
+            fs=fs,
             pha_low_hz=pha_low_hz,
             pha_high_hz=pha_high_hz,
             pha_n_bands=pha_n_bands,
@@ -310,14 +307,31 @@ class DifferentiableBandPassFilter(BaseFilter1D):
             amp_high_hz=amp_high_hz,
             amp_n_bands=amp_n_bands,
             cycle=cycle,
-        )()
+        )
 
-        if fp16:
-            kernels = kernels.half()
         self.register_buffer(
             "kernels",
             kernels,
         )
+        # self.register_buffer("pha_mids", pha_mids)
+        # self.register_buffer("amp_mids", amp_mids)
+        # self.pha_mids = nn.Parameter(pha_mids.detach())
+        # self.amp_mids = nn.Parameter(amp_mids.detach())
+
+        if fp16:
+            self.kernels = self.kernels.half()
+            self.pha_mids = self.pha_mids.half()
+            self.amp_mids = self.amp_mids.half()
+
+    def forward(self, x, t=None, edge_len=0):
+        # Constrains the parameter spaces
+        torch.clip(self.pha_mids, self.pha_low_hz, self.pha_high_hz)
+        torch.clip(self.amp_mids, self.amp_low_hz, self.amp_high_hz)
+
+        self.kernels = self.build_bandpass_filters(
+            self.sig_len, self.fs, self.pha_mids, self.amp_mids, self.cycle
+        )
+        return super().forward(x=x, t=t, edge_len=edge_len)
 
 
 if __name__ == "__main__":
@@ -332,16 +346,22 @@ if __name__ == "__main__":
     # BandPassFilter(bands, fs, xx.shape)
     m = DifferentiableBandPassFilter(xx.shape[-1], fs).cuda()
 
+    mngs.ml.utils.check_params(m)
+    # {'pha_mids': (torch.Size([30]), 'Learnable'),
+    #  'amp_mids': (torch.Size([50]), 'Learnable')}
+
     xf = m(xx)  # (8, 19, 80, 2048)
 
-    m.pha_bands
+    xf.sum().backward()  # OK, differentiable
+
+    m.pha_mids
     # Parameter containing:
     # tensor([ 2.0000,  2.6207,  3.2414,  3.8621,  4.4828,  5.1034,  5.7241,  6.3448,
     #          6.9655,  7.5862,  8.2069,  8.8276,  9.4483, 10.0690, 10.6897, 11.3103,
     #         11.9310, 12.5517, 13.1724, 13.7931, 14.4138, 15.0345, 15.6552, 16.2759,
     #         16.8966, 17.5172, 18.1379, 18.7586, 19.3793, 20.0000],
     #        requires_grad=True)
-    m.amp_bands
+    m.amp_mids
     # Parameter containing:
     # tensor([ 80.0000,  81.6327,  83.2653,  84.8980,  86.5306,  88.1633,  89.7959,
     #          91.4286,  93.0612,  94.6939,  96.3265,  97.9592,  99.5918, 101.2245,
@@ -352,10 +372,8 @@ if __name__ == "__main__":
     #         148.5714, 150.2041, 151.8367, 153.4694, 155.1020, 156.7347, 158.3673,
     #         160.0000], requires_grad=True)
 
-    xf.sum().backward()  # OK
-
     # PSD
-    bands = torch.hstack([m.pha_bands, m.amp_bands])
+    bands = torch.hstack([m.pha_mids, m.amp_mids])
 
     # Plots PSD
     # matplotlib.use("TkAgg")
@@ -377,7 +395,6 @@ if __name__ == "__main__":
             xf[0, 0, i_filt].detach().cpu().numpy(),
             label=f"filted at {mid_hz} Hz",
         )
-
         axes[i_filt + 1, 1].plot(
             ff_f.detach().cpu().numpy(),
             psd_f[0, 0].detach().cpu().numpy(),
@@ -386,7 +403,7 @@ if __name__ == "__main__":
     for ax in axes.ravel():
         ax.legend(loc="upper left")
 
-    mngs.io.save(fig, CONFIG["SDIR"] + "traces.png")
+    mngs.io.save(fig, "traces.png")
     # plt.show()
 
     # Close

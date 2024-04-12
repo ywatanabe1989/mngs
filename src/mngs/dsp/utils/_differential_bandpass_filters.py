@@ -1,26 +1,20 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-12 19:49:51 (ywatanabe)"
+# Time-stamp: "2024-04-12 20:11:46 (ywatanabe)"
 
 """
 This script does XYZ.
 """
 
 
-import math
-
 # Imports
-import os
 import sys
 
-import matplotlib
 import matplotlib.pyplot as plt
 import mngs
 import numpy as np
-import pandas as pd
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 from torchaudio.prototype.functional import sinc_impulse_response
 
 
@@ -59,20 +53,6 @@ def build_bandpass_filters(sig_len, fs, pha_mids, amp_mids, cycle):
         order = mngs.gen.to_even(order)
         return order
 
-    # def _define_orders(lows_hz, fs, sig_len, cycle):
-    #     def define_order(low_hz, fs, sig_len, cycle):
-    #         order = cycle * int((fs // low_hz))
-    #         order = order if 3 * order >= sig_len else (sig_len - 1) // 3
-    #         order = mngs.gen.to_even(order)
-    #         return order
-
-    #     return [define_order(ll.item(), fs, sig_len, cycle) for ll in lows_hz]
-
-    # def _define_window(order):
-    #     n = torch.arange(order)
-    #     window = 0.54 - 0.46 * torch.cos(2 * math.pi * n / (order - 1))
-    #     return window
-
     def _calc_filters(lows_hz, highs_hz, fs, order):
         nyq = fs / 2.0
         order = mngs.gen.to_odd(order)
@@ -94,67 +74,6 @@ def build_bandpass_filters(sig_len, fs, pha_mids, amp_mids, cycle):
     return torch.vstack([pha_bp_filters, amp_bp_filters])
 
 
-# class DifferentiableBandPassFilterInitializer(nn.Module):
-#     def __init__(
-#         self,
-#     ):
-#         """
-#         Initializes a differentiable FIR filter design.
-#         The parameters low_hz and high_hz can be learned during training.
-#         """
-#         super().__init__()
-
-
-#         # # Define cutoff frequencies as learnable parameters
-#         # pha_lows, pha_highs = self.define_freqs(self.pha_mids, factor=4.0)
-#         # amp_lows, amp_highs = self.define_freqs(self.amp_mids, factor=8.0)
-
-#         # # Define orders
-#         # pha_orders = self.define_orders(pha_lows, fs, sig_len, cycle)
-#         # amp_orders = self.define_orders(amp_lows, fs, sig_len, cycle)
-#         # max_order = max(pha_orders + amp_orders)
-
-#         # Initialize filters
-#         pha_bp_filters = self.calc_filters(pha_lows, pha_highs, fs, max_order)
-#         amp_bp_filters = self.calc_filters(amp_lows, amp_highs, fs, max_order)
-#         self.filters = torch.vstack([pha_bp_filters, amp_bp_filters])
-
-#     # @staticmethod
-#     # def define_freqs(mids, factor):
-#     #     lows = mids - mids / factor
-#     #     highs = mids + mids / factor
-#     #     return lows, highs
-
-#     # @staticmethod
-#     # def define_orders(lows_hz, fs, sig_len, cycle):
-#     #     def define_order(low_hz, fs, sig_len, cycle):
-#     #         order = cycle * int((fs // low_hz))
-#     #         order = order if 3 * order >= sig_len else (sig_len - 1) // 3
-#     #         order = mngs.gen.to_even(order)
-#     #         return order
-
-#     #     return [define_order(ll.item(), fs, sig_len, cycle) for ll in lows_hz]
-
-#     # @staticmethod
-#     # def define_window(order):
-#     #     n = torch.arange(order)
-#     #     window = 0.54 - 0.46 * torch.cos(2 * math.pi * n / (order - 1))
-#     #     return window
-
-#     # @staticmethod
-#     # def calc_filters(lows_hz, highs_hz, fs, order):
-#     #     nyq = fs / 2.0
-#     #     order = mngs.gen.to_odd(order)
-#     #     # lowpass filters
-#     #     irs_ll = sinc_impulse_response(lows_hz / nyq, window_size=order)
-#     #     irs_hh = sinc_impulse_response(highs_hz / nyq, window_size=order)
-#     #     irs = irs_ll - irs_hh
-#     #     return irs
-
-#     def forward(self):
-#         return self.filters, self.pha_mids, self.amp_mids
-
-
 if __name__ == "__main__":
     # Start
     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
@@ -173,7 +92,7 @@ if __name__ == "__main__":
 
     # Update 'pha_mids' and 'amp_mids' in the forward method.
     # Then, re-build filters using optimized parameters like this:
-    # filters = build_bandpass_filters(sig_len, fs, pha_mids, amp_mids, cycle)
+    # self.filters = build_bandpass_filters(self.sig_len, self.fs, self.pha_mids, self.amp_mids, self.cycle)
 
     mids_all = np.concatenate(
         [pha_mids.detach().cpu().numpy(), amp_mids.detach().cpu().numpy()]
