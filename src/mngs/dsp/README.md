@@ -52,7 +52,7 @@ xx, tt, fs = mngs.dsp.demo_sig(
 # xx.shape (batch_size, n_chs, n_segments, seq_len) # when sig_type is "tensorpac" or "pac"
 
 
-Various data types are automatically handled:
+# # Various data types are automatically handled:
 # xx = torch.tensor(xx).float()
 # xx = torch.tensor(xx).float().cuda()
 # xx = np.array(xx)
