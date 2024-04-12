@@ -6,7 +6,7 @@ $ pip install mngs
 ```
 
 ## Galleries
-[`mngs.dsp`](https://github.com/ywatanabe1989/mngs/tree/develop/src/mngs/dsp#readme)
+[`mngs.dsp`](https://github.com/ywatanabe1989/mngs/tree/main/src/mngs/dsp#readme)
 
 ## Contact
 Yusuke Watanabe (ywata1989@gmail.com).
