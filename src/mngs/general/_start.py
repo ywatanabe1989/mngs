@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-10 19:46:21 (ywatanabe)"
+# Time-stamp: "2024-04-12 19:46:35 (ywatanabe)"
 
 import inspect
 import os as _os
@@ -9,6 +9,7 @@ from glob import glob
 from pprint import pprint
 from time import sleep
 
+import matplotlib
 import mngs
 
 
@@ -25,6 +26,7 @@ def start(
     tf=None,
     seed=42,
     # matplotlib
+    agg=False,
     fig_size_mm=(160, 100),
     fig_scale=1.0,
     dpi_display=100,
@@ -161,6 +163,8 @@ def start(
             line_width=line_width,
             verbose=verbose,
         )
+    if agg:
+        matplotlib.use("Agg")
 
     return CONFIGS, sys.stdout, sys.stderr, plt, CC
 

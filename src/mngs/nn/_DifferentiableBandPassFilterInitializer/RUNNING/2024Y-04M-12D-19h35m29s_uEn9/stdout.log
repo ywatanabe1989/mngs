@@ -1,0 +1,27 @@
+
+----------------------------------------
+Matplotlib has been configured as follows:
+
+Figure DPI (Display): 100 DPI
+Figure DPI (Save): 300 DPI
+Figure Size (Not the Axis Size): 160.0 x 100.0 mm (width x height)
+Font Size (Title): 8 pt
+Font Size (X/Y Label): 8 pt
+Font Size (Tick Label): 7 pt
+Font Size (Legend): 6 pt
+Hide Top and Right Axes: True
+Custom Colors (RGBA):
+  blue: (0, 128, 192, 0.9)
+  red: (255, 70, 50, 0.9)
+  pink: (255, 150, 200, 0.9)
+  green: (20, 180, 20, 0.9)
+  yellow: (230, 160, 20, 0.9)
+  grey: (128, 128, 128, 0.9)
+  purple: (200, 50, 255, 0.9)
+  lightblue: (20, 200, 200, 0.9)
+  brown: (128, 0, 0, 0.9)
+  darkblue: (0, 0, 100, 0.9)
+  orange: (228, 94, 50, 0.9)
+  white: (255, 255, 255, 0.9)
+  black: (0, 0, 0, 0.9)
+----------------------------------------

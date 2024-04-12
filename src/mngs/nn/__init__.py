@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-11 16:07:32 (ywatanabe)"
+# Time-stamp: "2024-04-12 19:29:14 (ywatanabe)"
 
 from ._AxiswiseDropout import AxiswiseDropout
 
 # from ._BandPassFilter import BandPassFilter
 from ._BNet import BNet, BNet_config
 from ._ChannelGainChanger import ChannelGainChanger
-from ._DifferentiableBandPassFilterInitializer import (
-    DifferentiableBandPassFilterInitializer,
-)
+
+# from ._DifferentiableBandPassFilterInitializer import (
+#     DifferentiableBandPassFilterInitializer,
+# )
 from ._DropoutChannels import DropoutChannels
 
 # from ._GaussianFilter import GaussianFilter
