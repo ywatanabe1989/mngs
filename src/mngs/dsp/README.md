@@ -1,14 +1,9 @@
-# [`mngs.dsp`](https://github.com/ywatanabe1989/mngs/tree/main/src/mngs/dsp)
-The mngs.dsp module is a digital signal processing toolbox developed in **PyTorch**. It performs calculations using **torch.tensor** on **CUDA** devices when available. This package also accepts **np.array** and **pd.DataFrame**, handling them accordingly (torch.tensor -> torch.tensor -> torch.tensor; np.array -> torch.tensor -> np.array; pd.DataFrame -> torch.tensor -> np.array). Additionally, PyTorch modules are written in [`mngs.dsp.nn`]("../nn") for integration into machine learning projects.
+# [`mngs.dsp`](https://github.com/ywatanabe1989/mngs/tree/main/src/mngs/dsp/)
+The mngs.dsp module is a digital signal processing toolbox developed in **PyTorch**. It performs calculations using **torch.tensor** on **CUDA** devices when available. This package also accepts **np.array** and **pd.DataFrame**, handling them accordingly (e.g., np.array -> (torch.tensor calculation) -> np.array). The torch.nn.modules are available in [`mngs.dsp.nn`](https://github.com/ywatanabe1989/mngs/tree/main/src/mngs/nn/) for machine learning projects.
 
 ## Installation
 ```bash
 $ pip install mngs
-```
-
-## Quick Start
-``` python
-import mngs
 ```
 
 ## Galleries
@@ -26,43 +21,11 @@ import mngs
   <img src="./_pac/pac_with_trainable_bandpass_fp32.png" height="300" style="border: 2px solid gray; margin: 5px;">
 </div>
 
-<!-- <div align="center">
- !--   <img src="./_demo_sig/traces.png" height="300" style="border: 2px solid gray;">
- !-- </div>
- !-- 
- !-- <div align="center">
- !--   <img src="./_resample/traces.png" height="300" style="border: 2px solid gray;">
- !-- </div>
- !-- 
- !-- <div align="center">
- !--   <img src="./filt/traces.png" height="300" style="border: 2px solid gray;">
- !-- </div>
- !-- 
- !-- <div align="center">
- !--   <img src="./filt/psd.png" height="300" style="border: 2px solid gray;">
- !-- </div>
- !-- 
- !-- <div align="center">
- !--   <img src="./_wavelet/wavelet.png" height="300" style="border: 2px solid gray;">
- !-- </div>
- !-- 
- !-- <div align="center">
- !--   <img src="./_hilbert/traces.png" height="300" style="border: 2px solid gray;">
- !-- </div>
- !-- 
- !-- <div align="center">
- !--   <img src="./_modulation_index/modulation_index.png" height="300" style="border: 2px solid gray;">
- !-- </div>
- !-- 
- !-- <div align="center">
- !--   <img src="./_pac/pac_with_trainable_bandpass_fp32.png" height="300" style="border: 2px solid gray;">
- !-- </div> -->
 
+## Quick Start
+``` python
+import mngs
 
-
-
-
-```python
 # Parameters
 SRC_FS = 1024  # Source sampling frequency
 TGT_FS = 512   # Target sampling frequency
@@ -115,7 +78,7 @@ wavelet_coef, wavelet_freqs = mngs.dsp.wavelet(xx, fs)
 psd, psd_freqs = mngs.dsp.psd(xx, fs)
 
 # Phase-Amplitude Coupling
-pac, freqs_pha, freqs_amp = mngs.dsp.pac(x_3d, fs) # This function is computationally demanding. Please monitor the RAM/VRAM usage.
+pac, freqs_pha, freqs_amp = mngs.dsp.pac(xx, fs) # This process is computationally intensive. Please monitor RAM/VRAM usage.
 ```
 
 ## Contact
