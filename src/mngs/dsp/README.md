@@ -1,4 +1,4 @@
-# [`mngs.dsp`](".")
+# [`mngs.dsp`]("https://github.com/ywatanabe1989/mngs/tree/main/src/mngs/dsp")
 The mngs.dsp module is a digital signal processing toolbox developed in **PyTorch**. It performs calculations using **torch.tensor** on **CUDA** devices when available. This package also accepts **np.array** and **pd.DataFrame**, handling them accordingly (torch.tensor -> torch.tensor -> torch.tensor; np.array -> torch.tensor -> np.array; pd.DataFrame -> torch.tensor -> np.array). Additionally, PyTorch modules are written in [`mngs.dsp.nn`]("../nn") for integration into machine learning projects.
 
 ## Installation
