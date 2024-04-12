@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-13 02:20:29 (ywatanabe)"
+# Time-stamp: "2024-04-13 02:39:52 (ywatanabe)"
 
 import torch
 from mngs.general import torch_fn
@@ -68,7 +68,7 @@ if __name__ == "__main__":
     fig = mngs.dsp.utils.pac.plot_PAC_mngs_vs_tensorpac(
         pac_mngs, pac_tp, freqs_pha, freqs_amp
     )
-    fig.title("MI (modulation index) calculation")
+    fig.suptitle("MI (modulation index) calculation")
     mngs.io.save(fig, "modulation_index.png")
 
     # Close

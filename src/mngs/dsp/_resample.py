@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-13 01:47:58 (ywatanabe)"
+# Time-stamp: "2024-04-13 02:35:11 (ywatanabe)"
 
 
 import torch
@@ -19,8 +19,13 @@ def resample(x, src_fs, tgt_fs, t=None):
 
 
 if __name__ == "__main__":
+    import sys
+
     import matplotlib.pyplot as plt
     import mngs
+
+    # Start
+    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt)
 
     # Parameters
     T_SEC = 1

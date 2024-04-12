@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-13 02:23:55 (ywatanabe)"
+# Time-stamp: "2024-04-13 02:40:17 (ywatanabe)"
 
 import sys
 
@@ -123,7 +123,7 @@ if __name__ == "__main__":
                 pac_mngs, pac_tp, pha_mids_mngs, amp_mids_mngs
             )
             fig.suptitle(
-                "Phase-Amplitude Coupling calculation\n(Bandpass Filtering -> Hilbert Transformation-> Modulation Index)"
+                "Phase-Amplitude Coupling calculation\n\n(Bandpass Filtering -> Hilbert Transformation-> Modulation Index)"
             )
 
             # Saves the figure

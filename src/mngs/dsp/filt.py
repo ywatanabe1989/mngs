@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-13 02:18:12 (ywatanabe)"
+# Time-stamp: "2024-04-13 02:38:47 (ywatanabe)"
 
 
 import mngs
@@ -57,9 +57,9 @@ if __name__ == "__main__":
     # Parametes
     T_SEC = 1
     SRC_FS = 1024
-    FREQS_HZ = [3, 10, 30, 100, 300]
+    FREQS_HZ = list(np.linspace(0, 500, 10, endpoint=False))
     SIG_TYPE = "periodic"
-    BANDS = np.vstack([[5, 60]])
+    BANDS = np.vstack([[80, 300]])
     SIGMA = 3
 
     # Demo Signal
@@ -77,7 +77,7 @@ if __name__ == "__main__":
     x_hp, t_hp = mngs.dsp.filt.highpass(xx, fs, BANDS[:, 1], t=tt)
     x_g, t_g = mngs.dsp.filt.gauss(xx, sigma=SIGMA, t=tt)
     filted = {
-        f"Original (Sum of {FREQS_HZ} Hz signals)": (xx, tt, fs),
+        f"Original (Sum of {FREQS_HZ}-Hz signals)": (xx, tt, fs),
         f"Bandpass-filtered ({BANDS[0][0]} - {BANDS[0][1]} Hz)": (
             x_bp,
             t_bp,
