@@ -29,7 +29,7 @@ import mngs
 # Parameters
 SRC_FS = 1024  # Source sampling frequency
 TGT_FS = 512   # Target sampling frequency
-FREQS_HZ = [10, 30, 100]  # Frequencies in Hz
+FREQS_HZ = [10, 30, 100]  # Frequencies in Hz for periodic signals
 LOW_HZ = 20    # Low frequency for bandpass filter
 HIGH_HZ = 50   # High frequency for bandpass filter
 SIGMA = 10     # Sigma for Gaussian filter
@@ -48,7 +48,15 @@ SIG_TYPES = [
 xx, tt, fs = mngs.dsp.demo_sig(
     t_sec=T_SEC, fs=SRC_FS, freqs_hz=FREQS_HZ, sig_type="chirp"
 )
-# xx is either of torch.tensor (on cpu / cuda), numpy.ndarray, or pd.DataFrame.
+# xx.shape (batch_size, n_chs, seq_len) 
+# xx.shape (batch_size, n_chs, n_segments, seq_len) # when sig_type is "tensorpac" or "pac"
+
+
+Various data types are automatically handled:
+# xx = torch.tensor(xx).float()
+# xx = torch.tensor(xx).float().cuda()
+# xx = np.array(xx)
+# xx = pd.DataFrame(xx)
 
 # Normalization
 xx_norm = mngs.dsp.norm.z(xx)
