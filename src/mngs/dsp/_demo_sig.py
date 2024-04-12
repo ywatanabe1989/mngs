@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-12 23:42:16 (ywatanabe)"
+# Time-stamp: "2024-04-13 01:58:46 (ywatanabe)"
 
 
 """
@@ -300,6 +300,9 @@ if __name__ == "__main__":
         else:
             ax.plot(tt, xx[i_batch, i_ch, i_segment], label=sig_type)
         ax.legend(loc="upper left")
+    fig.suptitle("Demo signals")
+    fig.supxlabel("Time [s]")
+    fig.supylabel("Amplitude [?V]")
     mngs.io.save(fig, "traces.png")
 
     # Close

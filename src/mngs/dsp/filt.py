@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-12 23:42:57 (ywatanabe)"
+# Time-stamp: "2024-04-13 02:18:12 (ywatanabe)"
 
 
 import mngs
@@ -55,12 +55,12 @@ if __name__ == "__main__":
     CONFIG, sys.stdout, sys.stderr, plt, cc = mngs.gen.start(sys, plt)
 
     # Parametes
-    T_SEC = 10
+    T_SEC = 1
     SRC_FS = 1024
-    TGT_FS = 128
-    FREQS_HZ = [30, 60, 100, 200, 1000]
+    FREQS_HZ = [3, 10, 30, 100, 300]
     SIG_TYPE = "periodic"
-    BANDS = np.vstack([[45, 75]])
+    BANDS = np.vstack([[5, 60]])
+    SIGMA = 3
 
     # Demo Signal
     xx, tt, fs = mngs.dsp.demo_sig(
@@ -70,23 +70,27 @@ if __name__ == "__main__":
         sig_type=SIG_TYPE,
     )
 
-    # Resampling
-    x_r, t_r = mngs.dsp.resample(xx, fs, TGT_FS, t=tt)
-
     # Filtering
     x_bp, t_bp = mngs.dsp.filt.bandpass(xx, fs, BANDS, t=tt)
     x_bs, t_bs = mngs.dsp.filt.bandstop(xx, fs, BANDS, t=tt)
     x_lp, t_lp = mngs.dsp.filt.lowpass(xx, fs, BANDS[:, 0], t=tt)
     x_hp, t_hp = mngs.dsp.filt.highpass(xx, fs, BANDS[:, 1], t=tt)
-    x_g, t_g = mngs.dsp.filt.gauss(xx, sigma=3, t=tt)
+    x_g, t_g = mngs.dsp.filt.gauss(xx, sigma=SIGMA, t=tt)
     filted = {
-        "Original": (xx, tt, fs),
-        "Resampled": (x_r, t_r, TGT_FS),
-        "Bandpass-filtered": (x_bp, t_bp, fs),
-        "Bandstop-filtered": (x_bs, t_bs, fs),
-        "Lowpass-filtered": (x_lp, t_lp, fs),
-        "Highpass-filtered": (x_hp, t_hp, fs),
-        "Gaussian-filtered": (x_g, t_g, fs),
+        f"Original (Sum of {FREQS_HZ} Hz signals)": (xx, tt, fs),
+        f"Bandpass-filtered ({BANDS[0][0]} - {BANDS[0][1]} Hz)": (
+            x_bp,
+            t_bp,
+            fs,
+        ),
+        f"Bandstop-filtered ({BANDS[0][0]} - {BANDS[0][1]} Hz)": (
+            x_bs,
+            t_bs,
+            fs,
+        ),
+        f"Lowpass-filtered ({BANDS[0][0]} Hz)": (x_lp, t_lp, fs),
+        f"Highpass-filtered ({BANDS[0][1]} Hz)": (x_hp, t_hp, fs),
+        f"Gaussian-filtered (sigma = {SIGMA} SD [point])": (x_g, t_g, fs),
     }
 
     # Plots traces
@@ -104,6 +108,8 @@ if __name__ == "__main__":
             _xx = _xx[i_batch, i_ch, i_filt]
         ax.plot(_tt, _xx, label=k)
         ax.legend(loc="upper left")
+
+    fig.suptitle("Filtered")
     fig.supxlabel("Time [s]")
     fig.supylabel("Amplitude")
     mngs.io.save(fig, "traces.png")
@@ -126,6 +132,8 @@ if __name__ == "__main__":
 
         ax.plot(ff, _psd, label=k)
         ax.legend(loc="upper left")
+
+    fig.suptitle("Filtered")
     fig.supxlabel("Frequency [Hz]")
     fig.supylabel("Power Spectral Density")
     mngs.io.save(fig, "psd.png")

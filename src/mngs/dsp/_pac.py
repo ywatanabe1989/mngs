@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-12 23:28:26 (ywatanabe)"
+# Time-stamp: "2024-04-13 02:23:55 (ywatanabe)"
 
 import sys
 
@@ -121,6 +121,9 @@ if __name__ == "__main__":
             # Plots
             fig = mngs.dsp.utils.pac.plot_PAC_mngs_vs_tensorpac(
                 pac_mngs, pac_tp, pha_mids_mngs, amp_mids_mngs
+            )
+            fig.suptitle(
+                "Phase-Amplitude Coupling calculation\n(Bandpass Filtering -> Hilbert Transformation-> Modulation Index)"
             )
 
             # Saves the figure

@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-12 16:59:43 (ywatanabe)"
+# Time-stamp: "2024-04-13 02:04:53 (ywatanabe)"
 
 import matplotlib.pyplot as plt
 import mngs
@@ -85,7 +85,9 @@ def design_filter(
         order = mngs.gen.to_even(order)
         return order
 
-    fs, low_hz, high_hz = int(fs), float(low_hz), float(high_hz)
+    fs = int(fs)
+    low_hz = float(low_hz) if low_hz is not None else low_hz
+    high_hz = float(high_hz) if high_hz is not None else high_hz
     filter_mode = estimate_filter_type(low_hz, high_hz, is_bandstop)
     cutoff = determine_cutoff_frequencies(filter_mode, low_hz, high_hz)
     low_freq = determine_low_freq(filter_mode, low_hz, high_hz)

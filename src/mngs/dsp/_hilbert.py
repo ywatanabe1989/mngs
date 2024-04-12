@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-13 00:17:52 (ywatanabe)"
+# Time-stamp: "2024-04-13 02:24:36 (ywatanabe)"
 
 """
 This script does XYZ.
@@ -46,6 +46,7 @@ if __name__ == "__main__":
 
     # Plots
     fig, axes = mngs.plt.subplots(nrows=2, sharex=True)
+    fig.suptitle("Hilbert Transformation")
 
     axes[0].plot(tt, xx[0, 0], label=SIG_TYPE)
     axes[0].plot(tt, amp[0, 0], label="Amplidue")

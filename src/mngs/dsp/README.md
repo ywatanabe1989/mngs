@@ -1,5 +1,5 @@
 # mngs.dsp
-This mngs.dsp module is a digital signal processing toolbox developed in **PyTorch**. It performs calculations using torch.tensor. However, it also accommodates inputs in the form of **numpy.ndarray** and **pd.DataFrame** through wrapper functions. For example, if the input is a numpy.ndarray, it is initially converted to a torch.tensor (**utilizing CUDA automatically** when available), processed, and subsequently **returned in its original datatype** (numpy.ndarray). Additionally, [`mngs.dsp.nn`]("./dsp.nn") features PyTorch modules designed for straightforward integration into machine learning projects.
+The mngs.dsp module is a digital signal processing toolbox developed in **PyTorch**. It performs calculations using **torch.tensor** on **CUDA** devices when available. This package also accepts **np.array** and **pd.DataFrame**, handling them accordingly (torch.tensor -> torch.tensor -> torch.tensor; np.array -> torch.tensor -> np.array; pd.DataFrame -> torch.tensor -> np.array). Additionally, PyTorch modules are written in [`mngs.dsp.nn`]("../nn") for integration into machine learning projects.
 
 ## Installation
 ```bash
