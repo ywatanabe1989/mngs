@@ -1,4 +1,0 @@
-Traceback (most recent call last):
-  File "/home/ywatanabe/proj/entrance/mngs/dsp/nn/_PAC.py", line 205, in <module>
-    # Close
-AttributeError: 'Tensor' object has no attribute 'astype'

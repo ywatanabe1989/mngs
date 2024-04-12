@@ -1,6 +1,0 @@
-/home/ywatanabe/proj/mngs/src/mngs/general/_converters.py:75: UserWarning: Converted from  <class 'numpy.ndarray'> to <class 'torch.Tensor'> (cuda:0)
-  warnings.warn(
-/home/ywatanabe/proj/mngs/src/mngs/general/_converters.py:75: UserWarning: Converted from  <class 'numpy.ndarray'> to <class 'torch.Tensor'> (cpu)
-  warnings.warn(
-/home/ywatanabe/proj/mngs/src/mngs/nn/_Filters.py:139: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
-  return torch.tensor(kernels)

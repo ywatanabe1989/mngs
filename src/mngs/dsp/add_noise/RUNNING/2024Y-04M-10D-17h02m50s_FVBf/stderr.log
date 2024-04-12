@@ -1,6 +1,0 @@
-/home/ywatanabe/proj/mngs/src/mngs/general/_converters.py:75: UserWarning: Converted from  <class 'numpy.ndarray'> to <class 'torch.Tensor'> (cuda:0)
-  warnings.warn(
-Traceback (most recent call last):
-  File "/home/ywatanabe/proj/entrance/mngs/dsp/add_noise.py", line 102, in <module>
-    mngs.io.save(CONFIG["SDIR"] + "traces.py")
-TypeError: save() missing 1 required positional argument: 'sfname_or_spath'

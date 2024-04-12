@@ -1,6 +1,0 @@
-Traceback (most recent call last):
-  File "/home/ywatanabe/proj/entrance/mngs/dsp/add_noise.py", line 72, in <module>
-    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt)
-  File "/home/ywatanabe/proj/mngs/src/mngs/general/_start.py", line 145, in start
-    return CONFIGS, sys.stdout, sys.stderr, plt, CC
-NameError: name 'CC' is not defined
