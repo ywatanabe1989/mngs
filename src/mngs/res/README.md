@@ -6,6 +6,7 @@ A module to get resource information.
 $ pip install mngs
 ```
 
+## Quick Start
 ``` python
 import mngs
 
