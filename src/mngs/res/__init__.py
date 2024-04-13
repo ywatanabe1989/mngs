@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from ._info import info
+from ._gather_info import gather_info
 
 _ = None  # keep the importing orders
 from . import _utils
