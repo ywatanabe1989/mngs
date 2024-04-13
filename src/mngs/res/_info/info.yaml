@@ -1,4 +1,4 @@
-Collected Time: '2024-04-13 17:45:10'
+Collected Time: '2024-04-13 18:05:17'
 System Information:
     OS: Rocky Linux 9.3 (Blue Onyx) (x86_64)
     Node Name: '444'
@@ -9,7 +9,7 @@ CPU Info:
     Total cores: 32
     Max Frequency: 4500.00 MHz
     Min Frequency: 3000.00 MHz
-    Current Frequency: 4477.16 MHz
+    Current Frequency: 4530.39 MHz
     CPU Usage Per Core:
         Core 0: 0.0%
         Core 1: 0.0%
@@ -29,7 +29,7 @@ CPU Info:
         Core 15: 0.0%
         Core 16: 0.0%
         Core 17: 0.0%
-        Core 18: 1.0%
+        Core 18: 0.0%
         Core 19: 0.0%
         Core 20: 0.0%
         Core 21: 0.0%
@@ -43,11 +43,11 @@ CPU Info:
         Core 29: 0.0%
         Core 30: 0.0%
         Core 31: 0.0%
-    Total CPU Usage: 12.9%
+    Total CPU Usage: 3.0%
 Memory Info:
     Memory:
         Total: 61.7GiB
-        Available: 58.8GiB
+        Available: 58.7GiB
         Used: 2.1GiB
         Percentage: 4.8
     SWAP:
@@ -90,7 +90,7 @@ Disk Info:
             Used: 7.0MiB
             Free: 591.8MiB
             Percentage: 1.2
-    Total read: 243.8GiB
+    Total read: 244.6GiB
     Total write: 465.2GiB
 Network Info:
     Interfaces:
@@ -115,8 +115,8 @@ Network Info:
             Netmask:
             Broadcast: ff:ff:ff:ff:ff:ff
         wlp31s0:
-            - Address: 82:9f:7b:b9:32:08
+            - Address: e6:6c:a0:a3:52:f7
             Netmask:
             Broadcast: ff:ff:ff:ff:ff:ff
-    Total Bytes Sent: 4012653564
-    Total Bytes Received: 4537128161
+    Total Sent: 3.7GiB
+    Total Received: 4.2GiB

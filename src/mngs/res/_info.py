@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-13 18:04:11"
+# Time-stamp: "2024-04-13 18:05:08"
 # Author: Yusuke Watanabe (ywata1989@gmail.com)
 
 """
@@ -151,6 +151,8 @@ def _disk_info():
 
 
 def _network_info():
+    import mngs
+
     if_addrs = _psutil.net_if_addrs()
     interfaces = {}
     for interface_name, interface_addresses in if_addrs.items():
