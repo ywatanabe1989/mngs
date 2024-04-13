@@ -135,7 +135,7 @@ def load(lpath, show=False, verbose=False, **kwargs):
             ".eeg",
             ".set",
         ]:
-            obj = load_eeg_data(lpath, **kwargs)
+            obj = _load_eeg_data(lpath, **kwargs)
 
         else:
             print(f"\nNot loaded from: {lpath}\n")
@@ -154,7 +154,7 @@ def load(lpath, show=False, verbose=False, **kwargs):
         # return None
 
 
-def load_eeg_data(filename, **kwargs):
+def _load_eeg_data(filename, **kwargs):
     """
     Load EEG data based on file extension and associated files using MNE-Python.
 
@@ -218,29 +218,29 @@ def load_eeg_data(filename, **kwargs):
         return raw
 
 
-def check_encoding(file_path):
-    from chardet.universaldetector import UniversalDetector
+# def _check_encoding(file_path):
+#     from chardet.universaldetector import UniversalDetector
 
-    detector = UniversalDetector()
-    with open(file_path, mode="rb") as f:
-        for binary in f:
-            detector.feed(binary)
-            if detector.done:
-                break
-    detector.close()
-    enc = detector.result["encoding"]
-    return enc
+#     detector = UniversalDetector()
+#     with open(file_path, mode="rb") as f:
+#         for binary in f:
+#             detector.feed(binary)
+#             if detector.done:
+#                 break
+#     detector.close()
+#     enc = detector.result["encoding"]
+#     return enc
 
 
-def get_data_path_from_a_package(package_str, resource):
-    import importlib
-    import os
-    import sys
+# def get_data_path_from_a_package(package_str, resource):
+#     import importlib
+#     import os
+#     import sys
 
-    spec = importlib.util.find_spec(package_str)
-    data_dir = os.path.join(spec.origin.split("src")[0], "data")
-    resource_path = os.path.join(data_dir, resource)
-    return resource_path
+#     spec = importlib.util.find_spec(package_str)
+#     data_dir = os.path.join(spec.origin.split("src")[0], "data")
+#     resource_path = os.path.join(data_dir, resource)
+#     return resource_path
 
 
 def load_yaml_as_an_optuna_dict(fpath_yaml, trial):

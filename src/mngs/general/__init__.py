@@ -14,7 +14,6 @@ from ._embed import embed
 
 # Confirmed
 from ._paste import paste
-from ._reload import reload
 
 _ = None
 from ..io.__init__ import *

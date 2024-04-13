@@ -9,12 +9,86 @@ import pandas as pd
 import scipy
 
 
-def save(obj, sfname_or_spath, makedirs=True, show=True, **kwargs):
+def save(obj, sfname_or_spath, makedirs=True, verbose=True, **kwargs):
     """
-    Example
-      save(arr, 'data.npy')
-      save(df, 'df.csv')
-      save(serializable, 'serializable.pkl')
+    Saves an object to a file with the specified format, determined by the file extension.
+    The function supports saving data in various formats including CSV, NPY, PKL, JOBLIB, PNG, HTML, TIFF, MP4, YAML, JSON, HDF5, PTH, MAT, and CBM.
+
+    Arguments:
+        obj (object): The object to be saved. Can be a NumPy array, PyTorch tensor, Pandas DataFrame, or any serializable object depending on the file format.
+        sfname_or_spath (str): The file name or path where the object should be saved. The file extension determines the format.
+        makedirs (bool, optional): If True, the function will create the directory path if it does not exist. Defaults to True.
+        verbose (bool, optional): If True, prints a message upon successful saving. Defaults to True.
+        **kwargs: Additional keyword arguments to pass to the underlying save function of the specific format.
+
+    Returns:
+        None. The function saves the object to a file and does not return any value.
+
+    Supported Formats:
+        - .csv: Pandas DataFrames or listed scalars.
+        - .npy: NumPy arrays.
+        - .pkl: Serializable Python objects using pickle.
+        - .joblib: Objects using joblib with compression.
+        - .png: Images, including Plotly figures and Matplotlib plots.
+        - .html: Plotly figures as HTML files.
+        - .tiff / .tif: Images in TIFF format, typically from Matplotlib plots.
+        - .mp4: Videos, likely from animations created with Matplotlib.
+        - .yaml: Data in YAML format.
+        - .json: Data in JSON format.
+        - .hdf5: Data in HDF5 format, useful for large datasets.
+        - .pth: PyTorch model states.
+        - .mat: Data in MATLAB format using `scipy.io.savemat`.
+        - .cbm: CatBoost models.
+
+    Note:
+        - The function dynamically selects the appropriate saving mechanism based on the file extension.
+        - Ensure that the object type is compatible with the chosen file format.
+        - For custom saving mechanisms or unsupported formats, consider extending the function or using the specific library's save function directly.
+
+    Example:
+        import mngs
+
+        import numpy as np
+        import pandas as pd
+        import torch
+        import matplotlib.pyplot as plt
+
+        # .npy
+        arr = np.array([1, 2, 3])
+        mngs.io.save(arr, "xxx.npy")
+        # arr = mngs.io.load("xxx.npy")
+
+        # .csv
+        df = pd.DataFrame({"col1": [1, 2], "col2": [3, 4]})
+        mngs.io.save(df, "xxx.csv")
+        # df = mngs.io.load("xxx.csv")
+
+        # .pth
+        tensor = torch.tensor([1, 2, 3])
+        mngs.io.save(obj, "xxx.pth")
+        # tensor = mngs.io.load("xxx.pth")
+
+        # .pkl
+        _dict = {"a": 1, "b": 2, "c": [3, 4, 5]} # serializable object like dict, list, ...
+        mngs.io.save(_dict, "xxx.pkl")
+        # _dict = mngs.io.load("xxx.pkl")
+
+        # .png or .tiff
+        plt.figure()
+        plt.plot(np.array([1, 2, 3]))
+        mngs.io.save(plt, "xxx.png") # or "xxx.tiff"
+
+        # .png or .tiff
+        fig, ax = plt.subplots()
+        mngs.io.save(plt, "xxx.png") # or "xxx.tiff"
+
+        # .yaml
+        mngs.io.save(_dict, "xxx.yaml")
+        # _dict = mngs.io.load("xxx.yaml")
+
+        # .json
+        mngs.io.save(_dict, "xxx.json")
+        # _dict = mngs.io.load("xxx.json")
     """
     import inspect
     import json
@@ -28,6 +102,7 @@ def save(obj, sfname_or_spath, makedirs=True, show=True, **kwargs):
     import torch
     import yaml
 
+    # Determines the save directory from the script.
     spath, sfname = None, None
 
     if "/" in sfname_or_spath:
@@ -46,14 +121,13 @@ def save(obj, sfname_or_spath, makedirs=True, show=True, **kwargs):
         fdir, fname, _ = mngs.general.split_fpath(fpath)
         sdir = fdir + fname + "/"
         spath = sdir + sfname
-        # spath = mk_spath(sfname, makedirs=True)
 
-    ## Make directory
+    # Makes directory
     if makedirs:
         sdir = os.path.dirname(spath)
         os.makedirs(sdir, exist_ok=True)
 
-    ## Saves
+    # Main
     try:
         ## copy files
         is_copying_files = (
@@ -164,23 +238,22 @@ def save(obj, sfname_or_spath, makedirs=True, show=True, **kwargs):
         print(e)
 
     else:
-        if show and not is_copying_files:
-            # if show:
+        if verbose and not is_copying_files:
             print(mngs.gen.ct(f"\nSaved to: {spath}\n", c="yellow"))
 
 
-def check_encoding(file_path):
-    from chardet.universaldetector import UniversalDetector
+# def check_encoding(file_path):
+#     from chardet.universaldetector import UniversalDetector
 
-    detector = UniversalDetector()
-    with open(file_path, mode="rb") as f:
-        for binary in f:
-            detector.feed(binary)
-            if detector.done:
-                break
-    detector.close()
-    enc = detector.result["encoding"]
-    return enc
+#     detector = UniversalDetector()
+#     with open(file_path, mode="rb") as f:
+#         for binary in f:
+#             detector.feed(binary)
+#             if detector.done:
+#                 break
+#     detector.close()
+#     enc = detector.result["encoding"]
+#     return enc
 
 
 def _save_listed_scalars_as_csv(
@@ -190,7 +263,7 @@ def _save_listed_scalars_as_csv(
     indi_suffix=None,
     round=3,
     overwrite=False,
-    show=False,
+    verbose=False,
 ):
     """Puts to df and save it as csv"""
     import numpy as np
@@ -204,7 +277,7 @@ def _save_listed_scalars_as_csv(
         {"{}".format(column_name): listed_scalars}, index=indi_suffix
     ).round(round)
     df.to_csv(spath_csv)
-    if show:
+    if verbose:
         print("\nSaved to: {}\n".format(spath_csv))
 
 
@@ -213,7 +286,7 @@ def _save_listed_dfs_as_csv(
     spath_csv,
     indi_suffix=None,
     overwrite=False,
-    show=False,
+    verbose=False,
 ):
     """listed_dfs:
         [df1, df2, df3, ..., dfN]. They will be written vertically in the order.
@@ -243,7 +316,7 @@ def _save_listed_dfs_as_csv(
         with open(spath_csv, mode="a") as f:
             f_writer = csv.writer(f)
             f_writer.writerow([""])
-    if show:
+    if verbose:
         print("Saved to: {}".format(spath_csv))
 
 
