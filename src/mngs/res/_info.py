@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-13 17:56:54"
+# Time-stamp: "2024-04-13 18:04:11"
 # Author: Yusuke Watanabe (ywata1989@gmail.com)
 
 """
@@ -169,8 +169,8 @@ def _network_info():
     net_io = _psutil.net_io_counters()
     return {
         "Interfaces": interfaces,
-        "Total Bytes Sent": net_io.bytes_sent,
-        "Total Bytes Received": net_io.bytes_recv,
+        "Total Sent": mngs.gen.readable_bytes(net_io.bytes_sent),
+        "Total Received": mngs.gen.readable_bytes(net_io.bytes_recv),
     }
 
 
