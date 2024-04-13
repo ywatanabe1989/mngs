@@ -11,9 +11,9 @@ $ pip install mngs
 ```
 
 ## Galleries
-- Input / Output [`mngs.io`](https://github.com/ywatanabe1989/mngs/tree/main/src/mngs/io#readme)
-- Digital Signal Processing [`mngs.dsp`](https://github.com/ywatanabe1989/mngs/tree/main/src/mngs/dsp#readme)
-- Resource [`mngs.res`](https://github.com/ywatanabe1989/mngs/tree/main/src/mngs/res#readme)
+- [`mngs.io`](https://github.com/ywatanabe1989/mngs/tree/main/src/mngs/io#readme) Input / Output
+- [`mngs.dsp`](https://github.com/ywatanabe1989/mngs/tree/main/src/mngs/dsp#readme) Digital Signal Processing
+- [`mngs.res`](https://github.com/ywatanabe1989/mngs/tree/main/src/mngs/res#readme) Resource
 - mngs.general
 - mngs.plt
 - mngs.ml
