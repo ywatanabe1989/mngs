@@ -171,7 +171,7 @@ def pop_keys(keys_list, keys_to_pop):
     return keys_remainded_list
 
 
-def fmt_size(num, suffix="B"):
+def readable_bytes(num, suffix="B"):
     for unit in ["", "Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi"]:
         if abs(num) < 1024.0:
             return "%3.1f%s%s" % (num, unit, suffix)
