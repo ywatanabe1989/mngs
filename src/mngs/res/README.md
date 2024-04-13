@@ -9,11 +9,11 @@ $ pip install mngs
 ``` python
 import mngs
 
-information = mngs.res.info()
-mngs.io.save(information, "info.yaml")
-# https://github.com/ywatanabe1989/mngs/tree/main/src/mngs/res/_info/info.yaml
+info = mngs.res.gather_info()
+mngs.io.save(info, "info.yaml")
+# https://github.com/ywatanabe1989/mngs/tree/main/src/mngs/res/_gather_info/info.yaml
 
-print(information)
+print(info)
 
 #{'Collected Time': '2024-04-13 17:57:06',
 # 'System Information': {'OS': 'Rocky Linux 9.3 (Blue Onyx) (x86_64)',

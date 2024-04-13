@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-13 18:05:08"
+# Time-stamp: "2024-04-13 19:08:55"
 # Author: Yusuke Watanabe (ywata1989@gmail.com)
 
 """
@@ -17,7 +17,7 @@ import psutil as _psutil
 import yaml as _yaml
 
 
-def info(
+def gather_info(
     system=True,
     boot_time=True,
     cpu=True,
@@ -231,8 +231,8 @@ if __name__ == "__main__":
     # Start
     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt)
 
-    information = mngs.res.info()
-    mngs.io.save(information, "info.yaml")
+    info = mngs.res.gather_info()
+    mngs.io.save(info, "info.yaml")
 
     # Close
     mngs.gen.close(CONFIG)
