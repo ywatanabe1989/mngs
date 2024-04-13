@@ -5,13 +5,13 @@ A module to get resource information.
 ```bash
 $ pip install mngs
 ```
-
 ## Quick Start
 ``` python
 import mngs
 
 information = mngs.res.info()
 mngs.io.save(information, "info.yaml")
+# https://github.com/ywatanabe1989/mngs/tree/main/src/mngs/res/_info/info.yaml
 
 print(information)
 
@@ -115,8 +115,8 @@ print(information)
 #   'wlp31s0': [{'Address': '4e:a6:67:b3:1e:3b',
 #     'Netmask': None,
 #     'Broadcast': 'ff:ff:ff:ff:ff:ff'}]},
-#  'Total Bytes Sent': 4013645997,
-#  'Total Bytes Received': 4538449532}}
+#  'Total Sent': '3.7GiB',
+#  'Total Received': '4.2GiB'}}
 
 ```
 
