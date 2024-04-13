@@ -18,7 +18,6 @@ from ._reload import reload
 
 _ = None
 from ..io.__init__ import *
-from ._cuda_collect_env import main as cuda_collect_env
 from ._norm import to_z
 from ._reproduce import fix_seeds, gen_ID, gen_timestamp, tee
 from ._shell import run_shellcommand, run_shellscript
@@ -28,9 +27,9 @@ from .email import notify, send_gmail
 from .latex import add_hat_in_the_latex_style, to_the_latex_style
 
 # from .mat2py import *
+from .misc import color_text  # fmt_size,
 from .misc import (
     _return_counting_process,
-    color_text,
     connect_nums,
     connect_strs,
     copy_files,
@@ -38,7 +37,6 @@ from .misc import (
     ct,
     decapitalize,
     describe,
-    fmt_size,
     grep,
     is_defined_global,
     is_defined_local,
@@ -52,6 +50,7 @@ from .misc import (
     partial_at,
     pop_keys,
     print_block,
+    readable_bytes,
     search,
     squeeze_spaces,
     suppress_output,

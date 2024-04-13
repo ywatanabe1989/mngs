@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-13 01:18:23 (ywatanabe)"
+# Time-stamp: "2024-04-13 12:10:10 (ywatanabe)"
 
 """
 Functions to add noise to signals.

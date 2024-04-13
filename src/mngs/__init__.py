@@ -1,17 +1,16 @@
 #!/usr/bin/env python3
-# Time-stamp: "2024-04-13 02:56:30 (ywatanabe)"
+# Time-stamp: "2024-04-13 17:52:49"
 
 from . import io
 
 _ = None  # to keep the importing order
-from . import general
+from . import gen, general
 
-gen = general
+_ = None
+from . import dsp, gists, linalg, ml, nn, os, plt, stats, torch
 
-_ = None  # to keep the importing order
-from . import dsp, gists, linalg, ml, nn, os, plt, resource, stats, torch
-
-# _ = None  # to keep the importing order
+_ = None
+from . import res
 
 __copyright__ = "Copyright (C) 2024 Yusuke Watanabe"
 __version__ = "1.3.0"
