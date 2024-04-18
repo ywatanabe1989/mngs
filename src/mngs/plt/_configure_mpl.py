@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-10 11:00:31 (ywatanabe)"
+# Time-stamp: "2024-04-16 19:15:26"
 
 import matplotlib.pyplot as plt
 import numpy as np
-import seaborn as sns
 
 
 def rgba_to_hex(rgba):
@@ -31,11 +30,16 @@ def configure_mpl(
     dpi_display=100,
     dpi_save=300,
     # Font Size
-    font_size_base=8,
-    font_size_title=8,
-    font_size_axis_label=8,
-    font_size_tick_label=7,
-    font_size_legend=6,
+    # font_size_base=8,
+    # font_size_title=8,
+    # font_size_axis_label=8,
+    # font_size_tick_label=7,
+    # font_size_legend=6,
+    font_size_base=12,
+    font_size_title=12,
+    font_size_axis_label=12,
+    font_size_tick_label=10,
+    font_size_legend=10,
     # Hide spines
     hide_top_right_spines=True,
     # line
@@ -104,19 +108,19 @@ def configure_mpl(
     """
 
     COLORS_RGBA = {
-        "blue": (0, 128, 192, alpha),
-        "red": (255, 70, 50, alpha),
-        "pink": (255, 150, 200, alpha),
-        "green": (20, 180, 20, alpha),
-        "yellow": (230, 160, 20, alpha),
-        "grey": (128, 128, 128, alpha),
-        "purple": (200, 50, 255, alpha),
-        "lightblue": (20, 200, 200, alpha),
-        "brown": (128, 0, 0, alpha),
-        "darkblue": (0, 0, 100, alpha),
-        "orange": (228, 94, 50, alpha),
-        "white": (255, 255, 255, alpha),
-        "black": (0, 0, 0, alpha),
+        "blue": [0, 128, 192, alpha],
+        "red": [255, 70, 50, alpha],
+        "pink": [255, 150, 200, alpha],
+        "green": [20, 180, 20, alpha],
+        "yellow": [230, 160, 20, alpha],
+        "grey": [128, 128, 128, alpha],
+        "purple": [200, 50, 255, alpha],
+        "lightblue": [20, 200, 200, alpha],
+        "brown": [128, 0, 0, alpha],
+        "darkblue": [0, 0, 100, alpha],
+        "orange": [228, 94, 50, alpha],
+        "white": [255, 255, 255, alpha],
+        "black": [0, 0, 0, alpha],
     }
     COLORS_HEX = {k: rgba_to_hex(v) for k, v in COLORS_RGBA.items()}
     COLORS_RGBA_NORM = {c: normalize_rgba(v) for c, v in COLORS_RGBA.items()}
@@ -172,6 +176,8 @@ def configure_mpl(
         for color_str, rgba in COLORS_RGBA.items():
             print(f"  {color_str}: {rgba}")
         print("-" * 40)
+
+    COLORS_RGBA_NORM["gray"] = COLORS_RGBA_NORM["grey"]  # alias
 
     return plt, COLORS_RGBA_NORM
 

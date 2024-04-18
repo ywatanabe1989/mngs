@@ -105,7 +105,7 @@ def start(
         if "ipython" in __file__:
             __file__ = "/tmp/fake.py"
         spath = __file__
-        _sdir, sfname, _ = mngs.general.split_fpath(spath)
+        _sdir, sfname, _ = mngs.path.split(spath)
         sdir = _sdir + sfname + "/" + "RUNNING" + "/" + ID + "/"
     _os.makedirs(sdir, exist_ok=True)
 

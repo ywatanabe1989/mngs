@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-13 00:36:46 (ywatanabe)"
+# Time-stamp: "2024-04-17 08:48:20"
 
 from collections import OrderedDict
 
@@ -75,28 +75,29 @@ class SubplotsManager:
 
     def __call__(self, *args, track=True, **kwargs):
         """
-        Create subplots and wrap the axes with AxisDataCollector.
+        Create subplots and wrap the axes with AxisWrapper.
 
         Returns:
             tuple: A tuple containing the figure and wrapped axes
             in the same manner with matplotlib.pyplot.subplots.
         """
-        fig, axes = plt.subplots(*args, **kwargs)
-        # fig.tight_layout(rect=[0, 0.03, 1, 0.95])
 
+        fig, axes = plt.subplots(*args, **kwargs)
+
+        fig = FigWrapper(fig)
         axes = np.atleast_1d(axes)
         axes_orig_shape = axes.shape
 
         if axes_orig_shape == (1,):
-            ax_wrapped = AxisDataCollector(axes[0], self._plot_history, track)
+            ax_wrapped = AxisWrapper(axes[0], self._plot_history, track)
             return fig, ax_wrapped
 
         else:
-
             axes = axes.ravel()
             axes_wrapped = [
-                AxisDataCollector(ax, self._plot_history, track) for ax in axes
+                AxisWrapper(ax, self._plot_history, track) for ax in axes
             ]
+
             axes = (
                 np.array(axes_wrapped).reshape(axes_orig_shape)
                 if axes_orig_shape
@@ -104,20 +105,6 @@ class SubplotsManager:
             )
 
             return fig, axes
-        # # Wraps the axes
-        # for ax in axes:
-        #     ax = AxisDataCollector(ax, self._plot_history, track)
-
-        # axes = np.array(axes).reshape(axes_orig_shape)
-
-        # return fig, axes if axes_orig_shape else axes[0]
-
-        # ax = np.atleast_1d(ax)
-        # ax_wrapped = [
-        #     AxisDataCollector(a, self._plot_history, track) for a in ax
-        # ]
-        # return fig, ax_wrapped if len(ax_wrapped) > 1 else ax_wrapped[0]
-        # return fig, axes if len(ax_wrapped) > 1 else ax_wrapped[0]
 
     @property
     def history(self):
@@ -148,14 +135,62 @@ class SubplotsManager:
         )
 
 
-class AxisDataCollector:
+class FigWrapper:
+    """
+    A wrapper class for a Matplotlib axis that collects plotting data.
+    """
+
+    def __init__(self, fig):
+        """
+        Initialize the AxisWrapper with a given axis and history reference.
+        """
+        self.fig = fig
+
+    def __getattr__(self, attr):
+        """
+        Wrap the axis attribute access to collect plot calls or return the attribute directly.
+        """
+        original_attr = getattr(self.fig, attr)
+
+        if callable(original_attr):
+
+            def wrapper(
+                *args, id=None, track=True, n_xticks=4, n_yticks=4, **kwargs
+            ):
+                result = original_attr(*args, **kwargs)
+
+                return result
+
+            return wrapper
+        else:
+
+            return original_attr
+
+    ################################################################################
+    # Original methods
+    ################################################################################
+    def set_supxyt(self, xlabel=None, ylabel=None, title=None):
+        """Sets xlabel, ylabel and title"""
+        if xlabel is not None:
+            self.fig.supxlabel(xlabel)
+        if ylabel is not None:
+            self.fig.supylabel(ylabel)
+        if title is not None:
+            self.fig.suptitle(title)
+        return self.fig
+
+    def tight_layout(self, rect=[0, 0.03, 1, 0.95]):
+        self.fig.tight_layout(rect=rect)
+
+
+class AxisWrapper:
     """
     A wrapper class for a Matplotlib axis that collects plotting data.
     """
 
     def __init__(self, axis, history, track):
         """
-        Initialize the AxisDataCollector with a given axis and history reference.
+        Initialize the AxisWrapper with a given axis and history reference.
         """
         self.axis = axis
         self._history = history
@@ -229,48 +264,116 @@ class AxisDataCollector:
 
         return combined_data
 
+    ################################################################################
+    # Original methods
+    ################################################################################
+    def set_xyt(
+        self,
+        xlabel=None,
+        ylabel=None,
+        title=None,
+    ):
+        self.axis = mngs.plt.ax.set_xyt(
+            self.axis,
+            xlabel=xlabel,
+            ylabel=ylabel,
+            title=title,
+        )
+
+    def set_supxyt(
+        self,
+        xlabel=None,
+        ylabel=None,
+        title=None,
+    ):
+        self.axis = mngs.plt.ax.set_supxyt(
+            self.axis,
+            xlabel=xlabel,
+            ylabel=ylabel,
+            title=title,
+        )
+
+    def set_ticks(
+        self,
+        x_vals=None,
+        x_ticks=None,
+        y_vals=None,
+        y_ticks=None,
+    ):
+        self.axis = mngs.plt.ax.set_ticks(
+            self.axis,
+            x_vals=x_vals,
+            x_ticks=x_ticks,
+            y_vals=y_vals,
+            y_ticks=y_ticks,
+        )
+
+    def set_n_ticks(self, n_xticks=4, n_yticks=4):
+        self.axis = mngs.plt.ax.set_n_ticks(
+            self.axis, n_xticks=n_xticks, n_yticks=n_yticks
+        )
+
+    def hide_spines(
+        self,
+        tgts=["top", "right", "bottom", "left"],
+        hide_ticks=False,
+        hide_labels=False,
+    ):
+        self.axis = mngs.plt.ax.hide_spines(
+            self.axis,
+            tgts=tgts,
+            hide_ticks=hide_ticks,
+            hide_labels=hide_labels,
+        )
+
+    def fill_between(self, xx, mean, std, label, alpha=0.1):
+        self.axis = mngs.plt.ax.fill_between(
+            self.axis, xx, mean, std, label, alpha=alpha
+        )
+
+    def extend(self, x_ratio=1.0, y_ratio=1.0):
+        self.axis = mngs.plt.ax.extend(
+            self.axis, x_ratio=x_ratio, y_ratio=y_ratio
+        )
+
+    def rectangle(self, xx, yy, ww, hh, **kwargs):
+        self.axis = mngs.plt.ax.rectangle(self.axis, xx, yy, ww, hh, **kwargs)
+
+    def shift(self, dx=0, dy=0):
+        self.axis = mngs.plt.ax.shift(self.axis, dx=dx, dy=dy)
+
     def imshow2d(
         self,
         arr_2d,
-        id=None,
-        track=True,
         cbar=True,
         cbar_label=None,
-        cbar_shrink=0.8,
+        cbar_shrink=1.0,
+        cbar_fraction=0.046,
+        cbar_pad=0.04,
         cmap="viridis",
+        aspect="auto",
         vmin=None,
         vmax=None,
+        id=None,
+        track=True,
         **kwargs,
     ):
-        """
-        Imshows an two-dimensional array with theese two conditions:
-        1) The first dimension represents the x dim, from left to right.
-        2) The second dimension represents the y dim, from bottom to top
-        """
-
-        assert arr_2d.ndim == 2
-
-        # Cals the original ax.imshow() method on the transposed array
-        im = self.axis.imshow(
-            arr_2d.T, cmap=cmap, vmin=vmin, vmax=vmax, **kwargs
+        self.axis = mngs.plt.ax.imshow2d(
+            self.axis,
+            arr_2d,
+            cbar=cbar,
+            cbar_label=cbar_label,
+            cbar_shrink=cbar_shrink,
+            cbar_fraction=cbar_fraction,
+            cbar_pad=cbar_pad,
+            cmap=cmap,
+            aspect=aspect,
+            vmin=vmin,
+            vmax=vmax,
         )
 
-        # Creates a colorbar
-        fig = self.axis.get_figure()
-
-        if cbar:
-            _cbar = fig.colorbar(im, ax=self.axis, shrink=cbar_shrink)
-            if cbar_label:
-                _cbar.set_label(cbar_label)
-
-        # Invert y-axis to match typical image orientation
-        self.axis.invert_yaxis()
-
-        # Store the history if tracking is enabled and an ID is provided
         if track and id is not None:
             self._history[id] = (id, "imshow2d", arr_2d, None)
-
-        return fig  # Return the figure object
 
 
 def to_sigmaplot_format(record):

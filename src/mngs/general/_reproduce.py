@@ -121,7 +121,7 @@ def tee(sys, sdir=None, verbose=True):
             __file__ = "/tmp/fake.py"
         spath = __file__
 
-        _sdir, sfname, _ = mngs.general.split_fpath(spath)
+        _sdir, sfname, _ = mngs.path.split(spath)
         sdir = _sdir + sfname + "/log/"
 
     os.makedirs(sdir, exist_ok=True)
@@ -129,7 +129,7 @@ def tee(sys, sdir=None, verbose=True):
     spath_stdout = sdir + "stdout.log"
     spath_stderr = sdir + "stderr.log"
 
-    os.makedirs(mngs.general.split_fpath(spath_stdout)[0], exist_ok=True)
+    os.makedirs(mngs.path.split(spath_stdout)[0], exist_ok=True)
 
     sys_stdout = Tee(sys.stdout, spath_stdout)
     sys_stderr = Tee(sys.stdout, spath_stderr)

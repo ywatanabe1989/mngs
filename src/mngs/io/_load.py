@@ -40,7 +40,14 @@ def load(lpath, show=False, verbose=False, **kwargs):
 
         # numpy
         elif extension == ".npy":
-            obj = np.load(lpath, allow_pickle=True, **kwargs)  # [REVISED]
+            obj = np.load(lpath, allow_pickle=True, **kwargs)
+
+        # numpy npz
+        elif extension == ".npz":
+            obj = np.load(lpath)
+            obj = dict(obj)
+            obj = [v for v in obj.values()]
+
         # pkl
         elif extension == ".pkl":
             with open(lpath, "rb") as l:

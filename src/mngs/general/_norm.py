@@ -1,22 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-02 21:34:33 (ywatanabe)"
+# Time-stamp: "2024-04-14 17:46:49"
 
-import mngs
+
 import numpy as np
 import torch
 from mngs.general import torch_fn
 
-
-def to_z(x, axis):
-    if isinstance(x, torch.Tensor):  # [REVISED]
-        return (x - x.mean(dim=axis, keepdim=True)) / x.std(
-            dim=axis, keepdim=True
-        )  # [REVISED]
-    if isinstance(x, np.ndarray):  # [REVISED]
-        return (x - x.mean(axis=axis, keepdims=True)) / x.std(
-            axis=axis, keepdims=True
-        )
+# def to_z(x, axis):
+#     if isinstance(x, torch.Tensor):  # [REVISED]
+#         return (x - x.mean(dim=axis, keepdim=True)) / x.std(
+#             dim=axis, keepdim=True
+#         )  # [REVISED]
+#     if isinstance(x, np.ndarray):  # [REVISED]
+#         return (x - x.mean(axis=axis, keepdims=True)) / x.std(
+#             axis=axis, keepdims=True
+#         )
 
 
 @torch_fn

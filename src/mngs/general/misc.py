@@ -212,7 +212,7 @@ def is_listed_X(obj, types):
         return False
 
 
-def take_the_closest(list_obj, num_insert):
+def find_closest(list_obj, num_insert):
     """
     Assumes list_obj is sorted. Returns the closest value to num.
     If the same number is included in list_obj, the smaller number is returned.
@@ -412,7 +412,7 @@ def _copy_a_file(src, dst, allow_overwrite=False):
     else:
 
         if dst.endswith("/"):
-            _, src_fname, src_ext = mngs.general.split_fpath(src)
+            _, src_fname, src_ext = mngs.path.split(src)
             # src_fname = src + src_ext
             dst = dst + src_fname + src_ext
 
@@ -445,7 +445,7 @@ def copy_files(src_files, dists, allow_overwrite=False):
 
 def copy_the_file(sdir):  # dst
     __file__ = inspect.stack()[1].filename
-    _, fname, ext = mngs.general.split_fpath(__file__)
+    _, fname, ext = mngs.path.split(__file__)
 
     dst = sdir + fname + ext
 

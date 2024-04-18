@@ -27,6 +27,7 @@ def save(obj, sfname_or_spath, makedirs=True, verbose=True, **kwargs):
     Supported Formats:
         - .csv: Pandas DataFrames or listed scalars.
         - .npy: NumPy arrays.
+        - .npz: NumPy arrays.
         - .pkl: Serializable Python objects using pickle.
         - .joblib: Objects using joblib with compression.
         - .png: Images, including Plotly figures and Matplotlib plots.
@@ -118,7 +119,7 @@ def save(obj, sfname_or_spath, makedirs=True, verbose=True, **kwargs):
 
         ## spath
         fpath = __file__
-        fdir, fname, _ = mngs.general.split_fpath(fpath)
+        fdir, fname, _ = mngs.path.split(fpath)
         sdir = fdir + fname + "/"
         spath = sdir + sfname
 
@@ -151,6 +152,20 @@ def save(obj, sfname_or_spath, makedirs=True, verbose=True, **kwargs):
         # numpy
         elif spath.endswith(".npy"):
             np.save(spath, obj)
+
+        # numpy npz
+        elif spath.endswith(".npz"):
+            if isinstance(obj, dict):
+                np.savez_compressed(spath, **obj)
+            elif isinstance(obj, (list, tuple)) and all(
+                isinstance(x, np.ndarray) for x in obj
+            ):
+                obj = {str(ii): obj[ii] for ii in range(len(obj))}
+                np.savez_compressed(spath, **obj)
+            else:
+                raise ValueError(
+                    "For .npz files, obj must be a dict of arrays or a list/tuple of arrays."
+                )
         # pkl
         elif spath.endswith(".pkl"):
             with open(spath, "wb") as s:  # 'w'

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
-
 from ._close import close
 from ._converters import (
+    batch_fn,
     numpy_fn,
     squeeze_if,
     to_numpy,
@@ -10,6 +10,7 @@ from ._converters import (
     torch_fn,
     unsqueeze_if,
 )
+from ._DimHandler import DimHandler
 from ._embed import embed
 
 # Confirmed
@@ -36,6 +37,7 @@ from .misc import (
     ct,
     decapitalize,
     describe,
+    find_closest,
     grep,
     is_defined_global,
     is_defined_local,
@@ -54,7 +56,6 @@ from .misc import (
     squeeze_spaces,
     suppress_output,
     symlink,
-    take_the_closest,
     to_even,
     to_odd,
     unique,
