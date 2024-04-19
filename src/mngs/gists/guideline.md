@@ -23,7 +23,7 @@
 
 ## Emacs —more than an editor—
 - #### Install [Emacs](https://www.gnu.org/software/emacs/)
-  - The initial cost to learn Emacs is high, but the investment will pay off exponentially.
+  - Open Emacs. Try ‘M-x help-with-tutorial RET’ (hold down Alt (Meta) key while hitting ‘x’, then type ‘help-with-tutorial’, then hit Enter). 
 - #### Create shortcuts
   Define shortcut keys by writing Elisp code. Regularly update the configuration files. 
   [my .emacs.d](https://github.com/ywatanabe1989/.emacs.d)
