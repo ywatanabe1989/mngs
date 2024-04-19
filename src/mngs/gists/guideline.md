@@ -1,7 +1,7 @@
 # Guidelines for New Programmers.
 
-## Mentality
-- #### Embrace Automation
+## Preface
+- #### Programming is all about Automation
   Automate repetitive steps; _e.g._, "A -> B -> C" to "A -> C".
 - #### Programming is a skill
   Programming is not knowledge but a skill. To ride a bicycle, all you need is to ride a bicycle.
@@ -25,7 +25,7 @@
 - The initial cost to learn Emacs is high, but the investment will pay off exponentially.
 - #### Create shortcuts
   Define shortcut keys by writing Elisp code. Regularly update the configuration files. 
-  [https://github.com/ywatanabe1989/.emacs.d](https://github.com/ywatanabe1989/.emacs.d)
+  [my .emacs.d](https://github.com/ywatanabe1989/.emacs.d)
 
 
 ## Coding
@@ -35,7 +35,7 @@
   If you have any comments or queries, feel free to visit [Google.com](https://www.google.com/) or press "Ctrl + K" on your browser. Finding suitable information on the Internet is a critical skill.
 - #### ChatGPT
   Incorporate ChatGPT for your editor. 
-  [emacs-gpt](https://github.com/ywatanabe1989/emacs-gpt)
+  [my emacs-gpt](https://github.com/ywatanabe1989/emacs-gpt)
 - #### Avoid Comments
   Code itself should be descriptive. Comments should help readers to understand "why" instead of "what".
   [The Art of Readable Code](https://www.oreilly.com/library/view/the-art-of/9781449318482/).
