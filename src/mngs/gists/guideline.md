@@ -4,7 +4,7 @@
 - #### Embrace Automation
   Automate repetitive steps; _e.g._, "A -> B -> C" to "A -> C".
 - #### Programming is a skill
-  Programming is more of a skill rather than knowledge. To ride a bicycle, all you need is to ride a bicycle.
+  Programming is not knowledge but a skill. To ride a bicycle, all you need is to ride a bicycle.
 
 ## Use English
 - No exceptions. Do not use Japanese.
