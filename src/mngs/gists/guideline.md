@@ -7,7 +7,7 @@
   Programming is not knowledge but a skill. To ride a bicycle, all you need is to ride a bicycle.
 
 ## Use English
-- No exceptions. Read, write, and think in English.
+- Read, write, and think in English.
 
 ## Keyboard
 - #### Keyboard is better than mouse
