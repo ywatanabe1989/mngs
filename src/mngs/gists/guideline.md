@@ -1,4 +1,4 @@
-# Guidelines for New Programmers.
+# Guidelines for New Programmers
 
 ## Preface
 - #### Programming is all about Automation
@@ -14,7 +14,7 @@
 - #### Shortcuts are Key to Enhancing Productivity
   Shortcuts are often linked to English. You will realize a large number of software have common shortcuts.
 - #### Stick to ONE Keyboard
-  Preferably [the HHKB Keyboard](https://www.pfuemea.com/en-gb/dr_product/hhkb-professional-hybrid-type-s-charcoal-45g-tkl-blank-keycaps-pd-kb800bns). Your keyboard is the interface between you and computers; you should regard it as an extension of your body.
+  Preferably [the HHKB Keyboard](https://www.pfuemea.com/en-gb/dr_product/hhkb-professional-hybrid-type-s-charcoal-45g-tkl-blank-keycaps-pd-kb800bns). Your keyboard is the interface between you and computers, like an extension of your body.
 - #### Maintain Home Position
   "Ctrl + n" is better than "Enter".
 - #### Use the Entire Hand
