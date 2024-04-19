@@ -10,10 +10,10 @@
 - No exceptions. Do not use Japanese.
 
 ## Keyboard
-- #### Mouse < Keyboard
-- ### Master Shortcuts
+- ### Keyboard is better than mouse
+- ### Shortcuts is the key to enhance your productivity
   Shortcuts are often linked to English. You will realize a large number of software have common shortcuts.
-- ### Stick to One Keyboard
+- ### Stick to ONE Keyboard
   Preferably [the HHKB Keyboard](https://www.pfuemea.com/en-gb/dr_product/hhkb-professional-hybrid-type-s-charcoal-45g-tkl-blank-keycaps-pd-kb800bns). Your keyboard is the interface between you and computers; you should regard it as an extension of your body.
 - #### Do not go away from the home position
   "Ctrl + n" is better than "Enter".
