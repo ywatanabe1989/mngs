@@ -7,13 +7,13 @@
   Programming is not knowledge but a skill. To ride a bicycle, all you need is to ride a bicycle.
 
 ## Use English
-- No exceptions. Do not use Japanese.
+- No exceptions. Read, write, and think in English.
 
 ## Keyboard
-- ### Keyboard is better than mouse
-- ### Shortcuts is the key to enhance your productivity
+- #### Keyboard is better than mouse
+- #### Shortcuts is the key to enhance your productivity
   Shortcuts are often linked to English. You will realize a large number of software have common shortcuts.
-- ### Stick to ONE Keyboard
+- #### Stick to ONE Keyboard
   Preferably [the HHKB Keyboard](https://www.pfuemea.com/en-gb/dr_product/hhkb-professional-hybrid-type-s-charcoal-45g-tkl-blank-keycaps-pd-kb800bns). Your keyboard is the interface between you and computers; you should regard it as an extension of your body.
 - #### Do not go away from the home position
   "Ctrl + n" is better than "Enter".
@@ -36,6 +36,6 @@
 - #### ChatGPT
   Incorporate ChatGPT for your editor. 
   [emacs-gpt](https://github.com/ywatanabe1989/emacs-gpt)
-- ### Avoid Comments
+- #### Avoid Comments
   Code itself should be descriptive. Comments should help readers to understand "why" instead of "what".
   [The Art of Readable Code](https://www.oreilly.com/library/view/the-art-of/9781449318482/).
