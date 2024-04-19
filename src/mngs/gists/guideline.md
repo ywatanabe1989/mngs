@@ -10,19 +10,20 @@
 - Read, write, and think in English.
 
 ## Keyboard
-- #### Keyboard is better than mouse
-- #### Shortcuts is the key to enhance your productivity
+- #### Keyboard > Mouse
+- #### Shortcuts are Key to Enhancing Productivity
   Shortcuts are often linked to English. You will realize a large number of software have common shortcuts.
 - #### Stick to ONE Keyboard
   Preferably [the HHKB Keyboard](https://www.pfuemea.com/en-gb/dr_product/hhkb-professional-hybrid-type-s-charcoal-45g-tkl-blank-keycaps-pd-kb800bns). Your keyboard is the interface between you and computers; you should regard it as an extension of your body.
-- #### Do not go away from the home position
+- #### Maintain Home Position
   "Ctrl + n" is better than "Enter".
-- #### Use the entire hand
-  The tip of your left hand is very suitable for pressing "Alt".
+- #### Use the Entire Hand
+  Utilize the root of your left hand for keys like "Alt".
 
 
 ## Emacs —more than an editor—
-- The initial cost to learn Emacs is high, but the investment will pay off exponentially.
+- #### Install [Emacs](https://www.gnu.org/software/emacs/)
+  - The initial cost to learn Emacs is high, but the investment will pay off exponentially.
 - #### Create shortcuts
   Define shortcut keys by writing Elisp code. Regularly update the configuration files. 
   [my .emacs.d](https://github.com/ywatanabe1989/.emacs.d)
