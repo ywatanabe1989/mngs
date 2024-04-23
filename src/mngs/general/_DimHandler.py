@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-19 01:40:36"
+# Time-stamp: "2024-04-23 11:45:42"
 # Author: Yusuke Watanabe (ywata1989@gmail.com)
 
 """
@@ -17,10 +17,11 @@ import sys
 
 import matplotlib.pyplot as plt
 import mngs
+
+# from mngs.general import torch_fn
+import numpy as np
 import torch
 
-# Config
-CONFIG = mngs.gen.load_configs()
 
 # Functions
 class DimHandler:
@@ -59,37 +60,88 @@ class DimHandler:
     """
 
     def __init__(self):
-        self.orig_shape = None
-        self.keepdims = None
+        pass
+        # self.orig_shape = None
+        # self.keepdims = None
 
     def fit(self, x, keepdims=[]):
+        if isinstance(x, np.ndarray):
+            return self._fit_numpy(x, keepdims=keepdims)
+        elif isinstance(x, torch.Tensor):
+            return self._fit_torch(x, keepdims=keepdims)
+
+    def _fit_numpy(self, x, keepdims=[]):
+        """
+        Reshapes the input NumPy array by flattening the dimensions not in `keepdims` and moving the kept dimensions to the end.
+
+        Arguments:
+            x (numpy.ndarray): The input array to be reshaped.
+            keepdims (list of int): The indices of the dimensions to keep.
+
+        Returns:
+            x_flattened (numpy.ndarray): The reshaped array with kept dimensions moved to the end.
+        """
+        assert len(keepdims) <= len(
+            x.shape
+        ), "keepdims cannot have more dimensions than the array itself."
+
+        # Normalize negative indices to positive indices
+        total_dims = len(x.shape)
+        keepdims = [dim if dim >= 0 else total_dims + dim for dim in keepdims]
+        keepdims = sorted(set(keepdims))
+
+        self.shape_fit = x.shape
+
+        non_keepdims = [
+            ii for ii in range(len(self.shape_fit)) if ii not in keepdims
+        ]
+
+        self.n_non_keepdims = [self.shape_fit[nkd] for nkd in non_keepdims]
+        self.n_keepdims = [self.shape_fit[kd] for kd in keepdims]
+
+        # Permute the array dimensions so that the non-kept dimensions come first
+        new_order = non_keepdims + keepdims
+        x_permuted = np.transpose(x, axes=new_order)
+
+        # Flatten the non-kept dimensions
+        x_flattened = x_permuted.reshape(-1, *self.n_keepdims)
+
+        return x_flattened
+
+    def _fit_torch(self, x, keepdims=[]):
         """
         Reshapes the input tensor or array by flattening the dimensions not in `keepdims` and moving the kept dimensions to the end.
 
         Arguments:
-            x (torch.Tensor or numpy.array): The input tensor or array to be reshaped.
+            x (torch.Tensor): The input tensor or array to be reshaped.
             keepdims (list of int): The indices of the dimensions to keep.
 
         Returns:
-            x_flattend (torch.Tensor or numpy.array): The reshaped tensor or array with kept dimensions moved to the end.
+            x_flattend (torch.Tensor): The reshaped tensor or array with kept dimensions moved to the end.
 
         Note:
             This method modifies the `orig_shape`, `keepdims`, `n_non_keepdims`, and `n_keepdims` attributes based on the input.
         """
-        assert len(keepdims) <= len(x.shape)
+        assert len(keepdims) <= len(
+            x.shape
+        ), "keepdims cannot have more dimensions than the tensor itself."
 
-        keepdims = sorted(keepdims)
+        keepdims = torch.tensor(keepdims).clone().detach().cpu().int()
+        # Normalize negative indices to positive indices
+        total_dims = len(x.shape)
+        keepdims = [dim if dim >= 0 else total_dims + dim for dim in keepdims]
+        keepdims = sorted(set(keepdims))
 
-        orig_shape = x.shape
-        keepdims = keepdims
+        self.shape_fit = x.shape
+
         non_keepdims = [
             int(ii)
-            for ii in torch.arange(len(orig_shape))
+            for ii in torch.arange(len(self.shape_fit))
             if ii not in keepdims
         ]
 
-        self.n_non_keepdims = [orig_shape[nkd] for nkd in non_keepdims]
-        self.n_keepdims = [orig_shape[kd] for kd in keepdims]
+        self.n_non_keepdims = [self.shape_fit[nkd] for nkd in non_keepdims]
+        self.n_keepdims = [self.shape_fit[kd] for kd in keepdims]
 
         x_permuted = x.permute(*non_keepdims, *keepdims)
         x_flattend = x_permuted.reshape(-1, *self.n_keepdims)
@@ -98,7 +150,7 @@ class DimHandler:
 
     def unfit(self, y):
         """
-        Restores the reshaped tensor or array back to its original shape before the `fit` operation.
+        Restores the first dimension of reshaped tensor or array back to its original shape before the `fit` operation.
 
         Arguments:
             y (torch.Tensor or numpy.array): The tensor or array to be restored to its original shape.
@@ -106,11 +158,8 @@ class DimHandler:
         Returns:
             y_restored (torch.Tensor or numpy.array): The tensor or array restored to its original shape.
         """
-        orig_shape = y.shape
-        return y.reshape(
-            *self.n_non_keepdims,
-            *orig_shape[len(self.n_non_keepdims) - len(self.n_keepdims) + 1 :]
-        )
+        self.shape_unfit = y.shape
+        return y.reshape(*self.n_non_keepdims, *self.shape_unfit[1:])
 
 
 if __name__ == "__main__":

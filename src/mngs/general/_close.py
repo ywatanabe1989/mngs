@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-10 19:53:26 (ywatanabe)"
+# Time-stamp: "2024-04-19 18:30:56"
 
 import os
-import shutil
-from datetime import datetime, timedelta
+from datetime import datetime
 from glob import glob
 from time import sleep
 
@@ -25,21 +24,21 @@ def format_diff_time(diff_time):
     return diff_time_str
 
 
-def close(CONFIG, message=":)", notify=True, show=True):
+def close(CONFIG, message=":)", notify=True, verbose=True):
     try:
         CONFIG["END_TIME"] = datetime.now()
         CONFIG["SPENT_TIME"] = format_diff_time(
             CONFIG["END_TIME"] - CONFIG["START_TIME"]
         )
-        if show:
+        if verbose:
             print(f"\nEND TIME: {CONFIG['END_TIME']}")
             print(f"\nSPENT TIME: {CONFIG['SPENT_TIME']}")
 
     except Exception as e:
         print(e)
 
-    mngs.io.save(CONFIG, CONFIG["SDIR"] + "CONFIG.pkl")
-    mngs.io.save(CONFIG, CONFIG["SDIR"] + "CONFIG.yaml")
+    mngs.io.save(CONFIG, CONFIG["SDIR"] + "CONFIG.pkl", verbose=verbose)
+    mngs.io.save(CONFIG, CONFIG["SDIR"] + "CONFIG.yaml", verbose=False)
 
     try:
         if CONFIG.get("DEBUG", False):
@@ -50,7 +49,7 @@ def close(CONFIG, message=":)", notify=True, show=True):
                 message=message,
                 ID=CONFIG["ID"],
                 log_paths=glob(CONFIG["SDIR"] + "*.log"),
-                show=show,
+                verbose=verbose,
             )
     except Exception as e:
         print(e)
@@ -60,12 +59,12 @@ def close(CONFIG, message=":)", notify=True, show=True):
 
 
 def finish(src_dir):
-    dest_dir = src_dir.replace("RUNNING", "FINISHED")
+    dest_dir = src_dir.replace("RUNNING/", "")
     os.makedirs(dest_dir, exist_ok=True)
     try:
         os.rename(src_dir, dest_dir)
         mngs.gen.print_block(
-            f"Congratulations! Results have been moved from RUNNING to FINISHED.\n\n{src_dir}\n\nv\nv\n\n{dest_dir}",
+            f"Congratulations! The script completed.\n\n{dest_dir}",
             c="yellow",
         )
     except Exception as e:
@@ -80,7 +79,7 @@ if __name__ == "__main__":
     from icecream import ic
 
     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
-        sys, plt, show=False
+        sys, plt, verbose=False
     )
 
     ic("aaa")

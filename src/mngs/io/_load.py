@@ -17,17 +17,14 @@ import yaml
 
 
 def load(lpath, show=False, verbose=False, **kwargs):
-    import logging
-
     try:
         extension = "." + lpath.split(".")[-1]  # [REVISED]
 
         # csv
         if extension == ".csv":
+            index_col = kwargs.get("index_col", 0)
             obj = pd.read_csv(lpath, **kwargs)
-            obj = obj.loc[
-                :, ~obj.columns.str.contains("^Unnamed")
-            ]  # [REVISED]
+            obj = obj.loc[:, ~obj.columns.str.contains("^Unnamed")]
         # tsv
         elif extension == ".tsv":
             obj = pd.read_csv(lpath, sep="\t", **kwargs)
@@ -74,15 +71,6 @@ def load(lpath, show=False, verbose=False, **kwargs):
             pass
         # yaml
         elif extension == ".yaml":
-            # from ruamel.yaml import YAML
-
-            # yaml = YAML()
-            # yaml.preserve_quotes = (
-            #     True  # Optional: if you want to preserve quotes
-            # )
-            # yaml.indent(
-            #     mapping=2, sequence=4, offset=2
-            # )  # Optional: set indentation
 
             lower = kwargs.pop("lower", False)
 
@@ -154,8 +142,7 @@ def load(lpath, show=False, verbose=False, **kwargs):
         return obj
 
     except Exception as e:
-        if verbose:
-            print(f"\n{lpath} was not loaded:\n{e}")
+        print(f"\n{lpath} was not loaded:\n{e}")
 
         # logging.error(f"\n{lpath} was not loaded:\n{e}")
         # return None
@@ -294,7 +281,7 @@ def load_study_rdb(study_name, rdb_raw_bytes_url):
 
 def load_configs(IS_DEBUG=None, show=False, verbose=False):
 
-    if os.getenv("CI") == "true":
+    if os.getenv("CI") == "True":
         IS_DEBUG = True
 
     def update_debug(config, IS_DEBUG):

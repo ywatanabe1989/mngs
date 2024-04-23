@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-01-26 16:13:56 (ywatanabe)"
+# Time-stamp: "2024-04-20 16:01:00"
 
 import inspect
 import os
@@ -10,7 +10,6 @@ from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from io import StringIO
 
 import mngs
 
@@ -28,7 +27,7 @@ import mngs
 #     return output, error
 
 
-def notify(subject="", message=":)", ID=None, log_paths=None, show=False):
+def notify(subject="", message=":)", ID=None, log_paths=None, verbose=False):
     """
     Usage:
         notify("mngs.gen.notify()", "Hello world from mngs.")
@@ -48,7 +47,7 @@ def notify(subject="", message=":)", ID=None, log_paths=None, show=False):
             3. At the bottom, click "Select app" and pick the app you are using (select "Mail" for general purposes).
             4. Click "Select device" and select the device you are using (or choose "Other" and label it "Python Script" or similar).
             5. Click "Generate".
-            6. Use the 16-digit App Password in your script as directed. The App Password will be shown only once, so remember to copy it.
+            6. Use the 16-digit App Password in your script as directed. The App Password will be verbosen only once, so remember to copy it.
 
         Step 3: Configure Gmail as environment variables
                ```bash
@@ -79,8 +78,7 @@ def notify(subject="", message=":)", ID=None, log_paths=None, show=False):
     if mngs_sender_gmail is None or mngs_sender_password is None:
         print(
             f"""
-        Please set environmental variables to use this function:
-        
+        Please set environmental variables to use this function:\n\n
         $ export MNGS_SENDER_GMAIL="mngs.notification@gmail.com"
         $ export MNGS_SENDER_GMAIL_PASSWORD="YOUR_APP_PASSWORD"
         $ export MNGS_RECIPIENT_GMAIL="YOUR_GMAIL_ADDRESS"
@@ -98,7 +96,7 @@ def notify(subject="", message=":)", ID=None, log_paths=None, show=False):
         full_message,
         ID=ID,
         log_paths=log_paths,
-        show=show,
+        verbose=verbose,
     )
 
 
@@ -110,7 +108,7 @@ def send_gmail(
     message,
     ID=None,
     log_paths=None,
-    show=True,
+    verbose=True,
 ):
 
     if ID is None:
@@ -153,7 +151,7 @@ def send_gmail(
         # Quit the server
         server.quit()
 
-        if show:
+        if verbose:
             print(
                 f"\nEmail was sent: {sender_gmail} -> {recipient_gmail} (ID: {ID})"
             )

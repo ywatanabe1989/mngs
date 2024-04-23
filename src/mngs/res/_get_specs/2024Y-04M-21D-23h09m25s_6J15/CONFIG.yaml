@@ -1,0 +1,58 @@
+batch_size:
+    - 8
+    - 16
+    - 32
+    - 64
+n_chs:
+    - 8
+    - 16
+    - 32
+    - 64
+seq_len:
+    - 256
+    - 512
+    - 1024
+    - 2048
+    - 4096
+fs:
+    - 128
+    - 256
+    - 512
+n_segments:
+    - 1
+    - 2
+    - 4
+    - 8
+    - 16
+n_bands_pha:
+    - 1
+    - 2
+    - 4
+    - 8
+    - 16
+    - 32
+    - 64
+n_bands_amp:
+    - 1
+    - 2
+    - 4
+    - 8
+    - 16
+    - 32
+    - 64
+precision:
+    - fp16
+    - fp32
+device:
+    - cpu
+    - cuda
+package:
+    - tensorpac
+    - mngs
+IS_DEBUG: false
+ID: 2024Y-04M-21D-23h09m25s_6J15
+START_TIME: 2024-04-21 23:09:25.236558
+SDIR: 
+    /home/ywatanabe/proj/entrance/mngs/res/_get_specs/RUNNING/2024Y-04M-21D-23h09m25s_6J15/
+END_TIME: 2024-04-21 23:09:28.072296
+SPENT_TIME: 00:00:02

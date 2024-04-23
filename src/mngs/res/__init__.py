@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
-from ._gather_info import gather_info
+from ._get_proc_usages import get_proc_usages
+from ._get_specs import get_specs
+from ._rec_procs import rec_procs
 
 _ = None  # keep the importing orders
-from . import _utils
 
 # from .limit_RAM import get_RAM, limit_RAM
 

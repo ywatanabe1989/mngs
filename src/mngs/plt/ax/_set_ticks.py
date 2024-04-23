@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-16 21:17:15"
+# Time-stamp: "2024-04-19 03:07:33"
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -85,7 +85,9 @@ def set_x_ticks(ax, x_vals=None, x_ticks=None):
 
     # Replaces the x axis to x_vals
     elif is_x_vals and (not is_x_ticks):
-        ax = _set_x_vals(ax, x_vals)
+        # ax = _set_x_vals(ax, x_vals)
+        x_ticks = np.linspace(x_vals[0], x_vals[-1], 4)
+        ax = _set_x_vals(ax, x_ticks)
 
     # Locates 'x_ticks' on the original x axis
     elif (not is_x_vals) and is_x_ticks:

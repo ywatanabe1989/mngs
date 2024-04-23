@@ -721,6 +721,7 @@ def uq(*args, **kwargs):
 
 #     return df_show
 def print_block(message, char="-", n=40, c=None):
+    """Available colors are 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white', or 'grey'"""
     border = char * n
     text = f"\n{border}\n{message}\n{border}\n"
     if c is not None:
@@ -738,6 +739,7 @@ def color_text(text, c="green"):
         "cyan": "\033[96m",
         "white": "\033[97m",
         "grey": "\033[90m",  # Added grey color
+        "gray": "\033[90m",  # Added grey color
         "reset": "\033[0m",
     }
     ANSI_COLORS["tra"] = ANSI_COLORS["white"]

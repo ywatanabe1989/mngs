@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 
 import csv
-import warnings
 
 import mngs
-import numpy as np
 import pandas as pd
 import scipy
 
@@ -140,7 +138,7 @@ def save(obj, sfname_or_spath, makedirs=True, verbose=True, **kwargs):
         # csv
         elif spath.endswith(".csv"):
             if isinstance(obj, pd.DataFrame):  # DataFrame
-                obj.to_csv(spath)
+                obj.to_csv(spath, **kwargs)
             if mngs.gen.is_listed_X(obj, [int, float]):  # listed scalars
                 _save_listed_scalars_as_csv(
                     obj,
@@ -149,6 +147,7 @@ def save(obj, sfname_or_spath, makedirs=True, verbose=True, **kwargs):
                 )
             if mngs.gen.is_listed_X(obj, pd.DataFrame):  # listed DataFrame
                 _save_listed_dfs_as_csv(obj, spath, **kwargs)
+
         # numpy
         elif spath.endswith(".npy"):
             np.save(spath, obj)
@@ -336,11 +335,10 @@ def _save_listed_dfs_as_csv(
 
 
 def _mv_to_tmp(fpath, L=2):
-    import os
     from shutil import move
 
     try:
-        tgt_fname = connect_strs_with_hyphens(fpath.split("/")[-L:])
+        tgt_fname = mngs.gen.connect_strs(fpath.split("/")[-L:], filler="-")
         tgt_fpath = "/tmp/{}".format(tgt_fname)
         move(fpath, tgt_fpath)
         print("Moved to: {}".format(tgt_fpath))

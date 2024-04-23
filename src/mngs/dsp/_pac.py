@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-13 02:40:17 (ywatanabe)"
+# Time-stamp: "2024-04-16 23:23:47"
 
 import sys
 
 import matplotlib.pyplot as plt
 import mngs
 import numpy as np
-from mngs.general import torch_fn
+from mngs.general import batch_fn, torch_fn
 from mngs.nn import PAC
 
 """
@@ -16,6 +16,7 @@ mngs.dsp.pac function
 
 
 @torch_fn
+@batch_fn
 def pac(
     x,
     fs,
@@ -26,6 +27,7 @@ def pac(
     amp_end_hz=160,
     amp_n_bands=100,
     device="cuda",
+    batch_size=1,
     fp16=False,
     trainable=False,
 ):
@@ -88,35 +90,47 @@ if __name__ == "__main__":
     for IS_TRAINABLE in [True, False]:
         for FP16 in [True, False]:
 
-            # Demo signal
-            xx, tt, fs = mngs.dsp.demo_sig(
-                batch_size=1, n_chs=1, fs=FS, t_sec=T_SEC, sig_type="pac"
+            # # Demo signal
+            # xx, tt, fs = mngs.dsp.demo_sig(
+            #     batch_size=1, n_chs=1, fs=FS, t_sec=T_SEC, sig_type="pac"
+            # )
+
+            # # mngs calculation
+            # pac_mngs, pha_mids_mngs, amp_mids_mngs = mngs.dsp.pac(
+            #     xx,
+            #     fs,
+            #     pha_n_bands=50,
+            #     amp_n_bands=30,
+            #     trainable=IS_TRAINABLE,
+            #     fp16=FP16,
+            # )
+            # i_batch, i_ch = 0, 0
+            # pac_mngs = pac_mngs[i_batch, i_ch]
+
+            # # Tensorpac calculation
+            # (
+            #     _,
+            #     _,
+            #     _pha_mids_tp,
+            #     _amp_mids_tp,
+            #     pac_tp,
+            # ) = mngs.dsp.utils.pac.calc_pac_with_tensorpac(xx, fs, T_SEC)
+
+            # # Validates the consitency in frequency definitions
+            # assert np.allclose(pha_mids_mngs, _pha_mids_tp)
+            # assert np.allclose(amp_mids_mngs, _amp_mids_tp)
+
+            # mngs.io.save(
+            #     (pac_mngs, pac_tp, pha_mids_mngs, amp_mids_mngs),
+            #     "./data/cache.npz",
+            # )
+
+            ################################################################################
+            # cache
+            pac_mngs, pac_tp, pha_mids_mngs, amp_mids_mngs = mngs.io.load(
+                "./data/cache.npz"
             )
-
-            # mngs calculation
-            pac_mngs, pha_mids_mngs, amp_mids_mngs = mngs.dsp.pac(
-                xx,
-                fs,
-                pha_n_bands=50,
-                amp_n_bands=30,
-                trainable=IS_TRAINABLE,
-                fp16=FP16,
-            )
-            i_batch, i_ch = 0, 0
-            pac_mngs = pac_mngs[i_batch, i_ch]
-
-            # Tensorpac calculation
-            (
-                _,
-                _,
-                _pha_mids_tp,
-                _amp_mids_tp,
-                pac_tp,
-            ) = mngs.dsp.utils.pac.calc_pac_with_tensorpac(xx, fs, T_SEC)
-
-            # Validates the consitency in frequency definitions
-            assert np.allclose(pha_mids_mngs, _pha_mids_tp)
-            assert np.allclose(amp_mids_mngs, _amp_mids_tp)
+            ################################################################################
 
             # Plots
             fig = mngs.dsp.utils.pac.plot_PAC_mngs_vs_tensorpac(
@@ -125,6 +139,9 @@ if __name__ == "__main__":
             fig.suptitle(
                 "Phase-Amplitude Coupling calculation\n\n(Bandpass Filtering -> Hilbert Transformation-> Modulation Index)"
             )
+            plt.show()
+
+            mngs.gen.reload(mngs.dsp)
 
             # Saves the figure
             trainable_str = "trainable" if IS_TRAINABLE else "static"

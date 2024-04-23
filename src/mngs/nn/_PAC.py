@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-12 23:29:16 (ywatanabe)"
+# Time-stamp: "2024-04-19 18:30:38"
 
 """
 This script does XYZ.
@@ -22,7 +22,7 @@ CONFIG = mngs.gen.load_configs()
 class PAC(nn.Module):
     def __init__(
         self,
-        x_shape,
+        seq_len,
         fs,
         pha_start_hz=2,
         pha_end_hz=20,
@@ -35,58 +35,31 @@ class PAC(nn.Module):
     ):
         super().__init__()
 
-        # A static, general purpose BandPassFilter
-        if not trainable:
-            # First, bands definitions for phase and amplitude are declared
-            self.BANDS_PHA = self.calc_bands_pha(
-                start_hz=pha_start_hz,
-                end_hz=pha_end_hz,
-                n_bands=pha_n_bands,
-            )
-            self.BANDS_AMP = self.calc_bands_amp(
-                start_hz=amp_start_hz,
-                end_hz=amp_end_hz,
-                n_bands=amp_n_bands,
-            )
-            bands_all = torch.vstack([self.BANDS_PHA, self.BANDS_AMP])
+        # hhmax = fs // 2
+        # hh_upper = hh*1.8
+        # hh * 1.8 = hh_upper < hhmax = fs // 2
+        # hh < fs // 2 // 1.8
 
-            # Instanciation of the static bandpass filter module
-            self.bandpass = mngs.nn.BandPassFilter(
-                bands_all,
-                fs,
-                x_shape,
-                fp16=fp16,
-            )
-            self.PHA_MIDS_HZ = self.BANDS_PHA.mean(-1)
-            self.AMP_MIDS_HZ = self.BANDS_AMP.mean(-1)
+        factor = 0.8
+        amp_end_hz = int(
+            min(fs / 2 / (1 + factor) - 1, amp_end_hz)
+        )  # caps amp_end_hz
 
-        # A trainable BandPassFilter specifically for PAC calculation. Bands will be optimized.
-        else:
-            self.bandpass = mngs.nn.DifferentiableBandPassFilter(
-                x_shape[-1],
-                fs,
-                fp16=fp16,
-                pha_low_hz=pha_start_hz,
-                pha_high_hz=pha_end_hz,
-                pha_n_bands=pha_n_bands,
-                amp_low_hz=amp_start_hz,
-                amp_high_hz=amp_end_hz,
-                amp_n_bands=amp_n_bands,
-            )
-            self.PHA_MIDS_HZ = self.bandpass.pha_mids
-            self.AMP_MIDS_HZ = self.bandpass.amp_mids
-        self.hilbert = mngs.nn.Hilbert(dim=-1)
-        self.modulation_index = mngs.nn.ModulationIndex(n_bins=18, fp16=fp16)
-
-    @property
-    def dimensions(self):
-        return dict(
-            I_BATCH_SIZE=0,
-            I_CHS=1,
-            I_FREQS=2,
-            I_SEGMENTS=10,
-            I_SEQ_LEN=4,
+        self.bandpass = self.init_bandpass(
+            seq_len,
+            fs,
+            pha_start_hz=pha_start_hz,
+            pha_end_hz=pha_end_hz,
+            pha_n_bands=pha_n_bands,
+            amp_start_hz=amp_start_hz,
+            amp_end_hz=amp_end_hz,
+            amp_n_bands=amp_n_bands,
+            fp16=fp16,
+            trainable=trainable,
         )
+
+        self.hilbert = mngs.nn.Hilbert(seq_len, dim=-1)
+        self.modulation_index = mngs.nn.ModulationIndex(n_bins=18, fp16=fp16)
 
     def forward(self, x):
         """x.shape: (batch_size, n_chs, seq_len) or (batch_size, n_chs, n_segments, seq_len)"""
@@ -123,6 +96,63 @@ class PAC(nn.Module):
 
         pac = self.modulation_index(pha, amp)
         return pac
+
+    def init_bandpass(
+        self,
+        seq_len,
+        fs,
+        pha_start_hz=2,
+        pha_end_hz=20,
+        pha_n_bands=50,
+        amp_start_hz=60,
+        amp_end_hz=160,
+        amp_n_bands=30,
+        trainable=False,
+        fp16=False,
+    ):
+
+        # A static, general purpose BandPassFilter
+        if not trainable:
+            # First, bands definitions for phase and amplitude are declared
+            self.BANDS_PHA = self.calc_bands_pha(
+                start_hz=pha_start_hz,
+                end_hz=pha_end_hz,
+                n_bands=pha_n_bands,
+            )
+            self.BANDS_AMP = self.calc_bands_amp(
+                start_hz=amp_start_hz,
+                end_hz=amp_end_hz,
+                n_bands=amp_n_bands,
+            )
+            bands_all = torch.vstack([self.BANDS_PHA, self.BANDS_AMP])
+
+            # Instanciation of the static bandpass filter module
+            self.bandpass = mngs.nn.BandPassFilter(
+                bands_all,
+                fs,
+                seq_len,
+                fp16=fp16,
+            )
+            self.PHA_MIDS_HZ = self.BANDS_PHA.mean(-1)
+            self.AMP_MIDS_HZ = self.BANDS_AMP.mean(-1)
+
+        # A trainable BandPassFilter specifically for PAC calculation. Bands will be optimized.
+        else:
+            self.bandpass = mngs.nn.DifferentiableBandPassFilter(
+                seq_len,
+                fs,
+                fp16=fp16,
+                pha_low_hz=pha_start_hz,
+                pha_high_hz=pha_end_hz,
+                pha_n_bands=pha_n_bands,
+                amp_low_hz=amp_start_hz,
+                amp_high_hz=amp_end_hz,
+                amp_n_bands=amp_n_bands,
+            )
+            self.PHA_MIDS_HZ = self.bandpass.pha_mids
+            self.AMP_MIDS_HZ = self.bandpass.amp_mids
+
+        return self.bandpass
 
     @staticmethod
     def calc_bands_pha(start_hz=2, end_hz=20, n_bands=100):

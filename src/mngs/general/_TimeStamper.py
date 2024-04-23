@@ -25,7 +25,7 @@ class TimeStamper:
             ]
         )
 
-    def __call__(self, comment=""):
+    def __call__(self, comment="", verbose=False):
         now = time.time()
         from_start = now - self.start_time
         from_prev = now - self._prev
@@ -50,7 +50,8 @@ class TimeStamper:
             text,
         ]
 
-        print(text)
+        if verbose:
+            print(text)
         return text
 
     @property
