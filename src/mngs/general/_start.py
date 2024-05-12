@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-19 03:09:42"
+# Time-stamp: "2024-04-26 00:38:15 (ywatanabe)"
 
 import inspect
 import os as _os
@@ -31,10 +31,10 @@ def start(
     fig_scale=1.0,
     dpi_display=100,
     dpi_save=300,
-    font_size_base=14,
-    font_size_title=14,
-    font_size_axis_label=12,
-    font_size_tick_label=10,
+    font_size_base=10,
+    font_size_title=10,
+    font_size_axis_label=10,
+    font_size_tick_label=8,
     font_size_legend=8,
     hide_top_right_spines=True,
     alpha=0.9,

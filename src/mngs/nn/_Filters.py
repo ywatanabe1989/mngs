@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-23 12:53:39"
+# Time-stamp: "2024-05-07 17:09:16 (ywatanabe)"
 
 """
 This script does XYZ.
@@ -152,8 +152,13 @@ class BandPassFilter(BaseFilter1D):
 
         kernels = mngs.dsp.utils.zero_pad(filters)
         kernels = mngs.dsp.utils.ensure_even_len(kernels)
-        kernels = torch.tensor(kernels).clone().detach()
+        # kernels = torch.tensor(kernels).clone().detach()
+        kernels = kernels.clone().detach().requires_grad_(True)
         return kernels
+
+
+# /home/ywatanabe/proj/mngs/src/mngs/nn/_Filters.py:155: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+#   kernels = torch.tensor(kernels).clone().detach()
 
 
 class BandStopFilter(BaseFilter1D):

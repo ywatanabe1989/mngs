@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-16 13:46:21"
+# Time-stamp: "2024-04-27 16:54:43 (ywatanabe)"
 
 """
 mngs.dsp.wavelet function

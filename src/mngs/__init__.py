@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Time-stamp: "2024-04-23 22:41:25"
+# Time-stamp: "2024-05-12 16:09:43 (ywatanabe)"
 
 from . import io, path
 from ._sh import sh

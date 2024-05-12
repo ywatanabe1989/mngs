@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-19 00:16:59"#!/usr/bin/env python3
+# Time-stamp: "2024-04-26 20:10:55 (ywatanabe)"#!/usr/bin/env python3
 
 import warnings
 from functools import wraps
@@ -99,14 +99,16 @@ def to_torch(*args, return_fn=return_if, **kwargs):
         if isinstance(x, (pd.Series, pd.DataFrame)):
             x_new = torch.tensor(x.to_numpy()).squeeze().float()
             x_new = try_device(x_new, device)
-            _conversion_warning(x, x_new)
+            if device == "cuda":
+                _conversion_warning(x, x_new)
             return x_new
 
         # Numpy
         elif isinstance(x, (np.ndarray, list)):
             x_new = torch.tensor(x).float()
             x_new = try_device(x_new, device)
-            _conversion_warning(x, x_new)
+            if device == "cuda":
+                _conversion_warning(x, x_new)
             return x_new
 
         # Tuple

@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 
 import csv
+import io
 
 import mngs
 import pandas as pd
 import scipy
+from PIL import Image
 
 
 def save(obj, sfname_or_spath, makedirs=True, verbose=True, **kwargs):
@@ -29,8 +31,10 @@ def save(obj, sfname_or_spath, makedirs=True, verbose=True, **kwargs):
         - .pkl: Serializable Python objects using pickle.
         - .joblib: Objects using joblib with compression.
         - .png: Images, including Plotly figures and Matplotlib plots.
-        - .html: Plotly figures as HTML files.
         - .tiff / .tif: Images in TIFF format, typically from Matplotlib plots.
+        - .jpeg / .jpg: Images in JPEG format, typically from Matplotlib plots.
+        - .svg : Images in the SVG format, typically from Matplotlib plots.
+        - .html: Plotly figures as HTML files.
         - .mp4: Videos, likely from animations created with Matplotlib.
         - .yaml: Data in YAML format.
         - .json: Data in JSON format.
@@ -72,14 +76,10 @@ def save(obj, sfname_or_spath, makedirs=True, verbose=True, **kwargs):
         mngs.io.save(_dict, "xxx.pkl")
         # _dict = mngs.io.load("xxx.pkl")
 
-        # .png or .tiff
+        # .png | .tiff | .jpg
         plt.figure()
         plt.plot(np.array([1, 2, 3]))
-        mngs.io.save(plt, "xxx.png") # or "xxx.tiff"
-
-        # .png or .tiff
-        fig, ax = plt.subplots()
-        mngs.io.save(plt, "xxx.png") # or "xxx.tiff"
+        mngs.io.save(plt, "xxx.png") # "xxx.tiff", "xxx.tif", "xxx.jpeg, or "xxx.jpg"
 
         # .yaml
         mngs.io.save(_dict, "xxx.yaml")
@@ -104,9 +104,13 @@ def save(obj, sfname_or_spath, makedirs=True, verbose=True, **kwargs):
     # Determines the save directory from the script.
     spath, sfname = None, None
 
-    if "/" in sfname_or_spath:
+    # if "/" in sfname_or_spath:
+    #     spath = sfname_or_spath
+
+    if sfname_or_spath.startswith("/"):
         spath = sfname_or_spath
     else:
+        # this includes "./"
         sfname = sfname_or_spath
 
     if (spath is None) and (sfname is not None):
@@ -120,6 +124,8 @@ def save(obj, sfname_or_spath, makedirs=True, verbose=True, **kwargs):
         fdir, fname, _ = mngs.path.split(fpath)
         sdir = fdir + fname + "/"
         spath = sdir + sfname
+
+    spath = spath.replace("/./", "/")
 
     # Makes directory
     if makedirs:
@@ -173,6 +179,7 @@ def save(obj, sfname_or_spath, makedirs=True, verbose=True, **kwargs):
         elif spath.endswith(".joblib"):
             with open(spath, "wb") as s:  # 'w'
                 joblib.dump(obj, s, compress=3)
+
         # png
         elif spath.endswith(".png"):
             # plotly
@@ -199,6 +206,40 @@ def save(obj, sfname_or_spath, makedirs=True, verbose=True, **kwargs):
                 spath, dpi=300, format="tiff"
             )  # obj is matplotlib.pyplot object
             del obj
+
+        # jpeg
+        elif spath.endswith(".jpeg") or spath.endswith(".jpg"):
+            buf = io.BytesIO()
+            if isinstance(obj, plotly.graph_objs.Figure):
+                obj.write_image(
+                    buf, format="png"
+                )  # Saving plotly figure to buffer as PNG
+            else:
+                try:
+                    obj.savefig(
+                        buf, format="png"
+                    )  # Saving matplotlib figure to buffer as PNG
+                except:
+                    obj.figure.savefig(buf, format="png")
+            buf.seek(0)
+            img = Image.open(buf)
+            img.convert("RGB").save(spath, "JPEG")  # Convert to JPEG and save
+            buf.close()
+            del obj
+
+        # SVG
+        elif spath.endswith(".svg"):
+            # Plotly
+            if isinstance(obj, plotly.graph_objs.Figure):
+                obj.write_image(file=spath, format="svg")
+            # Matplotlib
+            else:
+                try:
+                    obj.savefig(spath, format="svg")
+                except AttributeError:
+                    obj.figure.savefig(spath, format="svg")
+            del obj
+
         # mp4
         elif spath.endswith(".mp4"):
             _mk_mp4(obj, spath)  # obj is matplotlib.pyplot.figure object

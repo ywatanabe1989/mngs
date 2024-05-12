@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-19 17:35:55"
+# Time-stamp: "2024-04-29 10:59:21 (ywatanabe)"
 
 """
 This script defines the ModulationIndex module.
@@ -15,129 +15,10 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+
 # Functions
-# dev, nan
-# class ModulationIndex(nn.Module):
-#     def __init__(self, n_bins=18, fp16=False, in_place=False):
-#         super(ModulationIndex, self).__init__()
-#         self.n_bins = n_bins
-#         self.fp16 = fp16
-#         self.in_place = in_place
-#         self.register_buffer(
-#             "pha_bin_cutoffs", torch.linspace(-np.pi, np.pi, n_bins + 1)
-#         )
-
-#     def forward(self, pha, amp, epsilon=1e-9):
-#         """
-#         Compute the Modulation Index based on phase and amplitude tensors.
-#         """
-#         assert pha.ndim == amp.ndim == 5
-#         batch_size, n_chs, n_freqs_pha, n_segments, seq_len = pha.shape
-#         _, _, n_freqs_amp, _, _ = amp.shape  # fixme
-
-#         if self.fp16:
-#             pha = pha.half()
-#             amp = pha.half()
-
-#         # device = pha.device
-#         pha_masks = self._phase_to_masks(
-#             pha, self.pha_bin_cutoffs.type_as(pha)
-#         )
-
-#         # Expands amp to use broadcasting for binning
-#         amp = amp.unsqueeze(2).unsqueeze(
-#             -1
-#         )  # Expanded for phase frequencies and bins
-#         pha_masks = pha_masks.unsqueeze(
-#             3
-#         )  # Expanded for amplitude frequencies
-
-#         # Calculate the amplitude in each phase bin
-#         if self.in_place:
-#             amp_expanded = amp.expand(
-#                 -1, -1, n_freqs_pha, -1, -1, -1, self.n_bins
-#             )
-#             pha_masks_expanded = pha_masks.expand(
-#                 -1, -1, -1, n_freqs_amp, -1, -1, -1
-#             )
-#             amp_bins = pha_masks_expanded.clone().mul_(
-#                 amp_expanded
-#             )  # this is not wokring
-#         else:
-#             amp_bins = (
-#                 pha_masks * amp
-#             )  # this is working thanks to broadcasting
-
-#         amp_sums = amp_bins.sum(dim=5, keepdim=True)
-#         counts = pha_masks.sum(dim=5, keepdim=True)
-#         amp_means = (
-#             amp_sums.div_(counts.add_(epsilon))
-#             if self.in_place
-#             else amp_sums / (counts + epsilon)
-#         )
-
-#         amp_probs = (
-#             amp_means.div_(amp_means.sum(dim=6, keepdim=True).add_(epsilon))
-#             if self.in_place
-#             else amp_means / (amp_means.sum(dim=6, keepdim=True) + epsilon)
-#         )
-
-#         # log_n_bins = torch.log(
-#         #     torch.tensor(self.n_bins).type_as(pha) + epsilon
-#         # )
-#         # MI = (
-#         #     log_n_bins
-#         #     + (amp_probs * torch.log(amp_probs + epsilon)).sum(dim=6)
-#         # ) / (log_n_bins + epsilon)
-#         import ipdb
-
-#         ipdb.set_trace()
-
-#         MI = (
-#             torch.log(torch.tensor(self.n_bins).type_as(pha) + epsilon)
-#             + (amp_probs * torch.log(amp_probs + epsilon)).sum(dim=6)
-#         ) / torch.log(torch.tensor(self.n_bins).type_as(pha))
-
-#         MI = MI.mean(dim=4)  # Mean across segments
-
-#         if MI.isnan().any():
-#             raise ValueError(
-#                 "NaN values detected in Modulation Index calculation."
-#             )
-
-#         return MI
-
-#     # @staticmethod
-#     # def _phase_to_masks(pha, phase_bin_cutoffs):
-#     #     n_bins = int(len(phase_bin_cutoffs) - 1)
-#     #     bin_indices = (
-#     #         (
-#     #             (
-#     #                 torch.bucketize(pha, phase_bin_cutoffs, right=False) - 1
-#     #             ).clamp(0, n_bins - 1)
-#     #         )
-#     #         .long()
-#     #         .to(pha.device)
-#     #     )
-#     #     one_hot_masks = F.one_hot(
-#     #         bin_indices,
-#     #         num_classes=n_bins,
-#     #     )
-#     #     return one_hot_masks
-
-#     @staticmethod
-#     def _phase_to_masks(pha, phase_bin_cutoffs):
-#         n_bins = len(phase_bin_cutoffs) - 1
-#         pha = pha.contiguous()
-#         bin_indices = torch.bucketize(pha, phase_bin_cutoffs, right=False) - 1
-#         bin_indices = bin_indices.clamp(min=0, max=n_bins - 1)
-#         return F.one_hot(bin_indices, num_classes=n_bins).to(
-#             pha.device, dtype=pha.dtype
-#         )
-
-
 class ModulationIndex(nn.Module):
-    def __init__(self, n_bins=18, fp16=False):
+    def __init__(self, n_bins=18, fp16=False, amp_prob=False):
         super(ModulationIndex, self).__init__()
         self.n_bins = n_bins
         self.fp16 = fp16
@@ -145,8 +26,18 @@ class ModulationIndex(nn.Module):
             "pha_bin_cutoffs", torch.linspace(-np.pi, np.pi, n_bins + 1)
         )
 
-        # self.dh_pha = mngs.gen.DimHandler()
-        # self.dh_amp = mngs.gen.DimHandler()
+        self.amp_prob = amp_prob
+
+    @property
+    def pha_bin_centers(
+        self,
+    ):
+        return (
+            ((self.pha_bin_cutoffs[1:] + self.pha_bin_cutoffs[:-1]) / 2)
+            .detach()
+            .cpu()
+            .numpy()
+        )
 
     def forward(self, pha, amp, epsilon=1e-9):
         """
@@ -185,12 +76,12 @@ class ModulationIndex(nn.Module):
         # Coupling
         pha_masks = pha_masks.unsqueeze(i_freqs_amp)
         amp = amp.unsqueeze(i_freqs_pha).unsqueeze(i_bins)
+
         amp_bins = pha_masks * amp  # this is the most memory-consuming process
 
         # # Batch processing to reduce maximum VRAM occupancy
         # pha_masks = self.dh_pha.fit(pha_masks, keepdims=[2, 3, 5, 6])
         # amp = self.dh_amp.fit(amp, keepdims=[2, 3, 5, 6])
-
         # n_chunks = len(pha_masks) // self.chunk_size
         # amp_bins = []
         # for i_chunk in range(n_chunks):
@@ -201,7 +92,6 @@ class ModulationIndex(nn.Module):
         # amp_bins = torch.cat(amp_bins)
         # amp_bins = self.dh_pha.unfit(amp_bins)
         # pha_masks = self.dh_pha.unfit(pha_masks)
-
         # Takes mean amplitude in each bin
         amp_sums = amp_bins.sum(dim=i_time, keepdims=True).to(device)
         counts = pha_masks.sum(dim=i_time, keepdims=True)
@@ -210,6 +100,18 @@ class ModulationIndex(nn.Module):
         amp_probs = amp_means / (
             amp_means.sum(dim=-1, keepdims=True) + epsilon
         )
+
+        if self.amp_prob:
+            return amp_probs.detach().cpu()
+
+        """
+        matplotlib.use("TkAgg")
+        fig, ax = mngs.plt.subplots(subplot_kw={'polar': True})
+        yy = amp_probs[0, 0, 0, 0, 0, 0, :].detach().cpu().numpy()
+        xx = ((self.pha_bin_cutoffs[1:] + self.pha_bin_cutoffs[:-1]) / 2).detach().cpu().numpy()
+        ax.bar(xx, yy, width=.1)
+        plt.show()
+        """
 
         MI = (
             torch.log(torch.tensor(self.n_bins, device=device) + epsilon)
@@ -270,7 +172,7 @@ if __name__ == "__main__":
 
     # Parameters
     FS = 512
-    T_SEC = 5
+    T_SEC = 1
     device = "cuda"
 
     # Demo signal
@@ -290,6 +192,7 @@ if __name__ == "__main__":
     pha, amp = _reshape(pha), _reshape(amp)
 
     m = ModulationIndex(n_bins=18, fp16=True).to(device)
+
     pac_mngs = m(pha.to(device), amp.to(device))
 
     # pac_mngs = mngs.dsp.modulation_index(pha, amp).cpu().numpy()

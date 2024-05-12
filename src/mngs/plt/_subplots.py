@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-17 08:48:20"
+# Time-stamp: "2024-05-11 15:35:19 (ywatanabe)"
 
 from collections import OrderedDict
 
@@ -215,6 +215,8 @@ class AxisWrapper:
                         self.axis, n_xticks=n_xticks, n_yticks=n_yticks
                     )
 
+                    # self.axis.set_n_ticks(n_xticks=n_xticks, n_yticks=n_yticks)
+
                 # Only store the history if tracking is enabled and an ID is provided
                 if self.track and (id is not None):
                     self._history[id] = (id, attr, args, kwargs)
@@ -315,15 +317,21 @@ class AxisWrapper:
 
     def hide_spines(
         self,
-        tgts=["top", "right", "bottom", "left"],
-        hide_ticks=False,
-        hide_labels=False,
+        top=True,
+        bottom=True,
+        left=True,
+        right=True,
+        ticks=True,
+        labels=True,
     ):
         self.axis = mngs.plt.ax.hide_spines(
             self.axis,
-            tgts=tgts,
-            hide_ticks=hide_ticks,
-            hide_labels=hide_labels,
+            top=top,
+            bottom=bottom,
+            left=left,
+            right=right,
+            ticks=ticks,
+            labels=labels,
         )
 
     def fill_between(self, xx, mean, std, label, alpha=0.1):

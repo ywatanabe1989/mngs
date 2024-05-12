@@ -18,6 +18,7 @@ from ._less import less
 from ._paste import paste
 from ._src import src
 from ._timeout import timeout
+from ._title_case import title_case
 
 _ = None
 from ..io.__init__ import *

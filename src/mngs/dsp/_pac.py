@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-16 23:23:47"
+# Time-stamp: "2024-04-29 11:03:51 (ywatanabe)"
 
 import sys
 
@@ -30,6 +30,8 @@ def pac(
     batch_size=1,
     fp16=False,
     trainable=False,
+    n_perm=None,
+    amp_prob=False,
 ):
     """
     Compute the phase-amplitude coupling (PAC) for signals. This function automatically handles inputs as
@@ -59,7 +61,7 @@ def pac(
         pac, pha_mids_hz, amp_mids_hz = mngs.dsp.pac(xx, fs)
     """
     m = PAC(
-        x.shape,
+        x.shape[-1],
         fs,
         pha_start_hz=pha_start_hz,
         pha_end_hz=pha_end_hz,
@@ -69,6 +71,8 @@ def pac(
         amp_n_bands=amp_n_bands,
         fp16=fp16,
         trainable=trainable,
+        n_perm=n_perm,
+        amp_prob=amp_prob,
     ).to(device)
     return m(x.to(device)), m.PHA_MIDS_HZ, m.AMP_MIDS_HZ
 
@@ -90,47 +94,47 @@ if __name__ == "__main__":
     for IS_TRAINABLE in [True, False]:
         for FP16 in [True, False]:
 
-            # # Demo signal
-            # xx, tt, fs = mngs.dsp.demo_sig(
-            #     batch_size=1, n_chs=1, fs=FS, t_sec=T_SEC, sig_type="pac"
-            # )
-
-            # # mngs calculation
-            # pac_mngs, pha_mids_mngs, amp_mids_mngs = mngs.dsp.pac(
-            #     xx,
-            #     fs,
-            #     pha_n_bands=50,
-            #     amp_n_bands=30,
-            #     trainable=IS_TRAINABLE,
-            #     fp16=FP16,
-            # )
-            # i_batch, i_ch = 0, 0
-            # pac_mngs = pac_mngs[i_batch, i_ch]
-
-            # # Tensorpac calculation
-            # (
-            #     _,
-            #     _,
-            #     _pha_mids_tp,
-            #     _amp_mids_tp,
-            #     pac_tp,
-            # ) = mngs.dsp.utils.pac.calc_pac_with_tensorpac(xx, fs, T_SEC)
-
-            # # Validates the consitency in frequency definitions
-            # assert np.allclose(pha_mids_mngs, _pha_mids_tp)
-            # assert np.allclose(amp_mids_mngs, _amp_mids_tp)
-
-            # mngs.io.save(
-            #     (pac_mngs, pac_tp, pha_mids_mngs, amp_mids_mngs),
-            #     "./data/cache.npz",
-            # )
-
-            ################################################################################
-            # cache
-            pac_mngs, pac_tp, pha_mids_mngs, amp_mids_mngs = mngs.io.load(
-                "./data/cache.npz"
+            # Demo signal
+            xx, tt, fs = mngs.dsp.demo_sig(
+                batch_size=1, n_chs=1, fs=FS, t_sec=T_SEC, sig_type="pac"
             )
-            ################################################################################
+
+            # mngs calculation
+            pac_mngs, pha_mids_mngs, amp_mids_mngs = mngs.dsp.pac(
+                xx,
+                fs,
+                pha_n_bands=50,
+                amp_n_bands=30,
+                trainable=IS_TRAINABLE,
+                fp16=FP16,
+            )
+            i_batch, i_ch = 0, 0
+            pac_mngs = pac_mngs[i_batch, i_ch]
+
+            # Tensorpac calculation
+            (
+                _,
+                _,
+                _pha_mids_tp,
+                _amp_mids_tp,
+                pac_tp,
+            ) = mngs.dsp.utils.pac.calc_pac_with_tensorpac(xx, fs, T_SEC)
+
+            # Validates the consitency in frequency definitions
+            assert np.allclose(pha_mids_mngs, _pha_mids_tp)
+            assert np.allclose(amp_mids_mngs, _amp_mids_tp)
+
+            mngs.io.save(
+                (pac_mngs, pac_tp, pha_mids_mngs, amp_mids_mngs),
+                "./data/cache.npz",
+            )
+
+            # ################################################################################
+            # # cache
+            # pac_mngs, pac_tp, pha_mids_mngs, amp_mids_mngs = mngs.io.load(
+            #     "./data/cache.npz"
+            # )
+            # ################################################################################
 
             # Plots
             fig = mngs.dsp.utils.pac.plot_PAC_mngs_vs_tensorpac(

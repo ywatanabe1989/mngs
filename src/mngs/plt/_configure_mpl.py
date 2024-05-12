@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-16 19:15:26"
+# Time-stamp: "2024-04-27 01:37:24 (ywatanabe)"
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -38,8 +38,8 @@ def configure_mpl(
     font_size_base=12,
     font_size_title=12,
     font_size_axis_label=12,
-    font_size_tick_label=10,
-    font_size_legend=10,
+    font_size_tick_label=8,
+    font_size_legend=8,
     # Hide spines
     hide_top_right_spines=True,
     # line

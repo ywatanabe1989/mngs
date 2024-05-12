@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
+
 from . import PARAMS, add_noise, filt, norm, reference, utils
+from ._crop import crop
 from ._demo_sig import demo_sig
 
 # from ._ensure_3d import ensure_3d

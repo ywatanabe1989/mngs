@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-19 03:07:33"
+# Time-stamp: "2024-04-27 17:30:50 (ywatanabe)"
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -9,7 +9,127 @@ import numpy as np
 def set_ticks(ax, x_vals=None, x_ticks=None, y_vals=None, y_ticks=None):
     ax = set_x_ticks(ax, x_vals=x_vals, x_ticks=x_ticks)
     ax = set_y_ticks(ax, y_vals=y_vals, y_ticks=y_ticks)
+    canvas_type = type(ax.figure.canvas).__name__
+    if "TkAgg" in canvas_type:
+        ax.get_figure().canvas.draw()  # Redraw the canvas once after making all updates
     return ax
+
+
+# def set_x_ticks(ax, x_vals=None, x_ticks=None):
+#     """
+#     Set custom tick labels on the x-axis based on specified values and desired ticks.
+
+#     Parameters:
+#     - ax: The axis object to modify.
+#     - x_vals: Array of x-axis values where tick labels should be placed.
+#     - x_ticks: List of desired tick labels on the x-axis.
+
+#     Example:
+#         import matplotlib.pyplot as plt
+#         import numpy as np
+
+#         fig, axes = plt.subplots(nrows=4)
+#         x = np.linspace(0, 10, 100)
+#         y = np.sin(x)
+#         for ax in axes:
+#             ax.plot(x, y)  # Plot a sine wave
+
+#         set_x_ticks(axes[0])  # Do nothing
+#         set_x_ticks(axes[1], x_vals=x+3)  # Set x_vals as tick labels
+#         set_x_ticks(axes[2], x_ticks=[1,2])  # Set x_ticks at their corresponding positions
+#         set_x_ticks(axes[3], x_vals=x+3, x_ticks=[4,5])  # Set x_ticks at positions specified by x_vals
+#         fig.tight_layout()
+#         plt.show()
+#     """
+
+#     def _avoid_overlaps(values):
+#         """Avoid overlaps in tick values by adding a small offset."""
+#         values = np.array(values)
+#         if values.dtype.kind in "if":  # Check if values are int or float
+#             values = values.astype(float) + np.arange(len(values)) * 1e-5
+#         return values
+
+#     def _set_x_vals(ax, x_vals):
+#         """Set x-axis values and labels."""
+#         x_vals = _avoid_overlaps(x_vals)
+#         ax.set_xticks(x_vals)
+#         ax.set_xticklabels([f"{xv:.2f}" for xv in x_vals])
+#         return ax
+
+#     if x_vals is not None:
+#         ax = _set_x_vals(ax, x_vals)
+#     if x_ticks is not None:
+#         if x_vals is not None:
+#             # Map x_ticks to x_vals if both are provided
+#             x_ticks_positions = np.interp(
+#                 x_ticks,
+#                 x_vals,
+#                 np.linspace(ax.get_xlim()[0], ax.get_xlim()[1], len(x_vals)),
+#             )
+#             ax.set_xticks(x_ticks_positions)
+#         else:
+#             # Directly set x_ticks if only x_ticks are provided
+#             ax.set_xticks(x_ticks)
+#         ax.set_xticklabels([f"{xt}" for xt in x_ticks])
+
+#     # ax.get_figure().canvas.draw()  # Redraw the canvas once after making all updates
+#     return ax
+
+
+# def set_y_ticks(ax, y_vals=None, y_ticks=None):
+#     """
+#     Set custom tick labels on the y-axis based on specified values and desired ticks.
+
+#     Parameters:
+#     - ax: The axis object to modify.
+#     - y_vals: Array of y-axis values where ticks should be placed.
+#     - y_ticks: List of labels for ticks on the y-axis.
+
+#     Example:
+#         import matplotlib.pyplot as plt
+#         import numpy as np
+
+#         fig, ax = plt.subplots()
+#         x = np.linspace(0, 10, 100)
+#         y = np.sin(x)
+#         ax.plot(x, y)  # Plot a sine wave
+
+#         set_y_ticks(ax, y_vals=y, y_ticks=['Low', 'High'])  # Set custom y-axis ticks
+#         plt.show()
+#     """
+
+#     def _avoid_overlaps(values):
+#         """Avoid overlaps in tick values by adding a small offset."""
+#         values = np.array(values)
+#         if values.dtype.kind in "if":  # Check if values are int or float
+#             values = values.astype(float) + np.arange(len(values)) * 1e-5
+#         return values
+
+#     def _set_y_vals(ax, y_vals):
+#         """Set y-axis values and labels."""
+#         y_vals = _avoid_overlaps(y_vals)
+#         ax.set_yticks(y_vals)
+#         ax.set_yticklabels([f"{yv:.2f}" for yv in y_vals])
+#         return ax
+
+#     if y_vals is not None:
+#         ax = _set_y_vals(ax, y_vals)
+#     if y_ticks is not None:
+#         if y_vals is not None:
+#             # Map y_ticks to y_vals if both are provided
+#             y_ticks_positions = np.interp(
+#                 y_ticks,
+#                 y_vals,
+#                 np.linspace(ax.get_ylim()[0], ax.get_ylim()[1], len(y_vals)),
+#             )
+#             ax.set_yticks(y_ticks_positions)
+#         else:
+#             # Directly set y_ticks if only y_ticks are provided
+#             ax.set_yticks(y_ticks)
+#         ax.set_yticklabels([f"{yt}" for yt in y_ticks])
+
+#     # ax.get_figure().canvas.draw()  # Redraw the canvas once after making all updates
+#     return ax
 
 
 def set_x_ticks(ax, x_vals=None, x_ticks=None):
@@ -179,18 +299,6 @@ def set_y_ticks(ax, y_vals=None, y_ticks=None):
         ax = _set_y_ticks(ax, y_ticks)
     return ax
 
-
-# def set_ticks(ax, xticks=None, yticks=None):
-
-#     if xticks is not None:
-#         ax.set_xticks(np.arange(0, len(xticks)))
-#         ax.set_xticklabels(xticks)
-
-#     if yticks is not None:
-#         ax.set_yticks(np.arange(0, len(yticks)))
-#         ax.set_yticklabels(yticks)
-
-#     return ax
 
 if __name__ == "__main__":
     import mngs

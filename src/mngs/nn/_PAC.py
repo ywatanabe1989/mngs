@@ -1,10 +1,11 @@
-#!/usr/bin/env python3
+#! ./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-19 18:30:38"
+# Time-stamp: "2024-05-07 13:09:54 (ywatanabe)"
 
 """
-This script does XYZ.
+This script defines PAC nn.Module.
 """
+
 
 # Imports
 import sys
@@ -15,8 +16,6 @@ import mngs
 import torch
 import torch.nn as nn
 
-# Config
-CONFIG = mngs.gen.load_configs()
 
 # Functions
 class PAC(nn.Module):
@@ -30,20 +29,28 @@ class PAC(nn.Module):
         amp_start_hz=60,
         amp_end_hz=160,
         amp_n_bands=30,
-        fp16=False,
+        n_perm=None,
         trainable=False,
+        in_place=True,
+        fp16=False,
+        amp_prob=False,
     ):
         super().__init__()
 
-        # hhmax = fs // 2
-        # hh_upper = hh*1.8
-        # hh * 1.8 = hh_upper < hhmax = fs // 2
-        # hh < fs // 2 // 1.8
+        self.fp16 = fp16
+        self.n_perm = n_perm
+        self.amp_prob = amp_prob
 
+        if n_perm is not None:
+            if not isinstance(n_perm, int):
+                raise ValueError("n_perm should be None or an integer.")
+
+        # if (n_perm is not None) and amp_prob:
+        #     raise ValueError("n_perm and amp_prob cannot both be specified.")
+
+        # caps amp_end_hz
         factor = 0.8
-        amp_end_hz = int(
-            min(fs / 2 / (1 + factor) - 1, amp_end_hz)
-        )  # caps amp_end_hz
+        amp_end_hz = int(min(fs / 2 / (1 + factor) - 1, amp_end_hz))
 
         self.bandpass = self.init_bandpass(
             seq_len,
@@ -58,44 +65,141 @@ class PAC(nn.Module):
             trainable=trainable,
         )
 
-        self.hilbert = mngs.nn.Hilbert(seq_len, dim=-1)
-        self.modulation_index = mngs.nn.ModulationIndex(n_bins=18, fp16=fp16)
+        self.hilbert = mngs.nn.Hilbert(seq_len, dim=-1, fp16=fp16)
 
-    def forward(self, x):
+        self.modulation_index = mngs.nn.ModulationIndex(
+            n_bins=18,
+            fp16=fp16,
+            amp_prob=amp_prob,
+        )
+
+        # Data Handlers
+        self.dh_pha = mngs.gen.DimHandler()
+        self.dh_amp = mngs.gen.DimHandler()
+
+    def forward(self, x, compute_grad=True):
         """x.shape: (batch_size, n_chs, seq_len) or (batch_size, n_chs, n_segments, seq_len)"""
 
-        x = self._ensure_4d_input(x)
-        # (batch_size, n_chs, n_segments, seq_len)
+        with torch.set_grad_enabled(compute_grad):
+            x = self._ensure_4d_input(x)
+            # (batch_size, n_chs, n_segments, seq_len)
 
-        batch_size, n_chs, n_segments, seq_len = x.shape
+            batch_size, n_chs, n_segments, seq_len = x.shape
 
-        x = x.reshape(batch_size * n_chs, n_segments, seq_len)
-        # (batch_size * n_chs, n_segments, seq_len)
+            x = x.reshape(batch_size * n_chs, n_segments, seq_len)
+            # (batch_size * n_chs, n_segments, seq_len)
 
-        x = self.bandpass(x, edge_len=0)
-        # (batch_size*n_chs, n_segments, n_pha_bands + n_amp_bands, seq_len)
+            x = self.bandpass(x, edge_len=0)
+            # (batch_size*n_chs, n_segments, n_pha_bands + n_amp_bands, seq_len)
 
-        x = self.hilbert(x)
-        # (batch_size*n_chs, n_segments, n_pha_bands + n_amp_bands, seq_len, pha + amp)
+            x = self.hilbert(x)
+            # (batch_size*n_chs, n_segments, n_pha_bands + n_amp_bands, seq_len, pha + amp)
 
-        x = x.reshape(batch_size, n_chs, *x.shape[1:])
-        # (batch_size, n_chs, n_segments, n_pha_bands + n_amp_bands, seq_len, pha + amp)
+            x = x.reshape(batch_size, n_chs, *x.shape[1:])
+            # (batch_size, n_chs, n_segments, n_pha_bands + n_amp_bands, seq_len, pha + amp)
 
-        x = x.transpose(2, 3)
-        # (batch_size, n_chs, n_pha_bands + n_amp_bands, n_segments, pha + amp)
+            x = x.transpose(2, 3)
+            # (batch_size, n_chs, n_pha_bands + n_amp_bands, n_segments, pha + amp)
 
-        pha = x[:, :, : len(self.PHA_MIDS_HZ), :, :, 0]
-        # (batch_size, n_chs, n_freqs_pha, n_segments, sequence_length)
+            if self.fp16:
+                x = x.half()
 
-        amp = x[:, :, -len(self.AMP_MIDS_HZ) :, :, :, 1]
-        # (batch_size, n_chs, n_freqs_amp, n_segments, sequence_length)()
+            pha = x[:, :, : len(self.PHA_MIDS_HZ), :, :, 0]
+            # (batch_size, n_chs, n_freqs_pha, n_segments, sequence_length)
 
-        edge_len = int(pha.shape[-1] // 8)
-        pha = pha[..., edge_len:-edge_len]
-        amp = amp[..., edge_len:-edge_len]
+            amp = x[:, :, -len(self.AMP_MIDS_HZ) :, :, :, 1]
+            # (batch_size, n_chs, n_freqs_amp, n_segments, sequence_length)()
 
-        pac = self.modulation_index(pha, amp)
-        return pac
+            edge_len = int(pha.shape[-1] // 8)
+
+            pha = pha[..., edge_len:-edge_len].half()
+            amp = amp[..., edge_len:-edge_len].half()
+
+            pac_or_amp_prob = self.modulation_index(pha, amp).squeeze()
+
+            if self.n_perm is None:
+                return pac_or_amp_prob
+            else:
+                return self.to_z_using_surrogate(pha, amp, pac_or_amp_prob)
+
+    def to_z_using_surrogate(self, pha, amp, observed):
+        surrogates = self.generate_surrogates(pha, amp)
+        mm = surrogates.mean(dim=2).to(observed.device)
+        ss = surrogates.std(dim=2).to(observed.device)
+        return (observed - mm) / (ss + 1e-5)
+
+        # if self.amp_prob:
+        #     amp_prob = self.modulation_index(pha, amp).squeeze()
+        #     amp_prob.shape  # torch.Size([2, 8, 50, 50, 3, 18])
+        #     pac_surrogates = self.generate_surrogates(pha, amp)
+        #     # torch.Size([2, 8, 3, 50, 50, 3, 18])
+        #     __import__("ipdb").set_trace()
+        #     return amp_prob
+
+        # elif not self.amp_prob:
+        #     pac = self.modulation_index(pha, amp).squeeze() # torch.Size([2, 8, 50, 50])
+
+        # if self.n_perm is not None:
+        #     pac_surrogates = self.generate_surrogates(pha, amp)
+        #     # torch.Size([2, 8, 3, 50, 50]) # self.amp_prob = False
+        #     __import__("ipdb").set_trace()
+        #     mm = pac_surrogates.mean(dim=2).to(pac.device)
+        #     ss = pac_surrogates.std(dim=2).to(pac.device)
+        #     pac_z = (pac - mm) / (ss + 1e-5)
+        #     return pac_z
+
+        # return pac
+
+    def generate_surrogates(self, pha, amp, bs=1):
+        # Shape of pha: [batch_size, n_chs, n_freqs_pha, n_segments, sequence_length]
+        batch_size, n_chs, n_freqs_pha, n_segments, seq_len = pha.shape
+        _, _, n_freqs_amp, _, _ = amp.shape
+
+        # cut and shuffle
+        cut_points = torch.randint(seq_len, (self.n_perm,), device=pha.device)
+        ranges = torch.arange(seq_len, device=pha.device)
+        indices = cut_points.unsqueeze(0) - ranges.unsqueeze(1)
+
+        pha = pha[..., indices]
+        amp = amp.unsqueeze(-1).expand(-1, -1, -1, -1, -1, self.n_perm)
+
+        pha = self.dh_pha.fit(pha, keepdims=[2, 3, 4])
+        amp = self.dh_amp.fit(amp, keepdims=[2, 3, 4])
+
+        if self.fp16:
+            pha = pha.half()
+            amp = amp.half()
+
+        # print("\nCalculating surrogate PAC values...")
+
+        surrogate_pacs = []
+        n_batches = (len(pha) + bs - 1) // bs
+        device = "cuda"
+        with torch.no_grad():
+            # ########################################
+            # # fixme
+            # pha = pha.to(device)
+            # amp = amp.to(device)
+            # ########################################
+
+            for i_batch in range(n_batches):
+                start = i_batch * bs
+                end = min((i_batch + 1) * bs, pha.shape[0])
+
+                _pha = pha[start:end].unsqueeze(1).to(device)  # n_chs = 1
+                _amp = amp[start:end].unsqueeze(1).to(device)  # n_chs = 1
+
+                _surrogate_pacs = self.modulation_index(_pha, _amp).cpu()
+                surrogate_pacs.append(_surrogate_pacs)
+
+                # # Optionally clear cache if memory is an issue
+                # torch.cuda.empty_cache()
+
+        torch.cuda.empty_cache()
+        surrogate_pacs = torch.vstack(surrogate_pacs).squeeze()
+        surrogate_pacs = self.dh_pha.unfit(surrogate_pacs)
+
+        return surrogate_pacs
 
     def init_bandpass(
         self,
@@ -137,7 +241,7 @@ class PAC(nn.Module):
             self.AMP_MIDS_HZ = self.BANDS_AMP.mean(-1)
 
         # A trainable BandPassFilter specifically for PAC calculation. Bands will be optimized.
-        else:
+        elif trainable:
             self.bandpass = mngs.nn.DifferentiableBandPassFilter(
                 seq_len,
                 fs,
@@ -186,10 +290,10 @@ class PAC(nn.Module):
             message = f"Input tensor must be 4D with the shape (batch_size, n_chs, n_segments, seq_len). Received shape: {x.shape}"
 
         if x.ndim == 3:
-            warnings.warn(
-                "'n_segments' was determined to be 1, assuming your input is (batch_size, n_chs, seq_len).",
-                UserWarning,
-            )
+            # warnings.warn(
+            #     "'n_segments' was determined to be 1, assuming your input is (batch_size, n_chs, seq_len).",
+            #     UserWarning,
+            # )
             x = x.unsqueeze(-2)
 
         if x.ndim != 4:
@@ -202,122 +306,93 @@ if __name__ == "__main__":
     # Start
     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt)
 
+    ts = mngs.gen.TimeStamper()
+
     # Parameters
     FS = 512
     T_SEC = 8
+    PLOT = False
+    fp16 = True
+    trainable = False
+    n_perm = 3
+    in_place = True
+    amp_prob = True
 
+    # Demo Signal
     xx, tt, fs = mngs.dsp.demo_sig(
-        batch_size=4,
-        n_chs=19,
-        n_segments=2,
+        batch_size=2,
+        n_chs=8,
+        n_segments=3,
         fs=FS,
         t_sec=T_SEC,
-        # sig_type="tensorpac",
-        sig_type="pac",
+        sig_type="tensorpac",
+        # sig_type="pac",
     )
-    xx = torch.tensor(xx)
+    xx = torch.tensor(xx).cuda()
+    xx.requires_grad = False
+    # (2, 8, 2, 4096)
 
-    # Tensorpac
-    i_batch, i_ch = 0, 0
-    (
-        _phases,
-        _amplitudes,
-        _freqs_pha,
-        _freqs_amp,
-        pac_tp,
-    ) = mngs.dsp.utils.pac.calc_pac_with_tensorpac(
-        xx, fs, t_sec=T_SEC, i_batch=0, i_ch=0
-    )
-    # wavelet
-
-    # mngs
-    pac_mngs, pha_bands, amp_bands = mngs.dsp.pac(
-        xx,
+    # PAC object initialization
+    ts("PAC initialization starts")
+    m = PAC(
+        xx.shape[-1],
         fs,
+        pha_start_hz=2,
+        pha_end_hz=20,
         pha_n_bands=50,
-        amp_n_bands=30,
-        device="cpu",
-        fp16=False,
-        trainable=True,
-    )
+        amp_start_hz=60,
+        amp_end_hz=160,
+        amp_n_bands=50,
+        fp16=fp16,
+        trainable=trainable,
+        n_perm=n_perm,
+        in_place=in_place,
+        amp_prob=amp_prob,
+    ).cuda()
+    ts("PAC initialization ends")
 
-    assert torch.allclose(torch.tensor(_freqs_pha).float(), pha_bands)
-    assert torch.allclose(torch.tensor(_freqs_amp).float(), amp_bands)
-
-    # pac_mngs.sum().backward()  # OK
-
-    pac_mngs = pac_mngs.detach().cpu().numpy()
-    pha_bands = pha_bands.detach().cpu().numpy()
-    amp_bands = amp_bands.detach().cpu().numpy()
-
-    def min_max(x):
-        MM = x.max()
-        mm = x.min()
-        return (x - mm) / (MM - mm)
-
-    fig = mngs.dsp.utils.pac.plot_PAC_mngs_vs_tensorpac(
-        # min_max(pac_mngs[i_batch, i_ch]),
-        # min_max(pac_tp),
-        pac_mngs[i_batch, i_ch],
-        pac_tp,
-        # np.log(pac_mngs[i_batch, i_ch] + 1e-5),
-        # np.log(pac_tp + 1e-5),
-        pha_bands.astype(int),
-        amp_bands.astype(int),
-    )
-    mngs.io.save(fig, CONFIG["SDIR"] + "pac.png")
-    plt.show()
-
-    # # Close
-    # mngs.gen.close(CONFIG)
-
-    """
-    # Speed check
-
-    # It takes 11.5 ms to calculate PAC from 20 x 4-second segments at 512 Hz -> PAC (50, 30) = (n_phase_bands, n_amp_bands)
-
-    # xx.shape (1, 1, 20, 2048)
-    # fs # 512
-
-    # Including instanciation of the PAC module
-    %timeit mngs.dsp.pac(xx, fs, pha_n_bands=50, amp_n_bands=30, device="cuda")
-    # 26.4 ms +- 81.9 us per loop (mean +- std. dev. of 7 runs, 10 loops each)
-    # pac_mngs.shape (50, 30)
-
-    # # CPU
-    # mngs.dsp.pac(torch.tensor(xx).float(), fs, pha_n_bands=50, amp_n_bands=30, device="cpu")
-    # %timeit mngs.dsp.pac(torch.tensor(xx).float(), fs, pha_n_bands=50, amp_n_bands=30, device="cpu")
-
-
-
-    # PAC calculation with mngs on cuda
-    xx = torch.tensor(xx).cuda().float()
-    m = PAC(xx.shape, fs, fp16=False, trainable=True).cuda()
-    mngs.ml.utils.check_params(m)
+    # PAC calculation
+    ts("PAC calculation starts")
     pac = m(xx)
-    %timeit pac = m(xx)
-    pac.shape # (4, 19, 50, 30)
+    ts("PAC calculation ends")
 
-
-    | float | 13 GB | 44.5 ms |
-    | half  |  7 GB | 28.5 ms |
-
-
-    # PAC calculation with mngs on cuda
-    xx.shape # (4, 19, 1, 2048)
-    fs # 512
-    xx = torch.tensor(xx).float()
-    m = PAC(xx.shape, fs, fp16=False, trainable=True).cpu()
-    %timeit pac = m(xx)
-    pac.shape # (4, 19, 50, 30)
-
-    | half  | 0 GB | 1,970 ms |
-    | float | 0 GB |   931 ms |
-
-
-    VRAM: 0 GB at float
-    VRAM: 0 GB at half
     """
+    amp_prob = m(xx)
+    amp_prob = amp_prob.reshape(-1, amp_prob.shape[-1])
+    xx = m.modulation_index.pha_bin_centers
+    plt.bar(xx, amp_prob[0])
+    """
+
+    mngs.gen.print_block(
+        f"PAC calculation time: {ts.delta(-1,-2):.3f} sec", c="yellow"
+    )
+    # 0.17 sec
+    mngs.gen.print_block(
+        f"x.shape: {xx.shape}"
+        f"\nfp16: {fp16}"
+        f"\ntrainable: {trainable}"
+        f"\nn_perm: {n_perm}"
+        f"\nin_place: {in_place}"
+    )
+
+    # # Plots
+    # if PLOT:
+    #     pac = pac.detach().cpu().numpy()
+    #     fig, ax = mngs.plt.subplots()
+    #     ax.imshow2d(pac[0, 0], cbar_label="PAC value [zscore]")
+    #     ax.set_ticks(
+    #         x_vals=m.PHA_MIDS_HZ,
+    #         x_ticks=np.linspace(m.PHA_MIDS_HZ[0], m.PHA_MIDS_HZ[-1], 4),
+    #         y_vals=m.AMP_MIDS_HZ,
+    #         y_ticks=np.linspace(m.AMP_MIDS_HZ[0], m.AMP_MIDS_HZ[-1], 4),
+    #     )
+    #     ax.set_xyt(
+    #         "Frequency for phase [Hz]",
+    #         "Amplitude for phase [Hz]",
+    #         "PAC values",
+    #     )
+    #     plt.show()
+
 
 # EOF
 
