@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-02 23:23:29 (ywatanabe)"
+# Time-stamp: "2024-06-02 23:31:11 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/dsp/_detect_ripples.py
 
 
@@ -68,9 +68,7 @@ def detect_ripples(
     # Calculate RMS
     xx = xx**2
     _, xx = mngs.dsp.hilbert(xx)
-    xx = mngs.dsp.filt.gauss(
-        xx, smoothing_sigma_ms * 1e-3 * CONFIG["FS_iEEG"]
-    ).squeeze(-2)
+    xx = mngs.dsp.filt.gauss(xx, smoothing_sigma_ms * 1e-3 * fs).squeeze(-2)
     xx = np.sqrt(xx)
 
     # Scales across channels
@@ -110,7 +108,7 @@ def detect_ripples(
             pd.DataFrame(
                 data=np.vstack([starts, ends]).T, columns=["start_s", "end_s"]
             )
-            / CONFIG["FS_iEEG"]
+            / fs
         )
         df["duration_s"] = df.end_s - df.start_s
 
