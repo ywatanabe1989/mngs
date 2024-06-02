@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-23 15:37:02"
+# Time-stamp: "2024-05-16 13:19:50 (ywatanabe)"
 # Author: Yusuke Watanabe (ywata1989@gmail.com)
 
 
@@ -13,6 +13,7 @@ This script does XYZ.
 Imports
 """
 import math
+import os
 import sys
 import time
 
@@ -42,8 +43,10 @@ def main(
     limit_s = limit_min * 60
     n_max = math.ceil(limit_s // interval_s)
 
-    if reset:
+    if reset and os.path.exists(path):
         mngs.sh(f"rm {path}")
+        mngs.io.save(pd.DataFrame(), path, verbose=False)
+        print(f"\n{path} was cleared.")
 
     for _ in range(n_max):
         add(path, verbose=verbose)
@@ -53,7 +56,8 @@ def main(
 def add(path, verbose=True):
     try:
         past = mngs.io.load(path)
-    except:
+    except Exception as e:
+        print(e)
         past = pd.DataFrame()
 
     now = mngs.res.get_proc_usages()

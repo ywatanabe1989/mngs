@@ -1,15 +1,35 @@
 #!/usr/bin/env python3
 
 import csv
+import inspect
 import io
+import json
+import os
+import pickle
+from shutil import move
 
+import h5py
+import joblib
 import mngs
+import numpy as np
 import pandas as pd
+import plotly
 import scipy
+import torch
+from matplotlib import animation
 from PIL import Image
+from ruamel.yaml import YAML
 
 
-def save(obj, sfname_or_spath, makedirs=True, verbose=True, **kwargs):
+def save(
+    obj,
+    sfname_or_spath,
+    makedirs=True,
+    verbose=True,
+    from_cwd=False,
+    dry_run=False,
+    **kwargs,
+):
     """
     Saves an object to a file with the specified format, determined by the file extension.
     The function supports saving data in various formats including CSV, NPY, PKL, JOBLIB, PNG, HTML, TIFF, MP4, YAML, JSON, HDF5, PTH, MAT, and CBM.
@@ -89,49 +109,58 @@ def save(obj, sfname_or_spath, makedirs=True, verbose=True, **kwargs):
         mngs.io.save(_dict, "xxx.json")
         # _dict = mngs.io.load("xxx.json")
     """
-    import inspect
-    import json
-    import os
-    import pickle
+    # import inspect
+    # import json
+    # import os
+    # import pickle
 
-    import h5py
-    import numpy as np
-    import pandas as pd
-    import plotly
-    import torch
-    import yaml
+    # import h5py
+    # import numpy as np
+    # import pandas as pd
+    # import plotly
+    # import torch
+    # import yaml
 
+    ########################################
     # Determines the save directory from the script.
+    # This process should be in this function for the intended behavior of inspect.
     spath, sfname = None, None
-
-    # if "/" in sfname_or_spath:
-    #     spath = sfname_or_spath
 
     if sfname_or_spath.startswith("/"):
         spath = sfname_or_spath
-    else:
-        # this includes "./"
-        sfname = sfname_or_spath
 
-    if (spath is None) and (sfname is not None):
-        ## for ipython
-        __file__ = inspect.stack()[1].filename
-        if "ipython" in __file__:
-            __file__ = f'/tmp/fake-{os.getenv("USER")}.py'
+    elif sfname_or_spath.startswith("./"):
+        if from_cwd:
+            spath_cwd = os.getcwd() + "/" + sfname_or_spath
+            spath_cwd = spath_cwd.replace("/./", "/").replace("//", "/")
 
-        ## spath
-        fpath = __file__
+        fpath = inspect.stack()[1].filename
+
+        if "ipython" in fpath:
+            fpath = f'/tmp/fake-{os.getenv("USER")}.py'
+
         fdir, fname, _ = mngs.path.split(fpath)
-        sdir = fdir + fname + "/"
-        spath = sdir + sfname
+        spath = fdir + fname + "/" + sfname_or_spath
 
-    spath = spath.replace("/./", "/")
+    # Corrects the spath
+    spath = spath.replace("/./", "/").replace("//", "/")
+    ########################################
+
+    if dry_run:
+        print(mngs.gen.ct(f"\n(dry run) Saved to: {spath}\n", c="yellow"))
+        return
 
     # Makes directory
     if makedirs:
-        sdir = os.path.dirname(spath)
-        os.makedirs(sdir, exist_ok=True)
+        os.makedirs(os.path.dirname(spath), exist_ok=True)
 
+    _save(obj, spath, verbose=verbose, **kwargs)
+
+    if from_cwd:
+        _save(obj, spath_cwd, verbose=verbose, **kwargs)
+
+
+def _save(obj, spath, verbose=True, **kwargs):
     # Main
     try:
         ## copy files
@@ -143,6 +172,8 @@ def save(obj, sfname_or_spath, makedirs=True, verbose=True, **kwargs):
 
         # csv
         elif spath.endswith(".csv"):
+            if isinstance(obj, pd.Series):  # Series
+                obj.to_csv(spath, **kwargs)
             if isinstance(obj, pd.DataFrame):  # DataFrame
                 obj.to_csv(spath, **kwargs)
             if mngs.gen.is_listed_X(obj, [int, float]):  # listed scalars
@@ -183,37 +214,57 @@ def save(obj, sfname_or_spath, makedirs=True, verbose=True, **kwargs):
         # png
         elif spath.endswith(".png"):
             # plotly
-            # if str(type(obj)) == "<class 'plotly.graph_objs._figure.Figure'>":
             if isinstance(obj, plotly.graph_objs.Figure):
                 obj.write_image(file=spath, format="png")
+            # PIL image
+            elif isinstance(obj, Image.Image):
+                obj.save(spath)
             # matplotlib
             else:
                 try:
                     obj.savefig(spath)
                 except:
                     obj.figure.savefig(spath)
+
             del obj
         # html
         elif spath.endswith(".html"):
             # plotly
             if isinstance(obj, plotly.graph_objs.Figure):
                 obj.write_html(file=spath)
-            # if str(type(obj)) == "<class 'plotly.graph_objs._figure.Figure'>":
-            #     obj.write_image(file=spath, format="html")
+
         # tiff
         elif spath.endswith(".tiff") or spath.endswith(".tif"):
-            obj.savefig(
-                spath, dpi=300, format="tiff"
-            )  # obj is matplotlib.pyplot object
+            # PIL image
+            if isinstance(obj, Image.Image):
+                obj.save(spath)
+            # matplotlib
+            else:
+                try:
+                    obj.savefig(spath, dpi=300, format="tiff")
+                except:
+                    obj.figure.savefig(spath, dpi=300, format="tiff")
+
             del obj
 
         # jpeg
         elif spath.endswith(".jpeg") or spath.endswith(".jpg"):
             buf = io.BytesIO()
+            # plotly
             if isinstance(obj, plotly.graph_objs.Figure):
                 obj.write_image(
                     buf, format="png"
                 )  # Saving plotly figure to buffer as PNG
+                buf.seek(0)
+                img = Image.open(buf)
+                img.convert("RGB").save(
+                    spath, "JPEG"
+                )  # Convert to JPEG and save
+                buf.close()
+            # PIL image
+            elif isinstance(obj, Image.Image):
+                obj.save(spath)
+            # matplotlib
             else:
                 try:
                     obj.savefig(
@@ -221,10 +272,13 @@ def save(obj, sfname_or_spath, makedirs=True, verbose=True, **kwargs):
                     )  # Saving matplotlib figure to buffer as PNG
                 except:
                     obj.figure.savefig(buf, format="png")
-            buf.seek(0)
-            img = Image.open(buf)
-            img.convert("RGB").save(spath, "JPEG")  # Convert to JPEG and save
-            buf.close()
+
+                buf.seek(0)
+                img = Image.open(buf)
+                img.convert("RGB").save(
+                    spath, "JPEG"
+                )  # Convert to JPEG and save
+                buf.close()
             del obj
 
         # SVG
@@ -247,8 +301,6 @@ def save(obj, sfname_or_spath, makedirs=True, verbose=True, **kwargs):
 
         # yaml
         elif spath.endswith(".yaml"):
-            from ruamel.yaml import YAML
-
             yaml = YAML()
             yaml.preserve_quotes = (
                 True  # Optional: if you want to preserve quotes
@@ -321,7 +373,6 @@ def _save_listed_scalars_as_csv(
     verbose=False,
 ):
     """Puts to df and save it as csv"""
-    import numpy as np
 
     if overwrite == True:
         _mv_to_tmp(spath_csv, L=2)
@@ -376,8 +427,6 @@ def _save_listed_dfs_as_csv(
 
 
 def _mv_to_tmp(fpath, L=2):
-    from shutil import move
-
     try:
         tgt_fname = mngs.gen.connect_strs(fpath.split("/")[-L:], filler="-")
         tgt_fpath = "/tmp/{}".format(tgt_fname)
@@ -388,8 +437,6 @@ def _mv_to_tmp(fpath, L=2):
 
 
 def _mk_mp4(fig, spath_mp4):
-    from matplotlib import animation
-
     axes = fig.get_axes()
 
     def init():

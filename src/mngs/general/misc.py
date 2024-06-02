@@ -13,6 +13,7 @@ from bisect import bisect_left, bisect_right
 from collections import defaultdict
 from contextlib import contextmanager
 from functools import partial, wraps
+from glob import glob
 
 import mngs
 import numpy as np
@@ -80,51 +81,63 @@ import numpy as np
 
 def search(patterns, strings, only_perfect_match=False, as_bool=False):
     """
-    Search for patterns (regular expressions acceptable) in a list of strings.
+    regular expression is acceptable for patterns.
 
-    Parameters:
-    - patterns: A pattern or a list of patterns to search for.
-    - strings: A list of strings to search within.
-    - only_perfect_match: If True, only returns perfect matches. Defaults to False.
-    - as_bool: If True, returns a list of booleans indicating match/no match for each string.
+    Example:
+        patterns = ['orange', 'banana']
+        strings = ['apple', 'orange', 'apple', 'apple_juice', 'banana', 'orange_juice']
+        print(search(patterns, strings))
+        # ([1, 4, 5], ['orange', 'banana', 'orange_juice'])
 
-    Returns:
-    - A list of indices and a list of strings that match the patterns, or
-    - If as_bool is True, a list of booleans indicating match/no match for each string.
+        patterns = 'orange'
+        strings = ['apple', 'orange', 'apple', 'apple_juice', 'banana', 'orange_juice']
+        print(search(patterns, strings))
+        # ([1, 5], ['orange', 'orange_juice'])
     """
 
-    def to_str_list(data):
-        """Ensure input is a list of strings."""
-        if isinstance(data, str):
-            return [data]
-        else:
-            return list(data)
+    ## For single string objects
+    def to_list(s_or_p):
+        if isinstance(s_or_p, collections.abc.KeysView):
+            s_or_p = list(s_or_p)
 
-    patterns = to_str_list(patterns)
-    strings = to_str_list(strings)
+        elif not isinstance(
+            s_or_p,
+            (list, tuple, pd.core.indexes.base.Index, pd.core.series.Series),
+        ):
+            s_or_p = [s_or_p]
 
-    matched_indices = []
-    matched_strings = []
+        return s_or_p
 
-    for i_str, string in enumerate(strings):
+    patterns = to_list(patterns)
+    strings = to_list(strings)
+
+    ## Main
+    if not only_perfect_match:
+        indi_matched = []
         for pattern in patterns:
-            if only_perfect_match:
-                if re.fullmatch(pattern, string):
-                    matched_indices.append(i_str)
-                    matched_strings.append(string)
-                    break  # Avoid duplicating matches for this string with other patterns
-            else:
-                if re.search(pattern, string):
-                    matched_indices.append(i_str)
-                    matched_strings.append(string)
-                    break  # Avoid duplicating matches for this string with other patterns
+            for i_str, string in enumerate(strings):
+                m = re.search(pattern, string)
+                if m is not None:
+                    indi_matched.append(i_str)
+    else:
+        indi_matched = []
+        for pattern in patterns:
+            for i_str, string in enumerate(strings):
+                if pattern == string:
+                    indi_matched.append(i_str)
+
+    ## Sorts the indices according to the original strings
+    indi_matched = natsorted(indi_matched)
+    keys_matched = list(np.array(strings)[indi_matched])
 
     if as_bool:
-        return [i in matched_indices for i in range(len(strings))]
+        bool_matched = np.zeros(len(strings), dtype=bool)
+        if np.unique(indi_matched).size != 0:
+            bool_matched[np.unique(indi_matched)] = True
+        return bool_matched, keys_matched
+
     else:
-        return matched_indices, list(
-            set(matched_strings)
-        )  # Remove duplicates in matched_strings
+        return indi_matched, keys_matched
 
 
 # def search(patterns, strings, only_perfect_match=False, as_bool=False):
@@ -851,3 +864,7 @@ def to_odd(n):
         return n - 1
     else:
         return n
+
+
+def natglob(expression):
+    return natsorted(glob(expression))

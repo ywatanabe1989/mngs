@@ -10,6 +10,7 @@ from ._converters import (
     torch_fn,
     unsqueeze_if,
 )
+from ._deprecated import deprecated
 from ._DimHandler import DimHandler
 from ._embed import embed
 from ._less import less
@@ -28,6 +29,7 @@ from ._reproduce import fix_seeds, gen_ID, gen_timestamp, tee
 from ._shell import run_shellcommand, run_shellscript
 from ._start import start
 from ._TimeStamper import TimeStamper
+from ._title2path import title2path
 from .latex import add_hat_in_the_latex_style, to_the_latex_style
 
 # from .mat2py import *
@@ -52,6 +54,7 @@ from .misc import (
     listed_dict,
     merge_dicts_wo_overlaps,
     mv_col,
+    natglob,
     partial_at,
     pop_keys,
     print_block,

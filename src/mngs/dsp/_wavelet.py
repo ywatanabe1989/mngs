@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-27 16:54:43 (ywatanabe)"
+# Time-stamp: "2024-05-30 11:06:27 (ywatanabe)"
 
 """
 mngs.dsp.wavelet function
@@ -23,7 +23,7 @@ def wavelet(
     batch_size=32,
 ):
     m = (
-        Wavelet(fs, freq_scale=freq_scale, out_scale=out_scale)
+        Wavelet(fs, freq_scale=freq_scale, out_scale="linear")
         .to(device)
         .eval()
     )

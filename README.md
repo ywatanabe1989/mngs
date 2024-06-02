@@ -7,7 +7,7 @@ mngs is Python utilities for ML and DSP projects
 
 ## Installation
 ``` bash
-$ pip install mngs
+$ pip install 'mngs==1.4.0'
 ```
 
 ## Galleries

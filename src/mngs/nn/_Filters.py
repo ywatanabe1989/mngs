@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-05-07 17:09:16 (ywatanabe)"
+# Time-stamp: "2024-05-30 09:35:17 (ywatanabe)"
 
 """
 This script does XYZ.
@@ -122,7 +122,7 @@ class BandPassFilter(BaseFilter1D):
 
         # Check bands definitions
         nyq = fs / 2.0
-        bands = np.clip(bands, 0.1, nyq - 1)
+        bands = torch.clip(bands, 0.1, nyq - 1)
         for ll, hh in bands:
             assert 0 < ll
             assert ll < hh

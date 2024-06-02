@@ -14,6 +14,7 @@ import numpy as np
 import pandas as pd
 import torch
 import yaml
+from PIL import Image
 
 
 def load(lpath, show=False, verbose=False, **kwargs):
@@ -63,12 +64,15 @@ def load(lpath, show=False, verbose=False, **kwargs):
         elif extension == ".json":
             with open(lpath, "r") as f:
                 obj = json.load(f)
-        # png
-        elif extension == ".png":
-            pass
-        # tiff
-        elif extension in [".tiff", ".tif"]:
-            pass
+
+        elif extension in [".jpg", ".png", ".tiff", "tif"]:
+            obj = Image.open(lpath)
+        # # png
+        # elif extension == ".png":
+        #     pass
+        # # tiff
+        # elif extension in [".tiff", ".tif"]:
+        #     pass
         # yaml
         elif extension == ".yaml":
 

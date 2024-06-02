@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-13 02:24:36 (ywatanabe)"
+# Time-stamp: "2024-06-02 21:28:58 (ywatanabe)"
 
 """
 This script does XYZ.
@@ -21,7 +21,7 @@ def hilbert(
     x,
     dim=-1,
 ):
-    y = Hilbert(dim=dim)(x)
+    y = Hilbert(x.shape[-1], dim=dim)(x)
     return y[..., 0], y[..., 1]
 
 

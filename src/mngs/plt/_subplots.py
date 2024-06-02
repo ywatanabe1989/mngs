@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-05-11 15:35:19 (ywatanabe)"
+# Time-stamp: "2024-05-30 10:58:35 (ywatanabe)"
 
 from collections import OrderedDict
 
@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import mngs
 import numpy as np
 import pandas as pd
+from mngs.general import deprecated
 
 
 class SubplotsManager:
@@ -169,7 +170,11 @@ class FigWrapper:
     ################################################################################
     # Original methods
     ################################################################################
-    def set_supxyt(self, xlabel=None, ylabel=None, title=None):
+    @deprecated("Use supxyt() instead.")
+    def set_supxyt(self, *args, **kwargs):
+        return self.supxyt(*args, **kwargs)
+
+    def supxyt(self, xlabel=None, ylabel=None, title=None):
         """Sets xlabel, ylabel and title"""
         if xlabel is not None:
             self.fig.supxlabel(xlabel)

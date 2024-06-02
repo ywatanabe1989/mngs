@@ -1,22 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-05-14 00:53:51 (ywatanabe)"
+# Time-stamp: "2024-05-14 00:58:26 (ywatanabe)"
 
 import matplotlib.pyplot as plt
 import mngs
 import numpy as np
 import seaborn as sns
-import umap.umap_ as umap_orig
 from natsort import natsorted
+from sklearn.decomposition import PCA
 from sklearn.preprocessing import LabelEncoder
 
 
-def umap(
+def pca(
     data_all,
     labels_all,
     axes_titles=None,
-    supervised=False,
-    title="UMAP Clustering",
+    title="PCA Clustering",
     alpha=0.1,
     s=3,
     use_independent_legend=False,
@@ -35,24 +34,22 @@ def umap(
     le.fit(natsorted(np.hstack(labels_all)))
     labels_all = [le.transform(labels) for labels in labels_all]
 
-    umap_model = umap_orig.UMAP(random_state=42)
-
-    if supervised:
-        _umap = umap_model.fit(data_all[0], y=labels_all[0])
-        title = f"(Supervised) {title}"
-    else:
-        _umap = umap_model.fit(data_all[0])
-        title = f"(Unsupervised) {title}"
+    pca_model = PCA(n_components=2)
 
     ncols = len(data_all) + 1 if add_super_imposed else len(data_all)
     share = True if ncols > 1 else False
     fig, axes = plt.subplots(ncols=ncols, sharex=share, sharey=share)
+
     fig.suptitle(title)
-    fig.supxlabel("UMAP 1")
-    fig.supylabel("UMAP 2")
+    fig.supxlabel("PCA 1")
+    fig.supylabel("PCA 2")
 
     for ii, (data, labels) in enumerate(zip(data_all, labels_all)):
-        embedding = _umap.transform(data)
+        if ii == 0:
+            _pca = pca_model.fit(data)
+            embedding = _pca.transform(data)
+        else:
+            embedding = pca_model.transform(data)
 
         if ncols == 1:
             ax = axes
@@ -80,6 +77,7 @@ def umap(
         if add_super_imposed:
             axes[0].set_title("Superimposed")
             axes[0].set_aspect("equal")
+
             sns.scatterplot(
                 x=embedding[:, 0],
                 y=embedding[:, 1],
@@ -92,7 +90,7 @@ def umap(
             )
 
     if not use_independent_legend:
-        return fig, None, _umap
+        return fig, None, pca_model
 
     elif use_independent_legend:
         legend_figs = []
@@ -113,5 +111,5 @@ def umap(
 
         for ax in axes:
             ax.legend_ = None
-
-        return fig, legend_figs, _umap
+            # ax.remove_legend()
+            return fig, legend_figs, pca_model

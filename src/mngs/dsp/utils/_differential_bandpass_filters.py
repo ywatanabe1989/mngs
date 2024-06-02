@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-27 16:20:51 (ywatanabe)"
+# Time-stamp: "2024-05-16 13:10:24 (ywatanabe)"
 
 """
 This script does XYZ.
@@ -49,9 +49,6 @@ def build_bandpass_filters(sig_len, fs, pha_mids, amp_mids, cycle):
 
     def define_order(low_hz, fs, sig_len, cycle):
         order = cycle * int((fs // low_hz))
-        import ipdb
-
-        ipdb.set_trace()
         order = order if 3 * order >= sig_len else (sig_len - 1) // 3
         order = mngs.gen.to_even(order)
         return order

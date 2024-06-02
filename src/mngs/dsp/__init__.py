@@ -4,6 +4,7 @@
 from . import PARAMS, add_noise, filt, norm, reference, utils
 from ._crop import crop
 from ._demo_sig import demo_sig
+from ._detect_ripples import detect_ripples
 
 # from ._ensure_3d import ensure_3d
 from ._hilbert import hilbert

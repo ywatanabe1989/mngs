@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-16 23:42:03"
+# Time-stamp: "2024-05-14 00:04:33 (ywatanabe)"
 
 from ._circular_hist import circular_hist
 from ._extend import extend
 from ._fill_between import fill_between
+from ._force_aspect import force_aspect
 from ._hide_spines import hide_spines
 from ._imshow2d import imshow2d
 from ._map_ticks import map_ticks
