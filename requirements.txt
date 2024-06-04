@@ -4,6 +4,7 @@ Pillow
 PyYAML
 Pyarrow
 chardet
+geom_median
 h5py
 icecream
 ipdb

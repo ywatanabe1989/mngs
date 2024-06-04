@@ -2,6 +2,7 @@
 mngs is Python utilities for ML and DSP projects
 
 ![CI](https://github.com/ywatanabe1989/mngs/actions/workflows/pip_install.yml/badge.svg)
+![CI](https://github.com/ywatanabe1989/mngs/actions/workflows/import.yml/badge.svg)
 
 ![Hard Working Sloth](./docs/hard_working_sloth.jpg)
 
