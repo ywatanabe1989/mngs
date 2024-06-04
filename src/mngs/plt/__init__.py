@@ -7,6 +7,8 @@ from ._annotated_heatmap import annotated_heatmap
 from ._configure_mpl import configure_mpl
 from ._draw_a_cube import draw_a_cube
 from ._get_RGBA_from_colormap import get_RGBA_from_colormap
+from ._grid_image import grid_image
+from ._interp_colors import interp_colors
 from ._mk_colorbar import mk_colorbar
 from ._mk_patches import mk_patches
 from ._subplots import subplots

@@ -35,7 +35,7 @@ def mk_spath(sfname, makedirs=False):
     spath = sdir + sfname
 
     if makedirs:
-        os.makedirs(mngs.general.split_fpath(spath)[0], exist_ok=True)
+        os.makedirs(mngs.path.split(spath)[0], exist_ok=True)
 
     return spath
 

@@ -1,28 +1,126 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-13 00:51:35 (ywatanabe)"
+# Time-stamp: "2024-05-30 11:06:27 (ywatanabe)"
 
 """
-This script does XYZ.
+mngs.dsp.wavelet function
 """
 
 import mngs
-from mngs.general import torch_fn
+from mngs.general import batch_fn, torch_fn
 from mngs.nn import Wavelet
 
 
 # Functions
 @torch_fn
+@batch_fn
 def wavelet(
     x,
     fs,
     freq_scale="linear",
     out_scale="linear",
     device="cuda",
+    batch_size=32,
 ):
-    m = Wavelet(fs, freq_scale=freq_scale, out_scale=out_scale)
-    pha, amp, freqs = m(x)
+    m = (
+        Wavelet(fs, freq_scale=freq_scale, out_scale="linear")
+        .to(device)
+        .eval()
+    )
+    pha, amp, freqs = m(x.to(device))
+
+    if out_scale == "log":
+        amp = (amp + 1e-5).log()
+        if amp.isnan().any():
+            print("NaN is detected while taking the lograrithm of amplitude.")
+
     return pha, amp, freqs
+
+
+# @torch_fn
+# def wavelet(
+#     x,
+#     fs,
+#     freq_scale="linear",
+#     out_scale="linear",
+#     device="cuda",
+#     batch_size=32,
+# ):
+#     @torch_fn
+#     def _wavelet(
+#         x,
+#         fs,
+#         freq_scale="linear",
+#         out_scale="linear",
+#         device="cuda",
+#     ):
+#         m = (
+#             Wavelet(fs, freq_scale=freq_scale, out_scale=out_scale)
+#             .to(device)
+#             .eval()
+#         )
+#         pha, amp, freqs = m(x.to(device))
+
+#         if out_scale == "log":
+#             amp = (amp + 1e-5).log()
+#             if amp.isnan().any():
+#                 print(
+#                     "NaN is detected while taking the lograrithm of amplitude."
+#                 )
+
+#         return pha, amp, freqs
+
+#     if len(x) <= batch_size:
+#         try:
+#             pha, amp, freqs = _wavelet(
+#                 x,
+#                 fs,
+#                 freq_scale=freq_scale,
+#                 out_scale=out_scale,
+#                 device=device,
+#             )
+#             torch.cuda.empty_cache()
+#             return pha, amp, freqs
+
+#         except Exception as e:
+#             print(e)
+#             print("\nTrying Batch Mode...")
+
+#     n_batches = (len(x) + batch_size - 1) // batch_size
+#     device_orig = x.device
+#     pha, amp, freqs = [], [], []
+#     for i_batch in tqdm(range(n_batches)):
+#         start = i_batch * batch_size
+#         end = (i_batch + 1) * batch_size
+#         _pha, _amp, _freqs = _wavelet(
+#             x[start:end],
+#             fs,
+#             freq_scale=freq_scale,
+#             out_scale=out_scale,
+#             device=device,
+#         )
+#         torch.cuda.empty_cache()
+#         # to CPU
+#         pha.append(_pha.cpu())
+#         amp.append(_amp.cpu())
+#         freqs.append(_freqs.cpu())
+
+#     pha = torch.vstack(pha)
+#     amp = torch.vstack(amp)
+#     freqs = freqs[0]
+
+#     try:
+#         pha = pha.to(device_orig)
+#         amp = amp.to(device_orig)
+#         freqs = freqs.to(device_orig)
+#     except Exception as e:
+#         print(
+#             f"\nError occurred while transferring wavelet outputs back to the original device. Proceeding with CPU tensor. \n\n({e})"
+#         )
+
+#     sleep(0.5)
+#     torch.cuda.empty_cache()
+#     return pha, amp, freqs
 
 
 if __name__ == "__main__":
@@ -43,8 +141,8 @@ if __name__ == "__main__":
 
     # Demo signal
     xx, tt, fs = mngs.dsp.demo_sig(
-        batch_size=2,
-        n_chs=2,
+        batch_size=64,
+        n_chs=19,
         n_segments=2,
         t_sec=T_SEC,
         fs=FS,
@@ -57,6 +155,7 @@ if __name__ == "__main__":
 
     # Main
     pha, amp, freqs = wavelet(xx, fs, device="cuda")
+    freqs = freqs[0, 0]
 
     # Plots
     i_batch, i_ch = 0, 0
@@ -80,7 +179,7 @@ if __name__ == "__main__":
         # extent=extent,
         # origin="lower",
     )
-    axes[1] = mngs.plt.ax.set_ticks(axes[1], xticks=tt, yticks=freqs)
+    axes[1] = mngs.plt.ax.set_ticks(axes[1], x_ticks=tt, y_ticks=freqs)
     axes[1].set_ylabel("Frequency [Hz]")
     axes[1].set_title("Amplitude")
 
@@ -92,7 +191,7 @@ if __name__ == "__main__":
         # extent=extent,
         # origin="lower",
     )
-    axes[2] = mngs.plt.ax.set_ticks(axes[2], xticks=tt, yticks=freqs)
+    axes[2] = mngs.plt.ax.set_ticks(axes[2], x_ticks=tt, y_ticks=freqs)
     axes[2].set_ylabel("Frequency [Hz]")
     axes[2].set_title("Phase")
 

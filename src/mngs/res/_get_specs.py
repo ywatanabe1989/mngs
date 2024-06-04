@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-13 19:08:55"
+# Time-stamp: "2024-04-21 23:09:40"
 # Author: Yusuke Watanabe (ywata1989@gmail.com)
 
 """
@@ -17,9 +17,9 @@ import psutil as _psutil
 import yaml as _yaml
 
 
-def gather_info(
+def get_specs(
     system=True,
-    boot_time=True,
+    # boot_time=True,
     cpu=True,
     gpu=True,
     disk=True,
@@ -27,6 +27,41 @@ def gather_info(
     verbose=False,
     yaml=False,
 ):
+    """
+    Collects and returns system specifications including system information, CPU, GPU, disk, and network details.
+
+    This function gathers various pieces of system information based on the parameters provided. It can return the data in a dictionary format or print it out based on the verbose flag. Additionally, there's an option to format the output as YAML.
+
+    Arguments:
+        system (bool): If True, collects system-wide information such as OS and node name. Default is True.
+        boot_time (bool): If True, collects system boot time. Currently commented out in the implementation. Default is True.
+        cpu (bool): If True, collects CPU-specific information including frequency and usage. Default is True.
+        gpu (bool): If True, collects GPU-specific information. Default is True.
+        disk (bool): If True, collects disk usage information for all partitions. Default is True.
+        network (bool): If True, collects network interface and traffic information. Default is True.
+        verbose (bool): If True, prints the collected information using pprint. Default is False.
+        yaml (bool): If True, formats the collected information as YAML. This modifies the return type to a YAML formatted string. Default is False.
+
+    Returns:
+        dict or str: By default, returns a dictionary containing the collected system specifications. If `yaml` is True, returns a YAML-formatted string instead.
+
+    Note:
+        - The actual collection of system, CPU, GPU, disk, and network information depends on the availability of corresponding libraries and access permissions.
+        - The `boot_time` argument is currently not used as its corresponding code is commented out.
+        - The function uses global variables and imports within its scope, which might affect its reusability and testability.
+
+    Example:
+        >>> specs = get_specs(verbose=True)
+        This will print and return the system specifications based on the default parameters.
+
+    Dependencies:
+        - This function depends on the `mngs` library for accessing system information and formatting output. Ensure this library is installed and properly configured.
+        - Python standard libraries: `datetime`, `platform`, `psutil`, `yaml` (optional for YAML output).
+
+    Raises:
+        PermissionError: If the function lacks necessary permissions to access certain system information, especially disk and network details.
+    """
+
     import mngs
 
     # To prevent import errors, _SUPPLE_INFO is collected here.
@@ -231,8 +266,8 @@ if __name__ == "__main__":
     # Start
     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt)
 
-    info = mngs.res.gather_info()
-    mngs.io.save(info, "info.yaml")
+    info = mngs.res.get_specs()
+    mngs.io.save(info, "specs.yaml")
 
     # Close
     mngs.gen.close(CONFIG)
@@ -240,5 +275,5 @@ if __name__ == "__main__":
 # EOF
 
 """
-/home/ywatanabe/proj/entrance/mngs/res/_info.py
+/home/ywatanabe/proj/entrance/mngs/res/_get_specs.py
 """

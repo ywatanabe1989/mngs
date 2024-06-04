@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-13 03:46:40 (ywatanabe)"
+# Time-stamp: "2024-05-30 09:37:02 (ywatanabe)"
 
 
 import mngs
@@ -22,22 +22,22 @@ def gauss(x, sigma, t=None):
 
 @torch_fn
 def bandpass(x, fs, bands, t=None):
-    return BandPassFilter(bands, fs, x.shape)(x, t=t)
+    return BandPassFilter(bands, fs, x.shape[-1])(x, t=t)
 
 
 @torch_fn
 def bandstop(x, fs, bands, t=None):
-    return BandStopFilter(bands, fs, x.shape)(x, t=t)
+    return BandStopFilter(bands, fs, x.shape[-1])(x, t=t)
 
 
 @torch_fn
 def lowpass(x, fs, cutoffs_hz, t=None):
-    return LowPassFilter(cutoffs_hz, fs, x.shape)(x, t=t)
+    return LowPassFilter(cutoffs_hz, fs, x.shape[-1])(x, t=t)
 
 
 @torch_fn
 def highpass(x, fs, cutoffs_hz, t=None):
-    return HighPassFilter(cutoffs_hz, fs, x.shape)(x, t=t)
+    return HighPassFilter(cutoffs_hz, fs, x.shape[-1])(x, t=t)
 
 
 def _custom_print(x):

@@ -1,3 +1,5 @@
+# from ._yield_grid_params import yield_grid_params
+from . import grid_search
 from ._check_params import check_params
 from ._DefaultDataset import DefaultDataset
 from ._format_samples_for_sktime import format_samples_for_sktime

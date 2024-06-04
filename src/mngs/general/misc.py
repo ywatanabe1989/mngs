@@ -13,6 +13,7 @@ from bisect import bisect_left, bisect_right
 from collections import defaultdict
 from contextlib import contextmanager
 from functools import partial, wraps
+from glob import glob
 
 import mngs
 import numpy as np
@@ -73,6 +74,11 @@ def squeeze_spaces(string, pattern=" +", repl=" "):
     return re.sub(pattern, repl, string)
 
 
+import re
+
+import numpy as np
+
+
 def search(patterns, strings, only_perfect_match=False, as_bool=False):
     """
     regular expression is acceptable for patterns.
@@ -90,28 +96,20 @@ def search(patterns, strings, only_perfect_match=False, as_bool=False):
     """
 
     ## For single string objects
-    def to_str_list(data):
-        data_arr = np.array(data).astype(str)
-        if data_arr.ndim == 0:
-            data_arr = data_arr[np.newaxis]
-        return list(data_arr)
+    def to_list(s_or_p):
+        if isinstance(s_or_p, collections.abc.KeysView):
+            s_or_p = list(s_or_p)
 
-    # def to_list(s_or_p):
-    #     if isinstance(s_or_p, collections.abc.KeysView):
-    #         s_or_p = list(s_or_p)
+        elif not isinstance(
+            s_or_p,
+            (list, tuple, pd.core.indexes.base.Index, pd.core.series.Series),
+        ):
+            s_or_p = [s_or_p]
 
-    #     elif not isinstance(
-    #         s_or_p,
-    #         (list, tuple, pd.core.indexes.base.Index, pd.core.series.Series),
-    #     ):
-    #         s_or_p = [s_or_p]
+        return s_or_p
 
-    #     return s_or_p
-
-    # patterns = to_list(patterns)
-    # strings = to_list(strings)
-    patterns = to_str_list(patterns)
-    strings = to_str_list(strings)
+    patterns = to_list(patterns)
+    strings = to_list(strings)
 
     ## Main
     if not only_perfect_match:
@@ -140,6 +138,75 @@ def search(patterns, strings, only_perfect_match=False, as_bool=False):
 
     else:
         return indi_matched, keys_matched
+
+
+# def search(patterns, strings, only_perfect_match=False, as_bool=False):
+#     """
+#     regular expression is acceptable for patterns.
+
+#     Example:
+#         patterns = ['orange', 'banana']
+#         strings = ['apple', 'orange', 'apple', 'apple_juice', 'banana', 'orange_juice']
+#         print(search(patterns, strings))
+#         # ([1, 4, 5], ['orange', 'banana', 'orange_juice'])
+
+#         patterns = 'orange'
+#         strings = ['apple', 'orange', 'apple', 'apple_juice', 'banana', 'orange_juice']
+#         print(search(patterns, strings))
+#         # ([1, 5], ['orange', 'orange_juice'])
+#     """
+
+#     ## For single string objects
+#     def to_str_list(data):
+#         data_arr = np.array(data).astype(str)
+#         if data_arr.ndim == 0:
+#             data_arr = data_arr[np.newaxis]
+#         return list(data_arr)
+
+#     # def to_list(s_or_p):
+#     #     if isinstance(s_or_p, collections.abc.KeysView):
+#     #         s_or_p = list(s_or_p)
+
+#     #     elif not isinstance(
+#     #         s_or_p,
+#     #         (list, tuple, pd.core.indexes.base.Index, pd.core.series.Series),
+#     #     ):
+#     #         s_or_p = [s_or_p]
+
+#     #     return s_or_p
+
+#     # patterns = to_list(patterns)
+#     # strings = to_list(strings)
+#     patterns = to_str_list(patterns)
+#     strings = to_str_list(strings)
+
+#     ## Main
+#     if not only_perfect_match:
+#         indi_matched = []
+#         for pattern in patterns:
+#             for i_str, string in enumerate(strings):
+#                 m = re.search(pattern, string)
+#                 if m is not None:
+#                     indi_matched.append(i_str)
+#     else:
+#         indi_matched = []
+#         for pattern in patterns:
+#             for i_str, string in enumerate(strings):
+#                 if pattern == string:
+#                     indi_matched.append(i_str)
+
+#     ## Sorts the indices according to the original strings
+#     indi_matched = natsorted(indi_matched)
+#     keys_matched = list(np.array(strings)[indi_matched])
+
+#     if as_bool:
+#         bool_matched = np.zeros(len(strings), dtype=bool)
+#         if np.unique(indi_matched).size != 0:
+#             bool_matched[np.unique(indi_matched)] = True
+#         return bool_matched, keys_matched
+
+#     else:
+#         return indi_matched, keys_matched
 
 
 def grep(str_list, search_key):
@@ -174,9 +241,9 @@ def pop_keys(keys_list, keys_to_pop):
 def readable_bytes(num, suffix="B"):
     for unit in ["", "Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi"]:
         if abs(num) < 1024.0:
-            return "%3.1f%s%s" % (num, unit, suffix)
+            return "%3.1f %s%s" % (num, unit, suffix)
         num /= 1024.0
-    return "%.1f%s%s" % (num, "Yi", suffix)
+    return "%.1f %s%s" % (num, "Yi", suffix)
 
 
 ################################################################################
@@ -212,7 +279,7 @@ def is_listed_X(obj, types):
         return False
 
 
-def take_the_closest(list_obj, num_insert):
+def find_closest(list_obj, num_insert):
     """
     Assumes list_obj is sorted. Returns the closest value to num.
     If the same number is included in list_obj, the smaller number is returned.
@@ -412,7 +479,7 @@ def _copy_a_file(src, dst, allow_overwrite=False):
     else:
 
         if dst.endswith("/"):
-            _, src_fname, src_ext = mngs.general.split_fpath(src)
+            _, src_fname, src_ext = mngs.path.split(src)
             # src_fname = src + src_ext
             dst = dst + src_fname + src_ext
 
@@ -445,7 +512,7 @@ def copy_files(src_files, dists, allow_overwrite=False):
 
 def copy_the_file(sdir):  # dst
     __file__ = inspect.stack()[1].filename
-    _, fname, ext = mngs.general.split_fpath(__file__)
+    _, fname, ext = mngs.path.split(__file__)
 
     dst = sdir + fname + ext
 
@@ -721,6 +788,7 @@ def uq(*args, **kwargs):
 
 #     return df_show
 def print_block(message, char="-", n=40, c=None):
+    """Available colors are 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white', or 'grey'"""
     border = char * n
     text = f"\n{border}\n{message}\n{border}\n"
     if c is not None:
@@ -738,6 +806,7 @@ def color_text(text, c="green"):
         "cyan": "\033[96m",
         "white": "\033[97m",
         "grey": "\033[90m",  # Added grey color
+        "gray": "\033[90m",  # Added grey color
         "reset": "\033[0m",
     }
     ANSI_COLORS["tra"] = ANSI_COLORS["white"]
@@ -795,3 +864,7 @@ def to_odd(n):
         return n - 1
     else:
         return n
+
+
+def natglob(expression):
+    return natsorted(glob(expression))

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-12 23:27:11 (ywatanabe)"
+# Time-stamp: "2024-06-05 02:06:26 (ywatanabe)"
 
 import inspect
 import os as _os
@@ -31,11 +31,11 @@ def start(
     fig_scale=1.0,
     dpi_display=100,
     dpi_save=300,
-    font_size_base=8,
-    font_size_title=8,
-    font_size_axis_label=8,
-    font_size_tick_label=7,
-    font_size_legend=6,
+    font_size_base=10,
+    font_size_title=10,
+    font_size_axis_label=10,
+    font_size_tick_label=8,
+    font_size_legend=8,
     hide_top_right_spines=True,
     alpha=0.9,
     line_width=0.5,
@@ -105,7 +105,7 @@ def start(
         if "ipython" in __file__:
             __file__ = "/tmp/fake.py"
         spath = __file__
-        _sdir, sfname, _ = mngs.general.split_fpath(spath)
+        _sdir, sfname, _ = mngs.path.split(spath)
         sdir = _sdir + sfname + "/" + "RUNNING" + "/" + ID + "/"
     _os.makedirs(sdir, exist_ok=True)
 
@@ -142,7 +142,7 @@ def start(
             torch=torch,
             tf=tf,
             seed=seed,
-            show=show,
+            verbose=verbose,
         )
 
     # Matplotlib configuration
@@ -163,6 +163,7 @@ def start(
             line_width=line_width,
             verbose=verbose,
         )
+        CC["gray"] = CC["grey"]
 
     if agg:
         matplotlib.use("Agg")

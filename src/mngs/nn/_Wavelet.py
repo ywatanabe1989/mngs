@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-11 22:28:40 (ywatanabe)"
+# Time-stamp: "2024-05-30 11:04:45 (ywatanabe)"
 
 
 import mngs
@@ -68,10 +68,17 @@ class Wavelet(nn.Module):
         pha = filtered_x.angle()
         amp = filtered_x.abs()
 
+        # Repeats freqs
+        freqs = (
+            self.freqs.unsqueeze(0)
+            .unsqueeze(0)
+            .repeat(pha.shape[0], pha.shape[1], 1)
+        )
+
         if self.out_scale == "log":
-            return torch.log(pha + 1e-5), torch.log(amp + 1e-5), self.freqs
+            return pha, torch.log(amp + 1e-5), freqs
         else:
-            return pha, amp, self.freqs
+            return pha, amp, freqs
 
     def init_kernel(self, samp_rate, kernel_size=None, freq_scale="log"):
         device = self.dummy.device
@@ -158,14 +165,15 @@ class Wavelet(nn.Module):
 
 
 if __name__ == "__main__":
+    import matplotlib.pyplot as plt
     import mngs
 
     xx, tt, fs = mngs.dsp.demo_sig(sig_type="chirp")
 
-    ww, ff = mngs.dsp.wavelet(xx, fs)
+    pha, amp, ff = mngs.dsp.wavelet(xx, fs)
 
     fig, ax = mngs.plt.subplots()
-    ax.imshow2d(ww[0, 0].T)
+    ax.imshow2d(amp[0, 0].T)
     ax = mngs.plt.ax.set_ticks(ax, xticks=tt, yticks=ff)
     ax = mngs.plt.ax.set_n_ticks(ax)
     plt.show()

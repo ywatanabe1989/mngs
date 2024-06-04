@@ -1,34 +1,42 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-12 23:51:57 (ywatanabe)"
+# Time-stamp: "2024-04-29 10:59:21 (ywatanabe)"
 
 """
-This script does XYZ.
+This script defines the ModulationIndex module.
 """
 
 # Imports
-import math
 import sys
-import time
 
 import mngs
 import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from mngs.general import torch_fn
 
-# Config
-CONFIG = mngs.gen.load_configs()
 
 # Functions
 class ModulationIndex(nn.Module):
-    def __init__(self, n_bins=18, fp16=False):
+    def __init__(self, n_bins=18, fp16=False, amp_prob=False):
         super(ModulationIndex, self).__init__()
         self.n_bins = n_bins
         self.fp16 = fp16
         self.register_buffer(
             "pha_bin_cutoffs", torch.linspace(-np.pi, np.pi, n_bins + 1)
+        )
+
+        self.amp_prob = amp_prob
+
+    @property
+    def pha_bin_centers(
+        self,
+    ):
+        return (
+            ((self.pha_bin_cutoffs[1:] + self.pha_bin_cutoffs[:-1]) / 2)
+            .detach()
+            .cpu()
+            .numpy()
         )
 
     def forward(self, pha, amp, epsilon=1e-9):
@@ -57,27 +65,53 @@ class ModulationIndex(nn.Module):
         # (batch_size, n_channels, n_freqs_pha, n_segments, sequence_length, n_bins)
 
         # Expands amp and masks to utilize broadcasting
-        i_batch = 0
-        i_chs = 1
+        # i_batch = 0
+        # i_chs = 1
         i_freqs_pha = 2
         i_freqs_amp = 3
-        i_segments = 4
+        # i_segments = 4
         i_time = 5
         i_bins = 6
 
         # Coupling
         pha_masks = pha_masks.unsqueeze(i_freqs_amp)
         amp = amp.unsqueeze(i_freqs_pha).unsqueeze(i_bins)
-        amp_bins = pha_masks * amp
 
+        amp_bins = pha_masks * amp  # this is the most memory-consuming process
+
+        # # Batch processing to reduce maximum VRAM occupancy
+        # pha_masks = self.dh_pha.fit(pha_masks, keepdims=[2, 3, 5, 6])
+        # amp = self.dh_amp.fit(amp, keepdims=[2, 3, 5, 6])
+        # n_chunks = len(pha_masks) // self.chunk_size
+        # amp_bins = []
+        # for i_chunk in range(n_chunks):
+        #     start = i_chunk * self.chunk_size
+        #     end = (i_chunk + 1) * self.chunk_size
+        #     _amp_bins = pha_masks[start:end] * amp[start:end]
+        #     amp_bins.append(_amp_bins.cpu())
+        # amp_bins = torch.cat(amp_bins)
+        # amp_bins = self.dh_pha.unfit(amp_bins)
+        # pha_masks = self.dh_pha.unfit(pha_masks)
         # Takes mean amplitude in each bin
-        amp_sums = amp_bins.sum(dim=i_time, keepdims=True)
+        amp_sums = amp_bins.sum(dim=i_time, keepdims=True).to(device)
         counts = pha_masks.sum(dim=i_time, keepdims=True)
         amp_means = amp_sums / (counts + epsilon)
 
         amp_probs = amp_means / (
             amp_means.sum(dim=-1, keepdims=True) + epsilon
         )
+
+        if self.amp_prob:
+            return amp_probs.detach().cpu()
+
+        """
+        matplotlib.use("TkAgg")
+        fig, ax = mngs.plt.subplots(subplot_kw={'polar': True})
+        yy = amp_probs[0, 0, 0, 0, 0, 0, :].detach().cpu().numpy()
+        xx = ((self.pha_bin_cutoffs[1:] + self.pha_bin_cutoffs[:-1]) / 2).detach().cpu().numpy()
+        ax.bar(xx, yy, width=.1)
+        plt.show()
+        """
 
         MI = (
             torch.log(torch.tensor(self.n_bins, device=device) + epsilon)
@@ -88,7 +122,8 @@ class ModulationIndex(nn.Module):
         MI = MI.squeeze(-1)
 
         # Takes mean along the n_segments dimension
-        MI = MI.mean(axis=-1)
+        i_segment = -1
+        MI = MI.mean(axis=i_segment)
 
         if MI.isnan().any():
             raise ValueError(
@@ -101,17 +136,17 @@ class ModulationIndex(nn.Module):
     def _phase_to_masks(pha, phase_bin_cutoffs):
         n_bins = int(len(phase_bin_cutoffs) - 1)
         bin_indices = (
-            (
-                (
-                    torch.bucketize(pha, phase_bin_cutoffs, right=False) - 1
-                ).clamp(0, n_bins - 1)
+            (torch.bucketize(pha, phase_bin_cutoffs, right=False) - 1).clamp(
+                0, n_bins - 1
             )
-            .long()
+        ).long()
+        one_hot_masks = (
+            F.one_hot(
+                bin_indices,
+                num_classes=n_bins,
+            )
+            .bool()
             .to(pha.device)
-        )
-        one_hot_masks = F.one_hot(
-            bin_indices,
-            num_classes=n_bins,
         )
         return one_hot_masks
 
@@ -129,10 +164,6 @@ def _reshape(x, batch_size=2, n_chs=4):
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
     import mngs
-    import seaborn as sns
-    import tensorpac
-    from tensorpac import Pac
-    from tqdm import tqdm
 
     # Start
     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
@@ -141,7 +172,8 @@ if __name__ == "__main__":
 
     # Parameters
     FS = 512
-    T_SEC = 5
+    T_SEC = 1
+    device = "cuda"
 
     # Demo signal
     xx, tt, fs = mngs.dsp.demo_sig(fs=FS, t_sec=T_SEC, sig_type="tensorpac")
@@ -158,9 +190,14 @@ if __name__ == "__main__":
 
     # GPU calculation with mngs.dsp.nn.ModulationIndex
     pha, amp = _reshape(pha), _reshape(amp)
-    pac_mngs = mngs.dsp.modulation_index(pha, amp).cpu().numpy()
+
+    m = ModulationIndex(n_bins=18, fp16=True).to(device)
+
+    pac_mngs = m(pha.to(device), amp.to(device))
+
+    # pac_mngs = mngs.dsp.modulation_index(pha, amp).cpu().numpy()
     i_batch, i_ch = 0, 0
-    pac_mngs = pac_mngs[i_batch, i_ch]
+    pac_mngs = pac_mngs[i_batch, i_ch].squeeze().numpy()
 
     # Plots
     fig = mngs.dsp.utils.pac.plot_PAC_mngs_vs_tensorpac(

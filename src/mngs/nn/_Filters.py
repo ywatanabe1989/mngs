@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-12 23:29:54 (ywatanabe)"
+# Time-stamp: "2024-05-30 09:35:17 (ywatanabe)"
 
 """
 This script does XYZ.
@@ -12,6 +12,7 @@ from abc import abstractmethod
 
 import matplotlib.pyplot as plt
 import mngs
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -19,9 +20,11 @@ from mngs.dsp.utils import build_bandpass_filters, init_bandpass_filters
 
 
 class BaseFilter1D(nn.Module):
-    def __init__(self, fp16=False):
+    def __init__(self, fp16=False, in_place=False):
         super().__init__()
         self.fp16 = fp16
+        self.in_place = in_place
+        # self.kernels = None
 
     @abstractmethod
     def init_kernels(
@@ -50,7 +53,7 @@ class BaseFilter1D(nn.Module):
         # Filtering
         x = self.flip_extend(x, self.kernel_size // 2)
         x = self.batch_conv(x, self.kernels, padding=0)
-        x = x[..., :seq_len]  # fixme
+        x = x[..., :seq_len]
 
         assert x.shape == (
             batch_size,
@@ -109,7 +112,7 @@ class BaseFilter1D(nn.Module):
 
 
 class BandPassFilter(BaseFilter1D):
-    def __init__(self, bands, fs, x_shape, fp16=False):
+    def __init__(self, bands, fs, seq_len, fp16=False):
         super().__init__(fp16=fp16)
 
         self.fp16 = fp16
@@ -119,13 +122,14 @@ class BandPassFilter(BaseFilter1D):
 
         # Check bands definitions
         nyq = fs / 2.0
+        bands = torch.clip(bands, 0.1, nyq - 1)
         for ll, hh in bands:
             assert 0 < ll
             assert ll < hh
             assert hh < nyq
 
         # Prepare kernels
-        kernels = self.init_kernels(x_shape[-1], fs, bands)
+        kernels = self.init_kernels(seq_len, fs, bands)
         if fp16:
             kernels = kernels.half()
         self.register_buffer(
@@ -148,12 +152,17 @@ class BandPassFilter(BaseFilter1D):
 
         kernels = mngs.dsp.utils.zero_pad(filters)
         kernels = mngs.dsp.utils.ensure_even_len(kernels)
-        kernels = torch.tensor(kernels)
+        # kernels = torch.tensor(kernels).clone().detach()
+        kernels = kernels.clone().detach().requires_grad_(True)
         return kernels
 
 
+# /home/ywatanabe/proj/mngs/src/mngs/nn/_Filters.py:155: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+#   kernels = torch.tensor(kernels).clone().detach()
+
+
 class BandStopFilter(BaseFilter1D):
-    def __init__(self, bands, fs, x_shape):
+    def __init__(self, bands, fs, seq_len):
         super().__init__()
 
         # Ensures bands shape
@@ -161,14 +170,13 @@ class BandStopFilter(BaseFilter1D):
 
         # Check bands definitions
         nyq = fs / 2.0
+        bands = np.clip(bands, 0.1, nyq - 1)
         for ll, hh in bands:
             assert 0 < ll
             assert ll < hh
             assert hh < nyq
 
-        self.register_buffer(
-            "kernels", self.init_kernels(x_shape[-1], fs, bands)
-        )
+        self.register_buffer("kernels", self.init_kernels(seq_len, fs, bands))
 
     @staticmethod
     def init_kernels(seq_len, fs, bands):
@@ -185,7 +193,7 @@ class BandStopFilter(BaseFilter1D):
 
 
 class LowPassFilter(BaseFilter1D):
-    def __init__(self, cutoffs_hz, fs, x_shape):
+    def __init__(self, cutoffs_hz, fs, seq_len):
         super().__init__()
 
         # Ensures bands shape
@@ -193,12 +201,13 @@ class LowPassFilter(BaseFilter1D):
 
         # Check bands definitions
         nyq = fs / 2.0
+        bands = np.clip(cutoffs_hz, 0.1, nyq - 1)
         for cc in cutoffs_hz:
             assert 0 < cc
             assert cc < nyq
 
         self.register_buffer(
-            "kernels", self.init_kernels(x_shape[-1], fs, cutoffs_hz)
+            "kernels", self.init_kernels(seq_len, fs, cutoffs_hz)
         )
 
     @staticmethod
@@ -216,7 +225,7 @@ class LowPassFilter(BaseFilter1D):
 
 
 class HighPassFilter(BaseFilter1D):
-    def __init__(self, cutoffs_hz, fs, x_shape):
+    def __init__(self, cutoffs_hz, fs, seq_len):
         super().__init__()
 
         # Ensures bands shape
@@ -224,12 +233,13 @@ class HighPassFilter(BaseFilter1D):
 
         # Check bands definitions
         nyq = fs / 2.0
+        bands = np.clip(cutoffs_hz, 0.1, nyq - 1)
         for cc in cutoffs_hz:
             assert 0 < cc
             assert cc < nyq
 
         self.register_buffer(
-            "kernels", self.init_kernels(x_shape[-1], fs, cutoffs_hz)
+            "kernels", self.init_kernels(seq_len, fs, cutoffs_hz)
         )
 
     @staticmethod
@@ -291,6 +301,11 @@ class DifferentiableBandPassFilter(BaseFilter1D):
 
         # Check bands definitions
         nyq = fs / 2.0
+        pha_high_hz = torch.tensor(pha_high_hz).clip(0.1, nyq - 1)
+        pha_low_hz = torch.tensor(pha_low_hz).clip(0.1, pha_high_hz - 1)
+        amp_high_hz = torch.tensor(amp_high_hz).clip(0.1, nyq - 1)
+        amp_low_hz = torch.tensor(amp_low_hz).clip(0.1, amp_high_hz - 1)
+
         assert pha_low_hz < pha_high_hz < nyq
         assert amp_low_hz < amp_high_hz < nyq
 

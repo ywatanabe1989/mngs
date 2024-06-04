@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-13 02:40:17 (ywatanabe)"
+# Time-stamp: "2024-04-29 11:03:51 (ywatanabe)"
 
 import sys
 
 import matplotlib.pyplot as plt
 import mngs
 import numpy as np
-from mngs.general import torch_fn
+from mngs.general import batch_fn, torch_fn
 from mngs.nn import PAC
 
 """
@@ -16,6 +16,7 @@ mngs.dsp.pac function
 
 
 @torch_fn
+@batch_fn
 def pac(
     x,
     fs,
@@ -26,8 +27,11 @@ def pac(
     amp_end_hz=160,
     amp_n_bands=100,
     device="cuda",
+    batch_size=1,
     fp16=False,
     trainable=False,
+    n_perm=None,
+    amp_prob=False,
 ):
     """
     Compute the phase-amplitude coupling (PAC) for signals. This function automatically handles inputs as
@@ -57,7 +61,7 @@ def pac(
         pac, pha_mids_hz, amp_mids_hz = mngs.dsp.pac(xx, fs)
     """
     m = PAC(
-        x.shape,
+        x.shape[-1],
         fs,
         pha_start_hz=pha_start_hz,
         pha_end_hz=pha_end_hz,
@@ -67,6 +71,8 @@ def pac(
         amp_n_bands=amp_n_bands,
         fp16=fp16,
         trainable=trainable,
+        n_perm=n_perm,
+        amp_prob=amp_prob,
     ).to(device)
     return m(x.to(device)), m.PHA_MIDS_HZ, m.AMP_MIDS_HZ
 
@@ -118,6 +124,18 @@ if __name__ == "__main__":
             assert np.allclose(pha_mids_mngs, _pha_mids_tp)
             assert np.allclose(amp_mids_mngs, _amp_mids_tp)
 
+            mngs.io.save(
+                (pac_mngs, pac_tp, pha_mids_mngs, amp_mids_mngs),
+                "./data/cache.npz",
+            )
+
+            # ################################################################################
+            # # cache
+            # pac_mngs, pac_tp, pha_mids_mngs, amp_mids_mngs = mngs.io.load(
+            #     "./data/cache.npz"
+            # )
+            # ################################################################################
+
             # Plots
             fig = mngs.dsp.utils.pac.plot_PAC_mngs_vs_tensorpac(
                 pac_mngs, pac_tp, pha_mids_mngs, amp_mids_mngs
@@ -125,6 +143,9 @@ if __name__ == "__main__":
             fig.suptitle(
                 "Phase-Amplitude Coupling calculation\n\n(Bandpass Filtering -> Hilbert Transformation-> Modulation Index)"
             )
+            plt.show()
+
+            mngs.gen.reload(mngs.dsp)
 
             # Saves the figure
             trainable_str = "trainable" if IS_TRAINABLE else "static"

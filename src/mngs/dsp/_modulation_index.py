@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-13 02:39:52 (ywatanabe)"
+# Time-stamp: "2024-04-29 10:41:48 (ywatanabe)"
 
 import torch
 from mngs.general import torch_fn
@@ -8,12 +8,12 @@ from mngs.nn import ModulationIndex
 
 
 @torch_fn
-def modulation_index(pha, amp, n_bins=18):
+def modulation_index(pha, amp, n_bins=18, amp_prob=False):
     """
     pha: (batch_size, n_chs, n_freqs_pha, n_segments, seq_len)
     amp: (batch_size, n_chs, n_freqs_amp, n_segments, seq_len)
     """
-    return ModulationIndex(n_bins=n_bins)(pha, amp)
+    return ModulationIndex(n_bins=n_bins, amp_prob=amp_prob)(pha, amp)
 
 
 def _reshape(x, batch_size=2, n_chs=4):

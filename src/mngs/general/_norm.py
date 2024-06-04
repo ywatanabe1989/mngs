@@ -1,38 +1,37 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-02 21:34:33 (ywatanabe)"
+# Time-stamp: "2024-04-26 20:02:00 (ywatanabe)"
 
-import mngs
+
 import numpy as np
 import torch
 from mngs.general import torch_fn
 
-
-def to_z(x, axis):
-    if isinstance(x, torch.Tensor):  # [REVISED]
-        return (x - x.mean(dim=axis, keepdim=True)) / x.std(
-            dim=axis, keepdim=True
-        )  # [REVISED]
-    if isinstance(x, np.ndarray):  # [REVISED]
-        return (x - x.mean(axis=axis, keepdims=True)) / x.std(
-            axis=axis, keepdims=True
-        )
+# def to_z(x, axis):
+#     if isinstance(x, torch.Tensor):  # [REVISED]
+#         return (x - x.mean(dim=axis, keepdim=True)) / x.std(
+#             dim=axis, keepdim=True
+#         )  # [REVISED]
+#     if isinstance(x, np.ndarray):  # [REVISED]
+#         return (x - x.mean(axis=axis, keepdims=True)) / x.std(
+#             axis=axis, keepdims=True
+#         )
 
 
 @torch_fn
-def to_z(x, dim=-1):
+def to_z(x, dim=-1, device="cuda"):
     return (x - x.mean(dim=dim, keepdim=True)) / x.std(dim=dim, keepdim=True)
 
 
 @torch_fn
-def to_1_1(x, amp=1.0, dim=-1, fn="mean"):
+def to_1_1(x, amp=1.0, dim=-1, fn="mean", device="cuda"):
     MM = x.max(dim=dim, keepdims=True)[0].abs()
     mm = x.min(dim=dim, keepdims=True)[0].abs()
     return amp * x / torch.maximum(MM, mm)
 
 
 @torch_fn
-def unbias(x, dim=-1, fn="mean"):
+def unbias(x, dim=-1, fn="mean", device="cuda"):
     if fn == "mean":
         return x - x.mean(dim=dim, keepdims=True)
     if fn == "min":

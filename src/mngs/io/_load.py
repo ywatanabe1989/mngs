@@ -14,20 +14,18 @@ import numpy as np
 import pandas as pd
 import torch
 import yaml
+from PIL import Image
 
 
 def load(lpath, show=False, verbose=False, **kwargs):
-    import logging
-
     try:
         extension = "." + lpath.split(".")[-1]  # [REVISED]
 
         # csv
         if extension == ".csv":
+            index_col = kwargs.get("index_col", 0)
             obj = pd.read_csv(lpath, **kwargs)
-            obj = obj.loc[
-                :, ~obj.columns.str.contains("^Unnamed")
-            ]  # [REVISED]
+            obj = obj.loc[:, ~obj.columns.str.contains("^Unnamed")]
         # tsv
         elif extension == ".tsv":
             obj = pd.read_csv(lpath, sep="\t", **kwargs)
@@ -40,7 +38,14 @@ def load(lpath, show=False, verbose=False, **kwargs):
 
         # numpy
         elif extension == ".npy":
-            obj = np.load(lpath, allow_pickle=True, **kwargs)  # [REVISED]
+            obj = np.load(lpath, allow_pickle=True, **kwargs)
+
+        # numpy npz
+        elif extension == ".npz":
+            obj = np.load(lpath)
+            obj = dict(obj)
+            obj = [v for v in obj.values()]
+
         # pkl
         elif extension == ".pkl":
             with open(lpath, "rb") as l:
@@ -59,23 +64,17 @@ def load(lpath, show=False, verbose=False, **kwargs):
         elif extension == ".json":
             with open(lpath, "r") as f:
                 obj = json.load(f)
-        # png
-        elif extension == ".png":
-            pass
-        # tiff
-        elif extension in [".tiff", ".tif"]:
-            pass
+
+        elif extension in [".jpg", ".png", ".tiff", "tif"]:
+            obj = Image.open(lpath)
+        # # png
+        # elif extension == ".png":
+        #     pass
+        # # tiff
+        # elif extension in [".tiff", ".tif"]:
+        #     pass
         # yaml
         elif extension == ".yaml":
-            # from ruamel.yaml import YAML
-
-            # yaml = YAML()
-            # yaml.preserve_quotes = (
-            #     True  # Optional: if you want to preserve quotes
-            # )
-            # yaml.indent(
-            #     mapping=2, sequence=4, offset=2
-            # )  # Optional: set indentation
 
             lower = kwargs.pop("lower", False)
 
@@ -147,8 +146,7 @@ def load(lpath, show=False, verbose=False, **kwargs):
         return obj
 
     except Exception as e:
-        if verbose:
-            print(f"\n{lpath} was not loaded:\n{e}")
+        print(f"\n{lpath} was not loaded:\n{e}")
 
         # logging.error(f"\n{lpath} was not loaded:\n{e}")
         # return None
@@ -287,7 +285,7 @@ def load_study_rdb(study_name, rdb_raw_bytes_url):
 
 def load_configs(IS_DEBUG=None, show=False, verbose=False):
 
-    if os.getenv("CI") == "true":
+    if os.getenv("CI") == "True":
         IS_DEBUG = True
 
     def update_debug(config, IS_DEBUG):
