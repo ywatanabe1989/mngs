@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-05-14 01:12:30 (ywatanabe)"
+# Time-stamp: "2024-06-05 02:06:26 (ywatanabe)"
 
 import inspect
 import os as _os
@@ -142,7 +142,7 @@ def start(
             torch=torch,
             tf=tf,
             seed=seed,
-            show=show,
+            verbose=verbose,
         )
 
     # Matplotlib configuration

@@ -6,8 +6,9 @@ mngs is Python utilities for ML and DSP projects
 ![Hard Working Sloth](./docs/hard_working_sloth.jpg)
 
 ## Installation
+Due to frequent updates and occasional issues with backward compatibility, please specify the version of mngs when installing.
 ``` bash
-$ pip install 'mngs==1.4.0'
+$ pip install 'mngs==1.5.0'
 ```
 
 ## Galleries

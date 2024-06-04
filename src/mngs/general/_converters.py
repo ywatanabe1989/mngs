@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-26 20:10:55 (ywatanabe)"#!/usr/bin/env python3
+# Time-stamp: "2024-06-03 08:33:33 (ywatanabe)"#!/usr/bin/env python3
 
 import warnings
 from functools import wraps
@@ -8,6 +8,7 @@ from functools import wraps
 import numpy as np
 import pandas as pd
 import torch
+import xarray
 from tqdm import tqdm
 
 
@@ -106,6 +107,14 @@ def to_torch(*args, return_fn=return_if, **kwargs):
         # Numpy
         elif isinstance(x, (np.ndarray, list)):
             x_new = torch.tensor(x).float()
+            x_new = try_device(x_new, device)
+            if device == "cuda":
+                _conversion_warning(x, x_new)
+            return x_new
+
+        # xarray
+        elif isinstance(x, xarray.core.dataarray.DataArray):
+            x_new = torch.tensor(np.array(x)).float()
             x_new = try_device(x_new, device)
             if device == "cuda":
                 _conversion_warning(x, x_new)

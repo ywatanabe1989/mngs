@@ -50,3 +50,11 @@ def split(fpath):
     base = os.path.basename(fpath)
     fname, ext = os.path.splitext(base)
     return dirname, fname, ext
+
+
+def file_size(path):
+    if os.path.exists(path):
+        file_size_bytes = os.path.getsize(path)
+        return mngs.gen.readable_bytes(file_size_bytes)
+    else:
+        return "(Not Found)"

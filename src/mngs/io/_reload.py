@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-05-13 12:42:23 (ywatanabe)"
+# Time-stamp: "2024-06-04 19:10:36 (ywatanabe)"
 
 
 def reload(module_or_func, verbose=False):
@@ -26,15 +26,18 @@ def reload(module_or_func, verbose=False):
     import importlib
     import sys
 
+    if module_or_func in sys.modules:
+        del sys.modules[module_or_func]
+        importlib.reload(module_or_func)
+
     if hasattr(module_or_func, "__module__"):
         # If the object has a __module__ attribute, it's likely a function or class.
         # Attempt to reload its module.
         module_name = module_or_func.__module__
         if module_name not in sys.modules:
-            if verbose:
-                print(
-                    f"Module {module_name} not found in sys.modules. Cannot reload."
-                )
+            print(
+                f"Module {module_name} not found in sys.modules. Cannot reload."
+            )
             return
     elif (
         hasattr(module_or_func, "__name__")
@@ -43,24 +46,18 @@ def reload(module_or_func, verbose=False):
         # Otherwise, assume it's a module and try to get its name directly.
         module_name = module_or_func.__name__
     else:
-        if verbose:
-            print(
-                f"Provided object is neither a recognized module nor a function/class with a __module__ attribute."
-            )
+        print(
+            f"Provided object is neither a recognized module nor a function/class with a __module__ attribute."
+        )
         return
 
     try:
         # Attempt to reload the module by name.
         importlib.reload(sys.modules[module_name])
-        if verbose:
-            print(f"Module {module_name} reloaded successfully.")
+
     except KeyError:
         # The module is not found in sys.modules, likely due to it not being imported.
-        if verbose:
-            print(
-                f"Module {module_name} not found in sys.modules. Cannot reload."
-            )
+        print(f"Module {module_name} not found in sys.modules. Cannot reload.")
     except Exception as e:
         # Catch any other exceptions and print an error message.
-        if verbose:
-            print(f"Failed to reload module {module_name}. Error: {e}")
+        print(f"Failed to reload module {module_name}. Error: {e}")

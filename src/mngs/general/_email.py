@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-20 16:01:00"
+# Time-stamp: "2024-06-04 14:00:19 (ywatanabe)"
 
 import inspect
 import os

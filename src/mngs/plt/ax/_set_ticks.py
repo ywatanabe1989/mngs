@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-05-30 12:18:45 (ywatanabe)"
+# Time-stamp: "2024-06-04 07:40:13 (ywatanabe)"
 
 import matplotlib.pyplot as plt
 import numpy as np
 
 
-def set_ticks(ax, x_vals=None, x_ticks=None, y_vals=None, y_ticks=None):
-    ax = set_x_ticks(ax, x_vals=x_vals, x_ticks=x_ticks)
-    ax = set_y_ticks(ax, y_vals=y_vals, y_ticks=y_ticks)
+def set_ticks(ax, xvals=None, xticks=None, yvals=None, yticks=None):
+    ax = set_x_ticks(ax, x_vals=xvals, x_ticks=xticks)
+    ax = set_y_ticks(ax, y_vals=yvals, y_ticks=yticks)
     canvas_type = type(ax.figure.canvas).__name__
     if "TkAgg" in canvas_type:
         ax.get_figure().canvas.draw()  # Redraw the canvas once after making all updates

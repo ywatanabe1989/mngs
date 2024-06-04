@@ -129,7 +129,8 @@ def save(
     if sfname_or_spath.startswith("/"):
         spath = sfname_or_spath
 
-    elif sfname_or_spath.startswith("./"):
+    # elif sfname_or_spath.startswith("./"):
+    else:
         if from_cwd:
             spath_cwd = os.getcwd() + "/" + sfname_or_spath
             spath_cwd = spath_cwd.replace("/./", "/").replace("//", "/")
@@ -142,12 +143,13 @@ def save(
         fdir, fname, _ = mngs.path.split(fpath)
         spath = fdir + fname + "/" + sfname_or_spath
 
+    # print(sfname_or_spath, fpath, spath, sfname)
     # Corrects the spath
     spath = spath.replace("/./", "/").replace("//", "/")
     ########################################
 
     if dry_run:
-        print(mngs.gen.ct(f"\n(dry run) Saved to: {spath}\n", c="yellow"))
+        print(mngs.gen.ct(f"\n(dry run) Saved to: {spath}", c="yellow"))
         return
 
     # Makes directory
@@ -157,7 +159,11 @@ def save(
     _save(obj, spath, verbose=verbose, **kwargs)
 
     if from_cwd:
-        _save(obj, spath_cwd, verbose=verbose, **kwargs)
+        if spath != spath_cwd:
+            mngs.sh(f"ln -sf {spath} {spath_cwd}", verbose=False)
+            print(
+                mngs.gen.color_text(f"\n(Symlinked to: {spath_cwd})", "yellow")
+            )
 
 
 def _save(obj, spath, verbose=True, **kwargs):
@@ -249,6 +255,7 @@ def _save(obj, spath, verbose=True, **kwargs):
 
         # jpeg
         elif spath.endswith(".jpeg") or spath.endswith(".jpg"):
+
             buf = io.BytesIO()
             # plotly
             if isinstance(obj, plotly.graph_objs.Figure):
@@ -296,8 +303,12 @@ def _save(obj, spath, verbose=True, **kwargs):
 
         # mp4
         elif spath.endswith(".mp4"):
-            _mk_mp4(obj, spath)  # obj is matplotlib.pyplot.figure object
+            obj.save(
+                spath, writer="ffmpeg", **kwargs
+            )  # obj is matplotlib.animation.FuncAnimation
             del obj
+            # _mk_mp4(obj, spath)  # obj is matplotlib.pyplot.figure object
+            # del obj
 
         # yaml
         elif spath.endswith(".yaml"):
@@ -346,7 +357,10 @@ def _save(obj, spath, verbose=True, **kwargs):
 
     else:
         if verbose and not is_copying_files:
-            print(mngs.gen.ct(f"\nSaved to: {spath}\n", c="yellow"))
+            file_size = mngs.path.file_size(spath)
+            print(
+                mngs.gen.ct(f"\nSaved to: {spath} ({file_size})", c="yellow")
+            )
 
 
 # def check_encoding(file_path):

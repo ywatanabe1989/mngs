@@ -47,4 +47,5 @@ torchaudio
 torchsummary
 umap-learn
 wheel
+xarray
 xmltodict

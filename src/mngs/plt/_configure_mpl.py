@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-27 01:37:24 (ywatanabe)"
+# Time-stamp: "2024-06-03 17:46:50 (ywatanabe)"
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -17,7 +17,7 @@ def normalize_rgba(rgba):
     rgba[0] /= 255
     rgba[1] /= 255
     rgba[2] /= 255
-    rgba = tuple(rgba)
+    # rgba = tuple(rgba)
     return rgba
 
 

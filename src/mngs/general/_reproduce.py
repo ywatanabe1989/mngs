@@ -7,7 +7,7 @@ import mngs
 ## Reproducibility
 ################################################################################
 def fix_seeds(
-    os=None, random=None, np=None, torch=None, tf=None, seed=42, show=True
+    os=None, random=None, np=None, torch=None, tf=None, seed=42, verbose=True
 ):
     os_str = "os" if os is not None else ""
     random_str = "random" if random is not None else ""
@@ -37,7 +37,7 @@ def fix_seeds(
     if tf is not None:
         tf.random.set_seed(seed)
 
-    if show:
+    if verbose:
         print(f"\n{'-'*40}\n")
         print(
             f"Random seeds of the following packages have been fixed as {seed}"

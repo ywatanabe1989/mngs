@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-05-30 10:58:35 (ywatanabe)"
+# Time-stamp: "2024-06-04 08:07:11 (ywatanabe)"
 
 from collections import OrderedDict
 
@@ -94,6 +94,7 @@ class SubplotsManager:
             return fig, ax_wrapped
 
         else:
+
             axes = axes.ravel()
             axes_wrapped = [
                 AxisWrapper(ax, self._plot_history, track) for ax in axes
@@ -104,7 +105,7 @@ class SubplotsManager:
                 if axes_orig_shape
                 else axes_wrapped[0]
             )
-
+            axes = AxesWrapper(axes)
             return fig, axes
 
     @property
@@ -130,7 +131,7 @@ class SubplotsManager:
             DataFrame: The plot history in SigmaPlot format.
         """
         data_frames = [to_sigmaplot_format(v) for v in self.history.values()]
-        combined_data = pd.concat(data_frames)
+        combined_data = pd.concat(data_frames, ignore_index=True, join="inner")
         return combined_data.apply(
             lambda col: col.dropna().reset_index(drop=True)
         )
@@ -188,6 +189,65 @@ class FigWrapper:
         self.fig.tight_layout(rect=rect)
 
 
+class AxesWrapper:
+    """
+    A wrapper class for multiple axes objects that can convert each to a pandas DataFrame
+    and concatenate them into a single DataFrame.
+    """
+
+    def __init__(self, axes):
+        """
+        Initializes the AxesWrapper with a list of axes.
+
+        Parameters:
+            axes (iterable): An iterable of objects that have a to_sigma() method returning a DataFrame.
+        """
+
+        self.axes = axes
+        # self.shape = (len(axes),)  # [REVISED]
+
+    @property
+    def shape(self):
+        return self.axes.shape
+
+    def to_sigma(self):
+        """
+        Converts each axis to a DataFrame using their to_sigma method and concatenates them along columns.
+
+        Returns:
+            DataFrame: A concatenated DataFrame of all axes.
+        """
+        dfs = []
+        for i_ax, ax in enumerate(self.axes.ravel()):
+            df = ax.to_sigma()
+            df.columns = [f"{i_ax}_{col}" for col in df.columns]
+            dfs.append(df)
+        return pd.concat(dfs, axis=1)
+
+    def ravel(self):
+        """
+        Flattens the AxesWrapper into a 1D array-like structure of axes.
+
+        Returns:
+            list: A list containing all axes objects.
+        """
+        self.axes = self.axes.ravel()  # [REVISED]
+        return self.axes
+
+    def flatten(self):
+        """
+        Flattens the AxesWrapper into a 1D array-like structure of axes.
+
+        Returns:
+            list: A list containing all axes objects.
+        """
+        self.axes = self.axes.flatten()
+        return self.axes
+
+    def __iter__(self):
+        return iter(self.axes)
+
+
 class AxisWrapper:
     """
     A wrapper class for a Matplotlib axis that collects plotting data.
@@ -200,6 +260,7 @@ class AxisWrapper:
         self.axis = axis
         self._history = history
         self.track = track
+        self.id = 0
 
     def __getattr__(self, attr):
         """
@@ -215,15 +276,17 @@ class AxisWrapper:
                 result = original_attr(*args, **kwargs)
 
                 # Apply set_n_ticks after the plotting method is called
-                if attr in ["plot", "scatter", "bar", "boxplot"]:
+                if attr in ["plot", "scatter", "bar", "plot_with_ci"]:
                     self.axis = mngs.plt.ax.set_n_ticks(
                         self.axis, n_xticks=n_xticks, n_yticks=n_yticks
                     )
 
-                    # self.axis.set_n_ticks(n_xticks=n_xticks, n_yticks=n_yticks)
-
                 # Only store the history if tracking is enabled and an ID is provided
-                if self.track and (id is not None):
+                # if self.track and (id is not None):
+                if self.track:
+                    if id is None:
+                        id = self.id
+                        self.id += 1
                     self._history[id] = (id, attr, args, kwargs)
                 return result
 
@@ -246,7 +309,7 @@ class AxisWrapper:
         """Reset the history for this axis."""
         self._history = {}
 
-    def to_sigma(self, lpath=None):
+    def to_sigma(self):
         """
         Convert the axis history to a sigma format DataFrame.
 
@@ -257,23 +320,30 @@ class AxisWrapper:
             data_frames = [
                 to_sigmaplot_format(v) for v in self.history.values()
             ]
-            combined_data = pd.concat(data_frames)
-            combined_data = combined_data.apply(
-                lambda col: col.dropna().reset_index(drop=True)
-            )
+            combined_data = pd.concat(data_frames, axis=1)
+            # combined_data = combined_data.apply(
+            #     lambda col: col.dropna().reset_index(drop=True)
+            # )
 
         except Exception as e:
             print(e)
             combined_data = pd.DataFrame()
-
-        if lpath is not None:
-            mngs.io.save(combined_data, lpath)
 
         return combined_data
 
     ################################################################################
     # Original methods
     ################################################################################
+    def raster(self, positions, time=None, track=True, id=None, **kwargs):
+        self.axis, df = mngs.plt.ax.raster(
+            self.axis, positions, time=time, **kwargs
+        )
+
+        if track:
+            if id is None:
+                id = mngs.gen.gen_ID()[-8:]
+            self._history[id] = (id, "raster", df, None)
+
     def set_xyt(
         self,
         xlabel=None,
@@ -302,17 +372,19 @@ class AxisWrapper:
 
     def set_ticks(
         self,
-        x_vals=None,
-        x_ticks=None,
-        y_vals=None,
-        y_ticks=None,
+        xvals=None,
+        xticks=None,
+        yvals=None,
+        yticks=None,
+        **kwargs,
     ):
+
         self.axis = mngs.plt.ax.set_ticks(
             self.axis,
-            x_vals=x_vals,
-            x_ticks=x_ticks,
-            y_vals=y_vals,
-            y_ticks=y_ticks,
+            xvals=xvals,
+            xticks=xticks,
+            yvals=yvals,
+            yticks=yticks,
         )
 
     def set_n_ticks(self, n_xticks=4, n_yticks=4):
@@ -339,10 +411,16 @@ class AxisWrapper:
             labels=labels,
         )
 
-    def fill_between(self, xx, mean, std, label, alpha=0.1):
-        self.axis = mngs.plt.ax.fill_between(
-            self.axis, xx, mean, std, label, alpha=alpha
+    def plot_with_ci(
+        self, xx, mean, std, label=None, alpha=0.5, track=True, id=None
+    ):
+        self.axis = mngs.plt.ax.plot_with_ci(
+            self.axis, xx, mean, std, label=label, alpha=alpha
         )
+        if track:
+            if id is None:
+                id = mngs.gen.gen_ID()[-8:]
+            self._history[id] = (id, "fill_between", (xx, mean, std), None)
 
     def extend(self, x_ratio=1.0, y_ratio=1.0):
         self.axis = mngs.plt.ax.extend(
@@ -367,8 +445,8 @@ class AxisWrapper:
         aspect="auto",
         vmin=None,
         vmax=None,
-        id=None,
         track=True,
+        id=None,
         **kwargs,
     ):
         self.axis = mngs.plt.ax.imshow2d(
@@ -385,7 +463,9 @@ class AxisWrapper:
             vmax=vmax,
         )
 
-        if track and id is not None:
+        if track:
+            if id is None:
+                id = mngs.gen.gen_ID()[-8:]
             self._history[id] = (id, "imshow2d", arr_2d, None)
 
 
@@ -401,16 +481,42 @@ def to_sigmaplot_format(record):
     """
 
     id, method, args, kwargs = record
-    if method in ["plot", "scatter"]:
-        x, y = args
-        df = pd.DataFrame({f"{id}_{method}_x": x, f"{id}_{method}_y": y})
-    elif method == "bar":
-        x, y = args
-        df = pd.DataFrame({f"{id}_{method}_x": x, f"{id}_{method}_y": y})
-    elif method == "boxplot":
-        x = args[0]
-        df = pd.DataFrame({f"{id}_{method}_x": x})
-    return df
+
+    try:
+        if method in ["plot", "scatter", "bar"]:
+            x, y = args
+            df = pd.DataFrame({f"{id}_{method}_x": x, f"{id}_{method}_y": y})
+            df = df.apply(lambda col: col.dropna().reset_index(drop=True))
+            return df
+        elif method == "plot_with_ci":
+            xx, mm, ss = args
+            df = pd.DataFrame(
+                {
+                    f"{id}_{method}_x": xx,
+                    f"{id}_{method}_under": mm - ss,
+                    f"{id}_{method}_mean": mm,
+                    f"{id}_{method}_upper": mm + ss,
+                }
+            )
+            return df
+
+        elif method == "boxplot":
+            x = args[0]
+            df = mngs.gen.force_dataframe(
+                {i_x: _x for i_x, _x in enumerate(x)}
+            )
+            df.columns = [f"{id}_{method}_{col}_x" for col in df.columns]
+            # df = pd.DataFrame({f"{id}_{method}_x": x})
+            df = df.apply(lambda col: col.dropna().reset_index(drop=True))
+            return df
+        elif method == "raster":
+            df = args[0]  # record[2]
+            return df
+
+    except IndexError:
+        raise ValueError(
+            f"Arguments for the method '{method}' are missing or in the wrong format."
+        )
 
 
 subplots = SubplotsManager()
