@@ -1,4 +1,4 @@
-name: import
+name: develop
 
 on:
   push:
@@ -11,13 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-      
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.8'
 
-    - name: import
+    - name: develop
       run: |
           pip install git+https://github.com/ywatanabe1989/mngs.git@develop
-          python ./tests/test_import.py
+          python ./tests/test_mngs_template.py
