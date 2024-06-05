@@ -6,7 +6,8 @@ mngs is Python utilities for ML and DSP projects
 ![CI](https://github.com/ywatanabe1989/mngs/actions/workflows/develop.yml/badge.svg)
 
 
-![Hard Working Sloth](./docs/hard_working_sloth.jpg)
+<!-- ![Hard Working Sloth](./docs/hard_working_sloth.jpg) -->
+![Lazy Python](./docs/lazy_python.gif)
 
 ## Installation
 Due to frequent updates and occasional issues with backward compatibility, please specify the version of mngs when installing.
