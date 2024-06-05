@@ -8,7 +8,10 @@ mngs is Python utilities for ML and DSP projects
 
 <!-- ![Hard Working Sloth](./docs/hard_working_sloth.jpg) -->
 <!-- ![Lazy Python](./docs/lazy_python.gif) -->
-<img src="./docs/lazy_python.gif" alt="Lazy Python" width="200px">
+<div style="text-align: center;">
+    <img src="./docs/lazy_python.gif" alt="Lazy Python" width="200px">
+</div>
+
 
 ## Installation
 Due to frequent updates and occasional issues with backward compatibility, please specify the version of mngs when installing.
