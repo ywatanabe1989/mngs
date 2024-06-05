@@ -19,5 +19,5 @@ jobs:
 
     - name: import
       run: |
-          pip install git+https://github.com/ywatanabe1989/mngs.git@develop  # [REVISED]
+          pip install git+https://github.com/ywatanabe1989/mngs.git@develop
           python ./tests/test_import.py
