@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Time-stamp: "2024-06-05 09:59:58 (ywatanabe)"
+# Time-stamp: "2024-06-05 10:49:14 (ywatanabe)"
 
 from . import io, path
 from ._sh import sh
@@ -14,7 +14,7 @@ _ = None
 from . import res
 
 __copyright__ = "Copyright (C) 2024 Yusuke Watanabe"
-__version__ = "1.5.1"
+__version__ = "1.5.2"
 __license__ = "MIT"
 __author__ = "ywatanabe1989"
 __author_email__ = "ywata1989@gmail.com"

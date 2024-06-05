@@ -11,7 +11,7 @@ mngs is Python utilities for ML and DSP projects
 ## Installation
 Due to frequent updates and occasional issues with backward compatibility, please specify the version of mngs when installing.
 ``` bash
-$ pip install 'mngs==1.5.1'
+$ pip install 'mngs==1.5.2'
 ```
 
 ## Galleries
