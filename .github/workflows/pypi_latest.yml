@@ -3,7 +3,6 @@ name: pypi_latest
 on:
   push:
     branches:
-      - main
       - develop
 
 jobs:
