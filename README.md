@@ -1,25 +1,23 @@
 # monogusa (= lazy in Japanese)
-mngs is Python utilities for ML and DSP projects
+Python utilities for machine learning and digital signal processing
 
+<!-- batges -->
 ![CI](https://github.com/ywatanabe1989/mngs/actions/workflows/pypi_latest.yml/badge.svg)
 ![CI](https://github.com/ywatanabe1989/mngs/actions/workflows/latest_release.yml/badge.svg)
 ![CI](https://github.com/ywatanabe1989/mngs/actions/workflows/develop.yml/badge.svg)
 
-
-<!-- ![Hard Working Sloth](./docs/hard_working_sloth.jpg) -->
-<!-- ![Lazy Python](./docs/lazy_python.gif) -->
+<!-- logo -->
 <div style="text-align: center;">
     <img src="./docs/lazy_python.gif" alt="Lazy Python" width="200px">
 </div>
 
 
 ## Installation
-Due to frequent updates and occasional issues with backward compatibility, please specify the version of mngs when installing.
 ``` bash
-$ pip install 'mngs==1.5.2'
+$ pip install mngs
 ```
 
-## Galleries
+## Example Usages
 - [`mngs.io`](https://github.com/ywatanabe1989/mngs/tree/main/src/mngs/io#readme) Input / Output
 - [`mngs.path`](https://github.com/ywatanabe1989/mngs/tree/main/src/mngs/path#readme) Path
 - [`mngs.dsp`](https://github.com/ywatanabe1989/mngs/tree/main/src/mngs/dsp#readme) Digital Signal Processing
