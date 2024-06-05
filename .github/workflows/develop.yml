@@ -1,0 +1,18 @@
+name: develop
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: develop
+      run: |
+          pip install git+https://github.com/ywatanabe1989/mngs.git@develop
+          python ./tests/test_mngs_template.py

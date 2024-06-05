@@ -1,4 +1,4 @@
-name: pip-install
+name: pypi_latest
 
 on:
   push:
@@ -11,6 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-      
-    - name: Install mngs
-      run: pip install git+https://git@github.com/ywatanabe1989/mngs.git@develop
+
+    - name: pypi_latest
+      run: |
+          pip install mngs
+          python ./tests/test_mngs_template.py
