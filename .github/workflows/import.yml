@@ -11,7 +11,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
       
     - name: Install mngs
-      run: pip install git+https://git@github.com/ywatanabe1989/mngs.git@develop
-      run: python ./tests/test_import.py
+      run |
+          pip install git+https://git@github.com/ywatanabe1989/mngs.git@develop
+          python ./tests/test_import.py
