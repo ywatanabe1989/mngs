@@ -1,24 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-03 17:46:50 (ywatanabe)"
+# Time-stamp: "2024-06-07 17:54:23 (ywatanabe)"
 
 import matplotlib.pyplot as plt
+import mngs
 import numpy as np
-
-
-def rgba_to_hex(rgba):
-    return "#{:02x}{:02x}{:02x}{:02x}".format(
-        int(rgba[0]), int(rgba[1]), int(rgba[2]), int(rgba[3] * 255)
-    )
-
-
-def normalize_rgba(rgba):
-    rgba = list(rgba)
-    rgba[0] /= 255
-    rgba[1] /= 255
-    rgba[2] /= 255
-    # rgba = tuple(rgba)
-    return rgba
 
 
 def configure_mpl(
@@ -55,14 +41,14 @@ def configure_mpl(
     For axis control, refer to the mngs.plt.ax module.
 
     Example:
-        plt, cc = configure_mpl(plt)
+        plt, CC = configure_mpl(plt)
 
         fig, ax = plt.subplots()
         x = np.linspace(0, 10, 100)
         for i_cc, cc_str in enumerate(cc):
-            phase_shift = i_cc * np.pi / len(cc)
+            phase_shift = i_cc * np.pi / len(CC)
             y = np.sin(x + phase_shift)
-            ax.plot(x, y, color=cc[cc_str], label=f"{cc_str}")
+            ax.plot(x, y, color=CC[cc_str], label=f"{cc_str}")
         ax.legend()
         plt.show()
 
@@ -108,22 +94,10 @@ def configure_mpl(
     """
 
     COLORS_RGBA = {
-        "blue": [0, 128, 192, alpha],
-        "red": [255, 70, 50, alpha],
-        "pink": [255, 150, 200, alpha],
-        "green": [20, 180, 20, alpha],
-        "yellow": [230, 160, 20, alpha],
-        "grey": [128, 128, 128, alpha],
-        "purple": [200, 50, 255, alpha],
-        "lightblue": [20, 200, 200, alpha],
-        "brown": [128, 0, 0, alpha],
-        "darkblue": [0, 0, 100, alpha],
-        "orange": [228, 94, 50, alpha],
-        "white": [255, 255, 255, alpha],
-        "black": [0, 0, 0, alpha],
+        k: mngs.plt.update_alpha(v, alpha)
+        for k, v in mngs.plt.PARAMS["RGBA"].items()
     }
-    COLORS_HEX = {k: rgba_to_hex(v) for k, v in COLORS_RGBA.items()}
-    COLORS_RGBA_NORM = {c: normalize_rgba(v) for c, v in COLORS_RGBA.items()}
+    COLORS_HEX = {k: mngs.plt.rgba2hex(v) for k, v in COLORS_RGBA.items()}
 
     # Normalize figure size from mm to inches
     figsize_inch = (fig_size_mm[0] / 25.4, fig_size_mm[1] / 25.4)
@@ -151,7 +125,10 @@ def configure_mpl(
             "axes.spines.top": not hide_top_right_spines,
             "axes.spines.right": not hide_top_right_spines,
             # Custom color cycle
-            "axes.prop_cycle": plt.cycler(color=COLORS_RGBA_NORM.values()),
+            # "axes.prop_cycle": plt.cycler(color=COLORS_RGBA_NORM.values()),
+            "axes.prop_cycle": plt.cycler(
+                color=[tuple(rgba) for rgba in COLORS_RGBA.values()]
+            ),
             # Line
             "lines.linewidth": line_width,
         }
@@ -177,19 +154,17 @@ def configure_mpl(
             print(f"  {color_str}: {rgba}")
         print("-" * 40)
 
-    COLORS_RGBA_NORM["gray"] = COLORS_RGBA_NORM["grey"]  # alias
-
-    return plt, COLORS_RGBA_NORM
+    return plt, mngs.plt.PARAMS["RGBA"]
 
 
 if __name__ == "__main__":
-    plt, cc = configure_mpl(plt)
+    plt, CC = configure_mpl(plt)
 
     fig, ax = plt.subplots()
     x = np.linspace(0, 10, 100)
-    for i_cc, cc_str in enumerate(cc):
-        phase_shift = i_cc * np.pi / len(cc)
+    for i_cc, cc_str in enumerate(CC):
+        phase_shift = i_cc * np.pi / len(CC)
         y = np.sin(x + phase_shift)
-        ax.plot(x, y, color=cc[cc_str], label=f"{cc_str}")
+        ax.plot(x, y, color=CC[cc_str], label=f"{cc_str}")
     ax.legend()
     plt.show()

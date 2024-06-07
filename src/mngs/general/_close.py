@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-05 01:53:15 (ywatanabe)"
+# Time-stamp: "2024-06-06 08:13:23 (ywatanabe)"
 
 import os
 from datetime import datetime
@@ -37,18 +37,20 @@ def close(CONFIG, message=":)", notify=True, verbose=True):
     except Exception as e:
         print(e)
 
-    mngs.io.save(CONFIG, CONFIG["SDIR"] + "CONFIG.pkl", verbose=verbose)
-    mngs.io.save(CONFIG, CONFIG["SDIR"] + "CONFIG.yaml", verbose=False)
+    mngs.io.save(
+        CONFIG, CONFIG["SDIR"] + "CONFIGS/CONFIG.pkl", verbose=verbose
+    )
+    mngs.io.save(CONFIG, CONFIG["SDIR"] + "CONFIGS/CONFIG.yaml", verbose=False)
 
     try:
         if CONFIG.get("DEBUG", False):
             message = f"[DEBUG]\n" + message
-        sleep(3)
+        sleep(1)
         if notify:
             mngs.gen.notify(
                 message=message,
                 ID=CONFIG["ID"],
-                log_paths=glob(CONFIG["SDIR"] + "*.log"),
+                log_paths=glob(CONFIG["SDIR"] + "logs/*.log"),
                 verbose=verbose,
             )
     except Exception as e:
@@ -58,8 +60,8 @@ def close(CONFIG, message=":)", notify=True, verbose=True):
     finish(CONFIG["SDIR"])
 
 
-def finish(src_dir):
-    dest_dir = src_dir.replace("RUNNING/", "")
+def finish(src_dir, remove_src_dir=True):
+    dest_dir = src_dir.replace("RUNNING/", "FINISHED/")
     os.makedirs(dest_dir, exist_ok=True)
     try:
         os.rename(src_dir, dest_dir)
@@ -67,6 +69,8 @@ def finish(src_dir):
             f"Congratulations! The script completed.\n\n{dest_dir}",
             c="yellow",
         )
+        if remove_src_dir:
+            mngs.sh(f"rm {src_dir} -rf", verbose=False)
     except Exception as e:
         print(e)
 

@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-04 08:07:11 (ywatanabe)"
+# Time-stamp: "2024-06-07 18:43:16 (ywatanabe)"
 
 from collections import OrderedDict
+from functools import wraps
 
 import matplotlib.pyplot as plt
 import mngs
@@ -206,6 +207,29 @@ class AxesWrapper:
         self.axes = axes
         # self.shape = (len(axes),)  # [REVISED]
 
+    def __getitem__(self, index):
+        """
+        Allows the AxesWrapper to be indexed.
+
+        Parameters:
+            index (int or slice): The index or slice of the axes to retrieve.
+
+        Returns:
+            The axis at the specified index or a new AxesWrapper with the sliced axes.
+        """
+        if isinstance(index, slice):
+            # Return a new AxesWrapper object containing the sliced part
+            return AxesWrapper(self.axes[index])
+        else:
+            # Return the specific axis at the index
+            return self.axes[index]
+
+    def __iter__(self):
+        return iter(self.axes)
+
+    def __len__(self):
+        return len(self.axes)
+
     @property
     def shape(self):
         return self.axes.shape
@@ -244,9 +268,6 @@ class AxesWrapper:
         self.axes = self.axes.flatten()
         return self.axes
 
-    def __iter__(self):
-        return iter(self.axes)
-
 
 class AxisWrapper:
     """
@@ -270,6 +291,7 @@ class AxisWrapper:
 
         if callable(original_attr):
 
+            @wraps(original_attr)  # added
             def wrapper(
                 *args, id=None, track=True, n_xticks=4, n_yticks=4, **kwargs
             ):
@@ -282,7 +304,6 @@ class AxisWrapper:
                     )
 
                 # Only store the history if tracking is enabled and an ID is provided
-                # if self.track and (id is not None):
                 if self.track:
                     if id is None:
                         id = self.id
@@ -483,11 +504,29 @@ def to_sigmaplot_format(record):
     id, method, args, kwargs = record
 
     try:
-        if method in ["plot", "scatter", "bar"]:
-            x, y = args
+        if method in ["plot", "scatter"]:
+            if len(args) == 2:  # matplotlib
+                x, y = args
+            else:  # seaborn
+                __import__("ipdb").set_trace()
+                # fixus
+                x = kwargs["x"]
+                y = kwargs["height"]
+
             df = pd.DataFrame({f"{id}_{method}_x": x, f"{id}_{method}_y": y})
             df = df.apply(lambda col: col.dropna().reset_index(drop=True))
             return df
+
+        if method == "bar":
+            print(kwargs)
+            if len(args) == 2:  # matplotlib
+                x, y = args
+            else:  # seaborn
+                x, y = kwargs["x"], kwargs["height"]
+            df = pd.DataFrame({f"{id}_{method}_x": x, f"{id}_{method}_y": y})
+            df = df.apply(lambda col: col.dropna().reset_index(drop=True))
+            return df
+
         elif method == "plot_with_ci":
             xx, mm, ss = args
             df = pd.DataFrame(
