@@ -21,6 +21,8 @@ from ._embed import embed
 
 # from ._find_indi import find_indi
 from ._less import less
+from ._mask_api import mask_api
+from ._not_implemented import not_implemented
 
 # Confirmed
 from ._paste import paste

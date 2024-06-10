@@ -26,8 +26,9 @@ def rgb2rgba(rgb, alpha=0, round=2):
 
 
 def update_alpha(rgba, alpha):
-    rgba[-1] = alpha
-    return rgba
+    rgba_list = list(rgba)
+    rgba_list[-1] = alpha
+    return rgba_list
 
 
 def rgba2hex(rgba):

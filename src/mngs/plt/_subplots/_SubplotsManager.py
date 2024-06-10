@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-07 19:16:33 (ywatanabe)"
+# Time-stamp: "2024-06-07 23:14:14 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/SubplotsManager.py
 
 from collections import OrderedDict
@@ -12,7 +12,7 @@ import pandas as pd
 from ._AxesWrapper import AxesWrapper
 from ._AxisWrapper import AxisWrapper
 from ._FigWrapper import FigWrapper
-from ._to_sigmaplot_format import to_sigmaplot_format
+from ._to_sigma import to_sigma as _to_sigma
 
 
 class SubplotsManager:
@@ -76,7 +76,7 @@ class SubplotsManager:
         self,
     ):
         """Initialize the SubplotsManager with an empty plot history."""
-        self._plot_history = OrderedDict()
+        self._subplots_manager_history = OrderedDict()
 
     def __call__(self, *args, track=True, **kwargs):
         """
@@ -89,21 +89,27 @@ class SubplotsManager:
 
         fig, axes = plt.subplots(*args, **kwargs)
 
+        # Fig
         fig = FigWrapper(fig)
+
+        # Axes
         axes = np.atleast_1d(axes)
         axes_orig_shape = axes.shape
 
         if axes_orig_shape == (1,):
-            ax_wrapped = AxisWrapper(axes[0], self._plot_history, track)
+            # ax_wrapped = AxisWrapper(
+            #     axes[0], self._subplots_manager_history, track
+            # )
+            ax_wrapped = AxisWrapper(axes[0], track)
             return fig, ax_wrapped
 
         else:
-
             axes = axes.ravel()
-            axes_wrapped = [
-                AxisWrapper(ax, self._plot_history, track) for ax in axes
-            ]
-
+            # axes_wrapped = [
+            #     AxisWrapper(ax, self._subplots_manager_history, track)
+            #     for ax in axes
+            # ]
+            axes_wrapped = [AxisWrapper(ax, track) for ax in axes]
             axes = (
                 np.array(axes_wrapped).reshape(axes_orig_shape)
                 if axes_orig_shape
@@ -112,33 +118,35 @@ class SubplotsManager:
             axes = AxesWrapper(axes)
             return fig, axes
 
-    @property
-    def history(self):
-        """
-        Get the sorted plot history.
+    # @property
+    # def history(self):
+    #     """
+    #     Get the sorted plot history.
 
-        Returns:
-            dict: The sorted plot history.
-        """
-        return {k: self._plot_history[k] for k in self._plot_history}
+    #     Returns:
+    #         dict: The sorted plot history.
+    #     """
+    #     return {
+    #         k: self._subplots_manager_history[k]
+    #         for k in self._subplots_manager_history
+    #     }
 
-    def reset_history(self):
-        """Reset the plot history to an empty state."""
-        self._plot_history = OrderedDict()
+    # def reset_history(self):
+    #     """Reset the plot history to an empty state."""
+    #     self._subplots_manager_history = OrderedDict()
 
-    @property
-    def to_sigma(self):
-        """
-        Convert the plot history data to a SigmaPlot-compatible format DataFrame.
+    # @property
+    # def to_sigma(self):
+    #     """
+    #     Convert the plot history data to a SigmaPlot-compatible format DataFrame.
 
-        Returns:
-            DataFrame: The plot history in SigmaPlot format.
-        """
-        data_frames = [to_sigmaplot_format(v) for v in self.history.values()]
-        combined_data = pd.concat(data_frames, ignore_index=True, join="inner")
-        return combined_data.apply(
-            lambda col: col.dropna().reset_index(drop=True)
-        )
+    #     Returns:
+    #         DataFrame: The plot history in SigmaPlot format.
+    #     """
+    #     df = _to_sigma(self.history)
+    #     self.reset_history()
+
+    #     return df
 
 
 subplots = SubplotsManager()

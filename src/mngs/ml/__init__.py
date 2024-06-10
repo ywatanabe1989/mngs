@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from . import act, clustering, layer, metrics, optim, plt, sk, utils
+from ._gen_ai._GenAI import GenAI
 from .ClassificationReporter import (
     ClassificationReporter,
     MultiClassificationReporter,
