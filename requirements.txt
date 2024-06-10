@@ -50,6 +50,7 @@ termplotlib
 torch
 torchaudio
 torchsummary
+twine
 umap-learn
 wheel
 xarray
