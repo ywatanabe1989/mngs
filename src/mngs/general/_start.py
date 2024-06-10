@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-05 02:06:26 (ywatanabe)"
+# Time-stamp: "2024-06-06 08:36:13 (ywatanabe)"
 
 import inspect
 import os as _os
@@ -103,7 +103,7 @@ def start(
     if sdir is None:
         __file__ = inspect.stack()[1].filename
         if "ipython" in __file__:
-            __file__ = "/tmp/fake.py"
+            __file__ = f"/tmp/fake_{_os.getenv('USER')}.py"
         spath = __file__
         _sdir, sfname, _ = mngs.path.split(spath)
         sdir = _sdir + sfname + "/" + "RUNNING" + "/" + ID + "/"
@@ -196,7 +196,7 @@ if __name__ == "__main__":
 
     if __name__ == "__main__":
         # Start
-        CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt)
+        CONFIG, sys.stdout, sys.stderr, plt, CC = start(sys, plt)
 
         # Your awesome code here :)
 

@@ -21,6 +21,8 @@ from ._embed import embed
 
 # from ._find_indi import find_indi
 from ._less import less
+from ._mask_api import mask_api
+from ._not_implemented import not_implemented
 
 # Confirmed
 from ._paste import paste
@@ -33,15 +35,13 @@ _ = None
 from ..io.__init__ import *
 from ._email import notify, send_gmail
 from ._norm import to_z
-from ._reproduce import fix_seeds, gen_ID, gen_timestamp, tee
+from ._reproduce import fix_seeds, gen_ID, gen_timestamp
 from ._shell import run_shellcommand, run_shellscript
 from ._start import start
+from ._tee import tee
 from ._TimeStamper import TimeStamper
 from ._title2path import title2path
 from .latex import add_hat_in_the_latex_style, to_the_latex_style
-
-# from .mat2py import *
-# from .misc import color_text  # fmt_size,
 from .misc import (
     _return_counting_process,
     color_text,

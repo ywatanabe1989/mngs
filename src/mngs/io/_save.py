@@ -2,7 +2,7 @@
 
 import csv
 import inspect
-import io
+import io as _io
 import json
 import os
 import pickle
@@ -231,8 +231,8 @@ def _save(obj, spath, verbose=True, **kwargs):
                     obj.savefig(spath)
                 except:
                     obj.figure.savefig(spath)
-
             del obj
+
         # html
         elif spath.endswith(".html"):
             # plotly
@@ -255,8 +255,8 @@ def _save(obj, spath, verbose=True, **kwargs):
 
         # jpeg
         elif spath.endswith(".jpeg") or spath.endswith(".jpg"):
+            buf = _io.BytesIO()
 
-            buf = io.BytesIO()
             # plotly
             if isinstance(obj, plotly.graph_objs.Figure):
                 obj.write_image(
@@ -264,9 +264,7 @@ def _save(obj, spath, verbose=True, **kwargs):
                 )  # Saving plotly figure to buffer as PNG
                 buf.seek(0)
                 img = Image.open(buf)
-                img.convert("RGB").save(
-                    spath, "JPEG"
-                )  # Convert to JPEG and save
+                img.convert("RGB").save(spath, "JPEG")
                 buf.close()
             # PIL image
             elif isinstance(obj, Image.Image):
@@ -274,9 +272,7 @@ def _save(obj, spath, verbose=True, **kwargs):
             # matplotlib
             else:
                 try:
-                    obj.savefig(
-                        buf, format="png"
-                    )  # Saving matplotlib figure to buffer as PNG
+                    obj.savefig(buf, format="png")
                 except:
                     obj.figure.savefig(buf, format="png")
 

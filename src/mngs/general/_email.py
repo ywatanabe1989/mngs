@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-04 14:00:19 (ywatanabe)"
+# Time-stamp: "2024-06-06 08:10:59 (ywatanabe)"
 
 import inspect
 import os
@@ -12,19 +12,6 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 import mngs
-
-# # Function to capture stdout and stderr
-# def capture_stdout_stderr():
-#     sys.stdout = StringIO()  # Capture stdout
-#     sys.stderr = StringIO()  # Capture stderr
-
-
-# def release_stdout_stderr():
-#     output = sys.stdout.getvalue()
-#     error = sys.stderr.getvalue()
-#     sys.stdout = sys.__stdout__  # Release stdout
-#     sys.stderr = sys.__stderr__  # Release stderr
-#     return output, error
 
 
 def notify(subject="", message=":)", ID=None, log_paths=None, verbose=False):
@@ -78,15 +65,12 @@ def notify(subject="", message=":)", ID=None, log_paths=None, verbose=False):
     if mngs_sender_gmail is None or mngs_sender_password is None:
         print(
             f"""
-        Please set environmental variables to use this function:\n\n
+        Please set environmental variables to use this function (f"{inspect.stack()[0][3]}"):\n\n
         $ export MNGS_SENDER_GMAIL="mngs.notification@gmail.com"
         $ export MNGS_SENDER_GMAIL_PASSWORD="YOUR_APP_PASSWORD"
         $ export MNGS_RECIPIENT_GMAIL="YOUR_GMAIL_ADDRESS"
         """
         )
-        # raise ValueError(
-        #     "Sender email or password not set in environment variables."
-        # )
 
     send_gmail(
         mngs_sender_gmail,
@@ -153,8 +137,12 @@ def send_gmail(
 
         if verbose:
             print(
-                f"\nEmail was sent: {sender_gmail} -> {recipient_gmail} (ID: {ID})"
+                f"\nEmail was sent:\n\t{sender_gmail} -> {recipient_gmail}\n\t(ID: {ID})"
             )
 
     except Exception as e:
         print(f"Email was not sent: {e}")
+
+
+if __name__ == "__main__":
+    notify(verbose=True)
