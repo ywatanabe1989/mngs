@@ -89,6 +89,11 @@ def load(lpath, show=False, verbose=False, **kwargs):
         elif extension in [".txt", ".log", ".event"]:
             with open(lpath, "r") as f:  # [REVISED]
                 obj = f.read().splitlines()  # [REVISED]
+
+        # md
+        elif extension == ".md":
+            obj = load_markdown(lpath, **kwargs)
+            
         # pth
         elif extension in [".pth", ".pt"]:
             obj = torch.load(lpath, **kwargs)
