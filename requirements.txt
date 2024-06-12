@@ -5,14 +5,17 @@ PyYAML
 Pyarrow
 anthropic
 chardet
+flask
 geom_median
 google-generativeai
 h5py
+html2text
 icecream
 ipdb
 ipython<8.0.0
 joblib
 julius
+markdown
 markdown2
 matplotlib
 mne

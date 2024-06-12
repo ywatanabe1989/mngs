@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-10 22:52:03 (ywatanabe)"
+# Time-stamp: "2024-06-11 06:56:58 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/chat.py
 
 
@@ -44,10 +44,10 @@ from natsort import natsorted
 from openai import OpenAI
 from tqdm import tqdm
 
-from ._ChatGPT import ChatGPT
-from ._Claude import Claude
-from ._Gemini import Gemini
-from ._Perplexity import Perplexity
+from mngs.ai._gen_ai._ChatGPT import ChatGPT
+from mngs.ai._gen_ai._Claude import Claude
+from mngs.ai._gen_ai._Gemini import Gemini
+from mngs.ai._gen_ai._Perplexity import Perplexity
 
 # from sciwriter_app._email import notify
 
@@ -166,13 +166,14 @@ def test_all(seed=None, temperature=1.0):
             model = GenAI(
                 model_name, stream=stream, seed=seed, temperature=temperature
             )
-            prompt = "Hi. Tell me your name just within a line."
+            # prompt = "Hi. Tell me your name just within a line."
+            prompt = "Hi. Tell me about the hippocampus."            
 
             print(
                 f"\n{'-'*40}\n{model.model}\nStream: {stream}\nSeed: {seed}\nTemperature: {temperature}\n{'-'*40}"
             )
             print(model(prompt))
-            print(model.get_available_models())
+            print(model.available_models)
 
 
 def main(

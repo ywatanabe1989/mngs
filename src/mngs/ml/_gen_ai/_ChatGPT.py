@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-10 22:58:01 (ywatanabe)"
+# Time-stamp: "2024-06-11 06:52:12 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_ChatGPT.py
 
 
@@ -92,17 +92,18 @@ class ChatGPT(BaseGenAI):
         )
 
         for chunk in stream:
-            if chunk.choices:
-                current_text = chunk.choices[0].delta.content
-                if current_text:
-                    yield current_text
+            # if chunk.choices:
+            current_text = chunk.choices[0].delta.content
+            if current_text:
+                yield f"{current_text}"
 
     def _get_available_models(self):
-        return [OpenAI(api_key=self.api_key).models.list()]
-        # return [m.id for m in self.client.models.list()]
+        return [m.id for m in OpenAI(api_key=self.api_key).models.list()]
 
 
 def main():
+    m = mngs.ai.GenAI("gpt-4o")
+    m("Hi")
     pass
 
 

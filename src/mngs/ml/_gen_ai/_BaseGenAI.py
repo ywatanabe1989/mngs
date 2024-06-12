@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-10 23:16:01 (ywatanabe)"
+# Time-stamp: "2024-06-11 06:55:22 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_BaseAI.py
 
 
@@ -84,7 +84,9 @@ class BaseGenAI(ABC):
     def _yield_stream(self, stream_obj):
         accumulated = ""
         for chunk in stream_obj:
-            print(chunk)
+            sys.stdout.write(chunk)
+            sys.stdout.flush()
+            # print(chunk)
             accumulated += chunk
         self._update_history("assistant", accumulated)
         return accumulated
