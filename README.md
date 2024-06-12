@@ -14,8 +14,14 @@ Python utilities for machine learning and digital signal processing
 
 ## Installation
 ``` bash
-$ pip install mngs
+# Pypi latest
+$ pip install mngs 
+
+# Develop
+$ pip install git+https://github.com/ywatanabe1989/mngs.git@develop
 ```
+
+
 
 ## Example Usages
 - [`mngs.io`](https://github.com/ywatanabe1989/mngs/tree/main/src/mngs/io#readme) Input / Output
