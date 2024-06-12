@@ -228,7 +228,7 @@ def load_markdown(lpath_md, style="plain_text"):
     import html2text
     
     # Load Markdown content from a file
-    with open('example.md', 'r') as file:
+    with open(lpath_md, 'r') as file:
         markdown_content = file.read()
 
     # Convert Markdown to HTML
