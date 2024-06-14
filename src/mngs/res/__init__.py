@@ -3,6 +3,7 @@
 from ._get_proc_usages import get_proc_usages
 from ._get_specs import get_specs
 from ._rec_procs import rec_procs
+from . import _utils
 
 _ = None  # keep the importing orders
 

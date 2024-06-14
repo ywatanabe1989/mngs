@@ -17,6 +17,7 @@ import yaml
 from PIL import Image
 
 
+
 def load(lpath, show=False, verbose=False, **kwargs):
     try:
         extension = "." + lpath.split(".")[-1]  # [REVISED]
@@ -88,6 +89,11 @@ def load(lpath, show=False, verbose=False, **kwargs):
         elif extension in [".txt", ".log", ".event"]:
             with open(lpath, "r") as f:  # [REVISED]
                 obj = f.read().splitlines()  # [REVISED]
+
+        # md
+        elif extension == ".md":
+            obj = load_markdown(lpath, **kwargs)
+            
         # pth
         elif extension in [".pth", ".pt"]:
             obj = torch.load(lpath, **kwargs)
@@ -146,7 +152,8 @@ def load(lpath, show=False, verbose=False, **kwargs):
         return obj
 
     except Exception as e:
-        print(f"\n{lpath} was not loaded:\n{e}")
+        mngs.gen.print_block(f"{lpath} was not loaded:\n{e}", "red")
+        # print(f"\n{lpath} was not loaded:\n{e}")
 
         # logging.error(f"\n{lpath} was not loaded:\n{e}")
         # return None
@@ -215,6 +222,27 @@ def _load_eeg_data(filename, **kwargs):
 
         return raw
 
+
+def load_markdown(lpath_md, style="plain_text"):
+    import markdown
+    import html2text
+    
+    # Load Markdown content from a file
+    with open(lpath_md, 'r') as file:
+        markdown_content = file.read()
+
+    # Convert Markdown to HTML
+    html_content = markdown.markdown(markdown_content)
+    if style == "html":
+        return html_content
+
+    elif style == "plain_text":
+        text_maker = html2text.HTML2Text()
+        text_maker.ignore_links = True
+        text_maker.bypass_tables = False
+        plain_text = text_maker.handle(html_content)
+
+        return plain_text
 
 # def _check_encoding(file_path):
 #     from chardet.universaldetector import UniversalDetector
