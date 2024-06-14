@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-11 06:55:22 (ywatanabe)"
+# Time-stamp: "2024-06-14 20:51:14 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_BaseAI.py
 
 
@@ -20,7 +20,7 @@ import matplotlib.pyplot as plt
 import mngs
 
 from ._format_output_func import format_output_func
-
+import re
 # sys.path = ["."] + sys.path
 # from scripts import utils, load
 
@@ -82,12 +82,14 @@ class BaseGenAI(ABC):
             return stream_obj
 
     def _yield_stream(self, stream_obj):
+        ansi_escape = re.compile(r'\x1B[@-_][0-?]*[ -/]*[@-~]')
         accumulated = ""
         for chunk in stream_obj:
-            sys.stdout.write(chunk)
+            clean_chunk = ansi_escape.sub('', chunk)
+            sys.stdout.write(clean_chunk)
             sys.stdout.flush()
             # print(chunk)
-            accumulated += chunk
+            accumulated += clean_chunk
         self._update_history("assistant", accumulated)
         return accumulated
 

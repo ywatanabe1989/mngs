@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-15 02:11:56 (ywatanabe)"
+# Time-stamp: "2024-06-15 02:13:31 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/chat.py
 
 
