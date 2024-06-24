@@ -58,3 +58,4 @@ umap-learn
 wheel
 xarray
 xmltodict
+ansi-escapes

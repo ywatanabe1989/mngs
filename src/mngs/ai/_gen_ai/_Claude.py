@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-10 22:58:41 (ywatanabe)"
+# Time-stamp: "2024-06-22 15:24:38 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_ChatGPT.py
 
 
@@ -12,15 +12,17 @@ This script does XYZ.
 """
 Imports
 """
+import os
 import sys
 
+import anthropic
 import matplotlib.pyplot as plt
 import mngs
 
-# from mngs.gen import notify
-from openai import OpenAI
-
 from ._BaseGenAI import BaseGenAI
+
+# from mngs.gen import notify
+
 
 # sys.path = ["."] + sys.path
 # from scripts import utils, load
@@ -42,12 +44,12 @@ Functions & Classes
 """
 
 
-class Perplexity(BaseGenAI):
+class Claude(BaseGenAI):
     def __init__(
         self,
         system_setting="",
-        model="",
-        api_key="",
+        api_key=os.getenv("Claude_API_KEY"),
+        model="claude-3-opus-20240229",
         stream=False,
         seed=None,
         n_keep=1,
@@ -65,49 +67,44 @@ class Perplexity(BaseGenAI):
     def _init_client(
         self,
     ):
-        client = OpenAI(
-            api_key=self.api_key, base_url="https://api.perplexity.ai"
+        client = anthropic.Anthropic(
+            api_key=self.api_key,
         )
         return client
 
-    def _api_call_static(self):
+    def _api_call_static(
+        self,
+    ):
         out_text = (
-            self.client.chat.completions.create(
+            self.client.messages.create(
                 model=self.model,
-                messages=self.chat_history,
-                stream=False,
+                max_tokens=1024,
+                messages=self.history,
                 temperature=self.temperature,
+                # seed=self.seed, # fixme
             )
-            .choices[0]
-            .message.content
+            .content[0]
+            .text
         )
         return out_text
 
     def _api_call_stream(self):
-        stream = self.client.chat.completions.create(
+        with self.client.messages.stream(
             model=self.model,
-            messages=self.chat_history,
-            max_tokens=4096,  # You can adjust this as needed
-            n=1,
-            stream=self.stream,
+            max_tokens=1024,
+            messages=self.history,
             temperature=self.temperature,
-        )
-
-        for chunk in stream:
-            if chunk.choices:
-                current_text = chunk.choices[0].delta.content
-                if current_text:
-                    yield current_text
+            # seed=self.seed, # fixme
+        ) as stream:
+            for text in stream.text_stream:
+                yield text
 
     def _get_available_models(self):
         return [
-            "llama-3-sonar-small-32k-chat",
-            "llama-3-sonar-small-32k-online",
-            "llama-3-sonar-large-32k-chat",
-            "llama-3-sonar-large-32k-online",
-            "llama-3-8b-instruct",
-            "llama-3-70b-instruct",
-            "mixtral-8x7b-instruct",
+            "claude-3-5-sonnet-20240620",
+            "claude-3-opus-20240229",
+            "claude-3-sonnet-20240229",
+            "claude-3-haiku-20240307",
         ]
 
 
