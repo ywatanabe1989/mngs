@@ -70,7 +70,7 @@ class ChatGPT(BaseGenAI):
         out_text = (
             self.client.chat.completions.create(
                 model=self.model,
-                messages=self.chat_history,
+                messages=self.history,
                 seed=self.seed,
                 stream=False,
                 temperature=self.temperature,
@@ -83,7 +83,7 @@ class ChatGPT(BaseGenAI):
     def _api_call_stream(self):
         stream = self.client.chat.completions.create(
             model=self.model,
-            messages=self.chat_history,
+            messages=self.history,
             max_tokens=4096,  # You can adjust this as needed
             n=1,
             stream=self.stream,

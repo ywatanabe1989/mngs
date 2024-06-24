@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-14 20:51:14 (ywatanabe)"
+# Time-stamp: "2024-06-24 14:45:24 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_BaseAI.py
 
 
@@ -13,14 +13,16 @@ This script does XYZ.
 Imports
 """
 
+import re
 import sys
 from abc import ABC, abstractmethod
 
 import matplotlib.pyplot as plt
 import mngs
+from ansi_escapes import ansiEscapes
 
 from ._format_output_func import format_output_func
-import re
+
 # sys.path = ["."] + sys.path
 # from scripts import utils, load
 
@@ -39,6 +41,20 @@ Config
 """
 Functions & Classes
 """
+
+
+def clean_text(chunk):
+    """
+    Removes ANSI escape sequences from a given text chunk.
+
+    Parameters:
+    - chunk (str): The text chunk to be cleaned.
+
+    Returns:
+    - str: The cleaned text chunk.
+    """
+    ansi_escape = re.compile(r"\x1B[@-_][0-?]*[ -/]*[@-~]")
+    return ansi_escape.sub("", chunk)
 
 
 class BaseGenAI(ABC):
@@ -65,7 +81,7 @@ class BaseGenAI(ABC):
         self.client = self._init_client()
 
     def __call__(self, prompt, format_output=True, return_stream=False):
-        self._update_history("user", prompt)
+        self.update_history("user", prompt)
         if prompt is None:
             prompt = ""
 
@@ -82,15 +98,16 @@ class BaseGenAI(ABC):
             return stream_obj
 
     def _yield_stream(self, stream_obj):
-        ansi_escape = re.compile(r'\x1B[@-_][0-?]*[ -/]*[@-~]')
-        accumulated = ""
+        accumulated = []
         for chunk in stream_obj:
-            clean_chunk = ansi_escape.sub('', chunk)
-            sys.stdout.write(clean_chunk)
-            sys.stdout.flush()
-            # print(chunk)
-            accumulated += clean_chunk
-        self._update_history("assistant", accumulated)
+            if chunk:
+                # clean_chunk = clean_text(chunk)
+                clean_chunk = chunk
+                sys.stdout.write(clean_chunk)
+                sys.stdout.flush()
+                accumulated.append(chunk)
+        accumulated = "".join(accumulated)
+        self.update_history("assistant", accumulated)
         return accumulated
 
     def _call_static(self, format_output=True):
@@ -102,7 +119,7 @@ class BaseGenAI(ABC):
             mngs.gen.notify(message=out_text)
 
         out_text = format_output_func(out_text) if format_output else out_text
-        self._update_history("assistant", out_text)
+        self.update_history("assistant", out_text)
         return out_text
 
     def _call_stream(self, format_output=None):
@@ -139,20 +156,20 @@ class BaseGenAI(ABC):
         return self._get_available_models()
 
     # history
-    def reset(self, system_setting):
-        self.chat_history = []
+    def reset(self, system_setting=""):
+        self.history = []
         if system_setting != "":
-            self.chat_history.append(
+            self.history.append(
                 {
                     "role": "system",
                     "content": system_setting,
                 }
             )
 
-    def _update_history(self, role, text):
-        self.chat_history.append({"role": role, "content": text})
-        if len(self.chat_history) > self.n_keep:
-            self.chat_history = self.chat_history[-self.n_keep :]
+    def update_history(self, role="", content=""):
+        self.history.append({"role": role, "content": content})
+        if len(self.history) > self.n_keep:
+            self.history = self.history[-self.n_keep :]
 
     def verify_model(
         self,

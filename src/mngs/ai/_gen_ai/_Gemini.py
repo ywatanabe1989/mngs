@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-10 22:58:29 (ywatanabe)"
+# Time-stamp: "2024-06-15 18:01:13 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_ChatGPT.py
 
 
@@ -72,13 +72,13 @@ class Gemini(BaseGenAI):
         client = genai.GenerativeModel(
             self.model, generation_config=generation_config
         )
-        chat_client = client.start_chat(history=self.chat_history)
+        chat_client = client.start_chat(history=self.history)
         return chat_client
 
     def _api_call_static(
         self,
     ):
-        prompt = self.chat_history[-1]["content"]
+        prompt = self.history[-1]["content"]
         response = self.client.send_message(prompt)
         out_text = response.text
         return out_text
@@ -86,10 +86,11 @@ class Gemini(BaseGenAI):
     def _api_call_stream(
         self,
     ):
-        prompt = self.chat_history[-1]["content"]
+        prompt = self.history[-1]["content"]
         responses = self.client.send_message(prompt, stream=True)
         for chunk in responses:
-            yield chunk.text
+            if chunk:
+                yield chunk.text
 
     def _get_available_models(self):
         return [m.name for m in genai.list_models()]

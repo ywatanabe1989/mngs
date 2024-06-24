@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-15 02:13:31 (ywatanabe)"
+# Time-stamp: "2024-06-24 14:21:45 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/chat.py
 
 
@@ -13,41 +13,17 @@ This script does XYZ.
 Imports
 """
 # mngs.gen.reload(mngs)
-import io
-import json
 import os
-import re
-import sys
-import warnings
-from abc import ABC, abstractmethod
-from glob import glob
-from pprint import pprint
-
-import anthropic
-import google.generativeai as genai
-import markdown2
-import matplotlib
-import matplotlib.pyplot as plt
-import mngs
-import numpy as np
-import openai
-import pandas as pd
-import seaborn as sns
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-import xarray as xr
-from icecream import ic
-
-# from mngs.gen import notify
-from natsort import natsorted
-from openai import OpenAI
-from tqdm import tqdm
 
 from mngs.ai._gen_ai._ChatGPT import ChatGPT
 from mngs.ai._gen_ai._Claude import Claude
 from mngs.ai._gen_ai._Gemini import Gemini
 from mngs.ai._gen_ai._Perplexity import Perplexity
+
+# # from mngs.gen import notify
+# from natsort import natsorted
+# from openai import OpenAI
+# from tqdm import tqdm
 
 # from sciwriter_app._email import notify
 
@@ -79,6 +55,7 @@ MODEL_CONFIG = {
     },
     "Claude": {
         "models": [
+            "claude-3-5-sonnet-20240620",
             "claude-3-opus-20240229",
             "claude-3-sonnet-20240229",
             "claude-3-haiku-20240307",
@@ -157,10 +134,11 @@ def model2apikey(model):
 
 def test_all(seed=None, temperature=1.0):
     model_names = [
-        "gpt-4",
-        "claude-3-opus-20240229",
-        "gemini-pro",
-        "llama-3-sonar-large-32k-online",
+        "claude-3-5-sonnet-20240620",
+        # "gpt-4",
+        # "claude-3-opus-20240229",
+        # "gemini-pro",
+        # "llama-3-sonar-large-32k-online",
     ]
 
     for model_name in model_names:
@@ -169,7 +147,7 @@ def test_all(seed=None, temperature=1.0):
                 model_name, stream=stream, seed=seed, temperature=temperature
             )
             # prompt = "Hi. Tell me your name just within a line."
-            prompt = "Hi. Tell me about the hippocampus."            
+            prompt = "Hi. Tell me about the hippocampus."
 
             print(
                 f"\n{'-'*40}\n{model.model}\nStream: {stream}\nSeed: {seed}\nTemperature: {temperature}\n{'-'*40}"
@@ -193,13 +171,17 @@ def main(
 
 
 if __name__ == "__main__":
+    import sys
+
+    import matplotlib.pyplot as plt
+    import mngs
+
     # # Argument Parser
     # import argparse
     # parser = argparse.ArgumentParser(description='')
     # parser.add_argument('--var', '-v', type=int, default=1, help='')
     # parser.add_argument('--flag', '-f', action='store_true', default=False, help='')
     # args = parser.parse_args()
-
     # Main
     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
         sys, plt, verbose=False

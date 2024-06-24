@@ -17,8 +17,8 @@ import yaml
 from PIL import Image
 
 
-
 def load(lpath, show=False, verbose=False, **kwargs):
+    lpath = lpath.replace("/./", "/")
     try:
         extension = "." + lpath.split(".")[-1]  # [REVISED]
 
@@ -93,7 +93,7 @@ def load(lpath, show=False, verbose=False, **kwargs):
         # md
         elif extension == ".md":
             obj = load_markdown(lpath, **kwargs)
-            
+
         # pth
         elif extension in [".pth", ".pt"]:
             obj = torch.load(lpath, **kwargs)
@@ -224,11 +224,11 @@ def _load_eeg_data(filename, **kwargs):
 
 
 def load_markdown(lpath_md, style="plain_text"):
-    import markdown
     import html2text
-    
+    import markdown
+
     # Load Markdown content from a file
-    with open(lpath_md, 'r') as file:
+    with open(lpath_md, "r") as file:
         markdown_content = file.read()
 
     # Convert Markdown to HTML
@@ -243,6 +243,7 @@ def load_markdown(lpath_md, style="plain_text"):
         plain_text = text_maker.handle(html_content)
 
         return plain_text
+
 
 # def _check_encoding(file_path):
 #     from chardet.universaldetector import UniversalDetector
