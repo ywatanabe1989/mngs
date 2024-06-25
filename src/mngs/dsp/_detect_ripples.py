@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-03 11:23:10 (ywatanabe)"
+# Time-stamp: "2024-06-25 19:58:55 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/dsp/_detect_ripples.py
 
 
@@ -87,7 +87,7 @@ def detect_ripples(
     """
 
     try:
-        xx, _ = _detect_ripples_preprocess(
+        xx, fs = _detect_ripples_preprocess(
             xx, fs, low_hz, high_hz, smoothing_sigma_ms
         )
 
@@ -147,7 +147,7 @@ def detect_ripples(
             # Relative peak
             delta_s = df.peak_s - df.start_s
             rel_peak = delta_s / df.duration_s
-            df["relative_peak_pos"] = np.round(rel_peak, 3)
+            df["rel_peak_pos"] = np.round(rel_peak, 3)
 
             # Index
             df.index = [ii for _ in range(len(df))]
@@ -174,7 +174,7 @@ def detect_ripples(
                 "end_s",
                 "duration_s",
                 "peak_s",
-                "relative_peak_pos",
+                "rel_peak_pos",
                 "peak_amp_sd",
                 "incidence_hz",
             ]
