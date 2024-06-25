@@ -16,5 +16,6 @@ from ._modulation_index import modulation_index
 from ._pac import pac
 from ._psd import psd
 from ._resample import resample
+from ._time import time
 from ._transform import to_segments, to_sktime_df
 from ._wavelet import wavelet
