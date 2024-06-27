@@ -1,6 +1,14 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-04 18:54:33 (ywatanabe)"
+# Time-stamp: "2024-06-27 18:52:00 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/pd/__init__.py
 
-from ._misc import find_indi, slice
+from ._misc import (
+    col_to_last,
+    col_to_top,
+    find_indi,
+    force_df,
+    ignore_SettingWithCopyWarning,
+    merge_columns,
+    slice,
+)

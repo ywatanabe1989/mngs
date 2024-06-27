@@ -1,8 +1,9 @@
-# M-x sort-lines
 GitPython
 Pillow
 PyYAML
 Pyarrow
+accelerate
+ansi-escapes
 anthropic
 chardet
 flask
@@ -53,9 +54,9 @@ termplotlib
 torch
 torchaudio
 torchsummary
+transformers
 twine
 umap-learn
 wheel
 xarray
 xmltodict
-ansi-escapes
