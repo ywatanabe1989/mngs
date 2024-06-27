@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-03 11:23:10 (ywatanabe)"
+# Time-stamp: "2024-06-25 19:45:47 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/dsp/_detect_ripples.py
 
 
@@ -39,9 +39,8 @@ def _detect_ripples_preprocess(xx, fs, low_hz, high_hz, smoothing_sigma_ms=4):
         xx = xx[np.newaxis]
 
     # Downsampling
-    fs_tgt = low_hz * 3
-    xx = mngs.dsp.resample(xx, float(fs), float(fs_tgt))
-    fs = fs_tgt  # override
+    fs_r = low_hz * 3
+    xx = mngs.dsp.resample(xx, float(fs), float(fs_r))
 
     # Subtracts the global mean to reduce false detection due to EMG signal
     xx -= np.nanmean(xx, axis=1, keepdims=True)
@@ -53,7 +52,7 @@ def _detect_ripples_preprocess(xx, fs, low_hz, high_hz, smoothing_sigma_ms=4):
         (
             mngs.dsp.filt.bandpass(
                 np.array(xx),
-                fs,
+                fs_r,
                 RIPPLE_BANDS,
             )
         )
@@ -64,13 +63,13 @@ def _detect_ripples_preprocess(xx, fs, low_hz, high_hz, smoothing_sigma_ms=4):
     # Calculate RMS
     xx = xx**2
     _, xx = mngs.dsp.hilbert(xx)
-    xx = mngs.dsp.filt.gauss(xx, smoothing_sigma_ms * 1e-3 * fs).squeeze(-2)
+    xx = mngs.dsp.filt.gauss(xx, smoothing_sigma_ms * 1e-3 * fs_r).squeeze(-2)
     xx = np.sqrt(xx)
 
     # Scales across channels
     xx = xx.mean(axis=1)
     xx = mngs.gen.to_z(xx, dim=-1)
-    return xx, fs_tgt
+    return xx, fs_r
 
 
 def detect_ripples(
@@ -87,7 +86,7 @@ def detect_ripples(
     """
 
     try:
-        xx, _ = _detect_ripples_preprocess(
+        xx, fs = _detect_ripples_preprocess(
             xx, fs, low_hz, high_hz, smoothing_sigma_ms
         )
 
@@ -185,15 +184,13 @@ def detect_ripples(
 
         return pd.concat(dfs)  # .set_index("index")
 
-    except ValueError as e:
-        print("Caught an error:", e)
-    # except Exception as e:
-    #     print("Something wrong with ripple detection. :", e)
+    except Exception as e:
+        print("Something wrong with ripple detection. :", e)
 
 
 def main():
     xx, tt, fs = mngs.dsp.demo_sig(sig_type="ripple")
-    df = detect_ripples(xx, fs)
+    df = detect_ripples(xx, fs, 80, 250)
     print(df)
 
 
