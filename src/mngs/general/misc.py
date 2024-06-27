@@ -27,12 +27,12 @@ from natsort import natsorted
 ## strings
 ################################################################################
 def decapitalize(s):
-    if not s:  # check that s is not empty string
+    if not s:
         return s
     return s[0].lower() + s[1:]
 
 
-def connect_strs(strs, filler="_"):  # connect_nums also works as connect_strs
+def connect_strs(strs, filler="_"):
     """
     Example:
         print(connect_strs(['a', 'b', 'c'], filler='_'))
@@ -303,17 +303,17 @@ def find_closest(list_obj, num_insert):
 
     pos_num_insert = bisect_left(list_obj, num_insert)
 
-    if pos_num_insert == 0:  # When the insertion is at the first position
+    if pos_num_insert == 0:
         closest_num = list_obj[0]
-        closest_pos = pos_num_insert  # 0
+        closest_pos = pos_num_insert
 
     if pos_num_insert == len(
         list_obj
-    ):  # When the insertion is at the last position
+    ):
         closest_num = list_obj[-1]
-        closest_pos = pos_num_insert  # len(list_obj)
+        closest_pos = pos_num_insert
 
-    else:  # When the insertion is anywhere between the first and the last positions
+    else:
         pos_before = pos_num_insert - 1
 
         before_num = list_obj[pos_before]
@@ -344,7 +344,7 @@ def isclose(mutable_a, mutable_b):
 ## dictionary
 ################################################################################
 def merge_dicts_wo_overlaps(*dicts):
-    merged_dict = {}  # init
+    merged_dict = {}
     for dict in dicts:
         assert mngs.general.search(
             merged_dict.keys(), dict.keys(), only_perfect_match=True
@@ -353,7 +353,7 @@ def merge_dicts_wo_overlaps(*dicts):
     return merged_dict
 
 
-def listed_dict(keys=None):  # Is there a better name?
+def listed_dict(keys=None):
     """
     Example 1:
         import random
@@ -510,13 +510,13 @@ def copy_files(src_files, dists, allow_overwrite=False):
             _copy_a_file(sf, dst, allow_overwrite=allow_overwrite)
 
 
-def copy_the_file(sdir):  # dst
+def copy_the_file(sdir):
     __file__ = inspect.stack()[1].filename
     _, fname, ext = mngs.path.split(__file__)
 
     dst = sdir + fname + ext
 
-    if "ipython" not in __file__:  # for ipython
+    if "ipython" not in __file__:
         # shutil.copyfile(__file__, dst)
         # print(f"Saved to: {dst}")
         _copy_a_file(__file__, dst)
@@ -607,7 +607,7 @@ def wait_key(process, tgt_key="q"):
         # press q
     """
     pressed_key = None
-    while pressed_key != tgt_key:  # "q"
+    while pressed_key != tgt_key:
         pressed_key = readchar.readchar()
         print(pressed_key)
     process.terminate()
@@ -805,8 +805,8 @@ def color_text(text, c="green"):
         "magenta": "\033[95m",
         "cyan": "\033[96m",
         "white": "\033[97m",
-        "grey": "\033[90m",  # Added grey color
-        "gray": "\033[90m",  # Added grey color
+        "grey": "\033[90m",
+        "gray": "\033[90m",
         "reset": "\033[0m",
     }
     ANSI_COLORS["tra"] = ANSI_COLORS["white"]
@@ -868,5 +868,16 @@ def to_odd(n):
 
 def natglob(expression):
     glob_pattern = re.sub(r"{[^}]*}", "*", expression)
-    return natsorted(glob(eval(glob_pattern)))
-    # return natsorted(glob(expression))
+    if isinstance(glob_pattern, str):
+        return natsorted(glob(glob_pattern))
+    else:
+        raise ValueError("Invalid glob pattern")
+
+# def natglob(expression):
+#     glob_pattern = re.sub(r"{[^}]*}", "*", expression)
+#     if isinsntace(eval(glob_pattern), str):
+#         abort
+#     else:
+#         glob_pattern = eval(glob_pattern)
+#         return natsorted(glob(glob_pattern))
+#     # return natsorted(glob(expression))
