@@ -162,7 +162,7 @@ def save(
         if spath != spath_cwd:
             sdir = mngs.path.split(spath_cwd)[0]
             os.makedirs(sdir, exist_ok=True)
-            mngs.sh(f"ln -sf {spath} {spath_cwd}", verbose=True)
+            mngs.sh(f"ln -sfr {spath} {spath_cwd}", verbose=False)
             print(
                 mngs.gen.color_text(f"\n(Symlinked to: {spath_cwd})", "yellow")
             )
