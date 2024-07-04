@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-10 12:40:03 (ywatanabe)"
+# Time-stamp: "2024-07-05 06:48:41 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/_to_sigma.py
 
 
@@ -59,20 +59,15 @@ import pandas as pd
 
 
 def to_sigma(history):
-    try:
-        if len(history) > 0:
-            data_frames = [
-                format_plotting_args(record) for record in history.values()
-            ]
-            combined_data = pd.concat(data_frames, join="inner", axis=1)
-            return combined_data.apply(
-                lambda col: col.dropna().reset_index(drop=True)
-            )
-        else:
-            return
-    except Exception as e:
-        __import__("ipdb").set_trace()
-        print(e)
+    if len(history) > 0:
+        values_list = list(history.values())
+        data_frames = [format_plotting_args(record) for record in values_list]
+        combined_data = pd.concat(data_frames, axis=1)  # join="inner",
+        return combined_data.apply(
+            lambda col: col.dropna().reset_index(drop=True)
+        )
+    else:
+        return
 
 
 def format_plotting_args(record):
@@ -80,11 +75,20 @@ def format_plotting_args(record):
 
     # Matplotlib
     if method in ["plot", "scatter", "bar"]:
-        x, y = args
-        df = pd.DataFrame(
-            {f"{id}_{method}_x": x, f"{id}_{method}_y": y}
-        )  # .apply(lambda col: col.dropna().reset_index(drop=True))
-        return df
+        if len(args) == 1:
+            args = args[0]
+            if args.ndim == 2:
+                x, y = args[:, 0], args[:, 1]
+                df = pd.DataFrame(
+                    {f"{id}_{method}_x": x}
+                )  # .apply(lambda col: col.dropna().reset_index(drop=True))
+                return df
+        elif len(args) == 2:
+            x, y = args
+            df = pd.DataFrame(
+                {f"{id}_{method}_x": x, f"{id}_{method}_y": y}
+            )  # .apply(lambda col: col.dropna().reset_index(drop=True))
+            return df
 
     elif method == "boxplot":
         xs = args[0]
@@ -110,6 +114,16 @@ def format_plotting_args(record):
                 f"{id}_{method}_under": mm - ss,
                 f"{id}_{method}_mean": mm,
                 f"{id}_{method}_upper": mm + ss,
+            }
+        )
+        return df
+
+    elif method == "fillv":
+        starts, ends = args
+        df = pd.DataFrame(
+            {
+                f"{id}_{method}_starts": starts,
+                f"{id}_{method}_ends": ends,
             }
         )
         return df

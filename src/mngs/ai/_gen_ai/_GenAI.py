@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-24 14:21:45 (ywatanabe)"
+# Time-stamp: "2024-06-28 21:50:15 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/chat.py
 
 
@@ -15,10 +15,11 @@ Imports
 # mngs.gen.reload(mngs)
 import os
 
-from mngs.ai._gen_ai._ChatGPT import ChatGPT
-from mngs.ai._gen_ai._Claude import Claude
-from mngs.ai._gen_ai._Gemini import Gemini
-from mngs.ai._gen_ai._Perplexity import Perplexity
+from ._ChatGPT import ChatGPT
+from ._Claude import Claude
+from ._Gemini import Gemini
+from ._Llama import Llama
+from ._Perplexity import Perplexity
 
 # # from mngs.gen import notify
 # from natsort import natsorted
@@ -86,6 +87,16 @@ MODEL_CONFIG = {
         "api_key_env": "PERPLEXITY_API_KEY",
         "class": "Perplexity",
     },
+    "Llama": {
+        "models": [
+            "Llama-3-70B",
+            "Llama-3-70-Instruct",
+            "Llama-3-8B",
+            "Llama-3-8B-Instruct",
+        ],
+        "api_key_env": "LLAMA_API_KEY",  # Fake
+        "class": "Llama",
+    },
 }
 
 
@@ -114,6 +125,81 @@ def GenAI(
             )
 
     raise ValueError(f"No handler available for model {model}.")
+
+
+def model2apikey(model):
+    """Retrieve the API key for a given model from environment variables."""
+    for config in MODEL_CONFIG.values():
+        if model in config["models"]:
+            api_key = os.getenv(config["api_key_env"])
+            if not api_key:
+                raise EnvironmentError(
+                    f"API key or checkpoint directory for {model} not found in environment."
+                )
+            return api_key
+    raise ValueError(f"Model {model} is not supported.")
+
+
+def test_all(seed=None, temperature=1.0):
+    model_names = [
+        "claude-3-5-sonnet-20240620",
+        "gpt-4",
+        "gemini-pro",
+        "llama-3-sonar-large-32k-online",
+        "llama-7b",
+    ]
+
+    for model_name in model_names:
+        for stream in [False, True]:
+            model = GenAI(
+                model_name, stream=stream, seed=seed, temperature=temperature
+            )
+            prompt = "Hi. Tell me about the hippocampus."
+
+            print(
+                f"\n{'-'*40}\n{model.model}\nStream: {stream}\nSeed: {seed}\nTemperature: {temperature}\n{'-'*40}"
+            )
+            print(model(prompt))
+            print(model.available_models)
+
+
+def main(
+    model="gpt-3.5-turbo",
+    stream=False,
+    prompt="Hi, please tell me about the hippocampus",
+    seed=None,
+    temperature=1.0,
+):
+    m = GenAI(model, stream=stream, seed=seed, temperature=temperature)
+    out = m(prompt)
+    return out
+
+
+# def GenAI(
+#     model="gpt-3.5-turbo",
+#     stream=False,
+#     api_key=None,
+#     seed=None,
+#     temperature=1.0,
+#     n_keep=1,
+# ):
+#     """Factory function to create an instance of an AI model handler."""
+#     if api_key is None:
+#         api_key = model2apikey(model)
+
+#     for config in MODEL_CONFIG.values():
+#         if model in config["models"]:
+#             model_class = globals()[config["class"]]
+#             return model_class(
+#                 model=model,
+#                 stream=stream,
+#                 api_key=api_key,
+#                 seed=seed,
+#                 temperature=temperature,
+#                 n_keep=n_keep,
+#             )
+
+#     raise ValueError(f"No handler available for model {model}.")
 
 
 ################################################################################
@@ -156,18 +242,18 @@ def test_all(seed=None, temperature=1.0):
             print(model.available_models)
 
 
-def main(
-    model="gpt-3.5-turbo",
-    stream=False,
-    prompt="Hi, please tell me about the hippocampus",
-    seed=None,
-    temperature=1.0,
-):
+# def main(
+#     model="gpt-3.5-turbo",
+#     stream=False,
+#     prompt="Hi, please tell me about the hippocampus",
+#     seed=None,
+#     temperature=1.0,
+# ):
 
-    m = GenAI(model, stream=stream, seed=seed, temperature=temperature)
-    out = m(prompt)
+#     m = GenAI(model, stream=stream, seed=seed, temperature=temperature)
+#     out = m(prompt)
 
-    return out
+#     return out
 
 
 if __name__ == "__main__":

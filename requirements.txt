@@ -5,7 +5,9 @@ Pyarrow
 accelerate
 ansi-escapes
 anthropic
+black
 chardet
+flake8
 flask
 geom_median
 google-generativeai

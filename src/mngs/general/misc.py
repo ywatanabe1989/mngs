@@ -307,9 +307,7 @@ def find_closest(list_obj, num_insert):
         closest_num = list_obj[0]
         closest_pos = pos_num_insert
 
-    if pos_num_insert == len(
-        list_obj
-    ):
+    if pos_num_insert == len(list_obj):
         closest_num = list_obj[-1]
         closest_pos = pos_num_insert
 
@@ -577,6 +575,7 @@ def describe(df, method="mean", factor=1):
 #             IQR = df.describe().T["75%"].iloc[0] - df.describe().T["25%"].iloc[0]
 #             return med, IQR / factor
 
+
 # def count():
 #     counter = 0
 #     while True:
@@ -786,6 +785,7 @@ def uq(*args, **kwargs):
 #     df_show = df.copy()
 #     df_show["n"] = df_show["n"].apply(lambda x: f"{int(x):,}")  # [REVISED]
 
+
 #     return df_show
 def print_block(message, char="-", n=40, c=None):
     """Available colors are 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white', or 'grey'"""
@@ -868,10 +868,11 @@ def to_odd(n):
 
 def natglob(expression):
     glob_pattern = re.sub(r"{[^}]*}", "*", expression)
-    if isinstance(glob_pattern, str):
+    try:
+        return natsorted(glob(eval(glob_pattern)))
+    except:
         return natsorted(glob(glob_pattern))
-    else:
-        raise ValueError("Invalid glob pattern")
+
 
 # def natglob(expression):
 #     glob_pattern = re.sub(r"{[^}]*}", "*", expression)
@@ -881,3 +882,56 @@ def natglob(expression):
 #         glob_pattern = eval(glob_pattern)
 #         return natsorted(glob(glob_pattern))
 #     # return natsorted(glob(expression))
+
+
+def float_linspace(start, stop, num_points):
+    """
+    Generate values from start to stop with a specific number of points.
+
+    Parameters:
+    start (float): The starting value of the sequence.
+    stop (float): The end value of the sequence.
+    num_points (int): The number of points to generate between start and stop.
+
+    Returns:
+    ndarray: Array of evenly spaced values.
+    """
+    num_points = int(num_points)  # Ensure num_points is an integer
+
+    if num_points < 2:
+        return (
+            np.array([start, stop]) if num_points == 2 else np.array([start])
+        )
+
+    step = (stop - start) / (num_points - 1)
+    values = [start + i * step for i in range(num_points)]
+
+    return np.array(values)
+
+
+def replace(string, replacements=None):
+    """
+    Replace placeholders in the string with corresponding values from replacements.
+
+    Parameters
+    ----------
+    string : str
+        The string containing placeholders in the format {key}.
+    replacements : dict or str, optional
+        A dictionary containing key-value pairs for replacing placeholders in the string,
+        or a single string to replace the entire string.
+
+    Returns
+    -------
+    str
+        A new string with placeholders replaced by corresponding values or the entire string replaced.
+    """
+    if isinstance(replacements, str):
+        return replacements
+
+    if replacements is None:
+        replacements = {}
+
+    for k, v in replacements.items():
+        string = string.replace("{" + k + "}", v)
+    return string

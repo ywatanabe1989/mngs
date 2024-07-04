@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-24 14:45:24 (ywatanabe)"
+# Time-stamp: "2024-06-28 21:23:09 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_BaseAI.py
 
 
