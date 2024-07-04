@@ -80,10 +80,3 @@ from .misc import (
     uq,
     wait_key,
 )
-from .pandas import (
-    col_to_last,
-    col_to_top,
-    force_dataframe,
-    ignore_SettingWithCopyWarning,
-    merge_columns,
-)

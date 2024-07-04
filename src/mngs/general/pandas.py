@@ -2,6 +2,7 @@
 
 import mngs
 import numpy as np
+
 import pandas as pd
 
 
@@ -136,11 +137,15 @@ class IDAllocator(object):
             }
         ).set_index("Original")
 
-        self.correspondence_table = self.table  # alias for the backward compatibility
+        self.correspondence_table = (
+            self.table
+        )  # alias for the backward compatibility
 
         self.orig_to_new_dict = {o: n for o, n in zip(orig_uq, new_IDs)}
 
-        self.new_to_orig_dict = {v: k for k, v in self.orig_to_new_dict.items()}
+        self.new_to_orig_dict = {
+            v: k for k, v in self.orig_to_new_dict.items()
+        }
 
     def __call__(self, x):  # alias for self.to_new(x)
         return self.to_new(x)
@@ -170,11 +175,13 @@ def force_dataframe(permutable_dict, filler=""):
 
     return out_df
 
+
 def ignore_SettingWithCopyWarning():
     import warnings
+
     try:
         from pandas.errors import SettingWithCopyWarning
     except:
         from pandas.core.common import SettingWithCopyWarning
-    warnings.simplefilter(action="ignore", category=SettingWithCopyWarning)        
+    warnings.simplefilter(action="ignore", category=SettingWithCopyWarning)
     # return SettingWithCopyWarning
