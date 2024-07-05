@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-27 18:49:50 (ywatanabe)"
+# Time-stamp: "2024-07-05 20:02:36 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/pd/_misc.py
 
 
@@ -218,16 +218,43 @@ def force_df(permutable_dict, filler=""):
     ## Get the lengths
     max_len = 0
     for k, v in permutable_dict.items():
-        max_len = max(max_len, len(v))
+        # Check if v is an iterable (but not string) or treat as single length otherwise
+        if isinstance(v, (str, int, float)) or not hasattr(v, "__len__"):
+            length = 1
+        else:
+            length = len(v)
+        max_len = max(max_len, length)
 
-    ## Replace with 0 filled list
+    ## Replace with appropriately filled list
     for k, v in permutable_dict.items():
-        permutable_dict[k] = list(v) + (max_len - len(v)) * [filler]
+        if isinstance(v, (str, int, float)) or not hasattr(v, "__len__"):
+            permutable_dict[k] = [v] + [filler] * (max_len - 1)
+        else:
+            permutable_dict[k] = list(v) + [filler] * (max_len - len(v))
 
     ## Puts them into a DataFrame
     out_df = pd.DataFrame(permutable_dict)
 
     return out_df
+
+
+# def force_df(permutable_dict, filler=""):
+#     ## Deep copy
+#     permutable_dict = permutable_dict.copy()
+
+#     ## Get the lengths
+#     max_len = 0
+#     for k, v in permutable_dict.items():
+#         max_len = max(max_len, len(v))
+
+#     ## Replace with 0 filled list
+#     for k, v in permutable_dict.items():
+#         permutable_dict[k] = list(v) + (max_len - len(v)) * [filler]
+
+#     ## Puts them into a DataFrame
+#     out_df = pd.DataFrame(permutable_dict)
+
+#     return out_df
 
 
 def ignore_SettingWithCopyWarning():

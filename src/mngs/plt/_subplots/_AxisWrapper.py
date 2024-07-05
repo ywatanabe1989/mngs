@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-05 06:15:23 (ywatanabe)"
+# Time-stamp: "2024-07-05 19:51:34 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/AxisWrapper.py
 
 from collections import OrderedDict
@@ -194,6 +194,18 @@ class AxisWrapper:
             self.axis, df = mngs.plt.ax.raster(
                 self.axis, positions, time=time, **kwargs
             )
+        out = df
+
+        # Tracking
+        self._track(track, id, method_name, out, None)
+
+    def ecdf(self, data, track=True, id=None, **kwargs):
+        # Method name
+        method_name = "ecdf"
+
+        # Plotting
+        with self._no_tracking():
+            self.axis, df = mngs.plt.ax.ecdf(self.axis, data, **kwargs)
         out = df
 
         # Tracking

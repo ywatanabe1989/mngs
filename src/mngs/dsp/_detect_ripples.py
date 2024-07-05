@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-05 06:52:39 (ywatanabe)"
+# Time-stamp: "2024-07-05 08:25:07 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/dsp/_detect_ripples.py
 
 
@@ -94,7 +94,7 @@ def _preprocess(xx, fs, low_hz, high_hz, smoothing_sigma_ms=4):
         (
             mngs.dsp.filt.bandpass(
                 np.array(xx),
-                fs_r,
+                fs_tgt,
                 RIPPLE_BANDS,
             )
         )
@@ -105,7 +105,9 @@ def _preprocess(xx, fs, low_hz, high_hz, smoothing_sigma_ms=4):
     # Calculate RMS
     xx = xx**2
     _, xx = mngs.dsp.hilbert(xx)
-    xx = mngs.dsp.filt.gauss(xx, smoothing_sigma_ms * 1e-3 * fs_r).squeeze(-2)
+    xx = mngs.dsp.filt.gauss(xx, smoothing_sigma_ms * 1e-3 * fs_tgt).squeeze(
+        -2
+    )
     xx = np.sqrt(xx)
 
     # Scales across channels

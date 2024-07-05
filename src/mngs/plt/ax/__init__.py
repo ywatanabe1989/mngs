@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-05 05:51:45 (ywatanabe)"
+# Time-stamp: "2024-07-05 19:34:27 (ywatanabe)"
 
 from ._circular_hist import circular_hist
+from ._ecdf import ecdf
 from ._extend import extend
 from ._fill_between import fill_between, plot_with_ci
 from ._fillv import fillv

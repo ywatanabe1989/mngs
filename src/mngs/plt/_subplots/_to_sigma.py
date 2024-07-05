@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-05 06:48:41 (ywatanabe)"
+# Time-stamp: "2024-07-05 20:04:19 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/_to_sigma.py
 
 
@@ -130,6 +130,10 @@ def format_plotting_args(record):
 
     elif method == "raster":
         df = args[0]
+        return df
+
+    elif method == "ecdf":
+        df = args
         return df
 
     elif method == "sns_barplot":
