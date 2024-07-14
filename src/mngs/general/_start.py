@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-06 08:36:13 (ywatanabe)"
+# Time-stamp: "2024-07-07 15:09:21 (ywatanabe)"
 
 import inspect
 import os as _os
@@ -110,7 +110,7 @@ def start(
     _os.makedirs(sdir, exist_ok=True)
 
     # CONFIGs
-    CONFIGS = mngs.io.load_configs(IS_DEBUG)
+    CONFIGS = mngs.io.load_configs(IS_DEBUG).to_dict()
     CONFIGS["ID"] = ID
     CONFIGS["START_TIME"] = start_time
     CONFIGS["SDIR"] = sdir.replace("/./", "/")
@@ -167,6 +167,8 @@ def start(
 
     if agg:
         matplotlib.use("Agg")
+
+    CONFIGS = mngs.gen.DotDict(CONFIGS)
 
     return CONFIGS, sys.stdout, sys.stderr, plt, CC
 

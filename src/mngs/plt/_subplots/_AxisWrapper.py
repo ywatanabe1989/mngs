@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-05 19:51:34 (ywatanabe)"
+# Time-stamp: "2024-07-13 07:33:07 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/AxisWrapper.py
 
 from collections import OrderedDict
@@ -10,8 +10,10 @@ from functools import wraps
 import mngs
 import seaborn as sns
 from mngs.gen import not_implemented
-
+import pandas as pd
 from ._to_sigma import to_sigma as _to_sigma
+from scipy.stats import gaussian_kde
+import numpy as np
 
 
 class AxisWrapper:
@@ -19,43 +21,39 @@ class AxisWrapper:
     A wrapper class for a Matplotlib axis that collects plotting data.
     """
 
-    # def __init__(self, axis, history, track):
-    def __init__(self, axis, track):
+    def __init__(self, fig, axis, track):
         """
         Initialize the AxisWrapper with a given axis and history reference.
         """
+        self.fig = fig
         self.axis = axis
         self._ax_history = OrderedDict()
         self.track = track
         self.id = 0
 
+    def get_figure(
+        self,
+    ):
+        return self.fig
+
     def __getattr__(self, attr):
-        """
-        Wrap the axis attribute access to collect plot calls or return the attribute directly.
-        """
-        original_attr = getattr(self.axis, attr)
+        if hasattr(self.axis, attr):
+            original_attr = getattr(self.axis, attr)
 
-        if callable(original_attr):
+            if callable(original_attr):
 
-            @wraps(original_attr)
-            def wrapper(
-                *args, track=None, id=None, n_xticks=4, n_yticks=4, **kwargs
-            ):
-                results = original_attr(*args, **kwargs)
+                @wraps(original_attr)
+                def wrapper(*args, track=None, id=None, **kwargs):
+                    results = original_attr(*args, **kwargs)
+                    self._track(track, id, attr, args, kwargs)
+                    return results
 
-                # if attr in ["plot", "scatter", "plot_with_ci"]:
-                #     self.axis = mngs.plt.ax.set_n_ticks(
-                #         self.axis, n_xticks=n_xticks, n_yticks=n_yticks
-                #     )
-
-                self._track(track, id, attr, args, kwargs)
-
-                return results
-
-            return wrapper
-
-        else:
-            return original_attr
+                return wrapper
+            else:
+                return original_attr
+        raise AttributeError(
+            f"'{type(self).__name__}' object has no attribute '{attr}'"
+        )
 
     ################################################################################
     ## Tracking
@@ -90,7 +88,6 @@ class AxisWrapper:
         Export tracked plotting data to a DataFrame in SigmaPlot format.
         """
         df = _to_sigma(self.history)
-        # self.reset_history()
 
         return df
 
@@ -133,7 +130,7 @@ class AxisWrapper:
             )
 
         # Tracking
-        out = arr_2d
+        out = pd.DataFrame(arr_2d)
         self._track(track, id, method_name, out, None)
 
     def rectangle(self, xx, yy, ww, hh, track=True, id=None, **kwargs):
@@ -141,15 +138,23 @@ class AxisWrapper:
         method_name = "rectangle"
 
         # Plotting
-        # with self._no_tracking():
-        self.axis = mngs.plt.ax.rectangle(self.axis, xx, yy, ww, hh, **kwargs)
+        with self._no_tracking():
+            self.axis = mngs.plt.ax.rectangle(
+                self.axis, xx, yy, ww, hh, **kwargs
+            )
 
         # Tracking
         out = None
         self._track(track, id, method_name, out, None)
 
     def plot_with_ci(
-        self, xx, mean, std, label=None, alpha=0.5, track=True, id=None
+        self,
+        xx,
+        mean,
+        std,
+        track=True,
+        id=None,
+        **kwargs,
     ):
         # Method name
         method_name = "plot_with_ci"
@@ -157,7 +162,7 @@ class AxisWrapper:
         # Plotting
         with self._no_tracking():
             self.axis = mngs.plt.ax.plot_with_ci(
-                self.axis, xx, mean, std, label=label, alpha=alpha
+                self.axis, xx, mean, std, **kwargs
             )
 
         # Tracking
@@ -199,6 +204,31 @@ class AxisWrapper:
         # Tracking
         self._track(track, id, method_name, out, None)
 
+    def kde(self, data, track=True, id=None, xlim=None, **kwargs):
+        # Method name
+        method_name = "kde"
+
+        xlim = xlim if xlim is not None else (data.min(), data.max())
+        xs = np.linspace(*xlim, int(1e3))
+        density = gaussian_kde(data)(xs)
+        density /= density.sum()
+
+        # Plotting
+        with self._no_tracking():
+            if kwargs.get("fill"):
+                self.axis.fill_between(xs, density, **kwargs)
+            else:
+                self.axis.plot(xs, density, **kwargs)
+
+        # Tracking
+        out = pd.DataFrame(
+            {
+                "x": xs,
+                "kde": density,
+            }
+        )
+        self._track(track, id, method_name, out, None)
+
     def ecdf(self, data, track=True, id=None, **kwargs):
         # Method name
         method_name = "ecdf"
@@ -231,11 +261,11 @@ class AxisWrapper:
     ## Seaborn-wrappers
     ################################################################################
     def _sns_base(self, method_name, *args, track=True, id=None, **kwargs):
-        actual_method_name = method_name.split("sns_")[-1]
+        sns_method_name = method_name.split("sns_")[-1]
 
         with self._no_tracking():
-            plot_func = getattr(sns, actual_method_name)
-            self.axis = plot_func(*args, **kwargs)
+            plot_func = getattr(sns, sns_method_name)
+            self.axis = plot_func(ax=self.axis, *args, **kwargs)
 
         # Track the plot if required
         self._track(track, id, method_name, args, kwargs)

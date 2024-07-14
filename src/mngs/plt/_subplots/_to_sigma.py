@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-05 20:04:19 (ywatanabe)"
+# Time-stamp: "2024-07-11 21:48:44 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/_to_sigma.py
 
 
@@ -35,6 +35,7 @@ import xarray as xr
 from icecream import ic
 from natsort import natsorted
 from tqdm import tqdm
+import logging
 
 # sys.path = ["."] + sys.path
 # from scripts import utils, load
@@ -63,9 +64,10 @@ def to_sigma(history):
         values_list = list(history.values())
         data_frames = [format_plotting_args(record) for record in values_list]
         combined_data = pd.concat(data_frames, axis=1)  # join="inner",
-        return combined_data.apply(
-            lambda col: col.dropna().reset_index(drop=True)
-        )
+        return combined_data
+        # return combined_data.apply(
+        #     lambda col: col.dropna().reset_index(drop=True)
+        # )
     else:
         return
 
@@ -74,21 +76,66 @@ def format_plotting_args(record):
     id, method, args, kwargs = record
 
     # Matplotlib
-    if method in ["plot", "scatter", "bar"]:
+    if method in ["plot"]:
         if len(args) == 1:
             args = args[0]
             if args.ndim == 2:
                 x, y = args[:, 0], args[:, 1]
-                df = pd.DataFrame(
-                    {f"{id}_{method}_x": x}
-                )  # .apply(lambda col: col.dropna().reset_index(drop=True))
+                df = pd.DataFrame({f"{id}_{method}_x": x})
                 return df
+
         elif len(args) == 2:
             x, y = args
-            df = pd.DataFrame(
-                {f"{id}_{method}_x": x, f"{id}_{method}_y": y}
-            )  # .apply(lambda col: col.dropna().reset_index(drop=True))
-            return df
+
+            if isinstance(y, (np.ndarray, xr.DataArray)):
+                if y.ndim == 2:
+                    from collections import OrderedDict
+
+                    out = OrderedDict()
+
+                    for ii in range(y.shape[1]):
+                        out[f"{id}_{method}_x{ii:02d}"] = x
+                        out[f"{id}_{method}_y{ii:02d}"] = y[:, ii]
+                    df = pd.DataFrame(out)
+
+                    # df = pd.DataFrame(
+                    #     {
+                    #         **{
+                    #             f"{id}_{method}_x{ii:02d}": x,
+                    #             f"{id}_{method}_y{ii:02d}": y[:, ii]
+
+                    #         }
+                    #     }
+                    # )
+                    return df
+
+            if isinstance(y, pd.DataFrame):
+                df = pd.DataFrame(
+                    {
+                        f"{id}_{method}_x": x,
+                        **{
+                            f"{id}_{method}_y{ii:02d}": np.array(y[col])
+                            for ii, col in enumerate(y.columns)
+                        },
+                    }
+                )
+                return df
+
+            else:
+                if isinstance(y, (np.ndarray, xr.DataArray, list)):
+                    df = pd.DataFrame(
+                        {f"{id}_{method}_x": x, f"{id}_{method}_y": y}
+                    )
+                    return df
+
+    elif method == "scatter":
+        x, y = args
+        df = pd.DataFrame({f"{id}_{method}_x": x, f"{id}_{method}_y": y})
+        return df
+
+    elif method == "bar":
+        __import__("ipdb").set_trace()
+        # raise NotImplementedError(f"{method} is not implemented.")
 
     elif method == "boxplot":
         xs = args[0]
@@ -129,10 +176,20 @@ def format_plotting_args(record):
         return df
 
     elif method == "raster":
-        df = args[0]
+        df = args
         return df
 
     elif method == "ecdf":
+        df = args
+        return df
+
+    elif method == "kde":
+        df = args
+        if id is not None:
+            df.columns = [f"{id}_{method}_" + col for col in df.columns]
+        return df
+
+    elif method == "imshow2d":
         df = args
         return df
 
@@ -177,7 +234,8 @@ def format_plotting_args(record):
         return df
 
     else:
-        raise NotImplementedError(f"{method} is not implemented.")
+        # logging.warn(f"{method} is not implemented.")
+        pass
 
 
 def main():

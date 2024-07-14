@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-03 14:45:57 (ywatanabe)"
+# Time-stamp: "2024-07-08 08:48:44 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/plt/ax/_raster.py
 
 
@@ -54,9 +54,33 @@ Functions & Classes
 
 
 def raster(ax, positions, time=None, **kwargs):
+    """
+    Create a raster plot using eventplot and return the plot along with a DataFrame.
+
+    Parameters:
+    -----------
+    ax : matplotlib.axes.Axes
+        The axes on which to draw the raster plot.
+    positions : list of lists or array-like
+        Position of events for each channel. Each list corresponds to events of one channel.
+    time : array-like, optional
+        The time indices for the events. If None, time will be generated based on event positions.
+    **kwargs : keyword arguments
+        Additional keyword arguments to be passed to the eventplot function.
+
+    Returns:
+    --------
+    ax : matplotlib.axes.Axes
+        The axes with the raster plot.
+    df : pandas.DataFrame
+        A DataFrame where rows correspond to time indices and columns correspond to channels.
+        Each cell contains the channel index for events at specific time indices.
+
+    """
+
     def positions_to_df(positions, time):
         if time is None:
-            time = np.arange(0, np.hstack(positions).max(), 1000)
+            time = np.linspace(0, np.hstack(positions).max(), 1000)
 
         digi = np.nan * np.zeros([len(positions), len(time)], dtype=int)
 
@@ -70,24 +94,47 @@ def raster(ax, positions, time=None, **kwargs):
 
         return pd.DataFrame(np.array(digi)).T.set_index(time)
 
+    def ensure_list(positions):
+        out = []
+        for pu in positions:
+            if isinstance(pu, list):
+                out.append(pu)
+            elif isinstance(pu, (int, float)):
+                out.append([pu])
+        return out
+
+    positions = ensure_list(positions)
+
     df = positions_to_df(positions, time)
 
     # Use eventplot to create a raster plot
     ax.eventplot(positions, orientation="horizontal", **kwargs)
 
-    # Set labels for axes
-    ax.set_xlabel("Time Index")
-    ax.set_ylabel("Channel Index")
+    # # Set labels for axes
+    # ax.set_xlabel("Time Index")
+    # ax.set_ylabel("Channel Index")
 
-    # Set y-ticks to correspond to each channel
-    ax.set_yticks(range(len(df.columns)))
-    ax.set_yticklabels(df.columns)
+    # # Set y-ticks to correspond to each channel
+    # ax.set_yticks(range(len(df.columns)))
+    # ax.set_yticklabels(df.columns)
 
     return ax, df
 
 
-def main():
-    pass
+def test():
+    # Example positions data
+    positions = [
+        [10, 50, 90],  # Channel 0
+        [20, 60, 100],  # Channel 1
+        [30, 70, 110],  # Channel 2
+        [40, 80, 120],  # Channel 3
+    ]
+
+    # Create a new figure and axes
+    fig, ax = mngs.plt.subplots()
+
+    # Call the raster function
+    ax, df = raster(ax, positions)
 
 
 if __name__ == "__main__":
@@ -102,7 +149,7 @@ if __name__ == "__main__":
     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
         sys, plt, verbose=False
     )
-    main()
+    test()
     mngs.gen.close(CONFIG, verbose=False, notify=False)
 
 # EOF

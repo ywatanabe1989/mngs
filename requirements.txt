@@ -7,6 +7,7 @@ ansi-escapes
 anthropic
 black
 chardet
+epc
 flake8
 flask
 geom_median
@@ -16,6 +17,7 @@ html2text
 icecream
 ipdb
 ipython<8.0.0
+jedi
 joblib
 julius
 markdown

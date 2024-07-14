@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-28 21:50:15 (ywatanabe)"
+# Time-stamp: "2024-07-14 18:31:44 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/chat.py
 
 
@@ -173,33 +173,6 @@ def main(
     m = GenAI(model, stream=stream, seed=seed, temperature=temperature)
     out = m(prompt)
     return out
-
-
-# def GenAI(
-#     model="gpt-3.5-turbo",
-#     stream=False,
-#     api_key=None,
-#     seed=None,
-#     temperature=1.0,
-#     n_keep=1,
-# ):
-#     """Factory function to create an instance of an AI model handler."""
-#     if api_key is None:
-#         api_key = model2apikey(model)
-
-#     for config in MODEL_CONFIG.values():
-#         if model in config["models"]:
-#             model_class = globals()[config["class"]]
-#             return model_class(
-#                 model=model,
-#                 stream=stream,
-#                 api_key=api_key,
-#                 seed=seed,
-#                 temperature=temperature,
-#                 n_keep=n_keep,
-#             )
-
-#     raise ValueError(f"No handler available for model {model}.")
 
 
 ################################################################################

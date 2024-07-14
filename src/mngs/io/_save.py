@@ -154,9 +154,7 @@ def save(
         os.makedirs(os.path.dirname(spath_cwd), exist_ok=True)
         mngs.sh(f"rm {spath_cwd}", verbose=False)
         mngs.sh(f"ln -sfr {spath} {spath_cwd}", verbose=False)
-        print(
-            mngs.gen.color_text(f"\n(Symlinked to: {spath_cwd})", "yellow")
-        )
+        print(mngs.gen.color_text(f"\n(Symlinked to: {spath_cwd})", "yellow"))
 
 
 def _save(obj, spath, verbose=True, **kwargs):
@@ -324,7 +322,7 @@ def _save(obj, spath, verbose=True, **kwargs):
                 name_list.append(k)
                 obj_list.append(v)
             with h5py.File(spath, "w") as hf:
-                for (name, obj) in zip(name_list, obj_list):
+                for name, obj in zip(name_list, obj_list):
                     hf.create_dataset(name, data=obj)
         # pth
         elif spath.endswith(".pth"):
