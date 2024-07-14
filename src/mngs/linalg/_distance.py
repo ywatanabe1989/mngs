@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-04 08:33:07 (ywatanabe)"
+# Time-stamp: "2024-07-06 07:39:50 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/linalg/_distance.py
 
 
@@ -16,3 +16,8 @@ def euclidean_distance(*args, **kwargs):
 @wrap
 def cdist(*args, **kwargs):
     return _distance.cdist(*args, **kwargs)
+
+
+# Optionally, manually copy the original docstring
+euclidean_distance.__doc__ = _distance.euclidean.__doc__
+cdist.__doc__ = _distance.cdist.__doc__

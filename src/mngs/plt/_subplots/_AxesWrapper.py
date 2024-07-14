@@ -1,9 +1,11 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-09 21:05:39 (ywatanabe)"
+# Time-stamp: "2024-07-14 18:44:24 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/AxesWrapper.py
 
 import pandas as pd
+from functools import wraps
+import numpy as np
 
 
 class AxesWrapper:
@@ -12,7 +14,7 @@ class AxesWrapper:
     and concatenate them into a single DataFrame.
     """
 
-    def __init__(self, axes):
+    def __init__(self, fig, axes):
         """
         Initializes the AxesWrapper with a list of axes.
 
@@ -20,8 +22,13 @@ class AxesWrapper:
             axes (iterable): An iterable of objects that have a to_sigma() method returning a DataFrame.
         """
 
+        self.fig = fig
         self.axes = axes
-        # self.shape = (len(axes),)  # [REVISED]
+
+    def get_figure(
+        self,
+    ):
+        return self.fig
 
     def __getitem__(self, index):
         """
@@ -45,6 +52,36 @@ class AxesWrapper:
 
     def __len__(self):
         return len(self.axes)
+
+    # def __getattr__(self, attr):
+    #     """
+    #     Wrap the axis attribute access to collect plot calls or return the attribute directly.
+    #     """
+    #     try:
+    #         original_attr = getattr(self.axes, attr)
+
+    #         if callable(original_attr):
+
+    #             @wraps(original_attr)
+    #             def wrapper(*args, track=None, id=None, **kwargs):
+    #                 results = original_attr(*args, **kwargs)
+    #                 self._track(track, id, attr, args, kwargs)
+    #                 return results
+
+    #             return wrapper
+
+    #         else:
+    #             return original_attr
+    #     except Exception as e:
+    #         print(e)
+    #         return getattr(self, attr)
+
+    @property
+    def history(self):
+        if isinstance(self.axes, np.ndarray):
+            return [ax.history for ax in self.axes.flat]
+        else:
+            return self.axes.history
 
     @property
     def shape(self):
@@ -91,5 +128,4 @@ class AxesWrapper:
         Returns:
             list: A list containing all axes objects.
         """
-        self.axes = self.axes.flat()
-        return self.axes
+        return self.axes.flat

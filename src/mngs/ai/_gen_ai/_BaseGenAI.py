@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-24 14:45:24 (ywatanabe)"
+# Time-stamp: "2024-07-14 18:37:19 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_BaseAI.py
 
 
@@ -166,10 +166,24 @@ class BaseGenAI(ABC):
                 }
             )
 
-    def update_history(self, role="", content=""):
-        self.history.append({"role": role, "content": content})
+    def update_history(self, role, content):
+        if self.history and self.history[-1]["role"] == role:
+            # If the last entry in the history is from the same role, concatenate the content
+            last_content = self.history[-1]["content"]
+            concatenated_content = f"{last_content}\n{content}"
+            self.history[-1]["content"] = concatenated_content
+        else:
+            # Otherwise, just append a new entry to the history
+            self.history.append({"role": role, "content": content})
+
+        # Trim the history to keep only the last 'n_keep' entries
         if len(self.history) > self.n_keep:
             self.history = self.history[-self.n_keep :]
+
+    # def update_history(self, role="", content=""):
+    #     self.history.append({"role": role, "content": content})
+    #     if len(self.history) > self.n_keep:
+    #         self.history = self.history[-self.n_keep :]
 
     def verify_model(
         self,

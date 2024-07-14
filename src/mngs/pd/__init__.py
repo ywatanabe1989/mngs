@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-27 22:43:27 (ywatanabe)"
+# Time-stamp: "2024-07-09 00:12:20 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/pd/__init__.py
 
 from ._misc import (
