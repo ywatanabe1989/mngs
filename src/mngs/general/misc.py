@@ -897,6 +897,7 @@ def natglob(expression):
     except:
         return natsorted(glob(glob_pattern))
 
+
 # def natglob(expression):
 #     glob_pattern = re.sub(r"{[^}]*}", "*", expression)
 #     if isinsntace(eval(glob_pattern), str):
@@ -959,4 +960,3 @@ def replace(string, replacements=None):
         if v is not None:
             string = string.replace("{" + k + "}", v)
     return string
->>>>>>> 4ca3189ffe6600b0060572fe61cfeca146798f2f
