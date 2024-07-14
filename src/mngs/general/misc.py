@@ -868,5 +868,8 @@ def to_odd(n):
 
 def natglob(expression):
     glob_pattern = re.sub(r"{[^}]*}", "*", expression)
-    return natsorted(glob(eval(glob_pattern)))
-    # return natsorted(glob(expression))
+    try:
+        out = natsorted(glob(eval(glob_pattern)))
+    except:
+        out = natsorted(glob(glob_pattern))
+    return out
