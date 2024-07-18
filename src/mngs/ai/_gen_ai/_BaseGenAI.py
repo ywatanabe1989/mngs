@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-14 18:37:19 (ywatanabe)"
+# Time-stamp: "2024-07-19 00:07:34 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_BaseAI.py
 
 
@@ -130,6 +130,7 @@ class BaseGenAI(ABC):
         except Exception as e:
             out_text = self._add_masked_api_key(f"Response timed out: {e}")
             mngs.gen.notify(message=out_text)
+            return iter([out_text])
 
     @abstractmethod
     def _init_client(self):
