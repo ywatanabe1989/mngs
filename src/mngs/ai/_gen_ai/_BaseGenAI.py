@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-19 00:07:34 (ywatanabe)"
+# Time-stamp: "2024-07-19 00:08:41 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_BaseAI.py
 
 
@@ -167,19 +167,41 @@ class BaseGenAI(ABC):
                 }
             )
 
+    # @staticmethod
+    # def _ensure_alternative_history(history):
+    #     if len(history) > 2:
+    #         if history[-1]["role"] == history[-2]["role"]:
+    #             last_content = history[-1]["content"]
+    #             del history[-1]
+    #             history[-1].context += f"\n\n{last_content}"
+    #     return history
+
+    def _ensure_alternative_history(self, history):
+        if len(history) < 2:
+            return history
+
+        if history[-1]["role"] == history[-2]["role"]:
+            last_content = history.pop()["content"]
+            history[-1]["content"] += f"\n\n{last_content}"
+            return self._ensure_alternative_history(history)
+
+        return history
+
+    @staticmethod
+    def _ensure_start_from_user(history):
+        if history[0]["role"] != "user":
+            history.pop(0)
+        return history
+
     def update_history(self, role, content):
-        if self.history and self.history[-1]["role"] == role:
-            # If the last entry in the history is from the same role, concatenate the content
-            last_content = self.history[-1]["content"]
-            concatenated_content = f"{last_content}\n{content}"
-            self.history[-1]["content"] = concatenated_content
-        else:
-            # Otherwise, just append a new entry to the history
-            self.history.append({"role": role, "content": content})
+        self.history.append({"role": role, "content": content})
 
         # Trim the history to keep only the last 'n_keep' entries
         if len(self.history) > self.n_keep:
             self.history = self.history[-self.n_keep :]
+
+        self.history = self._ensure_alternative_history(self.history)
+        self.history = self._ensure_start_from_user(self.history)
 
     # def update_history(self, role="", content=""):
     #     self.history.append({"role": role, "content": content})

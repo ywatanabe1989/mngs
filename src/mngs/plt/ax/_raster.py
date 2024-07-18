@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-08 08:48:44 (ywatanabe)"
+# Time-stamp: "2024-07-14 18:44:41 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/plt/ax/_raster.py
 
 
@@ -86,7 +86,11 @@ def raster(ax, positions, time=None, **kwargs):
 
         for i_unit, positions_unit in enumerate(positions):
 
+            if isinstance(positions_unit, [float, int]):
+                positions_unit = [positions_unit]
+
             for pu in positions_unit:
+
                 i_ins = bisect_left(time, pu)
                 if i_ins == digi.shape[-1]:
                     i_ins -= i_unit

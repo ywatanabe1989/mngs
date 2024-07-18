@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-13 06:40:10 (ywatanabe)"
+# Time-stamp: "2024-07-14 18:44:24 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/AxesWrapper.py
 
 import pandas as pd
@@ -121,7 +121,6 @@ class AxesWrapper:
         self.axes = self.axes.flatten()
         return self.axes
 
-    @property
     def flat(self):
         """
         Flattens the AxesWrapper into a 1D array-like structure of axes.
@@ -129,6 +128,4 @@ class AxesWrapper:
         Returns:
             list: A list containing all axes objects.
         """
-        # self.axes = self.axes.flat()
-        # return self.axes
         return self.axes.flat
