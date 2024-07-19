@@ -14,6 +14,7 @@ from ._converters import (
 )
 
 # from ._ddict import ddict
+from ._DotDict import DotDict
 from ._deprecated import deprecated
 from ._dict_replace import dict_replace
 from ._DimHandler import DimHandler
@@ -38,11 +39,13 @@ from ._norm import to_z
 from ._reproduce import fix_seeds, gen_ID, gen_timestamp
 from ._shell import run_shellcommand, run_shellscript
 from ._start import start
+from ._symlog import symlog
 from ._tee import tee
 from ._TimeStamper import TimeStamper
 from ._title2path import title2path
 from .latex import add_hat_in_the_latex_style, to_the_latex_style
 from .misc import (
+    quiet,
     _return_counting_process,
     color_text,
     connect_nums,
@@ -53,6 +56,7 @@ from .misc import (
     decapitalize,
     describe,
     find_closest,
+    float_linspace,
     grep,
     is_defined_global,
     is_defined_local,
@@ -68,6 +72,7 @@ from .misc import (
     pop_keys,
     print_block,
     readable_bytes,
+    replace,
     search,
     squeeze_spaces,
     suppress_output,

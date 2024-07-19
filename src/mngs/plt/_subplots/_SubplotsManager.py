@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-07 23:14:14 (ywatanabe)"
+# Time-stamp: "2024-07-13 06:41:29 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/SubplotsManager.py
 
 from collections import OrderedDict
@@ -97,25 +97,18 @@ class SubplotsManager:
         axes_orig_shape = axes.shape
 
         if axes_orig_shape == (1,):
-            # ax_wrapped = AxisWrapper(
-            #     axes[0], self._subplots_manager_history, track
-            # )
-            ax_wrapped = AxisWrapper(axes[0], track)
+            ax_wrapped = AxisWrapper(fig, axes[0], track)
             return fig, ax_wrapped
 
         else:
             axes = axes.ravel()
-            # axes_wrapped = [
-            #     AxisWrapper(ax, self._subplots_manager_history, track)
-            #     for ax in axes
-            # ]
-            axes_wrapped = [AxisWrapper(ax, track) for ax in axes]
+            axes_wrapped = [AxisWrapper(fig, ax, track) for ax in axes]
             axes = (
                 np.array(axes_wrapped).reshape(axes_orig_shape)
                 if axes_orig_shape
                 else axes_wrapped[0]
             )
-            axes = AxesWrapper(axes)
+            axes = AxesWrapper(fig, axes)
             return fig, axes
 
     # @property

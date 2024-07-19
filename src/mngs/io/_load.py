@@ -18,6 +18,9 @@ from PIL import Image
 
 
 def load(lpath, show=False, verbose=False, **kwargs):
+    if lpath.startswith('f"'):
+        lpath = eval(lpath)
+
     lpath = lpath.replace("/./", "/")
     try:
         extension = "." + lpath.split(".")[-1]  # [REVISED]
@@ -340,5 +343,7 @@ def load_configs(IS_DEBUG=None, show=False, verbose=False):
     for lpath in glob("./config/*.yaml"):
         CONFIG = update_debug(mngs.io.load(lpath), IS_DEBUG)
         CONFIGS.update(CONFIG)
+
+    CONFIGS = mngs.gen.DotDict(CONFIGS)
 
     return CONFIGS

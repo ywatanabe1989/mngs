@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-11 06:52:12 (ywatanabe)"
+# Time-stamp: "2024-07-19 23:39:35 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_ChatGPT.py
 
 
@@ -63,7 +63,7 @@ class ChatGPT(BaseGenAI):
     def _init_client(
         self,
     ):
-        client = OpenAI()
+        client = OpenAI(api_key=self.api_key)
         return client
 
     def _api_call_static(self):

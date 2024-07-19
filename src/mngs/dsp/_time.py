@@ -1,13 +1,17 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-25 19:20:27 (ywatanabe)"
+# Time-stamp: "2024-06-30 12:11:01 (ywatanabe)"
 # /mnt/ssd/ripple-wm-code/scripts/externals/mngs/src/mngs/dsp/_time.py
 
+import mngs
 import numpy as np
 
 
 def time(start_sec, end_sec, fs):
-    return np.linspace(start_sec, end_sec, (end_sec - start_sec) * fs)
+    # return np.linspace(start_sec, end_sec, (end_sec - start_sec) * fs)
+    return mngs.gen.float_linspace(
+        start_sec, end_sec, (end_sec - start_sec) * fs
+    )
 
 
 def main():

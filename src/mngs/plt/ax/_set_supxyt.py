@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-17 08:37:31"
+# Time-stamp: "2024-07-13 07:56:46 (ywatanabe)"
 # Author: Yusuke Watanabe (ywata1989@gmail.com)
 
 """
@@ -12,15 +12,19 @@ import matplotlib.pyplot as plt
 
 
 # Functions
-def set_supxyt(ax, xlabel=None, ylabel=None, title=None):
-    fig = ax.get_figure()
+def set_supxyt(ax, xlabel=False, ylabel=False, title=False):
     """Sets xlabel, ylabel and title"""
-    if xlabel is not None:
+    fig = ax.get_figure()
+
+    if xlabel is not False:
         fig.supxlabel(xlabel)
-    if ylabel is not None:
+
+    if ylabel is not False:
         fig.supylabel(ylabel)
-    if title is not None:
+
+    if title is not False:
         fig.suptitle(title)
+
     return ax
 
 

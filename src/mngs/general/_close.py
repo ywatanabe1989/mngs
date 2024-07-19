@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-06 08:13:23 (ywatanabe)"
+# Time-stamp: "2024-07-07 15:13:45 (ywatanabe)"
 
 import os
 from datetime import datetime
@@ -25,6 +25,8 @@ def format_diff_time(diff_time):
 
 
 def close(CONFIG, message=":)", notify=True, verbose=True):
+    CONFIG = CONFIG.to_dict()
+
     try:
         CONFIG["END_TIME"] = datetime.now()
         CONFIG["SPENT_TIME"] = format_diff_time(

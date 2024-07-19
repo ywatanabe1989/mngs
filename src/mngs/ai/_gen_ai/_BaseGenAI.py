@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-24 14:45:24 (ywatanabe)"
+# Time-stamp: "2024-07-19 00:35:54 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_BaseAI.py
 
 
@@ -78,7 +78,38 @@ class BaseGenAI(ABC):
 
         self.reset(system_setting)
         self.verify_model()
-        self.client = self._init_client()
+        # self.client = self._init_client()
+        self._client = None
+
+    @property
+    def client(self):
+        if self._client is None:
+            self._client = self._init_client()
+        return self._client
+
+    def __getstate__(self):
+        state = self.__dict__.copy()
+        state["_client"] = None
+        return state
+
+    def __setstate__(self, state):
+        self.__dict__.update(state)
+        self._client = None
+
+    # @property
+    # def client(self):
+    #     if self._client is None:
+    #         self._client = self._init_client()
+    #     return self._client
+
+    # def __getstate__(self):
+    #     state = self.__dict__.copy()
+    #     del state['_client']
+    #     return state
+
+    # def __setstate__(self, state):
+    #     self.__dict__.update(state)
+    #     self._client = None
 
     def __call__(self, prompt, format_output=True, return_stream=False):
         self.update_history("user", prompt)
@@ -89,13 +120,23 @@ class BaseGenAI(ABC):
             return self._call_static(format_output)
 
         elif self.stream and (not return_stream):
-            return self._yield_stream(self._call_stream(format_output))
+            try:
+                return self._yield_stream(self._call_stream(format_output))
+            except Exception as e:
+                error_message = f"Stream error: {str(e)}"
+                mngs.gen.notify(message=error_message)
+                return iter([error_message])
 
         elif self.stream and return_stream:
-            self.stream, _orig = return_stream, self.stream
-            stream_obj = self._call_stream(format_output)
-            self.stream = _orig
-            return stream_obj
+            try:
+                self.stream, _orig = return_stream, self.stream
+                stream_obj = self._call_stream(format_output)
+                self.stream = _orig
+                return stream_obj
+            except Exception as e:
+                error_message = f"Stream error: {str(e)}"
+                mngs.gen.notify(message=error_message)
+                return iter([error_message])
 
     def _yield_stream(self, stream_obj):
         accumulated = []
@@ -130,6 +171,7 @@ class BaseGenAI(ABC):
         except Exception as e:
             out_text = self._add_masked_api_key(f"Response timed out: {e}")
             mngs.gen.notify(message=out_text)
+            return iter([out_text])
 
     @abstractmethod
     def _init_client(self):
@@ -166,24 +208,65 @@ class BaseGenAI(ABC):
                 }
             )
 
-    def update_history(self, role="", content=""):
+    # @staticmethod
+    # def _ensure_alternative_history(history):
+    #     if len(history) > 2:
+    #         if history[-1]["role"] == history[-2]["role"]:
+    #             last_content = history[-1]["content"]
+    #             del history[-1]
+    #             history[-1].context += f"\n\n{last_content}"
+    #     return history
+
+    def _ensure_alternative_history(self, history):
+        if len(history) < 2:
+            return history
+
+        if history[-1]["role"] == history[-2]["role"]:
+            last_content = history.pop()["content"]
+            history[-1]["content"] += f"\n\n{last_content}"
+            return self._ensure_alternative_history(history)
+
+        return history
+
+    @staticmethod
+    def _ensure_start_from_user(history):
+        if history[0]["role"] != "user":
+            history.pop(0)
+        return history
+
+    def update_history(self, role, content):
         self.history.append({"role": role, "content": content})
+
+        # Trim the history to keep only the last 'n_keep' entries
         if len(self.history) > self.n_keep:
             self.history = self.history[-self.n_keep :]
+
+        self.history = self._ensure_alternative_history(self.history)
+        self.history = self._ensure_start_from_user(self.history)
+
+    # def update_history(self, role="", content=""):
+    #     self.history.append({"role": role, "content": content})
+    #     if len(self.history) > self.n_keep:
+    #         self.history = self.history[-self.n_keep :]
 
     def verify_model(
         self,
     ):
-        if self.model not in self.available_models:
-            message = (
-                f"Specified model {self.model} is not supported. "
-                f"Currently, available models are as follows:\n{self.available_models}"
-            )
-            message = self._add_masked_api_key(message)
+        try:
+            if self.model not in self.available_models:
+                message = (
+                    f"Specified model {self.model} is not supported. "
+                    f"Currently, available models are as follows:\n{self.available_models}"
+                )
+                message = self._add_masked_api_key(message)
 
-            mngs.gen.notify(message=message)
+                mngs.gen.notify(message=message)
 
-            return message
+                return message
+        except Exception as e:
+            error_message = f"GenAI Error: {str(e)}"
+            mngs.gen.notify(message=error_message)
+            return error_message if not self.stream else iter([error_message])
 
     @property
     def masked_api_key(

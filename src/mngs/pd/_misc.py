@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-27 18:49:50 (ywatanabe)"
+# Time-stamp: "2024-07-09 00:10:31 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/pd/_misc.py
 
 
@@ -16,6 +16,7 @@ import sys
 
 import matplotlib.pyplot as plt
 import pandas as pd
+from copy import deepcopy
 
 # sys.path = ["."] + sys.path
 # from scripts import utils, load
@@ -97,6 +98,54 @@ def merge_columns(_df, *columns):
         merged = mngs.ml.utils.merge_labels(list(merged), deepcopy(df[c]))
     df.loc[:, mngs.general.connect_strs(columns)] = merged
     return df
+
+
+# def merge_cols(_df, *cols, to_int=False):
+#     def merge_row(row):
+#         return "-".join(
+#             [
+#                 mngs.general.connect_nums(zs)
+#                 for zs in zip(np.array(row.index), np.array(row))
+#             ]
+#         )
+
+#     df = deepcopy(_df)
+
+#     for col in cols:
+#         assert isinstance(col, str)
+
+#     if not len(cols) > 1:  # Check if more than two arguments are passed
+#         return df[cols[0]]
+
+#     else:
+#         df_tmp = df[cols]
+#         # df_tmp = pd.concat(cols, axis=1)
+#         merged_col = df_tmp.apply(merge_row, axis=1)
+#         merged_col.name = "-".join(cols)
+#         return merged_col
+
+
+# def merge_cols(_df, cols):
+
+#     def merge_row(row):
+#         return "-".join(
+#             [str(zs) for zs in zip(np.array(row.columns), np.array(row))]
+#         )
+
+#     df = deepcopy(_df)
+
+#     for col in cols:
+#         assert isinstance(col, str)
+
+#     if len(cols) <= 1:
+#         return df[cols[0]]
+
+#     else:
+#         df_tmp = df[cols]
+#         merged_col = df_tmp.apply(merge_row, axis=1)
+#         merged_col.name = "-".join(cols)
+#         df[merged_col.name] = merged_col
+#         return df
 
 
 def col_to_last(df, col):
@@ -218,16 +267,43 @@ def force_df(permutable_dict, filler=""):
     ## Get the lengths
     max_len = 0
     for k, v in permutable_dict.items():
-        max_len = max(max_len, len(v))
+        # Check if v is an iterable (but not string) or treat as single length otherwise
+        if isinstance(v, (str, int, float)) or not hasattr(v, "__len__"):
+            length = 1
+        else:
+            length = len(v)
+        max_len = max(max_len, length)
 
-    ## Replace with 0 filled list
+    ## Replace with appropriately filled list
     for k, v in permutable_dict.items():
-        permutable_dict[k] = list(v) + (max_len - len(v)) * [filler]
+        if isinstance(v, (str, int, float)) or not hasattr(v, "__len__"):
+            permutable_dict[k] = [v] + [filler] * (max_len - 1)
+        else:
+            permutable_dict[k] = list(v) + [filler] * (max_len - len(v))
 
     ## Puts them into a DataFrame
     out_df = pd.DataFrame(permutable_dict)
 
     return out_df
+
+
+# def force_df(permutable_dict, filler=""):
+#     ## Deep copy
+#     permutable_dict = permutable_dict.copy()
+
+#     ## Get the lengths
+#     max_len = 0
+#     for k, v in permutable_dict.items():
+#         max_len = max(max_len, len(v))
+
+#     ## Replace with 0 filled list
+#     for k, v in permutable_dict.items():
+#         permutable_dict[k] = list(v) + (max_len - len(v)) * [filler]
+
+#     ## Puts them into a DataFrame
+#     out_df = pd.DataFrame(permutable_dict)
+
+#     return out_df
 
 
 def ignore_SettingWithCopyWarning():
