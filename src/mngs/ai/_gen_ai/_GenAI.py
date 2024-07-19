@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-14 18:31:44 (ywatanabe)"
+# Time-stamp: "2024-07-19 23:36:59 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/chat.py
 
 
@@ -50,7 +50,13 @@ Functions & Classes
 
 MODEL_CONFIG = {
     "ChatGPT": {
-        "models": ["gpt-4o", "gpt-4-turbo", "gpt-4", "gpt-3.5-turbo"],
+        "models": [
+            "gpt-4o-mini",
+            "gpt-4o",
+            "gpt-4-turbo",
+            "gpt-4",
+            "gpt-3.5-turbo",
+        ],
         "api_key_env": "OPENAI_API_KEY",
         "class": "ChatGPT",
     },
