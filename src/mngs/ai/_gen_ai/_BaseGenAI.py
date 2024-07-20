@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-21 07:43:15 (ywatanabe)"
+# Time-stamp: "2024-07-21 07:46:43 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_BaseAI.py
 
 
@@ -119,7 +119,6 @@ class BaseGenAI(ABC):
     #     self.__dict__.update(state)
     #     self._client = None
 
-    @property
     def gen_error(self, return_stream):
         """Return error messages in the same format of expected call function"""
 
