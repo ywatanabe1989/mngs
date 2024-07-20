@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-19 00:08:41 (ywatanabe)"
+# Time-stamp: "2024-07-21 03:15:27 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_BaseAI.py
 
 
@@ -111,26 +111,14 @@ class BaseGenAI(ABC):
         return accumulated
 
     def _call_static(self, format_output=True):
-        try:
-            out_text = self._api_call_static()
-
-        except Exception as e:
-            out_text = self._add_masked_api_key(f"Response timed out: {e}")
-            mngs.gen.notify(message=out_text)
-
+        out_text = self._api_call_static()
         out_text = format_output_func(out_text) if format_output else out_text
         self.update_history("assistant", out_text)
         return out_text
 
     def _call_stream(self, format_output=None):
-        try:
-            text_generator = self._api_call_stream()
-            return text_generator
-
-        except Exception as e:
-            out_text = self._add_masked_api_key(f"Response timed out: {e}")
-            mngs.gen.notify(message=out_text)
-            return iter([out_text])
+        text_generator = self._api_call_stream()
+        return text_generator
 
     @abstractmethod
     def _init_client(self):

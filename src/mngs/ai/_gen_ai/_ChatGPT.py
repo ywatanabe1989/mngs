@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-19 23:39:35 (ywatanabe)"
+# Time-stamp: "2024-07-21 03:15:49 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_ChatGPT.py
 
 
@@ -92,7 +92,6 @@ class ChatGPT(BaseGenAI):
         )
 
         for chunk in stream:
-            # if chunk.choices:
             current_text = chunk.choices[0].delta.content
             if current_text:
                 yield f"{current_text}"
