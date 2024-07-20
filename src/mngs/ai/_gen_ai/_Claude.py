@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-22 15:24:38 (ywatanabe)"
+# Time-stamp: "2024-07-21 07:04:31 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_ChatGPT.py
 
 
@@ -62,6 +62,7 @@ class Claude(BaseGenAI):
             stream=stream,
             n_keep=n_keep,
             temperature=temperature,
+            provider="Claude",
         )
 
     def _init_client(

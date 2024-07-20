@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-29 16:10:29 (ywatanabe)"
+# Time-stamp: "2024-07-21 07:05:23 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_Llama.py
 
 """
@@ -58,6 +58,7 @@ class Llama(BaseGenAI):
         seed: Optional[int] = None,
         n_keep: int = 1,
         temperature: float = 1.0,
+        provider="Llama",
         **kwargs,
     ):
 

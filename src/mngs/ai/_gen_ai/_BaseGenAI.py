@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-21 03:45:26 (ywatanabe)"
+# Time-stamp: "2024-07-21 07:43:15 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_BaseAI.py
 
 
@@ -43,6 +43,13 @@ Functions & Classes
 """
 
 
+def to_stream(string):
+    chunks = string
+    for chunk in chunks:
+        if chunk:
+            yield chunk
+
+
 def clean_text(chunk):
     """
     Removes ANSI escape sequences from a given text chunk.
@@ -67,7 +74,10 @@ class BaseGenAI(ABC):
         seed=None,
         n_keep=1,
         temperature=1.0,
+        provider="",
     ):
+        # Attributes
+        self.provider = provider
         self.system_setting = system_setting
         self.model = model
         self.api_key = api_key
@@ -76,25 +86,23 @@ class BaseGenAI(ABC):
         self.n_keep = n_keep
         self.temperature = temperature
 
+        # Initialization
         self.reset(system_setting)
-        self.verify_model()
-        # self.client = self._init_client()
-        self._client = None
 
-    @property
-    def client(self):
-        if self._client is None:
-            self._client = self._init_client()
-        return self._client
+        # Errror handling
+        # Store Error Messages until the main function call
+        # to send the error message as output
+        self._error_messages = []
 
-    def __getstate__(self):
-        state = self.__dict__.copy()
-        state["_client"] = None
-        return state
+        try:
+            self.verify_model()
+            self.client = self._init_client()
+        except Exception as e:
+            print(e)
+            message = f"\nmngs.ai.GenAI Initialiation Error:\n{str(e)}"
+            self._error_messages.append(message)
 
-    def __setstate__(self, state):
-        self.__dict__.update(state)
-        self._client = None
+    #     self._client = None
 
     # @property
     # def client(self):
@@ -104,39 +112,90 @@ class BaseGenAI(ABC):
 
     # def __getstate__(self):
     #     state = self.__dict__.copy()
-    #     del state['_client']
+    #     state["_client"] = None
     #     return state
 
     # def __setstate__(self, state):
     #     self.__dict__.update(state)
     #     self._client = None
 
+    @property
+    def gen_error(self, return_stream):
+        """Return error messages in the same format of expected call function"""
+
+        error_exists = False
+        return_obj = None
+
+        if self._error_messages:
+            error_exists = True
+
+            # Reset the stored error messages
+            error_messages = self._error_messages
+            self._error_messages = []
+
+            # Static
+            if self.stream is False:
+                return_obj = "".join(error_messages)
+
+            # Streaming
+            else:
+                stream_obj_error = to_stream(error_messages)
+                if not return_stream:
+                    return_obj = self._yield_stream(stream_obj_error)
+
+                elif return_stream:
+                    return_obj = stream_obj_error
+
+        return error_exists, return_obj
+
     def __call__(self, prompt, format_output=True, return_stream=False):
         self.update_history("user", prompt)
         if prompt is None:
             prompt = ""
 
-        if self.stream is False:
-            return self._call_static(format_output)
+        error_flag, error_obj = self.gen_error(return_stream)
 
-        elif self.stream and (not return_stream):
-            try:
-                return self._yield_stream(self._call_stream(format_output))
-            except Exception as e:
-                error_message = f"Stream error: {str(e)}"
-                mngs.gen.notify(message=error_message)
-                return iter([error_message])
+        # Static
+        try:
+            if self.stream is False:
+                if error_flag:
+                    return error_obj
+                else:
+                    return self._call_static(format_output)
 
-        elif self.stream and return_stream:
-            try:
-                self.stream, _orig = return_stream, self.stream
-                stream_obj = self._call_stream(format_output)
-                self.stream = _orig
-                return stream_obj
-            except Exception as e:
-                error_message = f"Stream error: {str(e)}"
-                mngs.gen.notify(message=error_message)
-                return iter([error_message])
+            else:
+                if not return_stream:
+                    if error_flag:
+                        return error_obj
+                    else:
+                        return self._yield_stream(
+                            self._call_stream(format_output)
+                        )
+
+                elif return_stream:
+                    if error_flag:
+                        return error_obj
+                    else:
+                        self.stream, _orig = return_stream, self.stream
+                        stream_obj = self._call_stream(format_output)
+                        self.stream = _orig
+                        return stream_obj
+
+        except Exception as e:
+            message = f"\nmngs.ai.GenAI Running Error:\n{str(e)}"
+            self._message.append(message)
+            return self.gen_error(return_stream)[1]
+
+        # # Streaming
+        # elif self.stream and (not return_stream):
+        #     return self._yield_stream(self._call_stream(format_output))
+
+        # # Streaming, Streaming object
+        # elif self.stream and return_stream:
+        #     self.stream, _orig = return_stream, self.stream
+        #     stream_obj = self._call_stream(format_output)
+        #     self.stream = _orig
+        #     return stream_obj
 
     def _yield_stream(self, stream_obj):
         accumulated = []
@@ -185,7 +244,6 @@ class BaseGenAI(ABC):
     def available_models(self):
         return self._get_available_models()
 
-    # history
     def reset(self, system_setting=""):
         self.history = []
         if system_setting != "":
@@ -195,15 +253,6 @@ class BaseGenAI(ABC):
                     "content": system_setting,
                 }
             )
-
-    # @staticmethod
-    # def _ensure_alternative_history(history):
-    #     if len(history) > 2:
-    #         if history[-1]["role"] == history[-2]["role"]:
-    #             last_content = history[-1]["content"]
-    #             del history[-1]
-    #             history[-1].context += f"\n\n{last_content}"
-    #     return history
 
     def _ensure_alternative_history(self, history):
         if len(history) < 2:
@@ -232,29 +281,16 @@ class BaseGenAI(ABC):
         self.history = self._ensure_alternative_history(self.history)
         self.history = self._ensure_start_from_user(self.history)
 
-    # def update_history(self, role="", content=""):
-    #     self.history.append({"role": role, "content": content})
-    #     if len(self.history) > self.n_keep:
-    #         self.history = self.history[-self.n_keep :]
-
     def verify_model(
         self,
     ):
-        try:
-            if self.model not in self.available_models:
-                message = (
-                    f"Specified model {self.model} is not supported. "
-                    f"Currently, available models are as follows:\n{self.available_models}"
-                )
-                message = self._add_masked_api_key(message)
-
-                mngs.gen.notify(message=message)
-
-                return message
-        except Exception as e:
-            error_message = f"GenAI Error: {str(e)}"
-            mngs.gen.notify(message=error_message)
-            return error_message if not self.stream else iter([error_message])
+        if self.model not in self.available_models:
+            message = (
+                f"Specified model {self.model} is not supported for the API Key ({self.masked_api_key}). "
+                f"Available models are as follows for {self.str}:\n{self.available_models}"
+            )
+            # message = self._add_masked_api_key(message)
+            raise ValueError(message)
 
     @property
     def masked_api_key(
@@ -264,6 +300,9 @@ class BaseGenAI(ABC):
 
     def _add_masked_api_key(self, text):
         return text + f"\n(API Key: {self.masked_api_key}"
+
+    def __str__(self):
+        return self.provider
 
 
 def main():

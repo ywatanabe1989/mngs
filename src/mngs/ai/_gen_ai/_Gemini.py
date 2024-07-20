@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-15 18:01:13 (ywatanabe)"
+# Time-stamp: "2024-07-21 07:04:51 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_ChatGPT.py
 
 
@@ -60,6 +60,7 @@ class Gemini(BaseGenAI):
             seed=seed,
             n_keep=n_keep,
             temperature=temperature,
+            provider="Gemini",
         )
 
     def _init_client(

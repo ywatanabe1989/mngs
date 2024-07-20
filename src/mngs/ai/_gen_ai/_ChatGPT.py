@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-21 03:15:49 (ywatanabe)"
+# Time-stamp: "2024-07-21 07:04:08 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_ChatGPT.py
 
 
@@ -58,6 +58,7 @@ class ChatGPT(BaseGenAI):
             stream=stream,
             n_keep=n_keep,
             temperature=temperature,
+            provider="OpenAI",
         )
 
     def _init_client(
