@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-21 03:15:27 (ywatanabe)"
+# Time-stamp: "2024-07-21 03:45:26 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_BaseAI.py
 
 
@@ -78,7 +78,38 @@ class BaseGenAI(ABC):
 
         self.reset(system_setting)
         self.verify_model()
-        self.client = self._init_client()
+        # self.client = self._init_client()
+        self._client = None
+
+    @property
+    def client(self):
+        if self._client is None:
+            self._client = self._init_client()
+        return self._client
+
+    def __getstate__(self):
+        state = self.__dict__.copy()
+        state["_client"] = None
+        return state
+
+    def __setstate__(self, state):
+        self.__dict__.update(state)
+        self._client = None
+
+    # @property
+    # def client(self):
+    #     if self._client is None:
+    #         self._client = self._init_client()
+    #     return self._client
+
+    # def __getstate__(self):
+    #     state = self.__dict__.copy()
+    #     del state['_client']
+    #     return state
+
+    # def __setstate__(self, state):
+    #     self.__dict__.update(state)
+    #     self._client = None
 
     def __call__(self, prompt, format_output=True, return_stream=False):
         self.update_history("user", prompt)
@@ -89,13 +120,23 @@ class BaseGenAI(ABC):
             return self._call_static(format_output)
 
         elif self.stream and (not return_stream):
-            return self._yield_stream(self._call_stream(format_output))
+            try:
+                return self._yield_stream(self._call_stream(format_output))
+            except Exception as e:
+                error_message = f"Stream error: {str(e)}"
+                mngs.gen.notify(message=error_message)
+                return iter([error_message])
 
         elif self.stream and return_stream:
-            self.stream, _orig = return_stream, self.stream
-            stream_obj = self._call_stream(format_output)
-            self.stream = _orig
-            return stream_obj
+            try:
+                self.stream, _orig = return_stream, self.stream
+                stream_obj = self._call_stream(format_output)
+                self.stream = _orig
+                return stream_obj
+            except Exception as e:
+                error_message = f"Stream error: {str(e)}"
+                mngs.gen.notify(message=error_message)
+                return iter([error_message])
 
     def _yield_stream(self, stream_obj):
         accumulated = []
@@ -199,16 +240,21 @@ class BaseGenAI(ABC):
     def verify_model(
         self,
     ):
-        if self.model not in self.available_models:
-            message = (
-                f"Specified model {self.model} is not supported. "
-                f"Currently, available models are as follows:\n{self.available_models}"
-            )
-            message = self._add_masked_api_key(message)
+        try:
+            if self.model not in self.available_models:
+                message = (
+                    f"Specified model {self.model} is not supported. "
+                    f"Currently, available models are as follows:\n{self.available_models}"
+                )
+                message = self._add_masked_api_key(message)
 
-            mngs.gen.notify(message=message)
+                mngs.gen.notify(message=message)
 
-            return message
+                return message
+        except Exception as e:
+            error_message = f"GenAI Error: {str(e)}"
+            mngs.gen.notify(message=error_message)
+            return error_message if not self.stream else iter([error_message])
 
     @property
     def masked_api_key(
