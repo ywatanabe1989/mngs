@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-21 07:46:43 (ywatanabe)"
+# Time-stamp: "2024-07-21 10:11:35 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_BaseAI.py
 
 
@@ -99,7 +99,7 @@ class BaseGenAI(ABC):
             self.client = self._init_client()
         except Exception as e:
             print(e)
-            message = f"\nmngs.ai.GenAI Initialiation Error:\n{str(e)}"
+            message = f"\nError:\n{str(e)}"
             self._error_messages.append(message)
 
     #     self._client = None
@@ -181,7 +181,7 @@ class BaseGenAI(ABC):
                         return stream_obj
 
         except Exception as e:
-            message = f"\nmngs.ai.GenAI Running Error:\n{str(e)}"
+            message = f"\nError:\n{str(e)}"
             self._message.append(message)
             return self.gen_error(return_stream)[1]
 
@@ -286,9 +286,8 @@ class BaseGenAI(ABC):
         if self.model not in self.available_models:
             message = (
                 f"Specified model {self.model} is not supported for the API Key ({self.masked_api_key}). "
-                f"Available models are as follows for {self.str}:\n{self.available_models}"
+                f"Available models for {str(self)} are as follows:\n{self.available_models}"
             )
-            # message = self._add_masked_api_key(message)
             raise ValueError(message)
 
     @property
@@ -300,8 +299,8 @@ class BaseGenAI(ABC):
     def _add_masked_api_key(self, text):
         return text + f"\n(API Key: {self.masked_api_key}"
 
-    def __str__(self):
-        return self.provider
+    # def __str__(self):
+    #     return self.provider
 
 
 def main():

@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-21 07:05:23 (ywatanabe)"
+# Time-stamp: "2024-07-21 10:04:01 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_Llama.py
 
 """
@@ -90,6 +90,9 @@ class Llama(BaseGenAI):
             n_keep=n_keep,
             temperature=temperature,
         )
+
+    def __str__(self):
+        return "Llama"
 
     def _init_client(self):
         generator = _Llama.build(
