@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-19 00:35:54 (ywatanabe)"
+# Time-stamp: "2024-07-20 17:08:11 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_BaseAI.py
 
 
@@ -78,23 +78,24 @@ class BaseGenAI(ABC):
 
         self.reset(system_setting)
         self.verify_model()
-        # self.client = self._init_client()
-        self._client = None
+        self.client = self._init_client()
 
-    @property
-    def client(self):
-        if self._client is None:
-            self._client = self._init_client()
-        return self._client
+    #     self._client = None
 
-    def __getstate__(self):
-        state = self.__dict__.copy()
-        state["_client"] = None
-        return state
+    # @property
+    # def client(self):
+    #     if self._client is None:
+    #         self._client = self._init_client()
+    #     return self._client
 
-    def __setstate__(self, state):
-        self.__dict__.update(state)
-        self._client = None
+    # def __getstate__(self):
+    #     state = self.__dict__.copy()
+    #     state["_client"] = None
+    #     return state
+
+    # def __setstate__(self, state):
+    #     self.__dict__.update(state)
+    #     self._client = None
 
     # @property
     # def client(self):
@@ -120,23 +121,13 @@ class BaseGenAI(ABC):
             return self._call_static(format_output)
 
         elif self.stream and (not return_stream):
-            try:
-                return self._yield_stream(self._call_stream(format_output))
-            except Exception as e:
-                error_message = f"Stream error: {str(e)}"
-                mngs.gen.notify(message=error_message)
-                return iter([error_message])
+            return self._yield_stream(self._call_stream(format_output))
 
         elif self.stream and return_stream:
-            try:
-                self.stream, _orig = return_stream, self.stream
-                stream_obj = self._call_stream(format_output)
-                self.stream = _orig
-                return stream_obj
-            except Exception as e:
-                error_message = f"Stream error: {str(e)}"
-                mngs.gen.notify(message=error_message)
-                return iter([error_message])
+            self.stream, _orig = return_stream, self.stream
+            stream_obj = self._call_stream(format_output)
+            self.stream = _orig
+            return stream_obj
 
     def _yield_stream(self, stream_obj):
         accumulated = []
@@ -152,26 +143,14 @@ class BaseGenAI(ABC):
         return accumulated
 
     def _call_static(self, format_output=True):
-        try:
-            out_text = self._api_call_static()
-
-        except Exception as e:
-            out_text = self._add_masked_api_key(f"Response timed out: {e}")
-            mngs.gen.notify(message=out_text)
-
+        out_text = self._api_call_static()
         out_text = format_output_func(out_text) if format_output else out_text
         self.update_history("assistant", out_text)
         return out_text
 
     def _call_stream(self, format_output=None):
-        try:
-            text_generator = self._api_call_stream()
-            return text_generator
-
-        except Exception as e:
-            out_text = self._add_masked_api_key(f"Response timed out: {e}")
-            mngs.gen.notify(message=out_text)
-            return iter([out_text])
+        text_generator = self._api_call_stream()
+        return text_generator
 
     @abstractmethod
     def _init_client(self):
@@ -252,21 +231,16 @@ class BaseGenAI(ABC):
     def verify_model(
         self,
     ):
-        try:
-            if self.model not in self.available_models:
-                message = (
-                    f"Specified model {self.model} is not supported. "
-                    f"Currently, available models are as follows:\n{self.available_models}"
-                )
-                message = self._add_masked_api_key(message)
+        if self.model not in self.available_models:
+            message = (
+                f"Specified model {self.model} is not supported. "
+                f"Currently, available models are as follows:\n{self.available_models}"
+            )
+            message = self._add_masked_api_key(message)
 
-                mngs.gen.notify(message=message)
+            mngs.gen.notify(message=message)
 
-                return message
-        except Exception as e:
-            error_message = f"GenAI Error: {str(e)}"
-            mngs.gen.notify(message=error_message)
-            return error_message if not self.stream else iter([error_message])
+            return message
 
     @property
     def masked_api_key(
