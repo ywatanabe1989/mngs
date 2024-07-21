@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-15 18:01:13 (ywatanabe)"
+# Time-stamp: "2024-07-21 10:09:43 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_ChatGPT.py
 
 
@@ -60,15 +60,17 @@ class Gemini(BaseGenAI):
             seed=seed,
             n_keep=n_keep,
             temperature=temperature,
+            provider="Gemini",
         )
+        genai.configure(api_key=self.api_key)
 
     def _init_client(
         self,
     ):
+        genai.configure(api_key=self.api_key)
         generation_config = genai.GenerationConfig(
             temperature=self.temperature
         )
-        genai.configure(api_key=self.api_key)
         client = genai.GenerativeModel(
             self.model, generation_config=generation_config
         )
@@ -93,7 +95,9 @@ class Gemini(BaseGenAI):
                 yield chunk.text
 
     def _get_available_models(self):
-        return [m.name for m in genai.list_models()]
+        genai.configure(api_key=self.api_key)
+        # genai.configure(api_key=self.api_key)
+        return [m.name.replace("models/", "") for m in genai.list_models()]
 
 
 def main():

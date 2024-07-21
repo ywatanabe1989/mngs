@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-10 22:58:41 (ywatanabe)"
+# Time-stamp: "2024-07-21 10:04:17 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_ChatGPT.py
 
 
@@ -60,6 +60,7 @@ class Perplexity(BaseGenAI):
             stream=stream,
             n_keep=n_keep,
             temperature=temperature,
+            provider="Perplexity",
         )
 
     def _init_client(
