@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-20 06:12:01 (ywatanabe)"
+# Time-stamp: "2024-07-25 09:21:58 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/chat.py
 
 
@@ -106,13 +106,14 @@ MODEL_CONFIG = {
 }
 
 
-def GenAI(
+def genai_factory(
     model="gpt-3.5-turbo",
     stream=False,
     api_key=None,
     seed=None,
     temperature=1.0,
     n_keep=1,
+    chat_history=None,
 ):
     """Factory function to create an instance of an AI model handler."""
     if api_key is None:
@@ -128,6 +129,7 @@ def GenAI(
                 seed=seed,
                 temperature=temperature,
                 n_keep=n_keep,
+                chat_history=chat_history,
             )
 
     raise ValueError(f"No handler available for model {model}.")

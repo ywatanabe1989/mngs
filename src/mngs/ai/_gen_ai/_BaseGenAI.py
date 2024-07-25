@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-21 10:11:35 (ywatanabe)"
+# Time-stamp: "2024-07-25 09:16:27 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_BaseAI.py
 
 
@@ -75,6 +75,7 @@ class BaseGenAI(ABC):
         n_keep=1,
         temperature=1.0,
         provider="",
+        chat_history=None,
     ):
         # Attributes
         self.provider = provider
@@ -88,6 +89,7 @@ class BaseGenAI(ABC):
 
         # Initialization
         self.reset(system_setting)
+        self.history = chat_history if chat_history else []
 
         # Errror handling
         # Store Error Messages until the main function call
@@ -101,23 +103,6 @@ class BaseGenAI(ABC):
             print(e)
             message = f"\nError:\n{str(e)}"
             self._error_messages.append(message)
-
-    #     self._client = None
-
-    # @property
-    # def client(self):
-    #     if self._client is None:
-    #         self._client = self._init_client()
-    #     return self._client
-
-    # def __getstate__(self):
-    #     state = self.__dict__.copy()
-    #     state["_client"] = None
-    #     return state
-
-    # def __setstate__(self, state):
-    #     self.__dict__.update(state)
-    #     self._client = None
 
     def gen_error(self, return_stream):
         """Return error messages in the same format of expected call function"""
