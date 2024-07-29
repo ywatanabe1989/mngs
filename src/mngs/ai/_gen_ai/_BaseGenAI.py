@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-29 11:32:23 (ywatanabe)"
+# Time-stamp: "2024-07-29 13:12:22 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_BaseAI.py
 
 
@@ -22,6 +22,7 @@ import mngs
 from ansi_escapes import ansiEscapes
 
 from ._format_output_func import format_output_func
+from ._calc_cost import calc_cost
 
 # sys.path = ["."] + sys.path
 # from scripts import utils, load
@@ -276,8 +277,11 @@ class BaseGenAI(ABC):
     def _add_masked_api_key(self, text):
         return text + f"\n(API Key: {self.masked_api_key}"
 
-    # def __str__(self):
-    #     return self.provider
+    @property
+    def cost(
+        self,
+    ):
+        return calc_cost(self.model, self.input_tokens, self.output_tokens)
 
 
 def main():
