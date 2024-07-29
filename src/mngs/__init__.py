@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
-# Time-stamp: "2024-06-24 15:00:20 (ywatanabe)"
+# Time-stamp: "2024-07-29 14:40:08 (ywatanabe)"
+
 
 from . import io, path
-from ._sh import sh
+
 
 None  # to keep the importing order
 from . import gen, general
+from ._sh import sh
+
 
 None
 from . import ai, dsp, gists, linalg, ml, nn, os, pd, plt, stats, torch

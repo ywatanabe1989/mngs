@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-29 12:14:29 (ywatanabe)"
+# Time-stamp: "2024-07-29 15:12:11 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_ChatGPT.py
 
 
@@ -110,11 +110,6 @@ class Gemini(BaseGenAI):
                     pass
 
                 yield chunk.text
-
-    def _get_available_models(self):
-        genai.configure(api_key=self.api_key)
-        # genai.configure(api_key=self.api_key)
-        return [m.name.replace("models/", "") for m in genai.list_models()]
 
 
 def main():

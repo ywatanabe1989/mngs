@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-29 12:29:16 (ywatanabe)"
+# Time-stamp: "2024-07-29 15:11:55 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_ChatGPT.py
 
 
@@ -48,7 +48,7 @@ class Claude(BaseGenAI):
     def __init__(
         self,
         system_setting="",
-        api_key=os.getenv("Claude_API_KEY"),
+        api_key=os.getenv("CLAUDE_API_KEY"),
         model="claude-3-opus-20240229",
         stream=False,
         seed=None,
@@ -110,13 +110,13 @@ class Claude(BaseGenAI):
                 if chunk.type == "content_block_delta":
                     yield chunk.delta.text
 
-    def _get_available_models(self):
-        return [
-            "claude-3-5-sonnet-20240620",
-            "claude-3-opus-20240229",
-            "claude-3-sonnet-20240229",
-            "claude-3-haiku-20240307",
-        ]
+    # def _get_available_models(self):
+    #     return [
+    #         "claude-3-5-sonnet-20240620",
+    #         "claude-3-opus-20240229",
+    #         "claude-3-sonnet-20240229",
+    #         "claude-3-haiku-20240307",
+    #     ]
 
 
 def main():

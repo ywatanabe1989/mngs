@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-25 09:19:18 (ywatanabe)"
+# Time-stamp: "2024-07-29 14:34:11 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_Llama.py
 
 """
@@ -122,9 +122,9 @@ class Llama(BaseGenAI):
         for char in full_response:
             yield char
 
-    def _get_available_models(self):
-        # Llama3 doesn't have a list of available models, so we'll return a placeholder
-        return ["llama3"]
+    # def _get_available_models(self):
+    #     # Llama3 doesn't have a list of available models, so we'll return a placeholder
+    #     return ["llama3"]
 
     def verify_model(self):
         # Llama3 doesn't require model verification, so we'll skip it

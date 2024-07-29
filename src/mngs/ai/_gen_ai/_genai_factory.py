@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-29 11:37:22 (ywatanabe)"
+# Time-stamp: "2024-07-29 15:11:23 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/chat.py
 
 
@@ -15,11 +15,12 @@ Imports
 # mngs.gen.reload(mngs)
 import os
 
-from ._ChatGPT import ChatGPT
+from ._OpenAI import OpenAI
 from ._Claude import Claude
 from ._Gemini import Gemini
 from ._Llama import Llama
 from ._Perplexity import Perplexity
+from .PARAMS import MODELS
 
 # # from mngs.gen import notify
 # from natsort import natsorted
@@ -48,64 +49,6 @@ Functions & Classes
 """
 
 
-MODEL_CONFIG = {
-    "ChatGPT": {
-        "models": [
-            "gpt-4o-mini",
-            "gpt-4o",
-            "gpt-4-turbo",
-            "gpt-4",
-            "gpt-3.5-turbo",
-        ],
-        "api_key_env": "OPENAI_API_KEY",
-        "class": "ChatGPT",
-    },
-    "Claude": {
-        "models": [
-            "claude-3-5-sonnet-20240620",
-            "claude-3-opus-20240229",
-            "claude-3-sonnet-20240229",
-            "claude-3-haiku-20240307",
-        ],
-        "api_key_env": "CLAUDE_API_KEY",
-        "class": "Claude",
-    },
-    "Gemini": {
-        "models": [
-            "gemini-1.5-pro-latest",
-            "gemini-1.5-flash-latest",
-            "gemini-1.5-pro",
-            "gemini-pro",
-        ],
-        "api_key_env": "GOOGLE_API_KEY",
-        "class": "Gemini",
-    },
-    "Perplexity": {
-        "models": [
-            "llama-3-sonar-small-32k-chat",
-            "llama-3-sonar-small-32k-online",
-            "llama-3-sonar-large-32k-chat",
-            "llama-3-sonar-large-32k-online",
-            "llama-3-8b-instruct",
-            "llama-3-70b-instruct",
-            "mixtral-8x7b-instruct",
-        ],
-        "api_key_env": "PERPLEXITY_API_KEY",
-        "class": "Perplexity",
-    },
-    "Llama": {
-        "models": [
-            "Llama-3-70B",
-            "Llama-3-70-Instruct",
-            "Llama-3-8B",
-            "Llama-3-8B-Instruct",
-        ],
-        "api_key_env": "LLAMA_API_KEY",  # Fake
-        "class": "Llama",
-    },
-}
-
-
 def genai_factory(
     model="gpt-3.5-turbo",
     stream=False,
@@ -116,36 +59,25 @@ def genai_factory(
     chat_history=None,
 ):
     """Factory function to create an instance of an AI model handler."""
-    if api_key is None:
-        api_key = model2apikey(model)
+    AVAILABLE_MODELS = MODELS.name.tolist()
 
-    for config in MODEL_CONFIG.values():
-        if model in config["models"]:
-            model_class = globals()[config["class"]]
-            return model_class(
-                model=model,
-                stream=stream,
-                api_key=api_key,
-                seed=seed,
-                temperature=temperature,
-                n_keep=n_keep,
-                chat_history=chat_history,
-            )
+    if model not in AVAILABLE_MODELS:
+        raise ValueError(
+            f'Model "{model}" is not available. Please choose from:{MODELS.name.tolist()}'
+        )
 
-    raise ValueError(f"No handler available for model {model}.")
+    provider = MODELS[MODELS.name == model].provider.iloc[0]
+    model_class = globals()[provider]
 
-
-def model2apikey(model):
-    """Retrieve the API key for a given model from environment variables."""
-    for config in MODEL_CONFIG.values():
-        if model in config["models"]:
-            api_key = os.getenv(config["api_key_env"])
-            if not api_key:
-                raise EnvironmentError(
-                    f"API key or checkpoint directory for {model} not found in environment."
-                )
-            return api_key
-    raise ValueError(f"Model {model} is not supported.")
+    return model_class(
+        model=model,
+        stream=stream,
+        api_key=api_key,
+        seed=seed,
+        temperature=temperature,
+        n_keep=n_keep,
+        chat_history=chat_history,
+    )
 
 
 def test_all(seed=None, temperature=1.0):
@@ -178,7 +110,7 @@ def main(
     seed=None,
     temperature=1.0,
 ):
-    m = GenAI(model, stream=stream, seed=seed, temperature=temperature)
+    m = genai_factory(model, stream=stream, seed=seed, temperature=temperature)
     out = m(prompt)
     return out
 
@@ -186,17 +118,17 @@ def main(
 ################################################################################
 # Helper functions
 ################################################################################
-def model2apikey(model):
-    """Retrieve the API key for a given model from environment variables."""
-    for config in MODEL_CONFIG.values():
-        if model in config["models"]:
-            api_key = os.getenv(config["api_key_env"])
-            if not api_key:
-                raise EnvironmentError(
-                    f"API key for {model} not found in environment."
-                )
-            return api_key
-    raise ValueError(f"Model {model} is not supported.")
+# def model2apikey(model):
+#     """Retrieve the API key for a given model from environment variables."""
+#     for config in MODEL_CONFIG.values():
+#         if model in config["models"]:
+#             api_key = os.getenv(config["api_key_env"])
+#             if not api_key:
+#                 raise EnvironmentError(
+#                     f"API key for {model} not found in environment."
+#                 )
+#             return api_key
+#     raise ValueError(f"Model {model} is not supported.")
 
 
 def test_all(seed=None, temperature=1.0):

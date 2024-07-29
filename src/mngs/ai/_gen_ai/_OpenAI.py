@@ -1,7 +1,7 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-29 12:29:04 (ywatanabe)"
-# /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_ChatGPT.py
+# Time-stamp: "2024-07-29 15:09:38 (ywatanabe)"
+# /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_OpenAI.py
 
 
 """
@@ -16,9 +16,8 @@ import sys
 
 import matplotlib.pyplot as plt
 import mngs
-from openai import OpenAI
+from openai import OpenAI as _OpenAI
 
-# from ._BaseGenAI import BaseGenAI
 from mngs.ai._gen_ai._BaseGenAI import BaseGenAI
 
 # sys.path = ["."] + sys.path
@@ -41,7 +40,7 @@ Functions & Classes
 """
 
 
-class ChatGPT(BaseGenAI):
+class OpenAI(BaseGenAI):
     def __init__(
         self,
         system_setting="",
@@ -67,7 +66,7 @@ class ChatGPT(BaseGenAI):
     def _init_client(
         self,
     ):
-        client = OpenAI(api_key=self.api_key)
+        client = _OpenAI(api_key=self.api_key)
         return client
 
     def _api_call_static(self):
@@ -117,8 +116,8 @@ class ChatGPT(BaseGenAI):
                     # print(e)
                     pass
 
-    def _get_available_models(self):
-        return [m.id for m in OpenAI(api_key=self.api_key).models.list()]
+    # def _get_available_models(self):
+    #     return [m.id for m in OpenAI(api_key=self.api_key).models.list()]
 
 
 def main():

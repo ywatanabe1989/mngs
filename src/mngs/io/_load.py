@@ -155,7 +155,9 @@ def load(lpath, show=False, verbose=False, **kwargs):
         return obj
 
     except Exception as e:
-        mngs.gen.print_block(f"{lpath} was not loaded:\n{e}", "red")
+        raise ValueError(f"{lpath} was not loaded:\n{e}")
+
+        # mngs.gen.print_block(f"{lpath} was not loaded:\n{e}", "red")
         # print(f"\n{lpath} was not loaded:\n{e}")
 
         # logging.error(f"\n{lpath} was not loaded:\n{e}")

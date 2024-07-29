@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-29 13:12:22 (ywatanabe)"
+# Time-stamp: "2024-07-29 15:20:32 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_BaseAI.py
 
 
@@ -23,6 +23,7 @@ from ansi_escapes import ansiEscapes
 
 from ._format_output_func import format_output_func
 from ._calc_cost import calc_cost
+from .PARAMS import MODELS
 
 # sys.path = ["."] + sys.path
 # from scripts import utils, load
@@ -212,10 +213,12 @@ class BaseGenAI(ABC):
         """Returns stream"""
         pass
 
-    @abstractmethod
     def _get_available_models(self):
-        """Returns available models"""
-        pass
+        indi = [
+            self.provider.lower() in api_key_env.lower()
+            for api_key_env in MODELS["api_key_env"]
+        ]
+        return MODELS[indi].name.tolist()
 
     @property
     def available_models(self):
