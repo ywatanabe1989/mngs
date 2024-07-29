@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-25 10:26:39 (ywatanabe)"
+# Time-stamp: "2024-07-29 11:32:23 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_BaseAI.py
 
 
@@ -86,6 +86,8 @@ class BaseGenAI(ABC):
         self.seed = seed
         self.n_keep = n_keep
         self.temperature = temperature
+        self.input_tokens = 0
+        self.output_tokens = 0
 
         # Initialization
         self.reset(system_setting)
@@ -167,25 +169,15 @@ class BaseGenAI(ABC):
 
         except Exception as e:
             message = f"\nError:\n{str(e)}"
-            self._message.append(message)
-            return self.gen_error(return_stream)[1]
-
-        # # Streaming
-        # elif self.stream and (not return_stream):
-        #     return self._yield_stream(self._call_stream(format_output))
-
-        # # Streaming, Streaming object
-        # elif self.stream and return_stream:
-        #     self.stream, _orig = return_stream, self.stream
-        #     stream_obj = self._call_stream(format_output)
-        #     self.stream = _orig
-        #     return stream_obj
+            self._error_messages.append(message)
+            error_flag, error_obj = self.gen_error(return_stream)
+            if error_flag:
+                return error_obj
 
     def _yield_stream(self, stream_obj):
         accumulated = []
         for chunk in stream_obj:
             if chunk:
-                # clean_chunk = clean_text(chunk)
                 clean_chunk = chunk
                 sys.stdout.write(clean_chunk)
                 sys.stdout.flush()

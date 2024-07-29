@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-25 09:18:50 (ywatanabe)"
+# Time-stamp: "2024-07-29 12:14:29 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_ChatGPT.py
 
 
@@ -84,6 +84,8 @@ class Gemini(BaseGenAI):
     ):
         prompt = self.history[-1]["content"]
         response = self.client.send_message(prompt)
+        self.input_tokens += response.usage_metadata.prompt_token_count
+        self.output_tokens += response.usage_metadata.candidates_token_count
         out_text = response.text
         return out_text
 
@@ -94,6 +96,19 @@ class Gemini(BaseGenAI):
         responses = self.client.send_message(prompt, stream=True)
         for chunk in responses:
             if chunk:
+                try:
+                    self.input_tokens += (
+                        chunk.usage_metadata.prompt_token_count
+                    )
+                except:
+                    pass
+                try:
+                    self.output_tokens += (
+                        chunk.usage_metadata.candidates_token_count
+                    )
+                except:
+                    pass
+
                 yield chunk.text
 
     def _get_available_models(self):
