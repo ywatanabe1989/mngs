@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-29 15:20:32 (ywatanabe)"
+# Time-stamp: "2024-07-30 05:00:33 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_BaseAI.py
 
 
@@ -136,7 +136,7 @@ class BaseGenAI(ABC):
 
         return error_exists, return_obj
 
-    def __call__(self, prompt, format_output=True, return_stream=False):
+    def __call__(self, prompt, format_output=False, return_stream=False):
         self.update_history("user", prompt)
         if prompt is None:
             prompt = ""

@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-29 14:34:19 (ywatanabe)"
+# Time-stamp: "2024-07-29 20:46:19 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_ChatGPT.py
 
 
@@ -80,6 +80,7 @@ class Perplexity(BaseGenAI):
             max_tokens=4096,
             stream=False,
             temperature=self.temperature,
+            # return_citations=True,
         )
 
         out_text = output.choices[0].message.content
@@ -96,6 +97,7 @@ class Perplexity(BaseGenAI):
             n=1,
             stream=self.stream,
             temperature=self.temperature,
+            # return_citations=True,
         )
 
         for chunk in stream:
@@ -114,17 +116,6 @@ class Perplexity(BaseGenAI):
                 current_text = chunk.choices[0].delta.content
                 if current_text:
                     yield current_text
-
-    # def _get_available_models(self):
-    #     return [
-    #         "llama-3-sonar-small-32k-chat",
-    #         "llama-3-sonar-small-32k-online",
-    #         "llama-3-sonar-large-32k-chat",
-    #         "llama-3-sonar-large-32k-online",
-    #         "llama-3-8b-instruct",
-    #         "llama-3-70b-instruct",
-    #         "mixtral-8x7b-instruct",
-    #     ]
 
 
 def main():
