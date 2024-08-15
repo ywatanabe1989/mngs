@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-21 07:04:51 (ywatanabe)"
+# Time-stamp: "2024-07-29 15:12:11 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_ChatGPT.py
 
 
@@ -51,6 +51,7 @@ class Gemini(BaseGenAI):
         seed=None,
         n_keep=1,
         temperature=1.0,
+        chat_history=None,
     ):
         super().__init__(
             system_setting=system_setting,
@@ -61,15 +62,17 @@ class Gemini(BaseGenAI):
             n_keep=n_keep,
             temperature=temperature,
             provider="Gemini",
+            chat_history=chat_history,
         )
+        genai.configure(api_key=self.api_key)
 
     def _init_client(
         self,
     ):
+        genai.configure(api_key=self.api_key)
         generation_config = genai.GenerationConfig(
             temperature=self.temperature
         )
-        genai.configure(api_key=self.api_key)
         client = genai.GenerativeModel(
             self.model, generation_config=generation_config
         )
@@ -81,6 +84,8 @@ class Gemini(BaseGenAI):
     ):
         prompt = self.history[-1]["content"]
         response = self.client.send_message(prompt)
+        self.input_tokens += response.usage_metadata.prompt_token_count
+        self.output_tokens += response.usage_metadata.candidates_token_count
         out_text = response.text
         return out_text
 
@@ -91,10 +96,20 @@ class Gemini(BaseGenAI):
         responses = self.client.send_message(prompt, stream=True)
         for chunk in responses:
             if chunk:
-                yield chunk.text
+                try:
+                    self.input_tokens += (
+                        chunk.usage_metadata.prompt_token_count
+                    )
+                except:
+                    pass
+                try:
+                    self.output_tokens += (
+                        chunk.usage_metadata.candidates_token_count
+                    )
+                except:
+                    pass
 
-    def _get_available_models(self):
-        return [m.name for m in genai.list_models()]
+                yield chunk.text
 
 
 def main():

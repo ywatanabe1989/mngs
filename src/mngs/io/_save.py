@@ -254,7 +254,7 @@ def _save(obj, spath, verbose=True, **kwargs):
                     buf, format="png"
                 )  # Saving plotly figure to buffer as PNG
                 buf.seek(0)
-                img = Image.open(buf)
+                im = Image.open(buf)
                 img.convert("RGB").save(spath, "JPEG")
                 buf.close()
             # PIL image
@@ -336,6 +336,13 @@ def _save(obj, spath, verbose=True, **kwargs):
         elif spath.endswith(".cbm"):
             obj.save_model(spath)
 
+        # Text
+        elif any(
+            spath.endswith(ext)
+            for ext in [".txt", ".md", ".py", ".html", ".css", ".js"]
+        ):
+            _save_text(obj, spath)
+
         else:
             raise ValueError("obj was not saved.")
 
@@ -362,6 +369,14 @@ def _save(obj, spath, verbose=True, **kwargs):
 #     detector.close()
 #     enc = detector.result["encoding"]
 #     return enc
+
+
+def _save_text(obj, spath):
+    # with open(file_path, "w+", encoding="utf-8") as file:
+    #     file.write(content)
+
+    with open(spath, "w") as file:
+        file.write(obj)
 
 
 def _save_listed_scalars_as_csv(

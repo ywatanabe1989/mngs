@@ -15,6 +15,47 @@ import pandas as pd
 import torch
 import yaml
 from PIL import Image
+from docx import Document
+from openpyxl import load_workbook
+
+# import docx
+# import PyPDF2
+# from io import StringIO
+# import markdown
+# import openpyxl
+
+
+def load_text(lpath, splitlines=False):
+    """
+    Load text from a file.
+
+    Parameters:
+    lpath (str): The path to the text file.
+    splitlines (bool): If True, return a list of lines. If False, return the entire text as a string.
+
+    Returns:
+    str or list: The contents of the text file.
+    """
+    try:
+        with open(lpath, "r", encoding="utf-8") as f:
+            if splitlines:
+                return f.read().splitlines()
+            else:
+                return f.read()
+    except UnicodeDecodeError:
+        # If UTF-8 fails, try to detect the encoding
+        import chardet
+
+        with open(lpath, "rb") as f:
+            raw_data = f.read()
+        detected = chardet.detect(raw_data)
+        encoding = detected["encoding"]
+
+        with open(lpath, "r", encoding=encoding) as f:
+            if splitlines:
+                return f.read().splitlines()
+            else:
+                return f.read()
 
 
 def load(lpath, show=False, verbose=False, **kwargs):
@@ -62,36 +103,32 @@ def load(lpath, show=False, verbose=False, **kwargs):
         elif extension == ".hdf5":
             obj = {}
             with h5py.File(lpath, "r") as hf:
-                for name in hf:  # [REVISED]
+                for name in hf:
                     obj[name] = hf[name][:]
         # json
         elif extension == ".json":
             with open(lpath, "r") as f:
                 obj = json.load(f)
 
+        # Image
         elif extension in [".jpg", ".png", ".tiff", "tif"]:
             obj = Image.open(lpath)
-        # # png
-        # elif extension == ".png":
-        #     pass
-        # # tiff
-        # elif extension in [".tiff", ".tif"]:
-        #     pass
+
         # yaml
-        elif extension == ".yaml":
+        elif extension in [".yaml", ".yml"]:
 
             lower = kwargs.pop("lower", False)
 
             with open(lpath) as f:
-                obj = yaml.safe_load(f, **kwargs)  # [REVISED]
+                obj = yaml.safe_load(f, **kwargs)
 
             if lower:
                 obj = {k.lower(): v for k, v in obj.items()}
 
         # txt
         elif extension in [".txt", ".log", ".event"]:
-            with open(lpath, "r") as f:  # [REVISED]
-                obj = f.read().splitlines()  # [REVISED]
+            with open(lpath, "r") as f:
+                obj = f.read().splitlines()
 
         # md
         elif extension == ".md":
@@ -102,34 +139,32 @@ def load(lpath, show=False, verbose=False, **kwargs):
             obj = torch.load(lpath, **kwargs)
 
         # mat
-        elif extension == ".mat":  # [REVISED]
-            from pymatreader import read_mat  # [REVISED]
+        elif extension == ".mat":
+            from pymatreader import read_mat
 
-            obj = read_mat(lpath, **kwargs)  # [REVISED]
+            obj = read_mat(lpath, **kwargs)
         # xml
-        elif extension == ".xml":  # [REVISED]
-            from xml2dict import xml2dict  # [REVISED]
+        elif extension == ".xml":
+            from xml2dict import xml2dict
 
-            obj = xml2dict(lpath, **kwargs)  # [REVISED]
+            obj = xml2dict(lpath, **kwargs)
         # # edf
         # elif extension == ".edf":  # [REVISED]
         #     obj = mne.io.read_raw_edf(lpath, preload=True)  # [REVISED]
         # con
-        elif extension == ".con":  # [REVISED]
-            obj = mne.io.read_raw_fif(
-                lpath, preload=True, **kwargs
-            )  # [REVISED]
-            obj = obj.to_data_frame()  # [REVISED]
-            obj["samp_rate"] = obj.info["sfreq"]  # [REVISED]
+        elif extension == ".con":
+            obj = mne.io.read_raw_fif(lpath, preload=True, **kwargs)
+            obj = obj.to_data_frame()
+            obj["samp_rate"] = obj.info["sfreq"]
         # # mrk
         # elif extension == ".mrk":  # [REVISED]
         #     obj = mne.io.read_mrk(lpath)  # [REVISED]
 
         # catboost model
-        elif extension == ".cbm":  # [REVISED]
-            from catboost import CatBoostModel  # [REVISED]
+        elif extension == ".cbm":
+            from catboost import CatBoostModel
 
-            obj = CatBoostModel.load_model(lpath, **kwargs)  # [REVISED]
+            obj = CatBoostModel.load_model(lpath, **kwargs)
 
         # EEG data
         elif extension in [
@@ -164,6 +199,41 @@ def load(lpath, show=False, verbose=False, **kwargs):
         ]:
             obj = _load_text(lpath)
 
+        # elif extension in TEXT_EXTENSIONS:
+        #     obj = _load_text(lpath)
+
+        # # Word document
+        # elif extension in [".docx", ".doc"]:
+        #     if extension == ".doc":
+        #         import win32com.client
+
+        #         word = win32com.client.Dispatch("Word.Application")
+        #         doc = word.Documents.Open(lpath)
+        #         obj = [paragraph.Range.Text for paragraph in doc.Paragraphs]
+        #         doc.Close()
+        #         word.Quit()
+        #     else:
+        #         doc = Document(lpath)
+        #         obj = [paragraph.text for paragraph in doc.paragraphs]
+
+        # # Excel workbook
+        # elif extension in [".xlsx", ".xls"]:
+        #     if extension == ".xls":
+        #         import xlrd
+
+        #         wb = xlrd.open_workbook(lpath)
+        #         obj = {
+        #             sheet.name: [
+        #                 sheet.row_values(row) for row in range(sheet.nrows)
+        #             ]
+        #             for sheet in wb.sheets()
+        #         }
+        #     else:
+        #         wb = load_workbook(lpath, read_only=True)
+        #         obj = {
+        #             sheet.title: list(sheet.values) for sheet in wb.worksheets
+        #         }
+
         else:
             print(f"\nNot loaded from: {lpath}\n")
             return None
@@ -174,11 +244,17 @@ def load(lpath, show=False, verbose=False, **kwargs):
         return obj
 
     except Exception as e:
-        mngs.gen.print_block(f"{lpath} was not loaded:\n{e}", "red")
-        # print(f"\n{lpath} was not loaded:\n{e}")
+        raise ValueError(f"{lpath} was not loaded:\n{e}")
 
-        # logging.error(f"\n{lpath} was not loaded:\n{e}")
-        # return None
+
+# def _load_text(lpath, splitlines=False):
+#     with open(lpath, "r") as f:
+#         return f.read().splitlines() if splitlines else f.read()
+
+
+def _load_text(lpath):
+    with open(lpath, "r") as f:
+        return f.read()
 
 
 def _load_text(lpath):
@@ -371,3 +447,50 @@ def load_configs(IS_DEBUG=None, show=False, verbose=False):
     CONFIGS = mngs.gen.DotDict(CONFIGS)
 
     return CONFIGS
+
+
+################################################################################
+# dev
+################################################################################
+# def _load_docx(lpath):
+#     doc = docx.Document(lpath)
+#     full_text = []
+#     for para in doc.paragraphs:
+#         full_text.append(para.text)
+#     return "\n".join(full_text)
+
+
+# def _load_pdf(lpath):
+#     reader = PyPDF2.PdfReader(lpath)
+#     full_text = []
+#     for page_num in range(len(reader.pages)):
+#         page = reader.pages[page_num]
+#         full_text.append(page.extract_text())
+#     return "\n".join(full_text)
+
+
+# def _load_latex(lpath):
+#     return lpath.read().decode("utf-8")
+
+
+# def _load_excel(lpath):
+#     workbook = openpyxl.load_workbook(lpath)
+#     all_text = []
+#     for sheet in workbook:
+#         for row in sheet.iter_rows(values_only=True):
+#             all_text.append(
+#                 " ".join(
+#                     [str(cell) if cell is not None else "" for cell in row]
+#                 )
+#             )
+#     return "\n".join(all_text)
+
+
+# def _load_markdown(lpath):
+#     md_text = StringIO(lpath.read().decode("utf-8"))
+#     html = markdown.markdown(md_text.read())
+#     return html
+
+
+# def _load_textfile(lpath):
+#     return lpath.read().decode("utf-8")

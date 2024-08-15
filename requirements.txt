@@ -1,3 +1,5 @@
+# ipython<8.0.0
+# win32com
 GitPython
 Pillow
 PyYAML
@@ -6,28 +8,35 @@ accelerate
 ansi-escapes
 anthropic
 black
+bs4
 chardet
 epc
 flake8
 flask
 geom_median
 google-generativeai
+googlesearch-python
 h5py
 html2text
 icecream
 ipdb
-ipython<8.0.0
+ipython
+isort
 jedi
 joblib
 julius
+lxml
+lxml_html_clean
 markdown
 markdown2
 matplotlib
 mne
+more-itertools
 natsort
 numpy
 obspy
 openai
+openpyxl
 openpyxl
 optuna
 pandas
@@ -41,6 +50,9 @@ pytest
 pytest-cov
 pytest-env
 pytest-xdist
+python-docx
+readability
+readability-lxml
 readchar
 ripple_detection
 ruamel.yaml
@@ -48,6 +60,8 @@ scikit-image
 scikit-learn
 scipy
 seaborn
+setuptools
+six
 sktime
 sktime
 sounddevice
@@ -63,4 +77,5 @@ twine
 umap-learn
 wheel
 xarray
+xlrd
 xmltodict

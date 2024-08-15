@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-21 07:04:31 (ywatanabe)"
+# Time-stamp: "2024-07-29 15:11:55 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_ChatGPT.py
 
 
@@ -48,12 +48,13 @@ class Claude(BaseGenAI):
     def __init__(
         self,
         system_setting="",
-        api_key=os.getenv("Claude_API_KEY"),
+        api_key=os.getenv("CLAUDE_API_KEY"),
         model="claude-3-opus-20240229",
         stream=False,
         seed=None,
         n_keep=1,
         temperature=1.0,
+        chat_history=None,
     ):
         super().__init__(
             system_setting=system_setting,
@@ -63,6 +64,7 @@ class Claude(BaseGenAI):
             n_keep=n_keep,
             temperature=temperature,
             provider="Claude",
+            chat_history=chat_history,
         )
 
     def _init_client(
@@ -76,37 +78,45 @@ class Claude(BaseGenAI):
     def _api_call_static(
         self,
     ):
-        out_text = (
-            self.client.messages.create(
-                model=self.model,
-                max_tokens=1024,
-                messages=self.history,
-                temperature=self.temperature,
-                # seed=self.seed, # fixme
-            )
-            .content[0]
-            .text
+        output = self.client.messages.create(
+            model=self.model,
+            max_tokens=4096,
+            messages=self.history,
+            temperature=self.temperature,
+            # seed=self.seed, # fixme
         )
+        out_text = output.content[0].text
+
+        self.input_tokens += output.usage.input_tokens
+        self.output_tokens += output.usage.output_tokens
+
         return out_text
 
     def _api_call_stream(self):
         with self.client.messages.stream(
             model=self.model,
-            max_tokens=1024,
+            max_tokens=4096,
             messages=self.history,
             temperature=self.temperature,
             # seed=self.seed, # fixme
         ) as stream:
-            for text in stream.text_stream:
-                yield text
+            for chunk in stream:
 
-    def _get_available_models(self):
-        return [
-            "claude-3-5-sonnet-20240620",
-            "claude-3-opus-20240229",
-            "claude-3-sonnet-20240229",
-            "claude-3-haiku-20240307",
-        ]
+                try:
+                    self.input_tokens += chunk.message.usage.input_tokens
+                    self.output_tokens += chunk.message.usage.output_tokens
+                except:
+                    pass
+                if chunk.type == "content_block_delta":
+                    yield chunk.delta.text
+
+    # def _get_available_models(self):
+    #     return [
+    #         "claude-3-5-sonnet-20240620",
+    #         "claude-3-opus-20240229",
+    #         "claude-3-sonnet-20240229",
+    #         "claude-3-haiku-20240307",
+    #     ]
 
 
 def main():

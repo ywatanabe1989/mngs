@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-08-15 10:15:17 (ywatanabe)"
+# Time-stamp: "2024-08-15 10:17:26 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_ChatGPT.py
 
 
@@ -52,6 +52,7 @@ class Perplexity(BaseGenAI):
         seed=None,
         n_keep=1,
         temperature=1.0,
+        chat_history=None,
     ):
         super().__init__(
             system_setting=system_setting,
@@ -61,6 +62,7 @@ class Perplexity(BaseGenAI):
             n_keep=n_keep,
             temperature=temperature,
             provider="Perplexity",
+            chat_history=chat_history,
         )
 
     def _init_client(
@@ -72,29 +74,44 @@ class Perplexity(BaseGenAI):
         return client
 
     def _api_call_static(self):
-        out_text = (
-            self.client.chat.completions.create(
-                model=self.model,
-                messages=self.history,
-                stream=False,
-                temperature=self.temperature,
-            )
-            .choices[0]
-            .message.content
+        output = self.client.chat.completions.create(
+            model=self.model,
+            messages=self.history,
+            max_tokens=4096,
+            stream=False,
+            temperature=self.temperature,
+            # return_citations=True,
         )
+
+        out_text = output.choices[0].message.content
+        self.input_tokens += output.usage.prompt_tokens
+        self.output_tokens += output.usage.completion_tokens
+
         return out_text
 
     def _api_call_stream(self):
         stream = self.client.chat.completions.create(
             model=self.model,
             messages=self.history,
-            max_tokens=4096,  # You can adjust this as needed
+            max_tokens=4096,
             n=1,
             stream=self.stream,
             temperature=self.temperature,
+            # return_citations=True,
         )
 
         for chunk in stream:
+            if chunk:
+                if chunk.choices[0].finish_reason == "stop":
+                    try:
+                        self.input_tokens += chunk.usage.prompt_tokens
+                    except:
+                        pass
+                    try:
+                        self.output_tokens += chunk.usage.completion_tokens
+                    except:
+                        pass
+
             if chunk.choices:
                 current_text = chunk.choices[0].delta.content
                 if current_text:

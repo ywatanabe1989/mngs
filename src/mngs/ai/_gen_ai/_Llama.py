@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-21 07:05:23 (ywatanabe)"
+# Time-stamp: "2024-07-29 14:34:11 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_Llama.py
 
 """
@@ -59,6 +59,7 @@ class Llama(BaseGenAI):
         n_keep: int = 1,
         temperature: float = 1.0,
         provider="Llama",
+        chat_history=None,
         **kwargs,
     ):
 
@@ -89,7 +90,11 @@ class Llama(BaseGenAI):
             seed=seed,
             n_keep=n_keep,
             temperature=temperature,
+            chat_history=chat_history,
         )
+
+    def __str__(self):
+        return "Llama"
 
     def _init_client(self):
         generator = _Llama.build(
@@ -117,9 +122,9 @@ class Llama(BaseGenAI):
         for char in full_response:
             yield char
 
-    def _get_available_models(self):
-        # Llama3 doesn't have a list of available models, so we'll return a placeholder
-        return ["llama3"]
+    # def _get_available_models(self):
+    #     # Llama3 doesn't have a list of available models, so we'll return a placeholder
+    #     return ["llama3"]
 
     def verify_model(self):
         # Llama3 doesn't require model verification, so we'll skip it
