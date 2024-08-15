@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-08-15 10:23:38 (ywatanabe)"
+# Time-stamp: "2024-08-15 10:29:46 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_ChatGPT.py
 
 
@@ -154,5 +154,3 @@ if __name__ == "__main__":
     mngs.gen.close(CONFIG, verbose=False, notify=False)
 
 # EOF
-# llama-3.1-8b-instruct"
-# llama-3.1-70b-instruct

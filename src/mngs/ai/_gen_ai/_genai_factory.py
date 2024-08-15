@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-29 15:11:23 (ywatanabe)"
+# Time-stamp: "2024-08-15 11:24:10 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/chat.py
 
 
@@ -21,6 +21,7 @@ from ._Gemini import Gemini
 from ._Llama import Llama
 from ._Perplexity import Perplexity
 from .PARAMS import MODELS
+import random
 
 # # from mngs.gen import notify
 # from natsort import natsorted
@@ -68,6 +69,10 @@ def genai_factory(
 
     provider = MODELS[MODELS.name == model].provider.iloc[0]
     model_class = globals()[provider]
+
+    # Select a random API key from the list
+    if isinstance(api_key, (list, tuple)):
+        api_key = random.choice(api_key)
 
     return model_class(
         model=model,
