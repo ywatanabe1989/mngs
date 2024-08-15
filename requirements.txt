@@ -79,3 +79,4 @@ wheel
 xarray
 xlrd
 xmltodict
+reportlab
