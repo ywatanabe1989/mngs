@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-29 14:56:42 (ywatanabe)"
+# Time-stamp: "2024-08-15 10:29:17 (ywatanabe)"
 # /home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/PARAMS.py
 
 import pandas as pd
@@ -72,10 +72,45 @@ MODELS = pd.DataFrame(
         },
         {
             "name": "gemini-1.5-flash-latest",
-            "input_cost": 0.35,
-            "output_cost": 1.05,
+            "input_cost": 0.15,
+            "output_cost": 0.0375,
             "api_key_env": "GOOGLE_API_KEY",
             "provider": "Gemini",
+        },
+        {
+            "name": "llama-3.1-sonar-small-128k-online",
+            "input_cost": 0.20,
+            "output_cost": 0.20,
+            "api_key_env": "PERPLEXITY_API_KEY",
+            "provider": "Perplexity",
+        },
+        {
+            "name": "llama-3.1-sonar-large-128k-online",
+            "input_cost": 1.00,
+            "output_cost": 1.00,
+            "api_key_env": "PERPLEXITY_API_KEY",
+            "provider": "Perplexity",
+        },
+        {
+            "name": "llama-3.1-sonar-huge-128k-online",
+            "input_cost": 5.00,
+            "output_cost": 5.00,
+            "api_key_env": "PERPLEXITY_API_KEY",
+            "provider": "Perplexity",
+        },
+        {
+            "name": "llama-3.1-sonar-small-128k-chat",
+            "input_cost": 0.20,
+            "output_cost": 0.20,
+            "api_key_env": "PERPLEXITY_API_KEY",
+            "provider": "Perplexity",
+        },
+        {
+            "name": "llama-3.1-sonar-large-128k-chat",
+            "input_cost": 1.00,
+            "output_cost": 1.00,
+            "api_key_env": "PERPLEXITY_API_KEY",
+            "provider": "Perplexity",
         },
         {
             "name": "llama-3-sonar-small-32k-chat",
@@ -149,6 +184,7 @@ MODELS = pd.DataFrame(
         },
     ]
 )
+
 
 # MODELS = mngs.io.load("./models.yaml")
 
