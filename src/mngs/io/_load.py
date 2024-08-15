@@ -23,7 +23,7 @@ def load(lpath, show=False, verbose=False, **kwargs):
 
     lpath = lpath.replace("/./", "/")
     try:
-        extension = "." + lpath.split(".")[-1]  # [REVISED]
+        extension = "." + lpath.split(".")[-1]
 
         # csv
         if extension == ".csv":
@@ -145,6 +145,25 @@ def load(lpath, show=False, verbose=False, **kwargs):
         ]:
             obj = _load_eeg_data(lpath, **kwargs)
 
+        elif extension in [
+            ".py",
+            ".js",
+            ".sh",
+            ".pl",
+            ".rb",
+            ".html",
+            ".css",
+            ".java",
+            ".cpp",
+            ".c",
+            ".php",
+            ".go",
+            ".rs",
+            ".bib",
+            ".tex" ".txt",
+        ]:
+            obj = _load_text(lpath)
+
         else:
             print(f"\nNot loaded from: {lpath}\n")
             return None
@@ -160,6 +179,11 @@ def load(lpath, show=False, verbose=False, **kwargs):
 
         # logging.error(f"\n{lpath} was not loaded:\n{e}")
         # return None
+
+
+def _load_text(lpath):
+    with open(lpath, "r") as f:
+        return f.read()
 
 
 def _load_eeg_data(filename, **kwargs):

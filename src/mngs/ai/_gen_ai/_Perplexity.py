@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-21 07:05:42 (ywatanabe)"
+# Time-stamp: "2024-08-15 10:15:17 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_ChatGPT.py
 
 
@@ -102,6 +102,11 @@ class Perplexity(BaseGenAI):
 
     def _get_available_models(self):
         return [
+            "llama-3.1-sonar-small-128k-online",
+            "llama-3.1-sonar-large-128k-online",
+            "llama-3.1-sonar-huge-128k-online",
+            "llama-3.1-sonar-small-128k-chat",
+            "llama-3.1-sonar-large-128k-chat",
             "llama-3-sonar-small-32k-chat",
             "llama-3-sonar-small-32k-online",
             "llama-3-sonar-large-32k-chat",
@@ -132,3 +137,5 @@ if __name__ == "__main__":
     mngs.gen.close(CONFIG, verbose=False, notify=False)
 
 # EOF
+# llama-3.1-8b-instruct"
+# llama-3.1-70b-instruct
