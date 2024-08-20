@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from ._cache import cache
 from ._load import (
     load,
     load_configs,
