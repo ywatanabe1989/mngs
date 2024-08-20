@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from ..ml.utils.grid_search import count_grids, yield_grids
+from ._cache import cache
 from ._ci import ci
 from ._close import close
 from ._converters import (
@@ -12,12 +13,12 @@ from ._converters import (
     torch_fn,
     unsqueeze_if,
 )
-
-# from ._ddict import ddict
-from ._DotDict import DotDict
 from ._deprecated import deprecated
 from ._dict_replace import dict_replace
 from ._DimHandler import DimHandler
+
+# from ._ddict import ddict
+from ._DotDict import DotDict
 from ._embed import embed
 
 # from ._find_indi import find_indi
@@ -45,9 +46,8 @@ from ._TimeStamper import TimeStamper
 from ._title2path import title2path
 from .latex import add_hat_in_the_latex_style, to_the_latex_style
 from .misc import (
-    quiet,
     _return_counting_process,
-    color_text,
+    color_text,  # mv_col,
     connect_nums,
     connect_strs,
     copy_files,
@@ -66,11 +66,11 @@ from .misc import (
     isclose,
     listed_dict,
     merge_dicts_wo_overlaps,
-    mv_col,
     natglob,
     partial_at,
     pop_keys,
     print_block,
+    quiet,
     readable_bytes,
     replace,
     search,

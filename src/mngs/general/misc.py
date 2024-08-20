@@ -672,8 +672,8 @@ class ThreadWithReturnValue(threading.Thread):
 #                 # Yield control back to the context block
 #                 yield
 
-from contextlib import contextmanager, redirect_stdout, redirect_stderr
 import os
+from contextlib import contextmanager, redirect_stderr, redirect_stdout
 
 
 @contextmanager
@@ -845,11 +845,11 @@ def color_text(text, c="green"):
 ct = color_text
 
 
-def mv_col(dataframe, column_name, position):
-    temp_col = dataframe[column_name]
-    dataframe.drop(labels=[column_name], axis=1, inplace=True)
-    dataframe.insert(loc=position, column=column_name, value=temp_col)
-    return dataframe
+# def mv_col(dataframe, column_name, position):
+#     temp_col = dataframe[column_name]
+#     dataframe.drop(labels=[column_name], axis=1, inplace=True)
+#     dataframe.insert(loc=position, column=column_name, value=temp_col)
+#     return dataframe
 
 
 def symlink(tgt, src, force=False):
