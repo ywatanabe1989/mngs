@@ -57,11 +57,12 @@ readchar
 reportlab
 ripple_detection
 ruamel.yaml
-ruff-lsp semgrep
+ruff-lsp
 scikit-image
 scikit-learn
 scipy
 seaborn
+semgrep
 setuptools
 six
 sktime

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-11 21:37:37 (ywatanabe)"
+# Time-stamp: "2024-08-26 08:37:49 (ywatanabe)"
 
 from ._circular_hist import circular_hist
 from ._ecdf import ecdf
@@ -12,7 +12,7 @@ from ._hide_spines import hide_spines
 from ._imshow2d import imshow2d
 from ._map_ticks import map_ticks
 from ._panel import panel
-from ._raster import raster
+from ._raster_plot import raster_plot
 from ._rectangle import rectangle
 from ._sci_note import sci_note
 from ._set_n_ticks import set_n_ticks
@@ -32,3 +32,4 @@ from ._add_marginal_ax import add_marginal_ax
 
 # from ._set_pos import set_pos
 from ._shift import shift
+from ._joyplot import joyplot

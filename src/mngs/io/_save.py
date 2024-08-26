@@ -129,12 +129,14 @@ def save(
 
     # print(sfname_or_spath, fpath, spath, sfname)
     # Corrects the spath
-    spath = spath.replace("/./", "/").replace("//", "/")
+    spath = spath.replace("/./", "/").replace("//", "/").replace(" ", "_")
     ########################################
 
     # Potential path to symlink
     spath_cwd = os.getcwd() + "/" + sfname_or_spath
-    spath_cwd = spath_cwd.replace("/./", "/").replace("//", "/")
+    spath_cwd = (
+        spath_cwd.replace("/./", "/").replace("//", "/").replace(" ", "_")
+    )
 
     # Remove spath and spath_cwd to prevent potential circular links
     for path in [spath, spath_cwd]:

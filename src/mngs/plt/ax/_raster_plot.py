@@ -1,7 +1,7 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-14 18:44:41 (ywatanabe)"
-# /home/ywatanabe/proj/mngs/src/mngs/plt/ax/_raster.py
+# Time-stamp: "2024-08-26 08:38:30 (ywatanabe)"
+# /home/ywatanabe/proj/mngs/src/mngs/plt/ax/_raster_plot.py
 
 
 """
@@ -53,7 +53,7 @@ Functions & Classes
 """
 
 
-def raster(ax, positions, time=None, **kwargs):
+def raster_plot(ax, positions, time=None, **kwargs):
     """
     Create a raster plot using eventplot and return the plot along with a DataFrame.
 
@@ -138,7 +138,7 @@ def test():
     fig, ax = mngs.plt.subplots()
 
     # Call the raster function
-    ax, df = raster(ax, positions)
+    ax, df = raster_plot(ax, positions)
 
 
 if __name__ == "__main__":
