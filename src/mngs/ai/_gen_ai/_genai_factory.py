@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-08-15 11:24:10 (ywatanabe)"
+# Time-stamp: "2024-08-18 07:20:09 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/chat.py
 
 
@@ -14,14 +14,14 @@ Imports
 """
 # mngs.gen.reload(mngs)
 import os
+import random
 
-from ._OpenAI import OpenAI
 from ._Claude import Claude
 from ._Gemini import Gemini
 from ._Llama import Llama
+from ._OpenAI import OpenAI
 from ._Perplexity import Perplexity
 from .PARAMS import MODELS
-import random
 
 # # from mngs.gen import notify
 # from natsort import natsorted
@@ -85,27 +85,27 @@ def genai_factory(
     )
 
 
-def test_all(seed=None, temperature=1.0):
-    model_names = [
-        "claude-3-5-sonnet-20240620",
-        "gpt-4",
-        "gemini-pro",
-        "llama-3-sonar-large-32k-online",
-        "llama-7b",
-    ]
+# def test_all(seed=None, temperature=1.0):
+#     model_names = [
+#         "claude-3-5-sonnet-20240620",
+#         "gpt-4",
+#         "gemini-pro",
+#         "llama-3-sonar-large-32k-online",
+#         "llama-7b",
+#     ]
 
-    for model_name in model_names:
-        for stream in [False, True]:
-            model = GenAI(
-                model_name, stream=stream, seed=seed, temperature=temperature
-            )
-            prompt = "Hi. Tell me about the hippocampus."
+#     for model_name in model_names:
+#         for stream in [False, True]:
+#             model = GenAI(
+#                 model_name, stream=stream, seed=seed, temperature=temperature
+#             )
+#             prompt = "Hi. Tell me about the hippocampus."
 
-            print(
-                f"\n{'-'*40}\n{model.model}\nStream: {stream}\nSeed: {seed}\nTemperature: {temperature}\n{'-'*40}"
-            )
-            print(model(prompt))
-            print(model.available_models)
+#             print(
+#                 f"\n{'-'*40}\n{model.model}\nStream: {stream}\nSeed: {seed}\nTemperature: {temperature}\n{'-'*40}"
+#             )
+#             print(model(prompt))
+#             print(model.available_models)
 
 
 def main(
@@ -160,18 +160,24 @@ def test_all(seed=None, temperature=1.0):
             print(model.available_models)
 
 
-# def main(
-#     model="gpt-3.5-turbo",
-#     stream=False,
-#     prompt="Hi, please tell me about the hippocampus",
-#     seed=None,
-#     temperature=1.0,
-# ):
+def main(
+    model="gemini-1.5-pro-latest",
+    stream=False,
+    prompt="Hi, please tell me about the hippocampus",
+    seed=None,
+    temperature=1.0,
+):
 
-#     m = GenAI(model, stream=stream, seed=seed, temperature=temperature)
-#     out = m(prompt)
+    m = mngs.ai.GenAI(
+        model=model,
+        api_key=os.getenv("GOOGLE_API_KEY"),
+        stream=stream,
+        seed=seed,
+        temperature=temperature,
+    )
+    out = m(prompt)
 
-#     return out
+    return out
 
 
 if __name__ == "__main__":

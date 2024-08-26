@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-29 15:11:55 (ywatanabe)"
+# Time-stamp: "2024-08-21 18:17:29 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_ChatGPT.py
 
 
@@ -83,7 +83,6 @@ class Claude(BaseGenAI):
             max_tokens=4096,
             messages=self.history,
             temperature=self.temperature,
-            # seed=self.seed, # fixme
         )
         out_text = output.content[0].text
 
@@ -93,12 +92,12 @@ class Claude(BaseGenAI):
         return out_text
 
     def _api_call_stream(self):
+
         with self.client.messages.stream(
             model=self.model,
             max_tokens=4096,
             messages=self.history,
             temperature=self.temperature,
-            # seed=self.seed, # fixme
         ) as stream:
             for chunk in stream:
 

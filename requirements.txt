@@ -1,5 +1,3 @@
-# ipython<8.0.0
-# win32com
 GitPython
 Pillow
 PyYAML
@@ -46,16 +44,20 @@ pybids
 pyedflib
 pymatreader
 pyperclip
+pyright
 pytest
 pytest-cov
 pytest-env
 pytest-xdist
 python-docx
+python-lsp-server
 readability
 readability-lxml
 readchar
+reportlab
 ripple_detection
 ruamel.yaml
+ruff-lsp semgrep
 scikit-image
 scikit-learn
 scipy
@@ -79,4 +81,3 @@ wheel
 xarray
 xlrd
 xmltodict
-reportlab
