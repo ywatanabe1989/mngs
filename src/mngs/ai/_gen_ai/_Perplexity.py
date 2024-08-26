@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-08-15 10:17:26 (ywatanabe)"
+# Time-stamp: "2024-08-15 10:23:38 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_ChatGPT.py
 
 

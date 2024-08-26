@@ -51,11 +51,14 @@ pytest-cov
 pytest-env
 pytest-xdist
 python-docx
+python-lsp-server
 readability
 readability-lxml
 readchar
+reportlab
 ripple_detection
 ruamel.yaml
+ruff-lsp
 scikit-image
 scikit-learn
 scipy
@@ -79,5 +82,3 @@ wheel
 xarray
 xlrd
 xmltodict
-python-lsp-server
-ruff-lsp
