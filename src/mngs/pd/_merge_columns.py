@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-08-20 17:34:28 (ywatanabe)"
+# Time-stamp: "2024-08-26 23:06:46 (ywatanabe)"
 # /home/ywatanabe/proj/mngs_repo/src/mngs/pd/_merge_cols.py
 
 
@@ -18,7 +18,7 @@ import pandas as pd
 ################################################################################
 ## Pandas
 ################################################################################
-def merge_columns(df, *args, sep1="_", sep2="-"):
+def merge_columns(df, *args, sep1="_", sep2="-", name="merged"):
     """
     Join specified columns with their labels.
 
@@ -68,7 +68,9 @@ def merge_columns(df, *args, sep1="_", sep2="-"):
         lambda row: sep1.join(f"{col}{sep2}{val}" for col, val in row.items()),
         axis=1,
     )
-    df[sep1.join(columns)] = merged_col
+
+    new_col_name = sep1.join(columns) if not name else str(name)
+    df[new_col_name] = merged_col
     return df
 
 

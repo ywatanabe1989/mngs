@@ -21,6 +21,7 @@ import pandas as pd
 import readchar
 import torch
 from natsort import natsorted
+from mngs.gen import deprecated
 
 
 ################################################################################
@@ -890,6 +891,7 @@ def to_odd(n):
         return n
 
 
+@deprecated("Use mngs.io.glob instead.")
 def natglob(expression):
     glob_pattern = re.sub(r"{[^}]*}", "*", expression)
     try:

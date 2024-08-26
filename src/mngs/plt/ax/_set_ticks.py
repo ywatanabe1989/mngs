@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-08 09:09:35 (ywatanabe)"
+# Time-stamp: "2024-08-25 10:30:51 (ywatanabe)"
 
 import matplotlib.pyplot as plt
 import numpy as np
+import mngs
 
 
 # fixme, quite slow
@@ -58,26 +59,51 @@ def set_x_ticks(ax, x_vals=None, x_ticks=None):
         ax.set_xticklabels([f"{xv}" for xv in x_vals])
         return ax
 
+    # def _set_x_ticks(ax, x_ticks):
+    #     x_ticks = np.array(x_ticks)
+    #     x_vals = np.array(
+    #         [
+    #             label.get_text().replace("−", "-")
+    #             for label in ax.get_xticklabels()
+    #         ]
+    #     )
+    #     x_vals = x_vals.astype(float)
+    #     x_indi = np.argmin(
+    #         np.array(np.abs(x_vals[:, np.newaxis] - x_ticks[np.newaxis, :])),
+    #         axis=0,
+    #     )
+
+    #     ax.set_xticks(ax.get_xticks()[x_indi])
+    #     ax.set_xticklabels([f"{xt}" for xt in x_ticks])
+    #     return ax
     def _set_x_ticks(ax, x_ticks):
         x_ticks = np.array(x_ticks)
-        x_vals = np.array(
-            [
-                label.get_text().replace("−", "-")
-                for label in ax.get_xticklabels()
-            ]
-        )
-        x_vals = x_vals.astype(float)
-        x_indi = np.argmin(
-            np.array(np.abs(x_vals[:, np.newaxis] - x_ticks[np.newaxis, :])),
-            axis=0,
-        )
-
-        ax.set_xticks(ax.get_xticks()[x_indi])
-        ax.set_xticklabels([f"{xt}" for xt in x_ticks])
+        if x_ticks.dtype.kind in ["U", "S"]:  # If x_ticks are strings
+            ax.set_xticks(range(len(x_ticks)))
+            ax.set_xticklabels(x_ticks)
+        else:
+            x_vals = np.array(
+                [
+                    label.get_text().replace("−", "-")
+                    for label in ax.get_xticklabels()
+                ]
+            )
+            x_vals = x_vals.astype(float)
+            x_indi = np.argmin(
+                np.array(
+                    np.abs(x_vals[:, np.newaxis] - x_ticks[np.newaxis, :])
+                ),
+                axis=0,
+            )
+            ax.set_xticks(ax.get_xticks()[x_indi])
+            ax.set_xticklabels([f"{xt}" for xt in x_ticks])
         return ax
 
     is_x_vals = x_vals is not None
     is_x_ticks = x_ticks is not None
+
+    if mngs.gen.is_listed_X(x_ticks, dict):
+        x_ticks = [mngs.gen.dict2str(xt, delimiter="\n") for xt in x_ticks]
 
     # Do nothing
     if (not is_x_vals) and (not is_x_ticks):
@@ -136,27 +162,52 @@ def set_y_ticks(ax, y_vals=None, y_ticks=None):
         ax.set_yticklabels([f"{yv:.2f}" for yv in y_vals])
         return ax
 
+    # def _set_y_ticks(ax, y_ticks):
+    #     y_ticks = np.array(y_ticks)
+    #     y_vals = np.array(
+    #         [
+    #             label.get_text().replace("−", "-")
+    #             for label in ax.get_yticklabels()
+    #         ]
+    #     )
+    #     y_vals = y_vals.astype(float)
+    #     y_indi = np.argmin(
+    #         np.array(np.abs(y_vals[:, np.newaxis] - y_ticks[np.newaxis, :])),
+    #         axis=0,
+    #     )
+
+    #     # y_indi = [np.argmin(np.abs(y_vals - yt)) for yt in y_ticks]
+    #     ax.set_yticks(ax.get_yticks()[y_indi])
+    #     ax.set_yticklabels([f"{yt}" for yt in y_ticks])
+    #     return ax
     def _set_y_ticks(ax, y_ticks):
         y_ticks = np.array(y_ticks)
-        y_vals = np.array(
-            [
-                label.get_text().replace("−", "-")
-                for label in ax.get_yticklabels()
-            ]
-        )
-        y_vals = y_vals.astype(float)
-        y_indi = np.argmin(
-            np.array(np.abs(y_vals[:, np.newaxis] - y_ticks[np.newaxis, :])),
-            axis=0,
-        )
-
-        # y_indi = [np.argmin(np.abs(y_vals - yt)) for yt in y_ticks]
-        ax.set_yticks(ax.get_yticks()[y_indi])
-        ax.set_yticklabels([f"{yt}" for yt in y_ticks])
+        if y_ticks.dtype.kind in ["U", "S"]:  # If y_ticks are strings
+            ax.set_yticks(range(len(y_ticks)))
+            ax.set_yticklabels(y_ticks)
+        else:
+            y_vals = np.array(
+                [
+                    label.get_text().replace("−", "-")
+                    for label in ax.get_yticklabels()
+                ]
+            )
+            y_vals = y_vals.astype(float)
+            y_indi = np.argmin(
+                np.array(
+                    np.abs(y_vals[:, np.newaxis] - y_ticks[np.newaxis, :])
+                ),
+                axis=0,
+            )
+            ax.set_yticks(ax.get_yticks()[y_indi])
+            ax.set_yticklabels([f"{yt}" for yt in y_ticks])
         return ax
 
     is_y_vals = y_vals is not None
     is_y_ticks = y_ticks is not None
+
+    if mngs.gen.is_listed_X(y_ticks, dict):
+        y_ticks = [mngs.gen.dict2str(yt, delimiter="\n") for yt in y_ticks]
 
     # Do nothing
     if (not is_y_vals) and (not is_y_ticks):

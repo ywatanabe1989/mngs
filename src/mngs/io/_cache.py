@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-08-20 19:21:54 (ywatanabe)"
+# Time-stamp: "2024-08-20 19:42:38 (ywatanabe)"
 # /home/ywatanabe/proj/mngs_repo/src/mngs/io/_cache.py
 
 

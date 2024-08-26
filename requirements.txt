@@ -79,3 +79,5 @@ wheel
 xarray
 xlrd
 xmltodict
+python-lsp-server
+ruff-lsp

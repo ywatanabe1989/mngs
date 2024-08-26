@@ -14,6 +14,7 @@ from ._converters import (
     unsqueeze_if,
 )
 from ._deprecated import deprecated
+from ._alternate_kwarg import alternate_kwarg
 from ._dict_replace import dict_replace
 from ._DimHandler import DimHandler
 
@@ -44,6 +45,7 @@ from ._symlog import symlog
 from ._tee import tee
 from ._TimeStamper import TimeStamper
 from ._title2path import title2path
+from ._dict2str import dict2str
 from .latex import add_hat_in_the_latex_style, to_the_latex_style
 from .misc import (
     _return_counting_process,
@@ -83,3 +85,4 @@ from .misc import (
     uq,
     wait_key,
 )
+from ._transpose import transpose
