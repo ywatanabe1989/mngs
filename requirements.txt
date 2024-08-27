@@ -82,3 +82,5 @@ wheel
 xarray
 xlrd
 xmltodict
+joypy
+pyls
