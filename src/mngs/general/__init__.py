@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
 
+"""General utility functions and classes for the MNGS project."""
+
+# Machine Learning utilities
 from ..ml.utils.grid_search import count_grids, yield_grids
-from ._cache import cache
-from ._ci import ci
-from ._close import close
-from ._converters import (
+
+# Core utilities
+from .decorators.cache import cache
+from .utils.ci import ci
+from .utils.close import close
+from .data_processing.converters import (
     batch_fn,
     numpy_fn,
     squeeze_if,
@@ -13,43 +18,44 @@ from ._converters import (
     torch_fn,
     unsqueeze_if,
 )
-from ._deprecated import deprecated
-from ._alternate_kwarg import alternate_kwarg
-from ._dict_replace import dict_replace
-from ._DimHandler import DimHandler
+from .decorators.deprecated import deprecated
+from .decorators.alternate_kwarg import alternate_kwarg
+from .utils.dict_replace import dict_replace
+from .data_processing.DimHandler import DimHandler
+from .utils.DotDict import DotDict
+from .utils.embed import embed
+from .utils.less import less
+from .utils.mask_api import mask_api
+from .utils.not_implemented import not_implemented
+from .utils.paste import paste
+from .utils.src import src
+from .system_ops.timeout import timeout
+from .utils.title_case import title_case
+from .utils.wrap import wrap
 
-# from ._ddict import ddict
-from ._DotDict import DotDict
-from ._embed import embed
+# I/O utilities
+from ..io import *
+from .system_ops.email import notify, send_gmail
+from .system_ops.shell import run_shellcommand, run_shellscript
+from .system_ops.tee import tee
 
-# from ._find_indi import find_indi
-from ._less import less
-from ._mask_api import mask_api
-from ._not_implemented import not_implemented
+# Data processing utilities
+from .data_processing.norm import to_z
+from .utils.reproduce import fix_seeds, gen_ID, gen_timestamp
+from .utils.start import start
+from .data_processing.symlog import symlog
+from .utils.TimeStamper import TimeStamper
+from .utils.title2path import title2path
+from .utils.dict2str import dict2str
+from .data_processing.transpose import transpose
 
-# Confirmed
-from ._paste import paste
-from ._src import src
-from ._timeout import timeout
-from ._title_case import title_case
-from ._wrap import wrap
+# LaTeX utilities
+from .utils.latex import add_hat_in_the_latex_style, to_the_latex_style
 
-_ = None
-from ..io.__init__ import *
-from ._email import notify, send_gmail
-from ._norm import to_z
-from ._reproduce import fix_seeds, gen_ID, gen_timestamp
-from ._shell import run_shellcommand, run_shellscript
-from ._start import start
-from ._symlog import symlog
-from ._tee import tee
-from ._TimeStamper import TimeStamper
-from ._title2path import title2path
-from ._dict2str import dict2str
-from .latex import add_hat_in_the_latex_style, to_the_latex_style
+# Miscellaneous utilities
 from .misc import (
     _return_counting_process,
-    color_text,  # mv_col,
+    color_text,
     connect_nums,
     connect_strs,
     copy_files,
@@ -85,4 +91,7 @@ from .misc import (
     uq,
     wait_key,
 )
-from ._transpose import transpose
+
+# Placeholder for unused variables
+_ = None
+
