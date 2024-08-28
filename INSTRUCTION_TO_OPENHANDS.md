@@ -6,6 +6,7 @@ Please revise the /workspace/mngs package.
 - Please update README.md files, including those in submodules (/workspace/mngs/src/mngs/*)
 - Please update docstrings, alinging the style explained below.
 - Reorganize package structure if necessary.
+- Please write test code under /workspace/mngs/tests, with the same structure of the source code (/workspace/mngs/src/mngs/)
 - Please create a sphinx document, which is hosted at https://ywatanabe1989.github.io/mngs/.
 
 # Echo
