@@ -21,6 +21,21 @@ pip install mngs
 - Power Spectral Density (PSD) estimation
 - Resampling utilities
 
+## Galleries
+<div style="display: flex; justify-content: center; flex-wrap: wrap;">
+  <img src="./_demo_sig/traces.png" height="300" style="border: 2px solid gray; margin: 5px;">
+  <img src="./_resample/traces.png" height="300" style="border: 2px solid gray; margin: 5px;">
+  <img src="./filt/traces.png" height="300" style="border: 2px solid gray; margin: 5px;">
+  <img src="./filt/psd.png" height="300" style="border: 2px solid gray; margin: 5px;">
+</div>
+
+<div style="display: flex; justify-content: center; flex-wrap: wrap;">
+  <img src="./_wavelet/wavelet.png" height="300" style="border: 2px solid gray; margin: 5px;">
+  <img src="./_hilbert/traces.png" height="300" style="border: 2px solid gray; margin: 5px;">
+  <img src="./_modulation_index/modulation_index.png" height="300" style="border: 2px solid gray; margin: 5px;">
+  <img src="./_pac/pac_with_trainable_bandpass_fp32.png" height="300" style="border: 2px solid gray; margin: 5px;">
+</div>
+
 ## Quick Start
 ```python
 import mngs
