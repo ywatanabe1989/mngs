@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-08-26 10:07:41 (ywatanabe)"
+# Time-stamp: "2024-08-29 17:55:40 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/AxisWrapper.py
 
 from collections import OrderedDict
@@ -13,8 +13,6 @@ import pandas as pd
 import seaborn as sns
 from mngs.gen import not_implemented
 from scipy.stats import gaussian_kde
-
-from functools import wraps
 
 from ._to_sigma import to_sigma as _to_sigma
 
@@ -360,44 +358,6 @@ class AxisWrapper:
         self._sns_base_xyhue(
             "sns_boxplot", *args, track=track, id=id, **kwargs
         )
-
-    # def sns_boxplot(self, *args, track=True, id=None, **kwargs):
-    #     df = kwargs.get("data")
-    #     if df is not None:
-    #         x = kwargs.get("x")
-    #         y = kwargs.get("y")
-    #         hue = kwargs.get("hue")
-
-    #         if x and y:
-    #             if hue:
-    #                 # Pivot the data with hue
-    #                 pivoted_data = df.pivot_table(
-    #                     values=y,
-    #                     index=df.index,
-    #                     columns=[x, hue],
-    #                     aggfunc="first",
-    #                 )
-    #                 # Flatten column names
-    #                 pivoted_data.columns = [
-    #                     f"{col[0]}-{col[1]}" for col in pivoted_data.columns
-    #                 ]
-    #             else:
-    #                 # Pivot the data without hue
-    #                 pivoted_data = df.pivot_table(
-    #                     values=y, index=df.index, columns=x, aggfunc="first"
-    #                 )
-
-    #             # Store the pivoted data
-    #             boxplot_data = pivoted_data
-
-    #     self._sns_base(
-    #         "sns_boxplot",
-    #         *args,
-    #         track=track,
-    #         track_obj=boxplot_data,
-    #         id=id,
-    #         **kwargs,
-    #     )
 
     @sns_copy_doc
     def sns_heatmap(self, *args, track=True, id=None, **kwargs):

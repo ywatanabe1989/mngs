@@ -20,8 +20,11 @@ import numpy as np
 import pandas as pd
 import readchar
 import torch
+
+# from mngs.gen import deprecated
 from natsort import natsorted
-from mngs.gen import deprecated
+
+from .decorators._deprecated import deprecated
 
 
 ################################################################################
