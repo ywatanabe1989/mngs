@@ -15,6 +15,11 @@ pip install mngs
 - Spectral analysis tools
 - Time-frequency analysis utilities
 - Signal generation and manipulation functions
+- Phase-Amplitude Coupling (PAC) analysis
+- Modulation Index calculation
+- Hilbert transform
+- Power Spectral Density (PSD) estimation
+- Resampling utilities
 
 ## Quick Start
 ```python
@@ -37,6 +42,18 @@ freqs, times, Sxx = mngs.dsp.spectrogram(signal, fs=1000, nperseg=256)
 
 # Generate chirp signal
 chirp = mngs.dsp.chirp(t, f0=1, f1=20, method='linear')
+
+# Perform Hilbert transform
+analytic_signal = mngs.dsp.hilbert(signal)
+
+# Calculate Phase-Amplitude Coupling
+pac = mngs.dsp.phase_amplitude_coupling(signal, fs=1000)
+
+# Estimate Power Spectral Density
+freqs, psd = mngs.dsp.psd(signal, fs=1000)
+
+# Resample signal
+resampled_signal = mngs.dsp.resample(signal, orig_fs=1000, new_fs=500)
 ```
 
 ## API Reference
@@ -48,6 +65,12 @@ chirp = mngs.dsp.chirp(t, f0=1, f1=20, method='linear')
 - `mngs.dsp.stft(signal, fs, nperseg)`: Performs Short-Time Fourier Transform
 - `mngs.dsp.istft(stft, fs, nperseg)`: Performs Inverse Short-Time Fourier Transform
 - `mngs.dsp.chirp(t, f0, f1, method)`: Generates chirp signal
+- `mngs.dsp.hilbert(signal)`: Performs Hilbert transform
+- `mngs.dsp.phase_amplitude_coupling(signal, fs)`: Calculates Phase-Amplitude Coupling
+- `mngs.dsp.modulation_index(signal, fs)`: Computes Modulation Index
+- `mngs.dsp.psd(signal, fs)`: Estimates Power Spectral Density
+- `mngs.dsp.resample(signal, orig_fs, new_fs)`: Resamples signal to new frequency
+- `mngs.dsp.add_noise(signal, snr)`: Adds noise to signal with specified SNR
 
 ## Use Cases
 - Audio signal processing
@@ -55,6 +78,7 @@ chirp = mngs.dsp.chirp(t, f0=1, f1=20, method='linear')
 - Vibration analysis
 - Communication systems
 - Radar and sonar signal processing
+- Neuroscience data analysis
 
 ## Performance
 The `mngs.dsp` module leverages PyTorch's GPU acceleration capabilities, providing significant speedups for large-scale signal processing tasks when run on CUDA-enabled devices.
@@ -69,3 +93,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 Yusuke Watanabe (ywata1989@gmail.com)
 
 For more information and updates, please visit the [mngs GitHub repository](https://github.com/ywatanabe1989/mngs).
+
