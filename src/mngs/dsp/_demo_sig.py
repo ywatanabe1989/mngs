@@ -157,5 +157,187 @@ def demo_sig(
             fs,
         )
 
-# ... (rest of the file remains unchanged)
+def _demo_sig_pac(
+    batch_size=8,
+    n_chs=19,
+    t_sec=4,
+    fs=512,
+    f_pha=10,
+    f_amp=100,
+    noise=0.8,
+    n_segments=20,
+    verbose=False,
+):
+    """
+    Generate a demo signal with phase-amplitude coupling.
+    Parameters:
+        batch_size (int): Number of batches.
+        n_chs (int): Number of channels.
+        t_sec (int): Duration of the signal in seconds.
+        fs (int): Sampling frequency.
+        f_pha (float): Frequency of the phase-modulating signal.
+        f_amp (float): Frequency of the amplitude-modulated signal.
+        noise (float): Noise level added to the signal.
+        n_segments (int): Number of segments.
+        verbose (bool): If True, print additional information.
+    Returns:
+        np.array: Generated signals with shape (batch_size, n_chs, n_segments, seq_len).
+    """
+    seq_len = t_sec * fs
+    t = np.arange(seq_len) / fs
+    if verbose:
+        print(f"Generating signal with length: {seq_len}")
+
+    # Create empty array to store the signals
+    signals = np.zeros((batch_size, n_chs, n_segments, seq_len))
+
+    for b in range(batch_size):
+        for ch in range(n_chs):
+            for seg in range(n_segments):
+                # Phase signal
+                theta = np.sin(2 * np.pi * f_pha * t)
+                # Amplitude envelope
+                amplitude_env = 1 + np.sin(2 * np.pi * f_amp * t)
+                # Combine phase and amplitude modulation
+                signal = theta * amplitude_env
+                # Add Gaussian noise
+                signal += noise * np.random.randn(seq_len)
+                signals[b, ch, seg, :] = signal
+
+    return signals
+
+
+def _demo_sig_tensorpac(
+    batch_size=8,
+    n_chs=19,
+    t_sec=4,
+    fs=512,
+    f_pha=10,
+    f_amp=100,
+    noise=0.8,
+    n_segments=20,
+    verbose=False,
+):
+    n_times = int(t_sec * fs)
+    x_2d, tt = pac_signals_wavelet(
+        sf=fs,
+        f_pha=f_pha,
+        f_amp=f_amp,
+        noise=noise,
+        n_epochs=n_segments,
+        n_times=n_times,
+    )
+    x_3d = np.stack([x_2d for _ in range(batch_size)], axis=0)
+    x_4d = np.stack([x_3d for _ in range(n_chs)], axis=1)
+    return x_4d, tt
+
+
+def _demo_sig_meg(
+    batch_size=8, n_chs=19, t_sec=10, fs=512, verbose=False, **kwargs
+):
+    data_path = sample.data_path()
+    meg_path = data_path / "MEG" / "sample"
+    raw_fname = meg_path / "sample_audvis_raw.fif"
+    fwd_fname = meg_path / "sample_audvis-meg-eeg-oct-6-fwd.fif"
+
+    # Load real data as the template
+    raw = mne.io.read_raw_fif(raw_fname, verbose=verbose)
+    raw = raw.crop(tmax=t_sec, verbose=verbose)
+    raw = raw.resample(fs, verbose=verbose)
+    raw.set_eeg_reference(projection=True, verbose=verbose)
+
+    return raw.get_data(
+        picks=raw.ch_names[: batch_size * n_chs], verbose=verbose
+    ).reshape(batch_size, n_chs, -1)
+
+
+def _demo_sig_periodic_1d(
+    t_sec=10, fs=512, freqs_hz=None, verbose=False, **kwargs
+):
+    """Returns a demo signal with the shape (t_sec*fs,)."""
+
+    if freqs_hz is None:
+        n_freqs = random.randint(1, 5)
+        freqs_hz = np.random.permutation(np.arange(fs))[:n_freqs]
+        if verbose:
+            print(f"freqs_hz was randomly determined as {freqs_hz}")
+
+    n = int(t_sec * fs)
+    t = np.linspace(0, t_sec, n, endpoint=False)
+
+    summed = np.array(
+        [
+            np.random.rand()
+            * np.sin((f_hz * t + np.random.rand()) * (2 * np.pi))
+            for f_hz in freqs_hz
+        ]
+    ).sum(axis=0)
+    return summed
+
+
+def _demo_sig_chirp_1d(
+    t_sec=10, fs=512, low_hz=None, high_hz=None, verbose=False, **kwargs
+):
+    if low_hz is None:
+        low_hz = random.randint(1, 20)
+        if verbose:
+            warnings.warn(f"low_hz was randomly determined as {low_hz}.")
+
+    if high_hz is None:
+        high_hz = random.randint(100, 1000)
+        if verbose:
+            warnings.warn(f"high_hz was randomly determined as {high_hz}.")
+
+    n = int(t_sec * fs)
+    t = np.linspace(0, t_sec, n, endpoint=False)
+    x = chirp(t, low_hz, t[-1], high_hz)
+    x *= 1.0 + 0.5 * np.sin(2.0 * np.pi * 3.0 * t)
+    return x
+
+
+def _demo_sig_ripple_1d(t_sec=10, fs=512, **kwargs):
+    n_samples = t_sec * fs
+    t = simulate_time(n_samples, fs)
+    n_ripples = random.randint(1, 5)
+    mid_time = np.random.permutation(t)[:n_ripples]
+    return simulate_LFP(t, mid_time, noise_amplitude=1.2, ripple_amplitude=5)
+
+
+if __name__ == "__main__":
+    # Start
+    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt)
+
+    SIG_TYPES = [
+        "uniform",
+        "gauss",
+        "periodic",
+        "chirp",
+        "meg",
+        "ripple",
+        "tensorpac",
+        "pac",
+    ]
+
+    i_batch, i_ch, i_segment = 0, 0, 0
+    fig, axes = mngs.plt.subplots(nrows=len(SIG_TYPES))
+    for ax, (i_sig_type, sig_type) in zip(axes, enumerate(SIG_TYPES)):
+        xx, tt, fs = demo_sig(sig_type=sig_type)
+        if sig_type not in ["tensorpac", "pac"]:
+            ax.plot(tt, xx[i_batch, i_ch], label=sig_type)
+        else:
+            ax.plot(tt, xx[i_batch, i_ch, i_segment], label=sig_type)
+        ax.legend(loc="upper left")
+    fig.suptitle("Demo signals")
+    fig.supxlabel("Time [s]")
+    fig.supylabel("Amplitude [?V]")
+    mngs.io.save(fig, "traces.png")
+
+    # Close
+    mngs.gen.close(CONFIG)
+
+# EOF
+
+"""
+/home/ywatanabe/proj/entrance/mngs/dsp/_demo_sig.py
+"""
 
