@@ -38,37 +38,67 @@ pip install mngs
 
 ## Quick Start
 ```python
-import mngs
-import torch
-import numpy as np
+# Parameters
+SRC_FS = 1024  # Source sampling frequency
+TGT_FS = 512   # Target sampling frequency
+FREQS_HZ = [10, 30, 100]  # Frequencies in Hz for periodic signals
+LOW_HZ = 20    # Low frequency for bandpass filter
+HIGH_HZ = 50   # High frequency for bandpass filter
+SIGMA = 10     # Sigma for Gaussian filter
+SIG_TYPES = [
+    "uniform",
+    "gauss",
+    "periodic",
+    "chirp",
+    "ripple",
+    "meg",
+    "tensorpac",
+] # Available signal types
 
-# Generate a sample signal
-t = torch.linspace(0, 1, 1000)
-signal = torch.sin(2 * np.pi * 10 * t) + 0.5 * torch.sin(2 * np.pi * 20 * t)
 
-# Perform wavelet transform
-wavelet_coeffs = mngs.dsp.wavelet_transform(signal, wavelet='db4', level=5)
+# Demo Signal
+xx, tt, fs = mngs.dsp.demo_sig(
+    t_sec=T_SEC, fs=SRC_FS, freqs_hz=FREQS_HZ, sig_type="chirp"
+)
+# xx.shape (batch_size, n_chs, seq_len) 
+# xx.shape (batch_size, n_chs, n_segments, seq_len) # when sig_type is "tensorpac" or "pac"
 
-# Apply bandpass filter
-filtered_signal = mngs.dsp.bandpass_filter(signal, lowcut=5, highcut=15, fs=1000)
 
-# Compute spectrogram
-freqs, times, Sxx = mngs.dsp.spectrogram(signal, fs=1000, nperseg=256)
+# # Various data types are automatically handled:
+# xx = torch.tensor(xx).float()
+# xx = torch.tensor(xx).float().cuda()
+# xx = np.array(xx)
+# xx = pd.DataFrame(xx)
 
-# Generate chirp signal
-chirp = mngs.dsp.chirp(t, f0=1, f1=20, method='linear')
+# Normalization
+xx_norm = mngs.dsp.norm.z(xx)
+xx_minmax = mngs.dsp.norm.minmax(xx)
 
-# Perform Hilbert transform
-analytic_signal = mngs.dsp.hilbert(signal)
+# Resampling
+xx_resampled = mngs.dsp.resample(xx, fs, TGT_FS)
 
-# Calculate Phase-Amplitude Coupling
-pac = mngs.dsp.phase_amplitude_coupling(signal, fs=1000)
+# Noise addition
+xx_gauss = mngs.dsp.add_noise.gauss(xx)
+xx_white = mngs.dsp.add_noise.white(xx)
+xx_pink = mngs.dsp.add_noise.pink(xx)
+xx_brown = mngs.dsp.add_noise.brown(xx)
 
-# Estimate Power Spectral Density
-freqs, psd = mngs.dsp.psd(signal, fs=1000)
+# Filtering
+xx_filted_bandpass = mngs.dsp.filt.bandpass(xx, fs, low_hz=LOW_HZ, high_hz=HIGH_HZ)
+xx_filted_bandstop = mngs.dsp.filt.bandstop(xx, fs, low_hz=LOW_HZ, high_hz=HIGH_HZ)
+xx_filted_gauss = mngs.dsp.filt.gauss(xx, sigma=SIGMA)
 
-# Resample signal
-resampled_signal = mngs.dsp.resample(signal, orig_fs=1000, new_fs=500)
+# Hilbert Transformation
+phase, amplitude = mngs.dsp.hilbert(xx) # or envelope
+
+# Wavelet Transformation
+wavelet_coef, wavelet_freqs = mngs.dsp.wavelet(xx, fs)
+
+# Power Spetrum Density
+psd, psd_freqs = mngs.dsp.psd(xx, fs)
+
+# Phase-Amplitude Coupling
+pac, freqs_pha, freqs_amp = mngs.dsp.pac(xx, fs) # This process is computationally intensive. Please monitor RAM/VRAM usage.
 ```
 
 ## API Reference
