@@ -5,23 +5,41 @@
 
 def reload(module_or_func, verbose=False):
     """
-    Reloads the given module or the module containing the given function.
+    Reload a module or the module containing a given function.
 
-    This function attempts to reload a module directly if a module is passed.
-    If a function is passed, it tries to reload the module that contains the function.
-    This can be useful during development when changes are made to modules and you want
-    those changes to be reflected without restarting the Python interpreter.
+    This function attempts to reload a module directly if a module is passed,
+    or reloads the module containing the function if a function is passed.
+    This is useful during development to reflect changes without restarting the Python interpreter.
 
-    Arguments:
-        module_or_func (module|function): The module or function to reload. If a function is
-                                          provided, its containing module is reloaded.
+    Parameters:
+    -----------
+    module_or_func : module or function
+        The module to reload, or a function whose containing module should be reloaded.
+    verbose : bool, optional
+        If True, print additional information during the reload process. Default is False.
 
     Returns:
-        None
+    --------
+    None
 
-    Note:
-        Reloading modules can have unexpected side effects, especially for modules that
-        maintain state or for complex imports. Use with caution.
+    Raises:
+    -------
+    Exception
+        If the module cannot be found or if there's an error during the reload process.
+
+    Notes:
+    ------
+    - Reloading modules can have unexpected side effects, especially for modules that
+      maintain state or have complex imports. Use with caution.
+    - This function modifies sys.modules, which affects the global state of the Python interpreter.
+
+    Examples:
+    ---------
+    >>> import my_module
+    >>> reload(my_module)
+
+    >>> from my_module import my_function
+    >>> reload(my_function)
     """
     import importlib
     import sys
@@ -54,6 +72,8 @@ def reload(module_or_func, verbose=False):
     try:
         # Attempt to reload the module by name.
         importlib.reload(sys.modules[module_name])
+        if verbose:
+            print(f"Successfully reloaded module: {module_name}")
 
     except KeyError:
         # The module is not found in sys.modules, likely due to it not being imported.
@@ -61,3 +81,4 @@ def reload(module_or_func, verbose=False):
     except Exception as e:
         # Catch any other exceptions and print an error message.
         print(f"Failed to reload module {module_name}. Error: {e}")
+
