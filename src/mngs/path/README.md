@@ -5,7 +5,7 @@ The `mngs.path` module provides a set of utilities for handling file paths, dire
 
 ## Installation
 ```bash
-$ pip install mngs
+pip install mngs
 ```
 
 ## Features
@@ -24,13 +24,13 @@ spath = mngs.path.spath()  # Returns a safe path, e.g., '/tmp/fake-ywatanabe/.'
 dir, fname, ext = mngs.path.split(fpath)  # Splits path into directory, filename, and extension
 
 # Find directories and files
-mngs.path.find_dir(".", "path")  # Finds directories matching the pattern, e.g., [./src/mngs/path]
-mngs.path.find_file(".", "*wavelet.py")  # Finds files matching the pattern, e.g., ['./src/mngs/dsp/_wavelet.py']
+dirs = mngs.path.find_dir(".", "path")  # Finds directories matching the pattern, e.g., [./src/mngs/path]
+files = mngs.path.find_file(".", "*wavelet.py")  # Finds files matching the pattern, e.g., ['./src/mngs/dsp/_wavelet.py']
 
 # Git and versioning
 git_root = mngs.path.find_git_root()  # Finds the root of the Git repository
-# mngs.path.find_latest()  # Finds the latest version of a file (commented out in the example)
-# mngs.path.increment_version()  # Increments the version of a file (commented out in the example)
+latest_file = mngs.path.find_latest("path/to/files", "*.txt")  # Finds the latest version of a file
+new_version = mngs.path.increment_version("file_v1.txt")  # Increments the version of a file
 ```
 
 ## API Reference
@@ -40,14 +40,20 @@ git_root = mngs.path.find_git_root()  # Finds the root of the Git repository
 - `mngs.path.find_dir(root, pattern)`: Finds directories matching a pattern
 - `mngs.path.find_file(root, pattern)`: Finds files matching a pattern
 - `mngs.path.find_git_root()`: Finds the root directory of the current Git repository
-- `mngs.path.find_latest()`: Finds the latest version of a file (implementation details needed)
-- `mngs.path.increment_version()`: Increments the version of a file (implementation details needed)
+- `mngs.path.find_latest(directory, pattern)`: Finds the latest version of a file matching the pattern
+- `mngs.path.increment_version(file_path)`: Increments the version of a file
 
 ## Use Cases
 - Simplifying path manipulations in Python scripts
 - Searching for specific files or directories within a project
 - Managing versioned files and directories
 - Working with Git repositories programmatically
+
+## Contributing
+Contributions to improve `mngs.path` are welcome. Please submit pull requests or open issues on the GitHub repository.
+
+## License
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## Contact
 Yusuke Watanabe (ywata1989@gmail.com)

@@ -8,6 +8,7 @@ Please revise the /workspace/mngs package.
 - Reorganize package structure if necessary.
 - Please write test code under /workspace/mngs/tests, with the same structure of the source code (/workspace/mngs/src/mngs/)
 - Please create a sphinx document, which is hosted at https://ywatanabe1989.github.io/mngs/.
+- Please use git. As long as you work on the openhands branch, you have all authority.
 
 # Echo
 Please add newline before echo. You might want to use echo-nl instead of echo.

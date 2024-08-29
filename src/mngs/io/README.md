@@ -6,7 +6,7 @@ The `mngs.io` module provides a set of convenient functions for handling various
 
 ## Installation
 ```bash
-$ pip install mngs
+pip install mngs
 ```
 
 ## Features
@@ -27,22 +27,22 @@ import torch
 # NumPy array (.npy)
 arr = np.array([1, 2, 3])
 mngs.io.save(arr, "xxx.npy")
-# arr = mngs.io.load("xxx.npy")
+arr = mngs.io.load("xxx.npy")
 
 # Pandas DataFrame (.csv)
 df = pd.DataFrame({"col1": [1, 2], "col2": [3, 4]})
 mngs.io.save(df, "xxx.csv")
-# df = mngs.io.load("xxx.csv")
+df = mngs.io.load("xxx.csv")
 
 # PyTorch tensor (.pth)
 tensor = torch.tensor([1, 2, 3])
 mngs.io.save(tensor, "xxx.pth")
-# tensor = mngs.io.load("xxx.pth")
+tensor = mngs.io.load("xxx.pth")
 
 # Serializable object (.pkl)
 _dict = {"a": 1, "b": 2, "c": [3, 4, 5]}
 mngs.io.save(_dict, "xxx.pkl")
-# _dict = mngs.io.load("xxx.pkl")
+_dict = mngs.io.load("xxx.pkl")
 
 # Matplotlib figure (.png or .tiff)
 plt.figure()
@@ -51,11 +51,11 @@ mngs.io.save(plt, "xxx.png")  # or "xxx.tiff"
 
 # YAML file
 mngs.io.save(_dict, "xxx.yaml")
-# _dict = mngs.io.load("xxx.yaml")
+_dict = mngs.io.load("xxx.yaml")
 
 # JSON file
 mngs.io.save(_dict, "xxx.json")
-# _dict = mngs.io.load("xxx.json")
+_dict = mngs.io.load("xxx.json")
 ```
 
 ## API Reference
@@ -72,6 +72,12 @@ The `save` and `load` functions automatically detect the file format based on th
 - `.png`, `.tiff`: Matplotlib figures
 - `.yaml`: YAML files
 - `.json`: JSON files
+
+## Contributing
+Contributions to improve `mngs.io` are welcome. Please submit pull requests or open issues on the GitHub repository.
+
+## License
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## Contact
 Yusuke Watanabe (ywata1989@gmail.com)

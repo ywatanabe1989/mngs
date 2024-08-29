@@ -33,7 +33,7 @@ $ pip install mngs
 $ pip install git+https://github.com/ywatanabe1989/mngs.git@develop
 ```
 
-## Example Usages
+## Submodules
 - [`mngs.io`](https://github.com/ywatanabe1989/mngs/tree/main/src/mngs/io#readme): Input/Output operations
 - [`mngs.path`](https://github.com/ywatanabe1989/mngs/tree/main/src/mngs/path#readme): Path manipulation utilities
 - [`mngs.dsp`](https://github.com/ywatanabe1989/mngs/tree/main/src/mngs/dsp#readme): Digital Signal Processing tools

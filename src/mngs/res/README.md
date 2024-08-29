@@ -1,12 +1,11 @@
 # [`mngs.res`](https://github.com/ywatanabe1989/mngs/tree/main/src/mngs/res/)
-A module to gather and manage system resource information.
 
 ## Overview
-The `mngs.res` module provides utilities for collecting and analyzing system resource information, including CPU, memory, GPU, disk, and network details. This module is particularly useful for system monitoring, performance analysis, and debugging.
+The `mngs.res` module provides comprehensive system resource monitoring and information gathering utilities. It offers an easy-to-use API for collecting detailed information about various system components, including CPU, memory, GPU, disk, and network.
 
 ## Installation
 ```bash
-$ pip install mngs
+pip install mngs
 ```
 
 ## Features
@@ -23,23 +22,33 @@ import mngs
 info = mngs.res.gather_info()
 
 # Save the information to a file
-mngs.io.save(info, "info.yaml")
+mngs.io.save(info, "system_info.yaml")
 
-# Print the gathered information
-print(info)
+# Print specific information
+print(f"CPU Usage: {info['cpu']['usage']}%")
+print(f"Total RAM: {info['memory']['total']} GB")
+print(f"GPU Name: {info['gpu'][0]['name']}")
+
+# Monitor system resources over time
+for _ in range(10):
+    cpu_usage = mngs.res.get_cpu_usage()
+    mem_usage = mngs.res.get_memory_usage()
+    print(f"CPU: {cpu_usage}%, Memory: {mem_usage}%")
+    time.sleep(1)
 ```
 
+## API Reference
+- `mngs.res.gather_info()`: Collects comprehensive system resource information
+- `mngs.res.get_cpu_info()`: Returns detailed CPU information
+- `mngs.res.get_memory_info()`: Returns memory usage statistics
+- `mngs.res.get_gpu_info()`: Returns GPU information (if available)
+- `mngs.res.get_disk_info()`: Returns disk usage and I/O statistics
+- `mngs.res.get_network_info()`: Returns network interface information
+- `mngs.res.get_cpu_usage()`: Returns current CPU usage percentage
+- `mngs.res.get_memory_usage()`: Returns current memory usage percentage
+
 ## Example Output
-The `gather_info()` function returns a dictionary containing detailed system information, including:
-
-- System Information (OS, Node Name, Release, Version)
-- CPU Info (Cores, Frequencies, Usage)
-- Memory Info (RAM and SWAP usage)
-- GPU Info (if available)
-- Disk Info (Partitions, Read/Write statistics)
-- Network Info (Interfaces, Data transfer)
-
-For a full example of the output, please refer to:
+The `gather_info()` function returns a dictionary containing detailed system information. For a full example of the output, please refer to:
 https://github.com/ywatanabe1989/mngs/tree/main/src/mngs/res/_gather_info/info.yaml
 
 ## Use Cases
@@ -48,9 +57,10 @@ https://github.com/ywatanabe1989/mngs/tree/main/src/mngs/res/_gather_info/info.y
 - Resource usage analysis
 - Debugging hardware-related issues
 - Generating system reports
+- Automated system health checks
 
-## API Reference
-- `mngs.res.gather_info()`: Collects comprehensive system resource information
+## Performance
+The `mngs.res` module is designed to be lightweight and efficient, with minimal impact on system performance during monitoring.
 
 ## Contributing
 Contributions to improve `mngs.res` are welcome. Please submit pull requests or open issues on the GitHub repository.
@@ -59,6 +69,6 @@ Contributions to improve `mngs.res` are welcome. Please submit pull requests or 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## Contact
-For questions or feedback, please contact Yusuke Watanabe (ywata1989@gmail.com).
+Yusuke Watanabe (ywata1989@gmail.com)
 
-For more information and updates, visit the [mngs GitHub repository](https://github.com/ywatanabe1989/mngs).
+For more information and updates, please visit the [mngs GitHub repository](https://github.com/ywatanabe1989/mngs).
