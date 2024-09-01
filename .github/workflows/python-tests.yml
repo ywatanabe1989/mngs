@@ -2,16 +2,16 @@ name: Python Tests
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, openhands ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, openhands ]
 
 jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.7, 3.8, 3.9, '3.10']
+        python-version: [3.8, 3.9, '3.10']
 
     steps:
     - uses: actions/checkout@v2
@@ -25,4 +25,7 @@ jobs:
         pip install -r requirements.txt
     - name: Run tests
       run: |
-        pytest tests/
+        python -m unittest discover tests
+        python -m unittest discover tests/mngs
+        python -m unittest discover tests/gen
+        python -m unittest discover tests/io

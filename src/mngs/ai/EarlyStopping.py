@@ -13,24 +13,37 @@ class EarlyStopping:
 
     This class is used to monitor the validation score during training and stop the process
     if no improvement is seen for a specified number of consecutive checks.
+
+    Attributes:
+        patience (int): Number of epochs to wait before early stopping.
+        verbose (bool): If True, prints a message for each validation score improvement.
+        delta (float): Minimum change in the monitored quantity to qualify as an improvement.
+        direction (str): Direction of improvement, either "minimize" or "maximize".
+        counter (int): Counter for patience.
+        best_score (float): Best score observed.
+        best_i_global (int): Global iteration number when the best score was observed.
+        models_spaths_dict (dict): Dictionary of model save paths.
     """
 
     def __init__(
         self, patience=7, verbose=False, delta=1e-5, direction="minimize"
     ):
         """
+        Initialize the EarlyStopping object.
+
         Args:
             patience (int): How long to wait after last time validation score improved.
                             Default: 7
             verbose (bool): If True, prints a message for each validation score improvement.
                             Default: False
             delta (float): Minimum change in the monitored quantity to qualify as an improvement.
-                            Default: 0
+                            Default: 1e-5
+            direction (str): Direction of improvement, either "minimize" or "maximize".
+                            Default: "minimize"
         """
         self.patience = patience
         self.verbose = verbose
         self.direction = direction
-
         self.delta = delta
 
         # default
@@ -39,7 +52,7 @@ class EarlyStopping:
         self.best_i_global = None
         self.models_spaths_dict = {}
 
-def is_best(self, val_score):
+    def is_best(self, val_score):
         """
         Check if the current validation score is the best so far.
 
@@ -54,6 +67,17 @@ def is_best(self, val_score):
         return is_smaller if self.direction == "minimize" else is_larger
 
     def __call__(self, current_score, models_spaths_dict, i_global):
+        """
+        Check if training should be stopped based on the current validation score.
+
+        Args:
+            current_score (float): The current validation score.
+            models_spaths_dict (dict): Dictionary of model save paths.
+            i_global (int): Global iteration number.
+
+        Returns:
+            bool: True if training should be stopped, False otherwise.
+        """
         # The 1st call
         if self.best_score is None:
             self.save(current_score, models_spaths_dict, i_global)
@@ -69,7 +93,9 @@ def is_best(self, val_score):
             self.counter += 1
             if self.verbose:
                 print(
-                    f"\nEarlyStopping counter: {self.counter} out of {self.patience}\n"
+                    f"
+EarlyStopping counter: {self.counter} out of {self.patience}
+"
                 )
             if self.counter >= self.patience:
                 if self.verbose:
@@ -77,11 +103,18 @@ def is_best(self, val_score):
                 return True
 
     def save(self, current_score, models_spaths_dict, i_global):
-        """Saves model when validation score decrease."""
+        """
+        Save the model when the validation score improves.
 
+        Args:
+            current_score (float): The current validation score.
+            models_spaths_dict (dict): Dictionary of model save paths.
+            i_global (int): Global iteration number.
+        """
         if self.verbose:
             print(
-                f"\nUpdate the best score: ({self.best_score:.6f} --> {current_score:.6f})"
+                f"
+Update the best score: ({self.best_score:.6f} --> {current_score:.6f})"
             )
 
         self.best_score = current_score
@@ -95,68 +128,4 @@ def is_best(self, val_score):
 
 if __name__ == "__main__":
     pass
-    # # starts the current fold's loop
-    # i_global = 0
-    # lc_logger = mngs.ml.LearningCurveLogger()
-    # early_stopping = utils.EarlyStopping(patience=50, verbose=True)
-    # for i_epoch, epoch in enumerate(tqdm(range(merged_conf["MAX_EPOCHS"]))):
-
-    #     dlf.fill(i_fold, reset_fill_counter=False)
-
-    #     step_str = "Validation"
-    #     for i_batch, batch in enumerate(dlf.dl_val):
-    #         _, loss_diag_val = utils.base_step(
-    #             step_str,
-    #             model,
-    #             mtl,
-    #             batch,
-    #             device,
-    #             i_fold,
-    #             i_epoch,
-    #             i_batch,
-    #             i_global,
-    #             lc_logger,
-    #             no_mtl=args.no_mtl,
-    #             print_batch_interval=False,
-    #         )
-    #     lc_logger.print(step_str)
-
-    #     step_str = "Training"
-    #     for i_batch, batch in enumerate(dlf.dl_tra):
-    #         optimizer.zero_grad()
-    #         loss, _ = utils.base_step(
-    #             step_str,
-    #             model,
-    #             mtl,
-    #             batch,
-    #             device,
-    #             i_fold,
-    #             i_epoch,
-    #             i_batch,
-    #             i_global,
-    #             lc_logger,
-    #             no_mtl=args.no_mtl,
-    #             print_batch_interval=False,
-    #         )
-    #         loss.backward()
-    #         optimizer.step()
-    #         i_global += 1
-    #     lc_logger.print(step_str)
-
-    #     bACC_val = np.array(lc_logger.logged_dict["Validation"]["bACC_diag_plot"])[
-    #         np.array(lc_logger.logged_dict["Validation"]["i_epoch"]) == i_epoch
-    #     ].mean()
-
-    #     model_spath = (
-    #         merged_conf["sdir"]
-    #         + f"checkpoints/model_fold#{i_fold}_epoch#{i_epoch:03d}.pth"
-    #     )
-    #     mtl_spath = model_spath.replace("model_fold", "mtl_fold")
-    #     models_spaths_dict = {model_spath: model, mtl_spath: mtl}
-
-    #     early_stopping(loss_diag_val, models_spaths_dict, i_epoch, i_global)
-    #     # early_stopping(-bACC_val, models_spaths_dict, i_epoch, i_global)
-
-    #     if early_stopping.early_stop:
-    #         print("Early stopping")
-    #         break
+    # Example usage code here (commented out)
