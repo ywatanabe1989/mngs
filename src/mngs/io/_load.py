@@ -162,11 +162,26 @@ def load(lpath, show=False, verbose=False, **kwargs):
 
 
 def _load_text(lpath):
-    with open(lpath, "r") as f:
-        return f.read()
+    """
+    Load text from a file.
 
+    Parameters:
+    -----------
+    lpath : str
+        The path to the text file to be loaded.
 
-def _load_text(lpath):
+    Returns:
+    --------
+    str
+        The content of the text file as a string.
+
+    Raises:
+    -------
+    FileNotFoundError
+        If the specified file does not exist.
+    IOError
+        If there's an error reading the file.
+    """
     with open(lpath, "r") as f:
         return f.read()
 
@@ -175,11 +190,30 @@ def _load_eeg_data(filename, **kwargs):
     """
     Load EEG data based on file extension and associated files using MNE-Python.
 
+    This function supports various EEG file formats including BrainVision, EDF, BDF, GDF, CNT, EGI, and SET.
+    It also handles special cases for .eeg files (BrainVision and Nihon Koden).
+
     Parameters:
-    filename (str: The path to the file to be loaded.
+    -----------
+    filename : str
+        The path to the EEG file to be loaded.
+    **kwargs : dict
+        Additional keyword arguments to be passed to the specific MNE loading function.
 
     Returns:
-    raw (mne.io.Raw: The loaded raw EEG data.
+    --------
+    raw : mne.io.Raw
+        The loaded raw EEG data.
+
+    Raises:
+    -------
+    ValueError
+        If the file extension is not supported.
+
+    Notes:
+    ------
+    This function uses MNE-Python to load the EEG data. It automatically detects the file format
+    based on the file extension and uses the appropriate MNE function to load the data.
     """
     # Get the file extension
     extension = filename.split(".")[-1]
@@ -236,6 +270,38 @@ def _load_eeg_data(filename, **kwargs):
 
 
 def load_markdown(lpath_md, style="plain_text"):
+    """
+    Load and convert Markdown content from a file.
+
+    This function reads a Markdown file and converts it to either HTML or plain text format.
+
+    Parameters:
+    -----------
+    lpath_md : str
+        The path to the Markdown file to be loaded.
+    style : str, optional
+        The output style of the converted content. 
+        Options are "html" or "plain_text" (default).
+
+    Returns:
+    --------
+    str
+        The converted content of the Markdown file, either as HTML or plain text.
+
+    Raises:
+    -------
+    FileNotFoundError
+        If the specified file does not exist.
+    IOError
+        If there's an error reading the file.
+    ValueError
+        If an invalid style option is provided.
+
+    Notes:
+    ------
+    This function uses the 'markdown' library to convert Markdown to HTML,
+    and 'html2text' to convert HTML to plain text when necessary.
+    """
     import html2text
     import markdown
 
@@ -247,17 +313,45 @@ def load_markdown(lpath_md, style="plain_text"):
     html_content = markdown.markdown(markdown_content)
     if style == "html":
         return html_content
-
     elif style == "plain_text":
         text_maker = html2text.HTML2Text()
         text_maker.ignore_links = True
         text_maker.bypass_tables = False
         plain_text = text_maker.handle(html_content)
-
         return plain_text
+    else:
+        raise ValueError("Invalid style option. Choose 'html' or 'plain_text'.")
 
 
-# def _check_encoding(file_path):
+def _check_encoding(file_path):
+    """
+    Check the encoding of a given file.
+
+    This function attempts to read the file with different encodings
+    to determine the correct one.
+
+    Parameters:
+    -----------
+    file_path : str
+        The path to the file to check.
+
+    Returns:
+    --------
+    str
+        The detected encoding of the file.
+
+    Raises:
+    -------
+    IOError
+        If the file cannot be read or the encoding cannot be determined.
+    """
+    import chardet
+
+    with open(file_path, 'rb') as file:
+        raw_data = file.read()
+    
+    result = chardet.detect(raw_data)
+    return result['encoding']
 #     from chardet.universaldetector import UniversalDetector
 
 #     detector = UniversalDetector()
@@ -271,22 +365,77 @@ def load_markdown(lpath_md, style="plain_text"):
 #     return enc
 
 
-# def get_data_path_from_a_package(package_str, resource):
-#     import importlib
-#     import os
-#     import sys
+def get_data_path_from_a_package(package_str, resource):
+    """
+    Get the path to a data file within a package.
 
-#     spec = importlib.util.find_spec(package_str)
-#     data_dir = os.path.join(spec.origin.split("src")[0], "data")
-#     resource_path = os.path.join(data_dir, resource)
-#     return resource_path
+    This function finds the path to a data file within a package's data directory.
+
+    Parameters:
+    -----------
+    package_str : str
+        The name of the package as a string.
+    resource : str
+        The name of the resource file within the package's data directory.
+
+    Returns:
+    --------
+    str
+        The full path to the resource file.
+
+    Raises:
+    -------
+    ImportError
+        If the specified package cannot be found.
+    FileNotFoundError
+        If the resource file does not exist in the package's data directory.
+    """
+    import importlib
+    import os
+    import sys
+
+    spec = importlib.util.find_spec(package_str)
+    if spec is None:
+        raise ImportError(f"Package '{package_str}' not found")
+    
+    data_dir = os.path.join(spec.origin.split("src")[0], "data")
+    resource_path = os.path.join(data_dir, resource)
+    
+    if not os.path.exists(resource_path):
+        raise FileNotFoundError(f"Resource '{resource}' not found in package '{package_str}'")
+    
+    return resource_path
 
 
 def load_yaml_as_an_optuna_dict(fpath_yaml, trial):
+    """
+    Load a YAML file and convert it to an Optuna-compatible dictionary.
+
+    This function reads a YAML file containing hyperparameter configurations
+    and converts it to a dictionary suitable for use with Optuna trials.
+
+    Parameters:
+    -----------
+    fpath_yaml : str
+        The file path to the YAML configuration file.
+    trial : optuna.trial.Trial
+        The Optuna trial object to use for suggesting hyperparameters.
+
+    Returns:
+    --------
+    dict
+        A dictionary containing the hyperparameters with values suggested by Optuna.
+
+    Raises:
+    -------
+    FileNotFoundError
+        If the specified YAML file does not exist.
+    ValueError
+        If the YAML file contains invalid configuration for Optuna.
+    """
     _d = load(fpath_yaml)
 
     for k, v in _d.items():
-
         dist = v["distribution"]
 
         if dist == "categorical":
@@ -310,26 +459,90 @@ def load_yaml_as_an_optuna_dict(fpath_yaml, trial):
 
 def load_study_rdb(study_name, rdb_raw_bytes_url):
     """
-    study = load_study_rdb(
-        study_name="YOUR_STUDY_NAME",
-        rdb_raw_bytes_url="sqlite:///*.db"
-    )
+    Load an Optuna study from a RDB (Relational Database) file.
+
+    This function loads an Optuna study from a given RDB file URL.
+
+    Parameters:
+    -----------
+    study_name : str
+        The name of the Optuna study to load.
+    rdb_raw_bytes_url : str
+        The URL of the RDB file, typically in the format "sqlite:///*.db".
+
+    Returns:
+    --------
+    optuna.study.Study
+        The loaded Optuna study object.
+
+    Raises:
+    -------
+    optuna.exceptions.StorageInvalidUsageError
+        If there's an error loading the study from the storage.
+
+    Example:
+    --------
+    >>> study = load_study_rdb(
+    ...     study_name="YOUR_STUDY_NAME",
+    ...     rdb_raw_bytes_url="sqlite:///path/to/your/study.db"
+    ... )
     """
     import optuna
 
-    # rdb_raw_bytes_url = "sqlite:////tmp/fake/ywatanabe/_MicroNN_WindowSize-1.0-sec_MaxEpochs_100_2021-1216-1844/optuna_study_test_file#0.db"
     storage = optuna.storages.RDBStorage(url=rdb_raw_bytes_url)
     study = optuna.load_study(study_name=study_name, storage=storage)
-    print(f"\nLoaded: {rdb_raw_bytes_url}\n")
+    print(f"
+Loaded: {rdb_raw_bytes_url}
+")
     return study
 
 
 def load_configs(IS_DEBUG=None, show=False, verbose=False):
+    """
+    Load and process configuration files from the ./config directory.
+
+    This function loads all YAML files in the ./config directory, processes debug configurations,
+    and returns a consolidated configuration dictionary.
+
+    Parameters:
+    -----------
+    IS_DEBUG : bool, optional
+        Flag to enable debug mode. If None, it will be determined from the ./config/IS_DEBUG.yaml file.
+    show : bool, optional
+        If True, print debug information. Default is False.
+    verbose : bool, optional
+        If True, print verbose debug information. Default is False.
+
+    Returns:
+    --------
+    mngs.gen.DotDict
+        A dictionary-like object containing all loaded and processed configurations.
+
+    Notes:
+    ------
+    - If the CI environment variable is set to "True", IS_DEBUG will be set to True.
+    - Debug configurations (keys starting with "DEBUG_") will replace their non-debug counterparts when IS_DEBUG is True.
+    """
 
     if os.getenv("CI") == "True":
         IS_DEBUG = True
 
     def update_debug(config, IS_DEBUG):
+        """
+        Update configuration with debug values if IS_DEBUG is True.
+
+        Parameters:
+        -----------
+        config : dict
+            The configuration dictionary to update.
+        IS_DEBUG : bool
+            Flag indicating whether debug mode is active.
+
+        Returns:
+        --------
+        dict
+            The updated configuration dictionary.
+        """
         if IS_DEBUG:
             debug_keys = mngs.gen.search("^DEBUG_", list(config.keys()))[1]
             for dk in debug_keys:
@@ -361,7 +574,35 @@ def load_configs(IS_DEBUG=None, show=False, verbose=False):
 ################################################################################
 # dev
 ################################################################################
-# def _load_docx(lpath):
+def _load_docx(lpath):
+    """
+    Load and extract text content from a .docx file.
+
+    Parameters:
+    -----------
+    lpath : str
+        The path to the .docx file.
+
+    Returns:
+    --------
+    str
+        The extracted text content from the .docx file.
+
+    Raises:
+    -------
+    FileNotFoundError
+        If the specified file does not exist.
+    docx.opc.exceptions.PackageNotFoundError
+        If the file is not a valid .docx file.
+    """
+    from docx import Document
+    
+    doc = Document(lpath)
+    full_text = []
+    for para in doc.paragraphs:
+        full_text.append(para.text)
+    return '
+'.join(full_text)
 #     doc = docx.Document(lpath)
 #     full_text = []
 #     for para in doc.paragraphs:

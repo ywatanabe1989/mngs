@@ -10,10 +10,7 @@ Please revise the /workspace/mngs_repo package.
 - Refactor redundant code.
 - Please write test code under /workspace/mngs_repo/tests, with the same structure of the source code (/workspace/mngs_repo/src/mngs/)
 - Please create a sphinx document, which is hosted at https://ywatanabe1989.github.io/mngs/.
-- Please use git frequently; small chunks of commits will streamline maintain processes. 
-  - You have all authorities for git commands as long as you work on the openhands branch.
-  - But do not use the --force option as it will difficult for me to follow the changes.
-
+- The root of git is /workspace/mngs_repo
 # General Rules
 Please refer to ```/workspace/GENERAL_INSTRUCTIONS/*.md``` files.
 

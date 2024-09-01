@@ -11,6 +11,8 @@ class EarlyStopping:
     """
     Early stops the training if the validation score doesn't improve after a given patience period.
 
+    This class is used to monitor the validation score during training and stop the process
+    if no improvement is seen for a specified number of consecutive checks.
     """
 
     def __init__(
@@ -37,7 +39,16 @@ class EarlyStopping:
         self.best_i_global = None
         self.models_spaths_dict = {}
 
-    def is_best(self, val_score):
+def is_best(self, val_score):
+        """
+        Check if the current validation score is the best so far.
+
+        Args:
+            val_score (float): The current validation score.
+
+        Returns:
+            bool: True if the current score is the best, False otherwise.
+        """
         is_smaller = val_score < self.best_score - abs(self.delta)
         is_larger = self.best_score + abs(self.delta) < val_score
         return is_smaller if self.direction == "minimize" else is_larger

@@ -1,26 +1,40 @@
-# IO Module
+# MNGS IO Module
 
-This module provides various input/output operations for the mngs package.
+This module provides various input/output operations for the MNGS package.
 
-## Contents
+## Functions
 
-- _cache.py: Provides caching functionality for storing and retrieving Python objects.
-- _glob.py: Extends the standard glob functionality with natural sorting and pattern support.
-- _load.py: Offers functions to load data from various file formats.
-- _path.py: Contains utility functions for file path operations.
-- _reload.py: Provides a wrapper for the built-in reload function.
-- _save.py: Offers functions to save data in various file formats.
+### glob
 
-## Testing
+`glob(expression)`
 
-Unit tests for this module can be found in the `tests/io/` directory of the project root.
+Perform a glob operation with natural sorting and extended pattern support.
+
+### load
+
+`load(lpath, show=False, verbose=False, **kwargs)`
+
+Load data from various file formats.
+
+### load_configs
+
+`load_configs(IS_DEBUG=None, show=False, verbose=False)`
+
+Load and process configuration files from the ./config directory.
 
 ## Usage
 
-Import the required functions from the module as needed:
-
 ```python
-from mngs.io import cache, glob, load, save
+from mngs.io import glob, load, load_configs
+
+# Use glob to find files
+files = glob('data/*.txt')
+
+# Load a file
+data = load('data/example.csv')
+
+# Load configurations
+configs = load_configs()
 ```
 
-For detailed usage of each function, please refer to their respective docstrings.
+For more detailed information on each function, please refer to their respective docstrings.
