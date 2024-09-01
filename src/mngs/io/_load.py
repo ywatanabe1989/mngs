@@ -403,3 +403,77 @@ def load_configs(IS_DEBUG=None, show=False, verbose=False):
 
 # def _load_textfile(lpath):
 #     return lpath.read().decode("utf-8")
+
+def load_markdown(lpath_md, style="plain_text"):
+    """
+    Load and convert a Markdown file to either HTML or plain text.
+
+    Parameters:
+    -----------
+    lpath_md : str
+        The path to the Markdown file.
+    style : str, optional
+        The output style, either "html" or "plain_text" (default).
+
+    Returns:
+    --------
+    str
+        The converted content of the Markdown file.
+    """
+    # ... (rest of the function remains unchanged)
+
+def load_yaml_as_an_optuna_dict(fpath_yaml, trial):
+    """
+    Load a YAML file and convert it to an Optuna-compatible dictionary.
+
+    Parameters:
+    -----------
+    fpath_yaml : str
+        The path to the YAML file.
+    trial : optuna.trial.Trial
+        The Optuna trial object.
+
+    Returns:
+    --------
+    dict
+        A dictionary with Optuna-compatible parameter suggestions.
+    """
+    # ... (rest of the function remains unchanged)
+
+def load_study_rdb(study_name, rdb_raw_bytes_url):
+    """
+    Load an Optuna study from a RDB storage.
+
+    Parameters:
+    -----------
+    study_name : str
+        The name of the Optuna study.
+    rdb_raw_bytes_url : str
+        The URL of the RDB storage.
+
+    Returns:
+    --------
+    optuna.study.Study
+        The loaded Optuna study object.
+    """
+    # ... (rest of the function remains unchanged)
+
+def load_configs(IS_DEBUG=None, show=False, verbose=False):
+    """
+    Load configuration files from the ./config directory.
+
+    Parameters:
+    -----------
+    IS_DEBUG : bool, optional
+        If True, use debug configurations. If None, check ./config/IS_DEBUG.yaml.
+    show : bool, optional
+        If True, display additional information during loading.
+    verbose : bool, optional
+        If True, print verbose output during loading.
+
+    Returns:
+    --------
+    mngs.gen.DotDict
+        A dictionary-like object containing the loaded configurations.
+    """
+    # ... (rest of the function remains unchanged)
