@@ -6,8 +6,8 @@ import io as _io
 import json
 import os
 import pickle
-from shutil import move
 import shutil
+from shutil import move
 
 import h5py
 import joblib
@@ -160,17 +160,18 @@ def save(
 
 
 def _save(obj, spath, verbose=True, **kwargs):
+    print(obj, spath)
     # Main
     try:
-        ## copy files
-        is_copying_files = (
-            isinstance(obj, str) or mngs.gen.is_listed_X(obj, str)
-        ) and (isinstance(spath, str) or mngs.gen.is_listed_X(spath, str))
-        if is_copying_files:
-            mngs.general.copy_files(obj, spath)
+        # ## copy files
+        # is_copying_files = (
+        #     isinstance(obj, str) or mngs.gen.is_listed_X(obj, str)
+        # ) and (isinstance(spath, str) or mngs.gen.is_listed_X(spath, str))
+        # if is_copying_files:
+        #     mngs.general.copy_files(obj, spath)
 
         # csv
-        elif spath.endswith(".csv"):
+        if spath.endswith(".csv"):
             if isinstance(obj, pd.Series):  # Series
                 obj.to_csv(spath, **kwargs)
             if isinstance(obj, pd.DataFrame):  # DataFrame
@@ -508,3 +509,9 @@ def save_optuna_study_as_csv_and_pngs(study, sdir):
 
     for figname, fig in figs_dict.items():
         save(fig, sdir + f"{figname}.png")
+
+
+if __name__ == "__main__":
+    import mngs
+
+    mngs.io.save("aaa", "text.txt")

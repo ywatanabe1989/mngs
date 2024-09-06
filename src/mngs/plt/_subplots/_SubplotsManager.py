@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-13 06:41:29 (ywatanabe)"
+# Time-stamp: "2024-08-30 01:41:03 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/SubplotsManager.py
 
 from collections import OrderedDict
@@ -98,6 +98,7 @@ class SubplotsManager:
 
         if axes_orig_shape == (1,):
             ax_wrapped = AxisWrapper(fig, axes[0], track)
+            fig.axes = [ax_wrapped]
             return fig, ax_wrapped
 
         else:
@@ -109,6 +110,7 @@ class SubplotsManager:
                 else axes_wrapped[0]
             )
             axes = AxesWrapper(fig, axes)
+            fig.axes = axes
             return fig, axes
 
     # @property

@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-08-25 10:30:51 (ywatanabe)"
+# Time-stamp: "2024-08-30 01:28:42 (ywatanabe)"
 
 import matplotlib.pyplot as plt
-import numpy as np
 import mngs
+import numpy as np
 
 
 # fixme, quite slow
@@ -59,26 +59,9 @@ def set_x_ticks(ax, x_vals=None, x_ticks=None):
         ax.set_xticklabels([f"{xv}" for xv in x_vals])
         return ax
 
-    # def _set_x_ticks(ax, x_ticks):
-    #     x_ticks = np.array(x_ticks)
-    #     x_vals = np.array(
-    #         [
-    #             label.get_text().replace("−", "-")
-    #             for label in ax.get_xticklabels()
-    #         ]
-    #     )
-    #     x_vals = x_vals.astype(float)
-    #     x_indi = np.argmin(
-    #         np.array(np.abs(x_vals[:, np.newaxis] - x_ticks[np.newaxis, :])),
-    #         axis=0,
-    #     )
-
-    #     ax.set_xticks(ax.get_xticks()[x_indi])
-    #     ax.set_xticklabels([f"{xt}" for xt in x_ticks])
-    #     return ax
     def _set_x_ticks(ax, x_ticks):
         x_ticks = np.array(x_ticks)
-        if x_ticks.dtype.kind in ["U", "S"]:  # If x_ticks are strings
+        if x_ticks.dtype.kind in ["U", "S", "O"]:  # If x_ticks are strings
             ax.set_xticks(range(len(x_ticks)))
             ax.set_xticklabels(x_ticks)
         else:
@@ -99,28 +82,30 @@ def set_x_ticks(ax, x_vals=None, x_ticks=None):
             ax.set_xticklabels([f"{xt}" for xt in x_ticks])
         return ax
 
-    is_x_vals = x_vals is not None
-    is_x_ticks = x_ticks is not None
+    x_vals_passed = x_vals is not None
+    x_ticks_passed = x_ticks is not None
 
     if mngs.gen.is_listed_X(x_ticks, dict):
         x_ticks = [mngs.gen.dict2str(xt, delimiter="\n") for xt in x_ticks]
 
-    # Do nothing
-    if (not is_x_vals) and (not is_x_ticks):
+    if (not x_vals_passed) and (not x_ticks_passed):
+        # Do nothing
         pass
 
-    # Replaces the x axis to x_vals
-    elif is_x_vals and (not is_x_ticks):
-        # ax = _set_x_vals(ax, x_vals)
+    elif x_vals_passed and (not x_ticks_passed):
+        # Replaces the x axis to x_vals
         x_ticks = np.linspace(x_vals[0], x_vals[-1], 4)
         ax = _set_x_vals(ax, x_ticks)
 
-    # Locates 'x_ticks' on the original x axis
-    elif (not is_x_vals) and is_x_ticks:
+    elif (not x_vals_passed) and x_ticks_passed:
+        # Locates 'x_ticks' on the original x axis
         ax.set_xticks(x_ticks)
 
-    # Replaces the original x axis to 'x_vals' and locates the 'x_ticks' on the new axis
-    elif is_x_vals and is_x_ticks:
+    elif x_vals_passed and x_ticks_passed:
+        if x_vals is "auto":
+            x_vals = np.arange(len(x_ticks))
+
+        # Replaces the original x axis to 'x_vals' and locates the 'x_ticks' on the new axis
         ax = _set_x_vals(ax, x_vals)
         ax = _set_x_ticks(ax, x_ticks)
 
@@ -182,7 +167,7 @@ def set_y_ticks(ax, y_vals=None, y_ticks=None):
     #     return ax
     def _set_y_ticks(ax, y_ticks):
         y_ticks = np.array(y_ticks)
-        if y_ticks.dtype.kind in ["U", "S"]:  # If y_ticks are strings
+        if y_ticks.dtype.kind in ["U", "S", "O"]:  # If y_ticks are strings
             ax.set_yticks(range(len(y_ticks)))
             ax.set_yticklabels(y_ticks)
         else:
@@ -203,26 +188,29 @@ def set_y_ticks(ax, y_vals=None, y_ticks=None):
             ax.set_yticklabels([f"{yt}" for yt in y_ticks])
         return ax
 
-    is_y_vals = y_vals is not None
-    is_y_ticks = y_ticks is not None
+    y_vals_passed = y_vals is not None
+    y_ticks_passed = y_ticks is not None
 
     if mngs.gen.is_listed_X(y_ticks, dict):
         y_ticks = [mngs.gen.dict2str(yt, delimiter="\n") for yt in y_ticks]
 
-    # Do nothing
-    if (not is_y_vals) and (not is_y_ticks):
+    if (not y_vals_passed) and (not y_ticks_passed):
+        # Do nothing
         pass
 
-    # Replaces the y axis to y_vals
-    elif is_y_vals and (not is_y_ticks):
+    elif y_vals_passed and (not y_ticks_passed):
+        # Replaces the y axis to y_vals
         ax = _set_y_vals(ax, y_vals)
 
-    # Locates 'y_ticks' on the original y axis
-    elif (not is_y_vals) and is_y_ticks:
+    elif (not y_vals_passed) and y_ticks_passed:
+        # Locates 'y_ticks' on the original y axis
         ax.set_yticks(y_ticks)
 
-    # Replaces the original y axis to 'y_vals' and locates the 'y_ticks' on the new axis
-    elif is_y_vals and is_y_ticks:
+    elif y_vals_passed and y_ticks_passed:
+        # Replaces the original y axis to 'y_vals' and locates the 'y_ticks' on the new axis
+        if y_vals is "auto":
+            y_vals = np.arange(len(y_ticks))
+
         ax = _set_y_vals(ax, y_vals)
         ax = _set_y_ticks(ax, y_ticks)
     return ax

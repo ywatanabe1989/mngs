@@ -1,10 +1,10 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-08-20 17:39:34 (ywatanabe)"
+# Time-stamp: "2024-09-03 06:04:45 (ywatanabe)"
 # /home/ywatanabe/proj/mngs_repo/src/mngs/pd/_mv.py
 
 
-def mv(df, key, position, axis=0):
+def mv(df, key, position, axis=1):
     """
     Move a row or column to a specified position in a DataFrame.
 
@@ -12,7 +12,7 @@ def mv(df, key, position, axis=0):
     df (pandas.DataFrame): The input DataFrame.
     key (str): The label of the row or column to move.
     position (int): The position to move the row or column to.
-    axis (int, optional): 0 for rows, 1 for columns. Defaults to 0.
+    axis (int, optional): 0 for rows, 1 for columns. Defaults to 1.
 
     Returns:
     pandas.DataFrame: A new DataFrame with the row or column moved.
@@ -22,6 +22,10 @@ def mv(df, key, position, axis=0):
     else:
         items = df.columns.tolist()
     items.remove(key)
+
+    if position < 0:
+        position += len(items) + 1
+
     items.insert(position, key)
     return df.reindex(items, axis=axis)
 

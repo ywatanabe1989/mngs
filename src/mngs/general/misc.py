@@ -20,7 +20,7 @@ import numpy as np
 import pandas as pd
 import readchar
 import torch
-
+import xarray as xr
 # from mngs.gen import deprecated
 from natsort import natsorted
 
@@ -101,16 +101,25 @@ def search(patterns, strings, only_perfect_match=False, as_bool=False):
 
     ## For single string objects
     def to_list(s_or_p):
-        if isinstance(s_or_p, collections.abc.KeysView):
-            s_or_p = list(s_or_p)
-
-        elif not isinstance(
-            s_or_p,
-            (list, tuple, pd.core.indexes.base.Index, pd.core.series.Series),
-        ):
-            s_or_p = [s_or_p]
-
+        if isinstance(s_or_p, (np.ndarray, pd.Series, xr.DataArray)):
+            return s_or_p.tolist()
+        elif isinstance(s_or_p, collections.abc.KeysView):
+            return list(s_or_p)
+        elif not isinstance(s_or_p, (list, tuple, pd.Index)):
+            return [s_or_p]
         return s_or_p
+
+    # def to_list(s_or_p):
+    #     if isinstance(s_or_p, collections.abc.KeysView):
+    #         s_or_p = list(s_or_p)
+
+    #     elif not isinstance(
+    #         s_or_p,
+    #         (list, tuple, pd.core.indexes.base.Index, pd.core.series.Series),
+    #     ):
+    #         s_or_p = [s_or_p]
+
+    #     return s_or_p
 
     patterns = to_list(patterns)
     strings = to_list(strings)
@@ -512,16 +521,16 @@ def copy_files(src_files, dists, allow_overwrite=False):
             _copy_a_file(sf, dst, allow_overwrite=allow_overwrite)
 
 
-def copy_the_file(sdir):
-    __file__ = inspect.stack()[1].filename
-    _, fname, ext = mngs.path.split(__file__)
+# def copy_the_file(sdir):
+#     __file__ = inspect.stack()[1].filename
+#     _, fname, ext = mngs.path.split(__file__)
 
-    dst = sdir + fname + ext
+#     dst = sdir + fname + ext
 
-    if "ipython" not in __file__:
-        # shutil.copyfile(__file__, dst)
-        # print(f"Saved to: {dst}")
-        _copy_a_file(__file__, dst)
+#     if "ipython" not in __file__:
+#         # shutil.copyfile(__file__, dst)
+#         # print(f"Saved to: {dst}")
+#         _copy_a_file(__file__, dst)
 
 
 def is_nan(X):

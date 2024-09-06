@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-08-25 12:18:24 (ywatanabe)"
+# Time-stamp: "2024-09-02 10:03:48 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/_to_sigma.py
 
 
@@ -22,6 +22,7 @@ import mngs
 import seaborn as sns
 
 mngs.gen.reload(mngs)
+import logging
 import warnings
 from glob import glob
 from pprint import pprint
@@ -35,7 +36,6 @@ import xarray as xr
 from icecream import ic
 from natsort import natsorted
 from tqdm import tqdm
-import logging
 
 # sys.path = ["."] + sys.path
 # from scripts import utils, load
@@ -158,9 +158,9 @@ def format_plotting_args(record):
         df = pd.DataFrame(
             {
                 f"{id}_{method}_x": xx,
+                f"{id}_{method}_upper": mm + ss,
                 f"{id}_{method}_under": mm - ss,
                 f"{id}_{method}_mean": mm,
-                f"{id}_{method}_upper": mm + ss,
             }
         )
         return df

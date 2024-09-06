@@ -1,10 +1,12 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-13 08:13:38 (ywatanabe)"
-# /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/FigWrapper.py
+# Time-stamp: "2024-08-30 01:43:44 (ywatanabe)"
+# /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/_FigWrapper.py
 
-from mngs.gen import deprecated
 from functools import wraps
+
+import pandas as pd
+from mngs.gen import deprecated
 
 
 class FigWrapper:
@@ -17,6 +19,7 @@ class FigWrapper:
         Initialize the AxisWrapper with a given axis and history reference.
         """
         self.fig = fig
+        self.axes = []
 
     def __getattr__(self, attr):
         """
@@ -40,6 +43,22 @@ class FigWrapper:
     ################################################################################
     # Original methods
     ################################################################################
+    def to_sigma(self):
+        """
+        Summarizes all data under the figure, including all AxesWrapper objects.
+        """
+        dfs = []
+        for i, ax in enumerate(self.axes):
+            if hasattr(ax, "to_sigma"):
+                df = ax.to_sigma()
+                df.columns = [f"Axis_{i}_{col}" for col in df.columns]
+                dfs.append(df)
+
+        if dfs:
+            return pd.concat(dfs, axis=1)
+        else:
+            return pd.DataFrame()
+
     @deprecated("Use supxyt() instead.")
     def set_supxyt(self, *args, **kwargs):
         return self.supxyt(*args, **kwargs)

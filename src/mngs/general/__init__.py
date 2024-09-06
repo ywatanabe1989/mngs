@@ -22,14 +22,13 @@ from .decorators._cache import cache
 from .decorators._deprecated import deprecated
 # Miscellaneous utilities
 from .misc import (_return_counting_process, color_text, connect_nums,
-                   connect_strs, copy_files, copy_the_file, ct, decapitalize,
-                   describe, find_closest, float_linspace, grep,
-                   is_defined_global, is_defined_local, is_later_or_equal,
-                   is_listed_X, is_nan, isclose, listed_dict,
-                   merge_dicts_wo_overlaps, natglob, partial_at, pop_keys,
-                   print_block, quiet, readable_bytes, replace, search,
-                   squeeze_spaces, suppress_output, symlink, to_even, to_odd,
-                   unique, uq, wait_key)
+                   connect_strs, copy_files, ct, decapitalize, describe,
+                   find_closest, float_linspace, grep, is_defined_global,
+                   is_defined_local, is_later_or_equal, is_listed_X, is_nan,
+                   isclose, listed_dict, merge_dicts_wo_overlaps, natglob,
+                   partial_at, pop_keys, print_block, quiet, readable_bytes,
+                   replace, search, squeeze_spaces, suppress_output, symlink,
+                   to_even, to_odd, unique, uq, wait_key)
 # Utils
 from .system_ops._email import notify, send_gmail
 from .system_ops._shell import run_shellcommand, run_shellscript

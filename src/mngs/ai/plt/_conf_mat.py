@@ -6,6 +6,7 @@ import pandas as pd
 import seaborn as sns
 from matplotlib import ticker
 from mpl_toolkits.axes_grid1 import make_axes_locatable
+from sklearn.metrics import balanced_accuracy_score
 from sklearn.metrics import confusion_matrix as sklearn_confusion_matrix
 
 
@@ -22,7 +23,7 @@ def conf_mat(
     true_labels=None,
     sorted_true_labels=None,
     label_rotation_xy=(15, 15),
-    title=None,
+    title="Confuxion Matrix",
     colorbar=True,
     x_extend_ratio=1.0,
     y_extend_ratio=1.0,
@@ -57,6 +58,18 @@ def conf_mat(
     if cm is None:
         cm = sklearn_confusion_matrix(y_true, y_pred)
 
+    def calc_bACC_from_cm(cm):
+        try:
+            per_class = np.diag(cm) / np.nansum(cm, axis=1)
+            bacc = np.nanmean(per_class)
+        except:
+            bacc = np.nan
+        return bacc
+
+    bacc = round(calc_bACC_from_cm(cm), 3)
+
+    title = f"{title} (bACC = {bacc})"
+
     # Ensure all labels are present in the confusion matrix
     if labels is not None:
         full_cm = np.zeros((len(labels), len(labels)))
@@ -78,15 +91,13 @@ def conf_mat(
 
     # To LaTeX styles
     if pred_labels is not None:
-        pred_labels = [mngs.general.to_the_latex_style(l) for l in pred_labels]
+        pred_labels = [mngs.general.to_latex_style(l) for l in pred_labels]
     if true_labels is not None:
-        true_labels = [mngs.general.to_the_latex_style(l) for l in true_labels]
+        true_labels = [mngs.general.to_latex_style(l) for l in true_labels]
     if labels is not None:
-        labels = [mngs.general.to_the_latex_style(l) for l in labels]
+        labels = [mngs.general.to_latex_style(l) for l in labels]
     if sorted_labels is not None:
-        sorted_labels = [
-            mngs.general.to_the_latex_style(l) for l in sorted_labels
-        ]
+        sorted_labels = [mngs.general.to_latex_style(l) for l in sorted_labels]
 
     # Prediction Labels: columns
     if pred_labels is not None:
@@ -114,6 +125,7 @@ def conf_mat(
         fmt=".0f",
         cmap="Blues",
         cbar=False,
+        vmin=0,
     )  # Here, don't plot color bar.
 
     # Adds comma separator for the annotated int texts
@@ -155,7 +167,7 @@ def conf_mat(
     dx = width_orig - width_tgt
 
     # Adjusts the sizes of the confusion matrix and colorbar
-    if colorbar == True:  # fixme
+    if colorbar:
         divider = make_axes_locatable(ax)  # Gets region from the ax
         cax = divider.append_axes("right", size="5%", pad=0.1)
         # cax = divider.new_horizontal(size="5%", pad=1, pack_start=True)
@@ -224,26 +236,20 @@ def conf_mat(
 
 if __name__ == "__main__":
 
-    import mngs
-
-    y_true, y_pred = mngs.io.load("/tmp/tmp.pkl")
-
-    fig, cm = conf_mat(plt, y_true=y_true, y_pred=y_pred)
-
-    # https://scikit-learn.org/stable/auto_examples/model_selection/plot_confusion_matrix.html#sphx-glr-auto-examples-model-selection-plot-confusion-matrix-py
     import sys
 
     import matplotlib.pyplot as plt
+    import mngs
     import numpy as np
     import sklearn
     from sklearn import datasets, svm
-
     # from sklearn.metrics import plot_confusion_matrix
     from sklearn.model_selection import train_test_split
 
     sys.path.append(".")
     import mngs
 
+    # https://scikit-learn.org/stable/auto_examples/model_selection/plot_confusion_matrix.html#sphx-glr-auto-examples-model-selection-plot-confusion-matrix-py
     # Imports some data to play with
     iris = datasets.load_iris()
     X = iris.data
@@ -262,29 +268,13 @@ if __name__ == "__main__":
     cm = sklearn.metrics.confusion_matrix(y_test, y_pred)
     cm **= 3
 
-    cm = np.random.randint(low=0, high=10, size=[3, 4])
-
-    mngs.plt.configure_mpl(
-        plt,
-        # figsize=(4, 8),
-        # figsize=(4, 8),
-        # fontsize=6,
-        # labelsize=8,
-        # legendfontsize=7,
-        # tick_size=0.8,
-        # tick_width=0.2,
-    )
-
-    # labels = class_names
-    pred_labels = ["A", "B", "C"]
-    true_labels = ["a", "b", "c", "d"]
-
     fig, cm = conf_mat(
         plt,
+        # y_true=y_test,
+        # y_pred=y_pred,
         cm,
-        # labels=class_names,
-        pred_labels=pred_labels,
-        true_labels=true_labels,
+        pred_labels=["A", "B", "C"],
+        true_labels=["a", "b", "c"],
         label_rotation_xy=(60, 60),
         x_extend_ratio=1.0,
         colorbar=True,
@@ -292,12 +282,10 @@ if __name__ == "__main__":
 
     fig.axes[-1] = mngs.plt.ax.sci_note(
         fig.axes[-1],
-        3,
         fformat="%3.1f",
-        # fformat="%d",
         y=True,
     )
 
-    fig.show()
+    plt.show()
 
     ## EOF
