@@ -81,7 +81,7 @@ def connect_strs(strs, filler="_"):
         connected = ""
         for s in strs:
             connected += filler + s
-        return connected[len(filler):]
+        return connected[len(filler) :]
     else:
         return strs
 
@@ -112,7 +112,7 @@ def connect_nums(nums, filler="_"):
         connected = ""
         for n in nums:
             connected += filler + str(n)
-        return connected[len(filler):]
+        return connected[len(filler) :]
     else:
         return nums
 
@@ -186,23 +186,22 @@ def search(patterns, strings, only_perfect_match=False, as_bool=False):
     >>> search(patterns, strings)
     ([1, 5], ['orange', 'orange_juice'])
     """
+
     def to_list(s_or_p):
-<<<<<<< HEAD
         if isinstance(s_or_p, (np.ndarray, pd.Series, xr.DataArray)):
             return s_or_p.tolist()
         elif isinstance(s_or_p, collections.abc.KeysView):
             return list(s_or_p)
         elif not isinstance(s_or_p, (list, tuple, pd.Index)):
             return [s_or_p]
-=======
-        if isinstance(s_or_p, collections.abc.KeysView):
-            s_or_p = list(s_or_p)
-        elif not isinstance(
-            s_or_p,
-            (list, tuple, pd.core.indexes.base.Index, pd.core.series.Series),
-        ):
-            s_or_p = [s_or_p]
->>>>>>> 5eb94c702fc60766ac3b840e6336a7d52ca088fc
+        # if isinstance(s_or_p, collections.abc.KeysView):
+        #     s_or_p = list(s_or_p)
+        # elif not isinstance(
+        #     s_or_p,
+        #     (list, tuple, pd.core.indexes.base.Index, pd.core.series.Series),
+        # ):
+        #     s_or_p = [s_or_p]
+
         return s_or_p
 
     # def to_list(s_or_p):
@@ -579,7 +578,7 @@ def merge_dicts_wo_overlaps(*dicts):
     >>> d2 = {'c': 3, 'd': 4}
     >>> merge_dicts_wo_overlaps(d1, d2)
     {'a': 1, 'b': 2, 'c': 3, 'd': 4}
-    
+
     >>> d3 = {'b': 5}  # This would raise an AssertionError due to overlapping key 'b'
     >>> merge_dicts_wo_overlaps(d1, d3)
     AssertionError
@@ -811,11 +810,6 @@ def copy_files(src_files, dists, allow_overwrite=False):
             _copy_a_file(sf, dst, allow_overwrite=allow_overwrite)
 
 
-<<<<<<< HEAD
-# def copy_the_file(sdir):
-#     __file__ = inspect.stack()[1].filename
-#     _, fname, ext = mngs.path.split(__file__)
-=======
 def copy_the_file(sdir):
     """Copy the current script file to a specified directory.
 
@@ -837,19 +831,11 @@ def copy_the_file(sdir):
     """
     __file__ = inspect.stack()[1].filename
     _, fname, ext = mngs.path.split(__file__)
->>>>>>> 5eb94c702fc60766ac3b840e6336a7d52ca088fc
 
-#     dst = sdir + fname + ext
+    #     dst = sdir + fname + ext
 
-<<<<<<< HEAD
-#     if "ipython" not in __file__:
-#         # shutil.copyfile(__file__, dst)
-#         # print(f"Saved to: {dst}")
-#         _copy_a_file(__file__, dst)
-=======
     if "ipython" not in __file__:
         _copy_a_file(__file__, dst)
->>>>>>> 5eb94c702fc60766ac3b840e6336a7d52ca088fc
 
 
 def is_nan(X):
@@ -926,6 +912,7 @@ def partial_at(func, index, value):
     >>> hello("Bob")
     'Hello, Bob!'
     """
+
     @wraps(func)
     def result(*rest, **kwargs):
         args = []
@@ -1287,11 +1274,7 @@ def print_block(message, char="-", n=40, c=None):
     ********************
     * Hello, World!    *
     ********************
-    """
-    ********************
-    Hello, World!
-    ********************
-    
+
     Note: The actual output will be in green color.
     """
     border = char * n
@@ -1321,27 +1304,6 @@ def color_text(text, c="green"):
     -------
     >>> print(color_text("Hello, World!", "blue"))
     # This will print "Hello, World!" in blue text
-    """
-    """Apply ANSI color codes to text.
-
-    Parameters
-    ----------
-    text : str
-        The text to be colored.
-    c : str, optional
-        The color to apply. Available colors are 'red', 'green', 'yellow',
-        'blue', 'magenta', 'cyan', 'white', 'grey', 'gray', 'tra', 'val', 'tes'.
-        Default is "green".
-
-    Returns
-    -------
-    str
-        The input text with ANSI color codes applied.
-
-    Example
-    -------
-    >>> print(color_text("Hello, World!", "red"))
-    # Output will be "Hello, World!" in red text
     """
     ANSI_COLORS = {
         "red": "\033[91m",

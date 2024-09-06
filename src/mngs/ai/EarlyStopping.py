@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Time-stamp: "2024-03-25 14:52:31 (ywatanabe)"
+# Time-stamp: "2024-09-06 23:27:51 (ywatanabe)"
 
 import os
 
@@ -93,9 +93,7 @@ class EarlyStopping:
             self.counter += 1
             if self.verbose:
                 print(
-                    f"
-EarlyStopping counter: {self.counter} out of {self.patience}
-"
+                    f"EarlyStopping counter: {self.counter} out of {self.patience}"
                 )
             if self.counter >= self.patience:
                 if self.verbose:
@@ -113,8 +111,7 @@ EarlyStopping counter: {self.counter} out of {self.patience}
         """
         if self.verbose:
             print(
-                f"
-Update the best score: ({self.best_score:.6f} --> {current_score:.6f})"
+                f"Update the best score: ({self.best_score:.6f} --> {current_score:.6f})"
             )
 
         self.best_score = current_score
@@ -128,4 +125,68 @@ Update the best score: ({self.best_score:.6f} --> {current_score:.6f})"
 
 if __name__ == "__main__":
     pass
-    # Example usage code here (commented out)
+    # # starts the current fold's loop
+    # i_global = 0
+    # lc_logger = mngs.ml.LearningCurveLogger()
+    # early_stopping = utils.EarlyStopping(patience=50, verbose=True)
+    # for i_epoch, epoch in enumerate(tqdm(range(merged_conf["MAX_EPOCHS"]))):
+
+    #     dlf.fill(i_fold, reset_fill_counter=False)
+
+    #     step_str = "Validation"
+    #     for i_batch, batch in enumerate(dlf.dl_val):
+    #         _, loss_diag_val = utils.base_step(
+    #             step_str,
+    #             model,
+    #             mtl,
+    #             batch,
+    #             device,
+    #             i_fold,
+    #             i_epoch,
+    #             i_batch,
+    #             i_global,
+    #             lc_logger,
+    #             no_mtl=args.no_mtl,
+    #             print_batch_interval=False,
+    #         )
+    #     lc_logger.print(step_str)
+
+    #     step_str = "Training"
+    #     for i_batch, batch in enumerate(dlf.dl_tra):
+    #         optimizer.zero_grad()
+    #         loss, _ = utils.base_step(
+    #             step_str,
+    #             model,
+    #             mtl,
+    #             batch,
+    #             device,
+    #             i_fold,
+    #             i_epoch,
+    #             i_batch,
+    #             i_global,
+    #             lc_logger,
+    #             no_mtl=args.no_mtl,
+    #             print_batch_interval=False,
+    #         )
+    #         loss.backward()
+    #         optimizer.step()
+    #         i_global += 1
+    #     lc_logger.print(step_str)
+
+    #     bACC_val = np.array(lc_logger.logged_dict["Validation"]["bACC_diag_plot"])[
+    #         np.array(lc_logger.logged_dict["Validation"]["i_epoch"]) == i_epoch
+    #     ].mean()
+
+    #     model_spath = (
+    #         merged_conf["sdir"]
+    #         + f"checkpoints/model_fold#{i_fold}_epoch#{i_epoch:03d}.pth"
+    #     )
+    #     mtl_spath = model_spath.replace("model_fold", "mtl_fold")
+    #     models_spaths_dict = {model_spath: model, mtl_spath: mtl}
+
+    #     early_stopping(loss_diag_val, models_spaths_dict, i_epoch, i_global)
+    #     # early_stopping(-bACC_val, models_spaths_dict, i_epoch, i_global)
+
+    #     if early_stopping.early_stop:
+    #         print("Early stopping")
+    #         break

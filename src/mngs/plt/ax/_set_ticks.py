@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-08-30 01:28:42 (ywatanabe)"
+# Time-stamp: "2024-09-06 23:33:56 (ywatanabe)"
 
 import matplotlib.pyplot as plt
 import mngs
@@ -102,7 +102,7 @@ def set_x_ticks(ax, x_vals=None, x_ticks=None):
         ax.set_xticks(x_ticks)
 
     elif x_vals_passed and x_ticks_passed:
-        if x_vals is "auto":
+        if x_vals == "auto":
             x_vals = np.arange(len(x_ticks))
 
         # Replaces the original x axis to 'x_vals' and locates the 'x_ticks' on the new axis
@@ -208,7 +208,7 @@ def set_y_ticks(ax, y_vals=None, y_ticks=None):
 
     elif y_vals_passed and y_ticks_passed:
         # Replaces the original y axis to 'y_vals' and locates the 'y_ticks' on the new axis
-        if y_vals is "auto":
+        if y_vals == "auto":
             y_vals = np.arange(len(y_ticks))
 
         ax = _set_y_vals(ax, y_vals)

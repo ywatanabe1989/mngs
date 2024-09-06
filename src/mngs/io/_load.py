@@ -280,7 +280,7 @@ def load_markdown(lpath_md, style="plain_text"):
     lpath_md : str
         The path to the Markdown file to be loaded.
     style : str, optional
-        The output style of the converted content. 
+        The output style of the converted content.
         Options are "html" or "plain_text" (default).
 
     Returns:
@@ -320,7 +320,9 @@ def load_markdown(lpath_md, style="plain_text"):
         plain_text = text_maker.handle(html_content)
         return plain_text
     else:
-        raise ValueError("Invalid style option. Choose 'html' or 'plain_text'.")
+        raise ValueError(
+            "Invalid style option. Choose 'html' or 'plain_text'."
+        )
 
 
 def _check_encoding(file_path):
@@ -347,11 +349,13 @@ def _check_encoding(file_path):
     """
     import chardet
 
-    with open(file_path, 'rb') as file:
+    with open(file_path, "rb") as file:
         raw_data = file.read()
-    
+
     result = chardet.detect(raw_data)
-    return result['encoding']
+    return result["encoding"]
+
+
 #     from chardet.universaldetector import UniversalDetector
 
 #     detector = UniversalDetector()
@@ -397,13 +401,15 @@ def get_data_path_from_a_package(package_str, resource):
     spec = importlib.util.find_spec(package_str)
     if spec is None:
         raise ImportError(f"Package '{package_str}' not found")
-    
+
     data_dir = os.path.join(spec.origin.split("src")[0], "data")
     resource_path = os.path.join(data_dir, resource)
-    
+
     if not os.path.exists(resource_path):
-        raise FileNotFoundError(f"Resource '{resource}' not found in package '{package_str}'")
-    
+        raise FileNotFoundError(
+            f"Resource '{resource}' not found in package '{package_str}'"
+        )
+
     return resource_path
 
 
@@ -491,9 +497,7 @@ def load_study_rdb(study_name, rdb_raw_bytes_url):
 
     storage = optuna.storages.RDBStorage(url=rdb_raw_bytes_url)
     study = optuna.load_study(study_name=study_name, storage=storage)
-    print(f"
-Loaded: {rdb_raw_bytes_url}
-")
+    print(f"Loaded: {rdb_raw_bytes_url}")
     return study
 
 
@@ -596,13 +600,14 @@ def _load_docx(lpath):
         If the file is not a valid .docx file.
     """
     from docx import Document
-    
+
     doc = Document(lpath)
     full_text = []
     for para in doc.paragraphs:
         full_text.append(para.text)
-    return '
-'.join(full_text)
+    return "".join(full_text)
+
+
 #     doc = docx.Document(lpath)
 #     full_text = []
 #     for para in doc.paragraphs:
@@ -645,6 +650,7 @@ def _load_docx(lpath):
 # def _load_textfile(lpath):
 #     return lpath.read().decode("utf-8")
 
+
 def load_markdown(lpath_md, style="plain_text"):
     """
     Load and convert a Markdown file to either HTML or plain text.
@@ -661,7 +667,26 @@ def load_markdown(lpath_md, style="plain_text"):
     str
         The converted content of the Markdown file.
     """
-    # ... (rest of the function remains unchanged)
+    import html2text
+    import markdown
+
+    # Load Markdown content from a file
+    with open(lpath_md, "r") as file:
+        markdown_content = file.read()
+
+    # Convert Markdown to HTML
+    html_content = markdown.markdown(markdown_content)
+    if style == "html":
+        return html_content
+
+    elif style == "plain_text":
+        text_maker = html2text.HTML2Text()
+        text_maker.ignore_links = True
+        text_maker.bypass_tables = False
+        plain_text = text_maker.handle(html_content)
+
+        return plain_text
+
 
 def load_yaml_as_an_optuna_dict(fpath_yaml, trial):
     """
@@ -679,7 +704,30 @@ def load_yaml_as_an_optuna_dict(fpath_yaml, trial):
     dict
         A dictionary with Optuna-compatible parameter suggestions.
     """
-    # ... (rest of the function remains unchanged)
+    _d = load(fpath_yaml)
+
+    for k, v in _d.items():
+
+        dist = v["distribution"]
+
+        if dist == "categorical":
+            _d[k] = trial.suggest_categorical(k, v["values"])
+
+        elif dist == "uniform":
+            _d[k] = trial.suggest_int(k, float(v["min"]), float(v["max"]))
+
+        elif dist == "loguniform":
+            _d[k] = trial.suggest_loguniform(
+                k, float(v["min"]), float(v["max"])
+            )
+
+        elif dist == "intloguniform":
+            _d[k] = trial.suggest_int(
+                k, float(v["min"]), float(v["max"]), log=True
+            )
+
+    return _d
+
 
 def load_study_rdb(study_name, rdb_raw_bytes_url):
     """
@@ -697,7 +745,14 @@ def load_study_rdb(study_name, rdb_raw_bytes_url):
     optuna.study.Study
         The loaded Optuna study object.
     """
-    # ... (rest of the function remains unchanged)
+    import optuna
+
+    # rdb_raw_bytes_url = "sqlite:////tmp/fake/ywatanabe/_MicroNN_WindowSize-1.0-sec_MaxEpochs_100_2021-1216-1844/optuna_study_test_file#0.db"
+    storage = optuna.storages.RDBStorage(url=rdb_raw_bytes_url)
+    study = optuna.load_study(study_name=study_name, storage=storage)
+    print(f"\nLoaded: {rdb_raw_bytes_url}\n")
+    return study
+
 
 def load_configs(IS_DEBUG=None, show=False, verbose=False):
     """
@@ -717,4 +772,33 @@ def load_configs(IS_DEBUG=None, show=False, verbose=False):
     mngs.gen.DotDict
         A dictionary-like object containing the loaded configurations.
     """
-    # ... (rest of the function remains unchanged)
+    if os.getenv("CI") == "True":
+        IS_DEBUG = True
+
+    def update_debug(config, IS_DEBUG):
+        if IS_DEBUG:
+            debug_keys = mngs.gen.search("^DEBUG_", list(config.keys()))[1]
+            for dk in debug_keys:
+                dk_wo_debug_prefix = dk.split("DEBUG_")[1]
+                config[dk_wo_debug_prefix] = config[dk]
+                if show or verbose:
+                    print(f"\n{dk} -> {dk_wo_debug_prefix}\n")
+        return config
+
+    # Check ./config/IS_DEBUG.yaml file if IS_DEBUG argument is not passed
+    if IS_DEBUG is None:
+        IS_DEBUG_PATH = "./config/IS_DEBUG.yaml"
+        if os.path.exists(IS_DEBUG_PATH):
+            IS_DEBUG = mngs.io.load("./config/IS_DEBUG.yaml").get("IS_DEBUG")
+        else:
+            IS_DEBUG = False
+
+    # Main
+    CONFIGS = {}
+    for lpath in glob("./config/*.yaml"):
+        CONFIG = update_debug(mngs.io.load(lpath), IS_DEBUG)
+        CONFIGS.update(CONFIG)
+
+    CONFIGS = mngs.gen.DotDict(CONFIGS)
+
+    return CONFIGS
