@@ -8,14 +8,16 @@ def format_label(label):
     """
     Format label by capitalizing first letter and replacing underscores with spaces.
     """
-    # Replace underscores with spaces
-    label = label.replace("_", " ")
 
-    # Capitalize first letter of each word
-    label = " ".join(word.capitalize() for word in label.split())
+    if isinstance(label, str):
+        # Replace underscores with spaces
+        label = label.replace("_", " ")
 
-    # Special case for abbreviations (all caps)
-    if label.isupper():
-        return label
+        # Capitalize first letter of each word
+        label = " ".join(word.capitalize() for word in label.split())
+
+        # Special case for abbreviations (all caps)
+        if label.isupper():
+            return label
 
     return label
