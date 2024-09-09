@@ -127,18 +127,15 @@ def save(
         fdir, fname, _ = mngs.path.split(fpath)
         spath = fdir + fname + "/" + sfname_or_spath
 
-    # print(sfname_or_spath, fpath, spath, sfname)
     # Corrects the spath
-    spath = spath.replace("/./", "/").replace("//", "/").replace(" ", "_")
+    spath = format_spath(spath)
     ########################################
 
     # Potential path to symlink
     spath_cwd = os.getcwd() + "/" + sfname_or_spath
-    spath_cwd = (
-        spath_cwd.replace("/./", "/").replace("//", "/").replace(" ", "_")
-    )
+    spath_cwd = format_spath(spath_cwd)
 
-    # Remove spath and spath_cwd to prevent potential circular links
+    # Removes spath and spath_cwd to prevent potential circular links
     for path in [spath, spath_cwd]:
         mngs.sh(f"rm {path}", verbose=False)
 
@@ -150,8 +147,18 @@ def save(
     if makedirs:
         os.makedirs(os.path.dirname(spath), exist_ok=True)
 
-    _save(obj, spath, verbose=verbose, **kwargs)
+    _save(
+        obj,
+        spath,
+        verbose=verbose,
+        from_cwd=from_cwd,
+        dry_run=dry_run,
+        **kwargs,
+    )
+    symlink(spath, spath_cwd, from_cwd)
 
+
+def symlink(spath, spath_cwd, from_cwd):
     if from_cwd and (spath != spath_cwd):
         os.makedirs(os.path.dirname(spath_cwd), exist_ok=True)
         mngs.sh(f"rm {spath_cwd}", verbose=False)
@@ -159,8 +166,7 @@ def save(
         print(mngs.gen.color_text(f"\n(Symlinked to: {spath_cwd})", "yellow"))
 
 
-def _save(obj, spath, verbose=True, **kwargs):
-    print(obj, spath)
+def _save(obj, spath, verbose=True, from_cwd=False, dry_run=False, **kwargs):
     # Main
     try:
         # ## copy files
@@ -172,10 +178,11 @@ def _save(obj, spath, verbose=True, **kwargs):
 
         # csv
         if spath.endswith(".csv"):
-            if isinstance(obj, pd.Series):  # Series
+            if isinstance(
+                obj, (pd.Series, pd.DataFrame)
+            ):  # Series or DataFrame
                 obj.to_csv(spath, **kwargs)
-            if isinstance(obj, pd.DataFrame):  # DataFrame
-                obj.to_csv(spath, **kwargs)
+
             if mngs.gen.is_listed_X(obj, [int, float]):  # listed scalars
                 _save_listed_scalars_as_csv(
                     obj,
@@ -206,26 +213,11 @@ def _save(obj, spath, verbose=True, **kwargs):
         elif spath.endswith(".pkl"):
             with open(spath, "wb") as s:  # 'w'
                 pickle.dump(obj, s)
+
         # joblib
         elif spath.endswith(".joblib"):
             with open(spath, "wb") as s:  # 'w'
                 joblib.dump(obj, s, compress=3)
-
-        # png
-        elif spath.endswith(".png"):
-            # plotly
-            if isinstance(obj, plotly.graph_objs.Figure):
-                obj.write_image(file=spath, format="png")
-            # PIL image
-            elif isinstance(obj, Image.Image):
-                obj.save(spath)
-            # matplotlib
-            else:
-                try:
-                    obj.savefig(spath)
-                except:
-                    obj.figure.savefig(spath)
-            del obj
 
         # html
         elif spath.endswith(".html"):
@@ -233,63 +225,33 @@ def _save(obj, spath, verbose=True, **kwargs):
             if isinstance(obj, plotly.graph_objs.Figure):
                 obj.write_html(file=spath)
 
-        # tiff
-        elif spath.endswith(".tiff") or spath.endswith(".tif"):
-            # PIL image
-            if isinstance(obj, Image.Image):
-                obj.save(spath)
-            # matplotlib
-            else:
-                try:
-                    obj.savefig(spath, dpi=300, format="tiff")
-                except:
-                    obj.figure.savefig(spath, dpi=300, format="tiff")
-
-            del obj
-
-        # jpeg
-        elif spath.endswith(".jpeg") or spath.endswith(".jpg"):
-            buf = _io.BytesIO()
-
-            # plotly
-            if isinstance(obj, plotly.graph_objs.Figure):
-                obj.write_image(
-                    buf, format="png"
-                )  # Saving plotly figure to buffer as PNG
-                buf.seek(0)
-                im = Image.open(buf)
-                img.convert("RGB").save(spath, "JPEG")
-                buf.close()
-            # PIL image
-            elif isinstance(obj, Image.Image):
-                obj.save(spath)
-            # matplotlib
-            else:
-                try:
-                    obj.savefig(buf, format="png")
-                except:
-                    obj.figure.savefig(buf, format="png")
-
-                buf.seek(0)
-                img = Image.open(buf)
-                img.convert("RGB").save(
-                    spath, "JPEG"
-                )  # Convert to JPEG and save
-                buf.close()
-            del obj
-
-        # SVG
-        elif spath.endswith(".svg"):
-            # Plotly
-            if isinstance(obj, plotly.graph_objs.Figure):
-                obj.write_image(file=spath, format="svg")
-            # Matplotlib
-            else:
-                try:
-                    obj.savefig(spath, format="svg")
-                except AttributeError:
-                    obj.figure.savefig(spath, format="svg")
-            del obj
+        # image ----------------------------------------
+        elif any(
+            [
+                spath.endswith(image_ext)
+                for image_ext in [
+                    ".png",
+                    ".tiff",
+                    ".tif",
+                    ".jpeg",
+                    ".jpg",
+                    ".svc",
+                ]
+            ]
+        ):
+            _save_image(obj, spath, **kwargs)
+            ext = os.path.splitext(spath)[1].lower()
+            try:
+                save(
+                    obj.to_sigma(),
+                    spath.replace(ext, ".csv"),
+                    from_cwd=from_cwd,
+                    dry_run=dry_run,
+                    **kwargs,
+                )
+            except Exception as e:
+                print(e)
+                pass
 
         # mp4
         elif spath.endswith(".mp4"):
@@ -353,7 +315,8 @@ def _save(obj, spath, verbose=True, **kwargs):
         print(f"Error saving file: {e}")
 
     else:
-        if verbose and not is_copying_files:
+        # if verbose and not is_copying_files:
+        if verbose:
             file_size = mngs.path.file_size(spath)
             print(
                 mngs.gen.ct(f"\nSaved to: {spath} ({file_size})", c="yellow")
@@ -374,10 +337,84 @@ def _save(obj, spath, verbose=True, **kwargs):
 #     return enc
 
 
-def _save_text(obj, spath):
-    # with open(file_path, "w+", encoding="utf-8") as file:
-    #     file.write(content)
+def _save_image(obj, spath, **kwargs):
 
+    # png
+    if spath.endswith(".png"):
+        # plotly
+        if isinstance(obj, plotly.graph_objs.Figure):
+            obj.write_image(file=spath, format="png")
+        # PIL image
+        elif isinstance(obj, Image.Image):
+            obj.save(spath)
+        # matplotlib
+        else:
+            try:
+                obj.savefig(spath)
+            except:
+                obj.figure.savefig(spath)
+        del obj
+
+    # tiff
+    elif spath.endswith(".tiff") or spath.endswith(".tif"):
+        # PIL image
+        if isinstance(obj, Image.Image):
+            obj.save(spath)
+        # matplotlib
+        else:
+            try:
+                obj.savefig(spath, dpi=300, format="tiff")
+            except:
+                obj.figure.savefig(spath, dpi=300, format="tiff")
+
+        del obj
+
+    # jpeg
+    elif spath.endswith(".jpeg") or spath.endswith(".jpg"):
+        buf = _io.BytesIO()
+
+        # plotly
+        if isinstance(obj, plotly.graph_objs.Figure):
+            obj.write_image(
+                buf, format="png"
+            )  # Saving plotly figure to buffer as PNG
+            buf.seek(0)
+            im = Image.open(buf)
+            img.convert("RGB").save(spath, "JPEG")
+            buf.close()
+
+        # PIL image
+        elif isinstance(obj, Image.Image):
+            obj.save(spath)
+
+        # matplotlib
+        else:
+            try:
+                obj.savefig(buf, format="png")
+            except:
+                obj.figure.savefig(buf, format="png")
+
+            buf.seek(0)
+            img = Image.open(buf)
+            img.convert("RGB").save(spath, "JPEG")  # Convert to JPEG and save
+            buf.close()
+        del obj
+
+    # SVG
+    elif spath.endswith(".svg"):
+        # Plotly
+        if isinstance(obj, plotly.graph_objs.Figure):
+            obj.write_image(file=spath, format="svg")
+        # Matplotlib
+        else:
+            try:
+                obj.savefig(spath, format="svg")
+            except AttributeError:
+                obj.figure.savefig(spath, format="svg")
+        del obj
+
+
+def _save_text(obj, spath):
     with open(spath, "w") as file:
         file.write(obj)
 
@@ -509,6 +546,10 @@ def save_optuna_study_as_csv_and_pngs(study, sdir):
 
     for figname, fig in figs_dict.items():
         save(fig, sdir + f"{figname}.png")
+
+
+def format_spath(spath):
+    return spath.replace("/./", "/").replace("//", "/").replace(" ", "_")
 
 
 if __name__ == "__main__":

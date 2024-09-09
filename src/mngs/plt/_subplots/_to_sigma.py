@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-02 10:03:48 (ywatanabe)"
+# Time-stamp: "2024-09-08 18:13:26 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/_to_sigma.py
 
 
@@ -134,8 +134,12 @@ def format_plotting_args(record):
         return df
 
     elif method == "bar":
-        __import__("ipdb").set_trace()
-        # raise NotImplementedError(f"{method} is not implemented.")
+        x, y = args
+        yerr = kwargs.get("yerr")
+        df = pd.DataFrame({f"{id}_{method}_x": x, f"{id}_{method}_y": y})
+        if yerr is not None:
+            df[f"{id}_{method}_yerr"] = yerr
+        return df
 
     elif method == "boxplot":
         xs = args[0]

@@ -58,15 +58,7 @@ def conf_mat(
     if cm is None:
         cm = sklearn_confusion_matrix(y_true, y_pred)
 
-    def calc_bACC_from_cm(cm):
-        try:
-            per_class = np.diag(cm) / np.nansum(cm, axis=1)
-            bacc = np.nanmean(per_class)
-        except:
-            bacc = np.nan
-        return bacc
-
-    bacc = round(calc_bACC_from_cm(cm), 3)
+    bacc = calc_bACC_from_cm(cm)
 
     title = f"{title} (bACC = {bacc})"
 
@@ -213,6 +205,16 @@ def conf_mat(
         mngs.io.save(fig, spath)
 
     return fig, cm
+
+
+def calc_bACC_from_cm(cm):
+    with mngs.gen.suppress_output():
+        try:
+            per_class = np.diag(cm) / np.nansum(cm, axis=1)
+            bacc = round(np.nanmean(per_class), 3)
+        except:
+            bacc = np.nan
+        return bacc
 
 
 # def AddAxesBBoxRect(fig, ax, ec="k"):

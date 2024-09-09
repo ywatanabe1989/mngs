@@ -18,24 +18,7 @@ from sklearn.metrics import (balanced_accuracy_score, classification_report,
 
 
 class MultiClassificationReporter(object):
-    """
-    A class for reporting classification metrics for multiple targets.
-
-    This class manages multiple ClassificationReporter instances, one for each target.
-
-    Attributes:
-        tgt2id (dict): Mapping of target names to their indices.
-        reporters (list): List of ClassificationReporter instances, one for each target.
-    """
-
     def __init__(self, sdir, tgts=None):
-        """
-        Initialize the MultiClassificationReporter.
-
-        Args:
-            sdir (str): Base directory for saving results.
-            tgts (list): List of target names. If None, a single unnamed target is assumed.
-        """
         if tgts is None:
             sdirs = [""]
         else:
@@ -46,14 +29,6 @@ class MultiClassificationReporter(object):
         self.reporters = [ClassificationReporter(sdir) for sdir in sdirs]
 
     def add(self, obj_name, obj, tgt=None):
-        """
-        Add an object to the reporter for a specific target.
-
-        Args:
-            obj_name (str): Name of the object to add.
-            obj: The object to add (can be a figure, DataFrame, or scalar).
-            tgt (str): The target name.
-        """
         i_tgt = self.tgt2id[tgt]
         self.reporters[i_tgt].add(obj_name, obj)
 
@@ -75,19 +50,6 @@ class MultiClassificationReporter(object):
         ),
         tgt=None,
     ):
-        """
-        Calculate classification metrics for a specific target.
-
-        Args:
-            true_class (array-like): True class labels.
-            pred_class (array-like): Predicted class labels.
-            pred_proba (array-like): Predicted probabilities.
-            labels (list): List of class labels.
-            i_fold (int): Fold number (for cross-validation).
-            show (bool): Whether to display results.
-            auc_plt_config (dict): Configuration for AUC plot.
-            tgt (str): The target name.
-        """
         i_tgt = self.tgt2id[tgt]
         self.reporters[i_tgt].calc_metrics(
             true_class,
@@ -105,14 +67,6 @@ class MultiClassificationReporter(object):
         show=False,
         tgt=None,
     ):
-        """
-        Summarize the classification results for a specific target.
-
-        Args:
-            n_round (int): Number of decimal places to round to.
-            show (bool): Whether to display the summary.
-            tgt (str): The target name.
-        """
         i_tgt = self.tgt2id[tgt]
         self.reporters[i_tgt].summarize(
             n_round=n_round,
@@ -125,14 +79,6 @@ class MultiClassificationReporter(object):
         meta_dict=None,
         tgt=None,
     ):
-        """
-        Save the classification results for a specific target.
-
-        Args:
-            files_to_reproduce (list): List of files needed to reproduce the results.
-            meta_dict (dict): Additional metadata to save.
-            tgt (str): The target name.
-        """
         i_tgt = self.tgt2id[tgt]
         self.reporters[i_tgt].save(
             files_to_reproduce=files_to_reproduce,
@@ -148,17 +94,6 @@ class MultiClassificationReporter(object):
         sci_notation_kwargs=None,
         tgt=None,
     ):
-        """
-        Plot and save confusion matrices for a specific target.
-
-        Args:
-            plt: Matplotlib pyplot object.
-            extend_ratio (float): Ratio to extend the plot.
-            colorbar (bool): Whether to include a colorbar.
-            confmat_plt_config (dict): Configuration for confusion matrix plot.
-            sci_notation_kwargs (dict): Keywords for scientific notation.
-            tgt (str): The target name.
-        """
         i_tgt = self.tgt2id[tgt]
         self.reporters[i_tgt].plot_and_save_conf_mats(
             plt,
@@ -170,29 +105,18 @@ class MultiClassificationReporter(object):
 
 
 class ClassificationReporter(object):
-    """
-    A class for reporting various classification metrics and saving them.
+    """Saves the following metrics under sdir.
+       - Balanced Accuracy
+       - MCC
+       - Confusion Matrix
+       - Classification Report
+       - ROC AUC score / curve
+       - PRE-REC AUC score / curve
 
-    This class calculates and saves the following metrics:
-    - Balanced Accuracy
-    - Matthews Correlation Coefficient (MCC)
-    - Confusion Matrix
-    - Classification Report
-    - ROC AUC score / curve
-    - Precision-Recall AUC score / curve
-
-    Attributes:
-        sdir (str): Directory to save the results.
-        folds_dict (defaultdict): Dictionary to store results for each fold.
+    Example is described in this file.
     """
 
     def __init__(self, sdir):
-        """
-        Initialize the ClassificationReporter.
-
-        Args:
-            sdir (str): Directory to save the results.
-        """
         self.sdir = sdir
         self.folds_dict = defaultdict(list)
         mngs.general.fix_seeds(
@@ -205,83 +129,50 @@ class ClassificationReporter(object):
         obj,
     ):
         """
-        Add an object to the reporter.
+        ## fig
+        fig, ax = plt.subplots()
+        ax.plot(np.random.rand(10))
+        reporter.add("manu_figs", fig)
 
-        This method can be used to add figures, DataFrames, or scalars to the report.
+        ## DataFrame
+        df = pd.DataFrame(np.random.rand(5, 3))
+        reporter.add("manu_dfs", df)
 
-        Args:
-            obj_name (str): Name of the object to add.
-            obj: The object to add (can be a figure, DataFrame, or scalar).
-
-        Example:
-            fig, ax = plt.subplots()
-            ax.plot(np.random.rand(10))
-            reporter.add("manu_figs", fig)
-
-            df = pd.DataFrame(np.random.rand(5, 3))
-            reporter.add("manu_dfs", df)
-
-            scalar = random.random()
-            reporter.add("manu_scalers", scalar)
+        ## scalar
+        scalar = random.random()
+        reporter.add("manu_scalers", scalar)
         """
         assert isinstance(obj_name, str)
         self.folds_dict[obj_name].append(obj)
 
     @staticmethod
     def calc_bACC(true_class, pred_class, i_fold, show=False):
-        """
-        Calculate Balanced Accuracy.
-
-        Args:
-            true_class (array-like): True class labels.
-            pred_class (array-like): Predicted class labels.
-            i_fold (int): Fold number (for cross-validation).
-            show (bool): Whether to display the result.
-
-        Returns:
-            float: Balanced accuracy score.
-        """
+        """Balanced ACC"""
         balanced_acc = balanced_accuracy_score(true_class, pred_class)
         if show:
-            print(f"Balanced ACC in fold#{i_fold} was {balanced_acc:.3f}")
+            print(f"\nBalanced ACC in fold#{i_fold} was {balanced_acc:.3f}\n")
         return balanced_acc
 
     @staticmethod
     def calc_mcc(true_class, pred_class, i_fold, show=False):
-        """
-        Calculate Matthews Correlation Coefficient (MCC).
-
-        Args:
-            true_class (array-like): True class labels.
-            pred_class (array-like): Predicted class labels.
-            i_fold (int): Fold number (for cross-validation).
-            show (bool): Whether to display the result.
-
-        Returns:
-            float: Matthews Correlation Coefficient.
-        """
+        """MCC"""
         mcc = float(matthews_corrcoef(true_class, pred_class))
         if show:
-            print(f"MCC in fold#{i_fold} was {mcc:.3f}")
+            print(f"\nMCC in fold#{i_fold} was {mcc:.3f}\n")
         return mcc
 
     @staticmethod
     def calc_conf_mat(true_class, pred_class, labels, i_fold, show=False):
         """
-        Calculate Confusion Matrix.
-
+        Confusion Matrix
         This method assumes unique classes of true_class and pred_class are the same.
-
-        Args:
-            true_class (array-like): True class labels.
-            pred_class (array-like): Predicted class labels.
-            labels (list): List of class labels.
-            i_fold (int): Fold number (for cross-validation).
-            show (bool): Whether to display the result.
-
-        Returns:
-            pd.DataFrame: Confusion matrix as a DataFrame.
         """
+        # conf_mat = pd.DataFrame(
+        #     data=confusion_matrix(true_class, pred_class),
+        #     columns=pred_labels,
+        #     index=true_labels,
+        # )
+
         conf_mat = pd.DataFrame(
             data=confusion_matrix(
                 true_class, pred_class, labels=np.arange(len(labels))
@@ -290,8 +181,8 @@ class ClassificationReporter(object):
         ).set_index(pd.Series(list(labels)))
 
         if show:
-            print(f"Confusion Matrix in fold#{i_fold}")
-            print(conf_mat)
+            print(f"\nConfusion Matrix in fold#{i_fold}: \n")
+            pprint(conf_mat)
             print()
 
         return conf_mat
