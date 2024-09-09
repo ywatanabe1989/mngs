@@ -3,7 +3,9 @@
 # Time-stamp: "2023-03-17 21:30:11 (ywatanabe)"
 
 import numpy as np
+import sympy
 from scipy.linalg import norm
+
 
 def cosine(v1, v2):
     if np.isnan(v1).any():
@@ -12,11 +14,13 @@ def cosine(v1, v2):
         return np.nan
     return np.dot(v1, v2) / (norm(v1) * norm(v2))
 
+
 def nannorm(v, axis=-1):
     if np.isnan(v).any():
         return np.nan
     else:
         return norm(v, axis=axis)
+
 
 def rebase_a_vec(v, v_base):
     def production_vector(v1, v0):
@@ -33,21 +37,18 @@ def rebase_a_vec(v, v_base):
     sign = np.sign(cosine(v, v_base))
     return sign * norm(v_prod)
 
-import sympy
-import numpy as np
-
 
 def three_line_lengths_to_coords(aa, bb, cc):
-    """    
+    """
     O, A, B = three_line_lengths_to_coords(2, np.sqrt(3), 1)
     print(O, A, B)
     """
-    
+
     # Definition
-    a1 = sympy.Symbol("a1")    
+    a1 = sympy.Symbol("a1")
     b1 = sympy.Symbol("b1")
-    b2 = sympy.Symbol("b2")    
-    
+    b2 = sympy.Symbol("b2")
+
     a1 = aa
     # b1 = bb
 

@@ -162,6 +162,7 @@ class AxisWrapper:
         xx,
         mean,
         std,
+        n=None,
         track=True,
         id=None,
         **kwargs,
@@ -172,11 +173,11 @@ class AxisWrapper:
         # Plotting
         with self._no_tracking():
             self.axis = mngs.plt.ax.plot_with_ci(
-                self.axis, xx, mean, std, **kwargs
+                self.axis, xx, mean, std, n=n, **kwargs
             )
 
         # Tracking
-        out = (xx, mean, std)
+        out = (xx, mean, std, n)
         self._track(track, id, method_name, out, None)
 
     def fillv(
@@ -412,12 +413,14 @@ class AxisWrapper:
         x=None,
         y=None,
         t=None,
+        format_labels=True,
     ):
         self.axis = mngs.plt.ax.set_xyt(
             self.axis,
             x=x,
             y=y,
             t=t,
+            format_labels=format_labels,
         )
 
     def set_supxyt(
@@ -425,12 +428,14 @@ class AxisWrapper:
         xlabel=None,
         ylabel=None,
         title=None,
+        format_labels=True,
     ):
         self.axis = mngs.plt.ax.set_supxyt(
             self.axis,
             xlabel=xlabel,
             ylabel=ylabel,
             title=title,
+            format_labels=format_labels,
         )
 
     def set_ticks(

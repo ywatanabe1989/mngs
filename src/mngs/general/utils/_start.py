@@ -100,7 +100,9 @@ def start(
     ID = mngs.gen.gen_ID(N=4)
     ID = ID if not IS_DEBUG else "DEBUG_" + ID
     PID = _os.getpid()
-    print(f"\n{'#'*40}\n## {ID} (PID: {PID})\n{'#'*40}\n")
+    print(
+        f"\n{'#'*40}\n## mngs v{mngs.__version__}\n## {ID} (PID: {PID})\n{'#'*40}\n"
+    )
     sleep(1)
 
     # Defines SDIR

@@ -149,19 +149,17 @@ def format_plotting_args(record):
             df = pd.DataFrame(xs)
         # Multiple boxes
         else:
-            df = mngs.gen.force_dataframe(
-                {i_x: _x for i_x, _x in enumerate(xs)}
-            )
+            df = mngs.pd.force_df({i_x: _x for i_x, _x in enumerate(xs)})
         df.columns = [f"{id}_{method}_{col}_x" for col in df.columns]
         df = df.apply(lambda col: col.dropna().reset_index(drop=True))
         return df
 
     # Original
     elif method == "plot_with_ci":
-        xx, mm, ss = args
+        xx, mm, ss, nn = args
         df = pd.DataFrame(
             {
-                f"{id}_{method}_x": xx,
+                f"{id}_{method}_x_(n={nn})": xx,
                 f"{id}_{method}_upper": mm + ss,
                 f"{id}_{method}_under": mm - ss,
                 f"{id}_{method}_mean": mm,
