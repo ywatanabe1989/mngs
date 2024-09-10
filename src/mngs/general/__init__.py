@@ -30,7 +30,8 @@ from .misc import (_return_counting_process, color_text, connect_nums,
                    replace, search, squeeze_spaces, suppress_output, symlink,
                    to_even, to_odd, unique, uq, wait_key)
 # Utils
-from .system_ops._email import notify, send_gmail
+from .system_ops._email import send_gmail
+from .system_ops._notify import notify
 from .system_ops._shell import run_shellcommand, run_shellscript
 from .system_ops._tee import tee
 from .system_ops._timeout import timeout
