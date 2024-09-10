@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-10 21:32:34 (ywatanabe)"
+# Time-stamp: "2024-09-10 21:37:34 (ywatanabe)"
 # /home/ywatanabe/proj/_mngs_repo_openhands/src/mngs/general/system_ops/_notify.py
 
 """This script does XYZ."""
@@ -97,12 +97,12 @@ Sent via
         )
 
     send_gmail(
-        sender_name,
         sender_gmail,
         sender_password,
         recipient_email,
         full_subject,
         full_message,
+        sender_name=sender_name,
         cc=cc,
         ID=ID,
         log_paths=log_paths,
