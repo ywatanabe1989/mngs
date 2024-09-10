@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-10 20:08:12 (ywatanabe)"
+# Time-stamp: "2024-09-10 21:31:50 (ywatanabe)"
 # /home/ywatanabe/proj/_mngs_repo_openhands/src/mngs/general/system_ops/_email.py
 
 import os
@@ -19,8 +19,9 @@ def send_gmail(
     recipient_email,
     subject,
     message,
-    ID=None,
+    sender_name=None,
     cc=None,
+    ID=None,
     log_paths=None,
     verbose=True,
 ):
@@ -34,14 +35,17 @@ def send_gmail(
         server.login(sender_gmail, sender_password)
 
         gmail = MIMEMultipart()
-        gmail["From"] = sender_gmail
+        gmail["Subject"] = subject
         gmail["To"] = recipient_email
         if cc:
             if isinstance(cc, str):
                 gmail["Cc"] = cc
             elif isinstance(cc, list):
                 gmail["Cc"] = ", ".join(cc)
-        gmail["Subject"] = subject
+        if sender_name:
+            msg["From"] = f"{sender_name} <{sender_gmail}>"
+        else:
+            msg["From"] = sender_gmail
         gmail_body = MIMEText(message, "plain")
         gmail.attach(gmail_body)
 
