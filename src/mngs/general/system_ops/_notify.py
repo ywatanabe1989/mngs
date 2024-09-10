@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-10 20:23:25 (ywatanabe)"
+# Time-stamp: "2024-09-10 20:25:37 (ywatanabe)"
 # /home/ywatanabe/proj/_mngs_repo_openhands/src/mngs/general/system_ops/_notify.py
 
 """This script does XYZ."""
@@ -76,11 +76,11 @@ def notify(
 Best regards,
 {sender}
 
-{'-'*20}
+{'-'*30}
 Sent via
 - Script: {script_name}
 - Source: mngs v{mngs.__version__} (github.com/ywatanabe1989/mngs/blob/{branch}/src/mngs/general/system_ops/_notify.py)
-{'-'*20}"""
+{'-'*30}"""
 
     full_message = header + message + footer
     full_subject = f"{subject}"
