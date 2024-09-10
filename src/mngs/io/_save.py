@@ -167,156 +167,147 @@ def symlink(spath, spath_cwd, from_cwd):
 
 
 def _save(obj, spath, verbose=True, from_cwd=False, dry_run=False, **kwargs):
-    # Main
-    try:
-        # ## copy files
-        # is_copying_files = (
-        #     isinstance(obj, str) or mngs.gen.is_listed_X(obj, str)
-        # ) and (isinstance(spath, str) or mngs.gen.is_listed_X(spath, str))
-        # if is_copying_files:
-        #     mngs.general.copy_files(obj, spath)
 
-        # csv
-        if spath.endswith(".csv"):
-            if isinstance(
-                obj, (pd.Series, pd.DataFrame)
-            ):  # Series or DataFrame
-                obj.to_csv(spath, **kwargs)
+    # ## copy files
+    # is_copying_files = (
+    #     isinstance(obj, str) or mngs.gen.is_listed_X(obj, str)
+    # ) and (isinstance(spath, str) or mngs.gen.is_listed_X(spath, str))
+    # if is_copying_files:
+    #     mngs.general.copy_files(obj, spath)
 
-            if mngs.gen.is_listed_X(obj, [int, float]):  # listed scalars
-                _save_listed_scalars_as_csv(
-                    obj,
-                    spath,
-                    **kwargs,
-                )
-            if mngs.gen.is_listed_X(obj, pd.DataFrame):  # listed DataFrame
-                _save_listed_dfs_as_csv(obj, spath, **kwargs)
+    # csv
+    if spath.endswith(".csv"):
+        if isinstance(obj, (pd.Series, pd.DataFrame)):  # Series or DataFrame
+            obj.to_csv(spath, **kwargs)
 
-        # numpy
-        elif spath.endswith(".npy"):
-            np.save(spath, obj)
-
-        # numpy npz
-        elif spath.endswith(".npz"):
-            if isinstance(obj, dict):
-                np.savez_compressed(spath, **obj)
-            elif isinstance(obj, (list, tuple)) and all(
-                isinstance(x, np.ndarray) for x in obj
-            ):
-                obj = {str(ii): obj[ii] for ii in range(len(obj))}
-                np.savez_compressed(spath, **obj)
-            else:
-                raise ValueError(
-                    "For .npz files, obj must be a dict of arrays or a list/tuple of arrays."
-                )
-        # pkl
-        elif spath.endswith(".pkl"):
-            with open(spath, "wb") as s:  # 'w'
-                pickle.dump(obj, s)
-
-        # joblib
-        elif spath.endswith(".joblib"):
-            with open(spath, "wb") as s:  # 'w'
-                joblib.dump(obj, s, compress=3)
-
-        # html
-        elif spath.endswith(".html"):
-            # plotly
-            if isinstance(obj, plotly.graph_objs.Figure):
-                obj.write_html(file=spath)
-
-        # image ----------------------------------------
-        elif any(
-            [
-                spath.endswith(image_ext)
-                for image_ext in [
-                    ".png",
-                    ".tiff",
-                    ".tif",
-                    ".jpeg",
-                    ".jpg",
-                    ".svc",
-                ]
-            ]
-        ):
-            _save_image(obj, spath, **kwargs)
-            ext = os.path.splitext(spath)[1].lower()
-            try:
-                save(
-                    obj.to_sigma(),
-                    spath.replace(ext, ".csv"),
-                    from_cwd=from_cwd,
-                    dry_run=dry_run,
-                    **kwargs,
-                )
-            except Exception as e:
-                print(e)
-                pass
-
-        # mp4
-        elif spath.endswith(".mp4"):
-            obj.save(
-                spath, writer="ffmpeg", **kwargs
-            )  # obj is matplotlib.animation.FuncAnimation
-            del obj
-            # _mk_mp4(obj, spath)  # obj is matplotlib.pyplot.figure object
-            # del obj
-
-        # yaml
-        elif spath.endswith(".yaml"):
-            yaml = YAML()
-            yaml.preserve_quotes = (
-                True  # Optional: if you want to preserve quotes
+        if mngs.gen.is_listed_X(obj, [int, float]):  # listed scalars
+            _save_listed_scalars_as_csv(
+                obj,
+                spath,
+                **kwargs,
             )
-            yaml.indent(
-                mapping=4, sequence=4, offset=4
-            )  # Optional: set indentation
+        if mngs.gen.is_listed_X(obj, pd.DataFrame):  # listed DataFrame
+            _save_listed_dfs_as_csv(obj, spath, **kwargs)
 
-            with open(spath, "w") as f:
-                yaml.dump(obj, f)
+    # numpy
+    elif spath.endswith(".npy"):
+        np.save(spath, obj)
 
-        # json
-        elif spath.endswith(".json"):
-            with open(spath, "w") as f:
-                json.dump(obj, f, indent=4)
-
-        # hdf5
-        elif spath.endswith(".hdf5"):
-            name_list, obj_list = []
-            for k, v in obj.items():
-                name_list.append(k)
-                obj_list.append(v)
-            with h5py.File(spath, "w") as hf:
-                for name, obj in zip(name_list, obj_list):
-                    hf.create_dataset(name, data=obj)
-        # pth
-        elif spath.endswith(".pth"):
-            torch.save(obj, spath)
-
-        # mat
-        elif spath.endswith(".mat"):
-            scipy.io.savemat(spath, obj)
-
-        # catboost model
-        elif spath.endswith(".cbm"):
-            obj.save_model(spath)
-
-        # Text
-        elif any(
-            spath.endswith(ext)
-            for ext in [".txt", ".md", ".py", ".html", ".css", ".js"]
+    # numpy npz
+    elif spath.endswith(".npz"):
+        if isinstance(obj, dict):
+            np.savez_compressed(spath, **obj)
+        elif isinstance(obj, (list, tuple)) and all(
+            isinstance(x, np.ndarray) for x in obj
         ):
-            _save_text(obj, spath)
-
+            obj = {str(ii): obj[ii] for ii in range(len(obj))}
+            np.savez_compressed(spath, **obj)
         else:
-            raise ValueError("obj was not saved.")
+            raise ValueError(
+                "For .npz files, obj must be a dict of arrays or a list/tuple of arrays."
+            )
+    # pkl
+    elif spath.endswith(".pkl"):
+        with open(spath, "wb") as s:  # 'w'
+            pickle.dump(obj, s)
 
-    except Exception as e:
-        print(f"Error saving file: {e}")
+    # joblib
+    elif spath.endswith(".joblib"):
+        with open(spath, "wb") as s:  # 'w'
+            joblib.dump(obj, s, compress=3)
+
+    # html
+    elif spath.endswith(".html"):
+        # plotly
+        if isinstance(obj, plotly.graph_objs.Figure):
+            obj.write_html(file=spath)
+
+    # image ----------------------------------------
+    elif any(
+        [
+            spath.endswith(image_ext)
+            for image_ext in [
+                ".png",
+                ".tiff",
+                ".tif",
+                ".jpeg",
+                ".jpg",
+                ".svc",
+            ]
+        ]
+    ):
+        _save_image(obj, spath, **kwargs)
+        ext = os.path.splitext(spath)[1].lower()
+        try:
+            save(
+                obj.to_sigma(),
+                spath.replace(ext, ".csv"),
+                from_cwd=from_cwd,
+                dry_run=dry_run,
+                **kwargs,
+            )
+        except Exception as e:
+            print(e)
+            pass
+
+    # mp4
+    elif spath.endswith(".mp4"):
+        obj.save(
+            spath, writer="ffmpeg", **kwargs
+        )  # obj is matplotlib.animation.FuncAnimation
+        del obj
+        # _mk_mp4(obj, spath)  # obj is matplotlib.pyplot.figure object
+        # del obj
+
+    # yaml
+    elif spath.endswith(".yaml"):
+        yaml = YAML()
+        yaml.preserve_quotes = True  # Optional: if you want to preserve quotes
+        yaml.indent(
+            mapping=4, sequence=4, offset=4
+        )  # Optional: set indentation
+
+        with open(spath, "w") as f:
+            yaml.dump(obj, f)
+
+    # json
+    elif spath.endswith(".json"):
+        with open(spath, "w") as f:
+            json.dump(obj, f, indent=4)
+
+    # hdf5
+    elif spath.endswith(".hdf5"):
+        name_list, obj_list = []
+        for k, v in obj.items():
+            name_list.append(k)
+            obj_list.append(v)
+        with h5py.File(spath, "w") as hf:
+            for name, obj in zip(name_list, obj_list):
+                hf.create_dataset(name, data=obj)
+    # pth
+    elif spath.endswith(".pth"):
+        torch.save(obj, spath)
+
+    # mat
+    elif spath.endswith(".mat"):
+        scipy.io.savemat(spath, obj)
+
+    # catboost model
+    elif spath.endswith(".cbm"):
+        obj.save_model(spath)
+
+    # Text
+    elif any(
+        spath.endswith(ext)
+        for ext in [".txt", ".md", ".py", ".html", ".css", ".js"]
+    ):
+        _save_text(obj, spath)
 
     else:
-        # if verbose and not is_copying_files:
-        if verbose:
+        raise ValueError(f"Unsupported file format. {spath} was not saved.")
+
+    if verbose:
+        if os.path.exists(spath):
             file_size = mngs.path.file_size(spath)
             print(
                 mngs.gen.ct(f"\nSaved to: {spath} ({file_size})", c="yellow")
@@ -335,6 +326,10 @@ def _save(obj, spath, verbose=True, from_cwd=False, dry_run=False, **kwargs):
 #     detector.close()
 #     enc = detector.result["encoding"]
 #     return enc
+
+
+def format_spath(spath):
+    return spath.replace("/./", "/").replace("//", "/").replace(" ", "_")
 
 
 def _save_image(obj, spath, **kwargs):

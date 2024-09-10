@@ -1,18 +1,9 @@
-import pytest
 import numpy as np
-from mngs.gen.misc import (
-    decapitalize,
-    connect_strs,
-    connect_nums,
-    squeeze_spaces,
-    search,
-    print_block,
-    color_text,
-    to_even,
-    to_odd,
-    float_linspace,
-    replace,
-)
+import pytest
+from mngs.gen.misc import (color_text, connect_nums, connect_strs,
+                           decapitalize, float_linspace, print_block, replace,
+                           search, squeeze_spaces, to_even, to_odd)
+
 
 def test_decapitalize():
     assert decapitalize("Hello") == "hello"
@@ -20,34 +11,42 @@ def test_decapitalize():
     assert decapitalize("") == ""
     assert decapitalize("a") == "a"
 
+
 def test_connect_strs():
-    assert connect_strs(['a', 'b', 'c']) == 'a_b_c'
-    assert connect_strs(['hello', 'world'], filler='-') == 'hello-world'
-    assert connect_strs(['single']) == 'single'
-    assert connect_strs([]) == []
+    assert connect_strs(["a", "b", "c"]) == "a_b_c"
+    assert connect_strs(["hello", "world"], filler="-") == "hello-world"
+    assert connect_strs(["single"]) == "single"
+    assert connect_strs([]) == ""
+
 
 def test_connect_nums():
-    assert connect_nums([1, 2, 3]) == '1_2_3'
-    assert connect_nums([3.14, 2.718, 1.414], filler='-') == '3.14-2.718-1.414'
-    assert connect_nums([42]) == '42'
-    assert connect_nums([]) == []
+    assert connect_nums([1, 2, 3]) == "1_2_3"
+    assert connect_nums([3.14, 2.718, 1.414], filler="-") == "3.14-2.718-1.414"
+    assert connect_nums([42]) == "42"
+    assert connect_nums([]) == ""
+
 
 def test_squeeze_spaces():
     assert squeeze_spaces("Hello   world") == "Hello world"
     assert squeeze_spaces("a---b--c-d", pattern="-+", repl="-") == "a-b-c-d"
-    assert squeeze_spaces("   leading and trailing   ") == " leading and trailing "
+    assert (
+        squeeze_spaces("   leading and trailing   ")
+        == " leading and trailing "
+    )
+
 
 def test_search():
-    strings = ['apple', 'orange', 'banana', 'grape']
-    patterns = ['an']
-    
+    strings = ["apple", "orange", "banana", "grape"]
+    patterns = ["an"]
+
     indices, matched = search(patterns, strings)
     assert indices == [1, 2]
-    assert matched == ['orange', 'banana']
+    assert matched == ["orange", "banana"]
 
     bool_array, matched = search(patterns, strings, as_bool=True)
     assert np.array_equal(bool_array, [False, True, True, False])
-    assert matched == ['orange', 'banana']
+    assert matched == ["orange", "banana"]
+
 
 def test_to_even():
     assert to_even(5) == 4
@@ -55,11 +54,13 @@ def test_to_even():
     assert to_even(0) == 0
     assert to_even(-3) == -4
 
+
 def test_to_odd():
     assert to_odd(6) == 5
     assert to_odd(7) == 7
     assert to_odd(0) == -1
     assert to_odd(-4) == -5
+
 
 def test_float_linspace():
     result = float_linspace(0, 1, 5)
@@ -70,13 +71,21 @@ def test_float_linspace():
     expected = np.array([1.0, 3.0, 5.0])
     assert np.allclose(result, expected)
 
+
 def test_replace():
     template = "Hello, {name}! You are {age} years old."
     replacements = {"name": "Alice", "age": "30"}
-    assert replace(template, replacements) == "Hello, Alice! You are 30 years old."
+    assert (
+        replace(template, replacements)
+        == "Hello, Alice! You are 30 years old."
+    )
 
-    assert replace("Original string", "Replacement string") == "Replacement string"
+    assert (
+        replace("Original string", "Replacement string")
+        == "Replacement string"
+    )
     assert replace("No replacements", {}) == "No replacements"
+
 
 # Note: print_block and color_text are not easily testable as they involve
 # printing to the console. You might want to consider refactoring these
