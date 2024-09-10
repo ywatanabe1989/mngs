@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-10 19:15:58 (ywatanabe)"
+# Time-stamp: "2024-09-10 19:19:26 (ywatanabe)"
 
 import inspect
 import os
@@ -27,7 +27,14 @@ def get_hostname():
     return socket.gethostname()
 
 
-def notify(subject="", message=":)", ID="auto", log_paths=None, verbose=False):
+def notify(
+    subject="",
+    message=":)",
+    ID="auto",
+    recipient_name=None,
+    log_paths=None,
+    verbose=False,
+):
     """
     Usage:
         notify(subject="subject here", message="message here")
@@ -72,8 +79,11 @@ def notify(subject="", message=":)", ID="auto", log_paths=None, verbose=False):
     if (script_name == "-c") or (script_name.endswith(".py")):
         script_name = "`$ python -c ...`"
 
+    # Recipient name
+    recipient_name = recipient_name if recipient_name is not None else "there"
+
     sender = f"{get_username()}@{get_hostname()}"
-    header = f"Hi there 👋\n\n"
+    header = f"Hi {recipient_name} 👋\n\n"
     footer = f"""
 
 Best regards,
@@ -87,7 +97,6 @@ Sent via
 
     full_message = header + message + footer
     full_subject = f"{subject}"
-    # full_subject = f"Notification from {os.getenv('USER')}@{os.getenv('HOSTNAME')} | {subject}"
 
     if mngs_sender_gmail is None or mngs_sender_password is None:
         print(
