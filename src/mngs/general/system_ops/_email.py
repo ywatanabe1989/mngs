@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-10 21:31:50 (ywatanabe)"
+# Time-stamp: "2024-09-10 21:38:44 (ywatanabe)"
 # /home/ywatanabe/proj/_mngs_repo_openhands/src/mngs/general/system_ops/_email.py
 
 import os
@@ -43,9 +43,9 @@ def send_gmail(
             elif isinstance(cc, list):
                 gmail["Cc"] = ", ".join(cc)
         if sender_name:
-            msg["From"] = f"{sender_name} <{sender_gmail}>"
+            gmail["From"] = f"{sender_name} <{sender_gmail}>"
         else:
-            msg["From"] = sender_gmail
+            gmail["From"] = sender_gmail
         gmail_body = MIMEText(message, "plain")
         gmail.attach(gmail_body)
 
