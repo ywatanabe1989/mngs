@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-10 20:25:37 (ywatanabe)"
+# Time-stamp: "2024-09-10 20:57:08 (ywatanabe)"
 # /home/ywatanabe/proj/_mngs_repo_openhands/src/mngs/general/system_ops/_notify.py
 
 """This script does XYZ."""
@@ -73,11 +73,11 @@ def notify(
     branch = get_git_branch()
     footer = f"""
 
-Best regards,
-{sender}
-
 {'-'*30}
+This is an automated system notification. If received outside working hours, please disregard.
+
 Sent via
+- Host: {sender}
 - Script: {script_name}
 - Source: mngs v{mngs.__version__} (github.com/ywatanabe1989/mngs/blob/{branch}/src/mngs/general/system_ops/_notify.py)
 {'-'*30}"""
