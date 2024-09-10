@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-08 18:13:26 (ywatanabe)"
+# Time-stamp: "2024-09-10 14:07:09 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/_to_sigma.py
 
 
@@ -204,7 +204,7 @@ def format_plotting_args(record):
         return df
 
     elif method == "sns_heatmap":
-        __import__("ipdb").set_trace()
+        df = args[0]
         return df
 
     elif method == "sns_histplot":

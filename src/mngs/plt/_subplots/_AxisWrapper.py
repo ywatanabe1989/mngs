@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-08-29 17:55:40 (ywatanabe)"
+# Time-stamp: "2024-09-10 14:06:04 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/AxisWrapper.py
 
 from collections import OrderedDict
@@ -281,15 +281,15 @@ class AxisWrapper:
         with self._no_tracking():
             sns_plot_fn = getattr(sns, sns_method_name)
 
-            # hue_colors = kwargs.pop("hue_colors", None)
-            # kwargs["palette"] = kwargs.get("palette") or hue_colors
-            kwargs = mngs.gen.alternate_kwarg(
-                kwargs, primary_key="palette", alternate_key="hue_colors"
-            )
+            if kwargs.get("hue_colors"):
+                kwargs = mngs.gen.alternate_kwarg(
+                    kwargs, primary_key="palette", alternate_key="hue_colors"
+                )
 
             self.axis = sns_plot_fn(ax=self.axis, *args, **kwargs)
 
         # Track the plot if required
+        track_obj = track_obj if track_obj is not None else args
         self._track(track, id, method_name, track_obj, kwargs)
 
     def _sns_base_xyhue(
@@ -327,37 +327,79 @@ class AxisWrapper:
     #         return pivoted_data
     #     return None
 
-    def _sns_prepare_xyhue(self, df, x, y, hue=None):
+    # def _sns_prepare_xyhue(self, df, x, y, hue=None):
+    #     if x is None and y is None:
+    #         return df
+    #     elif x is None:
+    #         return df[[y]]
+    #     elif y is None:
+    #         return df[[x]]
+    #     else:
+    #         if hue:
+    #             pivoted_data = df.pivot_table(
+    #                 values=y, index=df.index, columns=[x, hue], aggfunc="first"
+    #             )
+    #             pivoted_data.columns = [
+    #                 f"{col[0]}-{col[1]}" for col in pivoted_data.columns
+    #             ]
+    #         else:
+    #             pivoted_data = df.pivot_table(
+    #                 values=y, index=df.index, columns=x, aggfunc="first"
+    #             )
+    #         return pivoted_data
+
+    # @sns_copy_doc
+    # def sns_barplot(self, *args, track=True, id=None, **kwargs):
+    #     self._sns_base_xyhue(
+    #         "sns_barplot", *args, track=track, id=id, **kwargs
+    #     )
+
+    # @sns_copy_doc
+    # def sns_boxplot(self, *args, track=True, id=None, **kwargs):
+    #     self._sns_base_xyhue(
+    #         "sns_boxplot", *args, track=track, id=id, **kwargs
+    #     )
+
+    def _sns_prepare_xyhue(
+        self, data=None, x=None, y=None, hue=None, **kwargs
+    ):
         if x is None and y is None:
-            return df
+            return data
         elif x is None:
-            return df[[y]]
+            return data[[y]]
         elif y is None:
-            return df[[x]]
+            return data[[x]]
         else:
             if hue:
-                pivoted_data = df.pivot_table(
-                    values=y, index=df.index, columns=[x, hue], aggfunc="first"
+                pivoted_data = data.pivot_table(
+                    values=y,
+                    index=data.index,
+                    columns=[x, hue],
+                    aggfunc="first",
                 )
                 pivoted_data.columns = [
                     f"{col[0]}-{col[1]}" for col in pivoted_data.columns
                 ]
             else:
-                pivoted_data = df.pivot_table(
-                    values=y, index=df.index, columns=x, aggfunc="first"
+                pivoted_data = data.pivot_table(
+                    values=y, index=data.index, columns=x, aggfunc="first"
                 )
             return pivoted_data
 
     @sns_copy_doc
-    def sns_barplot(self, *args, track=True, id=None, **kwargs):
+    def sns_barplot(
+        self, data=None, x=None, y=None, track=True, id=None, **kwargs
+    ):
         self._sns_base_xyhue(
-            "sns_barplot", *args, track=track, id=id, **kwargs
+            "sns_barplot", data=data, x=x, y=y, track=track, id=id, **kwargs
         )
 
     @sns_copy_doc
-    def sns_boxplot(self, *args, track=True, id=None, **kwargs):
+    def sns_boxplot(
+        self, data=None, x=None, y=None, track=True, id=None, **kwargs
+    ):
         self._sns_base_xyhue(
-            "sns_boxplot", *args, track=track, id=id, **kwargs
+            "sns_boxplot", data=data, x=x, y=y, track=track, id=id, **kwargs
         )
 
     @sns_copy_doc
@@ -365,45 +407,115 @@ class AxisWrapper:
         self._sns_base("sns_heatmap", *args, track=track, id=id, **kwargs)
 
     @sns_copy_doc
-    def sns_histplot(self, *args, track=True, id=None, **kwargs):
+    def sns_histplot(
+        self, data=None, x=None, y=None, track=True, id=None, **kwargs
+    ):
         self._sns_base_xyhue(
-            "sns_histplot", *args, track=track, id=id, **kwargs
+            "sns_histplot", data=data, x=x, y=y, track=track, id=id, **kwargs
         )
 
     @sns_copy_doc
-    def sns_kdeplot(self, *args, track=True, id=None, **kwargs):
+    def sns_kdeplot(
+        self, data=None, x=None, y=None, track=True, id=None, **kwargs
+    ):
         self._sns_base_xyhue(
-            "sns_kdeplot", *args, track=track, id=id, **kwargs
+            "sns_kdeplot", data=data, x=x, y=y, track=track, id=id, **kwargs
         )
 
     @sns_copy_doc
-    def sns_lineplot(self, *args, track=True, id=None, **kwargs):
+    def sns_lineplot(
+        self, data=None, x=None, y=None, track=True, id=None, **kwargs
+    ):
         self._sns_base_xyhue(
-            "sns_lineplot", *args, track=track, id=id, **kwargs
+            "sns_lineplot", data=data, x=x, y=y, track=track, id=id, **kwargs
         )
-        # self._sns_base("sns_lineplot", *args, track=track, id=id, **kwargs)
 
     @sns_copy_doc
     def sns_pairplot(self, *args, track=True, id=None, **kwargs):
         self._sns_base("sns_pairplot", *args, track=track, id=id, **kwargs)
 
     @sns_copy_doc
-    def sns_scatterplot(self, *args, track=True, id=None, **kwargs):
+    def sns_scatterplot(
+        self, data=None, x=None, y=None, track=True, id=None, **kwargs
+    ):
         self._sns_base_xyhue(
-            "sns_scatterplot", *args, track=track, id=id, **kwargs
+            "sns_scatterplot",
+            data=data,
+            x=x,
+            y=y,
+            track=track,
+            id=id,
+            **kwargs,
         )
-        # self._sns_base("sns_scatterplot", *args, track=track, id=id, **kwargs)
 
     @sns_copy_doc
-    def sns_violinplot(self, *args, track=True, id=None, **kwargs):
+    def sns_violinplot(
+        self, data=None, x=None, y=None, track=True, id=None, **kwargs
+    ):
         self._sns_base_xyhue(
-            "sns_violinplot", *args, track=track, id=id, **kwargs
+            "sns_violinplot", data=data, x=x, y=y, track=track, id=id, **kwargs
         )
-        # self._sns_base("sns_violinplot", *args, track=track, id=id, **kwargs)
 
     @sns_copy_doc
     def sns_jointplot(self, *args, track=True, id=None, **kwargs):
         self._sns_base("sns_jointplot", *args, track=track, id=id, **kwargs)
+
+    # @sns_copy_doc
+    # def sns_barplot(self, data=None, x=None, y=None, track=True, id=None, **kwargs):
+    #     self._sns_base_xyhue(
+    #         "sns_barplot", data=data, x=x, y=y, track=track, id=id, **kwargs
+    #     )
+
+    # @sns_copy_doc
+    # def sns_boxplot(self, data=None, x=None, y=None, track=True, id=None, **kwargs):
+    #     self._sns_base_xyhue(
+    #         "sns_boxplot", data=data, x=x, y=y, track=track, id=id, **kwargs
+    #     )
+
+    # @sns_copy_doc
+    # def sns_heatmap(self, *args, track=True, id=None, **kwargs):
+    #     self._sns_base("sns_heatmap", *args, track=track, id=id, **kwargs)
+
+    # @sns_copy_doc
+    # def sns_histplot(self, *args, track=True, id=None, **kwargs):
+    #     self._sns_base_xyhue(
+    #         "sns_histplot", data=data, x=x, y=y, track=track, id=id, **kwargs
+    #     )
+
+    # @sns_copy_doc
+    # def sns_kdeplot(self, *args, track=True, id=None, **kwargs):
+    #     self._sns_base_xyhue(
+    #         "sns_kdeplot", data=data, x=x, y=y, track=track, id=id, **kwargs
+    #     )
+
+    # @sns_copy_doc
+    # def sns_lineplot(self, *args, track=True, id=None, **kwargs):
+    #     self._sns_base_xyhue(
+    #         "sns_lineplot", *args, track=track, id=id, **kwargs
+    #     )
+    #     # self._sns_base("sns_lineplot", *args, track=track, id=id, **kwargs)
+
+    # @sns_copy_doc
+    # def sns_pairplot(self, *args, track=True, id=None, **kwargs):
+    #     self._sns_base("sns_pairplot", *args, track=track, id=id, **kwargs)
+
+    # @sns_copy_doc
+    # def sns_scatterplot(self, *args, track=True, id=None, **kwargs):
+    #     self._sns_base_xyhue(
+    #         "sns_scatterplot", *args, track=track, id=id, **kwargs
+    #     )
+    #     # self._sns_base("sns_scatterplot", *args, track=track, id=id, **kwargs)
+
+    # @sns_copy_doc
+    # def sns_violinplot(self, *args, track=True, id=None, **kwargs):
+    #     self._sns_base_xyhue(
+    #         "sns_violinplot", *args, track=track, id=id, **kwargs
+    #     )
+    #     # self._sns_base("sns_violinplot", *args, track=track, id=id, **kwargs)
+
+    # @sns_copy_doc
+    # def sns_jointplot(self, *args, track=True, id=None, **kwargs):
+    #     self._sns_base("sns_jointplot", *args, track=track, id=id, **kwargs)
 
     ################################################################################
     ## Adjusting methods

@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-06 08:10:59 (ywatanabe)"
+# Time-stamp: "2024-09-10 19:15:58 (ywatanabe)"
 
 import inspect
 import os
+import pwd
 import smtplib
+import socket
 import sys
 from email import encoders
 from email.mime.base import MIMEBase
@@ -14,10 +16,21 @@ from email.mime.text import MIMEText
 import mngs
 
 
-def notify(subject="", message=":)", ID=None, log_paths=None, verbose=False):
+def get_username():
+    try:
+        return pwd.getpwuid(os.getuid()).pw_name
+    except:
+        return os.getenv("USER") or os.getenv("LOGNAME") or "unknown"
+
+
+def get_hostname():
+    return socket.gethostname()
+
+
+def notify(subject="", message=":)", ID="auto", log_paths=None, verbose=False):
     """
     Usage:
-        notify("mngs.gen.notify()", "Hello world from mngs.")
+        notify(subject="subject here", message="message here")
 
     Note:
         This function operates correctly when a Gmail address is configured as follows:
@@ -43,24 +56,38 @@ def notify(subject="", message=":)", ID=None, log_paths=None, verbose=False):
                export MNGS_RECIPIENT_GMAIL="YOUR_GMAIL_ADDRESS"
                ```
     """
+    # Environmental variables
+    mngs_sender_gmail = os.getenv("MNGS_SENDER_GMAIL")
+    mngs_sender_password = os.getenv("MNGS_SENDER_GMAIL_PASSWORD")
+    mngs_recipient_gmail = os.getenv("MNGS_RECIPIENT_GMAIL")
+
     # Get the script name from sys.argv or inspect the stack
     if sys.argv[0]:
         script_name = os.path.basename(sys.argv[0])
     else:
         frames = inspect.stack()
         script_name = (
-            os.path.basename(frames[-1].filename)
-            if frames
-            else "No script name available."
+            os.path.basename(frames[-1].filename) if frames else "(Not found)"
         )
+    if (script_name == "-c") or (script_name.endswith(".py")):
+        script_name = "`$ python -c ...`"
 
-    full_message = f"{message}"
-    full_subject = f"{script_name} from {os.getenv('USER')}@{os.getenv('HOSTNAME')} | {subject}"
+    sender = f"{get_username()}@{get_hostname()}"
+    header = f"Hi there 👋\n\n"
+    footer = f"""
 
-    # Environmental variables
-    mngs_sender_gmail = os.getenv("MNGS_SENDER_GMAIL")
-    mngs_sender_password = os.getenv("MNGS_SENDER_GMAIL_PASSWORD")
-    mngs_recipient_gmail = os.getenv("MNGS_RECIPIENT_GMAIL")
+Best regards,
+{sender}
+
+{'-'*20}
+Sent via
+- Script: {script_name}
+- Source: mngs v{mngs.__version__} (github.com/ywatanabe1989/mngs/blob/main/src/mngs/general/_email.py)
+{'-'*20}"""
+
+    full_message = header + message + footer
+    full_subject = f"{subject}"
+    # full_subject = f"Notification from {os.getenv('USER')}@{os.getenv('HOSTNAME')} | {subject}"
 
     if mngs_sender_gmail is None or mngs_sender_password is None:
         print(
@@ -95,8 +122,9 @@ def send_gmail(
     verbose=True,
 ):
 
-    if ID is None:
+    if ID == "auto":
         ID = mngs.gen.gen_ID()  # .split("_")[-1]
+        subject = f"{subject} (ID: {ID})"
 
     try:
         # Set up the gmail server
@@ -112,7 +140,7 @@ def send_gmail(
         gmail = MIMEMultipart()
         gmail["From"] = sender_gmail
         gmail["To"] = recipient_gmail
-        gmail["Subject"] = f"{subject} (ID: {ID})"
+        gmail["Subject"] = subject
         gmail_body = MIMEText(message, "plain")
         gmail.attach(gmail_body)
 
