@@ -27,7 +27,7 @@ def save(
     sfname_or_spath,
     makedirs=True,
     verbose=True,
-    from_cwd=False,
+    from_cwd=True,
     dry_run=False,
     **kwargs,
 ):

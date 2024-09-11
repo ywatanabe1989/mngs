@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-10 14:06:04 (ywatanabe)"
+# Time-stamp: "2024-09-12 04:58:56 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/AxisWrapper.py
 
 from collections import OrderedDict
@@ -89,6 +89,10 @@ class AxisWrapper:
     @property
     def history(self):
         return {k: self._ax_history[k] for k in self._ax_history}
+
+    @property
+    def flat(self):
+        return [self.axis]
 
     def reset_history(self):
         self._ax_history = {}

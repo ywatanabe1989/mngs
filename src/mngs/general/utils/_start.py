@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-08-24 18:03:34 (ywatanabe)"
+# Time-stamp: "2024-09-12 03:49:33 (ywatanabe)"
 
 import inspect
 import os as _os
+import re
 from datetime import datetime
 from glob import glob
 from pprint import pprint
@@ -113,13 +114,23 @@ def start(
         spath = __file__
         _sdir, sfname, _ = mngs.path.split(spath)
         sdir = _sdir + sfname + "/" + "RUNNING" + "/" + ID + "/"
+        sdir = sdir.replace("/./", "/")
     _os.makedirs(sdir, exist_ok=True)
+
+    relative_sdir = simplify_relative_path(sdir)
+
+    # # Relative SDIR
+    # base_path = _os.getcwd()
+    # relative_sdir = _os.path.relpath(sdir, base_path) if base_path else sdir
+    # # relative_srid = "scripts/memory-load/distance_between_gs_stats/RUNNING/2024Y-09M-12D-02h44m40s_GlBZ"
+    # relative_sdir.replace("scripts/", "./").replace("RUNNING/", "").replace(2024Y-09M-12D-02h44m40s_GlBZ, "")
 
     # CONFIGs
     CONFIGS = mngs.io.load_configs(IS_DEBUG).to_dict()
     CONFIGS["ID"] = ID
     CONFIGS["START_TIME"] = start_time
-    CONFIGS["SDIR"] = sdir.replace("/./", "/")
+    CONFIGS["SDIR"] = sdir
+    CONFIGS["REL_SDIR"] = relative_sdir
     if verbose:
         print(f"\n{'-'*40}\n")
         print(f"CONFIG:")
@@ -146,9 +157,9 @@ def start(
             random=random,
             np=np,
             torch=torch,
-            tf=tf,
+            # tf=tf,
             seed=seed,
-            verbose=verbose,
+            # verbose=verbose,
         )
 
     # Matplotlib configuration
@@ -177,6 +188,39 @@ def start(
     CONFIGS = mngs.gen.DotDict(CONFIGS)
 
     return CONFIGS, sys.stdout, sys.stderr, plt, CC
+
+
+def simplify_relative_path(sdir):
+    """
+    Simplify the relative path by removing specific patterns.
+
+    Example
+    -------
+    sdir = '/home/user/scripts/memory-load/distance_between_gs_stats/RUNNING/2024Y-09M-12D-02h44m40s_GlBZ'
+    simplified_path = simplify_relative_path(sdir)
+    print(simplified_path)
+    # Output: './memory-load/distance_between_gs_stats/'
+
+    Parameters
+    ----------
+    sdir : str
+        The directory path to simplify
+
+    Returns
+    -------
+    str
+        Simplified relative path
+    """
+    base_path = _os.getcwd()
+    relative_sdir = _os.path.relpath(sdir, base_path) if base_path else sdir
+    simplified_path = relative_sdir.replace("scripts/", "./").replace(
+        "RUNNING/", ""
+    )
+    # Remove date-time pattern and random string
+    simplified_path = re.sub(
+        r"\d{4}Y-\d{2}M-\d{2}D-\d{2}h\d{2}m\d{2}s_\w+/?$", "", simplified_path
+    )
+    return simplified_path
 
 
 if __name__ == "__main__":
