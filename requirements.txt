@@ -18,8 +18,12 @@ h5py
 html2text
 icecream
 ipdb
+<<<<<<< HEAD
 # traitlets==5.1.1
 ipython<=8.0.0
+=======
+ipython<8.0.0
+>>>>>>> 176c783cdf9da755499b4419960c0d5f23459883
 isort
 jedi
 joblib
@@ -85,3 +89,4 @@ wheel
 xarray
 xlrd
 xmltodict
+traitlets==5.1.1
