@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-10 21:37:34 (ywatanabe)"
+# Time-stamp: "2024-09-11 17:43:03 (ywatanabe)"
 # /home/ywatanabe/proj/_mngs_repo_openhands/src/mngs/general/system_ops/_notify.py
 
 """This script does XYZ."""
@@ -50,7 +50,6 @@ def notify(
     ID="auto",
     sender_name=None,
     recipient_email=None,
-    recipient_name="there",
     cc=None,
     log_paths=None,
     verbose=False,
@@ -70,7 +69,6 @@ def notify(
         script_name = "`$ python -c ...`"
 
     sender = f"{get_username()}@{get_hostname()}"
-    header = f"Hi {recipient_name} 👋\n\n"
     branch = get_git_branch()
     footer = f"""
 
@@ -83,7 +81,7 @@ Sent via
 - Source: mngs v{mngs.__version__} (github.com/ywatanabe1989/mngs/blob/{branch}/src/mngs/general/system_ops/_notify.py)
 {'-'*30}"""
 
-    full_message = header + message + footer
+    full_message = message + footer
     full_subject = f"{subject}"
 
     if sender_gmail is None or sender_password is None:
@@ -127,7 +125,6 @@ if __name__ == "__main__":
 #     echo "Options:"
 #     echo "  -s, --subject   Subject of the notification (default: 'Subject')"
 #     echo "  -m, --message   Message body of the notification (default: 'Message')"
-#     echo "  -r, --recipient-name   The name of the recipient (default: 'there')"
 #     echo "  -t, --to        The email address of the recipient"
 #     echo "  -c, --cc        CC email address(es) (can be used multiple times)"
 #     echo "  -h, --help      Display this help message"
@@ -141,7 +138,6 @@ if __name__ == "__main__":
 # main() {
 #     subject="Subject"
 #     message="Message"
-#     recipient_name="there"
 #     recipient_email=""
 #     cc_addresses=()
 
@@ -165,15 +161,6 @@ if __name__ == "__main__":
 #                 done
 #                 message=${message% }
 #                 ;;
-#             -r|--recipient-name)
-#                 shift
-#                 recipient_name=""
-#                 while [[ $# -gt 0 && ! $1 =~ ^- ]]; do
-#                     recipient_name+="$1 "
-#                     shift
-#                 done
-#                 recipient_name=${recipient_name% }
-#                 ;;
 #             -t|--to)
 #                 shift
 #                 recipient_email="$1"
@@ -196,7 +183,6 @@ if __name__ == "__main__":
 
 #     subject=$(echo "$subject" | sed "s/'/'\\\\''/g")
 #     message=$(echo "$message" | sed "s/'/'\\\\''/g")
-#     recipient_name=$(echo "$recipient_name" | sed "s/'/'\\\\''/g")
 #     recipient_email=$(echo "$recipient_email" | sed "s/'/'\\\\''/g")
 #     cc_string=$(IFS=,; echo "${cc_addresses[*]}" | sed "s/'/'\\\\''/g")
 
@@ -210,7 +196,6 @@ if __name__ == "__main__":
 #     subject='$subject',
 #     message='$message',
 #     ID=None,
-#     recipient_name='$recipient_name',
 #     recipient_email='$recipient_email',
 #     cc=cc_list
 # )
