@@ -155,15 +155,18 @@ def save(
         dry_run=dry_run,
         **kwargs,
     )
-    symlink(spath, spath_cwd, from_cwd)
+    symlink(spath, spath_cwd, from_cwd, verbose)
 
 
-def symlink(spath, spath_cwd, from_cwd):
+def symlink(spath, spath_cwd, from_cwd, verbose):
     if from_cwd and (spath != spath_cwd):
         os.makedirs(os.path.dirname(spath_cwd), exist_ok=True)
         mngs.sh(f"rm {spath_cwd}", verbose=False)
         mngs.sh(f"ln -sfr {spath} {spath_cwd}", verbose=False)
-        print(mngs.gen.color_text(f"\n(Symlinked to: {spath_cwd})", "yellow"))
+        if verbose:
+            print(
+                mngs.gen.color_text(f"\n(Symlinked to: {spath_cwd})", "yellow")
+            )
 
 
 def _save(obj, spath, verbose=True, from_cwd=False, dry_run=False, **kwargs):
