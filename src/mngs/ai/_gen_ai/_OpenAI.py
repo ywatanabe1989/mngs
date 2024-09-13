@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-13 18:59:49 (ywatanabe)"
+# Time-stamp: "2024-09-13 19:16:42 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_OpenAI.py
 
 """Imports"""
@@ -52,7 +52,7 @@ class OpenAI(BaseGenAI):
             max_tokens=self.max_tokens,
         )
 
-        if kwargs.get("model") == "o1-preview":
+        if kwargs.get("model") in ["o1-mini", "o1-preview"]:
             kwargs.pop("max_tokens")
 
         output = self.client.chat.completions.create(**kwargs)
@@ -75,7 +75,7 @@ class OpenAI(BaseGenAI):
             stream_options={"include_usage": True},
         )
 
-        if kwargs.get("model") == "o1-preview":
+        if kwargs.get("model") in ["o1-mini", "o1-preview"]:
             full_response = self._api_call_static()
             for char in full_response:
                 yield char
@@ -103,8 +103,9 @@ class OpenAI(BaseGenAI):
 
 
 def main():
+    model = "o1-mini"
     # model = "o1-preview"
-    model = "gpt-4o"
+    # model = "gpt-4o"
     stream = True
     max_tokens = 4906
     m = mngs.ai.GenAI(model, stream=stream, max_tokens=max_tokens)

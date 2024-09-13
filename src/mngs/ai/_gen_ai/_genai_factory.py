@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-13 18:41:55 (ywatanabe)"
+# Time-stamp: "2024-09-13 19:17:53 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/chat.py
 
 
@@ -53,29 +53,6 @@ def genai_factory(
         chat_history=chat_history,
         max_tokens=max_tokens,
     )
-
-
-# def test_all(seed=None, temperature=1.0):
-#     model_names = [
-#         "claude-3-5-sonnet-20240620",
-#         "gpt-4",
-#         "gemini-pro",
-#         "llama-3-sonar-large-32k-online",
-#         "llama-7b",
-#     ]
-
-#     for model_name in model_names:
-#         for stream in [False, True]:
-#             model = GenAI(
-#                 model_name, stream=stream, seed=seed, temperature=temperature
-#             )
-#             prompt = "Hi. Tell me about the hippocampus."
-
-#             print(
-#                 f"\n{'-'*40}\n{model.model}\nStream: {stream}\nSeed: {seed}\nTemperature: {temperature}\n{'-'*40}"
-#             )
-#             print(model(prompt))
-#             print(model.available_models)
 
 
 def main(

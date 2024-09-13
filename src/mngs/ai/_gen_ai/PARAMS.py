@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-13 19:04:12 (ywatanabe)"
+# Time-stamp: "2024-09-13 19:18:20 (ywatanabe)"
 # /home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/PARAMS.py
 
 import pandas as pd
@@ -9,6 +9,13 @@ import pandas as pd
 
 MODELS = pd.DataFrame(
     [
+        {
+            "name": "o1-mini",
+            "input_cost": 3.00,
+            "output_cost": 12.00,
+            "api_key_env": "OPENAI_API_KEY",
+            "provider": "OpenAI",
+        },
         {
             "name": "o1-preview",
             "input_cost": 15.00,

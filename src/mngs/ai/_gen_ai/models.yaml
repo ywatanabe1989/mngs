@@ -3,6 +3,11 @@
     output_cost: 60.00
     api_key_env: OPENAI_API_KEY
     class: ChatGPT
+  - name: o1-mini
+    input_cost: 3.00
+    output_cost: 12.00
+    api_key_env: OPENAI_API_KEY
+    class: ChatGPT
   - name: gpt-4
     input_cost: 30.00
     output_cost: 60.00
