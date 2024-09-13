@@ -1,18 +1,10 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-08-18 07:20:09 (ywatanabe)"
+# Time-stamp: "2024-09-13 18:41:55 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/chat.py
 
 
-"""
-This script does XYZ.
-"""
-
-
-"""
-Imports
-"""
-# mngs.gen.reload(mngs)
+"""Imports"""
 import os
 import random
 
@@ -23,31 +15,7 @@ from ._OpenAI import OpenAI
 from ._Perplexity import Perplexity
 from .PARAMS import MODELS
 
-# # from mngs.gen import notify
-# from natsort import natsorted
-# from openai import OpenAI
-# from tqdm import tqdm
-
-# from sciwriter_app._email import notify
-
-# sys.path = ["."] + sys.path
-# from scripts import utils, load
-
-"""
-Warnings
-"""
-# warnings.simplefilter("ignore", UserWarning)
-
-
-"""
-Config
-"""
-# CONFIG = mngs.gen.load_configs()
-
-
-"""
-Functions & Classes
-"""
+"""Functions & Classes"""
 
 
 def genai_factory(
@@ -58,6 +26,7 @@ def genai_factory(
     temperature=1.0,
     n_keep=1,
     chat_history=None,
+    max_tokens=4096,
 ):
     """Factory function to create an instance of an AI model handler."""
     AVAILABLE_MODELS = MODELS.name.tolist()
@@ -82,6 +51,7 @@ def genai_factory(
         temperature=temperature,
         n_keep=n_keep,
         chat_history=chat_history,
+        max_tokens=max_tokens,
     )
 
 

@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-10 14:07:09 (ywatanabe)"
+# Time-stamp: "2024-09-12 09:52:21 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/_to_sigma.py
 
 
@@ -98,15 +98,6 @@ def format_plotting_args(record):
                         out[f"{id}_{method}_y{ii:02d}"] = y[:, ii]
                     df = pd.DataFrame(out)
 
-                    # df = pd.DataFrame(
-                    #     {
-                    #         **{
-                    #             f"{id}_{method}_x{ii:02d}": x,
-                    #             f"{id}_{method}_y{ii:02d}": y[:, ii]
-
-                    #         }
-                    #     }
-                    # )
                     return df
 
             if isinstance(y, pd.DataFrame):
@@ -139,6 +130,11 @@ def format_plotting_args(record):
         df = pd.DataFrame({f"{id}_{method}_x": x, f"{id}_{method}_y": y})
         if yerr is not None:
             df[f"{id}_{method}_yerr"] = yerr
+        return df
+
+    elif method == "hist":
+        x = args
+        df = pd.DataFrame({f"{id}_{method}_x": x})
         return df
 
     elif method == "boxplot":
@@ -188,7 +184,7 @@ def format_plotting_args(record):
     elif method == "kde":
         df = args
         if id is not None:
-            df.columns = [f"{id}_{method}_" + col for col in df.columns]
+            df.columns = [f"{id}_{method}_{col}" for col in df.columns]
         return df
 
     elif method == "imshow2d":

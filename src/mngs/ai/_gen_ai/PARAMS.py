@@ -1,12 +1,21 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-08-15 10:29:17 (ywatanabe)"
+# Time-stamp: "2024-09-13 18:38:26 (ywatanabe)"
 # /home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/PARAMS.py
 
 import pandas as pd
 
+# https://openai.com/api/pricing/
+
 MODELS = pd.DataFrame(
     [
+        {
+            "name": "o1-preview",
+            "input_cost": 15.00,
+            "output_cost": 60.00,
+            "api_key_env": "OPENAI_API_KEY",
+            "provider": "OpenAI",
+        },
         {
             "name": "gpt-4",
             "input_cost": 30.00,
@@ -17,14 +26,14 @@ MODELS = pd.DataFrame(
         {
             "name": "gpt-4o",
             "input_cost": 5.00,
-            "output_cost": 2.50,
+            "output_cost": 15.00,
             "api_key_env": "OPENAI_API_KEY",
             "provider": "OpenAI",
         },
         {
             "name": "gpt-4o-mini",
             "input_cost": 0.150,
-            "output_cost": 0.075,
+            "output_cost": 0.600,
             "api_key_env": "OPENAI_API_KEY",
             "provider": "OpenAI",
         },

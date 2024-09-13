@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-12 04:58:56 (ywatanabe)"
+# Time-stamp: "2024-09-12 12:11:19 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/AxisWrapper.py
 
 from collections import OrderedDict
@@ -211,9 +211,11 @@ class AxisWrapper:
 
         # Plotting
         with self._no_tracking():
-            self.axis, df = mngs.plt.ax.raster(
+            self.axis, df = mngs.plt.ax.raster_plot(
                 self.axis, positions, time=time, **kwargs
             )
+        if id is not None:
+            df.columns = [f"{id}_{method_name}_{col}" for col in df.columns]
         out = df
 
         # Tracking
@@ -463,63 +465,6 @@ class AxisWrapper:
     @sns_copy_doc
     def sns_jointplot(self, *args, track=True, id=None, **kwargs):
         self._sns_base("sns_jointplot", *args, track=track, id=id, **kwargs)
-
-    # @sns_copy_doc
-    # def sns_barplot(self, data=None, x=None, y=None, track=True, id=None, **kwargs):
-    #     self._sns_base_xyhue(
-    #         "sns_barplot", data=data, x=x, y=y, track=track, id=id, **kwargs
-    #     )
-
-    # @sns_copy_doc
-    # def sns_boxplot(self, data=None, x=None, y=None, track=True, id=None, **kwargs):
-    #     self._sns_base_xyhue(
-    #         "sns_boxplot", data=data, x=x, y=y, track=track, id=id, **kwargs
-    #     )
-
-    # @sns_copy_doc
-    # def sns_heatmap(self, *args, track=True, id=None, **kwargs):
-    #     self._sns_base("sns_heatmap", *args, track=track, id=id, **kwargs)
-
-    # @sns_copy_doc
-    # def sns_histplot(self, *args, track=True, id=None, **kwargs):
-    #     self._sns_base_xyhue(
-    #         "sns_histplot", data=data, x=x, y=y, track=track, id=id, **kwargs
-    #     )
-
-    # @sns_copy_doc
-    # def sns_kdeplot(self, *args, track=True, id=None, **kwargs):
-    #     self._sns_base_xyhue(
-    #         "sns_kdeplot", data=data, x=x, y=y, track=track, id=id, **kwargs
-    #     )
-
-    # @sns_copy_doc
-    # def sns_lineplot(self, *args, track=True, id=None, **kwargs):
-    #     self._sns_base_xyhue(
-    #         "sns_lineplot", *args, track=track, id=id, **kwargs
-    #     )
-    #     # self._sns_base("sns_lineplot", *args, track=track, id=id, **kwargs)
-
-    # @sns_copy_doc
-    # def sns_pairplot(self, *args, track=True, id=None, **kwargs):
-    #     self._sns_base("sns_pairplot", *args, track=track, id=id, **kwargs)
-
-    # @sns_copy_doc
-    # def sns_scatterplot(self, *args, track=True, id=None, **kwargs):
-    #     self._sns_base_xyhue(
-    #         "sns_scatterplot", *args, track=track, id=id, **kwargs
-    #     )
-    #     # self._sns_base("sns_scatterplot", *args, track=track, id=id, **kwargs)
-
-    # @sns_copy_doc
-    # def sns_violinplot(self, *args, track=True, id=None, **kwargs):
-    #     self._sns_base_xyhue(
-    #         "sns_violinplot", *args, track=track, id=id, **kwargs
-    #     )
-    #     # self._sns_base("sns_violinplot", *args, track=track, id=id, **kwargs)
-
-    # @sns_copy_doc
-    # def sns_jointplot(self, *args, track=True, id=None, **kwargs):
-    #     self._sns_base("sns_jointplot", *args, track=track, id=id, **kwargs)
 
     ################################################################################
     ## Adjusting methods
