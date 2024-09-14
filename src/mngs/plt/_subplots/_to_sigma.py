@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-12 09:52:21 (ywatanabe)"
+# Time-stamp: "2024-09-14 14:14:56 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/_to_sigma.py
 
 
@@ -151,16 +151,14 @@ def format_plotting_args(record):
         return df
 
     # Original
-    elif method == "plot_with_ci":
-        xx, mm, ss, nn = args
-        df = pd.DataFrame(
-            {
-                f"{id}_{method}_x_(n={nn})": xx,
-                f"{id}_{method}_upper": mm + ss,
-                f"{id}_{method}_under": mm - ss,
-                f"{id}_{method}_mean": mm,
-            }
-        )
+    # elif method == "plot_with_ci":
+    #     df = args
+    #     df.columns = [f"{id}_{method}_{col}" for col in df.columns]
+    #     return df
+
+    elif method == "mplot":
+        df = args
+        df.columns = [f"{id}_{method}_{col}" for col in df.columns]
         return df
 
     elif method == "fillv":

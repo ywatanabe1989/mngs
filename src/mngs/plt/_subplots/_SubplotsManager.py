@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-08-30 01:41:03 (ywatanabe)"
+# Time-stamp: "2024-09-14 16:52:16 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/SubplotsManager.py
 
 from collections import OrderedDict
@@ -78,7 +78,7 @@ class SubplotsManager:
         """Initialize the SubplotsManager with an empty plot history."""
         self._subplots_manager_history = OrderedDict()
 
-    def __call__(self, *args, track=True, **kwargs):
+    def __call__(self, *args, track=True, sharex=True, sharey=True, **kwargs):
         """
         Create subplots and wrap the axes with AxisWrapper.
 
@@ -87,7 +87,9 @@ class SubplotsManager:
             in the same manner with matplotlib.pyplot.subplots.
         """
 
-        fig, axes = plt.subplots(*args, **kwargs)
+        fig, axes = plt.subplots(*args, sharex=True, sharey=True, **kwargs)
+        # fig.legend(loc="upper left")
+        # fig.tight_layout()
 
         # Fig
         fig = FigWrapper(fig)

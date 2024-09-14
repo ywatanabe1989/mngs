@@ -924,19 +924,91 @@ def partial_at(func, index, value):
     return result
 
 
-def describe(df, method="mean", factor=1):
+# def describe(df, method="mean", round_factor=1, axis=0):
+# assert method in ["mean_std", "mean_ci", "median_iqr"]
+#     df = pd.DataFrame(df)
+#     with warnings.catch_warnings():
+#         warnings.simplefilter("ignore", RuntimeWarning)
+#         if method == "mean":
+#             return round(np.nanmean(df, axis=axis), 3), round(
+#                 np.nanstd(df, axis=axis) / round_factor, 3
+#             )
+#         if method == "median":
+#             med = df.median(axis=axis)
+#             IQR = df.quantile(0.75, axis=axis) - df.quantile(0.25, axis=axis)
+#             return round(med, 3), round(IQR / round_factor, 3)
+
+
+def describe(df, method="mean_std", round_factor=3, axis=0):
+    """
+    Compute descriptive statistics for a DataFrame.
+
+    Example
+    -------
+    import pandas as pd
+    import numpy as np
+    data = pd.DataFrame({'A': [1, 2, 3, 4, 5], 'B': [10, 20, 30, 40, 50]})
+    result = describe(data, method='mean_std')
+    print(f"n={result['n']}, mean={result['mean']}, std={result['std']}")
+
+    Parameters
+    ----------
+    df : pandas.DataFrame or array-like
+        Input data.
+    method : str, optional
+        Statistical method to use. Options are 'mean_std', 'mean_ci', 'median_iqr'.
+        Default is 'mean_std'.
+    round_factor : int, optional
+        Factor to divide the spread statistic by. Default is 3.
+    axis : int, optional
+        Axis along which to compute statistics. Default is 0.
+
+    Returns
+    -------
+    dict
+        Dictionary containing statistics based on the method chosen.
+    """
+    assert method in ["mean_std", "mean_ci", "median_iqr"]
     df = pd.DataFrame(df)
-    # df = df[~df[0].isna()]
+    nn = df.notna().sum(axis=axis)
+
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", RuntimeWarning)
-        if method == "mean":
-            return round(np.nanmean(df), 3), round(np.nanstd(df) / factor, 3)
-        if method == "median":
-            med = df.describe().T["50%"].iloc[0]
-            IQR = (
-                df.describe().T["75%"].iloc[0] - df.describe().T["25%"].iloc[0]
-            )
-            return round(med, 3), round(IQR / factor, 3)
+        if method in ["mean_std", "mean_ci"]:
+            mm = np.nanmean(df, axis=axis)
+            if method == "mean_std":
+                ss = np.nanstd(df, axis=axis)
+                key = "std"
+            else:  # mean_ci
+                ss = 1.96 * np.nanstd(df, axis=axis) / np.sqrt(nn)
+                key = "ci"
+            return {
+                "n": np.round(nn, 3),
+                "mean": np.round(mm, 3),
+                key: np.round(ss, 3),
+            }
+        else:  # median_iqr
+            med = df.median(axis=axis)
+            iqr = df.quantile(0.75, axis=axis) - df.quantile(0.25, axis=axis)
+            return {
+                "n": np.round(nn, round_factor),
+                "median": np.round(med, round_factor),
+                "iqr": np.round(iqr, round_factor),
+            }
+
+
+# def describe(df, method="mean", round_factor=1):
+#     df = pd.DataFrame(df)
+#     with warnings.catch_warnings():
+#         warnings.simplefilter("ignore", RuntimeWarning)
+#         if method == "mean":
+#             return round(np.nanmean(df), 3), round(np.nanstd(df) / round_factor, 3)
+#         if method == "median":
+#             med = df.describe().T["50%"].iloc[0]
+#             IQR = (
+#                 df.describe().T["75%"].iloc[0] - df.describe().T["25%"].iloc[0]
+#             )
+#             return round(med, 3), round(IQR / round_factor, 3)
 
 
 # def describe(arr, method="mean", factor=1):

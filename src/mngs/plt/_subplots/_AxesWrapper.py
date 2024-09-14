@@ -1,11 +1,12 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-08-22 14:49:40 (ywatanabe)"
+# Time-stamp: "2024-09-14 17:16:14 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/AxesWrapper.py
 
-import pandas as pd
 from functools import wraps
+
 import numpy as np
+import pandas as pd
 
 
 class AxesWrapper:
@@ -53,28 +54,8 @@ class AxesWrapper:
     def __len__(self):
         return len(self.axes)
 
-    # def __getattr__(self, attr):
-    #     """
-    #     Wrap the axis attribute access to collect plot calls or return the attribute directly.
-    #     """
-    #     try:
-    #         original_attr = getattr(self.axes, attr)
-
-    #         if callable(original_attr):
-
-    #             @wraps(original_attr)
-    #             def wrapper(*args, track=None, id=None, **kwargs):
-    #                 results = original_attr(*args, **kwargs)
-    #                 self._track(track, id, attr, args, kwargs)
-    #                 return results
-
-    #             return wrapper
-
-    #         else:
-    #             return original_attr
-    #     except Exception as e:
-    #         print(e)
-    #         return getattr(self, attr)
+    def legend(self, loc="upper left"):
+        return [ax.legend(loc=loc) for ax in self.axes]
 
     @property
     def history(self):
@@ -97,8 +78,14 @@ class AxesWrapper:
         dfs = []
         for i_ax, ax in enumerate(self.axes.ravel()):
             df = ax.to_sigma()
-            df.columns = [f"{i_ax}_{col}" for col in df.columns]
+            df.columns = [f"ax_{i_ax:02d}_{col}" for col in df.columns]
             dfs.append(df)
+
+            # Add a spacer column after each dataframe except the last one
+            if i_ax < len(self.axes) - 1:
+                spacer = pd.DataFrame({"Spacer": [np.nan] * len(df)})
+                dfs.append(spacer)
+
         return pd.concat(dfs, axis=1)
 
     def ravel(self):

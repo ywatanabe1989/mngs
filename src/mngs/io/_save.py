@@ -115,6 +115,9 @@ def save(
     # This process should be in this function for the intended behavior of inspect.
     spath, sfname = None, None
 
+    if sfname_or_spath.startswith('f"'):
+        sfname_or_spath = eval(sfname_or_spath)
+
     if sfname_or_spath.startswith("/"):
         spath = sfname_or_spath
 

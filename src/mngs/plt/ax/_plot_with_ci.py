@@ -1,12 +1,25 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-10 10:07:22 (ywatanabe)"
+# Time-stamp: "2024-09-14 14:13:42 (ywatanabe)"
 
+import numpy as np
+import pandas as pd
 from mngs.gen import deprecated
 
 
-@deprecated("Use plot_with_ci(0 instaed.")
-def fill_between(axis, xx_values, mean_values, std_values, n=None, **kwargs):
+@deprecated("Use plot_with_ci() instead.")
+def fill_between(
+    ax,
+    xx=None,
+    mean=None,
+    median=None,
+    std=None,
+    ci=None,
+    iqr=None,
+    n=None,
+    alpha=0.3,
+    **kwargs,
+):
     """
     Deprecated function to plot mean with confidence interval.
 
@@ -44,47 +57,52 @@ def fill_between(axis, xx_values, mean_values, std_values, n=None, **kwargs):
     matplotlib.axes.Axes
         The axes with the plot
     """
-    axis.plot(xx_values, mean_values, **kwargs)
-    if n is not None:
-        label = kwargs.get("label", "")
-        kwargs["label"] = f"{label} (n={n})"
-
-    axis.fill_between(
-        xx_values, mean_values - std_values, mean_values + std_values, **kwargs
+    return plot_with_ci(
+        ax,
+        xx=xx,
+        mean=mean,
+        median=median,
+        std=std,
+        ci=ci,
+        iqr=iqr,
+        n=n,
+        alpha=alpha,
+        **kwargs,
     )
 
-    return axis
 
-
-def plot_with_ci(axis, xx_values, mean_values, std_values, n=None, **kwargs):
+def plot_with_ci(
+    axis,
+    xx=None,
+    mean=None,
+    median=None,
+    std=None,
+    ci=None,
+    iqr=None,
+    n=None,
+    alpha=0.3,
+    **kwargs,
+):
     """
-    Plot mean with confidence interval.
-
-    Example
-    -------
-    import matplotlib.pyplot as plt
-    import numpy as np
-
-    xx = np.linspace(0, 10, 100)
-    mean = np.sin(xx)
-    std = 0.1 * np.ones_like(xx)
-
-    fig, axis = plt.subplots()
-    plot_with_ci(axis, xx, mean, std, n=50, label='Sine wave')
-    plt.legend()
-    plt.show()
+    Plot mean/median with confidence interval or interquartile range.
 
     Parameters
     ----------
     axis : matplotlib.axes.Axes
         The axes to plot on
-    xx_values : array-like
+    xx : array-like
         x-axis values
-    mean_values : array-like
+    mean : array-like, optional
         Mean values to plot
-    std_values : array-like
+    median : array-like, optional
+        Median values to plot
+    std : array-like, optional
         Standard deviation values
-    n : int, optional
+    ci : array-like, optional
+        Confidence interval values
+    iqr : array-like, optional
+        Interquartile range values
+    n : int or array-like, optional
         Sample size to display in label
     **kwargs : dict
         Additional keyword arguments to pass to plot and fill_between
@@ -94,19 +112,111 @@ def plot_with_ci(axis, xx_values, mean_values, std_values, n=None, **kwargs):
     matplotlib.axes.Axes
         The axes with the plot
     """
-    return fill_between(axis, xx_values, mean_values, std_values, n, **kwargs)
+    label = kwargs.pop("label", "")
+
+    if median is not None:
+        central = median
+        label += " (median"
+        if iqr is not None:
+            label += " ± IQR)"
+            lower, upper = median - iqr / 2, median + iqr / 2
+        else:
+            raise ValueError(
+                "If median is provided, iqr must also be provided"
+            )
+    elif mean is not None:
+        central = mean
+        label += " (mean"
+        if std is not None:
+            label += " ± std)"
+            lower, upper = mean - std, mean + std
+        elif ci is not None:
+            label += " with 95% CI)"
+            lower, upper = mean - ci / 2, mean + ci / 2
+        else:
+            raise ValueError(
+                "If mean is provided, either std or ci must also be provided"
+            )
+    else:
+        raise ValueError("Either mean or median must be provided")
+
+    n_label = ""
+    if n is not None:
+        if isinstance(n, (int, float)):
+            n_label = f" (n={n})"
+            _n = n * np.ones_like(xx)
+        elif len(n) == len(xx):
+            if min(n) == max(n):
+                n_label = f" (ns={min(n)})"
+            else:
+                n_label = f" (ns={min(n)}–{max(n)})"
+            _n = n
+        else:
+            n_label = f" (n (mean) ={np.mean(n):.1f})"
+            _n = np.mean(n) * np.ones_like(xx)
+        label += n_label
+
+    if xx is None:
+        xx = np.arange(len(central))
+
+    axis.plot(xx, central, label=label, **kwargs)
+    axis.fill_between(xx, lower, upper, alpha=alpha, **kwargs)
+
+    return axis, pd.DataFrame(
+        {
+            "label": [label for _ in range(len(xx))],
+            "xx": xx,
+            "lower": lower,
+            "central": central,
+            "upper": upper,
+            "n": _n,
+        }
+    )
 
 
-# def fill_between(ax, xx, mean, std, n=None, **kwargs):
-#     ax.plot(xx, mean, **kwargs)
-#     if n is not None:
-#         label = kwargs.get("label", "")
-#         label += f" (n={n})"
+def mplot(
+    axis,
+    xx=None,
+    yy=None,
+    mean=None,
+    median=None,
+    std=None,
+    ci=None,
+    iqr=None,
+    n=None,
+    alpha=0.3,
+    **kwargs,
+):
+    """
+    Automatically choose between ordinary plot and plot with confidence interval.
 
-#     ax.fill_between(xx, mean - std, mean + std, **kwargs)
+    Parameters
+    ----------
+    (same as before)
 
-#     return ax
-
-
-# def plot_with_ci(ax, xx, mean, std, n=None, **kwargs):
-#     return fill_between(ax, xx, mean, std, **kwargs)
+    Returns
+    -------
+    (same as before)
+    """
+    if yy is not None:
+        # Ordinary plot
+        if xx is None:
+            xx = np.arange(len(yy))
+        axis.plot(xx, yy, **kwargs)
+        return axis, pd.DataFrame({"xx": xx, "yy": yy})
+    elif mean is not None or median is not None:
+        # Plot with confidence interval
+        return plot_with_ci(
+            axis,
+            xx=xx,
+            mean=mean,
+            median=median,
+            std=std,
+            ci=ci,
+            iqr=iqr,
+            n=n,
+            alpha=alpha,
+            **kwargs,
+        )
+    else:
+        raise ValueError("Either yy, mean, or median must be provided")

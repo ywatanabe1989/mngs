@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-12 12:11:19 (ywatanabe)"
+# Time-stamp: "2024-09-14 17:12:13 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/AxisWrapper.py
 
 from collections import OrderedDict
@@ -103,7 +103,7 @@ class AxisWrapper:
         """
         df = _to_sigma(self.history)
 
-        return df
+        return df if df is not None else pd.DataFrame()
 
     ################################################################################
     ## Plotting methods (other than matplotlib's original methods)
@@ -161,28 +161,79 @@ class AxisWrapper:
         out = None
         self._track(track, id, method_name, out, None)
 
-    def plot_with_ci(
+    def mplot(
         self,
-        xx,
-        mean,
-        std,
+        xx=None,
+        yy=None,
+        mean=None,
+        median=None,
+        std=None,
+        ci=None,
+        iqr=None,
         n=None,
+        alpha=0.3,
         track=True,
         id=None,
         **kwargs,
     ):
-        # Method name
-        method_name = "plot_with_ci"
+        # Method
+        method_name = "mplot"
 
         # Plotting
         with self._no_tracking():
-            self.axis = mngs.plt.ax.plot_with_ci(
-                self.axis, xx, mean, std, n=n, **kwargs
+            self.axis, df = mngs.plt.ax.mplot(
+                self.axis,
+                xx=xx,
+                yy=yy,
+                mean=mean,
+                median=median,
+                std=std,
+                ci=ci,
+                iqr=iqr,
+                n=n,
+                alpha=alpha,
+                **kwargs,
             )
 
         # Tracking
-        out = (xx, mean, std, n)
+        out = df
         self._track(track, id, method_name, out, None)
+
+    # def plot_with_ci(
+    #     self,
+    #     xx=None,
+    #     mean=None,
+    #     median=None,
+    #     std=None,
+    #     ci=None,
+    #     iqr=None,
+    #     n=None,
+    #     alpha=0.3,
+    #     track=True,
+    #     id=None,
+    #     **kwargs,
+    # ):
+    #     # Method
+    #     method_name = "plot_with_ci"
+
+    #     # Plotting
+    #     with self._no_tracking():
+    #         self.axis, df = mngs.plt.ax.plot_with_ci(
+    #             self.axis,
+    #             xx=xx,
+    #             mean=mean,
+    #             median=median,
+    #             std=std,
+    #             ci=ci,
+    #             iqr=iqr,
+    #             n=n,
+    #             alpha=alpha,
+    #             **kwargs,
+    #         )
+
+    #     # Tracking
+    #     out = df
+    #     self._track(track, id, method_name, out, None)
 
     def fillv(
         self,
@@ -317,55 +368,6 @@ class AxisWrapper:
             **kwargs,
         )
 
-    # def _sns_prepare_xyhue(self, df, x, y, hue=None):
-    #     if x and y:
-    #         if hue:
-    #             pivoted_data = df.pivot_table(
-    #                 values=y, index=df.index, columns=[x, hue], aggfunc="first"
-    #             )
-    #             pivoted_data.columns = [
-    #                 f"{col[0]}-{col[1]}" for col in pivoted_data.columns
-    #             ]
-    #         else:
-    #             pivoted_data = df.pivot_table(
-    #                 values=y, index=df.index, columns=x, aggfunc="first"
-    #             )
-    #         return pivoted_data
-    #     return None
-
-    # def _sns_prepare_xyhue(self, df, x, y, hue=None):
-    #     if x is None and y is None:
-    #         return df
-    #     elif x is None:
-    #         return df[[y]]
-    #     elif y is None:
-    #         return df[[x]]
-    #     else:
-    #         if hue:
-    #             pivoted_data = df.pivot_table(
-    #                 values=y, index=df.index, columns=[x, hue], aggfunc="first"
-    #             )
-    #             pivoted_data.columns = [
-    #                 f"{col[0]}-{col[1]}" for col in pivoted_data.columns
-    #             ]
-    #         else:
-    #             pivoted_data = df.pivot_table(
-    #                 values=y, index=df.index, columns=x, aggfunc="first"
-    #             )
-    #         return pivoted_data
-
-    # @sns_copy_doc
-    # def sns_barplot(self, *args, track=True, id=None, **kwargs):
-    #     self._sns_base_xyhue(
-    #         "sns_barplot", *args, track=track, id=id, **kwargs
-    #     )
-
-    # @sns_copy_doc
-    # def sns_boxplot(self, *args, track=True, id=None, **kwargs):
-    #     self._sns_base_xyhue(
-    #         "sns_boxplot", *args, track=track, id=id, **kwargs
-    #     )
-
     def _sns_prepare_xyhue(
         self, data=None, x=None, y=None, hue=None, **kwargs
     ):
@@ -469,6 +471,9 @@ class AxisWrapper:
     ################################################################################
     ## Adjusting methods
     ################################################################################
+    def legend(self, loc="upper left"):
+        return self.axis.legend(loc=loc)
+
     def set_xyt(
         self,
         x=None,
