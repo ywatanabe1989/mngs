@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-14 14:13:42 (ywatanabe)"
+# Time-stamp: "2024-09-14 21:57:21 (ywatanabe)"
 
 import numpy as np
 import pandas as pd
@@ -142,14 +142,17 @@ def plot_with_ci(
 
     n_label = ""
     if n is not None:
-        if isinstance(n, (int, float)):
-            n_label = f" (n={n})"
+        if isinstance(n, int):
+            n_label = f" (n={n:,})"
+            _n = n * np.ones_like(xx)
+        elif isinstance(n, float):
+            n_label = f" (n={n:.1f})"
             _n = n * np.ones_like(xx)
         elif len(n) == len(xx):
             if min(n) == max(n):
-                n_label = f" (ns={min(n)})"
+                n_label = f" (ns={min(n):,})"
             else:
-                n_label = f" (ns={min(n)}–{max(n)})"
+                n_label = f" (ns={min(n):,}–{max(n):,})"
             _n = n
         else:
             n_label = f" (n (mean) ={np.mean(n):.1f})"

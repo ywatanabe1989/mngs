@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-14 16:52:16 (ywatanabe)"
+# Time-stamp: "2024-09-15 09:24:23 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/SubplotsManager.py
 
 from collections import OrderedDict
@@ -87,9 +87,7 @@ class SubplotsManager:
             in the same manner with matplotlib.pyplot.subplots.
         """
 
-        fig, axes = plt.subplots(*args, sharex=True, sharey=True, **kwargs)
-        # fig.legend(loc="upper left")
-        # fig.tight_layout()
+        fig, axes = plt.subplots(*args, sharex=sharex, sharey=sharey, **kwargs)
 
         # Fig
         fig = FigWrapper(fig)
@@ -114,36 +112,6 @@ class SubplotsManager:
             axes = AxesWrapper(fig, axes)
             fig.axes = axes
             return fig, axes
-
-    # @property
-    # def history(self):
-    #     """
-    #     Get the sorted plot history.
-
-    #     Returns:
-    #         dict: The sorted plot history.
-    #     """
-    #     return {
-    #         k: self._subplots_manager_history[k]
-    #         for k in self._subplots_manager_history
-    #     }
-
-    # def reset_history(self):
-    #     """Reset the plot history to an empty state."""
-    #     self._subplots_manager_history = OrderedDict()
-
-    # @property
-    # def to_sigma(self):
-    #     """
-    #     Convert the plot history data to a SigmaPlot-compatible format DataFrame.
-
-    #     Returns:
-    #         DataFrame: The plot history in SigmaPlot format.
-    #     """
-    #     df = _to_sigma(self.history)
-    #     self.reset_history()
-
-    #     return df
 
 
 subplots = SubplotsManager()

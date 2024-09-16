@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-14 14:13:54 (ywatanabe)"
+# Time-stamp: "2024-09-15 18:41:44 (ywatanabe)"
 
 from ._add_marginal_ax import add_marginal_ax
 from ._circular_hist import circular_hist
@@ -24,6 +24,6 @@ from ._set_supxyt import set_supxyt
 from ._set_ticks import set_ticks
 from ._set_xyt import set_xyt
 from ._share_axes import (get_global_xlim, get_global_ylim, set_xlims,
-                          set_ylims, sharex, sharey)
+                          set_ylims, sharex, sharexy, sharey)
 # from ._set_pos import set_pos
 from ._shift import shift

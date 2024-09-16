@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-14 14:14:56 (ywatanabe)"
+# Time-stamp: "2024-09-16 19:04:24 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/_to_sigma.py
 
 
@@ -65,9 +65,6 @@ def to_sigma(history):
         data_frames = [format_plotting_args(record) for record in values_list]
         combined_data = pd.concat(data_frames, axis=1)  # join="inner",
         return combined_data
-        # return combined_data.apply(
-        #     lambda col: col.dropna().reset_index(drop=True)
-        # )
     else:
         return
 
@@ -143,11 +140,19 @@ def format_plotting_args(record):
         # One box plot
         if mngs.gen.is_listed_X(xs, [float, int]):
             df = pd.DataFrame(xs)
-        # Multiple boxes
+
+        elif isinstance(xs, np.ndarray):
+            df = pd.DataFrame(xs)
+
         else:
+            # Multiple boxes
             df = mngs.pd.force_df({i_x: _x for i_x, _x in enumerate(xs)})
         df.columns = [f"{id}_{method}_{col}_x" for col in df.columns]
         df = df.apply(lambda col: col.dropna().reset_index(drop=True))
+        return df
+
+    elif method == "_boxplot":
+        df = args[0]
         return df
 
     # Original
@@ -156,7 +161,7 @@ def format_plotting_args(record):
     #     df.columns = [f"{id}_{method}_{col}" for col in df.columns]
     #     return df
 
-    elif method == "mplot":
+    elif method == "_plot":
         df = args
         df.columns = [f"{id}_{method}_{col}" for col in df.columns]
         return df
@@ -230,8 +235,10 @@ def format_plotting_args(record):
         return df
 
     else:
-        # logging.warn(f"{method} is not implemented.")
-        pass
+        if not method.startswith("set_"):
+            logging.warn(
+                f"{method} is not implemented in _to_sigma method of the mngs.plt module."
+            )
 
 
 def main():

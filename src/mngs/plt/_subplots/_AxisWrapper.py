@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-14 17:12:13 (ywatanabe)"
+# Time-stamp: "2024-09-16 19:05:17 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/AxisWrapper.py
 
 from collections import OrderedDict
@@ -161,7 +161,7 @@ class AxisWrapper:
         out = None
         self._track(track, id, method_name, out, None)
 
-    def mplot(
+    def _plot(
         self,
         xx=None,
         yy=None,
@@ -177,7 +177,7 @@ class AxisWrapper:
         **kwargs,
     ):
         # Method
-        method_name = "mplot"
+        method_name = "_plot"
 
         # Plotting
         with self._no_tracking():
@@ -199,42 +199,6 @@ class AxisWrapper:
         out = df
         self._track(track, id, method_name, out, None)
 
-    # def plot_with_ci(
-    #     self,
-    #     xx=None,
-    #     mean=None,
-    #     median=None,
-    #     std=None,
-    #     ci=None,
-    #     iqr=None,
-    #     n=None,
-    #     alpha=0.3,
-    #     track=True,
-    #     id=None,
-    #     **kwargs,
-    # ):
-    #     # Method
-    #     method_name = "plot_with_ci"
-
-    #     # Plotting
-    #     with self._no_tracking():
-    #         self.axis, df = mngs.plt.ax.plot_with_ci(
-    #             self.axis,
-    #             xx=xx,
-    #             mean=mean,
-    #             median=median,
-    #             std=std,
-    #             ci=ci,
-    #             iqr=iqr,
-    #             n=n,
-    #             alpha=alpha,
-    #             **kwargs,
-    #         )
-
-    #     # Tracking
-    #     out = df
-    #     self._track(track, id, method_name, out, None)
-
     def fillv(
         self,
         starts,
@@ -254,6 +218,23 @@ class AxisWrapper:
 
         # Tracking
         out = (starts, ends)
+        self._track(track, id, method_name, out, None)
+
+    def _boxplot(self, x, track=True, id=None, **kwargs):
+        # Method name
+        method_name = "_boxplot"
+
+        # Plotting
+        with self._no_tracking():
+            self.axis.boxplot(x, **kwargs)
+
+        df = pd.DataFrame(pd.Series(x))
+
+        if id is not None:
+            df.columns = [f"{id}_{method_name}_{col}" for col in df.columns]
+        out = df
+
+        # Tracking
         self._track(track, id, method_name, out, None)
 
     def raster(self, positions, time=None, track=True, id=None, **kwargs):

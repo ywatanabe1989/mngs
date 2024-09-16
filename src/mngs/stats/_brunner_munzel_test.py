@@ -4,7 +4,7 @@ import numpy as np
 from scipy import stats
 
 
-def brunner_munzel_test(x1, x2, distribution="t"):
+def brunner_munzel_test(x1, x2, distribution="t", round_factor=3):
     """Calculate Brunner-Munzel-test scores.
     Parameters:
       x1, x2: array_like
@@ -68,5 +68,8 @@ def brunner_munzel_test(x1, x2, distribution="t"):
     p_value = min(c, 1.0 - c) * 2.0
     effsize = (r2_mean - r1_mean) / (n1 + n2) + 0.5
     return dict(
-        w_statistic=w_statistic, p_value=p_value, dof=dof, effsize=effsize
+        w_statistic=round(w_statistic, round_factor),
+        p_value=round(p_value, round_factor),
+        dof=round(dof, round_factor),
+        effsize=round(effsize, round_factor),
     )
