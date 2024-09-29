@@ -27,7 +27,7 @@ def save(
     sfname_or_spath,
     makedirs=True,
     verbose=True,
-    from_cwd=True,
+    from_cwd=False,
     dry_run=False,
     **kwargs,
 ):
@@ -140,7 +140,7 @@ def save(
 
     # Removes spath and spath_cwd to prevent potential circular links
     for path in [spath, spath_cwd]:
-        mngs.sh(f"rm {path}", verbose=False)
+        mngs.sh(f"rm -f {path}", verbose=False)
 
     if dry_run:
         print(mngs.gen.ct(f"\n(dry run) Saved to: {spath}", c="yellow"))
@@ -164,7 +164,7 @@ def save(
 def symlink(spath, spath_cwd, from_cwd, verbose):
     if from_cwd and (spath != spath_cwd):
         os.makedirs(os.path.dirname(spath_cwd), exist_ok=True)
-        mngs.sh(f"rm {spath_cwd}", verbose=False)
+        mngs.sh(f"rm -f {spath_cwd}", verbose=False)
         mngs.sh(f"ln -sfr {spath} {spath_cwd}", verbose=False)
         if verbose:
             print(
@@ -245,9 +245,10 @@ def _save(obj, spath, verbose=True, from_cwd=False, dry_run=False, **kwargs):
         _save_image(obj, spath, **kwargs)
         ext = os.path.splitext(spath)[1].lower()
         try:
+            ext_wo_dot = ext.replace(".", "")
             save(
                 obj.to_sigma(),
-                spath.replace(ext, ".csv"),
+                spath.replace(ext_wo_dot, "csv"),
                 from_cwd=from_cwd,
                 dry_run=dry_run,
                 **kwargs,

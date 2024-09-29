@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-16 19:04:24 (ywatanabe)"
+# Time-stamp: "2024-09-29 07:57:04 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/_to_sigma.py
 
 
@@ -63,8 +63,12 @@ def to_sigma(history):
     if len(history) > 0:
         values_list = list(history.values())
         data_frames = [format_plotting_args(record) for record in values_list]
-        combined_data = pd.concat(data_frames, axis=1)  # join="inner",
-        return combined_data
+        try:
+            combined_data = pd.concat(data_frames, axis=1)
+            return combined_data
+        except Exception as e:
+            print(e)
+            return pd.DataFrame()
     else:
         return
 
@@ -135,33 +139,28 @@ def format_plotting_args(record):
         return df
 
     elif method == "boxplot":
-        xs = args[0]
+        x = args[0]
 
         # One box plot
-        if mngs.gen.is_listed_X(xs, [float, int]):
-            df = pd.DataFrame(xs)
-
-        elif isinstance(xs, np.ndarray):
-            df = pd.DataFrame(xs)
+        if isinstance(x, np.ndarray) or mngs.gen.is_listed_X(x, [float, int]):
+            df = pd.DataFrame(x)
 
         else:
             # Multiple boxes
-            df = mngs.pd.force_df({i_x: _x for i_x, _x in enumerate(xs)})
+            df = mngs.pd.force_df({i_x: _x for i_x, _x in enumerate(x)})
         df.columns = [f"{id}_{method}_{col}_x" for col in df.columns]
         df = df.apply(lambda col: col.dropna().reset_index(drop=True))
         return df
 
-    elif method == "_boxplot":
-        df = args[0]
-        return df
-
-    # Original
-    # elif method == "plot_with_ci":
-    #     df = args
+    # elif method == "boxplot_":
+    #     __import__("ipdb").set_trace()
+    #     x = args[0]
+    #     df =
     #     df.columns = [f"{id}_{method}_{col}" for col in df.columns]
+
     #     return df
 
-    elif method == "_plot":
+    elif method == "plot_":
         df = args
         df.columns = [f"{id}_{method}_{col}" for col in df.columns]
         return df
@@ -207,12 +206,14 @@ def format_plotting_args(record):
         return df
 
     elif method == "sns_histplot":
-        __import__("ipdb").set_trace()
+        df=args
         return df
 
     elif method == "sns_kdeplot":
-        __import__("ipdb").set_trace()
-        return df
+        pass
+        # df = args
+        # __import__("ipdb").set_trace()
+        # return df
 
     elif method == "sns_lineplot":
         __import__("ipdb").set_trace()
@@ -227,7 +228,7 @@ def format_plotting_args(record):
         return df
 
     elif method == "sns_violinplot":
-        __import__("ipdb").set_trace()
+        df = args
         return df
 
     elif method == "sns_jointplot":
@@ -235,10 +236,11 @@ def format_plotting_args(record):
         return df
 
     else:
-        if not method.startswith("set_"):
-            logging.warn(
-                f"{method} is not implemented in _to_sigma method of the mngs.plt module."
-            )
+        pass
+        # if not method.startswith("set_"):
+        #     logging.warn(
+        #         f"{method} is not implemented in _to_sigma method of the mngs.plt module."
+        #     )
 
 
 def main():

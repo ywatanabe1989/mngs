@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-14 21:57:21 (ywatanabe)"
+# Time-stamp: "2024-09-29 13:59:59 (ywatanabe)"
 
 import numpy as np
 import pandas as pd
 from mngs.gen import deprecated
 
 
-@deprecated("Use plot_with_ci() instead.")
+@deprecated("Use plot_() instead.")
 def fill_between(
     ax,
     xx=None,
@@ -141,6 +141,7 @@ def plot_with_ci(
         raise ValueError("Either mean or median must be provided")
 
     n_label = ""
+    _n = None
     if n is not None:
         if isinstance(n, int):
             n_label = f" (n={n:,})"
@@ -177,7 +178,7 @@ def plot_with_ci(
     )
 
 
-def mplot(
+def plot_(
     axis,
     xx=None,
     yy=None,

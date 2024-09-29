@@ -25,7 +25,9 @@ import xarray as xr
 from natsort import natsorted
 
 from .decorators._deprecated import deprecated
-
+from collections import abc
+import os
+from contextlib import contextmanager, redirect_stderr, redirect_stdout
 
 ################################################################################
 ## strings
@@ -149,7 +151,85 @@ import re
 import numpy as np
 
 
-def search(patterns, strings, only_perfect_match=False, as_bool=False):
+# def search(patterns, strings, only_perfect_match=False, as_bool=False, ensure_one=False):
+#     """Search for patterns in strings using regular expressions.
+
+#     Parameters
+#     ----------
+#     patterns : str or list of str
+#         The pattern(s) to search for. Can be a single string or a list of strings.
+#     strings : str or list of str
+#         The string(s) to search in. Can be a single string or a list of strings.
+#     only_perfect_match : bool, optional
+#         If True, only exact matches are considered (default is False).
+#     as_bool : bool, optional
+#         If True, return a boolean array instead of indices (default is False).
+
+#     Returns
+#     -------
+#     tuple
+#         A tuple containing two elements:
+#         - If as_bool is False: (list of int, list of str)
+#           The first element is a list of indices where matches were found.
+#           The second element is a list of matched strings.
+#         - If as_bool is True: (numpy.ndarray of bool, list of str)
+#           The first element is a boolean array indicating matches.
+#           The second element is a list of matched strings.
+
+#     Example
+#     -------
+#     >>> patterns = ['orange', 'banana']
+#     >>> strings = ['apple', 'orange', 'apple', 'apple_juice', 'banana', 'orange_juice']
+#     >>> search(patterns, strings)
+#     ([1, 4, 5], ['orange', 'banana', 'orange_juice'])
+
+#     >>> patterns = 'orange'
+#     >>> strings = ['apple', 'orange', 'apple', 'apple_juice', 'banana', 'orange_juice']
+#     >>> search(patterns, strings)
+#     ([1, 5], ['orange', 'orange_juice'])
+#     """
+
+#     def to_list(s_or_p):
+#         if isinstance(s_or_p, (np.ndarray, pd.Series, xr.DataArray)):
+#             return s_or_p.tolist()
+#         elif isinstance(s_or_p, collections.abc.KeysView):
+#             return list(s_or_p)
+#         elif not isinstance(s_or_p, (list, tuple, pd.Index)):
+#             return [s_or_p]
+#         return s_or_p
+
+#     patterns = to_list(patterns)
+#     strings = to_list(strings)
+
+#     if not only_perfect_match:
+#         indi_matched = []
+#         for pattern in patterns:
+#             for i_str, string in enumerate(strings):
+#                 m = re.search(pattern, string)
+#                 if m is not None:
+#                     indi_matched.append(i_str)
+#     else:
+#         indi_matched = []
+#         for pattern in patterns:
+#             for i_str, string in enumerate(strings):
+#                 if pattern == string:
+#                     indi_matched.append(i_str)
+
+#     indi_matched = natsorted(indi_matched)
+#     keys_matched = list(np.array(strings)[indi_matched])
+
+#     if ensure_one:
+#         asssert len(indi_matched) == 1
+
+#     if as_bool:
+#         bool_matched = np.zeros(len(strings), dtype=bool)
+#         if np.unique(indi_matched).size != 0:
+#             bool_matched[np.unique(indi_matched)] = True
+#         return bool_matched, keys_matched
+#     else:
+#         return indi_matched, keys_matched
+
+def search(patterns, strings, only_perfect_match=False, as_bool=False, ensure_one=False):
     """Search for patterns in strings using regular expressions.
 
     Parameters
@@ -162,6 +242,8 @@ def search(patterns, strings, only_perfect_match=False, as_bool=False):
         If True, only exact matches are considered (default is False).
     as_bool : bool, optional
         If True, return a boolean array instead of indices (default is False).
+    ensure_one : bool, optional
+        If True, ensures only one match is found (default is False).
 
     Returns
     -------
@@ -187,131 +269,40 @@ def search(patterns, strings, only_perfect_match=False, as_bool=False):
     ([1, 5], ['orange', 'orange_juice'])
     """
 
-    def to_list(s_or_p):
-        if isinstance(s_or_p, (np.ndarray, pd.Series, xr.DataArray)):
-            return s_or_p.tolist()
-        elif isinstance(s_or_p, collections.abc.KeysView):
-            return list(s_or_p)
-        elif not isinstance(s_or_p, (list, tuple, pd.Index)):
-            return [s_or_p]
-        # if isinstance(s_or_p, collections.abc.KeysView):
-        #     s_or_p = list(s_or_p)
-        # elif not isinstance(
-        #     s_or_p,
-        #     (list, tuple, pd.core.indexes.base.Index, pd.core.series.Series),
-        # ):
-        #     s_or_p = [s_or_p]
-
-        return s_or_p
-
-    # def to_list(s_or_p):
-    #     if isinstance(s_or_p, collections.abc.KeysView):
-    #         s_or_p = list(s_or_p)
-
-    #     elif not isinstance(
-    #         s_or_p,
-    #         (list, tuple, pd.core.indexes.base.Index, pd.core.series.Series),
-    #     ):
-    #         s_or_p = [s_or_p]
-
-    #     return s_or_p
+    def to_list(string_or_pattern):
+        if isinstance(string_or_pattern, (np.ndarray, pd.Series, xr.DataArray)):
+            return string_or_pattern.tolist()
+        elif isinstance(string_or_pattern, abc.KeysView):
+            return list(string_or_pattern)
+        elif not isinstance(string_or_pattern, (list, tuple, pd.Index)):
+            return [string_or_pattern]
+        return string_or_pattern
 
     patterns = to_list(patterns)
     strings = to_list(strings)
 
-    if not only_perfect_match:
-        indi_matched = []
-        for pattern in patterns:
-            for i_str, string in enumerate(strings):
-                m = re.search(pattern, string)
-                if m is not None:
-                    indi_matched.append(i_str)
-    else:
-        indi_matched = []
-        for pattern in patterns:
-            for i_str, string in enumerate(strings):
+    indices_matched = []
+    for pattern in patterns:
+        for index_str, string in enumerate(strings):
+            if only_perfect_match:
                 if pattern == string:
-                    indi_matched.append(i_str)
+                    indices_matched.append(index_str)
+            else:
+                if re.search(pattern, string):
+                    indices_matched.append(index_str)
 
-    indi_matched = natsorted(indi_matched)
-    keys_matched = list(np.array(strings)[indi_matched])
+    indices_matched = natsorted(indices_matched)
+    keys_matched = list(np.array(strings)[indices_matched])
+
+    if ensure_one:
+        assert len(indices_matched) == 1, "Expected exactly one match, but found {}".format(len(indices_matched))
 
     if as_bool:
         bool_matched = np.zeros(len(strings), dtype=bool)
-        if np.unique(indi_matched).size != 0:
-            bool_matched[np.unique(indi_matched)] = True
+        bool_matched[np.unique(indices_matched)] = True
         return bool_matched, keys_matched
     else:
-        return indi_matched, keys_matched
-
-
-# def search(patterns, strings, only_perfect_match=False, as_bool=False):
-#     """
-#     regular expression is acceptable for patterns.
-
-#     Example:
-#         patterns = ['orange', 'banana']
-#         strings = ['apple', 'orange', 'apple', 'apple_juice', 'banana', 'orange_juice']
-#         print(search(patterns, strings))
-#         # ([1, 4, 5], ['orange', 'banana', 'orange_juice'])
-
-#         patterns = 'orange'
-#         strings = ['apple', 'orange', 'apple', 'apple_juice', 'banana', 'orange_juice']
-#         print(search(patterns, strings))
-#         # ([1, 5], ['orange', 'orange_juice'])
-#     """
-
-#     ## For single string objects
-#     def to_str_list(data):
-#         data_arr = np.array(data).astype(str)
-#         if data_arr.ndim == 0:
-#             data_arr = data_arr[np.newaxis]
-#         return list(data_arr)
-
-#     # def to_list(s_or_p):
-#     #     if isinstance(s_or_p, collections.abc.KeysView):
-#     #         s_or_p = list(s_or_p)
-
-#     #     elif not isinstance(
-#     #         s_or_p,
-#     #         (list, tuple, pd.core.indexes.base.Index, pd.core.series.Series),
-#     #     ):
-#     #         s_or_p = [s_or_p]
-
-#     #     return s_or_p
-
-#     # patterns = to_list(patterns)
-#     # strings = to_list(strings)
-#     patterns = to_str_list(patterns)
-#     strings = to_str_list(strings)
-
-#     ## Main
-#     if not only_perfect_match:
-#         indi_matched = []
-#         for pattern in patterns:
-#             for i_str, string in enumerate(strings):
-#                 m = re.search(pattern, string)
-#                 if m is not None:
-#                     indi_matched.append(i_str)
-#     else:
-#         indi_matched = []
-#         for pattern in patterns:
-#             for i_str, string in enumerate(strings):
-#                 if pattern == string:
-#                     indi_matched.append(i_str)
-
-#     ## Sorts the indices according to the original strings
-#     indi_matched = natsorted(indi_matched)
-#     keys_matched = list(np.array(strings)[indi_matched])
-
-#     if as_bool:
-#         bool_matched = np.zeros(len(strings), dtype=bool)
-#         if np.unique(indi_matched).size != 0:
-#             bool_matched[np.unique(indi_matched)] = True
-#         return bool_matched, keys_matched
-
-#     else:
-#         return indi_matched, keys_matched
+        return indices_matched, keys_matched
 
 
 def grep(str_list, search_key):
@@ -996,41 +987,6 @@ def describe(df, method="mean_std", round_factor=3, axis=0):
                 "iqr": np.round(iqr, round_factor),
             }
 
-
-# def describe(df, method="mean", round_factor=1):
-#     df = pd.DataFrame(df)
-#     with warnings.catch_warnings():
-#         warnings.simplefilter("ignore", RuntimeWarning)
-#         if method == "mean":
-#             return round(np.nanmean(df), 3), round(np.nanstd(df) / round_factor, 3)
-#         if method == "median":
-#             med = df.describe().T["50%"].iloc[0]
-#             IQR = (
-#                 df.describe().T["75%"].iloc[0] - df.describe().T["25%"].iloc[0]
-#             )
-#             return round(med, 3), round(IQR / round_factor, 3)
-
-
-# def describe(arr, method="mean", factor=1):
-#     arr = pd.DataFrame(arr)
-#     arr = np.hstack(arr[~np.isnan(arr)])
-
-#     with warnings.catch_warnings():
-#         warnings.simplefilter("ignore", RuntimeWarning)
-#         if method == "mean":
-#             return np.nanmean(df), np.nanstd(df) / factor
-#         if method == "median":
-#             med = df.describe().T["50%"].iloc[0]
-#             IQR = df.describe().T["75%"].iloc[0] - df.describe().T["25%"].iloc[0]
-#             return med, IQR / factor
-
-
-# def count():
-#     counter = 0
-#     while True:
-#         print(counter)
-#         time.sleep(1)
-#         counter += 1
 def _return_counting_process():
     import multiprocessing
 
@@ -1124,37 +1080,6 @@ class ThreadWithReturnValue(threading.Thread):
         ### fixme
         Thread.join(self, *args)
         return self._return
-
-
-# @contextmanager
-# def suppress_output():
-#     """A context manager that suppresses stdout and stderr."""
-#     with open(os.devnull, "w") as fnull:
-#         with contextlib.redirect_stdout(fnull), contextlib.redirect_stderr(
-#             fnull
-#         ):
-#             yield
-
-# @contextmanager
-# def suppress_output():
-#     """
-#     A context manager that suppresses stdout and stderr.
-
-#     Example:
-#         with suppress_output():
-#             print("This will not be printed to the console.")
-#     """
-#     # Open a file descriptor that points to os.devnull (a black hole for data)
-#     with open(os.devnull, "w") as fnull:
-#         # Temporarily redirect stdout to the file descriptor fnull
-#         with contextlib.redirect_stdout(fnull):
-#             # Temporarily redirect stderr to the file descriptor fnull
-#             with contextlib.redirect_stderr(fnull):
-#                 # Yield control back to the context block
-#                 yield
-
-import os
-from contextlib import contextmanager, redirect_stderr, redirect_stdout
 
 
 @contextmanager
@@ -1267,57 +1192,6 @@ def uq(*args, **kwargs):
     return unique(*args, **kwargs)
 
 
-# def uq(data, axis=None):
-#     def _uq(data):
-#         uqs, counts = np.unique(data, return_counts=True)
-#         df = pd.DataFrame({"uq": uqs, "n": counts})
-#         # Format the 'Counts' column with commas for thousands
-#         df["n"] = df["n"].apply(lambda x: f"{x:,}")
-#         return df
-
-#     data = pd.DataFrame(data)
-
-#     if axis == 1:
-#         dfs = {}
-#         for col in data.columns:
-#             df = _uq(data[col])
-#             dfs[col] = df
-#         return dfs
-
-#     if axis == 0:
-#         dfs = {}
-#         for col in data.T.columns:
-#             df = _uq(data.T[col])
-#             dfs[col] = df
-#         return dfs
-
-#     if axis is None:
-#         return _uq(data)
-
-
-# def unique(data, axis=None):
-#     """
-#     Identifies unique elements in the data and their counts, returning a DataFrame.
-
-#     Parameters:
-#     - data (array-like): The input data to analyze for unique elements.
-#     - show (bool, optional): If True, prints the DataFrame. Defaults to True.
-
-#     Returns:
-#     - df (pandas.DataFrame): DataFrame with unique elements and their counts.
-#     """
-#     uqs, counts = np.unique(data, return_counts=True)  # [REVISED]
-#     df = pd.DataFrame(
-#         np.vstack([uqs, counts]).T, columns=["uq", "n"]  # [REVISED]
-#     ).set_index(
-#         "uq"
-#     )  # [REVISED]
-
-#     df_show = df.copy()
-#     df_show["n"] = df_show["n"].apply(lambda x: f"{int(x):,}")  # [REVISED]
-
-
-#     return df_show
 def print_block(message, char="-", n=40, c=None):
     """Print a message surrounded by a character border.
 
@@ -1355,6 +1229,7 @@ def print_block(message, char="-", n=40, c=None):
         text = color_text(text, c)
     print(text)
 
+print_ = print_block
 
 def color_text(text, c="green"):
     """Apply ANSI color codes to text.

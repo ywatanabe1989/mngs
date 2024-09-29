@@ -26,7 +26,7 @@ from .misc import (_return_counting_process, color_text, connect_nums,
                    find_closest, float_linspace, grep, is_defined_global,
                    is_defined_local, is_later_or_equal, is_listed_X, is_nan,
                    isclose, listed_dict, merge_dicts_wo_overlaps, natglob,
-                   partial_at, pop_keys, print_block, quiet, readable_bytes,
+                   partial_at, pop_keys, print_block, print_, quiet, readable_bytes,
                    replace, search, squeeze_spaces, suppress_output, symlink,
                    to_even, to_odd, unique, uq, wait_key)
 # Utils

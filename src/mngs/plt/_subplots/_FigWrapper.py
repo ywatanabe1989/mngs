@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-16 10:36:52 (ywatanabe)"
+# Time-stamp: "2024-09-19 20:22:18 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/_FigWrapper.py
 
 from functools import wraps

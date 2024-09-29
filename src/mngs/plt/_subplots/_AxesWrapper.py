@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-14 17:16:14 (ywatanabe)"
+# Time-stamp: "2024-09-21 15:00:54 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/AxesWrapper.py
 
 from functools import wraps
@@ -86,7 +86,7 @@ class AxesWrapper:
                 spacer = pd.DataFrame({"Spacer": [np.nan] * len(df)})
                 dfs.append(spacer)
 
-        return pd.concat(dfs, axis=1)
+        return pd.concat(dfs, axis=1) if dfs else pd.DataFrame()
 
     def ravel(self):
         """
@@ -116,4 +116,7 @@ class AxesWrapper:
         Returns:
             list: A list containing all axes objects.
         """
-        return self.axes.flat
+        if isinstance(self.axes, list):
+            return self.axes
+        else:
+            return self.axes.flat

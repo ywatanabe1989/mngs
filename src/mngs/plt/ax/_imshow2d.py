@@ -1,11 +1,9 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-08-24 18:27:53 (ywatanabe)"
+# Time-stamp: "2024-09-28 10:19:09 (ywatanabe)"
 # Author: Yusuke Watanabe (ywata1989@gmail.com)
 
-"""
-This script does XYZ.
-"""
+"""This script does XYZ."""
 
 import sys
 
@@ -56,16 +54,6 @@ def imshow2d(
 
     # Invert y-axis to match typical image orientation
     ax.invert_yaxis()
-
-
-    # # Set ticks for x and y axes
-    # xticks = np.arange(arr_2d.shape[1])  # Correct after transposition
-    # ax.set_xticks(xticks)
-    # ax.set_xticklabels([str(xt) for xt in xticks])
-
-    # yticks = np.arange(arr_2d.shape[0])  # Correct after transposition
-    # ax.set_yticks(yticks)
-    # ax.set_yticklabels([str(yt) for yt in yticks])
 
     return ax
 
