@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-21 15:00:54 (ywatanabe)"
+# Time-stamp: "2024-10-02 09:36:05 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/AxesWrapper.py
 
 from functools import wraps
@@ -81,10 +81,11 @@ class AxesWrapper:
             df.columns = [f"ax_{i_ax:02d}_{col}" for col in df.columns]
             dfs.append(df)
 
-            # Add a spacer column after each dataframe except the last one
-            if i_ax < len(self.axes) - 1:
-                spacer = pd.DataFrame({"Spacer": [np.nan] * len(df)})
-                dfs.append(spacer)
+            # # Add a spacer column after each dataframe except the last one
+            # if i_ax < len(self.axes) - 1:
+            #     spacer = pd.DataFrame({"Spacer": [np.nan] * len(df)})
+            #     dfs.append(spacer)
+            # __import__("ipdb").set_trace()
 
         return pd.concat(dfs, axis=1) if dfs else pd.DataFrame()
 

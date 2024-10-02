@@ -195,6 +195,21 @@ def _save(obj, spath, verbose=True, from_cwd=False, dry_run=False, **kwargs):
         if mngs.gen.is_listed_X(obj, pd.DataFrame):  # listed DataFrame
             _save_listed_dfs_as_csv(obj, spath, **kwargs)
 
+    # # csv
+    # if spath.endswith(".xlsx"):
+    #     if isinstance(obj, (pd.Series, pd.DataFrame)):  # Series or DataFrame
+    #         obj.to_csv(spath, **kwargs)
+
+    #     if mngs.gen.is_listed_X(obj, [int, float]):  # listed scalars
+    #         _save_listed_scalars_as_csv(
+    #             obj,
+    #             spath,
+    #             **kwargs,
+    #         )
+    #     if mngs.gen.is_listed_X(obj, pd.DataFrame):  # listed DataFrame
+    #         _save_listed_dfs_as_csv(obj, spath, **kwargs)
+
+
     # numpy
     elif spath.endswith(".npy"):
         np.save(spath, obj)

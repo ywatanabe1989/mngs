@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-29 07:57:04 (ywatanabe)"
+# Time-stamp: "2024-10-02 09:32:36 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/_to_sigma.py
 
 
@@ -128,8 +128,17 @@ def format_plotting_args(record):
     elif method == "bar":
         x, y = args
         yerr = kwargs.get("yerr")
+
+        if isinstance(x, (int, float)):
+            x = pd.Series(x, name="x")
+        if isinstance(y, (int, float)):
+            y = pd.Series(y, name="y")
+
         df = pd.DataFrame({f"{id}_{method}_x": x, f"{id}_{method}_y": y})
+
         if yerr is not None:
+            if isinstance(yerr, (int, float)):
+                yerr = pd.Series(yerr, name="yerr")
             df[f"{id}_{method}_yerr"] = yerr
         return df
 
