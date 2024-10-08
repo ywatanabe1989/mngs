@@ -16,6 +16,26 @@ import mngs
 ## PATH
 ################################################################################
 def get_this_fpath(when_ipython="/tmp/fake.py"):
+    """
+    Get the file path of the calling script, with special handling for IPython environments.
+
+    Parameters:
+    -----------
+    when_ipython : str, optional
+        The file path to return when running in an IPython environment. Default is "/tmp/fake.py".
+
+    Returns:
+    --------
+    str
+        The file path of the calling script or the specified path for IPython environments.
+
+    Example:
+    --------
+    >>> import mngs.io._path as path
+    >>> fpath = path.get_this_fpath()
+    >>> print(fpath)
+    '/path/to/current/script.py'
+    """
     __file__ = inspect.stack()[1].filename
     if "ipython" in __file__:  # for ipython
         __file__ = when_ipython  # "/tmp/fake.py"
@@ -23,7 +43,28 @@ def get_this_fpath(when_ipython="/tmp/fake.py"):
 
 
 def mk_spath(sfname, makedirs=False):
+    """
+    Create a save path based on the calling script's location.
 
+    Parameters:
+    -----------
+    sfname : str
+        The name of the file to be saved.
+    makedirs : bool, optional
+        If True, create the directory structure for the save path. Default is False.
+
+    Returns:
+    --------
+    str
+        The full save path for the file.
+
+    Example:
+    --------
+    >>> import mngs.io._path as path
+    >>> spath = path.mk_spath('output.txt', makedirs=True)
+    >>> print(spath)
+    '/path/to/current/script/output.txt'
+    """
     __file__ = inspect.stack()[1].filename
     if "ipython" in __file__:  # for ipython
         __file__ = f'/tmp/fake-{os.getenv("USER")}.py'
@@ -41,6 +82,26 @@ def mk_spath(sfname, makedirs=False):
 
 
 def find_the_git_root_dir():
+    """
+    Find the root directory of the current Git repository.
+
+    Returns:
+    --------
+    str
+        The path to the root directory of the current Git repository.
+
+    Raises:
+    -------
+    git.exc.InvalidGitRepositoryError
+        If the current directory is not part of a Git repository.
+
+    Example:
+    --------
+    >>> import mngs.io._path as path
+    >>> git_root = path.find_the_git_root_dir()
+    >>> print(git_root)
+    '/path/to/git/repository'
+    """
     import git
 
     repo = git.Repo(".", search_parent_directories=True)
@@ -48,12 +109,31 @@ def find_the_git_root_dir():
 
 
 def split_fpath(fpath):
-    """Split a file path to (1) the directory path, (2) the file name, and (3) the file extention
+    """
+    Split a file path into directory path, file name, and file extension.
+
+    Parameters:
+    -----------
+    fpath : str
+        The full file path to split.
+
+    Returns:
+    --------
+    tuple
+        A tuple containing (dirname, fname, ext), where:
+        - dirname: str, the directory path
+        - fname: str, the file name without extension
+        - ext: str, the file extension
+
     Example:
-        dirname, fname, ext = split_fpath('../data/01/day1/split_octave/2kHz_mat/tt8-2.mat')
-        print(dirname) # '../data/01/day1/split_octave/2kHz_mat/'
-        print(fname) # 'tt8-2'
-        print(ext) # '.mat'
+    --------
+    >>> dirname, fname, ext = split_fpath('../data/01/day1/split_octave/2kHz_mat/tt8-2.mat')
+    >>> print(dirname)
+    '../data/01/day1/split_octave/2kHz_mat/'
+    >>> print(fname)
+    'tt8-2'
+    >>> print(ext)
+    '.mat'
     """
     dirname = os.path.dirname(fpath) + "/"
     base = os.path.basename(fpath)
@@ -62,6 +142,35 @@ def split_fpath(fpath):
 
 
 def touch(fpath):
+    """
+    Create a file or update its modification time.
+
+    This function mimics the Unix 'touch' command.
+
+    Parameters:
+    -----------
+    fpath : str
+        The path to the file to be touched.
+
+    Returns:
+    --------
+    None
+
+    Side Effects:
+    -------------
+    Creates a new file if it doesn't exist, or updates the modification time
+    of an existing file.
+
+    Example:
+    --------
+    >>> import mngs.io._path as path
+    >>> import os
+    >>> test_file = '/tmp/test_file.txt'
+    >>> path.touch(test_file)
+    >>> assert os.path.exists(test_file)
+    >>> print(f"File created: {test_file}")
+    File created: /tmp/test_file.txt
+    """
     import pathlib
 
     return pathlib.Path(fpath).touch()
@@ -69,13 +178,27 @@ def touch(fpath):
 
 def find(rootdir, type="f", exp=["*"]):
     """
-    Mimicks the Unix find command.
+    Mimic the Unix find command to search for files or directories.
+
+    Parameters:
+    -----------
+    rootdir : str
+        The root directory to start the search from.
+    type : str, optional
+        The type of entries to search for. 'f' for files, 'd' for directories,
+        or None for both. Default is 'f'.
+    exp : str or list of str, optional
+        Pattern(s) to match against file or directory names. Default is ["*"].
+
+    Returns:
+    --------
+    list
+        A list of paths that match the search criteria.
 
     Example:
-        # rootdir =
-        # type = 'f'  # 'f' for files, 'd' for directories, None for both
-        # exp = '*.txt'  # Pattern to match, or None to match all
-        find('/path/to/search', "f", "*.txt")
+    --------
+    >>> find('/path/to/search', "f", "*.txt")
+    ['/path/to/search/file1.txt', '/path/to/search/subdir/file2.txt']
     """
     if isinstance(exp, str):
         exp = [exp]
@@ -112,6 +235,33 @@ def find(rootdir, type="f", exp=["*"]):
 
 
 def find_latest(dirname, fname, ext, version_prefix="_v"):
+    """
+    Find the latest version of a file with a specific naming pattern.
+
+    This function searches for files in the given directory that match the pattern:
+    {fname}{version_prefix}{number}{ext} and returns the path of the file with the highest version number.
+
+    Parameters:
+    -----------
+    dirname : str
+        The directory to search in.
+    fname : str
+        The base filename without version number or extension.
+    ext : str
+        The file extension, including the dot (e.g., '.txt').
+    version_prefix : str, optional
+        The prefix used before the version number. Default is '_v'.
+
+    Returns:
+    --------
+    str or None
+        The full path of the latest version file if found, None otherwise.
+
+    Example:
+    --------
+    >>> find_latest('/path/to/dir', 'myfile', '.txt')
+    '/path/to/dir/myfile_v3.txt'
+    """
     version_pattern = re.compile(
         rf"({re.escape(fname)}{re.escape(version_prefix)})(\d+)({re.escape(ext)})$"
     )
@@ -135,6 +285,38 @@ def find_latest(dirname, fname, ext, version_prefix="_v"):
 
 
 def increment_version(dirname, fname, ext, version_prefix="_v"):
+    """
+    Generate the next version of a filename based on existing versioned files.
+
+    This function searches for files in the given directory that match the pattern:
+    {fname}{version_prefix}{number}{ext} and returns the path for the next version.
+
+    Parameters:
+    -----------
+    dirname : str
+        The directory to search in and where the new file will be created.
+    fname : str
+        The base filename without version number or extension.
+    ext : str
+        The file extension, including the dot (e.g., '.txt').
+    version_prefix : str, optional
+        The prefix used before the version number. Default is '_v'.
+
+    Returns:
+    --------
+    str
+        The full path for the next version of the file.
+
+    Example:
+    --------
+    >>> increment_version('/path/to/dir', 'myfile', '.txt')
+    '/path/to/dir/myfile_v004.txt'
+
+    Notes:
+    ------
+    - If no existing versioned files are found, it starts with version 001.
+    - The version number is always formatted with at least 3 digits.
+    """
     # Create a regex pattern to match the version number in the filename
     version_pattern = re.compile(
         rf"({re.escape(fname)}{re.escape(version_prefix)})(\d+)({re.escape(ext)})$"

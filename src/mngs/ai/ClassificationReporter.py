@@ -4,6 +4,7 @@ import os
 import random
 import sys
 from collections import defaultdict
+from glob import glob
 from pprint import pprint
 
 import matplotlib
@@ -12,13 +13,9 @@ import mngs
 import numpy as np
 import pandas as pd
 import torch
-from sklearn.metrics import (
-    balanced_accuracy_score,
-    classification_report,
-    confusion_matrix,
-    matthews_corrcoef,
-)
-from glob import glob
+from sklearn.metrics import (balanced_accuracy_score, classification_report,
+                             confusion_matrix, matthews_corrcoef)
+
 
 class MultiClassificationReporter(object):
     def __init__(self, sdir, tgts=None):
@@ -122,7 +119,9 @@ class ClassificationReporter(object):
     def __init__(self, sdir):
         self.sdir = sdir
         self.folds_dict = defaultdict(list)
-        mngs.general.fix_seeds(os=os, random=random, np=np, torch=torch, show=False)
+        mngs.general.fix_seeds(
+            os=os, random=random, np=np, torch=torch, show=False
+        )
 
     def add(
         self,
@@ -206,10 +205,15 @@ class ClassificationReporter(object):
         # ACC to bACC
         clf_report["accuracy"] = balanced_acc
         clf_report = pd.concat(
-            [clf_report[labels], clf_report[["accuracy", "macro avg", "weighted avg"]]],
+            [
+                clf_report[labels],
+                clf_report[["accuracy", "macro avg", "weighted avg"]],
+            ],
             axis=1,
         )
-        clf_report = clf_report.rename(columns={"accuracy": "balanced accuracy"})
+        clf_report = clf_report.rename(
+            columns={"accuracy": "balanced accuracy"}
+        )
         clf_report = clf_report.round(3)
         # Renames 'support' to 'sample size'
         clf_report["index"] = clf_report.index
@@ -223,7 +227,9 @@ class ClassificationReporter(object):
         return clf_report
 
     @staticmethod
-    def calc_and_plot_roc_curve(true_class, pred_proba, labels, sdir_for_csv=None):
+    def calc_and_plot_roc_curve(
+        true_class, pred_proba, labels, sdir_for_csv=None
+    ):
         # ROC-AUC
         fig_roc, metrics_roc_auc_dict = mngs.ml.plt.roc_auc(
             plt,
@@ -268,9 +274,13 @@ class ClassificationReporter(object):
 
         ## Preparation
         # for convenience
-        true_class = mngs.general.torch_to_arr(true_class).astype(int).reshape(-1)
+        true_class = (
+            mngs.general.torch_to_arr(true_class).astype(int).reshape(-1)
+        )
         pred_class = (
-            mngs.general.torch_to_arr(pred_class).astype(np.float64).reshape(-1)
+            mngs.general.torch_to_arr(pred_class)
+            .astype(np.float64)
+            .reshape(-1)
         )
         pred_proba = mngs.general.torch_to_arr(pred_proba).astype(np.float64)
 
@@ -317,13 +327,17 @@ class ClassificationReporter(object):
             labels,
             sdir_for_csv=self.sdir_for_roc_csv + f"fold#{i_fold}/",
         )
-        self.folds_dict["roc/micro"].append(metrics_roc_auc_dict["roc_auc"]["micro"])
-        self.folds_dict["roc/macro"].append(metrics_roc_auc_dict["roc_auc"]["macro"])
+        self.folds_dict["roc/micro"].append(
+            metrics_roc_auc_dict["roc_auc"]["micro"]
+        )
+        self.folds_dict["roc/macro"].append(
+            metrics_roc_auc_dict["roc_auc"]["macro"]
+        )
         self.folds_dict["roc/figs"].append(fig_roc)
 
         # PRE-REC curve
-        fig_pre_rec, metrics_pre_rec_auc_dict = self.calc_and_plot_pre_rec_curve(
-            true_class, pred_proba, labels
+        fig_pre_rec, metrics_pre_rec_auc_dict = (
+            self.calc_and_plot_pre_rec_curve(true_class, pred_proba, labels)
         )
         self.folds_dict["pre_rec/micro"].append(
             metrics_pre_rec_auc_dict["pre_rec_auc"]["micro"]
@@ -375,9 +389,11 @@ class ClassificationReporter(object):
             df_cls["y_mean"] = ys.mean(axis=1)
             df_cls["y_std"] = ys.std(axis=1)
             df_cls["roc_auc_mean"] = roc_aucs.mean(axis=1)
-            df_cls["roc_auc_std"] = roc_aucs.std(axis=1)            
+            df_cls["roc_auc_std"] = roc_aucs.std(axis=1)
 
-            spath_cls = os.path.join(self.sdir_for_roc_csv, f"k-fold_mean_std/{cls_str}.csv")
+            spath_cls = os.path.join(
+                self.sdir_for_roc_csv, f"k-fold_mean_std/{cls_str}.csv"
+            )
             mngs.io.save(df_cls, spath_cls)
             # dfs_classes.append(df_cls)
 
@@ -413,12 +429,15 @@ class ClassificationReporter(object):
                     self.folds_dict[k] = sr.round(n_round)
 
                 ## listed pd.DataFrames
-                elif mngs.general.is_listed_X(self.folds_dict[k], pd.DataFrame):
+                elif mngs.general.is_listed_X(
+                    self.folds_dict[k], pd.DataFrame
+                ):
                     zero_df_for_mm = 0 * self.folds_dict[k][0].copy()
                     zero_df_for_ss = 0 * self.folds_dict[k][0].copy()
 
                     mm = (
-                        zero_df_for_mm + np.stack(self.folds_dict[k]).mean(axis=0)
+                        zero_df_for_mm
+                        + np.stack(self.folds_dict[k]).mean(axis=0)
                     ).round(n_round)
 
                     ss = (
@@ -427,7 +446,8 @@ class ClassificationReporter(object):
                     ).round(n_round)
 
                     self.folds_dict[k] = [mm, ss] + [
-                        df_fold.round(n_round) for df_fold in self.folds_dict[k]
+                        df_fold.round(n_round)
+                        for df_fold in self.folds_dict[k]
                     ]
 
                     if show:
@@ -493,10 +513,13 @@ class ClassificationReporter(object):
                 )
 
             ## listed figures
-            elif mngs.general.is_listed_X(self.folds_dict[k], matplotlib.figure.Figure):
+            elif mngs.general.is_listed_X(
+                self.folds_dict[k], matplotlib.figure.Figure
+            ):
                 for i_fold, fig in enumerate(self.folds_dict[k]):
                     mngs.io.save(
-                        self.folds_dict[k][i_fold], self.sdir + f"{k}/fold#{i_fold}.png"
+                        self.folds_dict[k][i_fold],
+                        self.sdir + f"{k}/fold#{i_fold}.png",
                     )
 
             else:
@@ -518,7 +541,12 @@ class ClassificationReporter(object):
         sci_notation_kwargs=None,
     ):
         def _inner_plot_conf_mat(
-            plt, cm_df, title, extend_ratio=1.0, colorbar=True, sci_notation_kwargs=None
+            plt,
+            cm_df,
+            title,
+            extend_ratio=1.0,
+            colorbar=True,
+            sci_notation_kwargs=None,
         ):
             labels = list(cm_df.columns)
             fig_conf_mat = mngs.ml.plt.confusion_matrix(
@@ -548,7 +576,9 @@ class ClassificationReporter(object):
         ########################################
         ## Drops mean and std for the folds
         try:
-            conf_mats = self.folds_dict["conf_mat/conf_mat"][-self.n_folds_intended :]
+            conf_mats = self.folds_dict["conf_mat/conf_mat"][
+                -self.n_folds_intended :
+            ]
 
         except Exception as e:
             print(e)
@@ -573,7 +603,8 @@ class ClassificationReporter(object):
                 sci_notation_kwargs=sci_notation_kwargs,
             )
             mngs.io.save(
-                fig_conf_mat_fold, self.sdir + f"conf_mat/figs/fold#{i_fold}.png"
+                fig_conf_mat_fold,
+                self.sdir + f"conf_mat/figs/fold#{i_fold}.png",
             )
             plt.close()
 
@@ -608,7 +639,9 @@ if __name__ == "__main__":
     ################################################################################
     ## Sets tee
     ################################################################################
-    sdir = mngs.io.mk_spath("./tmp/sdir-ClassificationReporter/")  # "/tmp/sdir/"
+    sdir = mngs.io.mk_spath(
+        "./tmp/sdir-ClassificationReporter/"
+    )  # "/tmp/sdir/"
     sys.stdout, sys.stderr = mngs.general.tee(sys, sdir)
 
     ################################################################################

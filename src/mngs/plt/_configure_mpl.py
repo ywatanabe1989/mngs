@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-08 00:48:39 (ywatanabe)"
+# Time-stamp: "2024-09-15 18:10:23 (ywatanabe)"
 
 import matplotlib.pyplot as plt
 import mngs
@@ -15,12 +15,12 @@ def configure_mpl(
     # DPI
     dpi_display=100,
     dpi_save=300,
-    # Font Size
-    font_size_base=10,
-    font_size_title=10,
-    font_size_axis_label=10,
-    font_size_tick_label=8,
-    font_size_legend=8,
+    # # Font Size
+    # font_size_base=10,
+    # font_size_title=10,
+    # font_size_axis_label=10,
+    # font_size_tick_label=8,
+    # font_size_legend=8,
     # Hide spines
     hide_top_right_spines=True,
     # line
@@ -63,17 +63,17 @@ def configure_mpl(
         dpi_save (int, optional):
             Resolution for saved figures in dots per inch. Defaults to 300.
 
-        font_size_title (int, optional):
-            Font size for titles. Defaults to 8.
+        # font_size_title (int, optional):
+        #     Font size for titles. Defaults to 8.
 
-        font_size_axis_label (int, optional):
-            Font size for axis labels. Defaults to 8.
+        # font_size_axis_label (int, optional):
+        #     Font size for axis labels. Defaults to 8.
 
-        font_size_tick_label (int, optional):
-            Font size for tick labels. Defaults to 7.
+        # font_size_tick_label (int, optional):
+        #     Font size for tick labels. Defaults to 7.
 
-        font_size_legend (int, optional):
-            Font size for legend text. Defaults to 6.
+        # font_size_legend (int, optional):
+        #     Font size for legend text. Defaults to 6.
 
         hide_top_right_spines (bool, optional):
             If True, hides the top and right spines of the plot. Defaults to True.
@@ -112,17 +112,17 @@ def configure_mpl(
             "savefig.dpi": dpi_save,
             # Figure Size
             "figure.figsize": figsize_inch,
-            # Font Size
-            "font.size": font_size_base,
-            # Title
-            "axes.titlesize": font_size_title,
-            # Axis
-            "axes.labelsize": font_size_axis_label,
-            # Ticks
-            "xtick.labelsize": font_size_tick_label,
-            "ytick.labelsize": font_size_tick_label,
-            # Legend
-            "legend.fontsize": font_size_legend,
+            # # Font Size
+            # "font.size": font_size_base,
+            # # Title
+            # "axes.titlesize": font_size_title,
+            # # Axis
+            # "axes.labelsize": font_size_axis_label,
+            # # Ticks
+            # "xtick.labelsize": font_size_tick_label,
+            # "ytick.labelsize": font_size_tick_label,
+            # # Legend
+            # "legend.fontsize": font_size_legend,
             # Top and Right Axes
             "axes.spines.top": not hide_top_right_spines,
             "axes.spines.right": not hide_top_right_spines,
@@ -146,10 +146,10 @@ def configure_mpl(
             f"{fig_size_mm[0] * fig_scale:.1f} x "
             f"{fig_size_mm[1] * fig_scale:.1f} mm (width x height)"
         )
-        print(f"Font Size (Title): {font_size_title} pt")
-        print(f"Font Size (X/Y Label): {font_size_axis_label} pt")
-        print(f"Font Size (Tick Label): {font_size_tick_label} pt")
-        print(f"Font Size (Legend): {font_size_legend} pt")
+        # print(f"Font Size (Title): {font_size_title} pt")
+        # print(f"Font Size (X/Y Label): {font_size_axis_label} pt")
+        # print(f"Font Size (Tick Label): {font_size_tick_label} pt")
+        # print(f"Font Size (Legend): {font_size_legend} pt")
         print(f"Hide Top and Right Axes: {hide_top_right_spines}")
         print(f"Custom Colors (RGBA):")
         for color_str, rgba in RGBA.items():

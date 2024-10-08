@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-04 17:43:57 (ywatanabe)"
+# Time-stamp: "2024-09-26 19:41:01 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/linalg/_geometric_median.py
 
 
@@ -23,9 +23,11 @@ from mngs.gen import torch_fn
 
 @torch_fn
 def geometric_median(xx, dim=-1):
+
     # Ensure dim is a positive index
     if dim < 0:
         dim = xx.ndim + dim
+        dim = torch.tensor(dim).to(xx.device)
 
     # Create a list of slices to access all elements along each dimension
     indi = [slice(None)] * xx.ndim
@@ -38,11 +40,14 @@ def geometric_median(xx, dim=-1):
     for i in range(dim_size):
         indi[
             dim
-        ] = i  # Set the slice for the current index in the target dimension
+        ] = i
+        # Set the slice for the current index in the target dimension
         slice_data = xx[tuple(indi)]  # Extract the data for the current index
         points.append(slice_data)
 
-    return compute_geometric_median(points).median
+    out = compute_geometric_median(points).median
+
+    return out
 
 
 if __name__ == "__main__":

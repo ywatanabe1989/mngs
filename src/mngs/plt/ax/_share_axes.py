@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-12 20:23:21 (ywatanabe)"
+# Time-stamp: "2024-09-15 18:40:46 (ywatanabe)"
 # /home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_share_axes.py
 
 
@@ -12,33 +12,33 @@ This script does XYZ.
 """
 Imports
 """
+import importlib
 import os
 import re
 import sys
 
 import matplotlib
 import matplotlib.pyplot as plt
-import seaborn as sns
-import importlib
-
 import mngs
+import seaborn as sns
 
 importlib.reload(mngs)
+
+import logging
+import warnings
+from glob import glob
+from pprint import pprint
 
 import numpy as np
 import pandas as pd
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from icecream import ic
-from natsort import natsorted
-from glob import glob
-from pprint import pprint
-import warnings
-import logging
-from tqdm import tqdm
 import xarray as xr
+from icecream import ic
 from mpl_toolkits.axes_grid1 import make_axes_locatable
+from natsort import natsorted
+from tqdm import tqdm
 
 # sys.path = ["."] + sys.path
 # from scripts import utils, load
@@ -58,6 +58,11 @@ Config
 """
 Functions & Classes
 """
+
+
+def sharexy(*multiple_axes):
+    sharex(*multiple_axes)
+    sharey(*multiple_axes)
 
 
 def sharex(*multiple_axes):
@@ -84,7 +89,6 @@ def get_global_xlim(*multiple_axes):
         # axis
         else:
             ax = axes
-            __import__("ipdb").set_trace()
             _xmin, _xmax = ax.get_ylim()
             xmin = min(xmin, _xmin)
             xmax = max(xmax, _xmax)

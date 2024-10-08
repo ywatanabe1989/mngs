@@ -4,7 +4,7 @@
 
 
 """
-This script does XYZ.
+This script provides functions for generating demo signals for digital signal processing tasks.
 """
 
 # Imports
@@ -42,7 +42,37 @@ def demo_sig(
     freqs_hz=None,
     verbose=False,
 ):
+    """
+    Generate demo signals for various signal types.
 
+    Parameters:
+    -----------
+    sig_type : str, optional
+        Type of signal to generate. Options are "uniform", "gauss", "periodic", "chirp", "ripple", "meg", "tensorpac", "pac".
+        Default is "periodic".
+    batch_size : int, optional
+        Number of batches to generate. Default is 8.
+    n_chs : int, optional
+        Number of channels. Default is 19.
+    n_segments : int, optional
+        Number of segments for tensorpac and pac signals. Default is 20.
+    t_sec : float, optional
+        Duration of the signal in seconds. Default is 4.
+    fs : int, optional
+        Sampling frequency in Hz. Default is 512.
+    freqs_hz : list or None, optional
+        List of frequencies in Hz for periodic signals. If None, random frequencies will be used.
+    verbose : bool, optional
+        If True, print additional information. Default is False.
+
+    Returns:
+    --------
+    tuple
+        A tuple containing:
+        - np.ndarray: Generated signal(s) with shape (batch_size, n_chs, time_samples) or (batch_size, n_chs, n_segments, time_samples) for tensorpac and pac signals.
+        - np.ndarray: Time array.
+        - int: Sampling frequency.
+    """
     assert sig_type in [
         "uniform",
         "gauss",
@@ -127,7 +157,6 @@ def demo_sig(
             fs,
         )
 
-
 def _demo_sig_pac(
     batch_size=8,
     n_chs=19,
@@ -141,7 +170,6 @@ def _demo_sig_pac(
 ):
     """
     Generate a demo signal with phase-amplitude coupling.
-
     Parameters:
         batch_size (int): Number of batches.
         n_chs (int): Number of channels.
@@ -152,7 +180,6 @@ def _demo_sig_pac(
         noise (float): Noise level added to the signal.
         n_segments (int): Number of segments.
         verbose (bool): If True, print additional information.
-
     Returns:
         np.array: Generated signals with shape (batch_size, n_chs, n_segments, seq_len).
     """
@@ -313,3 +340,4 @@ if __name__ == "__main__":
 """
 /home/ywatanabe/proj/entrance/mngs/dsp/_demo_sig.py
 """
+

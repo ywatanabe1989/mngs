@@ -1,10 +1,13 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-13 08:13:38 (ywatanabe)"
-# /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/FigWrapper.py
+# Time-stamp: "2024-10-04 18:57:28 (ywatanabe)"
+# /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/_FigWrapper.py
 
-from mngs.gen import deprecated
 from functools import wraps
+
+import numpy as np
+import pandas as pd
+from mngs.gen import deprecated
 
 
 class FigWrapper:
@@ -17,6 +20,7 @@ class FigWrapper:
         Initialize the AxisWrapper with a given axis and history reference.
         """
         self.fig = fig
+        self.axes = []
 
     def __getattr__(self, attr):
         """
@@ -40,6 +44,46 @@ class FigWrapper:
     ################################################################################
     # Original methods
     ################################################################################
+    def legend(self, loc="upper left"):
+        for ax in self.axes:
+            try:
+                ax.legend(loc=loc)
+            except:
+                pass
+
+    # def to_sigma(self):
+    #     if hasattr(self.axes, "to_sigma"):
+    #         return self.axes.to_sigma()
+    def to_sigma(self):
+        """
+        Summarizes all data under the figure, including all AxesWrapper objects.
+
+        Returns
+        -------
+        pd.DataFrame
+            Concatenated dataframe of all axes data with spacer columns.
+
+        Example
+        -------
+        fig, axes = mngs.plt.subplots(2, 2)
+        df_summary = fig.to_sigma()
+        print(df_summary)
+        """
+        dfs = []
+        for i_ax, ax in enumerate(self.axes.flat):
+            if hasattr(ax, "to_sigma"):
+                df = ax.to_sigma()
+                if not df.empty:
+                    df.columns = [f"ax_{i_ax:02d}_{col}" for col in df.columns]
+                    dfs.append(df)
+
+                    # # Add a spacer column after each non-empty dataframe except the last one
+                    # if i_ax < len(self.axes) - 1:
+                    #     spacer = pd.DataFrame({"Spacer": [np.nan] * len(df)})
+                    #     dfs.append(spacer)
+
+        return pd.concat(dfs, axis=1) if dfs else pd.DataFrame()
+
     @deprecated("Use supxyt() instead.")
     def set_supxyt(self, *args, **kwargs):
         return self.supxyt(*args, **kwargs)

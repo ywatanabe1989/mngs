@@ -1,122 +1,74 @@
 # [`mngs.res`](https://github.com/ywatanabe1989/mngs/tree/main/src/mngs/res/)
-A module to get resource information.
+
+## Overview
+The `mngs.res` module provides comprehensive system resource monitoring and information gathering utilities. It offers an easy-to-use API for collecting detailed information about various system components, including CPU, memory, GPU, disk, and network.
 
 ## Installation
 ```bash
-$ pip install mngs
+pip install mngs
 ```
+
+## Features
+- Comprehensive system information gathering
+- Easy-to-use API for resource monitoring
+- Support for CPU, memory, GPU, disk, and network information
+- Output in easily readable and parsable formats (YAML, JSON)
+
 ## Quick Start
-``` python
+```python
 import mngs
 
+# Gather system information
 info = mngs.res.gather_info()
-mngs.io.save(info, "info.yaml")
-# https://github.com/ywatanabe1989/mngs/tree/main/src/mngs/res/_gather_info/info.yaml
 
-print(info)
+# Save the information to a file
+mngs.io.save(info, "system_info.yaml")
 
-#{'Collected Time': '2024-04-13 17:57:06',
-# 'System Information': {'OS': 'Rocky Linux 9.3 (Blue Onyx) (x86_64)',
-#  'Node Name': '444',
-#  'Release': '5.14.0-362.24.1.el9_3.x86_64',
-#  'Version': '#1 SMP PREEMPT_DYNAMIC Wed Mar 13 17:33:16 UTC 2024'},
-# 'CPU Info': {'Physical cores': 16,
-#  'Total cores': 32,
-#  'Max Frequency': '4500.00 MHz',
-#  'Min Frequency': '3000.00 MHz',
-#  'Current Frequency': '4530.00 MHz',
-#  'CPU Usage Per Core': {'Core 0': '0.0%',
-#   'Core 1': '0.0%',
-#   'Core 2': '0.0%',
-#   'Core 3': '0.0%',
-#   'Core 4': '0.0%',
-#   'Core 5': '0.0%',
-#   'Core 6': '0.0%',
-#   'Core 7': '0.0%',
-#   'Core 8': '0.0%',
-#   'Core 9': '0.0%',
-#   'Core 10': '0.0%',
-#   'Core 11': '0.0%',
-#   'Core 12': '0.0%',
-#   'Core 13': '0.0%',
-#   'Core 14': '0.0%',
-#   'Core 15': '0.0%',
-#   'Core 16': '0.0%',
-#   'Core 17': '0.0%',
-#   'Core 18': '0.0%',
-#   'Core 19': '0.0%',
-#   'Core 20': '0.0%',
-#   'Core 21': '0.0%',
-#   'Core 22': '0.0%',
-#   'Core 23': '0.0%',
-#   'Core 24': '0.0%',
-#   'Core 25': '0.0%',
-#   'Core 26': '0.0%',
-#   'Core 27': '0.0%',
-#   'Core 28': '0.0%',
-#   'Core 29': '0.0%',
-#   'Core 30': '0.0%',
-#   'Core 31': '0.0%'},
-#  'Total CPU Usage': '2.8%'},
-# 'Memory Info': {'Memory': {'Total': '61.7GiB',
-#   'Available': '58.7GiB',
-#   'Used': '2.2GiB',
-#   'Percentage': 4.8},
-#  'SWAP': {'Total': '31.0GiB',
-#   'Free': '30.7GiB',
-#   'Used': '337.4MiB',
-#   'Percentage': 1.1}},
-# 'GPU Info': {'NVIDIA GPU models': 'GPU 0: NVIDIA GeForce RTX 4090',
-#  'NVIDIA Driver version': '550.67',
-#  'CUDA Runtime version': None,
-#  'cuDNN version': None},
-# 'Disk Info': {'Partitions': {'/dev/mapper/rl-root': {'Mountpoint': '/',
-#    'File system type': 'xfs',
-#    'Total Size': '70.0GiB',
-#    'Used': '15.0GiB',
-#    'Free': '55.0GiB',
-#    'Percentage': 21.4},
-#   '/dev/mapper/rl-home': {'Mountpoint': '/home',
-#    'File system type': 'xfs',
-#    'Total Size': '850.8GiB',
-#    'Used': '189.4GiB',
-#    'Free': '661.5GiB',
-#    'Percentage': 22.3},
-#   '/dev/nvme0n1p2': {'Mountpoint': '/boot',
-#    'File system type': 'xfs',
-#    'Total Size': '1014.0MiB',
-#    'Used': '1003.3MiB',
-#    'Free': '10.7MiB',
-#    'Percentage': 98.9},
-#   '/dev/nvme0n1p1': {'Mountpoint': '/boot/efi',
-#    'File system type': 'vfat',
-#    'Total Size': '598.8MiB',
-#    'Used': '7.0MiB',
-#    'Free': '591.8MiB',
-#    'Percentage': 1.2}},
-#  'Total read': '243.8GiB',
-#  'Total write': '465.2GiB'},
-# 'Network Info': {'Interfaces': {'lo': [{'Address': '127.0.0.1',
-#     'Netmask': '255.0.0.0',
-#     'Broadcast': None},
-#    {'Address': '::1',
-#     'Netmask': 'ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff',
-#     'Broadcast': None},
-#    {'Address': '00:00:00:00:00:00', 'Netmask': None, 'Broadcast': None}],
-#   'enp24s0': [{'Address': '172.16.31.31',
-#     'Netmask': '255.255.255.0',
-#     'Broadcast': '172.16.31.255'},
-#    {'Address': 'fe80::6bbe:a317:c388:7a0b%enp24s0',
-#     'Netmask': 'ffff:ffff:ffff:ffff::',
-#     'Broadcast': None},
-#    {'Address': '04:7c:16:6d:e2:0a',
-#     'Netmask': None,
-#     'Broadcast': 'ff:ff:ff:ff:ff:ff'}],
-#   'wlp31s0': [{'Address': '4e:a6:67:b3:1e:3b',
-#     'Netmask': None,
-#     'Broadcast': 'ff:ff:ff:ff:ff:ff'}]},
-#  'Total Sent': '3.7GiB',
-#  'Total Received': '4.2GiB'}}
+# Print specific information
+print(f"CPU Usage: {info['cpu']['usage']}%")
+print(f"Total RAM: {info['memory']['total']} GB")
+print(f"GPU Name: {info['gpu'][0]['name']}")
 
+# Monitor system resources over time
+for _ in range(10):
+    cpu_usage = mngs.res.get_cpu_usage()
+    mem_usage = mngs.res.get_memory_usage()
+    print(f"CPU: {cpu_usage}%, Memory: {mem_usage}%")
+    time.sleep(1)
 ```
 
+## API Reference
+- `mngs.res.gather_info()`: Collects comprehensive system resource information
+- `mngs.res.get_cpu_info()`: Returns detailed CPU information
+- `mngs.res.get_memory_info()`: Returns memory usage statistics
+- `mngs.res.get_gpu_info()`: Returns GPU information (if available)
+- `mngs.res.get_disk_info()`: Returns disk usage and I/O statistics
+- `mngs.res.get_network_info()`: Returns network interface information
+- `mngs.res.get_cpu_usage()`: Returns current CPU usage percentage
+- `mngs.res.get_memory_usage()`: Returns current memory usage percentage
+
+## Example Output
+The `gather_info()` function returns a dictionary containing detailed system information. For a full example of the output, please refer to:
+https://github.com/ywatanabe1989/mngs/tree/main/src/mngs/res/_gather_info/info.yaml
+
+## Use Cases
+- System monitoring and diagnostics
+- Performance benchmarking
+- Resource usage analysis
+- Debugging hardware-related issues
+- Generating system reports
+- Automated system health checks
+
+## Performance
+The `mngs.res` module is designed to be lightweight and efficient, with minimal impact on system performance during monitoring.
+
+## Contributing
+Contributions to improve `mngs.res` are welcome. Please submit pull requests or open issues on the GitHub repository.
+
+## License
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Contact
+Yusuke Watanabe (ywata1989@gmail.com)
+
+For more information and updates, please visit the [mngs GitHub repository](https://github.com/ywatanabe1989/mngs).

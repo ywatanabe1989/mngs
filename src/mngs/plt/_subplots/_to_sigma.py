@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-08-25 12:18:24 (ywatanabe)"
+# Time-stamp: "2024-10-05 18:56:18 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/_to_sigma.py
 
 
@@ -22,6 +22,7 @@ import mngs
 import seaborn as sns
 
 mngs.gen.reload(mngs)
+import logging
 import warnings
 from glob import glob
 from pprint import pprint
@@ -35,7 +36,6 @@ import xarray as xr
 from icecream import ic
 from natsort import natsorted
 from tqdm import tqdm
-import logging
 
 # sys.path = ["."] + sys.path
 # from scripts import utils, load
@@ -63,11 +63,12 @@ def to_sigma(history):
     if len(history) > 0:
         values_list = list(history.values())
         data_frames = [format_plotting_args(record) for record in values_list]
-        combined_data = pd.concat(data_frames, axis=1)  # join="inner",
-        return combined_data
-        # return combined_data.apply(
-        #     lambda col: col.dropna().reset_index(drop=True)
-        # )
+        try:
+            combined_data = pd.concat(data_frames, axis=1)
+            return combined_data
+        except Exception as e:
+            print(e)
+            return pd.DataFrame()
     else:
         return
 
@@ -98,15 +99,6 @@ def format_plotting_args(record):
                         out[f"{id}_{method}_y{ii:02d}"] = y[:, ii]
                     df = pd.DataFrame(out)
 
-                    # df = pd.DataFrame(
-                    #     {
-                    #         **{
-                    #             f"{id}_{method}_x{ii:02d}": x,
-                    #             f"{id}_{method}_y{ii:02d}": y[:, ii]
-
-                    #         }
-                    #     }
-                    # )
                     return df
 
             if isinstance(y, pd.DataFrame):
@@ -134,35 +126,52 @@ def format_plotting_args(record):
         return df
 
     elif method == "bar":
-        __import__("ipdb").set_trace()
-        # raise NotImplementedError(f"{method} is not implemented.")
+        x, y = args
+        yerr = kwargs.get("yerr")
+
+        if isinstance(x, (int, float)):
+            x = pd.Series(x, name="x")
+        if isinstance(y, (int, float)):
+            y = pd.Series(y, name="y")
+
+        df = pd.DataFrame({f"{id}_{method}_x": x, f"{id}_{method}_y": y})
+
+        if yerr is not None:
+            if isinstance(yerr, (int, float)):
+                yerr = pd.Series(yerr, name="yerr")
+            df[f"{id}_{method}_yerr"] = yerr
+        return df
+
+    elif method == "hist":
+        x = args
+        df = pd.DataFrame({f"{id}_{method}_x": x})
+        return df
 
     elif method == "boxplot":
-        xs = args[0]
+        x = args[0]
 
         # One box plot
-        if mngs.gen.is_listed_X(xs, [float, int]):
-            df = pd.DataFrame(xs)
-        # Multiple boxes
+        if isinstance(x, np.ndarray) or mngs.gen.is_listed_X(x, [float, int]):
+            df = pd.DataFrame(x)
+
         else:
-            df = mngs.gen.force_dataframe(
-                {i_x: _x for i_x, _x in enumerate(xs)}
-            )
+            # Multiple boxes
+            df = mngs.pd.force_df({i_x: _x for i_x, _x in enumerate(x)})
         df.columns = [f"{id}_{method}_{col}_x" for col in df.columns]
         df = df.apply(lambda col: col.dropna().reset_index(drop=True))
         return df
 
-    # Original
-    elif method == "plot_with_ci":
-        xx, mm, ss = args
-        df = pd.DataFrame(
-            {
-                f"{id}_{method}_x": xx,
-                f"{id}_{method}_under": mm - ss,
-                f"{id}_{method}_mean": mm,
-                f"{id}_{method}_upper": mm + ss,
-            }
-        )
+    # elif method == "boxplot_":
+    #     __import__("ipdb").set_trace()
+    #     x = args[0]
+    #     df =
+    #     df.columns = [f"{id}_{method}_{col}" for col in df.columns]
+
+    #     return df
+
+    elif method == "plot_":
+        df = args
+        df.columns = [f"{id}_{method}_{col}" for col in df.columns]
         return df
 
     elif method == "fillv":
@@ -186,7 +195,7 @@ def format_plotting_args(record):
     elif method == "kde":
         df = args
         if id is not None:
-            df.columns = [f"{id}_{method}_" + col for col in df.columns]
+            df.columns = [f"{id}_{method}_{col}" for col in df.columns]
         return df
 
     elif method == "imshow2d":
@@ -199,19 +208,23 @@ def format_plotting_args(record):
 
     elif method == "sns_boxplot":
         df = args
+        if id is not None:
+            df.columns = [f"{id}_{method}_{col}" for col in df.columns]
         return df
 
     elif method == "sns_heatmap":
-        __import__("ipdb").set_trace()
+        df = args
         return df
 
     elif method == "sns_histplot":
-        __import__("ipdb").set_trace()
+        df = args
         return df
 
     elif method == "sns_kdeplot":
-        __import__("ipdb").set_trace()
-        return df
+        pass
+        # df = args
+        # __import__("ipdb").set_trace()
+        # return df
 
     elif method == "sns_lineplot":
         __import__("ipdb").set_trace()
@@ -226,7 +239,7 @@ def format_plotting_args(record):
         return df
 
     elif method == "sns_violinplot":
-        __import__("ipdb").set_trace()
+        df = args
         return df
 
     elif method == "sns_jointplot":
@@ -234,8 +247,11 @@ def format_plotting_args(record):
         return df
 
     else:
-        # logging.warn(f"{method} is not implemented.")
         pass
+        # if not method.startswith("set_"):
+        #     logging.warn(
+        #         f"{method} is not implemented in _to_sigma method of the mngs.plt module."
+        #     )
 
 
 def main():

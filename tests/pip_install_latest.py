@@ -1,48 +1,94 @@
-#!./env/bin/python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-05 10:24:12 (ywatanabe)"
-# /home/ywatanabe/proj/mngs/tests/pip_install_latest.py
+# Time-stamp: "2024-09-11 08:56:53 (ywatanabe)"
+# /home/ywatanabe/proj/_mngs_repo_openhands/tests/pip_install_latest.py
 
+import argparse
+import logging
 import os
+import subprocess
 import sys
 
 import requests
 
 
-def get_latest_release_tag(repo):
-    """Fetch the latest release tag from a GitHub repository."""
-    url = f"https://api.github.com/repos/{repo}/tags"
+def get_latest_release_tag(repository):
+    """
+    Fetch the latest release tag from a GitHub repository.
+
+    Example
+    -------
+    repo = "ywatanabe1989/mngs"
+    tag = get_latest_release_tag(repo)
+    print(tag)
+
+    Parameters
+    ----------
+    repository : str
+        GitHub repository in the format "username/repository"
+
+    Returns
+    -------
+    str or None
+        Latest release tag if found, None otherwise
+    """
+    url = f"https://api.github.com/repos/{repository}/tags"
     response = requests.get(url)
     tags = response.json()
-    if not tags:
-        return None
-    # Assuming the first tag in the list is the latest
-    latest_tag = tags[0]["name"]
-    return latest_tag
+    return tags[0]["name"] if tags else None
 
 
-def install_package(repo, tag):
-    """Install a package from GitHub using pip and a specific tag."""
-    command = f"pip install git+https://github.com/{repo}@{tag}"
-    print(f"Executing: {command}")
-    os.system(command)
+def install_package(repository, tag):
+    """
+    Install a package from GitHub using pip and a specific tag.
+
+    Example
+    -------
+    repo = "ywatanabe1989/mngs"
+    tag = "v1.0.0"
+    install_package(repo, tag)
+
+    Parameters
+    ----------
+    repository : str
+        GitHub repository in the format "username/repository"
+    tag : str
+        Tag to install
+
+    Returns
+    -------
+    int
+        Return code of the pip install command
+    """
+    command = f"pip install git+https://github.com/{repository}@{tag}"
+    logging.info(f"Executing: {command}")
+    return subprocess.call(command, shell=True)
 
 
 def main():
-    if len(sys.argv) != 2:
-        print(
-            "\nExample usage:\npython pip_install_latest.py ywatanabe1989/mngs"
-        )
+    parser = argparse.ArgumentParser(
+        description="Install latest version of a GitHub repository."
+    )
+    parser.add_argument(
+        "repository",
+        help="GitHub repository in the format username/repository",
+    )
+    args = parser.parse_args()
 
-        sys.exit(1)
+    logging.basicConfig(
+        level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+    )
 
-    repo = sys.argv[1]
-    latest_tag = get_latest_release_tag(repo)
+    latest_tag = get_latest_release_tag(args.repository)
     if latest_tag:
-        print(f"Installing {repo} at tag {latest_tag}")
-        install_package(repo, latest_tag)
+        logging.info(f"Installing {args.repository} at tag {latest_tag}")
+        result = install_package(args.repository, latest_tag)
+        if result == 0:
+            logging.info("Installation successful")
+        else:
+            logging.error("Installation failed")
     else:
-        print("No tags found for the repository.")
+        logging.error("No tags found for the repository.")
 
 
 if __name__ == "__main__":

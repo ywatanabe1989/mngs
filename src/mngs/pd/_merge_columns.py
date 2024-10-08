@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-08-26 23:06:46 (ywatanabe)"
+# Time-stamp: "2024-10-07 12:03:29 (ywatanabe)"
 # /home/ywatanabe/proj/mngs_repo/src/mngs/pd/_merge_cols.py
 
 
@@ -59,19 +59,20 @@ def merge_columns(df, *args, sep1="_", sep2="-", name="merged"):
     pandas.DataFrame
         DataFrame with added merged column
     """
+    _df = df.copy()
     columns = (
         args[0]
         if len(args) == 1 and isinstance(args[0], (list, tuple))
         else args
     )
-    merged_col = df[list(columns)].apply(
+    merged_col = _df[list(columns)].apply(
         lambda row: sep1.join(f"{col}{sep2}{val}" for col, val in row.items()),
         axis=1,
     )
 
     new_col_name = sep1.join(columns) if not name else str(name)
-    df[new_col_name] = merged_col
-    return df
+    _df[new_col_name] = merged_col
+    return _df
 
 
 merge_cols = merge_columns
