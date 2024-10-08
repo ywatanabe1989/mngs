@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-14 15:27:24 (ywatanabe)"
+# Time-stamp: "2024-09-12 05:37:55 (ywatanabe)"
 # _umap_dev.py
 
 
@@ -13,6 +13,7 @@ This script does XYZ.
 Imports
 """
 import sys
+
 import matplotlib.pyplot as plt
 import mngs
 import numpy as np
@@ -181,8 +182,11 @@ def _plot(
         for hue in np.unique(_hues):
             indi = hue == np.array(_hues)
 
-            colors = np.vstack(hues_colors)[indi]
-            colors = [colors[ii] for ii in range(len(colors))]
+            if hues_colors:
+                colors = np.vstack(hues_colors)[indi]
+                colors = [colors[ii] for ii in range(len(colors))]
+            else:
+                colors = None
             ax.scatter(
                 x=embedding[:, 0][indi],
                 y=embedding[:, 1][indi],
@@ -231,7 +235,7 @@ def _plot(
     if not use_independent_legend:
         for ax in axes.flat:
             ax.legend(loc="upper left")
-        return fig, None, _umap
+        return fig, None
 
     elif use_independent_legend:
         legend_figs = []
@@ -324,9 +328,9 @@ def _check_input_vars(data_all, labels_all, hues_all, hues_colors_all):
 
 
 def _test(dataset_str="iris"):
-    from sklearn.datasets import load_iris, load_digits
-    import numpy as np
     import matplotlib.pyplot as plt
+    import numpy as np
+    from sklearn.datasets import load_digits, load_iris
     from sklearn.model_selection import train_test_split
 
     # Load iris dataset

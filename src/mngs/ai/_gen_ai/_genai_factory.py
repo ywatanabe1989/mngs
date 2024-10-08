@@ -1,18 +1,10 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-08-18 07:20:09 (ywatanabe)"
+# Time-stamp: "2024-09-13 19:17:53 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/chat.py
 
 
-"""
-This script does XYZ.
-"""
-
-
-"""
-Imports
-"""
-# mngs.gen.reload(mngs)
+"""Imports"""
 import os
 import random
 
@@ -23,31 +15,7 @@ from ._OpenAI import OpenAI
 from ._Perplexity import Perplexity
 from .PARAMS import MODELS
 
-# # from mngs.gen import notify
-# from natsort import natsorted
-# from openai import OpenAI
-# from tqdm import tqdm
-
-# from sciwriter_app._email import notify
-
-# sys.path = ["."] + sys.path
-# from scripts import utils, load
-
-"""
-Warnings
-"""
-# warnings.simplefilter("ignore", UserWarning)
-
-
-"""
-Config
-"""
-# CONFIG = mngs.gen.load_configs()
-
-
-"""
-Functions & Classes
-"""
+"""Functions & Classes"""
 
 
 def genai_factory(
@@ -58,6 +26,7 @@ def genai_factory(
     temperature=1.0,
     n_keep=1,
     chat_history=None,
+    max_tokens=4096,
 ):
     """Factory function to create an instance of an AI model handler."""
     AVAILABLE_MODELS = MODELS.name.tolist()
@@ -82,30 +51,8 @@ def genai_factory(
         temperature=temperature,
         n_keep=n_keep,
         chat_history=chat_history,
+        max_tokens=max_tokens,
     )
-
-
-# def test_all(seed=None, temperature=1.0):
-#     model_names = [
-#         "claude-3-5-sonnet-20240620",
-#         "gpt-4",
-#         "gemini-pro",
-#         "llama-3-sonar-large-32k-online",
-#         "llama-7b",
-#     ]
-
-#     for model_name in model_names:
-#         for stream in [False, True]:
-#             model = GenAI(
-#                 model_name, stream=stream, seed=seed, temperature=temperature
-#             )
-#             prompt = "Hi. Tell me about the hippocampus."
-
-#             print(
-#                 f"\n{'-'*40}\n{model.model}\nStream: {stream}\nSeed: {seed}\nTemperature: {temperature}\n{'-'*40}"
-#             )
-#             print(model(prompt))
-#             print(model.available_models)
 
 
 def main(

@@ -229,7 +229,7 @@ class LearningCurveLogger(object):
     # def _to_dfs_pivot_i_global(logged_dict):
     #     dfs_pivot_i_global = {}
     #     for step in logged_dict.keys():
-    #         df_step = mngs.general.pandas.force_dataframe(logged_dict[step])
+    #         df_step = mngs.pd.force_df(logged_dict[step])
     #         df_step_pvt_on_i_global = df_step.pivot_table(
     #             columns="i_global", aggfunc="mean"
     #         ).T
@@ -241,7 +241,7 @@ class LearningCurveLogger(object):
     def _to_dfs_pivot(logged_dict, pivot_column=None):
         dfs_pivot = {}
         for step in logged_dict.keys():
-            df_step = mngs.general.pandas.force_dataframe(logged_dict[step])
+            df_step = mngs.pd.force_df(logged_dict[step])
             if pivot_column is not None:
                 dfs_pivot[step] = df_step.pivot_table(
                     columns=pivot_column, aggfunc="mean"

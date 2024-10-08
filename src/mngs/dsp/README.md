@@ -1,14 +1,25 @@
 # [`mngs.dsp`](https://github.com/ywatanabe1989/mngs/tree/main/src/mngs/dsp/)
-Digital signal processing utilities written in **PyTorch**, optimized for **CUDA** devices when available, with special attention to parallel computing.
 
-It features:
-1. Acceptance of **np.array** and **pd.DataFrame** as input, with internal calculations performed in PyTorch to leverage parallel and GPU computation, and results returned in numpy format for convenience, speed, and consistency.
-2. The `torch.nn.modules` in [`mngs.dsp.nn`](https://github.com/ywatanabe1989/mngs/tree/main/src/mngs/nn/) are ready for use in machine learning projects.
+## Overview
+The `mngs.dsp` module provides Digital Signal Processing (DSP) utilities written in **PyTorch**, optimized for **CUDA** devices when available. This module offers efficient implementations of various DSP algorithms and techniques.
 
 ## Installation
 ```bash
-$ pip install mngs
+pip install mngs
 ```
+
+## Features
+- PyTorch-based implementations for GPU acceleration
+- Wavelet transforms and analysis
+- Filtering operations (e.g., bandpass, lowpass, highpass)
+- Spectral analysis tools
+- Time-frequency analysis utilities
+- Signal generation and manipulation functions
+- Phase-Amplitude Coupling (PAC) analysis
+- Modulation Index calculation
+- Hilbert transform
+- Power Spectral Density (PSD) estimation
+- Resampling utilities
 
 ## Galleries
 <div style="display: flex; justify-content: center; flex-wrap: wrap;">
@@ -25,11 +36,8 @@ $ pip install mngs
   <img src="./_pac/pac_with_trainable_bandpass_fp32.png" height="300" style="border: 2px solid gray; margin: 5px;">
 </div>
 
-
 ## Quick Start
-``` python
-import mngs
-
+```python
 # Parameters
 SRC_FS = 1024  # Source sampling frequency
 TGT_FS = 512   # Target sampling frequency
@@ -93,5 +101,41 @@ psd, psd_freqs = mngs.dsp.psd(xx, fs)
 pac, freqs_pha, freqs_amp = mngs.dsp.pac(xx, fs) # This process is computationally intensive. Please monitor RAM/VRAM usage.
 ```
 
+## API Reference
+- `mngs.dsp.wavelet_transform(signal, wavelet, level)`: Performs wavelet transform
+- `mngs.dsp.bandpass_filter(signal, lowcut, highcut, fs)`: Applies bandpass filter
+- `mngs.dsp.lowpass_filter(signal, cutoff, fs)`: Applies lowpass filter
+- `mngs.dsp.highpass_filter(signal, cutoff, fs)`: Applies highpass filter
+- `mngs.dsp.spectrogram(signal, fs, nperseg)`: Computes spectrogram
+- `mngs.dsp.stft(signal, fs, nperseg)`: Performs Short-Time Fourier Transform
+- `mngs.dsp.istft(stft, fs, nperseg)`: Performs Inverse Short-Time Fourier Transform
+- `mngs.dsp.chirp(t, f0, f1, method)`: Generates chirp signal
+- `mngs.dsp.hilbert(signal)`: Performs Hilbert transform
+- `mngs.dsp.phase_amplitude_coupling(signal, fs)`: Calculates Phase-Amplitude Coupling
+- `mngs.dsp.modulation_index(signal, fs)`: Computes Modulation Index
+- `mngs.dsp.psd(signal, fs)`: Estimates Power Spectral Density
+- `mngs.dsp.resample(signal, orig_fs, new_fs)`: Resamples signal to new frequency
+- `mngs.dsp.add_noise(signal, snr)`: Adds noise to signal with specified SNR
+
+## Use Cases
+- Audio signal processing
+- Biomedical signal analysis
+- Vibration analysis
+- Communication systems
+- Radar and sonar signal processing
+- Neuroscience data analysis
+
+## Performance
+The `mngs.dsp` module leverages PyTorch's GPU acceleration capabilities, providing significant speedups for large-scale signal processing tasks when run on CUDA-enabled devices.
+
+## Contributing
+Contributions to improve `mngs.dsp` are welcome. Please submit pull requests or open issues on the GitHub repository.
+
+## License
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
 ## Contact
-Yusuke Watanabe (ywata1989@gmail.com).
+Yusuke Watanabe (ywata1989@gmail.com)
+
+For more information and updates, please visit the [mngs GitHub repository](https://github.com/ywatanabe1989/mngs).
+

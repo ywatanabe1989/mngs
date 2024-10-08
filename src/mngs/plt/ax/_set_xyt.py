@@ -10,18 +10,23 @@ This script does XYZ.
 # Imports
 import matplotlib.pyplot as plt
 
+from ._format_label import format_label
+
 
 # Functions
-def set_xyt(ax, x=False, y=False, t=False):
+def set_xyt(ax, x=False, y=False, t=False, format_labels=True):
     """Sets xlabel, ylabel and title"""
 
     if x is not False:
+        x = format_label(x) if format_labels else x
         ax.set_xlabel(x)
 
     if y is not False:
+        y = format_label(y) if format_labels else y
         ax.set_ylabel(y)
 
     if t is not False:
+        t = format_label(t) if format_labels else t
         ax.set_title(t)
 
     return ax

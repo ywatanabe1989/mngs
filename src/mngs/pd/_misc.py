@@ -13,10 +13,10 @@ This script does XYZ.
 Imports
 """
 import sys
+from copy import deepcopy
 
 import matplotlib.pyplot as plt
 import pandas as pd
-from copy import deepcopy
 
 # sys.path = ["."] + sys.path
 # from scripts import utils, load
@@ -258,33 +258,6 @@ class IDAllocator(object):
 
     def to_orig(self, xn):
         return np.array([self.new_to_orig_dict[xn_i] for xn_i in xn])
-
-
-def force_df(permutable_dict, filler=""):
-    ## Deep copy
-    permutable_dict = permutable_dict.copy()
-
-    ## Get the lengths
-    max_len = 0
-    for k, v in permutable_dict.items():
-        # Check if v is an iterable (but not string) or treat as single length otherwise
-        if isinstance(v, (str, int, float)) or not hasattr(v, "__len__"):
-            length = 1
-        else:
-            length = len(v)
-        max_len = max(max_len, length)
-
-    ## Replace with appropriately filled list
-    for k, v in permutable_dict.items():
-        if isinstance(v, (str, int, float)) or not hasattr(v, "__len__"):
-            permutable_dict[k] = [v] + [filler] * (max_len - 1)
-        else:
-            permutable_dict[k] = list(v) + [filler] * (max_len - len(v))
-
-    ## Puts them into a DataFrame
-    out_df = pd.DataFrame(permutable_dict)
-
-    return out_df
 
 
 # def force_df(permutable_dict, filler=""):

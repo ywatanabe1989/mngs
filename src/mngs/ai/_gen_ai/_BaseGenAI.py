@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-30 05:00:33 (ywatanabe)"
+# Time-stamp: "2024-09-13 18:44:11 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_BaseAI.py
 
 
@@ -21,8 +21,8 @@ import matplotlib.pyplot as plt
 import mngs
 from ansi_escapes import ansiEscapes
 
-from ._format_output_func import format_output_func
 from ._calc_cost import calc_cost
+from ._format_output_func import format_output_func
 from .PARAMS import MODELS
 
 # sys.path = ["."] + sys.path
@@ -78,6 +78,7 @@ class BaseGenAI(ABC):
         temperature=1.0,
         provider="",
         chat_history=None,
+        max_tokens=4096,
     ):
         # Attributes
         self.provider = provider
@@ -88,6 +89,7 @@ class BaseGenAI(ABC):
         self.seed = seed
         self.n_keep = n_keep
         self.temperature = temperature
+        self.max_tokens = max_tokens
         self.input_tokens = 0
         self.output_tokens = 0
 

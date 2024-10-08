@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-05 09:55:24 (ywatanabe)"
+# Time-stamp: "2024-09-11 08:49:15 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/docs/test_import.py
 
 
@@ -57,7 +57,13 @@ Functions & Classes
 
 
 def main():
+    print("hello")
     pass
+
+
+def test_main():
+    main()
+    assert True
 
 
 if __name__ == "__main__":

@@ -14,51 +14,44 @@ import numpy as np
 import pandas as pd
 import torch
 import yaml
-from PIL import Image
 from docx import Document
 from openpyxl import load_workbook
-
-# import docx
-# import PyPDF2
-# from io import StringIO
-# import markdown
-# import openpyxl
-
-
-def load_text(lpath, splitlines=False):
-    """
-    Load text from a file.
-
-    Parameters:
-    lpath (str): The path to the text file.
-    splitlines (bool): If True, return a list of lines. If False, return the entire text as a string.
-
-    Returns:
-    str or list: The contents of the text file.
-    """
-    try:
-        with open(lpath, "r", encoding="utf-8") as f:
-            if splitlines:
-                return f.read().splitlines()
-            else:
-                return f.read()
-    except UnicodeDecodeError:
-        # If UTF-8 fails, try to detect the encoding
-        import chardet
-
-        with open(lpath, "rb") as f:
-            raw_data = f.read()
-        detected = chardet.detect(raw_data)
-        encoding = detected["encoding"]
-
-        with open(lpath, "r", encoding=encoding) as f:
-            if splitlines:
-                return f.read().splitlines()
-            else:
-                return f.read()
+from PIL import Image
 
 
 def load(lpath, show=False, verbose=False, **kwargs):
+    """
+    Load data from various file formats.
+
+    This function supports loading data from multiple file formats including CSV, Excel, Numpy, Pickle, JSON, YAML, and more.
+
+    Parameters:
+    -----------
+    lpath : str
+        The path to the file to be loaded.
+    show : bool, optional
+        If True, display additional information during loading. Default is False.
+    verbose : bool, optional
+        If True, print verbose output during loading. Default is False.
+    **kwargs : dict
+        Additional keyword arguments to be passed to the specific loading function.
+
+    Returns:
+    --------
+    object
+        The loaded data object, which can be of various types depending on the input file format.
+
+    Raises:
+    -------
+    ValueError
+        If the file extension is not supported.
+
+    Examples:
+    ---------
+    >>> data = load('data.csv')
+    >>> image = load('image.png')
+    >>> model = load('model.pth')
+    """
     if lpath.startswith('f"'):
         lpath = eval(lpath)
 
@@ -66,106 +59,86 @@ def load(lpath, show=False, verbose=False, **kwargs):
     try:
         extension = "." + lpath.split(".")[-1]
 
-        # csv
+        # CSV
         if extension == ".csv":
             index_col = kwargs.get("index_col", 0)
             obj = pd.read_csv(lpath, **kwargs)
             obj = obj.loc[:, ~obj.columns.str.contains("^Unnamed")]
-        # tsv
+        # TSV
         elif extension == ".tsv":
             obj = pd.read_csv(lpath, sep="\t", **kwargs)
-        # excel
+        # Excel
         elif extension in [".xls", ".xlsx", ".xlsm", ".xlsb"]:
             obj = pd.read_excel(lpath, **kwargs)
-        # parquet
+        # Parquet
         elif extension == ".parquet":
             obj = pd.read_parquet(lpath, **kwargs)
-
-        # numpy
+        # Numpy
         elif extension == ".npy":
             obj = np.load(lpath, allow_pickle=True, **kwargs)
-
-        # numpy npz
+        # Numpy NPZ
         elif extension == ".npz":
             obj = np.load(lpath)
             obj = dict(obj)
             obj = [v for v in obj.values()]
-
-        # pkl
+        # Pickle
         elif extension == ".pkl":
             with open(lpath, "rb") as l:
                 obj = pickle.load(l, **kwargs)
-        # joblib
+        # Joblib
         elif extension == ".joblib":
             with open(lpath, "rb") as l:
                 obj = joblib.load(l, **kwargs)
-        # hdf5
+        # HDF5
         elif extension == ".hdf5":
             obj = {}
             with h5py.File(lpath, "r") as hf:
                 for name in hf:
                     obj[name] = hf[name][:]
-        # json
+        # JSON
         elif extension == ".json":
             with open(lpath, "r") as f:
                 obj = json.load(f)
-
         # Image
         elif extension in [".jpg", ".png", ".tiff", "tif"]:
             obj = Image.open(lpath)
-
-        # yaml
+        # YAML
         elif extension in [".yaml", ".yml"]:
-
             lower = kwargs.pop("lower", False)
-
             with open(lpath) as f:
                 obj = yaml.safe_load(f, **kwargs)
-
             if lower:
                 obj = {k.lower(): v for k, v in obj.items()}
-
-        # txt
+        # Text
         elif extension in [".txt", ".log", ".event"]:
             with open(lpath, "r") as f:
                 obj = f.read().splitlines()
-
-        # md
+        # Markdown
         elif extension == ".md":
             obj = load_markdown(lpath, **kwargs)
-
-        # pth
+        # PyTorch
         elif extension in [".pth", ".pt"]:
             obj = torch.load(lpath, **kwargs)
-
-        # mat
+        # MATLAB
         elif extension == ".mat":
             from pymatreader import read_mat
 
             obj = read_mat(lpath, **kwargs)
-        # xml
+        # XML
         elif extension == ".xml":
             from xml2dict import xml2dict
 
             obj = xml2dict(lpath, **kwargs)
-        # # edf
-        # elif extension == ".edf":  # [REVISED]
-        #     obj = mne.io.read_raw_edf(lpath, preload=True)  # [REVISED]
-        # con
+        # CON
         elif extension == ".con":
             obj = mne.io.read_raw_fif(lpath, preload=True, **kwargs)
             obj = obj.to_data_frame()
             obj["samp_rate"] = obj.info["sfreq"]
-        # # mrk
-        # elif extension == ".mrk":  # [REVISED]
-        #     obj = mne.io.read_mrk(lpath)  # [REVISED]
-
-        # catboost model
+        # CatBoost model
         elif extension == ".cbm":
             from catboost import CatBoostModel
 
             obj = CatBoostModel.load_model(lpath, **kwargs)
-
         # EEG data
         elif extension in [
             ".vhdr",
@@ -179,85 +152,36 @@ def load(lpath, show=False, verbose=False, **kwargs):
             ".set",
         ]:
             obj = _load_eeg_data(lpath, **kwargs)
-
-        elif extension in [
-            ".py",
-            ".js",
-            ".sh",
-            ".pl",
-            ".rb",
-            ".html",
-            ".css",
-            ".java",
-            ".cpp",
-            ".c",
-            ".php",
-            ".go",
-            ".rs",
-            ".bib",
-            ".tex" ".txt",
-        ]:
-            obj = _load_text(lpath)
-
-        # elif extension in TEXT_EXTENSIONS:
-        #     obj = _load_text(lpath)
-
-        # # Word document
-        # elif extension in [".docx", ".doc"]:
-        #     if extension == ".doc":
-        #         import win32com.client
-
-        #         word = win32com.client.Dispatch("Word.Application")
-        #         doc = word.Documents.Open(lpath)
-        #         obj = [paragraph.Range.Text for paragraph in doc.Paragraphs]
-        #         doc.Close()
-        #         word.Quit()
-        #     else:
-        #         doc = Document(lpath)
-        #         obj = [paragraph.text for paragraph in doc.paragraphs]
-
-        # # Excel workbook
-        # elif extension in [".xlsx", ".xls"]:
-        #     if extension == ".xls":
-        #         import xlrd
-
-        #         wb = xlrd.open_workbook(lpath)
-        #         obj = {
-        #             sheet.name: [
-        #                 sheet.row_values(row) for row in range(sheet.nrows)
-        #             ]
-        #             for sheet in wb.sheets()
-        #         }
-        #     else:
-        #         wb = load_workbook(lpath, read_only=True)
-        #         obj = {
-        #             sheet.title: list(sheet.values) for sheet in wb.worksheets
-        #         }
-
         else:
-            print(f"\nNot loaded from: {lpath}\n")
-            return None
-
-        if show or verbose:
-            print(f"\nLoaded from: {lpath}\n")
+            raise ValueError(f"Unsupported file extension: {extension}")
 
         return obj
-
     except Exception as e:
-        raise ValueError(f"{lpath} was not loaded:\n{e}")
-
-
-# def _load_text(lpath, splitlines=False):
-#     with open(lpath, "r") as f:
-#         return f.read().splitlines() if splitlines else f.read()
+        print(f"Error loading file {lpath}: {str(e)}")
+        raise
 
 
 def _load_text(lpath):
-    with open(lpath, "r") as f:
-        return f.read()
+    """
+    Load text from a file.
 
+    Parameters:
+    -----------
+    lpath : str
+        The path to the text file to be loaded.
 
-def _load_text(lpath):
+    Returns:
+    --------
+    str
+        The content of the text file as a string.
+
+    Raises:
+    -------
+    FileNotFoundError
+        If the specified file does not exist.
+    IOError
+        If there's an error reading the file.
+    """
     with open(lpath, "r") as f:
         return f.read()
 
@@ -266,11 +190,30 @@ def _load_eeg_data(filename, **kwargs):
     """
     Load EEG data based on file extension and associated files using MNE-Python.
 
+    This function supports various EEG file formats including BrainVision, EDF, BDF, GDF, CNT, EGI, and SET.
+    It also handles special cases for .eeg files (BrainVision and Nihon Koden).
+
     Parameters:
-    filename (str: The path to the file to be loaded.
+    -----------
+    filename : str
+        The path to the EEG file to be loaded.
+    **kwargs : dict
+        Additional keyword arguments to be passed to the specific MNE loading function.
 
     Returns:
-    raw (mne.io.Raw: The loaded raw EEG data.
+    --------
+    raw : mne.io.Raw
+        The loaded raw EEG data.
+
+    Raises:
+    -------
+    ValueError
+        If the file extension is not supported.
+
+    Notes:
+    ------
+    This function uses MNE-Python to load the EEG data. It automatically detects the file format
+    based on the file extension and uses the appropriate MNE function to load the data.
     """
     # Get the file extension
     extension = filename.split(".")[-1]
@@ -327,6 +270,38 @@ def _load_eeg_data(filename, **kwargs):
 
 
 def load_markdown(lpath_md, style="plain_text"):
+    """
+    Load and convert Markdown content from a file.
+
+    This function reads a Markdown file and converts it to either HTML or plain text format.
+
+    Parameters:
+    -----------
+    lpath_md : str
+        The path to the Markdown file to be loaded.
+    style : str, optional
+        The output style of the converted content.
+        Options are "html" or "plain_text" (default).
+
+    Returns:
+    --------
+    str
+        The converted content of the Markdown file, either as HTML or plain text.
+
+    Raises:
+    -------
+    FileNotFoundError
+        If the specified file does not exist.
+    IOError
+        If there's an error reading the file.
+    ValueError
+        If an invalid style option is provided.
+
+    Notes:
+    ------
+    This function uses the 'markdown' library to convert Markdown to HTML,
+    and 'html2text' to convert HTML to plain text when necessary.
+    """
     import html2text
     import markdown
 
@@ -338,17 +313,49 @@ def load_markdown(lpath_md, style="plain_text"):
     html_content = markdown.markdown(markdown_content)
     if style == "html":
         return html_content
-
     elif style == "plain_text":
         text_maker = html2text.HTML2Text()
         text_maker.ignore_links = True
         text_maker.bypass_tables = False
         plain_text = text_maker.handle(html_content)
-
         return plain_text
+    else:
+        raise ValueError(
+            "Invalid style option. Choose 'html' or 'plain_text'."
+        )
 
 
-# def _check_encoding(file_path):
+def _check_encoding(file_path):
+    """
+    Check the encoding of a given file.
+
+    This function attempts to read the file with different encodings
+    to determine the correct one.
+
+    Parameters:
+    -----------
+    file_path : str
+        The path to the file to check.
+
+    Returns:
+    --------
+    str
+        The detected encoding of the file.
+
+    Raises:
+    -------
+    IOError
+        If the file cannot be read or the encoding cannot be determined.
+    """
+    import chardet
+
+    with open(file_path, "rb") as file:
+        raw_data = file.read()
+
+    result = chardet.detect(raw_data)
+    return result["encoding"]
+
+
 #     from chardet.universaldetector import UniversalDetector
 
 #     detector = UniversalDetector()
@@ -362,22 +369,79 @@ def load_markdown(lpath_md, style="plain_text"):
 #     return enc
 
 
-# def get_data_path_from_a_package(package_str, resource):
-#     import importlib
-#     import os
-#     import sys
+def get_data_path_from_a_package(package_str, resource):
+    """
+    Get the path to a data file within a package.
 
-#     spec = importlib.util.find_spec(package_str)
-#     data_dir = os.path.join(spec.origin.split("src")[0], "data")
-#     resource_path = os.path.join(data_dir, resource)
-#     return resource_path
+    This function finds the path to a data file within a package's data directory.
+
+    Parameters:
+    -----------
+    package_str : str
+        The name of the package as a string.
+    resource : str
+        The name of the resource file within the package's data directory.
+
+    Returns:
+    --------
+    str
+        The full path to the resource file.
+
+    Raises:
+    -------
+    ImportError
+        If the specified package cannot be found.
+    FileNotFoundError
+        If the resource file does not exist in the package's data directory.
+    """
+    import importlib
+    import os
+    import sys
+
+    spec = importlib.util.find_spec(package_str)
+    if spec is None:
+        raise ImportError(f"Package '{package_str}' not found")
+
+    data_dir = os.path.join(spec.origin.split("src")[0], "data")
+    resource_path = os.path.join(data_dir, resource)
+
+    if not os.path.exists(resource_path):
+        raise FileNotFoundError(
+            f"Resource '{resource}' not found in package '{package_str}'"
+        )
+
+    return resource_path
 
 
 def load_yaml_as_an_optuna_dict(fpath_yaml, trial):
+    """
+    Load a YAML file and convert it to an Optuna-compatible dictionary.
+
+    This function reads a YAML file containing hyperparameter configurations
+    and converts it to a dictionary suitable for use with Optuna trials.
+
+    Parameters:
+    -----------
+    fpath_yaml : str
+        The file path to the YAML configuration file.
+    trial : optuna.trial.Trial
+        The Optuna trial object to use for suggesting hyperparameters.
+
+    Returns:
+    --------
+    dict
+        A dictionary containing the hyperparameters with values suggested by Optuna.
+
+    Raises:
+    -------
+    FileNotFoundError
+        If the specified YAML file does not exist.
+    ValueError
+        If the YAML file contains invalid configuration for Optuna.
+    """
     _d = load(fpath_yaml)
 
     for k, v in _d.items():
-
         dist = v["distribution"]
 
         if dist == "categorical":
@@ -401,58 +465,149 @@ def load_yaml_as_an_optuna_dict(fpath_yaml, trial):
 
 def load_study_rdb(study_name, rdb_raw_bytes_url):
     """
-    study = load_study_rdb(
-        study_name="YOUR_STUDY_NAME",
-        rdb_raw_bytes_url="sqlite:///*.db"
-    )
+    Load an Optuna study from a RDB (Relational Database) file.
+
+    This function loads an Optuna study from a given RDB file URL.
+
+    Parameters:
+    -----------
+    study_name : str
+        The name of the Optuna study to load.
+    rdb_raw_bytes_url : str
+        The URL of the RDB file, typically in the format "sqlite:///*.db".
+
+    Returns:
+    --------
+    optuna.study.Study
+        The loaded Optuna study object.
+
+    Raises:
+    -------
+    optuna.exceptions.StorageInvalidUsageError
+        If there's an error loading the study from the storage.
+
+    Example:
+    --------
+    >>> study = load_study_rdb(
+    ...     study_name="YOUR_STUDY_NAME",
+    ...     rdb_raw_bytes_url="sqlite:///path/to/your/study.db"
+    ... )
     """
     import optuna
 
-    # rdb_raw_bytes_url = "sqlite:////tmp/fake/ywatanabe/_MicroNN_WindowSize-1.0-sec_MaxEpochs_100_2021-1216-1844/optuna_study_test_file#0.db"
     storage = optuna.storages.RDBStorage(url=rdb_raw_bytes_url)
     study = optuna.load_study(study_name=study_name, storage=storage)
-    print(f"\nLoaded: {rdb_raw_bytes_url}\n")
+    print(f"Loaded: {rdb_raw_bytes_url}")
     return study
 
 
-def load_configs(IS_DEBUG=None, show=False, verbose=False):
+# def load_configs(IS_DEBUG=None, show=False, verbose=False):
+#     """
+#     Load and process configuration files from the ./config directory.
 
-    if os.getenv("CI") == "True":
-        IS_DEBUG = True
+#     This function loads all YAML files in the ./config directory, processes debug configurations,
+#     and returns a consolidated configuration dictionary.
 
-    def update_debug(config, IS_DEBUG):
-        if IS_DEBUG:
-            debug_keys = mngs.gen.search("^DEBUG_", list(config.keys()))[1]
-            for dk in debug_keys:
-                dk_wo_debug_prefix = dk.split("DEBUG_")[1]
-                config[dk_wo_debug_prefix] = config[dk]
-                if show or verbose:
-                    print(f"\n{dk} -> {dk_wo_debug_prefix}\n")
-        return config
+#     Parameters:
+#     -----------
+#     IS_DEBUG : bool, optional
+#         Flag to enable debug mode. If None, it will be determined from the ./config/IS_DEBUG.yaml file.
+#     show : bool, optional
+#         If True, print debug information. Default is False.
+#     verbose : bool, optional
+#         If True, print verbose debug information. Default is False.
 
-    # Check ./config/IS_DEBUG.yaml file if IS_DEBUG argument is not passed
-    if IS_DEBUG is None:
-        IS_DEBUG_PATH = "./config/IS_DEBUG.yaml"
-        if os.path.exists(IS_DEBUG_PATH):
-            IS_DEBUG = mngs.io.load("./config/IS_DEBUG.yaml").get("IS_DEBUG")
-        else:
-            IS_DEBUG = False
+#     Returns:
+#     --------
+#     mngs.gen.DotDict
+#         A dictionary-like object containing all loaded and processed configurations.
 
-    # Main
-    CONFIGS = {}
-    for lpath in glob("./config/*.yaml"):
-        CONFIG = update_debug(mngs.io.load(lpath), IS_DEBUG)
-        CONFIGS.update(CONFIG)
+#     Notes:
+#     ------
+#     - If the CI environment variable is set to "True", IS_DEBUG will be set to True.
+#     - Debug configurations (keys starting with "DEBUG_") will replace their non-debug counterparts when IS_DEBUG is True.
+#     """
 
-    CONFIGS = mngs.gen.DotDict(CONFIGS)
+#     if os.getenv("CI") == "True":
+#         IS_DEBUG = True
 
-    return CONFIGS
+#     def use_debug_values(config, IS_DEBUG):
+#         """
+#         Update configuration with debug values if IS_DEBUG is True.
+
+#         Parameters:
+#         -----------
+#         config : dict
+#             The configuration dictionary to update.
+#         IS_DEBUG : bool
+#             Flag indicating whether debug mode is active.
+
+#         Returns:
+#         --------
+#         dict
+#             The updated configuration dictionary.
+#         """
+#         if IS_DEBUG:
+#             debug_keys = mngs.gen.search("^DEBUG_", list(config.keys()))[1]
+#             for dk in debug_keys:
+#                 dk_wo_debug_prefix = dk.split("DEBUG_")[1]
+#                 config[dk_wo_debug_prefix] = config[dk]
+#                 if show or verbose:
+#                     print(f"\n{dk} -> {dk_wo_debug_prefix}\n")
+#         return config
+
+#     # Check ./config/IS_DEBUG.yaml file if IS_DEBUG argument is not passed
+#     if IS_DEBUG is None:
+#         IS_DEBUG_PATH = "./config/IS_DEBUG.yaml"
+#         if os.path.exists(IS_DEBUG_PATH):
+#             IS_DEBUG = mngs.io.load("./config/IS_DEBUG.yaml").get("IS_DEBUG")
+#         else:
+#             IS_DEBUG = False
+
+#     # Main
+#     CONFIGS = {}
+#     for lpath in glob("./config/*.yaml"):
+#         CONFIG = use_debug_values(mngs.io.load(lpath), IS_DEBUG)
+#         CONFIGS.update(CONFIG)
+
+#     CONFIGS = mngs.gen.DotDict(CONFIGS)
+
+#     return CONFIGS
 
 
 ################################################################################
 # dev
 ################################################################################
-# def _load_docx(lpath):
+def _load_docx(lpath):
+    """
+    Load and extract text content from a .docx file.
+
+    Parameters:
+    -----------
+    lpath : str
+        The path to the .docx file.
+
+    Returns:
+    --------
+    str
+        The extracted text content from the .docx file.
+
+    Raises:
+    -------
+    FileNotFoundError
+        If the specified file does not exist.
+    docx.opc.exceptions.PackageNotFoundError
+        If the file is not a valid .docx file.
+    """
+    from docx import Document
+
+    doc = Document(lpath)
+    full_text = []
+    for para in doc.paragraphs:
+        full_text.append(para.text)
+    return "".join(full_text)
+
+
 #     doc = docx.Document(lpath)
 #     full_text = []
 #     for para in doc.paragraphs:
@@ -494,3 +649,170 @@ def load_configs(IS_DEBUG=None, show=False, verbose=False):
 
 # def _load_textfile(lpath):
 #     return lpath.read().decode("utf-8")
+
+
+def load_markdown(lpath_md, style="plain_text"):
+    """
+    Load and convert a Markdown file to either HTML or plain text.
+
+    Parameters:
+    -----------
+    lpath_md : str
+        The path to the Markdown file.
+    style : str, optional
+        The output style, either "html" or "plain_text" (default).
+
+    Returns:
+    --------
+    str
+        The converted content of the Markdown file.
+    """
+    import html2text
+    import markdown
+
+    # Load Markdown content from a file
+    with open(lpath_md, "r") as file:
+        markdown_content = file.read()
+
+    # Convert Markdown to HTML
+    html_content = markdown.markdown(markdown_content)
+    if style == "html":
+        return html_content
+
+    elif style == "plain_text":
+        text_maker = html2text.HTML2Text()
+        text_maker.ignore_links = True
+        text_maker.bypass_tables = False
+        plain_text = text_maker.handle(html_content)
+
+        return plain_text
+
+
+def load_yaml_as_an_optuna_dict(fpath_yaml, trial):
+    """
+    Load a YAML file and convert it to an Optuna-compatible dictionary.
+
+    Parameters:
+    -----------
+    fpath_yaml : str
+        The path to the YAML file.
+    trial : optuna.trial.Trial
+        The Optuna trial object.
+
+    Returns:
+    --------
+    dict
+        A dictionary with Optuna-compatible parameter suggestions.
+    """
+    _d = load(fpath_yaml)
+
+    for k, v in _d.items():
+
+        dist = v["distribution"]
+
+        if dist == "categorical":
+            _d[k] = trial.suggest_categorical(k, v["values"])
+
+        elif dist == "uniform":
+            _d[k] = trial.suggest_int(k, float(v["min"]), float(v["max"]))
+
+        elif dist == "loguniform":
+            _d[k] = trial.suggest_loguniform(
+                k, float(v["min"]), float(v["max"])
+            )
+
+        elif dist == "intloguniform":
+            _d[k] = trial.suggest_int(
+                k, float(v["min"]), float(v["max"]), log=True
+            )
+
+    return _d
+
+
+def load_study_rdb(study_name, rdb_raw_bytes_url):
+    """
+    Load an Optuna study from a RDB storage.
+
+    Parameters:
+    -----------
+    study_name : str
+        The name of the Optuna study.
+    rdb_raw_bytes_url : str
+        The URL of the RDB storage.
+
+    Returns:
+    --------
+    optuna.study.Study
+        The loaded Optuna study object.
+    """
+    import optuna
+
+    # rdb_raw_bytes_url = "sqlite:////tmp/fake/ywatanabe/_MicroNN_WindowSize-1.0-sec_MaxEpochs_100_2021-1216-1844/optuna_study_test_file#0.db"
+    storage = optuna.storages.RDBStorage(url=rdb_raw_bytes_url)
+    study = optuna.load_study(study_name=study_name, storage=storage)
+    print(f"\nLoaded: {rdb_raw_bytes_url}\n")
+    return study
+
+
+def load_configs(IS_DEBUG=None, show=False, verbose=False):
+    """
+    Load configuration files from the ./config directory.
+
+    Parameters:
+    -----------
+    IS_DEBUG : bool, optional
+        If True, use debug configurations. If None, check ./config/IS_DEBUG.yaml.
+    show : bool, optional
+        If True, display additional information during loading.
+    verbose : bool, optional
+        If True, print verbose output during loading.
+
+    Returns:
+    --------
+    mngs.gen.DotDict
+        A dictionary-like object containing the loaded configurations.
+    """
+
+    def apply_debug_values(config, IS_DEBUG):
+        if IS_DEBUG:
+            if isinstance(config, (dict, mngs.gen.DotDict)):
+                for key, value in list(config.items()):
+                    if key.startswith("DEBUG_"):
+                        dk_wo_debug_prefix = key.split("DEBUG_")[1]
+                        config[dk_wo_debug_prefix] = value
+                        if show or verbose:
+                            print(f"\n{key} -> {dk_wo_debug_prefix}\n")
+                    elif isinstance(value, (dict, mngs.gen.DotDict)):
+                        config[key] = apply_debug_values(value, IS_DEBUG)
+        return config
+
+    if os.getenv("CI") == "True":
+        IS_DEBUG = True
+
+    # def apply_debug_values(config, IS_DEBUG):
+    #     if IS_DEBUG and isinstance(config, (dict, mngs.gen.DotDict)):
+    #         debug_keys = mngs.gen.search("^DEBUG_", list(config.keys()))[1]
+    #         for dk in debug_keys:
+    #             dk_wo_debug_prefix = dk.split("DEBUG_")[1]
+    #             config[dk_wo_debug_prefix] = config[dk]
+    #             if show or verbose:
+    #                 print(f"\n{dk} -> {dk_wo_debug_prefix}\n")
+    #     return config
+
+    # Check ./config/IS_DEBUG.yaml file if IS_DEBUG argument is not passed
+    if IS_DEBUG is None:
+        IS_DEBUG_PATH = "./config/IS_DEBUG.yaml"
+        if os.path.exists(IS_DEBUG_PATH):
+            IS_DEBUG = mngs.io.load("./config/IS_DEBUG.yaml").get("IS_DEBUG")
+        else:
+            IS_DEBUG = False
+
+    # Main
+    CONFIGS = {}
+    for lpath in glob("./config/*.yaml"):
+        CONFIG = apply_debug_values(mngs.io.load(lpath), IS_DEBUG)
+        CONFIGS.update(CONFIG)
+
+    CONFIGS = mngs.gen.DotDict(CONFIGS)
+
+    return CONFIGS
