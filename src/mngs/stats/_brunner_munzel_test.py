@@ -34,6 +34,11 @@ def brunner_munzel_test(x1, x2, distribution="t"):
       print(bmtest(d1, d2, distribution='normal'))
     """
 
+    x1 = np.hstack(x1)
+    x1 = x1[~np.isnan(x1)]
+    x2 = np.hstack(x2)
+    x2 = x2[~np.isnan(x2)]
+
     n1, n2 = len(x1), len(x2)
     R = stats.rankdata(list(x1) + list(x2))
     R1, R2 = R[:n1], R[n1:]
@@ -41,15 +46,27 @@ def brunner_munzel_test(x1, x2, distribution="t"):
     Ri1, Ri2 = stats.rankdata(x1), stats.rankdata(x2)
     var1 = np.var([r - ri for r, ri in zip(R1, Ri1)], ddof=1)
     var2 = np.var([r - ri for r, ri in zip(R2, Ri2)], ddof=1)
-    w = ((n1 * n2) * (r2_mean - r1_mean)) / ((n1 + n2) * np.sqrt(n1 * var1 + n2 * var2))
+    w_statistic = ((n1 * n2) * (r2_mean - r1_mean)) / (
+        (n1 + n2) * np.sqrt(n1 * var1 + n2 * var2)
+    )
     if distribution == "t":
         dof = (n1 * var1 + n2 * var2) ** 2 / (
             (n1 * var1) ** 2 / (n1 - 1) + (n2 * var2) ** 2 / (n2 - 1)
         )
-        c = stats.t.cdf(abs(w), dof) if not np.isinf(w) else 0.0
+        c = (
+            stats.t.cdf(abs(w_statistic), dof)
+            if not np.isinf(w_statistic)
+            else 0.0
+        )
     if distribution == "normal":
         dof = np.nan
-        c = stats.norm.cdf(abs(w)) if not np.isinf(w) else 0.0
+        c = (
+            stats.norm.cdf(abs(w_statistic))
+            if not np.isinf(w_statistic)
+            else 0.0
+        )
     p_value = min(c, 1.0 - c) * 2.0
-    p = (r2_mean - r1_mean) / (n1 + n2) + 0.5
-    return (w, p_value, dof, p)
+    effsize = (r2_mean - r1_mean) / (n1 + n2) + 0.5
+    return dict(
+        w_statistic=w_statistic, p_value=p_value, dof=dof, effsize=effsize
+    )

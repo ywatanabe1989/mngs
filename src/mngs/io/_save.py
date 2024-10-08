@@ -7,6 +7,7 @@ import json
 import os
 import pickle
 from shutil import move
+import shutil
 
 import h5py
 import joblib
@@ -109,18 +110,6 @@ def save(
         mngs.io.save(_dict, "xxx.json")
         # _dict = mngs.io.load("xxx.json")
     """
-    # import inspect
-    # import json
-    # import os
-    # import pickle
-
-    # import h5py
-    # import numpy as np
-    # import pandas as pd
-    # import plotly
-    # import torch
-    # import yaml
-
     ########################################
     # Determines the save directory from the script.
     # This process should be in this function for the intended behavior of inspect.
@@ -129,12 +118,7 @@ def save(
     if sfname_or_spath.startswith("/"):
         spath = sfname_or_spath
 
-    # elif sfname_or_spath.startswith("./"):
     else:
-        if from_cwd:
-            spath_cwd = os.getcwd() + "/" + sfname_or_spath
-            spath_cwd = spath_cwd.replace("/./", "/").replace("//", "/")
-
         fpath = inspect.stack()[1].filename
 
         if "ipython" in fpath:
@@ -145,8 +129,18 @@ def save(
 
     # print(sfname_or_spath, fpath, spath, sfname)
     # Corrects the spath
-    spath = spath.replace("/./", "/").replace("//", "/")
+    spath = spath.replace("/./", "/").replace("//", "/").replace(" ", "_")
     ########################################
+
+    # Potential path to symlink
+    spath_cwd = os.getcwd() + "/" + sfname_or_spath
+    spath_cwd = (
+        spath_cwd.replace("/./", "/").replace("//", "/").replace(" ", "_")
+    )
+
+    # Remove spath and spath_cwd to prevent potential circular links
+    for path in [spath, spath_cwd]:
+        mngs.sh(f"rm {path}", verbose=False)
 
     if dry_run:
         print(mngs.gen.ct(f"\n(dry run) Saved to: {spath}", c="yellow"))
@@ -158,12 +152,11 @@ def save(
 
     _save(obj, spath, verbose=verbose, **kwargs)
 
-    if from_cwd:
-        if spath != spath_cwd:
-            mngs.sh(f"ln -sf {spath} {spath_cwd}", verbose=False)
-            print(
-                mngs.gen.color_text(f"\n(Symlinked to: {spath_cwd})", "yellow")
-            )
+    if from_cwd and (spath != spath_cwd):
+        os.makedirs(os.path.dirname(spath_cwd), exist_ok=True)
+        mngs.sh(f"rm {spath_cwd}", verbose=False)
+        mngs.sh(f"ln -sfr {spath} {spath_cwd}", verbose=False)
+        print(mngs.gen.color_text(f"\n(Symlinked to: {spath_cwd})", "yellow"))
 
 
 def _save(obj, spath, verbose=True, **kwargs):
@@ -263,7 +256,7 @@ def _save(obj, spath, verbose=True, **kwargs):
                     buf, format="png"
                 )  # Saving plotly figure to buffer as PNG
                 buf.seek(0)
-                img = Image.open(buf)
+                im = Image.open(buf)
                 img.convert("RGB").save(spath, "JPEG")
                 buf.close()
             # PIL image
@@ -331,7 +324,7 @@ def _save(obj, spath, verbose=True, **kwargs):
                 name_list.append(k)
                 obj_list.append(v)
             with h5py.File(spath, "w") as hf:
-                for (name, obj) in zip(name_list, obj_list):
+                for name, obj in zip(name_list, obj_list):
                     hf.create_dataset(name, data=obj)
         # pth
         elif spath.endswith(".pth"):
@@ -345,11 +338,18 @@ def _save(obj, spath, verbose=True, **kwargs):
         elif spath.endswith(".cbm"):
             obj.save_model(spath)
 
+        # Text
+        elif any(
+            spath.endswith(ext)
+            for ext in [".txt", ".md", ".py", ".html", ".css", ".js"]
+        ):
+            _save_text(obj, spath)
+
         else:
             raise ValueError("obj was not saved.")
 
     except Exception as e:
-        print(e)
+        print(f"Error saving file: {e}")
 
     else:
         if verbose and not is_copying_files:
@@ -371,6 +371,14 @@ def _save(obj, spath, verbose=True, **kwargs):
 #     detector.close()
 #     enc = detector.result["encoding"]
 #     return enc
+
+
+def _save_text(obj, spath):
+    # with open(file_path, "w+", encoding="utf-8") as file:
+    #     file.write(content)
+
+    with open(spath, "w") as file:
+        file.write(obj)
 
 
 def _save_listed_scalars_as_csv(

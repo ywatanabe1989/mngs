@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-16 20:47:36"
+# Time-stamp: "2024-08-24 18:27:53 (ywatanabe)"
 # Author: Yusuke Watanabe (ywata1989@gmail.com)
 
 """
@@ -56,6 +56,7 @@ def imshow2d(
 
     # Invert y-axis to match typical image orientation
     ax.invert_yaxis()
+
 
     # # Set ticks for x and y axes
     # xticks = np.arange(arr_2d.shape[1])  # Correct after transposition

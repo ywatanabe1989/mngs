@@ -7,14 +7,13 @@
 # License: BSD Style.
 
 from itertools import combinations
-import numpy as np
 
-from sklearn.utils import check_random_state
-from sklearn.metrics.pairwise import distance_metrics
-from sklearn.metrics.pairwise import pairwise_distances
+import numpy as np
 
 # from sklearn.externals.joblib import Parallel, delayed
 from joblib import Parallel, delayed
+from sklearn.metrics.pairwise import distance_metrics, pairwise_distances
+from sklearn.utils import check_random_state
 
 
 def silhouette_score_slow(
@@ -144,9 +143,14 @@ def silhouette_samples_slow(X, labels, metric="euclidean", **kwds):
     """
     metric = distance_metrics()[metric]
     n = labels.shape[0]
-    A = np.array([_intra_cluster_distance_slow(X, labels, metric, i) for i in range(n)])
+    A = np.array(
+        [_intra_cluster_distance_slow(X, labels, metric, i) for i in range(n)]
+    )
     B = np.array(
-        [_nearest_cluster_distance_slow(X, labels, metric, i) for i in range(n)]
+        [
+            _nearest_cluster_distance_slow(X, labels, metric, i)
+            for i in range(n)
+        ]
     )
     sil_samples = (B - A) / np.maximum(A, B)
     # nan values are for clusters of size 1, and should be 0
@@ -209,7 +213,9 @@ def _nearest_cluster_distance_slow(X, labels, metric, i):
     label = labels[i]
     b = np.min(
         [
-            np.mean([metric(X[i], X[j]) for j in np.where(labels == cur_label)[0]])
+            np.mean(
+                [metric(X[i], X[j]) for j in np.where(labels == cur_label)[0]]
+            )
             for cur_label in set(labels)
             if not cur_label == label
         ]
@@ -218,7 +224,13 @@ def _nearest_cluster_distance_slow(X, labels, metric, i):
 
 
 def silhouette_score_block(
-    X, labels, metric="euclidean", sample_size=None, random_state=None, n_jobs=1, **kwds
+    X,
+    labels,
+    metric="euclidean",
+    sample_size=None,
+    random_state=None,
+    n_jobs=1,
+    **kwds
 ):
     """Compute the mean Silhouette Coefficient of all samples.
 
@@ -286,7 +298,9 @@ def silhouette_score_block(
         else:
             X, labels = X[indices], labels[indices]
     return np.mean(
-        silhouette_samples_block(X, labels, metric=metric, n_jobs=n_jobs, **kwds)
+        silhouette_samples_block(
+            X, labels, metric=metric, n_jobs=n_jobs, **kwds
+        )
     )
 
 
@@ -342,8 +356,12 @@ def silhouette_samples_block(X, labels, metric="euclidean", n_jobs=1, **kwds):
     http://en.wikipedia.org/wiki/Silhouette_(clustering)
 
     """
-    A = _intra_cluster_distances_block(X, labels, metric, n_jobs=n_jobs, **kwds)
-    B = _nearest_cluster_distance_block(X, labels, metric, n_jobs=n_jobs, **kwds)
+    A = _intra_cluster_distances_block(
+        X, labels, metric, n_jobs=n_jobs, **kwds
+    )
+    B = _nearest_cluster_distance_block(
+        X, labels, metric, n_jobs=n_jobs, **kwds
+    )
     sil_samples = (B - A) / np.maximum(A, B)
     # nan values are for clusters of size 1, and should be 0
     return np.nan_to_num(sil_samples)

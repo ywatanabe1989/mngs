@@ -5,19 +5,56 @@
 
 
 def title2path(title):
+    """
+    Convert a title (string or dictionary) to a path-friendly string.
+
+    Parameters
+    ----------
+    title : str or dict
+        The input title to be converted.
+
+    Returns
+    -------
+    str
+        A path-friendly string derived from the input title.
+    """
+    if isinstance(title, dict):
+        from mngs.general import dict2str
+
+        title = dict2str(title)
+
     path = title
 
-    # Comma patterns
     patterns = [":", ";", "=", "[", "]"]
-    for pp in patterns:
-        path = path.replace(pp, "")
+    for pattern in patterns:
+        path = path.replace(pattern, "")
 
-    # Exceptions
     path = path.replace("_-_", "-")
     path = path.replace(" ", "_")
 
-    # Consective under scores
-    for _ in range(10):
+    while "__" in path:
         path = path.replace("__", "_")
 
     return path.lower()
+
+
+# def title2path(title):
+#     if isinstance(title, dict):
+#         title = dict2str(title)
+
+#     path = title
+
+#     # Comma patterns
+#     patterns = [":", ";", "=", "[", "]"]
+#     for pp in patterns:
+#         path = path.replace(pp, "")
+
+#     # Exceptions
+#     path = path.replace("_-_", "-")
+#     path = path.replace(" ", "_")
+
+#     # Consective under scores
+#     for _ in range(10):
+#         path = path.replace("__", "_")
+
+#     return path.lower()

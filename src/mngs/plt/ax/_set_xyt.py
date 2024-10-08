@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-16 21:26:05"
+# Time-stamp: "2024-07-13 08:14:19 (ywatanabe)"
 # Author: Yusuke Watanabe (ywata1989@gmail.com)
 
 """
@@ -12,14 +12,18 @@ import matplotlib.pyplot as plt
 
 
 # Functions
-def set_xyt(ax, xlabel=None, ylabel=None, title=None):
+def set_xyt(ax, x=False, y=False, t=False):
     """Sets xlabel, ylabel and title"""
-    if xlabel is not None:
-        ax.set_xlabel(xlabel)
-    if ylabel is not None:
-        ax.set_ylabel(ylabel)
-    if title is not None:
-        ax.set_title(title)
+
+    if x is not False:
+        ax.set_xlabel(x)
+
+    if y is not False:
+        ax.set_ylabel(y)
+
+    if t is not False:
+        ax.set_title(t)
+
     return ax
 
 

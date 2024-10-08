@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-06 08:36:13 (ywatanabe)"
+# Time-stamp: "2024-08-24 18:03:34 (ywatanabe)"
 
 import inspect
 import os as _os
@@ -78,6 +78,9 @@ def start(
     \"""
     """
 
+    # Initialize plt
+    plt.close("all")
+
     # Timer
     start_time = datetime.now()
 
@@ -96,7 +99,8 @@ def start(
     # ID
     ID = mngs.gen.gen_ID(N=4)
     ID = ID if not IS_DEBUG else "DEBUG_" + ID
-    print(f"\n{'#'*40}\n## {ID}\n{'#'*40}\n")
+    PID = _os.getpid()
+    print(f"\n{'#'*40}\n## {ID} (PID: {PID})\n{'#'*40}\n")
     sleep(1)
 
     # Defines SDIR
@@ -110,7 +114,7 @@ def start(
     _os.makedirs(sdir, exist_ok=True)
 
     # CONFIGs
-    CONFIGS = mngs.io.load_configs(IS_DEBUG)
+    CONFIGS = mngs.io.load_configs(IS_DEBUG).to_dict()
     CONFIGS["ID"] = ID
     CONFIGS["START_TIME"] = start_time
     CONFIGS["SDIR"] = sdir.replace("/./", "/")
@@ -167,6 +171,8 @@ def start(
 
     if agg:
         matplotlib.use("Agg")
+
+    CONFIGS = mngs.gen.DotDict(CONFIGS)
 
     return CONFIGS, sys.stdout, sys.stderr, plt, CC
 

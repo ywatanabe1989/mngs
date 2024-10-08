@@ -54,11 +54,27 @@ def conf_mat(
 
     assert (cm is not None) or ((y_true is not None) and (y_pred is not None))
 
-    if not cm:
+    if cm is None:
         cm = sklearn_confusion_matrix(y_true, y_pred)
 
+    # Ensure all labels are present in the confusion matrix
+    if labels is not None:
+        full_cm = np.zeros((len(labels), len(labels)))
+        unique_true = np.unique(y_true)
+        unique_pred = np.unique(y_pred)
+        for i, true_label in enumerate(labels):
+            for j, pred_label in enumerate(labels):
+                if true_label in unique_true and pred_label in unique_pred:
+                    full_cm[i, j] = cm[
+                        np.where(unique_true == true_label)[0][0],
+                        np.where(unique_pred == pred_label)[0][0],
+                    ]
+        cm = full_cm
+
     # Dataframe
-    df = pd.DataFrame(data=cm).copy()
+    cm = pd.DataFrame(
+        data=cm,
+    ).copy()
 
     # To LaTeX styles
     if pred_labels is not None:
@@ -74,25 +90,25 @@ def conf_mat(
 
     # Prediction Labels: columns
     if pred_labels is not None:
-        df.columns = pred_labels
+        cm.columns = pred_labels
     elif (pred_labels is None) and (labels is not None):
-        df.columns = labels
+        cm.columns = labels
 
     # Ground Truth Labels: index
     if true_labels is not None:
-        df.index = true_labels
+        cm.index = true_labels
     elif (true_labels is None) and (labels is not None):
-        df.index = labels
+        cm.index = labels
 
     # Sort based on sorted_labels here
     if sorted_labels is not None:
         assert set(sorted_labels) == set(labels)
-        df = df.reindex(index=sorted_labels, columns=sorted_labels)
+        cm = cm.reindex(index=sorted_labels, columns=sorted_labels)
 
     # Main
     fig, ax = plt.subplots()
     res = sns.heatmap(
-        df,
+        cm,
         annot=True,
         annot_kws={"size": plt.rcParams["font.size"]},
         fmt=".0f",
@@ -118,19 +134,19 @@ def conf_mat(
 
     # Appearances
     ax = mngs.plt.ax.extend(ax, x_extend_ratio, y_extend_ratio)
-    if df.shape[0] == df.shape[1]:
+    if cm.shape[0] == cm.shape[1]:
         ax.set_box_aspect(1)
-    ax.set_xticklabels(
-        ax.get_xticklabels(),
-        rotation=label_rotation_xy[0],
-        fontdict={"verticalalignment": "top"},
-    )
-    ax.set_yticklabels(
-        ax.get_yticklabels(),
-        rotation=label_rotation_xy[1],
-        fontdict={"horizontalalignment": "right"},
-    )
-    # The size
+        ax.set_xticklabels(
+            ax.get_xticklabels(),
+            rotation=label_rotation_xy[0],
+            fontdict={"verticalalignment": "top"},
+        )
+        ax.set_yticklabels(
+            ax.get_yticklabels(),
+            rotation=label_rotation_xy[1],
+            fontdict={"horizontalalignment": "right"},
+        )
+        # The size
     bbox = ax.get_position()
     left_orig = bbox.x0
     width_orig = bbox.x1 - bbox.x0
@@ -143,7 +159,7 @@ def conf_mat(
         divider = make_axes_locatable(ax)  # Gets region from the ax
         cax = divider.append_axes("right", size="5%", pad=0.1)
         # cax = divider.new_horizontal(size="5%", pad=1, pack_start=True)
-        cax = mngs.plt.ax.set_pos(fig, cax, -dx * 2.54, 0)
+        cax = mngs.plt.ax.shift(cax, dx=-dx * 2.54, dy=0)
         fig.add_axes(cax)
 
         """
@@ -169,7 +185,7 @@ def conf_mat(
         """
 
         # Plots colorbar and adjusts the size
-        vmax = np.array(df).max().astype(int)
+        vmax = np.array(cm).max().astype(int)
         norm = matplotlib.colors.Normalize(vmin=0, vmax=vmax)
         cbar = fig.colorbar(
             plt.cm.ScalarMappable(norm=norm, cmap="Blues"),

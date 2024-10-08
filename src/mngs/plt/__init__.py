@@ -15,6 +15,7 @@ from ._colors import (
     to_rgb,
     to_rgba,
     update_alpha,
+    gradiate_color,
 )
 from ._configure_mpl import configure_mpl
 from ._draw_a_cube import draw_a_cube
