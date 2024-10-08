@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Time-stamp: "2024-10-07 22:21:36 (ywatanabe)"
+# Time-stamp: "2024-10-08 20:49:56 (ywatanabe)"
 
 
 from . import io, path
@@ -18,8 +18,8 @@ None  # to keep the importing order
 from . import web
 
 __copyright__ = "Copyright (C) 2024 Yusuke Watanabe"
-__version__ = "1.7.0"
+__version__ = "1.8.0"
 __license__ = "MIT"
 __author__ = "ywatanabe1989"
-__author_email__ = "ywata1989@gmail.com"
+__author_email__ = "ywatanabe@alumni.u-tokyo.ac.jp"
 __url__ = "https://github.com/ywatanabe1989/mngs"
