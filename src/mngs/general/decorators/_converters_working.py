@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-03 08:33:33 (ywatanabe)"#!/usr/bin/env python3
+# Time-stamp: "2024-10-06 09:30:27 (ywatanabe)"#!/usr/bin/env python3
 
 import warnings
 from functools import wraps
@@ -421,6 +421,68 @@ def batch_fn(func):
 #         return wrapper
 
 #     return decorator
+
+def pandas_fn(func):
+    """
+    Decorator to ensure pandas calculation
+
+    Example:
+        @pandas_fn
+        def pandas_mean(*args, **kwargs):
+            return pd.DataFrame(*args, **kwargs).mean()
+
+        def custom_print(x):
+            print(type(x), x)
+
+        x = [1, 2, 3]
+        x_list = x
+        x_tensor = torch.tensor(x).float()
+        x_tensor_cuda = torch.tensor(x).float().cuda()
+        x_array = np.array(x)
+        x_df = pd.DataFrame({"col1": x})
+
+        custom_print(pandas_mean(x_list))
+        custom_print(pandas_mean(x_array))
+        custom_print(pandas_mean(x_df))
+        custom_print(pandas_mean(x_tensor))
+        custom_print(pandas_mean(x_tensor_cuda))
+    """
+
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        # Buffers the input types
+        is_torch_input = is_torch(*args, **kwargs)
+        is_cuda_input = is_cuda(*args, **kwargs)
+        device = "cuda" if is_cuda_input else "cpu"
+
+        # Convert inputs to pandas DataFrame
+        def to_pandas(x):
+            if isinstance(x, pd.DataFrame):
+                return x
+            elif isinstance(x, pd.Series):
+                return pd.DataFrame(x)
+            elif isinstance(x, (np.ndarray, list)):
+                return pd.DataFrame(x)
+            elif isinstance(x, torch.Tensor):
+                return pd.DataFrame(x.detach().cpu().numpy())
+            else:
+                return pd.DataFrame([x])
+
+        c_args = [to_pandas(arg) for arg in args]
+        c_kwargs = {k: to_pandas(v) for k, v in kwargs.items()}
+
+        # Run the function
+        results = func(*c_args, **c_kwargs)
+
+        # Convert results back to original type if necessary
+        if is_torch_input:
+            return to_torch(results, return_fn=return_if, device=device)[0]
+        elif isinstance(results, pd.DataFrame) or isinstance(results, pd.Series):
+            return results
+        else:
+            return to_numpy(results, return_fn=return_if)[0]
+
+    return wrapper
 
 
 if __name__ == "__main__":

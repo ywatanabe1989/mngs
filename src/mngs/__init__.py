@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Time-stamp: "2024-10-02 23:30:02 (ywatanabe)"
+# Time-stamp: "2024-10-07 22:21:36 (ywatanabe)"
 
 
 from . import io, path
@@ -9,7 +9,7 @@ from . import gen, general
 from ._sh import sh
 
 None
-from . import ai, dsp, gists, linalg, ml, nn, os, pd, plt, stats, torch, tex
+from . import ai, dsp, gists, linalg, ml, nn, os, pd, plt, stats, torch, tex, typing
 
 None
 from . import res

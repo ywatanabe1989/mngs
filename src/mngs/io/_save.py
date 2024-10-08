@@ -1,5 +1,26 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Time-stamp: "2024-10-07 12:33:48 (ywatanabe)"
+# File: /home/ywatanabe/proj/_mngs_repo_openhands/src/mngs/io/_save.py
 
+
+"""
+1. Functionality:
+   - Provides utilities for saving various data types to different file formats.
+2. Input:
+   - Objects to be saved (e.g., NumPy arrays, PyTorch tensors, Pandas DataFrames, etc.)
+   - File path or name where the object should be saved
+3. Output:
+   - Saved files in various formats (e.g., CSV, NPY, PKL, JOBLIB, PNG, HTML, TIFF, MP4, YAML, JSON, HDF5, PTH, MAT, CBM)
+4. Prerequisites:
+   - Python 3.x
+   - Required libraries: numpy, pandas, torch, matplotlib, plotly, h5py, joblib, PIL, ruamel.yaml
+"""
+
+"""Imports"""
+from typing import List, Tuple, Dict, Any, Union, Sequence, Literal
+from collections.abc import Iterable
+import numpy as np
 import csv
 import inspect
 import io as _io
@@ -20,145 +41,244 @@ import torch
 from matplotlib import animation
 from PIL import Image
 from ruamel.yaml import YAML
+import xarray as xr
+import logging
+
+ArrayLike = Union[
+    List,
+    Tuple,
+    np.ndarray,
+    pd.Series,
+    pd.DataFrame,
+    xr.DataArray,
+    torch.Tensor,
+]
+
+# def save(
+#     obj,
+#     sfname_or_spath,
+#     makedirs=True,
+#     verbose=True,
+#     from_cwd=False,
+#     dry_run=False,
+#     **kwargs,
+# ):
+#     """
+#     Saves an object to a file with the specified format, determined by the file extension.
+#     The function supports saving data in various formats including CSV, NPY, PKL, JOBLIB, PNG, HTML, TIFF, MP4, YAML, JSON, HDF5, PTH, MAT, and CBM.
+
+#     Arguments:
+#         obj (object): The object to be saved. Can be a NumPy array, PyTorch tensor, Pandas DataFrame, or any serializable object depending on the file format.
+#         sfname_or_spath (str): The file name or path where the object should be saved. The file extension determines the format.
+#         makedirs (bool, optional): If True, the function will create the directory path if it does not exist. Defaults to True.
+#         verbose (bool, optional): If True, prints a message upon successful saving. Defaults to True.
+#         **kwargs: Additional keyword arguments to pass to the underlying save function of the specific format.
+
+#     Returns:
+#         None. The function saves the object to a file and does not return any value.
+
+#     Supported Formats:
+#         - .csv: Pandas DataFrames or listed scalars.
+#         - .npy: NumPy arrays.
+#         - .npz: NumPy arrays.
+#         - .pkl: Serializable Python objects using pickle.
+#         - .joblib: Objects using joblib with compression.
+#         - .png: Images, including Plotly figures and Matplotlib plots.
+#         - .tiff / .tif: Images in TIFF format, typically from Matplotlib plots.
+#         - .jpeg / .jpg: Images in JPEG format, typically from Matplotlib plots.
+#         - .svg : Images in the SVG format, typically from Matplotlib plots.
+#         - .html: Plotly figures as HTML files.
+#         - .mp4: Videos, likely from animations created with Matplotlib.
+#         - .yaml: Data in YAML format.
+#         - .json: Data in JSON format.
+#         - .hdf5: Data in HDF5 format, useful for large datasets.
+#         - .pth: PyTorch model states.
+#         - .mat: Data in MATLAB format using `scipy.io.savemat`.
+#         - .cbm: CatBoost models.
+
+#     Note:
+#         - The function dynamically selects the appropriate saving mechanism based on the file extension.
+#         - Ensure that the object type is compatible with the chosen file format.
+#         - For custom saving mechanisms or unsupported formats, consider extending the function or using the specific library's save function directly.
+
+#     Example:
+#         import mngs
+
+#         import numpy as np
+#         import pandas as pd
+#         import torch
+#         import matplotlib.pyplot as plt
+
+#         # .npy
+#         arr = np.array([1, 2, 3])
+#         mngs.io.save(arr, "xxx.npy")
+#         # arr = mngs.io.load("xxx.npy")
+
+#         # .csv
+#         df = pd.DataFrame({"col1": [1, 2], "col2": [3, 4]})
+#         mngs.io.save(df, "xxx.csv")
+#         # df = mngs.io.load("xxx.csv")
+
+#         # .pth
+#         tensor = torch.tensor([1, 2, 3])
+#         mngs.io.save(obj, "xxx.pth")
+#         # tensor = mngs.io.load("xxx.pth")
+
+#         # .pkl
+#         _dict = {"a": 1, "b": 2, "c": [3, 4, 5]} # serializable object like dict, list, ...
+#         mngs.io.save(_dict, "xxx.pkl")
+#         # _dict = mngs.io.load("xxx.pkl")
+
+#         # .png | .tiff | .jpg
+#         plt.figure()
+#         plt.plot(np.array([1, 2, 3]))
+#         mngs.io.save(plt, "xxx.png") # "xxx.tiff", "xxx.tif", "xxx.jpeg, or "xxx.jpg"
+
+#         # .yaml
+#         mngs.io.save(_dict, "xxx.yaml")
+#         # _dict = mngs.io.load("xxx.yaml")
+
+#         # .json
+#         mngs.io.save(_dict, "xxx.json")
+#         # _dict = mngs.io.load("xxx.json")
+#     """
 
 
 def save(
-    obj,
-    sfname_or_spath,
-    makedirs=True,
-    verbose=True,
-    from_cwd=False,
-    dry_run=False,
+    obj: Any,
+    sfname_or_spath: str,
+    makedirs: bool = True,
+    verbose: bool = True,
+    from_cwd: bool = False,
+    dry_run: bool = False,
     **kwargs,
-):
+) -> None:
     """
-    Saves an object to a file with the specified format, determined by the file extension.
-    The function supports saving data in various formats including CSV, NPY, PKL, JOBLIB, PNG, HTML, TIFF, MP4, YAML, JSON, HDF5, PTH, MAT, and CBM.
+    Save an object to a file with the specified format.
 
-    Arguments:
-        obj (object): The object to be saved. Can be a NumPy array, PyTorch tensor, Pandas DataFrame, or any serializable object depending on the file format.
-        sfname_or_spath (str): The file name or path where the object should be saved. The file extension determines the format.
-        makedirs (bool, optional): If True, the function will create the directory path if it does not exist. Defaults to True.
-        verbose (bool, optional): If True, prints a message upon successful saving. Defaults to True.
-        **kwargs: Additional keyword arguments to pass to the underlying save function of the specific format.
+    Parameters
+    ----------
+    obj : Any
+        The object to be saved. Can be a NumPy array, PyTorch tensor, Pandas DataFrame, or any serializable object.
+    sfname_or_spath : str
+        The file name or path where the object should be saved. The file extension determines the format.
+    makedirs : bool, optional
+        If True, create the directory path if it does not exist. Default is True.
+    verbose : bool, optional
+        If True, print a message upon successful saving. Default is True.
+    from_cwd : bool, optional
+        If True, create a symlink from the current working directory. Default is False.
+    dry_run : bool, optional
+        If True, simulate the saving process without actually writing files. Default is False.
+    **kwargs
+        Additional keyword arguments to pass to the underlying save function of the specific format.
 
-    Returns:
-        None. The function saves the object to a file and does not return any value.
+    Returns
+    -------
+    None
 
-    Supported Formats:
-        - .csv: Pandas DataFrames or listed scalars.
-        - .npy: NumPy arrays.
-        - .npz: NumPy arrays.
-        - .pkl: Serializable Python objects using pickle.
-        - .joblib: Objects using joblib with compression.
-        - .png: Images, including Plotly figures and Matplotlib plots.
-        - .tiff / .tif: Images in TIFF format, typically from Matplotlib plots.
-        - .jpeg / .jpg: Images in JPEG format, typically from Matplotlib plots.
-        - .svg : Images in the SVG format, typically from Matplotlib plots.
-        - .html: Plotly figures as HTML files.
-        - .mp4: Videos, likely from animations created with Matplotlib.
-        - .yaml: Data in YAML format.
-        - .json: Data in JSON format.
-        - .hdf5: Data in HDF5 format, useful for large datasets.
-        - .pth: PyTorch model states.
-        - .mat: Data in MATLAB format using `scipy.io.savemat`.
-        - .cbm: CatBoost models.
+    Notes
+    -----
+    Supported formats include CSV, NPY, PKL, JOBLIB, PNG, HTML, TIFF, MP4, YAML, JSON, HDF5, PTH, MAT, and CBM.
+    The function dynamically selects the appropriate saving mechanism based on the file extension.
 
-    Note:
-        - The function dynamically selects the appropriate saving mechanism based on the file extension.
-        - Ensure that the object type is compatible with the chosen file format.
-        - For custom saving mechanisms or unsupported formats, consider extending the function or using the specific library's save function directly.
+    Examples
+    --------
+    >>> import mngs
+    >>> import numpy as np
+    >>> import pandas as pd
+    >>> import torch
+    >>> import matplotlib.pyplot as plt
 
-    Example:
-        import mngs
+    >>> # Save NumPy array
+    >>> arr = np.array([1, 2, 3])
+    >>> mngs.io.save(arr, "data.npy")
 
-        import numpy as np
-        import pandas as pd
-        import torch
-        import matplotlib.pyplot as plt
+    >>> # Save Pandas DataFrame
+    >>> df = pd.DataFrame({"col1": [1, 2], "col2": [3, 4]})
+    >>> mngs.io.save(df, "data.csv")
 
-        # .npy
-        arr = np.array([1, 2, 3])
-        mngs.io.save(arr, "xxx.npy")
-        # arr = mngs.io.load("xxx.npy")
+    >>> # Save PyTorch tensor
+    >>> tensor = torch.tensor([1, 2, 3])
+    >>> mngs.io.save(tensor, "model.pth")
 
-        # .csv
-        df = pd.DataFrame({"col1": [1, 2], "col2": [3, 4]})
-        mngs.io.save(df, "xxx.csv")
-        # df = mngs.io.load("xxx.csv")
+    >>> # Save dictionary
+    >>> data_dict = {"a": 1, "b": 2, "c": [3, 4, 5]}
+    >>> mngs.io.save(data_dict, "data.pkl")
 
-        # .pth
-        tensor = torch.tensor([1, 2, 3])
-        mngs.io.save(obj, "xxx.pth")
-        # tensor = mngs.io.load("xxx.pth")
+    >>> # Save matplotlib figure
+    >>> plt.figure()
+    >>> plt.plot(np.array([1, 2, 3]))
+    >>> mngs.io.save(plt, "plot.png")
 
-        # .pkl
-        _dict = {"a": 1, "b": 2, "c": [3, 4, 5]} # serializable object like dict, list, ...
-        mngs.io.save(_dict, "xxx.pkl")
-        # _dict = mngs.io.load("xxx.pkl")
+    >>> # Save as YAML
+    >>> mngs.io.save(data_dict, "config.yaml")
 
-        # .png | .tiff | .jpg
-        plt.figure()
-        plt.plot(np.array([1, 2, 3]))
-        mngs.io.save(plt, "xxx.png") # "xxx.tiff", "xxx.tif", "xxx.jpeg, or "xxx.jpg"
-
-        # .yaml
-        mngs.io.save(_dict, "xxx.yaml")
-        # _dict = mngs.io.load("xxx.yaml")
-
-        # .json
-        mngs.io.save(_dict, "xxx.json")
-        # _dict = mngs.io.load("xxx.json")
+    >>> # Save as JSON
+    >>> mngs.io.save(data_dict, "data.json")
     """
-    ########################################
-    # Determines the save directory from the script.
-    # This process should be in this function for the intended behavior of inspect.
-    spath, sfname = None, None
+    try:
+        ########################################
+        # Determines the save directory from the script.
+        # When save() is called in a /path/to/script.py, data will be saved under /path/to/ directoy.
+        # On the other hand, when save() is called in an ipython environment, data will be saved in /tmp/USERNAME/
+        # This process should be in this function for the intended behavior of inspect.
+        ########################################
+        spath, sfname = None, None
 
-    if sfname_or_spath.startswith('f"'):
-        sfname_or_spath = eval(sfname_or_spath)
+        if sfname_or_spath.startswith('f"'):
+            sfname_or_spath = eval(sfname_or_spath)
 
-    if sfname_or_spath.startswith("/"):
-        spath = sfname_or_spath
+        if sfname_or_spath.startswith("/"):
+            spath = sfname_or_spath
 
-    else:
-        fpath = inspect.stack()[1].filename
+        else:
+            fpath = inspect.stack()[1].filename
 
-        if "ipython" in fpath:
-            fpath = f'/tmp/fake-{os.getenv("USER")}.py'
+            if ("ipython" in fpath) or ("<stdin>" in fpath):
+                fpath = f'/tmp/{os.getenv("USER")}.py'
 
-        fdir, fname, _ = mngs.path.split(fpath)
-        spath = fdir + fname + "/" + sfname_or_spath
+            fdir, fname, _ = mngs.path.split(fpath)
+            spath = fdir + fname + "/" + sfname_or_spath
 
-    # Corrects the spath
-    spath = format_spath(spath)
-    ########################################
+        # Corrects the spath
+        spath = format_spath(spath)
+        ########################################
 
-    # Potential path to symlink
-    spath_cwd = os.getcwd() + "/" + sfname_or_spath
-    spath_cwd = format_spath(spath_cwd)
+        # Potential path to symlink
+        spath_cwd = os.getcwd() + "/" + sfname_or_spath
+        spath_cwd = format_spath(spath_cwd)
 
-    # Removes spath and spath_cwd to prevent potential circular links
-    for path in [spath, spath_cwd]:
-        mngs.sh(f"rm -f {path}", verbose=False)
+        # Removes spath and spath_cwd to prevent potential circular links
+        for path in [spath, spath_cwd]:
+            mngs.sh(f"rm -f {path}", verbose=False)
 
-    if dry_run:
-        print(mngs.gen.ct(f"\n(dry run) Saved to: {spath}", c="yellow"))
-        return
+        if dry_run:
+            print(mngs.gen.ct(f"\n(dry run) Saved to: {spath}", c="yellow"))
+            return
 
-    # Makes directory
-    if makedirs:
-        os.makedirs(os.path.dirname(spath), exist_ok=True)
+        # Makes directory
+        if makedirs:
+            os.makedirs(os.path.dirname(spath), exist_ok=True)
 
-    _save(
-        obj,
-        spath,
-        verbose=verbose,
-        from_cwd=from_cwd,
-        dry_run=dry_run,
-        **kwargs,
-    )
-    symlink(spath, spath_cwd, from_cwd, verbose)
+        _save(
+            obj,
+            spath,
+            verbose=verbose,
+            from_cwd=from_cwd,
+            dry_run=dry_run,
+            **kwargs,
+        )
+        symlink(spath, spath_cwd, from_cwd, verbose)
+
+    except Exception as e:
+        logging.error(
+            f"Error occurred while saving: {str(e)}"
+            f"Debug: Initial fpath = {inspect.stack()[1].filename}"
+            f"Debug: Final fpath = {fpath}"
+            f"Debug: fdir = {fdir}, fname = {fname}"
+            f"Debug: Final spath = {spath}"
+        )
 
 
 def symlink(spath, spath_cwd, from_cwd, verbose):
@@ -173,14 +293,6 @@ def symlink(spath, spath_cwd, from_cwd, verbose):
 
 
 def _save(obj, spath, verbose=True, from_cwd=False, dry_run=False, **kwargs):
-
-    # ## copy files
-    # is_copying_files = (
-    #     isinstance(obj, str) or mngs.gen.is_listed_X(obj, str)
-    # ) and (isinstance(spath, str) or mngs.gen.is_listed_X(spath, str))
-    # if is_copying_files:
-    #     mngs.general.copy_files(obj, spath)
-
     # csv
     if spath.endswith(".csv"):
         if isinstance(obj, (pd.Series, pd.DataFrame)):  # Series or DataFrame
@@ -194,21 +306,6 @@ def _save(obj, spath, verbose=True, from_cwd=False, dry_run=False, **kwargs):
             )
         if mngs.gen.is_listed_X(obj, pd.DataFrame):  # listed DataFrame
             _save_listed_dfs_as_csv(obj, spath, **kwargs)
-
-    # # csv
-    # if spath.endswith(".xlsx"):
-    #     if isinstance(obj, (pd.Series, pd.DataFrame)):  # Series or DataFrame
-    #         obj.to_csv(spath, **kwargs)
-
-    #     if mngs.gen.is_listed_X(obj, [int, float]):  # listed scalars
-    #         _save_listed_scalars_as_csv(
-    #             obj,
-    #             spath,
-    #             **kwargs,
-    #         )
-    #     if mngs.gen.is_listed_X(obj, pd.DataFrame):  # listed DataFrame
-    #         _save_listed_dfs_as_csv(obj, spath, **kwargs)
-
 
     # numpy
     elif spath.endswith(".npy"):
@@ -270,7 +367,6 @@ def _save(obj, spath, verbose=True, from_cwd=False, dry_run=False, **kwargs):
             )
         except Exception as e:
             print(e)
-            pass
 
     # mp4
     elif spath.endswith(".mp4"):

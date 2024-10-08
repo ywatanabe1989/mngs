@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-02 09:32:36 (ywatanabe)"
+# Time-stamp: "2024-10-05 18:56:18 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/_to_sigma.py
 
 
@@ -208,14 +208,16 @@ def format_plotting_args(record):
 
     elif method == "sns_boxplot":
         df = args
+        if id is not None:
+            df.columns = [f"{id}_{method}_{col}" for col in df.columns]
         return df
 
     elif method == "sns_heatmap":
-        df = args[0]
+        df = args
         return df
 
     elif method == "sns_histplot":
-        df=args
+        df = args
         return df
 
     elif method == "sns_kdeplot":

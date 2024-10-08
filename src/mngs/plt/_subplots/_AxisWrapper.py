@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-29 14:04:00 (ywatanabe)"
+# Time-stamp: "2024-10-07 21:19:31 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/AxisWrapper.py
 
 from collections import OrderedDict
@@ -169,7 +169,7 @@ class AxisWrapper:
         bacc=False,
         track=True,
         id=None,
-        **kwargs
+        **kwargs,
     ):
         # Method name
         method_name = "conf_mat"
@@ -191,7 +191,7 @@ class AxisWrapper:
                 bacc=bacc,
                 track=track,
                 id=id,
-                **kwargs
+                **kwargs,
             )
             bacc_val = None
 
@@ -297,10 +297,12 @@ class AxisWrapper:
         with self._no_tracking():
             self.axis.boxplot(data, **kwargs)
 
-        out = pd.DataFrame({
-            "data": _data,
-            "n": [n for _ in range(len(data))],
-            })
+        out = pd.DataFrame(
+            {
+                "data": _data,
+                "n": [n for _ in range(len(data))],
+            }
+        )
 
         # Tracking
         self._track(track, id, method_name, out, None)
@@ -352,11 +354,7 @@ class AxisWrapper:
 
         # Tracking
         out = pd.DataFrame(
-            {
-                "x": xs,
-                "kde": density,
-                "n": [len(data) for _ in range(len(xs))]
-            }
+            {"x": xs, "kde": density, "n": [len(data) for _ in range(len(xs))]}
         )
         self._track(track, id, method_name, out, None)
 
@@ -415,13 +413,13 @@ class AxisWrapper:
     def _sns_base_xyhue(
         self, method_name, *args, track=True, id=None, **kwargs
     ):
+        """Formats data passed to sns functions with (data=data, x=x, y=y) keyword arguments"""
         df = kwargs.get("data")
         x, y, hue = kwargs.get("x"), kwargs.get("y"), kwargs.get("hue")
 
         track_obj = (
             self._sns_prepare_xyhue(df, x, y, hue) if df is not None else None
         )
-
         self._sns_base(
             method_name,
             *args,
@@ -431,48 +429,33 @@ class AxisWrapper:
             **kwargs,
         )
 
-    # def _sns_prepare_xyhue(
-    #     self, data=None, x=None, y=None, hue=None, **kwargs
-    # ):
-    #     if hue is not None:
-    #         pivoted_data = data.pivot_table(
-    #             values=y,
-    #             index=data.index,
-    #             columns=[x, hue],
-    #             aggfunc="first",
-    #         )
-    #         pivoted_data.columns = [
-    #             f"{col[0]}-{col[1]}" for col in pivoted_data.columns
-    #         ]
-    #     else:
-    #         pivoted_data = data.pivot_table(
-    #             values=y, index=data.index, columns=x, aggfunc="first"
-    #         )
-    #         return pivoted_data
+    def _sns_prepare_xyhue(
+        self, data=None, x=None, y=None, hue=None, **kwargs
+    ):
+        """Returns obj to track"""
+        data = data.reset_index()
 
-    #     if x is None and y is None:
-    #         return data
-
-    #     elif x is None:
-    #         return data[[y]]
-
-    #     elif y is None:
-    #         return data[[x]]
-
-
-    def _sns_prepare_xyhue(self, data=None, x=None, y=None, hue=None, **kwargs):
         if hue is not None:
             if x is None and y is None:
+
                 return data
             elif x is None:
+
                 agg_dict = {}
                 for hh in data[hue].unique():
                     agg_dict[hh] = data.loc[data[hue] == hh, y]
                 df = mngs.pd.force_df(agg_dict)
                 return df
-                # return data[[y, hue]]
+
             elif y is None:
-                df = pd.concat([data.loc[data[hue] == hh, x] for hh in data[hue].unique()], axis=1)
+
+                df = pd.concat(
+                    [
+                        data.loc[data[hue] == hh, x]
+                        for hh in data[hue].unique()
+                    ],
+                    axis=1,
+                )
                 return df
             else:
                 pivoted_data = data.pivot_table(
@@ -488,10 +471,13 @@ class AxisWrapper:
         else:
             if x is None and y is None:
                 return data
+
             elif x is None:
                 return data[[y]]
+
             elif y is None:
                 return data[[x]]
+
             else:
                 return data.pivot_table(
                     values=y, index=data.index, columns=x, aggfunc="first"
@@ -507,21 +493,40 @@ class AxisWrapper:
 
     @sns_copy_doc
     def sns_boxplot(
-            self, data=None, x=None, y=None, strip=False, track=True, id=None, **kwargs
+        self,
+        data=None,
+        x=None,
+        y=None,
+        strip=False,
+        track=True,
+        id=None,
+        **kwargs,
     ):
         self._sns_base_xyhue(
             "sns_boxplot", data=data, x=x, y=y, track=track, id=id, **kwargs
         )
         if strip:
             strip_kwargs = kwargs.copy()
-            strip_kwargs.pop('notch', None)  # Remove boxplot-specific kwargs
-            strip_kwargs.pop('whis', None)
-            self.sns_stripplot(data=data, x=x, y=y, track=False, id=f"{id}_strip", **strip_kwargs)
-
+            strip_kwargs.pop("notch", None)  # Remove boxplot-specific kwargs
+            strip_kwargs.pop("whis", None)
+            self.sns_stripplot(
+                data=data,
+                x=x,
+                y=y,
+                track=False,
+                id=f"{id}_strip",
+                **strip_kwargs,
+            )
 
     @sns_copy_doc
-    def sns_heatmap(self, *args, track=True, id=None, **kwargs):
-        self._sns_base("sns_heatmap", *args, track=track, id=id, **kwargs)
+    def sns_heatmap(self, *args, xyz=False, track=True, id=None, **kwargs):
+        method_name = "sns_heatmap"
+        df = args[0]
+        if xyz:
+            df = mngs.pd.to_xyz(df)
+        self._sns_base(
+            method_name, *args, track=track, track_obj=df, id=id, **kwargs
+        )
 
     @sns_copy_doc
     def sns_histplot(
@@ -533,7 +538,15 @@ class AxisWrapper:
 
     @sns_copy_doc
     def sns_kdeplot(
-            self, data=None, x=None, y=None, xlim=None, ylim=None, track=True, id=None, **kwargs
+        self,
+        data=None,
+        x=None,
+        y=None,
+        xlim=None,
+        ylim=None,
+        track=True,
+        id=None,
+        **kwargs,
     ):
         if kwargs.get("hue"):
             hue_col = kwargs["hue"]
@@ -557,14 +570,13 @@ class AxisWrapper:
                 _data, lim = data[y], ylim
             self.kde(_data, xlim=lim, **kwargs)
 
-
     @sns_copy_doc
     def sns_pairplot(self, *args, track=True, id=None, **kwargs):
         self._sns_base("sns_pairplot", *args, track=track, id=id, **kwargs)
 
     @sns_copy_doc
     def sns_scatterplot(
-            self, data=None, x=None, y=None, track=True, id=None, **kwargs
+        self, data=None, x=None, y=None, track=True, id=None, **kwargs
     ):
         self._sns_base_xyhue(
             "sns_scatterplot",
@@ -577,24 +589,61 @@ class AxisWrapper:
         )
 
     @sns_copy_doc
-    def sns_swarmplot(self, data=None, x=None, y=None, track=True, id=None, **kwargs):
+    def sns_swarmplot(
+        self, data=None, x=None, y=None, track=True, id=None, **kwargs
+    ):
         self._sns_base_xyhue(
             "sns_swarmplot", data=data, x=x, y=y, track=track, id=id, **kwargs
         )
 
     @sns_copy_doc
-    def sns_stripplot(self, data=None, x=None, y=None, track=True, id=None, **kwargs):
+    def sns_stripplot(
+        self, data=None, x=None, y=None, track=True, id=None, **kwargs
+    ):
         self._sns_base_xyhue(
             "sns_stripplot", data=data, x=x, y=y, track=track, id=id, **kwargs
         )
 
+    # @sns_copy_doc
+    # def sns_violinplot(
+    #     self, data=None, x=None, y=None, track=True, id=None, **kwargs
+    # ):
+    #     self._sns_base_xyhue(
+    #         "sns_violinplot", data=data, x=x, y=y, track=track, id=id, **kwargs
+    #     )
+
     @sns_copy_doc
     def sns_violinplot(
-        self, data=None, x=None, y=None, track=True, id=None, **kwargs
+        self,
+        data=None,
+        x=None,
+        y=None,
+        track=True,
+        id=None,
+        half=False,
+        **kwargs,
     ):
-        self._sns_base_xyhue(
-            "sns_violinplot", data=data, x=x, y=y, track=track, id=id, **kwargs
-        )
+        if half:
+            with self._no_tracking():
+                self.axis = mngs.plt.ax.half_violin(
+                    self.axis, data=data, x=x, y=y, **kwargs
+                )
+        else:
+            self._sns_base_xyhue(
+                "sns_violinplot",
+                data=data,
+                x=x,
+                y=y,
+                track=track,
+                id=id,
+                **kwargs,
+            )
+
+        # Tracking
+        track_obj = self._sns_prepare_xyhue(data, x, y, kwargs.get("hue"))
+        self._track(track, id, "sns_violinplot", track_obj, kwargs)
+
+        return self.axis
 
     # @sns_copy_doc
     # def sns_violinplot(
@@ -638,11 +687,28 @@ class AxisWrapper:
     def sns_jointplot(self, *args, track=True, id=None, **kwargs):
         self._sns_base("sns_jointplot", *args, track=track, id=id, **kwargs)
 
+    # @sns_copy_doc
+    # def sns_half_violin(self, data=None, x=None, y=None, hue=None, track=True, id=None, **kwargs):
+    #     # Method name
+    #     method_name = "sns_half_violin"
+
+    #     # Plotting
+    #     with self._no_tracking():
+    #         self.axis = mngs.plt.half_violin(self.axis, data=data, x=x, y=y, hue=hue, **kwargs)
+
+    #     # Tracking
+    #     track_obj = self._sns_prepare_xyhue(data, x, y, hue)
+    #     self._track(track, id, method_name, track_obj, kwargs)
+
+    #     return self.axis
+
     ################################################################################
     ## Adjusting methods
     ################################################################################
-    def rotate_labels(self, x=30, y=30, x_ha='right', y_ha='center'):
-        self.axis = mngs.plt.ax.rotate_labels(self.axis, x=x, y=y, x_ha=x_ha, y_ha=y_ha)
+    def rotate_labels(self, x=30, y=30, x_ha="right", y_ha="center"):
+        self.axis = mngs.plt.ax.rotate_labels(
+            self.axis, x=x, y=y, x_ha=x_ha, y_ha=y_ha
+        )
 
     def legend(self, loc="upper left"):
         return self.axis.legend(loc=loc)
