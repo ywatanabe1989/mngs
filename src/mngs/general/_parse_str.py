@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-11 09:51:20 (ywatanabe)"
+# Time-stamp: "2024-10-11 09:53:27 (ywatanabe)"
 # File: _parse.py
 
 import re
 from typing import Dict, Union
+import logging
 
 def parse_str(string: str, expression: str) -> Dict[str, Union[str, int]]:
     """
@@ -46,7 +47,10 @@ def parse_str(string: str, expression: str) -> Dict[str, Union[str, int]]:
     match = re.match(pattern, string)
 
     if not match:
-        raise ValueError(f"String format does not match the given expression. \nString input: {string}\nExpression: {expression}")
+        logging.warning(f"String format does not match the given expression. \nString input: {string}\nExpression: {expression}")
+        return {}
+        # raise ValueError(f"String format does not match the given expression. \nString input: {string}\nExpression: {expression}")
+
 
     groups = match.groups()
     result = {}
