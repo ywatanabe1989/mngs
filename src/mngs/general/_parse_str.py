@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-10 22:53:29 (ywatanabe)"
+# Time-stamp: "2024-10-11 09:51:20 (ywatanabe)"
 # File: _parse.py
 
 import re
@@ -46,10 +46,7 @@ def parse_str(string: str, expression: str) -> Dict[str, Union[str, int]]:
     match = re.match(pattern, string)
 
     if not match:
-        raise ValueError("String format does not match the given expression")
-
-    if not match:
-        raise ValueError("String format does not match the given expression")
+        raise ValueError(f"String format does not match the given expression. \nString input: {string}\nExpression: {expression}")
 
     groups = match.groups()
     result = {}
