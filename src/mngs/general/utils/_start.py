@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-15 18:12:10 (ywatanabe)"
+# Time-stamp: "2024-10-10 19:56:30 (ywatanabe)"
 
 import inspect
 import os as _os
@@ -133,9 +133,10 @@ def start(
     CONFIGS["REL_SDIR"] = relative_sdir
     if verbose:
         print(f"\n{'-'*40}\n")
-        print(f"CONFIG:")
-        for k, v in CONFIGS.items():
-            print(f"\n{k}:\n{v}\n")
+        pprint(CONFIGS)
+        # print(f"CONFIG:")
+        # for k, v in CONFIGS.items():
+        #     print(f"\n{k}:\n{v}\n")
         print(f"\n{'-'*40}\n")
 
     # Logging (tee)

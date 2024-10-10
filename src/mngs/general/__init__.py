@@ -74,7 +74,7 @@ from .misc import (
     uq,
     wait_key,
 )
-
+from ._parse_str import parse_str
 # Utils
 from .system_ops._email import send_gmail
 from .system_ops._notify import notify
