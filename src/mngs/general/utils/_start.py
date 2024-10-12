@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-10 19:56:30 (ywatanabe)"
+# Time-stamp: "2024-10-13 01:01:38 (ywatanabe)"
 
 import inspect
 import os as _os
@@ -187,6 +187,13 @@ def start(
         matplotlib.use("Agg")
 
     CONFIGS = mngs.gen.DotDict(CONFIGS)
+
+    if verbose:
+        print(f"\n{'-'*40}\n")
+        pprint(CONFIGS)
+        # for k, v in CONFIGS.items():
+        #     print(f"\n{k}:\n{v}\n")
+        print(f"\n{'-'*40}\n")
 
     return CONFIGS, sys.stdout, sys.stderr, plt, CC
 

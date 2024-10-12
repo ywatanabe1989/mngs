@@ -1,47 +1,22 @@
-#!./env/bin/python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-29 15:12:11 (ywatanabe)"
+# Time-stamp: "2024-09-13 20:39:12 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_ChatGPT.py
 
 
-"""
-This script does XYZ.
-"""
-
-
-"""
-Imports
-"""
+"""Imports"""
 import os
 import sys
 
 import google.generativeai as genai
 import matplotlib.pyplot as plt
 import mngs
+from mngs.ai._gen_ai._BaseGenAI import BaseGenAI
 
-from ._BaseGenAI import BaseGenAI
-
-# sys.path = ["."] + sys.path
-# from scripts import utils, load
-
-"""
-Warnings
-"""
-# warnings.simplefilter("ignore", UserWarning)
+"""Functions & Classes"""
 
 
-"""
-Config
-"""
-# CONFIG = mngs.gen.load_configs()
-
-
-"""
-Functions & Classes
-"""
-
-
-class Gemini(BaseGenAI):
+class Google(BaseGenAI):
     def __init__(
         self,
         system_setting="",
@@ -52,7 +27,9 @@ class Gemini(BaseGenAI):
         n_keep=1,
         temperature=1.0,
         chat_history=None,
+        max_tokens=4096,
     ):
+
         super().__init__(
             system_setting=system_setting,
             model=model,
@@ -63,15 +40,18 @@ class Gemini(BaseGenAI):
             temperature=temperature,
             provider="Gemini",
             chat_history=chat_history,
+            max_tokens=max_tokens,
         )
+
         genai.configure(api_key=self.api_key)
+        # genai.configure(api_key=self.api_key)
 
     def _init_client(
         self,
     ):
         genai.configure(api_key=self.api_key)
         generation_config = genai.GenerationConfig(
-            temperature=self.temperature
+            temperature=self.temperature,
         )
         client = genai.GenerativeModel(
             self.model, generation_config=generation_config
@@ -88,6 +68,17 @@ class Gemini(BaseGenAI):
         self.output_tokens += response.usage_metadata.candidates_token_count
         out_text = response.text
         return out_text
+
+    # def _api_call_static(self):
+    #     prompt = self.history[-1]["content"]
+    #     response = self.client.send_message(prompt)
+    #     if response.usage_metadata:
+    #         self.input_tokens += response.usage_metadata.prompt_token_count
+    #         self.output_tokens += (
+    #             response.usage_metadata.candidates_token_count
+    #         )
+    #     out_text = response.text
+    #     return out_text
 
     def _api_call_stream(
         self,
@@ -111,20 +102,30 @@ class Gemini(BaseGenAI):
 
                 yield chunk.text
 
+    # def _api_call_stream(self):
+    #     prompt = self.history[-1]["content"]
+    #     responses = self.client.send_message(prompt, stream=True)
+    #     for chunk in responses:
+    #         if chunk:
+    #             if chunk.usage_metadata:
+    #                 self.input_tokens += (
+    #                     chunk.usage_metadata.prompt_token_count
+    #                 )
+    #                 self.output_tokens += (
+    #                     chunk.usage_metadata.candidates_token_count
+    #                 )
+    #             yield chunk.text
+
 
 def main():
-    pass
+    # ai = mngs.ai.GenAI("gpt-4o")
+    # ai = mngs.ai.GenAI("gemini-1.5-pro-latest", stream=False)
+    ai = mngs.ai.GenAI("gemini-1.5-flash-latest", stream=False)
+    # ai = mngs.ai.GenAI("gpt-4o", stream=False)
+    print(ai("hi"))
 
 
 if __name__ == "__main__":
-    # # Argument Parser
-    # import argparse
-    # parser = argparse.ArgumentParser(description='')
-    # parser.add_argument('--var', '-v', type=int, default=1, help='')
-    # parser.add_argument('--flag', '-f', action='store_true', default=False, help='')
-    # args = parser.parse_args()
-
-    # Main
     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
         sys, plt, verbose=False
     )

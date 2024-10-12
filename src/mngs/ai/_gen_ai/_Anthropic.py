@@ -1,17 +1,10 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-08-21 18:17:29 (ywatanabe)"
+# Time-stamp: "2024-09-13 20:10:40 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_ChatGPT.py
 
 
-"""
-This script does XYZ.
-"""
-
-
-"""
-Imports
-"""
+"""Imports"""
 import os
 import sys
 
@@ -21,40 +14,21 @@ import mngs
 
 from ._BaseGenAI import BaseGenAI
 
-# from mngs.gen import notify
+"""Functions & Classes"""
 
 
-# sys.path = ["."] + sys.path
-# from scripts import utils, load
-
-"""
-Warnings
-"""
-# warnings.simplefilter("ignore", UserWarning)
-
-
-"""
-Config
-"""
-# CONFIG = mngs.gen.load_configs()
-
-
-"""
-Functions & Classes
-"""
-
-
-class Claude(BaseGenAI):
+class Anthropic(BaseGenAI):
     def __init__(
         self,
         system_setting="",
-        api_key=os.getenv("CLAUDE_API_KEY"),
+        api_key=os.getenv("ANTHROPIC_API_KEY"),
         model="claude-3-opus-20240229",
         stream=False,
         seed=None,
         n_keep=1,
         temperature=1.0,
         chat_history=None,
+        max_tokens=4096,
     ):
         super().__init__(
             system_setting=system_setting,
@@ -63,8 +37,9 @@ class Claude(BaseGenAI):
             stream=stream,
             n_keep=n_keep,
             temperature=temperature,
-            provider="Claude",
+            provider="Anthropic",
             chat_history=chat_history,
+            max_tokens=max_tokens,
         )
 
     def _init_client(
@@ -80,7 +55,7 @@ class Claude(BaseGenAI):
     ):
         output = self.client.messages.create(
             model=self.model,
-            max_tokens=4096,
+            max_tokens=self.max_tokens,
             messages=self.history,
             temperature=self.temperature,
         )
@@ -95,7 +70,7 @@ class Claude(BaseGenAI):
 
         with self.client.messages.stream(
             model=self.model,
-            max_tokens=4096,
+            max_tokens=self.max_tokens,
             messages=self.history,
             temperature=self.temperature,
         ) as stream:

@@ -40,6 +40,7 @@ imports = [
     ('title_case', '.utils._title_case'),
     ('wrap', '.utils._wrap'),
     ('inspect_module', '._inspect_module'),
+    ("check_host", '._check_host')
 ]
 
 for names, module in imports:

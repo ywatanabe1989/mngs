@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-13 19:18:20 (ywatanabe)"
+# Time-stamp: "2024-09-13 20:04:57 (ywatanabe)"
 # /home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/PARAMS.py
 
 import pandas as pd
@@ -62,36 +62,36 @@ MODELS = pd.DataFrame(
             "name": "claude-3-5-sonnet-20240620",
             "input_cost": 3.00,
             "output_cost": 15.00,
-            "api_key_env": "CLAUDE_API_KEY",
-            "provider": "Claude",
+            "api_key_env": "ANTHROPIC_API_KEY",
+            "provider": "Anthropic",
         },
         {
             "name": "claude-3-opus-20240229",
             "input_cost": 15.00,
             "output_cost": 75.00,
-            "api_key_env": "CLAUDE_API_KEY",
-            "provider": "Claude",
+            "api_key_env": "ANTHROPIC_API_KEY",
+            "provider": "Anthropic",
         },
         {
             "name": "claude-3-haiku-20240307",
             "input_cost": 0.25,
             "output_cost": 1.25,
-            "api_key_env": "CLAUDE_API_KEY",
-            "provider": "Claude",
+            "api_key_env": "ANTHROPIC_API_KEY",
+            "provider": "Anthropic",
         },
         {
             "name": "gemini-1.5-pro-latest",
             "input_cost": 3.50,
             "output_cost": 10.50,
             "api_key_env": "GOOGLE_API_KEY",
-            "provider": "Gemini",
+            "provider": "Google",
         },
         {
             "name": "gemini-1.5-flash-latest",
             "input_cost": 0.15,
             "output_cost": 0.0375,
             "api_key_env": "GOOGLE_API_KEY",
-            "provider": "Gemini",
+            "provider": "Google",
         },
         {
             "name": "llama-3.1-sonar-small-128k-online",

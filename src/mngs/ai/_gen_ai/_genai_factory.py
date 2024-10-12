@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-13 19:17:53 (ywatanabe)"
+# Time-stamp: "2024-09-13 20:31:48 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/chat.py
 
 
@@ -8,8 +8,8 @@
 import os
 import random
 
-from ._Claude import Claude
-from ._Gemini import Gemini
+from ._Anthropic import Anthropic
+from ._Google import Google
 from ._Llama import Llama
 from ._OpenAI import OpenAI
 from ._Perplexity import Perplexity
@@ -37,6 +37,7 @@ def genai_factory(
         )
 
     provider = MODELS[MODELS.name == model].provider.iloc[0]
+
     model_class = globals()[provider]
 
     # Select a random API key from the list
@@ -133,21 +134,10 @@ if __name__ == "__main__":
     import matplotlib.pyplot as plt
     import mngs
 
-    # # Argument Parser
-    # import argparse
-    # parser = argparse.ArgumentParser(description='')
-    # parser.add_argument('--var', '-v', type=int, default=1, help='')
-    # parser.add_argument('--flag', '-f', action='store_true', default=False, help='')
-    # args = parser.parse_args()
-    # Main
     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
         sys, plt, verbose=False
     )
     test_all()
-    # out_static = main(stream=False, seed=42)
-    # out_static = main(stream=False, seed=42)
-
-    # out_stream = main(stream=True)
 
     mngs.gen.close(CONFIG, verbose=False, notify=False)
 
