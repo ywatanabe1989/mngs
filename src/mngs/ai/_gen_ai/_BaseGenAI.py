@@ -1,17 +1,13 @@
-#!./env/bin/python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-13 18:44:11 (ywatanabe)"
+# Time-stamp: "2024-09-13 20:37:08 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_BaseAI.py
 
 
-"""
-This script does XYZ.
-"""
+"""This script does XYZ."""
 
 
-"""
-Imports
-"""
+"""Imports"""
 
 import re
 import sys
@@ -25,24 +21,7 @@ from ._calc_cost import calc_cost
 from ._format_output_func import format_output_func
 from .PARAMS import MODELS
 
-# sys.path = ["."] + sys.path
-# from scripts import utils, load
-
-"""
-Warnings
-"""
-# warnings.simplefilter("ignore", UserWarning)
-
-
-"""
-Config
-"""
-# CONFIG = mngs.gen.load_configs()
-
-
-"""
-Functions & Classes
-"""
+"""Functions & Classes"""
 
 
 def to_stream(string):
@@ -96,14 +75,13 @@ class BaseGenAI(ABC):
         # Initialization
         self.reset(system_setting)
         self.history = chat_history if chat_history else []
-
         # Errror handling
         # Store Error Messages until the main function call
         # to send the error message as output
         self._error_messages = []
 
         try:
-            self.verify_model()
+            self.verify_model()  # fixme for Gemini
             self.client = self._init_client()
         except Exception as e:
             print(e)
@@ -266,6 +244,7 @@ class BaseGenAI(ABC):
     def verify_model(
         self,
     ):
+
         if self.model not in self.available_models:
             message = (
                 f"Specified model {self.model} is not supported for the API Key ({self.masked_api_key}). "
@@ -294,14 +273,6 @@ def main():
 
 
 if __name__ == "__main__":
-    # # Argument Parser
-    # import argparse
-    # parser = argparse.ArgumentParser(description='')
-    # parser.add_argument('--var', '-v', type=int, default=1, help='')
-    # parser.add_argument('--flag', '-f', action='store_true', default=False, help='')
-    # args = parser.parse_args()
-
-    # Main
     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
         sys, plt, verbose=False
     )
