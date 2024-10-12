@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
-# Time-stamp: "2024-10-11 08:02:16 (ywatanabe)"
+# Time-stamp: "2024-10-12 12:16:51 (ywatanabe)"
 
 # from . import io, path
 
 # # Core modules
-# try:
-#     from . import gen, general
-#     from ._sh import sh
-# except ImportError as e:
-#     print(f"Warning: Failed to import some core modules. Error: {e}")
+try:
+    # from . import gen, general
+    from ._sh import sh
+except ImportError as e:
+    print(f"Warning: Failed to import some core modules. Error: {e}")
 
 # Additional modules
-additional_modules = ['io', 'path', 'gen', 'general', 'sh', 'ai', 'dsp', 'gists', 'linalg', 'ml', 'nn', 'os', 'pd', 'plt', 'stats', 'torch', 'tex', 'typing']
+additional_modules = ['io', 'path', 'gen', 'general', 'ai', 'dsp', 'gists', 'linalg', 'ml', 'nn', 'os', 'pd', 'plt', 'stats', 'torch', 'tex', 'typing']
 for module in additional_modules:
     try:
         exec(f"from . import {module}")
