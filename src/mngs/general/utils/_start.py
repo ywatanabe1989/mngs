@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-<<<<<<< HEAD
-# Time-stamp: "2024-10-10 18:35:43 (ywatanabe)"
-=======
-# Time-stamp: "2024-10-10 19:56:30 (ywatanabe)"
->>>>>>> a3af025d0839ee245ab423e7ceac389669881898
+# Time-stamp: "2024-10-13 01:01:38 (ywatanabe)"
 
 import inspect
 import os as _os
@@ -135,8 +131,6 @@ def start(
     CONFIGS["START_TIME"] = start_time
     CONFIGS["SDIR"] = sdir
     CONFIGS["REL_SDIR"] = relative_sdir
-<<<<<<< HEAD
-=======
     if verbose:
         print(f"\n{'-'*40}\n")
         pprint(CONFIGS)
@@ -144,7 +138,6 @@ def start(
         # for k, v in CONFIGS.items():
         #     print(f"\n{k}:\n{v}\n")
         print(f"\n{'-'*40}\n")
->>>>>>> a3af025d0839ee245ab423e7ceac389669881898
 
     # Logging (tee)
     if sys is not None:
