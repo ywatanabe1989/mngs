@@ -257,6 +257,17 @@ def save(
             print(mngs.gen.ct(f"\n(dry run) Saved to: {spath}", c="yellow"))
             return
 
+<<<<<<< HEAD
+    _save(
+        obj,
+        spath,
+        verbose=verbose,
+        from_cwd=from_cwd,
+        dry_run=dry_run,
+        **kwargs,
+    )
+    symlink(spath, spath_cwd, from_cwd, verbose)
+=======
         # Makes directory
         if makedirs:
             os.makedirs(os.path.dirname(spath), exist_ok=True)
@@ -279,6 +290,7 @@ def save(
             f"Debug: fdir = {fdir}, fname = {fname}"
             f"Debug: Final spath = {spath}"
         )
+>>>>>>> 52cab71ed8216581f79a5996d1efd286b0b2b31f
 
 
 def symlink(spath, spath_cwd, from_cwd, verbose):
