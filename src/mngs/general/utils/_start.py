@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-12 03:49:33 (ywatanabe)"
+# Time-stamp: "2024-10-10 19:56:30 (ywatanabe)"
 
 import inspect
 import os as _os
@@ -133,9 +133,10 @@ def start(
     CONFIGS["REL_SDIR"] = relative_sdir
     if verbose:
         print(f"\n{'-'*40}\n")
-        print(f"CONFIG:")
-        for k, v in CONFIGS.items():
-            print(f"\n{k}:\n{v}\n")
+        pprint(CONFIGS)
+        # print(f"CONFIG:")
+        # for k, v in CONFIGS.items():
+        #     print(f"\n{k}:\n{v}\n")
         print(f"\n{'-'*40}\n")
 
     # Logging (tee)
@@ -170,11 +171,11 @@ def start(
             fig_scale=fig_scale,
             dpi_display=dpi_display,
             dpi_save=dpi_save,
-            font_size_base=font_size_base,
-            font_size_title=font_size_title,
-            font_size_axis_label=font_size_axis_label,
-            font_size_tick_label=font_size_tick_label,
-            font_size_legend=font_size_legend,
+            # font_size_base=font_size_base,
+            # font_size_title=font_size_title,
+            # font_size_axis_label=font_size_axis_label,
+            # font_size_tick_label=font_size_tick_label,
+            # font_size_legend=font_size_legend,
             hide_top_right_spines=hide_top_right_spines,
             alpha=alpha,
             line_width=line_width,

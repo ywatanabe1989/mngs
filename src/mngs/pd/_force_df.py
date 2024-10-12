@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-09 17:29:05 (ywatanabe)"
+# Time-stamp: "2024-09-29 05:55:52 (ywatanabe)"
 # /home/ywatanabe/proj/_mngs_repo_openhands/src/mngs/pd/_force_df.py
 
 import numpy as np
 import pandas as pd
-
+import mngs
 
 # def force_df(permutable_dict, filler=""):
 def force_df(permutable_dict, filler=np.nan):
+
+    if mngs.gen.is_listed_X(permutable_dict, pd.Series):
+        permutable_dict = [sr.to_dict() for sr in permutable_dict]
     ## Deep copy
     permutable_dict = permutable_dict.copy()
 

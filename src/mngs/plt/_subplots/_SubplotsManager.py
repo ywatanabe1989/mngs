@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-08-30 01:41:03 (ywatanabe)"
+# Time-stamp: "2024-09-23 20:52:51 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/SubplotsManager.py
 
 from collections import OrderedDict
@@ -78,7 +78,7 @@ class SubplotsManager:
         """Initialize the SubplotsManager with an empty plot history."""
         self._subplots_manager_history = OrderedDict()
 
-    def __call__(self, *args, track=True, **kwargs):
+    def __call__(self, *args, track=True, sharex=True, sharey=True, **kwargs):
         """
         Create subplots and wrap the axes with AxisWrapper.
 
@@ -87,7 +87,7 @@ class SubplotsManager:
             in the same manner with matplotlib.pyplot.subplots.
         """
 
-        fig, axes = plt.subplots(*args, **kwargs)
+        fig, axes = plt.subplots(*args, sharex=sharex, sharey=sharey, **kwargs)
 
         # Fig
         fig = FigWrapper(fig)
@@ -98,7 +98,8 @@ class SubplotsManager:
 
         if axes_orig_shape == (1,):
             ax_wrapped = AxisWrapper(fig, axes[0], track)
-            fig.axes = [ax_wrapped]
+            # fig.axes = [ax_wrapped]
+            fig.axes = np.array([ax_wrapped])
             return fig, ax_wrapped
 
         else:
@@ -112,36 +113,6 @@ class SubplotsManager:
             axes = AxesWrapper(fig, axes)
             fig.axes = axes
             return fig, axes
-
-    # @property
-    # def history(self):
-    #     """
-    #     Get the sorted plot history.
-
-    #     Returns:
-    #         dict: The sorted plot history.
-    #     """
-    #     return {
-    #         k: self._subplots_manager_history[k]
-    #         for k in self._subplots_manager_history
-    #     }
-
-    # def reset_history(self):
-    #     """Reset the plot history to an empty state."""
-    #     self._subplots_manager_history = OrderedDict()
-
-    # @property
-    # def to_sigma(self):
-    #     """
-    #     Convert the plot history data to a SigmaPlot-compatible format DataFrame.
-
-    #     Returns:
-    #         DataFrame: The plot history in SigmaPlot format.
-    #     """
-    #     df = _to_sigma(self.history)
-    #     self.reset_history()
-
-    #     return df
 
 
 subplots = SubplotsManager()
