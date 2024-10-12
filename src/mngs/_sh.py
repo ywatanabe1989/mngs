@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-05 01:40:55 (ywatanabe)"
+# Time-stamp: "2024-10-11 08:46:26 (ywatanabe)"
 # Author: Yusuke Watanabe (ywata1989@gmail.com)
 
 
@@ -13,7 +13,6 @@ This script does XYZ.
 Imports
 """
 import subprocess
-
 import mngs
 
 """

@@ -113,6 +113,7 @@ def load(lpath, show=False, verbose=False, **kwargs):
         elif extension in [".txt", ".log", ".event"]:
             with open(lpath, "r") as f:
                 obj = f.read().splitlines()
+                # obj = tqdm(f.read().splitlines(), desc=f"Reading {lpath}")
         # Markdown
         elif extension == ".md":
             obj = load_markdown(lpath, **kwargs)
