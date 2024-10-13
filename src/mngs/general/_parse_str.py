@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-11 09:53:27 (ywatanabe)"
+# Time-stamp: "2024-10-13 02:36:52 (ywatanabe)"
 # File: _parse.py
 
 import re
@@ -42,6 +42,11 @@ def parse_str(string: str, expression: str) -> Dict[str, Union[str, int]]:
     >>> parse_str(string, expression)
     # ValueError: Inconsistent values for placeholder 'HH'
     """
+
+    # Formatting
+    string = string.replace("/./", "/")
+    expression = expression.replace("f\"", "").replace("\"", "")
+
     placeholders = re.findall(r'{(\w+)}', expression)
     pattern = re.sub(r'{(\w+)}', '([^/]+)', expression)
     match = re.match(pattern, string)

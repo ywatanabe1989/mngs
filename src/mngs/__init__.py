@@ -1,34 +1,54 @@
 #!/usr/bin/env python3
-# Time-stamp: "2024-10-13 02:16:19 (ywatanabe)"
+# Time-stamp: "2024-10-13 19:21:10 (ywatanabe)"
 
 # from . import io, path
+import sys, os
 
-# # Core modules
-try:
-    # from . import gen, general
-    from ._sh import sh
-except ImportError as e:
-    print(f"Warning: Failed to import some core modules. Error: {e}")
+from .gen import suppress_output
 
-# Additional modules
-additional_modules = ['io', 'path', 'gen', 'general', 'ai', 'dsp', 'gists', 'linalg', 'ml', 'nn', 'os', 'pd', 'plt', 'stats', 'torch', 'tex', 'typing', "res", "web"]
-for module in additional_modules:
+suppress = os.getenv("MNGS_SUPPRESS_IMPORTING_MESSAGES", "").lower() == "true"
+
+with suppress_output(suppress=suppress):
+    # Core modules
     try:
-        exec(f"from . import {module}")
+        from ._sh import sh
     except ImportError as e:
-        print(f"Warning: Failed to import {module}. Error: {e}") #
+        pass # print(f"Warning: Failed to import some core modules. Error: {e}")
+
+    # Additional modules
+    additional_modules = [
+        "io",
+        "path",
+        "gen",
+        "general",
+        "ai",
+        "dsp",
+        "gists",
+        "linalg",
+        "ml",
+        "nn",
+        "os",
+        "pd",
+        "plt",
+        "stats",
+        "torch",
+        "tex",
+        "typing",
+        "res",
+        "web",
+    ]
+    for module in additional_modules:
+        try:
+            exec(f"from . import {module}")
+        except ImportError as e:
+            pass # print(f"Warning: Failed to import {module}. Error: {e}")
 
 
-from ._sh import sh
-# try:
-#     from . import res
-# except ImportError as e:
-#     print(f"Warning: Failed to import res. Error: {e}")
+    from ._sh import sh
 
-# try:
-#     from . import web
-# except ImportError as e:
-#     print(f"Warning: Failed to import web. Error: {e}")
+
+# Modules
+from .gen._print_config import print_config
 
 __copyright__ = "Copyright (C) 2024 Yusuke Watanabe"
 __version__ = "1.8.0"

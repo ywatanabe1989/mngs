@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-11 08:40:22 (ywatanabe)"
+# Time-stamp: "2024-10-13 19:04:49 (ywatanabe)"
 # File: 2024-10-02 23:28:44
 
 import os
@@ -30,7 +30,7 @@ for filename in os.listdir(current_dir):
                     if not name.startswith("_"):
                         globals()[name] = obj
         except ImportError as e:
-            print(f"Warning: Failed to import {module_name}. Error: {e}")
+            pass # print(f"Warning: Failed to import {module_name}. Error: {e}")
 
 # Clean up temporary variables
 del os, importlib, inspect, current_dir, filename, module_name, module, name, obj

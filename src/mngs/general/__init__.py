@@ -40,14 +40,15 @@ imports = [
     ('title_case', '.utils._title_case'),
     ('wrap', '.utils._wrap'),
     ('inspect_module', '._inspect_module'),
-    ("check_host", '._check_host')
+    ("check_host", '._check_host'),
+    ("print_config", '._print_config'),
 ]
 
 for names, module in imports:
     try:
         exec(f"from {module} import {names}")
     except ImportError as e:
-        print(f"Warning: Failed to import {names} from {module}.")
+        pass # print(f"Warning: Failed to import {names} from {module}.")
 
 # Placeholder for unused variables
 _ = None

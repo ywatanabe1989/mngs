@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-11 08:37:24 (ywatanabe)"
+# Time-stamp: "2024-10-13 19:06:11 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/pd/__init__.py
 
 import os
@@ -30,7 +30,7 @@ for filename in os.listdir(current_dir):
                     if not name.startswith("_"):
                         globals()[name] = obj
         except ImportError as e:
-            print(f"Warning: Failed to import {module_name}.")
+            pass # print(f"Warning: Failed to import {module_name}.")
 
 # Clean up temporary variables
 del (

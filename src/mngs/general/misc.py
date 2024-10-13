@@ -1083,7 +1083,7 @@ class ThreadWithReturnValue(threading.Thread):
 
 
 @contextmanager
-def suppress_output():
+def suppress_output(suppress=True):
     """
     A context manager that suppresses stdout and stderr.
 
@@ -1091,12 +1091,16 @@ def suppress_output():
         with suppress_output():
             print("This will not be printed to the console.")
     """
-    # Open a file descriptor that points to os.devnull (a black hole for data)
-    with open(os.devnull, "w") as fnull:
-        # Temporarily redirect stdout and stderr to the file descriptor fnull
-        with redirect_stdout(fnull), redirect_stderr(fnull):
-            # Yield control back to the context block
-            yield
+    if suppress:
+        # Open a file descriptor that points to os.devnull (a black hole for data)
+        with open(os.devnull, "w") as fnull:
+            # Temporarily redirect stdout and stderr to the file descriptor fnull
+            with redirect_stdout(fnull), redirect_stderr(fnull):
+                # Yield control back to the context block
+                yield
+    else:
+        # If suppress is False, just yield without redirecting output
+        yield
 
 
 quiet = suppress_output
