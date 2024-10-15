@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-29 10:59:21 (ywatanabe)"
+# Time-stamp: "2024-10-15 14:12:55 (ywatanabe)"
 
 """
 This script defines the ModulationIndex module.
@@ -14,7 +14,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-
+import warnings
 
 # Functions
 class ModulationIndex(nn.Module):
@@ -126,9 +126,10 @@ class ModulationIndex(nn.Module):
         MI = MI.mean(axis=i_segment)
 
         if MI.isnan().any():
-            raise ValueError(
-                "NaN values detected in Modulation Index calculation."
-            )
+            warnings.warn("NaN values detected in Modulation Index calculation.")
+            # raise ValueError(
+            #     "NaN values detected in Modulation Index calculation."
+            # )
 
         return MI
 

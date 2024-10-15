@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-10 21:38:44 (ywatanabe)"
+# Time-stamp: "2024-10-15 20:07:48 (ywatanabe)"
 # /home/ywatanabe/proj/_mngs_repo_openhands/src/mngs/general/system_ops/_email.py
 
 import os
@@ -27,7 +27,12 @@ def send_gmail(
 ):
     if ID == "auto":
         ID = mngs.gen.gen_ID()
-        subject = f"{subject} (ID: {ID})"
+
+    if ID:
+        if subject:
+            subject = f"{subject} (ID: {ID})"
+        else:
+            subject = f"ID: {ID}"
 
     try:
         server = smtplib.SMTP("smtp.gmail.com", 587)

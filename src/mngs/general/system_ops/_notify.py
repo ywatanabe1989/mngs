@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-11 17:44:58 (ywatanabe)"
+# Time-stamp: "2024-10-15 20:13:16 (ywatanabe)"
 # /home/ywatanabe/proj/_mngs_repo_openhands/src/mngs/general/system_ops/_notify.py
 
 """This script does XYZ."""
@@ -43,6 +43,18 @@ def get_git_branch():
     except Exception as e:
         return "main"
 
+def gen_footer(sender, script_name, mngs, branch):
+    return \
+f"""
+
+{'-'*30}
+Sent via
+- Host: {sender}
+- Script: {script_name}
+- Source: mngs v{mngs.__version__} (github.com/ywatanabe1989/mngs/blob/{branch}/src/mngs/general/system_ops/_notify.py)
+{'-'*30}"""
+
+# This is an automated system notification. If received outside working hours, please disregard.
 
 def notify(
     subject="",
@@ -65,24 +77,16 @@ def notify(
         script_name = (
             os.path.basename(frames[-1].filename) if frames else "(Not found)"
         )
-    if (script_name == "-c") or (script_name.endswith(".py")):
+    if (script_name == "-c") or (not script_name.endswith(".py")):
         script_name = "`$ python -c ...`"
 
     sender = f"{get_username()}@{get_hostname()}"
     branch = get_git_branch()
-    footer = f"""
-
-{'-'*30}
-This is an automated system notification. If received outside working hours, please disregard.
-
-Sent via
-- Host: {sender}
-- Script: {script_name}
-- Source: mngs v{mngs.__version__} (github.com/ywatanabe1989/mngs/blob/{branch}/src/mngs/general/system_ops/_notify.py)
-{'-'*30}"""
+    footer = gen_footer(sender, script_name, mngs, branch)
 
     full_message = message + footer
-    full_subject = f"{subject}"
+    full_subject = f"{script_name} - {subject}" if subject else f"{script_name}"
+
 
     if sender_gmail is None or sender_password is None:
         print(
@@ -110,6 +114,8 @@ Sent via
 
 if __name__ == "__main__":
     notify(verbose=True)
+
+    # python -c "import mngs; mngs.gen.notify()"
 
 
 # # Example in shell
