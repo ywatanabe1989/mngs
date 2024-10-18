@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+<<<<<<< HEAD
 # Time-stamp: "2024-10-17 09:34:20 (ywatanabe)"
+=======
+# Time-stamp: "2024-10-18 16:58:53 (ywatanabe)"
+>>>>>>> 3522ec23cafd94e15544d8989005a2dca8da96db
 
 import os
 from datetime import datetime
@@ -59,11 +63,11 @@ def close(CONFIG, message=":)", notify=True, verbose=True):
         print(e)
 
     # RUNNING to FINISHED
-    finish(CONFIG["SDIR"])
+    running2finished(CONFIG["SDIR"])
 
 
-def finish(src_dir, remove_src_dir=True):
-    dest_dir = src_dir.replace("RUNNING/", "FINISHED/")
+def running2finished(src_dir, remove_src_dir=True):
+    dest_dir = src_dir.replace("RUNNING/", "FINISHEDED/")
     os.makedirs(dest_dir, exist_ok=True)
     try:
         os.rename(src_dir, dest_dir)
