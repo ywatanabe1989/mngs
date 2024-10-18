@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-18 16:50:00 (ywatanabe)"
+# Time-stamp: "2024-10-18 16:55:41 (ywatanabe)"
 # /home/ywatanabe/proj/_mngs_repo_openhands/src/mngs/general/system_ops/_notify.py
 
 """This script does XYZ."""
@@ -212,25 +212,3 @@ if __name__ == "__main__":
 # # { main "$@"; } 2>&1 | tee "$LOG_FILE"
 
 # # EOF
-
-
-Hi Aggi,
-
-Thank you very much for your offer. I appreciate your assistance.
-
-If the following conditions are acceptable, I will proceed with registering you, Agnieszka Markiewicz, as an authoried person:
-
-Pickup spot:
-FOOTSCRAY WEST LPO, WEST FOOTSCRAY VIC Post Office
-528 Barkly St, West Footscray VIC 3012
-
-Destination:
-Yusuke Watanabe
-17 Wattle Road, Maidstone, VIC 3012
-
-Please confirm if these details are correct and if you're comfortable with the arrangement.
-
-Best regards,
-Yusuke Watanabe
-
-Thank you very much for your multiple times of reliable support, Aggi. The due date decided by the post office is 30 Oct. Please feel free to schedule the task at your convenience.
