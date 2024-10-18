@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-19 03:06:43 (ywatanabe)"
+# Time-stamp: "2024-10-19 03:10:30 (ywatanabe)"
 
 import os
 from datetime import datetime
@@ -58,8 +58,8 @@ def close(CONFIG, message=":)", notify=True, verbose=True, sys=None):
     except Exception as e:
         print(e)
 
-    # RUNNING to FINISHED
-    finish(CONFIG["SDIR"])
+    # RUNNING to RUNNING2FINISHEDED
+    running2finished(CONFIG["SDIR"])
 
     try:
         sys.stdout.close()
@@ -68,7 +68,7 @@ def close(CONFIG, message=":)", notify=True, verbose=True, sys=None):
         pass
 
 
-def finish(src_dir, remove_src_dir=True):
+def running2finished(src_dir, remove_src_dir=True):
     dest_dir = src_dir.replace("RUNNING/", "FINISHED/")
     os.makedirs(dest_dir, exist_ok=True)
     try:
