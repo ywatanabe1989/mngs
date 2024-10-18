@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-18 17:01:19 (ywatanabe)"
+# Time-stamp: "2024-10-18 17:03:21 (ywatanabe)"
 # /home/ywatanabe/proj/_mngs_repo_openhands/src/mngs/general/system_ops/_notify.py
 
 """This script does XYZ."""
@@ -43,9 +43,9 @@ def get_git_branch():
     except Exception as e:
         return "main"
 
+
 def gen_footer(sender, script_name, mngs, branch):
-    return \
-f"""
+    return f"""
 
 {'-'*30}
 Sent via
@@ -54,7 +54,9 @@ Sent via
 - Source: mngs v{mngs.__version__} (github.com/ywatanabe1989/mngs/blob/{branch}/src/mngs/general/system_ops/_notify.py)
 {'-'*30}"""
 
+
 # This is an automated system notification. If received outside working hours, please disregard.
+
 
 def notify(
     subject="",
@@ -86,7 +88,11 @@ def notify(
     footer = gen_footer(sender, script_name, mngs, branch)
 
     full_message = message + footer
-    full_subject = f"{script_name}—{subject}" if subject and (script_name != FAKE_PYTHON_SCRIPT_NAME) else f"{subject}"
+    full_subject = (
+        f"{script_name}—{subject}"
+        if subject and (script_name != FAKE_PYTHON_SCRIPT_NAME)
+        else f"{subject}"
+    )
 
     if sender_gmail is None or sender_password is None:
         print(
