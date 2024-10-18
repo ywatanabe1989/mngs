@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-19 04:26:32 (ywatanabe)"
+# Time-stamp: "2024-10-19 04:40:35 (ywatanabe)"
 
 import os
 from datetime import datetime
@@ -10,6 +10,7 @@ from time import sleep
 import mngs
 import time
 import shutil
+import re
 
 def format_diff_time(diff_time):
     # Get total seconds from the timedelta object
@@ -48,6 +49,16 @@ def save_configs(CONFIG):
     )
     mngs.io.save(CONFIG, CONFIG["SDIR"] + "CONFIGS/CONFIG.yaml", verbose=False)
 
+def escape_ANSI_from_log_files(log_files):
+    ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
+
+    # ANSI code escape
+    for f in log_files:
+        with open(f, 'r', encoding='utf-8') as file:
+            content = file.read()
+        cleaned_content = ansi_escape.sub('', content)
+        with open(f, 'w', encoding='utf-8') as file:
+            file.write(cleaned_content)
 
 def close(CONFIG, message=":)", notify=True, verbose=True, sys=None):
     CONFIG = CONFIG.to_dict()
@@ -55,43 +66,41 @@ def close(CONFIG, message=":)", notify=True, verbose=True, sys=None):
     CONFIG = process_timestamp(CONFIG, verbose=verbose)
 
     save_configs(CONFIG)
-
     mngs.io.flush(sys=sys)
 
     # RUNNING to RUNNING2FINISHEDED
     running2finished(CONFIG["SDIR"])
-
+    CONFIG["SDIR"] = CONFIG["SDIR"].replace("RUNNING", "FINISHED")
     mngs.io.flush(sys=sys)
 
-    try:
-        if CONFIG.get("DEBUG", False):
-            message = f"[DEBUG]\n" + message
-        if notify:
+    # ANSI code escape
+    log_files = glob(CONFIG["SDIR"] + "logs/*.log")
+    escape_ANSI_from_log_files(log_files)
+
+    if notify:
+        try:
+            message = f"[DEBUG]\n" + str(message) if CONFIG.get("DEBUG", False) else str(message)
             mngs.gen.notify(
                 message=message,
                 ID=CONFIG["ID"],
-                attachment_paths=glob(CONFIG["SDIR"].replace("RUNNING", "FINISHED") + "logs/*.log"),
+                attachment_paths=log_files,
                 verbose=verbose,
             )
             mngs.io.flush(sys=sys)
-    except Exception as e:
-        print(e)
+        except Exception as e:
+            print(e)
 
-    finally:
-        # Close open file handles
-        try:
-            sys.stdout.close()
-            sys.stderr.close()
-        except:
-            pass
+    try:
+        sys.stdout.close()
+        sys.stderr.close()
+    except:
+        pass
 
 
 def running2finished(src_dir, remove_src_dir=True, max_wait=60):
     dest_dir = src_dir.replace("RUNNING/", "FINISHED/")
     os.makedirs(dest_dir, exist_ok=True)
     try:
-        # Close any open file handles (implement this part based on your specific needs)
-        # ...
 
         # Copy files individually
         for item in os.listdir(src_dir):
