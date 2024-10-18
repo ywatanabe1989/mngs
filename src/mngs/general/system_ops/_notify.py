@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-18 16:55:41 (ywatanabe)"
+# Time-stamp: "2024-10-18 16:57:18 (ywatanabe)"
 # /home/ywatanabe/proj/_mngs_repo_openhands/src/mngs/general/system_ops/_notify.py
 
 """This script does XYZ."""
@@ -66,7 +66,7 @@ def notify(
     log_paths=None,
     verbose=False,
 ):
-    FAKE_PYTHON_SCRIPT_NAME = `$ python -c ...`
+    FAKE_PYTHON_SCRIPT_NAME = "$ python -c ..."
     sender_gmail = os.getenv("MNGS_SENDER_GMAIL")
     sender_password = os.getenv("MNGS_SENDER_GMAIL_PASSWORD")
     recipient_email = recipient_email or os.getenv("MNGS_RECIPIENT_GMAIL")
