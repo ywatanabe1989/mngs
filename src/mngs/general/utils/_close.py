@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-15 20:09:18 (ywatanabe)"
+# Time-stamp: "2024-10-17 09:34:20 (ywatanabe)"
 
 import os
 from datetime import datetime
@@ -47,7 +47,7 @@ def close(CONFIG, message=":)", notify=True, verbose=True):
     try:
         if CONFIG.get("DEBUG", False):
             message = f"[DEBUG]\n" + message
-        sleep(1)
+        sleep(3)
         if notify:
             mngs.gen.notify(
                 message=message,
