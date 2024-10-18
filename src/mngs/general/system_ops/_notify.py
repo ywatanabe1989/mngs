@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-18 16:57:18 (ywatanabe)"
+# Time-stamp: "2024-10-18 17:01:19 (ywatanabe)"
 # /home/ywatanabe/proj/_mngs_repo_openhands/src/mngs/general/system_ops/_notify.py
 
 """This script does XYZ."""
@@ -86,7 +86,7 @@ def notify(
     footer = gen_footer(sender, script_name, mngs, branch)
 
     full_message = message + footer
-    full_subject = f"{script_name}—{subject}" if subject is not FAKE_PYTHON_SCRIPT_NAME else f"{script_name}"
+    full_subject = f"{script_name}—{subject}" if subject and (script_name != FAKE_PYTHON_SCRIPT_NAME) else f"{subject}"
 
     if sender_gmail is None or sender_password is None:
         print(
