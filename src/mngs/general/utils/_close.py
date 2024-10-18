@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-<<<<<<< HEAD
-# Time-stamp: "2024-10-18 15:25:24 (ywatanabe)"
-=======
-# Time-stamp: "2024-10-15 20:09:18 (ywatanabe)"
->>>>>>> c4a1b445c2c24675875fcaf5d832a18732a72cfa
+# Time-stamp: "2024-10-18 16:58:53 (ywatanabe)"
 
 import os
 from datetime import datetime
