@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-18 21:16:06 (ywatanabe)"
+# Time-stamp: "2024-10-18 21:16:57 (ywatanabe)"
 # /home/ywatanabe/proj/_mngs_repo_openhands/src/mngs/general/system_ops/_notify.py
 
 """This script does XYZ."""
@@ -65,7 +65,7 @@ def notify(
     sender_name=None,
     recipient_email=None,
     cc=None,
-    log_paths=None,
+    attachment_paths=None,
     verbose=False,
 ):
     FAKE_PYTHON_SCRIPT_NAME = "$ python -c ..."
@@ -113,7 +113,7 @@ def notify(
         sender_name=sender_name,
         cc=cc,
         ID=ID,
-        attachment_file_paths=log_paths,
+        attachment_paths=attachment_paths,
         verbose=verbose,
     )
 

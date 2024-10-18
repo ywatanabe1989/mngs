@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-18 21:14:37 (ywatanabe)"
+# Time-stamp: "2024-10-18 21:20:01 (ywatanabe)"
 # /home/ywatanabe/proj/_mngs_repo_openhands/src/mngs/general/system_ops/_email.py
 
 import os
@@ -22,7 +22,7 @@ def send_gmail(
     sender_name=None,
     cc=None,
     ID=None,
-    attachment_file_paths=None,
+    attachment_paths=None,
     verbose=True,
 ):
     if ID == "auto":
@@ -54,8 +54,8 @@ def send_gmail(
         gmail_body = MIMEText(message, "plain")
         gmail.attach(gmail_body)
 
-        if attachment_file_paths:
-            for path in attachment_file_paths:
+        if attachment_paths:
+            for path in attachment_paths:
                 mime_type, _ = mimetypes.guess_type(path)
                 if mime_type is None:
                     mime_type = 'application/octet-stream'
@@ -72,8 +72,8 @@ def send_gmail(
                     )
                     gmail.attach(part)
 
-        # if attachment_file_paths:
-        #     for path in attachment_file_paths:
+        # if attachment_paths:
+        #     for path in attachment_paths:
         #         with open(path, "rb") as file:
         #             part = MIMEBase("application", "octet-stream")
         #             part.set_payload(file.read())

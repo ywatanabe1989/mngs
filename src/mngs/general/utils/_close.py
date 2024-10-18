@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-18 17:05:19 (ywatanabe)"
+# Time-stamp: "2024-10-18 21:17:39 (ywatanabe)"
 
 import os
 from datetime import datetime
@@ -47,23 +47,23 @@ def close(CONFIG, message=":)", notify=True, verbose=True):
     try:
         if CONFIG.get("DEBUG", False):
             message = f"[DEBUG]\n" + message
-        sleep(3)
+        sleep(1)
         if notify:
             mngs.gen.notify(
                 message=message,
                 ID=CONFIG["ID"],
-                log_paths=glob(CONFIG["SDIR"] + "logs/*.log"),
+                attachment_paths=glob(CONFIG["SDIR"] + "logs/*.log"),
                 verbose=verbose,
             )
     except Exception as e:
         print(e)
 
     # RUNNING to FINISHED
-    running2finished(CONFIG["SDIR"])
+    finish(CONFIG["SDIR"])
 
 
-def running2finished(src_dir, remove_src_dir=True):
-    dest_dir = src_dir.replace("RUNNING/", "FINISHEDED/")
+def finish(src_dir, remove_src_dir=True):
+    dest_dir = src_dir.replace("RUNNING/", "FINISHED/")
     os.makedirs(dest_dir, exist_ok=True)
     try:
         os.rename(src_dir, dest_dir)
