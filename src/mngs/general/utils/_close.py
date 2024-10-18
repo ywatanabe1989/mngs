@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-19 03:10:30 (ywatanabe)"
+# Time-stamp: "2024-10-19 04:26:32 (ywatanabe)"
 
 import os
 from datetime import datetime
@@ -8,7 +8,8 @@ from glob import glob
 from time import sleep
 
 import mngs
-
+import time
+import shutil
 
 def format_diff_time(diff_time):
     # Get total seconds from the timedelta object
@@ -23,64 +24,133 @@ def format_diff_time(diff_time):
     diff_time_str = f"{hours:02d}:{minutes:02d}:{seconds:02d}"
     return diff_time_str
 
+def process_timestamp(CONFIG, verbose=True):
+    try:
+        CONFIG["END_TIME"] = datetime.now()
+        CONFIG["RUN_TIME"] = format_diff_time(
+            CONFIG["END_TIME"] - CONFIG["START_TIME"]
+        )
+        if verbose:
+            print()
+            print(f"START TIME: {CONFIG['START_TIME']}")
+            print(f"END TIME: {CONFIG['END_TIME']}")
+            print(f"RUN TIME: {CONFIG['RUN_TIME']}")
+            print()
+
+    except Exception as e:
+        print(e)
+
+    return CONFIG
+
+def save_configs(CONFIG):
+    mngs.io.save(
+        CONFIG, CONFIG["SDIR"] + "CONFIGS/CONFIG.pkl", verbose=False
+    )
+    mngs.io.save(CONFIG, CONFIG["SDIR"] + "CONFIGS/CONFIG.yaml", verbose=False)
+
 
 def close(CONFIG, message=":)", notify=True, verbose=True, sys=None):
     CONFIG = CONFIG.to_dict()
 
-    try:
-        CONFIG["END_TIME"] = datetime.now()
-        CONFIG["SPENT_TIME"] = format_diff_time(
-            CONFIG["END_TIME"] - CONFIG["START_TIME"]
-        )
-        if verbose:
-            print(f"\nEND TIME: {CONFIG['END_TIME']}")
-            print(f"\nSPENT TIME: {CONFIG['SPENT_TIME']}")
+    CONFIG = process_timestamp(CONFIG, verbose=verbose)
 
-    except Exception as e:
-        print(e)
+    save_configs(CONFIG)
 
-    mngs.io.save(
-        CONFIG, CONFIG["SDIR"] + "CONFIGS/CONFIG.pkl", verbose=verbose
-    )
-    mngs.io.save(CONFIG, CONFIG["SDIR"] + "CONFIGS/CONFIG.yaml", verbose=False)
-
-    try:
-        if CONFIG.get("DEBUG", False):
-            message = f"[DEBUG]\n" + message
-        sleep(1)
-        if notify:
-            mngs.gen.notify(
-                message=message,
-                ID=CONFIG["ID"],
-                attachment_paths=glob(CONFIG["SDIR"] + "logs/*.log"),
-                verbose=verbose,
-            )
-    except Exception as e:
-        print(e)
+    mngs.io.flush(sys=sys)
 
     # RUNNING to RUNNING2FINISHEDED
     running2finished(CONFIG["SDIR"])
 
+    mngs.io.flush(sys=sys)
+
     try:
-        sys.stdout.close()
-        sys.stderr.close()
-    except:
-        pass
+        if CONFIG.get("DEBUG", False):
+            message = f"[DEBUG]\n" + message
+        if notify:
+            mngs.gen.notify(
+                message=message,
+                ID=CONFIG["ID"],
+                attachment_paths=glob(CONFIG["SDIR"].replace("RUNNING", "FINISHED") + "logs/*.log"),
+                verbose=verbose,
+            )
+            mngs.io.flush(sys=sys)
+    except Exception as e:
+        print(e)
+
+    finally:
+        # Close open file handles
+        try:
+            sys.stdout.close()
+            sys.stderr.close()
+        except:
+            pass
 
 
-def running2finished(src_dir, remove_src_dir=True):
+def running2finished(src_dir, remove_src_dir=True, max_wait=60):
     dest_dir = src_dir.replace("RUNNING/", "FINISHED/")
     os.makedirs(dest_dir, exist_ok=True)
     try:
-        os.rename(src_dir, dest_dir)
-        mngs.gen.print_block(
-            f"Congratulations! The script completed.\n\n{dest_dir}",
-            c="yellow",
-        )
-        if remove_src_dir:
-            mngs.sh(f"rm {src_dir} -rf", verbose=False)
+        # Close any open file handles (implement this part based on your specific needs)
+        # ...
+
+        # Copy files individually
+        for item in os.listdir(src_dir):
+            s = os.path.join(src_dir, item)
+            d = os.path.join(dest_dir, item)
+            if os.path.isdir(s):
+                shutil.copytree(s, d)
+            else:
+                shutil.copy2(s, d)
+
+        start_time = time.time()
+        while not os.path.exists(dest_dir) and time.time() - start_time < max_wait:
+            time.sleep(0.1)
+        if os.path.exists(dest_dir):
+            mngs.gen.print_block(
+                f"Congratulations! The script completed.\n\n{dest_dir}",
+                c="yellow",
+            )
+            if remove_src_dir:
+                shutil.rmtree(src_dir)
+        else:
+            print(f"Copy operation timed out after {max_wait} seconds")
     except Exception as e:
         print(e)
+
+
+# def running2finished(src_dir, remove_src_dir=True, max_wait=60):
+#     dest_dir = src_dir.replace("RUNNING/", "FINISHED/")
+#     os.makedirs(dest_dir, exist_ok=True)
+#     try:
+#         os.rename(src_dir, dest_dir)
+#         start_time = time.time()
+#         while not os.path.exists(dest_dir) and time.time() - start_time < max_wait:
+#             time.sleep(0.1)
+#         if os.path.exists(dest_dir):
+#             mngs.gen.print_block(
+#                 f"Congratulations! The script completed.\n\n{dest_dir}",
+#                 c="yellow",
+#             )
+#             if remove_src_dir:
+#                 mngs.sh(f"rm {src_dir} -rf", verbose=False)
+#         else:
+#             print(f"Rename operation timed out after {max_wait} seconds")
+#     except Exception as e:
+#         print(e)
+
+# def running2finished(src_dir, remove_src_dir=True):
+#     dest_dir = src_dir.replace("RUNNING/", "FINISHED/")
+#     os.makedirs(dest_dir, exist_ok=True)
+#     try:
+#         os.rename(src_dir, dest_dir)
+#         mngs.gen.print_block(
+#             f"Congratulations! The script completed.\n\n{dest_dir}",
+#             c="yellow",
+#         )
+#         if remove_src_dir:
+#             mngs.sh(f"rm {src_dir} -rf", verbose=False)
+#     except Exception as e:
+#         print(e)
 
 
 if __name__ == "__main__":

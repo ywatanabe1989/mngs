@@ -29,3 +29,5 @@ try:
     from ._save import save, save_optuna_study_as_csv_and_pngs
 except ImportError as e:
     pass # print(f"Warning: Failed to import from ._save.")
+
+from ._flush import flush
