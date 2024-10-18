@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-15 20:13:16 (ywatanabe)"
+# Time-stamp: "2024-10-18 21:15:10 (ywatanabe)"
 # /home/ywatanabe/proj/_mngs_repo_openhands/src/mngs/general/system_ops/_notify.py
 
 """This script does XYZ."""
@@ -107,7 +107,7 @@ def notify(
         sender_name=sender_name,
         cc=cc,
         ID=ID,
-        log_paths=log_paths,
+        attachment_file_paths=log_paths,
         verbose=verbose,
     )
 

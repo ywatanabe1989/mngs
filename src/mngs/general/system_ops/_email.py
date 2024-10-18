@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-15 20:07:48 (ywatanabe)"
+# Time-stamp: "2024-10-18 21:14:37 (ywatanabe)"
 # /home/ywatanabe/proj/_mngs_repo_openhands/src/mngs/general/system_ops/_email.py
 
 import os
@@ -9,7 +9,7 @@ from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-
+import mimetypes
 import mngs
 
 
@@ -22,7 +22,7 @@ def send_gmail(
     sender_name=None,
     cc=None,
     ID=None,
-    log_paths=None,
+    attachment_file_paths=None,
     verbose=True,
 ):
     if ID == "auto":
@@ -54,10 +54,16 @@ def send_gmail(
         gmail_body = MIMEText(message, "plain")
         gmail.attach(gmail_body)
 
-        if log_paths:
-            for path in log_paths:
+        if attachment_file_paths:
+            for path in attachment_file_paths:
+                mime_type, _ = mimetypes.guess_type(path)
+                if mime_type is None:
+                    mime_type = 'application/octet-stream'
+
+                main_type, sub_type = mime_type.split('/', 1)
+
                 with open(path, "rb") as file:
-                    part = MIMEBase("application", "octet-stream")
+                    part = MIMEBase(main_type, sub_type)
                     part.set_payload(file.read())
                     encoders.encode_base64(part)
                     part.add_header(
@@ -65,6 +71,18 @@ def send_gmail(
                         f"attachment; filename= {os.path.basename(path)}",
                     )
                     gmail.attach(part)
+
+        # if attachment_file_paths:
+        #     for path in attachment_file_paths:
+        #         with open(path, "rb") as file:
+        #             part = MIMEBase("application", "octet-stream")
+        #             part.set_payload(file.read())
+        #             encoders.encode_base64(part)
+        #             part.add_header(
+        #                 "Content-Disposition",
+        #                 f"attachment; filename= {os.path.basename(path)}",
+        #             )
+        #             gmail.attach(part)
 
         recipients = [recipient_email]
         if cc:
