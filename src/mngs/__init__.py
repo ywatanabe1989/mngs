@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Time-stamp: "2024-10-13 19:21:10 (ywatanabe)"
+# Time-stamp: "2024-10-15 00:36:24 (ywatanabe)"
 
 # from . import io, path
 import sys, os
@@ -36,6 +36,7 @@ with suppress_output(suppress=suppress):
         "typing",
         "res",
         "web",
+        "db",
     ]
     for module in additional_modules:
         try:

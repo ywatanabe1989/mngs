@@ -2,7 +2,7 @@ import numpy as _np
 import pandas as _pd
 import xarray as _xr
 import torch as _torch
-from typing import List, Tuple, Dict, Any, Union, Sequence, Literal, Optional
+from typing import List, Tuple, Dict, Any, Union, Sequence, Literal, Optional, Generator
 from collections.abc import Iterable
 
 ArrayLike = Union[
@@ -16,4 +16,4 @@ ArrayLike = Union[
 ]
 
 
-# from mngs.typing import List, Tuple, Dict, Any, Union, Sequence, Literal, Iterable, ArrayLike
+# from mngs.typing import List, Tuple, Dict, Any, Union, Sequence, Literal, Iterable, Generator, ArrayLike

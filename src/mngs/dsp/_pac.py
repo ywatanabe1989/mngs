@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-29 11:03:51 (ywatanabe)"
+# Time-stamp: "2024-10-15 14:23:12 (ywatanabe)"
 
 import sys
 
@@ -9,6 +9,7 @@ import mngs
 import numpy as np
 from mngs.general import batch_fn, torch_fn
 from mngs.nn import PAC
+import torch
 
 """
 mngs.dsp.pac function
@@ -28,6 +29,7 @@ def pac(
     amp_n_bands=100,
     device="cuda",
     batch_size=1,
+    batch_size_ch=-1,
     fp16=False,
     trainable=False,
     n_perm=None,
@@ -60,6 +62,19 @@ def pac(
         )
         pac, pha_mids_hz, amp_mids_hz = mngs.dsp.pac(xx, fs)
     """
+    def process_ch_batching(m, x, batch_size_ch, device):
+        n_chs = x.shape[1]
+        n_batches = (n_chs + batch_size_ch - 1) // batch_size_ch
+
+        agg = []
+        for ii in range(n_batches):
+            start, end = batch_size_ch * ii, min(batch_size_ch * (ii + 1), n_chs)
+            _pac = m(x[:, start:end, :].to(device)).detach().cpu()
+            agg.append(_pac)
+
+        # return np.concatenate(agg, axis=1)
+        return torch.cat(agg, dim=1)
+
     m = PAC(
         x.shape[-1],
         fs,
@@ -74,7 +89,12 @@ def pac(
         n_perm=n_perm,
         amp_prob=amp_prob,
     ).to(device)
-    return m(x.to(device)), m.PHA_MIDS_HZ, m.AMP_MIDS_HZ
+
+    if batch_size_ch == -1:
+        return m(x.to(device)), m.PHA_MIDS_HZ, m.AMP_MIDS_HZ
+    else:
+        return process_ch_batching(m, x, batch_size_ch, device), m.PHA_MIDS_HZ, m.AMP_MIDS_HZ
+
 
 
 if __name__ == "__main__":
