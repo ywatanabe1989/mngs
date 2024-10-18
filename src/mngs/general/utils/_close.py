@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-18 21:17:39 (ywatanabe)"
+# Time-stamp: "2024-10-19 03:06:43 (ywatanabe)"
 
 import os
 from datetime import datetime
@@ -24,7 +24,7 @@ def format_diff_time(diff_time):
     return diff_time_str
 
 
-def close(CONFIG, message=":)", notify=True, verbose=True):
+def close(CONFIG, message=":)", notify=True, verbose=True, sys=None):
     CONFIG = CONFIG.to_dict()
 
     try:
@@ -60,6 +60,12 @@ def close(CONFIG, message=":)", notify=True, verbose=True):
 
     # RUNNING to FINISHED
     finish(CONFIG["SDIR"])
+
+    try:
+        sys.stdout.close()
+        sys.stderr.close()
+    except:
+        pass
 
 
 def finish(src_dir, remove_src_dir=True):

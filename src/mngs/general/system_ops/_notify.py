@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-18 21:16:57 (ywatanabe)"
+# Time-stamp: "2024-10-19 02:58:09 (ywatanabe)"
 # /home/ywatanabe/proj/_mngs_repo_openhands/src/mngs/general/system_ops/_notify.py
 
 """This script does XYZ."""
@@ -15,7 +15,7 @@ import sys
 import mngs
 
 from ._email import send_gmail
-
+import warnings
 
 def get_username():
     try:
@@ -68,6 +68,11 @@ def notify(
     attachment_paths=None,
     verbose=False,
 ):
+    try:
+        message = str(message)
+    except Exception as e:
+        warnings.warn(str(e))
+
     FAKE_PYTHON_SCRIPT_NAME = "$ python -c ..."
     sender_gmail = os.getenv("MNGS_SENDER_GMAIL")
     sender_password = os.getenv("MNGS_SENDER_GMAIL_PASSWORD")

@@ -53,9 +53,13 @@ def load(lpath, show=False, verbose=False, **kwargs):
     >>> model = load('model.pth')
     """
     if lpath.startswith('f"'):
-        lpath = eval(lpath)
+        try:
+            lpath = eval(lpath)
+        except:
+            lpath = lpath.replace('f"', '')
 
     lpath = lpath.replace("/./", "/")
+
     try:
         extension = "." + lpath.split(".")[-1]
 
