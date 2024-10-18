@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-15 20:09:18 (ywatanabe)"
+# Time-stamp: "2024-10-18 17:05:19 (ywatanabe)"
 
 import os
 from datetime import datetime
@@ -47,7 +47,7 @@ def close(CONFIG, message=":)", notify=True, verbose=True):
     try:
         if CONFIG.get("DEBUG", False):
             message = f"[DEBUG]\n" + message
-        sleep(1)
+        sleep(3)
         if notify:
             mngs.gen.notify(
                 message=message,
@@ -59,11 +59,11 @@ def close(CONFIG, message=":)", notify=True, verbose=True):
         print(e)
 
     # RUNNING to FINISHED
-    finish(CONFIG["SDIR"])
+    running2finished(CONFIG["SDIR"])
 
 
-def finish(src_dir, remove_src_dir=True):
-    dest_dir = src_dir.replace("RUNNING/", "FINISHED/")
+def running2finished(src_dir, remove_src_dir=True):
+    dest_dir = src_dir.replace("RUNNING/", "FINISHEDED/")
     os.makedirs(dest_dir, exist_ok=True)
     try:
         os.rename(src_dir, dest_dir)
