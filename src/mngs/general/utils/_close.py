@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-18 21:27:37 (ywatanabe)"
+# Time-stamp: "2024-10-19 03:03:56 (ywatanabe)"
 
 import os
 from datetime import datetime
 from glob import glob
 from time import sleep
-
 import mngs
 
 
@@ -24,7 +23,7 @@ def format_diff_time(diff_time):
     return diff_time_str
 
 
-def close(CONFIG, message=":)", notify=True, verbose=True):
+def close(CONFIG, message=":)", notify=True, verbose=True, sys=None):
     CONFIG = CONFIG.to_dict()
 
     try:
@@ -57,6 +56,13 @@ def close(CONFIG, message=":)", notify=True, verbose=True):
             )
     except Exception as e:
         print(e)
+
+    # Close open file handles
+    try:
+        sys.stdout.close()
+        sys.stderr.close()
+    except:
+        pass
 
     # RUNNING to RUNNING2FINISHEDED
     running2finished(CONFIG["SDIR"])
