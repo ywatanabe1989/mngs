@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-19 17:19:57 (ywatanabe)"
+# Time-stamp: "2024-10-19 17:25:09 (ywatanabe)"
 # /home/yusukew/proj/mngs_repo/src/mngs/db/_delete_duplicates.py
 
 """
@@ -16,7 +16,7 @@ Prerequisites:
 
 import sqlite3
 from tqdm import tqdm
-import pandas as pd
+import pandas as _pd
 from typing import Union, List, Optional
 
 
@@ -26,7 +26,7 @@ def delete_duplicates(
     columns: Union[str, List[str]] = "all",
     include_blob: bool = False,
     batch_size: int = 1000,
-) -> Optional[pd.DataFrame]:
+) -> Optional[_pd.DataFrame]:
     """
     Delete duplicate entries from an SQLite database table using batch processing.
 
@@ -45,7 +45,7 @@ def delete_duplicates(
 
     Returns:
     --------
-    Optional[pd.DataFrame]
+    Optional[_pd.DataFrame]
         DataFrame of remaining duplicates if any, None otherwise.
     """
     try:
@@ -88,7 +88,7 @@ def delete_duplicates(
                 LIMIT {batch_size} OFFSET {offset}
             """
 
-            df = pd.read_sql_query(query, conn)
+            df = _pd.read_sql_query(query, conn)
             df_duplicated = df[df["rn"] > 1]
 
             if not df_duplicated.empty:
@@ -124,7 +124,7 @@ def delete_duplicates(
 
         # Verify removal
         verify_query = f"SELECT *, ROW_NUMBER() OVER (PARTITION BY {columns_str} ORDER BY rowid) as rn FROM {table_name}"
-        df_after = pd.read_sql_query(verify_query, conn)
+        df_after = _pd.read_sql_query(verify_query, conn)
         remaining_duplicates = df_after[df_after["rn"] > 1]
 
         if remaining_duplicates.empty:
