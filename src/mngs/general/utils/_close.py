@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-<<<<<<< HEAD
-# Time-stamp: "2024-10-19 03:03:56 (ywatanabe)"
-=======
-# Time-stamp: "2024-10-19 04:40:35 (ywatanabe)"
->>>>>>> ff1c0838bf7bcd958d4181b20c2a42711bd4b920
+# Time-stamp: "2024-10-19 11:48:20 (ywatanabe)"
 
 import os
 from datetime import datetime
@@ -28,14 +24,7 @@ def format_diff_time(diff_time):
     diff_time_str = f"{hours:02d}:{minutes:02d}:{seconds:02d}"
     return diff_time_str
 
-<<<<<<< HEAD
-
-def close(CONFIG, message=":)", notify=True, verbose=True, sys=None):
-    CONFIG = CONFIG.to_dict()
-
-=======
 def process_timestamp(CONFIG, verbose=True):
->>>>>>> ff1c0838bf7bcd958d4181b20c2a42711bd4b920
     try:
         CONFIG["END_TIME"] = datetime.now()
         CONFIG["RUN_TIME"] = format_diff_time(
@@ -100,21 +89,11 @@ def close(CONFIG, message=":)", notify=True, verbose=True, sys=None):
         except Exception as e:
             print(e)
 
-<<<<<<< HEAD
-    # Close open file handles
-=======
->>>>>>> ff1c0838bf7bcd958d4181b20c2a42711bd4b920
     try:
         sys.stdout.close()
         sys.stderr.close()
     except:
         pass
-<<<<<<< HEAD
-
-    # RUNNING to RUNNING2FINISHEDED
-    running2finished(CONFIG["SDIR"])
-=======
->>>>>>> ff1c0838bf7bcd958d4181b20c2a42711bd4b920
 
 
 def running2finished(src_dir, remove_src_dir=True, max_wait=60):
