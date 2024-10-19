@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-15 00:46:12 (ywatanabe)"
+# Time-stamp: "2024-10-19 17:11:21 (ywatanabe)"
 # /mnt/ssd/mngs_repo/src/mngs/db/_inspect.py
 
 import sqlite3
