@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-19 17:25:09 (ywatanabe)"
+# Time-stamp: "2024-10-19 17:34:47 (ywatanabe)"
 # /home/yusukew/proj/mngs_repo/src/mngs/db/_delete_duplicates.py
 
 """
