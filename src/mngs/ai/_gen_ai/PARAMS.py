@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-13 20:04:57 (ywatanabe)"
+# Time-stamp: "2024-10-19 17:37:58 (ywatanabe)"
 # /home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/PARAMS.py
 
 import pandas as pd
