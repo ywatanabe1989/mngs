@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-21 14:51:14 (ywatanabe)"
+# Time-stamp: "2024-10-21 21:10:52 (ywatanabe)"
 # /mnt/ssd/mngs_repo/src/mngs/db/_inspect.py
 
 import sqlite3
@@ -88,7 +88,7 @@ class Inspector:
             return columns, sample_data, total_rows
 
     def inspect(
-        self, table_names: Optional[List[str]] = None
+            self, table_names: Optional[List[str]] = None, verbose=True,
     ) -> List[Dict[str, Any]]:
         if table_names is None:
             table_names = self.get_table_names()
@@ -123,40 +123,14 @@ class Inspector:
 
             data_tables.append(sample_data)
 
+        # if len(data_tables) == 1:
+        #     return data_tables[0]
+        # else:
+        #     return tuple(data_tables)
         return data_tables
 
-    # def inspect(self, table_names: Optional[List[str]] = None) -> None:
-    #     """Inspects and prints database structure and sample data.
 
-    #     Args:
-    #         table_names (Optional[List[str]], optional): List of table names to inspect.
-    #             If None, inspects all tables. Defaults to None.
-    #     """
-    #     if table_names is None:
-    #         table_names = self.get_table_names()
-    #         print("Tables in the database:")
-    #         for name in table_names:
-    #             print(f"  {name}")
-    #     else:
-    #         for table_name in table_names:
-    #             columns = self.get_table_info(table_name)
-    #             column_names, rows, total_rows = self.get_sample_data(table_name)
-
-    #             print(f"\nTable: {table_name}")
-    #             print(f"Total rows: {total_rows:,}")
-    #             print("\nColumns:")
-    #             for col in columns:
-    #                 constraints = f"({col[6]})" if col[6] else ""
-    #                 print(f"  {col[1]} ({col[2]}) {constraints}")
-
-    #             print("\nSample data:")
-    #             table_data = []
-    #             for row in rows:
-    #                 table_data.append([str(value) if not isinstance(value, bytes) else "<BLOB>" for value in row])
-    #             print(tabulate(table_data, headers=column_names, tablefmt="grid"))
-
-
-def inspect(lpath_db: str, table_names: Optional[List[str]] = None) -> None:
+def inspect(lpath_db: str, table_names: Optional[List[str]] = None, verbose: bool = True) -> None:
     """
     Inspects the specified SQLite database.
 
@@ -170,9 +144,10 @@ def inspect(lpath_db: str, table_names: Optional[List[str]] = None) -> None:
             If None, inspects all tables. Defaults to None.
     """
     inspector = Inspector(lpath_db)
-    overviews_tables = inspector.inspect(table_names)
-    for dd in overviews_tables:
-        print(f"\n{dd}\n")
+    overviews_tables = inspector.inspect(table_names, verbose=verbose)
+    if verbose:
+        for dd in overviews_tables:
+            print(f"\n{dd}\n")
     return overviews_tables
 
 
