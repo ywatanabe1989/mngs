@@ -5,7 +5,7 @@ import inspect
 import os
 
 import mngs
-
+import numpy as np
 
 def this_path(when_ipython="/tmp/fake.py"):
     __file__ = inspect.stack()[1].filename
@@ -58,3 +58,9 @@ def file_size(path):
         return mngs.gen.readable_bytes(file_size_bytes)
     else:
         return "(Not Found)"
+
+def getsize(path):
+    if os.path.exists(path):
+        return os.path.getsize(path)
+    else:
+        return np.nan

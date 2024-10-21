@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-13 19:07:29 (ywatanabe)"
+# Time-stamp: "2024-10-20 19:14:02 (ywatanabe)"
 # Author: Yusuke Watanabe (ywata1989@gmail.com)
 
 try:
@@ -9,7 +9,7 @@ except ImportError as e:
     pass # print(f"Warning: Failed to import from ._find.")
 
 try:
-    from ._path import file_size, spath, split, this_path
+    from ._path import file_size, spath, split, this_path, getsize
 except ImportError as e:
     pass # print(f"Warning: Failed to import from ._path.")
 
