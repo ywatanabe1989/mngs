@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-21 00:53:15 (ywatanabe)"
+# Time-stamp: "2024-10-21 14:51:14 (ywatanabe)"
 # /mnt/ssd/mngs_repo/src/mngs/db/_inspect.py
 
 import sqlite3
@@ -8,6 +8,7 @@ from typing import List, Tuple, Any, Optional, Dict
 import pandas as pd
 import os
 import mngs
+
 
 class Inspector:
     def __init__(self, db_path: str):
@@ -23,10 +24,14 @@ class Inspector:
         """
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
-            cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+            cursor.execute(
+                "SELECT name FROM sqlite_master WHERE type='table';"
+            )
             return [table[0] for table in cursor.fetchall()]
 
-    def get_table_info(self, table_name: str) -> List[Tuple[int, str, str, int, Any, int, str]]:
+    def get_table_info(
+        self, table_name: str
+    ) -> List[Tuple[int, str, str, int, Any, int, str]]:
         """Retrieves table structure information.
 
         Args:
@@ -59,7 +64,9 @@ class Inspector:
 
             return enhanced_columns
 
-    def get_sample_data(self, table_name: str, limit: int = 5) -> Tuple[List[str], List[Tuple], int]:
+    def get_sample_data(
+        self, table_name: str, limit: int = 5
+    ) -> Tuple[List[str], List[Tuple], int]:
         """Retrieves sample data from the specified table.
 
         Args:
@@ -80,34 +87,43 @@ class Inspector:
 
             return columns, sample_data, total_rows
 
-    def inspect(self, table_names: Optional[List[str]] = None) -> List[Dict[str, Any]]:
+    def inspect(
+        self, table_names: Optional[List[str]] = None
+    ) -> List[Dict[str, Any]]:
         if table_names is None:
             table_names = self.get_table_names()
 
-        results = []
+        data_tables = []
         for table_name in table_names:
             columns = self.get_table_info(table_name)
             column_names, rows, total_rows = self.get_sample_data(table_name)
 
-            table_info = {
-                "name": table_name,
-                "total_rows": total_rows,
-                "columns": [
+            meta = {}
+            meta["table_name"] = table_name
+            meta["n_total_rows"] = total_rows
+
+            sample_data = pd.DataFrame(
+                [
                     {
-                        "name": col[1],
-                        "type": col[2],
-                        "constraints": col[6] if col[6] else ""
-                    } for col in columns
-                ],
-                "sample_data": [
-                    {col: (str(value) if not isinstance(value, bytes) else "<BLOB>")
-                     for col, value in zip(column_names, row)}
+                        col: (
+                            str(value)
+                            if not isinstance(value, bytes)
+                            else "<BLOB>"
+                        )
+                        for col, value in zip(column_names, row)
+                    }
                     for row in rows
                 ]
-            }
-            results.append(table_info)
+            )
 
-        return results
+            for k, v in meta.items():
+                sample_data[k] = v
+
+            sample_data = sample_data.set_index(["table_name", "n_total_rows"])
+
+            data_tables.append(sample_data)
+
+        return data_tables
 
     # def inspect(self, table_names: Optional[List[str]] = None) -> None:
     #     """Inspects and prints database structure and sample data.
@@ -139,6 +155,7 @@ class Inspector:
     #                 table_data.append([str(value) if not isinstance(value, bytes) else "<BLOB>" for value in row])
     #             print(tabulate(table_data, headers=column_names, tablefmt="grid"))
 
+
 def inspect(lpath_db: str, table_names: Optional[List[str]] = None) -> None:
     """
     Inspects the specified SQLite database.
@@ -153,7 +170,11 @@ def inspect(lpath_db: str, table_names: Optional[List[str]] = None) -> None:
             If None, inspects all tables. Defaults to None.
     """
     inspector = Inspector(lpath_db)
-    return inspector.inspect(table_names)
+    overviews_tables = inspector.inspect(table_names)
+    for dd in overviews_tables:
+        print(f"\n{dd}\n")
+    return overviews_tables
+
 
 # python -c "import mngs; mngs.db.inspect(\"./data/db_all/Patient_23_005.db\")"
 # python -c "import mngs; mngs.db.inspect(\"./data/db_all/Patient_23_005.db\", table_names=[\"eeg_data_reindexed\"])"
