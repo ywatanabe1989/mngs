@@ -6,6 +6,6 @@
 try:
     from ._typing import List, Tuple, Dict, Any, Union, Sequence, Literal, Optional, Iterable, Generator, ArrayLike
 except ImportError as e:
-    pass # print(f"Warning: Failed to import from ._typing.")
+    warnings.warn(f"Warning: Failed to import from ._typing.")
 
 # from ._typing import List, Tuple, Dict, Any, Union, Sequence, Literal, Optional, Iterable, Generator, ArrayLike

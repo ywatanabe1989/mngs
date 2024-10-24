@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-13 20:31:48 (ywatanabe)"
+# Time-stamp: "2024-10-24 12:59:03 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/chat.py
 
 
@@ -28,8 +28,9 @@ def genai_factory(
     chat_history=None,
     max_tokens=4096,
 ):
+    import pandas as pd
     """Factory function to create an instance of an AI model handler."""
-    AVAILABLE_MODELS = MODELS.name.tolist()
+    AVAILABLE_MODELS = pd.DataFrame(MODELS).name.tolist()
 
     if model not in AVAILABLE_MODELS:
         raise ValueError(

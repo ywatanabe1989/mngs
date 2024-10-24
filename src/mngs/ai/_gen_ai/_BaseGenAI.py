@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-13 20:37:08 (ywatanabe)"
+# Time-stamp: "2024-10-24 13:00:02 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_BaseAI.py
 
 
@@ -194,6 +194,8 @@ class BaseGenAI(ABC):
         pass
 
     def _get_available_models(self):
+        import pandas as pd
+        MODELS = pd.DataFrame(MODELS)
         indi = [
             self.provider.lower() in api_key_env.lower()
             for api_key_env in MODELS["api_key_env"]
