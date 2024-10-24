@@ -1,11 +1,12 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-13 20:04:57 (ywatanabe)"
+# Time-stamp: "2024-10-23 22:05:52 (ywatanabe)"
 # /home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/PARAMS.py
 
 import pandas as pd
 
 # https://openai.com/api/pricing/
+# https://www.anthropic.com/pricing#anthropic-api
 
 MODELS = pd.DataFrame(
     [
@@ -57,6 +58,13 @@ MODELS = pd.DataFrame(
             "output_cost": 1.50,
             "api_key_env": "OPENAI_API_KEY",
             "provider": "OpenAI",
+        },
+        {
+            "name": "claude-3-5-sonnet-20241022",
+            "input_cost": 3.00,
+            "output_cost": 15.00,
+            "api_key_env": "ANTHROPIC_API_KEY",
+            "provider": "Anthropic",
         },
         {
             "name": "claude-3-5-sonnet-20240620",
