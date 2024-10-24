@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Time-stamp: "2024-10-19 17:35:25 (ywatanabe)"
+# Time-stamp: "2024-10-21 22:27:32 (ywatanabe)"
 
 # from . import io, path
 import sys, os
@@ -28,7 +28,7 @@ with suppress_output(suppress=suppress):
         "ml",
         "nn",
         "os",
-        "pd",
+        # "pd",
         "plt",
         "stats",
         "torch",
