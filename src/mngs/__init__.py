@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
-<<<<<<< HEAD
-# Time-stamp: "2024-10-25 12:09:49 (ywatanabe)"
-=======
-# Time-stamp: "2024-10-27 13:08:58 (ywatanabe)"
->>>>>>> e52b4928e775444fa510e102daa6d177fa616df9
+# Time-stamp: "2024-10-27 13:34:51 (ywatanabe)"
 
 ########################################
 # Warnings
