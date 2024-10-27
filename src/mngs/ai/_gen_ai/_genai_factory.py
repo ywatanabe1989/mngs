@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-24 12:59:03 (ywatanabe)"
+# Time-stamp: "2024-10-27 13:02:01 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/chat.py
 
 
@@ -14,10 +14,11 @@ from ._Llama import Llama
 from ._OpenAI import OpenAI
 from ._Perplexity import Perplexity
 from .PARAMS import MODELS
+import pandas as pd
 
 """Functions & Classes"""
 
-
+"""Parameters"""
 def genai_factory(
     model="gpt-3.5-turbo",
     stream=False,
@@ -28,9 +29,8 @@ def genai_factory(
     chat_history=None,
     max_tokens=4096,
 ):
-    import pandas as pd
     """Factory function to create an instance of an AI model handler."""
-    AVAILABLE_MODELS = pd.DataFrame(MODELS).name.tolist()
+    AVAILABLE_MODELS = MODELS.name.tolist()
 
     if model not in AVAILABLE_MODELS:
         raise ValueError(
