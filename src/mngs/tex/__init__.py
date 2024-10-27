@@ -30,7 +30,7 @@ for filename in os.listdir(current_dir):
                     if not name.startswith("_"):
                         globals()[name] = obj
         except ImportError as e:
-            pass # print(f"Warning: Failed to import {module_name}. Error: {e}")
+            warnings.warn(f"Warning: Failed to import {module_name}. Error: {e}")
 
 # Clean up temporary variables
 del os, importlib, inspect, current_dir, filename, module_name, module, name, obj

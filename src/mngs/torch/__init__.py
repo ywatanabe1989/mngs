@@ -5,6 +5,6 @@
 try:
     from ._apply_to import apply_to
 except ImportError as e:
-    pass # print(f"Warning: Failed to import apply_to from ._apply_to.")
+    warnings.warn(f"Warning: Failed to import apply_to from ._apply_to.")
 
 # from ._apply_to import apply_to

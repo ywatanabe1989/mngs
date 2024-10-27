@@ -1,15 +1,12 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-23 22:05:56 (ywatanabe)"
+# Time-stamp: "2024-10-27 12:39:44 (ywatanabe)"
 # /home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/PARAMS.py
-
-import pandas as pd
 
 # https://openai.com/api/pricing/
 # https://www.anthropic.com/pricing#anthropic-api
 
-MODELS = pd.DataFrame(
-    [
+MODELS = [
         {
             "name": "o1-mini",
             "input_cost": 3.00,
@@ -207,4 +204,3 @@ MODELS = pd.DataFrame(
             "provider": "Llama",
         },
     ]
-)
