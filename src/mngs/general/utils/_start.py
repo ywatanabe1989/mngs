@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-15 13:42:07 (ywatanabe)"
+# Time-stamp: "2024-10-25 23:19:02 (ywatanabe)"
 
 import inspect
 import os as _os
@@ -18,6 +18,7 @@ def start(
     sys=None,
     plt=None,
     sdir=None,
+    sdir_suffix=None,
     verbose=True,
     # Random seeds
     os=None,
@@ -115,6 +116,8 @@ def start(
         _sdir, sfname, _ = mngs.path.split(spath)
         sdir = _sdir + sfname + "/" + "RUNNING" + "/" + ID + "/"
         sdir = sdir.replace("/./", "/")
+        if sdir_suffix:
+            sdir = sdir[:-1] + f"-{sdir_suffix}/"
     _os.makedirs(sdir, exist_ok=True)
 
     relative_sdir = simplify_relative_path(sdir)

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Time-stamp: "2024-10-24 18:56:26 (ywatanabe)"
+# Time-stamp: "2024-10-25 12:09:49 (ywatanabe)"
 
 ########################################
 # Warnings
@@ -39,6 +39,7 @@ from . import res
 from . import web
 from . import db
 from . import pd
+from . import str
 
 # ########################################
 # # Lazy importing

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-19 11:48:20 (ywatanabe)"
+# Time-stamp: "2024-10-27 13:30:38 (ywatanabe)"
 
 import os
 from datetime import datetime
@@ -75,6 +75,7 @@ def close(CONFIG, message=":)", notify=True, verbose=True, sys=None):
     # ANSI code escape
     log_files = glob(CONFIG["SDIR"] + "logs/*.log")
     escape_ANSI_from_log_files(log_files)
+    mngs.io.flush(sys=sys)
 
     if notify:
         try:
@@ -92,8 +93,8 @@ def close(CONFIG, message=":)", notify=True, verbose=True, sys=None):
     try:
         sys.stdout.close()
         sys.stderr.close()
-    except:
-        pass
+    except Exception as e:
+        print(e)
 
 
 def running2finished(src_dir, remove_src_dir=True, max_wait=60):

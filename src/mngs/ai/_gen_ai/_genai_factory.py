@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-24 12:59:03 (ywatanabe)"
+# Time-stamp: "2024-10-27 12:43:40 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/chat.py
 
 
@@ -14,9 +14,12 @@ from ._Llama import Llama
 from ._OpenAI import OpenAI
 from ._Perplexity import Perplexity
 from .PARAMS import MODELS
+import pandas as pd
 
 """Functions & Classes"""
 
+"""Parameters"""
+MODELS = pd.DataFrame(MODELS)
 
 def genai_factory(
     model="gpt-3.5-turbo",
