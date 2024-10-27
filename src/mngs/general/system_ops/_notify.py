@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-11 17:44:58 (ywatanabe)"
+# Time-stamp: "2024-10-19 11:30:45 (ywatanabe)"
 # /home/ywatanabe/proj/_mngs_repo_openhands/src/mngs/general/system_ops/_notify.py
 
 """This script does XYZ."""
@@ -15,7 +15,7 @@ import sys
 import mngs
 
 from ._email import send_gmail
-
+import warnings
 
 def get_username():
     try:
@@ -44,6 +44,20 @@ def get_git_branch():
         return "main"
 
 
+def gen_footer(sender, script_name, mngs, branch):
+    return f"""
+
+{'-'*30}
+Sent via
+- Host: {sender}
+- Script: {script_name}
+- Source: mngs v{mngs.__version__} (github.com/ywatanabe1989/mngs/blob/{branch}/src/mngs/general/system_ops/_notify.py)
+{'-'*30}"""
+
+
+# This is an automated system notification. If received outside working hours, please disregard.
+
+
 def notify(
     subject="",
     message=":)",
@@ -51,9 +65,15 @@ def notify(
     sender_name=None,
     recipient_email=None,
     cc=None,
-    log_paths=None,
+    attachment_paths=None,
     verbose=False,
 ):
+    try:
+        message = str(message)
+    except Exception as e:
+        warnings.warn(str(e))
+
+    FAKE_PYTHON_SCRIPT_NAME = "$ python -c ..."
     sender_gmail = os.getenv("MNGS_SENDER_GMAIL")
     sender_password = os.getenv("MNGS_SENDER_GMAIL_PASSWORD")
     recipient_email = recipient_email or os.getenv("MNGS_RECIPIENT_GMAIL")
@@ -65,24 +85,19 @@ def notify(
         script_name = (
             os.path.basename(frames[-1].filename) if frames else "(Not found)"
         )
-    if (script_name == "-c") or (script_name.endswith(".py")):
-        script_name = "`$ python -c ...`"
+    if (script_name == "-c") or (not script_name.endswith(".py")):
+        script_name = FAKE_PYTHON_SCRIPT_NAME
 
     sender = f"{get_username()}@{get_hostname()}"
     branch = get_git_branch()
-    footer = f"""
+    footer = gen_footer(sender, script_name, mngs, branch)
 
-{'-'*30}
-This is an automated system notification. If received outside working hours, please disregard.
-
-Sent via
-- Host: {sender}
-- Script: {script_name}
-- Source: mngs v{mngs.__version__} (github.com/ywatanabe1989/mngs/blob/{branch}/src/mngs/general/system_ops/_notify.py)
-{'-'*30}"""
-
-    full_message = message + footer
-    full_subject = f"{subject}"
+    full_message = script_name + "\n\n" + message + "\n\n" + footer
+    full_subject = (
+        f"{script_name}—{subject}"
+        if subject and (script_name != FAKE_PYTHON_SCRIPT_NAME)
+        else f"{subject}"
+    )
 
     if sender_gmail is None or sender_password is None:
         print(
@@ -103,13 +118,15 @@ Sent via
         sender_name=sender_name,
         cc=cc,
         ID=ID,
-        log_paths=log_paths,
+        attachment_paths=attachment_paths,
         verbose=verbose,
     )
 
 
 if __name__ == "__main__":
     notify(verbose=True)
+
+    # python -c "import mngs; mngs.gen.notify()"
 
 
 # # Example in shell

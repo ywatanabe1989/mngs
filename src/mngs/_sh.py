@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-05 01:40:55 (ywatanabe)"
+# Time-stamp: "2024-10-21 19:16:26 (ywatanabe)"
 # Author: Yusuke Watanabe (ywata1989@gmail.com)
 
 
@@ -13,7 +13,6 @@ This script does XYZ.
 Imports
 """
 import subprocess
-
 import mngs
 
 """
@@ -45,9 +44,9 @@ def sh(command_str, verbose=True):
     )
     output, error = process.communicate()
     if process.returncode == 0:
-        out = output.decode("utf-8")
+        out = output.decode("utf-8").strip()
     else:
-        out = error.decode("utf-8")
+        out = error.decode("utf-8").strip()
 
     if verbose:
         print(out)

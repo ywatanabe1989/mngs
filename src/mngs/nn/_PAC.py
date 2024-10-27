@@ -1,6 +1,6 @@
 #! ./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-05-07 13:09:54 (ywatanabe)"
+# Time-stamp: "2024-10-15 14:25:49 (ywatanabe)"
 
 """
 This script defines PAC nn.Module.
@@ -40,6 +40,7 @@ class PAC(nn.Module):
         self.fp16 = fp16
         self.n_perm = n_perm
         self.amp_prob = amp_prob
+        self.trainable = trainable
 
         if n_perm is not None:
             if not isinstance(n_perm, int):
@@ -77,10 +78,12 @@ class PAC(nn.Module):
         self.dh_pha = mngs.gen.DimHandler()
         self.dh_amp = mngs.gen.DimHandler()
 
-    def forward(self, x, compute_grad=True):
+    def forward(self, x):
+    # def forward(self, x, compute_grad=True):
+
         """x.shape: (batch_size, n_chs, seq_len) or (batch_size, n_chs, n_segments, seq_len)"""
 
-        with torch.set_grad_enabled(compute_grad):
+        with torch.set_grad_enabled(self.trainable):
             x = self._ensure_4d_input(x)
             # (batch_size, n_chs, n_segments, seq_len)
 
@@ -115,7 +118,9 @@ class PAC(nn.Module):
             pha = pha[..., edge_len:-edge_len].half()
             amp = amp[..., edge_len:-edge_len].half()
 
-            pac_or_amp_prob = self.modulation_index(pha, amp).squeeze()
+            pac_or_amp_prob = self.modulation_index(pha, amp)#.squeeze()
+            # print(pac_or_amp_prob.shape)
+            # pac_or_amp_prob = pac_or_amp_prob.squeeze()
 
             if self.n_perm is None:
                 return pac_or_amp_prob

@@ -22,6 +22,7 @@ from .decorators._converters import (
 
 None # to keep order when black is applied
 
+from ._suppress_output import suppress_output, quiet
 # Data processing utilities
 from .data_processing._ci import ci
 from .data_processing._DimHandler import DimHandler
@@ -61,12 +62,10 @@ from .misc import (
     pop_keys,
     print_block,
     print_,
-    quiet,
     readable_bytes,
     replace,
     search,
     squeeze_spaces,
-    suppress_output,
     symlink,
     to_even,
     to_odd,
@@ -74,7 +73,7 @@ from .misc import (
     uq,
     wait_key,
 )
-
+from ._parse_str import parse_str
 # Utils
 from .system_ops._email import send_gmail
 from .system_ops._notify import notify

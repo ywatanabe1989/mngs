@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-05-16 13:10:24 (ywatanabe)"
+# Time-stamp: "2024-10-13 19:14:05 (ywatanabe)"
 
 """
 This script does XYZ.
@@ -15,7 +15,13 @@ import mngs
 import numpy as np
 import torch
 import torch.nn as nn
+
+
+import warnings
+
+warnings.simplefilter("ignore", UserWarning)
 from torchaudio.prototype.functional import sinc_impulse_response
+warnings.resetwarnings()
 
 
 # Functions

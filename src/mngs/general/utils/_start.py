@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-15 18:12:10 (ywatanabe)"
+# Time-stamp: "2024-10-15 13:42:07 (ywatanabe)"
 
 import inspect
 import os as _os
@@ -133,6 +133,8 @@ def start(
     CONFIGS["REL_SDIR"] = relative_sdir
     if verbose:
         print(f"\n{'-'*40}\n")
+        # pprint(CONFIGS)         #
+
         print(f"CONFIG:")
         for k, v in CONFIGS.items():
             print(f"\n{k}:\n{v}\n")
@@ -186,6 +188,13 @@ def start(
         matplotlib.use("Agg")
 
     CONFIGS = mngs.gen.DotDict(CONFIGS)
+
+    if verbose:
+        print(f"\n{'-'*40}\n")
+        pprint(CONFIGS)
+        # for k, v in CONFIGS.items():
+        #     print(f"\n{k}:\n{v}\n")
+        print(f"\n{'-'*40}\n")
 
     return CONFIGS, sys.stdout, sys.stderr, plt, CC
 

@@ -53,9 +53,13 @@ def load(lpath, show=False, verbose=False, **kwargs):
     >>> model = load('model.pth')
     """
     if lpath.startswith('f"'):
-        lpath = eval(lpath)
+        try:
+            lpath = eval(lpath)
+        except:
+            lpath = lpath.replace('f"', '')
 
     lpath = lpath.replace("/./", "/")
+
     try:
         extension = "." + lpath.split(".")[-1]
 
@@ -113,6 +117,7 @@ def load(lpath, show=False, verbose=False, **kwargs):
         elif extension in [".txt", ".log", ".event"]:
             with open(lpath, "r") as f:
                 obj = f.read().splitlines()
+                # obj = tqdm(f.read().splitlines(), desc=f"Reading {lpath}")
         # Markdown
         elif extension == ".md":
             obj = load_markdown(lpath, **kwargs)
@@ -777,42 +782,42 @@ def load_configs(IS_DEBUG=None, show=False, verbose=False):
         if IS_DEBUG:
             if isinstance(config, (dict, mngs.gen.DotDict)):
                 for key, value in list(config.items()):
-                    if key.startswith("DEBUG_"):
-                        dk_wo_debug_prefix = key.split("DEBUG_")[1]
-                        config[dk_wo_debug_prefix] = value
-                        if show or verbose:
-                            print(f"\n{key} -> {dk_wo_debug_prefix}\n")
-                    elif isinstance(value, (dict, mngs.gen.DotDict)):
-                        config[key] = apply_debug_values(value, IS_DEBUG)
+                    try:
+                        if key.startswith("DEBUG_"):
+                            dk_wo_debug_prefix = key.split("DEBUG_")[1]
+                            config[dk_wo_debug_prefix] = value
+                            if show or verbose:
+                                print(f"\n{key} -> {dk_wo_debug_prefix}\n")
+                        elif isinstance(value, (dict, mngs.gen.DotDict)):
+                            config[key] = apply_debug_values(value, IS_DEBUG)
+                    except Exception as e:
+                        print(e)
         return config
 
     if os.getenv("CI") == "True":
         IS_DEBUG = True
 
-    # def apply_debug_values(config, IS_DEBUG):
-    #     if IS_DEBUG and isinstance(config, (dict, mngs.gen.DotDict)):
-    #         debug_keys = mngs.gen.search("^DEBUG_", list(config.keys()))[1]
-    #         for dk in debug_keys:
-    #             dk_wo_debug_prefix = dk.split("DEBUG_")[1]
-    #             config[dk_wo_debug_prefix] = config[dk]
-    #             if show or verbose:
-    #                 print(f"\n{dk} -> {dk_wo_debug_prefix}\n")
-    #     return config
+    try:
+        # Check ./config/IS_DEBUG.yaml file if IS_DEBUG argument is not passed
+        if IS_DEBUG is None:
+            IS_DEBUG_PATH = "./config/IS_DEBUG.yaml"
+            if os.path.exists(IS_DEBUG_PATH):
+                IS_DEBUG = mngs.io.load("./config/IS_DEBUG.yaml").get("IS_DEBUG")
+            else:
+                IS_DEBUG = False
 
-    # Check ./config/IS_DEBUG.yaml file if IS_DEBUG argument is not passed
-    if IS_DEBUG is None:
-        IS_DEBUG_PATH = "./config/IS_DEBUG.yaml"
-        if os.path.exists(IS_DEBUG_PATH):
-            IS_DEBUG = mngs.io.load("./config/IS_DEBUG.yaml").get("IS_DEBUG")
-        else:
-            IS_DEBUG = False
+        # Main
+        CONFIGS = {}
+        for lpath in glob("./config/*.yaml"):
+            config = mngs.io.load(lpath)
+            if config:
+                CONFIG = apply_debug_values(config, IS_DEBUG)
+                CONFIGS.update(CONFIG)
 
-    # Main
-    CONFIGS = {}
-    for lpath in glob("./config/*.yaml"):
-        CONFIG = apply_debug_values(mngs.io.load(lpath), IS_DEBUG)
-        CONFIGS.update(CONFIG)
+        CONFIGS = mngs.gen.DotDict(CONFIGS)
 
-    CONFIGS = mngs.gen.DotDict(CONFIGS)
+    except Exception as e:
+        print(e)
+        CONFIGS = mngs.gen.DotDict({})
 
     return CONFIGS
