@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Time-stamp: "2024-10-24 18:56:26 (ywatanabe)"
+# Time-stamp: "2024-10-27 13:08:58 (ywatanabe)"
 
 ########################################
 # Warnings
@@ -147,7 +147,7 @@ from .gen._print_config import print_config
 # Usage: python -m mngs print_config
 
 __copyright__ = "Copyright (C) 2024 Yusuke Watanabe"
-__version__ = "1.8.0"
+__version__ = "1.8.1"
 __license__ = "MIT"
 __author__ = "ywatanabe1989"
 __author_email__ = "ywatanabe@alumni.u-tokyo.ac.jp"
