@@ -1,6 +1,10 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
+<<<<<<< HEAD
 # Time-stamp: "2024-10-27 12:43:40 (ywatanabe)"
+=======
+# Time-stamp: "2024-10-27 13:02:01 (ywatanabe)"
+>>>>>>> e52b4928e775444fa510e102daa6d177fa616df9
 # /home/ywatanabe/proj/mngs/src/mngs/ml/chat.py
 
 
@@ -19,8 +23,11 @@ import pandas as pd
 """Functions & Classes"""
 
 """Parameters"""
+<<<<<<< HEAD
 MODELS = pd.DataFrame(MODELS)
 
+=======
+>>>>>>> e52b4928e775444fa510e102daa6d177fa616df9
 def genai_factory(
     model="gpt-3.5-turbo",
     stream=False,
@@ -31,9 +38,8 @@ def genai_factory(
     chat_history=None,
     max_tokens=4096,
 ):
-    import pandas as pd
     """Factory function to create an instance of an AI model handler."""
-    AVAILABLE_MODELS = pd.DataFrame(MODELS).name.tolist()
+    AVAILABLE_MODELS = MODELS.name.tolist()
 
     if model not in AVAILABLE_MODELS:
         raise ValueError(
