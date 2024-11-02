@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-03 03:42:32 (ywatanabe)"
+# Time-stamp: "2024-11-03 04:37:54 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/ai/_gen_ai/_Google.py
 
 """Imports"""
@@ -115,10 +115,7 @@ class Google(BaseGenAI):
 
 
 def main():
-    # ai = mngs.ai.GenAI("gpt-4o")
-    # ai = mngs.ai.GenAI("gemini-1.5-pro-latest", stream=False)
     ai = mngs.ai.GenAI("gemini-1.5-flash-latest", stream=False)
-    # ai = mngs.ai.GenAI("gpt-4o", stream=False)
     print(ai("hi"))
 
 
