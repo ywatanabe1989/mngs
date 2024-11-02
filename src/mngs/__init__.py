@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "ywatanabe (2024-11-03 00:02:07)"
+# Time-stamp: "2024-11-03 01:11:57 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/__init__.py
 
 ########################################
@@ -28,7 +28,6 @@ from . import dict
 from . import gen
 from . import decorators
 from . import ai
-from . import ml
 from . import dsp
 from . import gists
 from . import linalg

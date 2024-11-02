@@ -1,12 +1,19 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-03 01:22:13 (ywatanabe)"
+# File: ./mngs_repo/tests/test_io.py
 
-import pytest
+import json
 import os
 import tempfile
+
 import numpy as np
 import pandas as pd
-import json
+import pytest
 import yaml
-from mngs.io import load, glob
+
+from mngs.io import glob, load
+
 
 def test_load_csv():
     with tempfile.NamedTemporaryFile(mode='w', suffix='.csv', delete=False) as tmp:
@@ -64,3 +71,6 @@ def test_load_unsupported():
             load(tmp.name)
 
 # Add more tests for other load functions as needed
+
+
+# EOF
