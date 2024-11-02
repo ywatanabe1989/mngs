@@ -144,6 +144,7 @@ def load(lpath, show=False, verbose=False, **kwargs):
             from catboost import CatBoostModel
 
             obj = CatBoostModel.load_model(lpath, **kwargs)
+
         # EEG data
         elif extension in [
             ".vhdr",
@@ -157,10 +158,21 @@ def load(lpath, show=False, verbose=False, **kwargs):
             ".set",
         ]:
             obj = _load_eeg_data(lpath, **kwargs)
+
+        elif extension == ".db":
+            try:
+                from ..db._BaseSQLiteDB import BaseSQLiteDB
+                obj = BaseSQLiteDB(lpath)
+            except Exception as e:
+                raise ValueError(str(e))
+
         else:
             raise ValueError(f"Unsupported file extension: {extension}")
 
         return obj
+
+
+
     except Exception as e:
         print(f"Error loading file {lpath}: {str(e)}")
         raise

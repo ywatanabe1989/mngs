@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-25 20:29:30 (ywatanabe)"
-# ./scripts/db/BaseSQLiteDB.py
+# Time-stamp: "2024-10-31 08:28:52 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/db/_BaseSQLiteDB.py
 
 """
 BaseSQLiteDB: Comprehensive SQLite Database Management Class
@@ -82,53 +82,95 @@ class BaseSQLiteDB:
         self.db_path = db_path
         if db_path:
             self.connect(db_path)
-            self._initialize_writable_state()
+            # self._initialize_writable_state()
+
+        # if writable:
+        #     self.writable = True
+        # else:
+        #     self.writable = False
 
     def __call__(
         self,
+            return_summary=False,
+        print_summary=True,
+        table_names: Optional[List[str]] = None,
+        verbose: bool = True,
+        limit: int = 5,
     ):
-        self.summary
+        if print_summary:
+            self.print_summary()
+
+        if return_summary:
+            return self.get_summaries(
+                table_names=table_names,
+                verbose=verbose,
+                limit=limit,
+            )
 
     # ----------------------------------------
     # Writable states
     # ----------------------------------------
-    def _initialize_writable_state(self) -> None:
-        """Initializes writable state table and protects it."""
-        try:
-            # Create state table
-            self.execute(
-                """
-                CREATE TABLE IF NOT EXISTS _db_state (
-                    key TEXT PRIMARY KEY,
-                    value TEXT,
-                    protected INTEGER DEFAULT 1
-                )
-                """
-            )
+    # def _initialize_writable_state(self) -> None:
+    #     """Initializes writable state table and protects it."""
+    #     try:
+    #         # Create state table without protection by default
+    #         self.execute(
+    #             """
+    #             CREATE TABLE IF NOT EXISTS _db_state (
+    #                 key TEXT PRIMARY KEY,
+    #                 value TEXT,
+    #                 protected INTEGER DEFAULT 0
+    #             )
+    #             """
+    #         )
 
-            # Create trigger
-            self.execute(
-                """
-                CREATE TRIGGER IF NOT EXISTS protect_db_state
-                BEFORE UPDATE ON _db_state
-                BEGIN
-                    SELECT CASE
-                        WHEN OLD.protected = 1 THEN
-                            RAISE(ABORT, 'Cannot modify protected state')
-                    END;
-                END;
-                """
-            )
+    #         # Initialize state
+    #         self.execute(
+    #             """
+    #             INSERT OR IGNORE INTO _db_state (key, value, protected)
+    #             VALUES ('writable', 'true', 0)
+    #             """
+    #         )
+    #     except sqlite3.Error as err:
+    #         raise ValueError(f"Failed to initialize writable state: {err}")
 
-            # Initialize state
-            self.execute(
-                """
-                INSERT OR IGNORE INTO _db_state (key, value, protected)
-                VALUES ('writable', 'true', 1)
-                """
-            )
-        except sqlite3.Error as err:
-            raise ValueError(f"Failed to initialize writable state: {err}")
+    # def _initialize_writable_state(self) -> None:
+    #     """Initializes writable state table and protects it."""
+    #     try:
+    #         # Create state table
+    #         self.execute(
+    #             """
+    #             CREATE TABLE IF NOT EXISTS _db_state (
+    #                 key TEXT PRIMARY KEY,
+    #                 value TEXT,
+    #                 protected INTEGER DEFAULT 1
+    #             )
+    #             """
+    #         )
+
+    #         # Create trigger
+    #         self.execute(
+    #             """
+    #             CREATE TRIGGER IF NOT EXISTS protect_db_state
+    #             BEFORE UPDATE ON _db_state
+    #             BEGIN
+    #                 SELECT CASE
+    #                     WHEN OLD.protected = 1 THEN
+    #                         RAISE(ABORT, 'Cannot modify protected state')
+    #                 END;
+    #             END;
+    #             """
+    #         )
+
+    #         # Initialize state
+    #         self.execute(
+    #             """
+    #             INSERT OR IGNORE INTO _db_state (key, value, protected)
+    #             VALUES ('writable', 'true', 1)
+    #             """
+    #         )
+    #     except sqlite3.Error as err:
+    #         raise ValueError(f"Failed to initialize writable state: {err}")
 
     @property
     def writable(self) -> bool:
@@ -282,7 +324,7 @@ class BaseSQLiteDB:
         try:
             self.cursor.execute(query, parameters)
             self.conn.commit()
-            return self.cursor  # Return cursor for chaining
+            return self.cursor
         except sqlite3.Error as err:
             raise sqlite3.Error(f"Query execution failed: {err}")
 
@@ -526,34 +568,10 @@ class BaseSQLiteDB:
         self,
         table_name: str,
         columns: Dict[str, str],
-        foreign_keys: Dict[str, Union[str, List[str]]] = None,
+        foreign_keys: List[Dict[str, str]] = None,
         if_not_exists: bool = True,
     ) -> None:
-        """Creates new table with metadata columns for BLOB types and foreign keys.
-
-        Parameters
-        ----------
-        table_name : str
-            Name of table to create
-        columns : Dict[str, str]
-            Column definitions with names as keys and SQL types as values
-        foreign_keys : Dict[str, Union[str, List[str]]], optional
-            Foreign key definitions as {table_name: column_name(s)}
-        if_not_exists : bool, optional
-            Whether to use IF NOT EXISTS clause (default True)
-
-        Example
-        -------
-        >>> columns = {
-        ...     'id': 'INTEGER PRIMARY KEY',
-        ...     'name': 'TEXT',
-        ...     'data': 'BLOB'
-        ... }
-        >>> foreign_keys = {'parent_table': ['id', 'name']}
-        >>> db.create_table('measurements', columns, foreign_keys)
-        """
         try:
-            # Create base table
             exists_clause = "IF NOT EXISTS " if if_not_exists else ""
             column_defs = []
 
@@ -567,19 +585,75 @@ class BaseSQLiteDB:
 
             # Add foreign key constraints
             if foreign_keys:
-                for src_table, columns in foreign_keys.items():
-                    if isinstance(columns, str):
-                        columns = [columns]
-                    for column in columns:
-                        column_defs.append(
-                            f"FOREIGN KEY ({column}) REFERENCES {src_table}({column})"
-                        )
+                for fk in foreign_keys:
+                    column_defs.append(
+                        f"FOREIGN KEY ({fk['tgt_column']}) REFERENCES {fk['src_table']}({fk['src_column']})"
+                    )
 
             query = f"CREATE TABLE {exists_clause}{table_name} ({', '.join(column_defs)})"
             self.execute(query)
 
         except sqlite3.Error as err:
             raise ValueError(f"Failed to create table {table_name}: {err}")
+
+    # def create_table(
+    #     self,
+    #     table_name: str,
+    #     columns: Dict[str, str],
+    #     foreign_keys: Dict[str, Union[str, List[str]]] = None,
+    #     if_not_exists: bool = True,
+    # ) -> None:
+    #     """Creates new table with metadata columns for BLOB types and foreign keys.
+
+    #     Parameters
+    #     ----------
+    #     table_name : str
+    #         Name of table to create
+    #     columns : Dict[str, str]
+    #         Column definitions with names as keys and SQL types as values
+    #     foreign_keys : Dict[str, Union[str, List[str]]], optional
+    #         Foreign key definitions as {table_name: column_name(s)}
+    #     if_not_exists : bool, optional
+    #         Whether to use IF NOT EXISTS clause (default True)
+
+    #     Example
+    #     -------
+    #     >>> columns = {
+    #     ...     'id': 'INTEGER PRIMARY KEY',
+    #     ...     'name': 'TEXT',
+    #     ...     'data': 'BLOB'
+    #     ... }
+    #     >>> foreign_keys = {'parent_table': ['id', 'name']}
+    #     >>> db.create_table('measurements', columns, foreign_keys)
+    #     """
+    #     try:
+    #         # Create base table
+    #         exists_clause = "IF NOT EXISTS " if if_not_exists else ""
+    #         column_defs = []
+
+    #         for col_name, col_type in columns.items():
+    #             column_defs.append(f"{col_name} {col_type}")
+    #             if "BLOB" in col_type.upper():
+    #                 column_defs.extend([
+    #                     f"{col_name}_dtype TEXT DEFAULT 'unknown'",
+    #                     f"{col_name}_shape TEXT DEFAULT 'unknown'"
+    #                 ])
+
+    #         # Add foreign key constraints
+    #         if foreign_keys:
+    #             for src_table, columns in foreign_keys.items():
+    #                 if isinstance(columns, str):
+    #                     columns = [columns]
+    #                 for column in columns:
+    #                     column_defs.append(
+    #                         f"FOREIGN KEY ({column}) REFERENCES {src_table}({column})"
+    #                     )
+
+    #         query = f"CREATE TABLE {exists_clause}{table_name} ({', '.join(column_defs)})"
+    #         self.execute(query)
+
+    #     except sqlite3.Error as err:
+    #         raise ValueError(f"Failed to create table {table_name}: {err}")
 
     def drop_table(self, table_name: str, if_exists: bool = True) -> None:
         """Drops a table from the database.
@@ -950,7 +1024,7 @@ class BaseSQLiteDB:
         order_by: str = None,
         limit: Optional[int] = None,
         offset: Optional[int] = None,
-        return_as: str = "dataframe",  # "dataframe", "list", "dict"
+        return_as: str = "dataframe",
     ):
         """Retrieves rows from specified table."""
 
@@ -985,10 +1059,8 @@ class BaseSQLiteDB:
                 return data
             elif return_as == "dict":
                 return [dict(zip(column_names, row)) for row in data]
-            else:  # "dataframe"
+            else:
                 return pd.DataFrame(data, columns=column_names)
-
-            # return pd.DataFrame(self.cursor.fetchall(), columns=column_names)
 
         except sqlite3.Error as error:
             raise sqlite3.Error(
@@ -1078,6 +1150,82 @@ class BaseSQLiteDB:
     #         values = [[row.get(col) for col in valid_columns] for row in batch]
     #         self.executemany(query, values)
 
+    # def _run_many(
+    #     self,
+    #     sql_command,
+    #     table_name: str,
+    #     rows: List[Dict[str, Any]],
+    #     batch_size: int = 1000,
+    #     inherit_foreign: bool = True,
+    # ) -> None:
+
+    #     assert sql_command.upper() in ["INSERT", "REPLACE", "INSERT OR REPLACE"]
+
+    #     if not rows:
+    #         return
+
+    #     # Get available columns in table
+    #     schema = self.get_table_schema(table_name)
+    #     table_columns = set(schema['name'])
+
+    #     # Filter to only valid columns from first row
+    #     valid_columns = [col for col in rows[0].keys()]
+
+    #     if inherit_foreign:
+    #         fk_query = f"PRAGMA foreign_key_list({table_name})"
+    #         foreign_keys = self.execute(fk_query).fetchall()
+
+    #         for row in rows:
+    #             for fk in foreign_keys:
+    #                 ref_table, from_col, to_col = fk[2], fk[3], fk[4]
+    #                 if from_col not in row or row[from_col] is None:
+    #                     if to_col in row:
+    #                         query = f"SELECT {from_col} FROM {ref_table} WHERE {to_col} = ?"
+    #                         result = self.execute(query, (row[to_col],)).fetchone()
+    #                         if result:
+    #                             row[from_col] = result[0]
+
+    #     # Ensure 'id' is in valid_columns if present in rows
+    #     # columns = valid_columns if 'id' in valid_columns else ['id'] + valid_columns
+    #     columns = valid_columns
+    #     placeholders = ",".join(["?" for _ in columns])
+    #     query = f"{sql_command} INTO {table_name} ({','.join(columns)}) VALUES ({placeholders})"
+
+    #     for idx in range(0, len(rows), batch_size):
+    #         batch = rows[idx : idx + batch_size]
+    #         values = [[row.get(col) for col in valid_columns] for row in batch]
+    #         self.executemany(query, values)
+
+    # def insert_many(
+    #     self,
+    #     table_name: str,
+    #     rows: List[Dict[str, Any]],
+    #     batch_size: int = 1000,
+    #     inherit_foreign: bool = True,
+    # ) -> None:
+    #     self._run_many(
+    #         sql_command="INSERT",
+    #         table_name=table_name,
+    #         rows=rows,
+    #         batch_size=batch_size,
+    #         inherit_foreign=inherit_foreign
+    #     )
+
+    # def replace_many(
+    #     self,
+    #     table_name: str,
+    #     rows: List[Dict[str, Any]],
+    #     batch_size: int = 1000,
+    #     inherit_foreign: bool = True,
+    # ) -> None:
+    #     self._run_many(
+    #         sql_command="REPLACE",
+    #         table_name=table_name,
+    #         rows=rows,
+    #         batch_size=batch_size,
+    #         inherit_foreign=inherit_foreign
+    #     )
+
     def _run_many(
         self,
         sql_command,
@@ -1085,18 +1233,47 @@ class BaseSQLiteDB:
         rows: List[Dict[str, Any]],
         batch_size: int = 1000,
         inherit_foreign: bool = True,
+        where: Optional[str] = None,
+        columns: Optional[List[str]] = None,
     ) -> None:
-
-        assert sql_command.upper() in ["INSERT", "REPLACE", "INSERT OR REPLACE"]
+        assert sql_command.upper() in ["INSERT", "REPLACE", "INSERT OR REPLACE", "UPDATE"]
 
         if not rows:
             return
 
-        # Get available columns in table
+        if sql_command.upper() == "UPDATE":
+            valid_columns = columns if columns else [col for col in rows[0].keys()]
+            set_clause = ",".join([f"{col}=?" for col in valid_columns])
+            where_clause = where if where else "1=1"
+            query = f"UPDATE {table_name} SET {set_clause} WHERE {where_clause}"
+
+            for idx in range(0, len(rows), batch_size):
+                batch = rows[idx : idx + batch_size]
+                values = [
+                    tuple([row[col] for col in valid_columns])
+                    for row in batch
+                ]
+                self.executemany(query, values)
+            return
+
+        # Filter rows based on where clause if provided
+        if where:
+            filtered_rows = []
+            for row in rows:
+                try:
+                    # Create a temporary query to test the where clause
+                    test_query = f"SELECT 1 FROM (SELECT {','.join(f'{k} as {k}' for k in row.keys())}) WHERE {where}"
+                    values = tuple(row.values())
+                    result = self.execute(test_query, values).fetchone()
+                    if result:
+                        filtered_rows.append(row)
+                except Exception as e:
+                    print(f"Warning: Where clause evaluation failed for row: {e}")
+            rows = filtered_rows
+
+        # Rest of the original function...
         schema = self.get_table_schema(table_name)
         table_columns = set(schema['name'])
-
-        # Filter to only valid columns from first row
         valid_columns = [col for col in rows[0].keys()]
 
         if inherit_foreign:
@@ -1113,20 +1290,33 @@ class BaseSQLiteDB:
                             if result:
                                 row[from_col] = result[0]
 
-        # Ensure 'id' is in valid_columns if present in rows
-        columns = valid_columns if 'id' in valid_columns else ['id'] + valid_columns
+        columns = valid_columns
         placeholders = ",".join(["?" for _ in columns])
         query = f"{sql_command} INTO {table_name} ({','.join(columns)}) VALUES ({placeholders})"
 
         for idx in range(0, len(rows), batch_size):
             batch = rows[idx : idx + batch_size]
-            values = [
-                [row.get('id', None)] + [row.get(col) for col in valid_columns if col != 'id']
-                if 'id' not in valid_columns
-                else [row.get(col) for col in valid_columns]
-                for row in batch
-            ]
+            values = [[row.get(col) for col in valid_columns] for row in batch]
             self.executemany(query, values)
+
+
+    def update_many(
+        self,
+        table_name: str,
+        rows: List[Dict[str, Any]],
+        batch_size: int = 1000,
+        where: Optional[str] = None,
+        columns: Optional[List[str]] = None,
+    ) -> None:
+        self._run_many(
+            sql_command="UPDATE",
+            table_name=table_name,
+            rows=rows,
+            batch_size=batch_size,
+            inherit_foreign=False,
+            where=where,
+            columns=columns
+        )
 
     def insert_many(
         self,
@@ -1134,13 +1324,15 @@ class BaseSQLiteDB:
         rows: List[Dict[str, Any]],
         batch_size: int = 1000,
         inherit_foreign: bool = True,
+        where: Optional[str] = None,
     ) -> None:
         self._run_many(
             sql_command="INSERT",
             table_name=table_name,
             rows=rows,
             batch_size=batch_size,
-            inherit_foreign=inherit_foreign
+            inherit_foreign=inherit_foreign,
+            where=where,
         )
 
     def replace_many(
@@ -1149,13 +1341,15 @@ class BaseSQLiteDB:
         rows: List[Dict[str, Any]],
         batch_size: int = 1000,
         inherit_foreign: bool = True,
+        where: Optional[str] = None,
     ) -> None:
         self._run_many(
             sql_command="REPLACE",
             table_name=table_name,
             rows=rows,
             batch_size=batch_size,
-            inherit_foreign=inherit_foreign
+            inherit_foreign=inherit_foreign,
+            where=where,
         )
 
     # def insert_many(
@@ -1296,63 +1490,60 @@ class BaseSQLiteDB:
         additional_columns: Dict[str, Any] = None,
         batch_size: int = 1000,
     ) -> None:
-        """Stores NumPy array as BLOB with metadata in SQLite database.
-
-        Example
-        -------
-        >>> # Insert new data
-        >>> data = np.random.randn(100, 10)
-        >>> metadata = {'timestamp': '2024-01-01', 'label': 'test'}
-        >>> db.save_array('measurements', data, column='features', metadata=metadata)
-        >>> # Update existing rows with IDs
-        >>> db.save_array('measurements', new_data, column='features', ids=[1,2,3])
-        >>> # Update rows matching condition
-        >>> db.save_array('measurements', new_data, column='features',
-        ...              where="timestamp < '2024-01-01'")
-        """
-        if not isinstance(data, np.ndarray):
-            raise ValueError("Input must be a NumPy array")
+        """Stores NumPy array as BLOB with metadata in SQLite database."""
+        if not isinstance(data, (np.ndarray, list)):
+            raise ValueError("Input must be a NumPy array or list of arrays")
 
         try:
-            binary = data.tobytes()
-            columns = [column, f"{column}_dtype", f"{column}_shape"]
-            values = [binary, str(data.dtype), str(data.shape)]
+            if ids is not None:
+                if isinstance(ids, int):
+                    ids = [ids]
+                    data = [data]
+                if len(ids) != len(data):
+                    raise ValueError("Length of ids must match number of arrays")
 
-            if additional_columns:
-                columns = list(additional_columns.keys()) + columns
-                values = list(additional_columns.values()) + values
+                for id_, arr in zip(ids, data):
+                    if not isinstance(arr, np.ndarray):
+                        raise ValueError(f"Element for id {id_} must be a NumPy array")
 
-            if ids is not None or where is not None:
-                update_cols = [f"{col}=?" for col in columns]
-                query = f"UPDATE {table_name} SET {','.join(update_cols)}"
+                    binary = arr.tobytes()
+                    columns = [column, f"{column}_dtype", f"{column}_shape"]
+                    values = [binary, str(arr.dtype), str(arr.shape)]
 
-                if ids is not None:
-                    if isinstance(ids, int):
-                        ids = [ids]
-                    if len(ids) != len(data):
-                        raise ValueError(
-                            "Length of ids must match first dimension of data"
-                        )
-                    placeholders = ",".join("?" for _ in ids)
-                    query += f" WHERE id IN ({placeholders})"
-                    values.extend(ids)
+                    if additional_columns:
+                        columns = list(additional_columns.keys()) + columns
+                        values = list(additional_columns.values()) + values
+
+                    update_cols = [f"{col}=?" for col in columns]
+                    query = f"UPDATE {table_name} SET {','.join(update_cols)} WHERE id=?"
+                    values.append(id_)
+                    self.execute(query, tuple(values))
+
+            else:
+                if not isinstance(data, np.ndarray):
+                    raise ValueError("Single input must be a NumPy array")
+
+                binary = data.tobytes()
+                columns = [column, f"{column}_dtype", f"{column}_shape"]
+                values = [binary, str(data.dtype), str(data.shape)]
+
+                if additional_columns:
+                    columns = list(additional_columns.keys()) + columns
+                    values = list(additional_columns.values()) + values
 
                 if where is not None:
-                    query += (
-                        f" WHERE {where}"
-                        if "WHERE" not in query
-                        else f" AND {where}"
-                    )
-
-                self.execute(query, tuple(values))
-            else:
-                placeholders = ",".join(["?" for _ in columns])
-                columns_str = ",".join(columns)
-                query = f"INSERT INTO {table_name} ({columns_str}) VALUES ({placeholders})"
-                self.execute(query, tuple(values))
+                    update_cols = [f"{col}=?" for col in columns]
+                    query = f"UPDATE {table_name} SET {','.join(update_cols)} WHERE {where}"
+                    self.execute(query, tuple(values))
+                else:
+                    placeholders = ",".join(["?" for _ in columns])
+                    columns_str = ",".join(columns)
+                    query = f"INSERT INTO {table_name} ({columns_str}) VALUES ({placeholders})"
+                    self.execute(query, tuple(values))
 
         except Exception as err:
             raise ValueError(f"Failed to save array: {err}")
+
 
     def load_array(
         self,
@@ -1361,51 +1552,11 @@ class BaseSQLiteDB:
         ids: Union[int, List[int], str] = "all",
         where: str = None,
         order_by: str = None,
-        batch_size: int = 1000,
+        batch_size: int = 128,
         dtype: np.dtype = None,
         shape: Optional[Tuple] = None,
     ) -> Optional[np.ndarray]:
-        """Loads array data from SQLite database with metadata support.
-
-        Example
-        -------
-        >>> # Load all data
-        >>> data = db.load_array('measurements', 'data', ids='all')
-        >>> # Load specific IDs with condition
-        >>> data = db.load_array('measurements', 'data', ids=[1,2,3],
-        ...                      where="timestamp > '2024-01-01'")
-
-        Parameters
-        ----------
-        table_name : str
-            Source table name
-        column : str
-            Name of BLOB column
-        ids : Union[int, List[int], str]
-            Specific IDs or 'all' (default: 'all')
-        where : str, optional
-            SQL WHERE clause (default: None)
-        order_by : str, optional
-            SQL ORDER BY clause (default: None)
-        batch_size : int, optional
-            Batch size for loading (default: 1,000)
-        dtype : np.dtype, optional
-            Override array dtype (default: None)
-        shape : Optional[Tuple], optional
-            Override array shape (default: None)
-
-        Returns
-        -------
-        Optional[np.ndarray]
-            Loaded array data or None if no data found
-
-        Raises
-        ------
-        ValueError
-            If invalid parameters or data conversion fails
-        sqlite3.Error
-            If database operation fails
-        """
+        """Loads array data from SQLite database with metadata support."""
         try:
             if ids == "all":
                 query = f"SELECT id FROM {table_name}"
@@ -1416,14 +1567,17 @@ class BaseSQLiteDB:
             elif isinstance(ids, int):
                 ids = [ids]
 
-            all_data = []
-            for idx in range(0, len(ids), batch_size):
-                batch_ids = ids[idx : idx + batch_size]
+            # Create mapping of id to data
+            id_to_data = {}
+            unique_ids = list(set(ids))
+
+            for idx in range(0, len(unique_ids), batch_size):
+                batch_ids = unique_ids[idx : idx + batch_size]
                 placeholders = ",".join("?" for _ in batch_ids)
 
                 try:
                     query = f"""
-                        SELECT {column},
+                        SELECT id, {column},
                                {column}_dtype,
                                {column}_shape
                         FROM {table_name}
@@ -1432,7 +1586,7 @@ class BaseSQLiteDB:
                     self.cursor.execute(query, tuple(batch_ids))
                     has_metadata = True
                 except sqlite3.OperationalError:
-                    query = f"SELECT {column} FROM {table_name} WHERE id IN ({placeholders})"
+                    query = f"SELECT id, {column} FROM {table_name} WHERE id IN ({placeholders})"
                     self.cursor.execute(query, tuple(batch_ids))
                     has_metadata = False
 
@@ -1445,12 +1599,12 @@ class BaseSQLiteDB:
                 if results:
                     for result in results:
                         if has_metadata:
-                            blob, dtype_str, shape_str = result
+                            id_val, blob, dtype_str, shape_str = result
                             data = np.frombuffer(
                                 blob, dtype=np.dtype(dtype_str)
                             ).reshape(eval(shape_str))
                         else:
-                            blob = result[0]
+                            id_val, blob = result
                             data = (
                                 np.frombuffer(blob, dtype=dtype)
                                 if dtype
@@ -1458,11 +1612,75 @@ class BaseSQLiteDB:
                             )
                             if shape:
                                 data = data.reshape(shape)
-                        all_data.append(data)
+                        id_to_data[id_val] = data
 
+            # Maintain input order and duplicates
+            all_data = [id_to_data[id_val] for id_val in ids if id_val in id_to_data]
             return np.stack(all_data, axis=0) if all_data else None
+
         except Exception as err:
             raise ValueError(f"Failed to load array: {err}")
+
+    def binary_to_array(self, binary_data, dtype_str=None, shape_str=None, dtype=None, shape=None):
+        """Convert binary data into numpy array."""
+        if binary_data is None:
+            return None
+
+        if dtype_str and shape_str:
+            return np.frombuffer(binary_data, dtype=np.dtype(dtype_str)).reshape(eval(shape_str))
+        elif dtype and shape:
+            return np.frombuffer(binary_data, dtype=dtype).reshape(shape)
+        return binary_data
+
+    def get_array_dict(self, df, columns=None, dtype=None, shape=None):
+        """Return dictionary of concatenated arrays for batch processing.
+
+        Returns:
+            dict: {column_name: numpy_array} where each array has shape (n_samples, *data_shape)
+        """
+        result = {}
+        if columns is None:
+            columns = [col for col in df.columns if not (col.endswith('_dtype') or col.endswith('_shape'))]
+
+        for col in columns:
+            if f"{col}_dtype" in df.columns and f"{col}_shape" in df.columns:
+                arrays = [
+                    self.binary_to_array(row[col], row[f"{col}_dtype"], row[f"{col}_shape"])
+                    for _, row in df.iterrows()
+                ]
+            elif dtype and shape:
+                arrays = [
+                    self.binary_to_array(x, dtype=dtype, shape=shape)
+                    for x in df[col]
+                ]
+            result[col] = np.stack(arrays)
+
+        return result
+
+    def decode_array_columns(self, df, columns=None, dtype=None, shape=None):
+        """Decode binary columns to numpy arrays within DataFrame for exploration.
+
+        Modifies DataFrame in-place, replacing binary data with numpy arrays.
+        Returns modified DataFrame.
+        """
+        if columns is None:
+            columns = [col for col in df.columns if not (col.endswith('_dtype') or col.endswith('_shape'))]
+
+        for col in columns:
+            if f"{col}_dtype" in df.columns and f"{col}_shape" in df.columns:
+                df[col] = df.apply(
+                    lambda row: self.binary_to_array(
+                        row[col],
+                        row[f"{col}_dtype"],
+                        row[f"{col}_shape"]
+                    ),
+                    axis=1
+                )
+            elif dtype and shape:
+                df[col] = df[col].apply(
+                    lambda x: self.binary_to_array(x, dtype=dtype, shape=shape)
+                )
+        return df
 
     # ----------------------------------------
     # Import/Export Operations
@@ -1763,38 +1981,17 @@ class BaseSQLiteDB:
 
         return format_map[format.lower()](size_bytes)
 
+
     def get_summaries(
         self,
         table_names: Optional[List[str]] = None,
         verbose: bool = True,
         limit: int = 5,
     ) -> Dict[str, pd.DataFrame]:
-        """Generates table summaries with schema and sample data.
-
-        Example
-        -------
-        >>> db = BaseSQLiteDB('example.db')
-        >>> summaries = db.get_summaries(['measurements'], limit=3)
-        >>> for table_name, summary in summaries.items():
-        ...     print(f"\nTable: {table_name}")
-        ...     print(summary)
-
-        Parameters
-        ----------
-        table_names : Optional[List[str]]
-            Target tables to summarize. If None, summarizes all tables
-        verbose : bool
-            Controls output printing
-        limit : int
-            Maximum number of rows to fetch per table
-
-        Returns
-        -------
-        Dict[str, pd.DataFrame]
-            Dictionary of table names and their sample DataFrames
-        """
         if table_names is None:
             table_names = self.get_table_names()
+        if isinstance(table_names, str):
+            table_names = [table_names]
 
         sample_tables = {}
         for table_name in table_names:
@@ -1803,6 +2000,17 @@ class BaseSQLiteDB:
 
             for column in table_sample.columns:
                 if table_sample[column].dtype == object:
+                    try:
+                        # Try parsing as datetime
+                        pd.to_datetime(table_sample[column])
+                        continue
+                    except:
+                        pass
+
+                    # Check if all values are strings
+                    if table_sample[column].apply(lambda x: isinstance(x, str)).all():
+                        continue
+
                     dtype_col = f"{column}_dtype"
                     shape_col = f"{column}_shape"
                     if (
@@ -1820,29 +2028,101 @@ class BaseSQLiteDB:
 
         return sample_tables
 
+    # def print_summary(
+    #     self,
+    #     table_names: Optional[List[str]] = None,
+    #     verbose: bool = True,
+    #     limit: int = 5,
+    # ):
+    #     """Prints a friendly summary of all tables in the database."""
+    #     # Set pandas display options
+    #     with pd.option_context('display.max_columns', None,
+    #                           'display.width', None,
+    #                           'display.max_colwidth', None):
+
+    #         summaries = self.get_summaries(
+    #             table_names=table_names,
+    #             verbose=verbose,
+    #             limit=limit
+    #         )
+
+    #         print("\n=== Database Summary ===")
+    #         for table_name, df in summaries.items():
+    #             print("-" * (len(table_name) + 7))
+    #             print(f"Table: {table_name}")
+    #             print("-" * (len(table_name) + 7))
+    #             if df.empty:
+    #                 print("Empty table")
+    #             else:
+    #                 print(f"\nSample rows ({len(df)} shown):\n")
+    #                 dtype_df = pd.DataFrame([df.dtypes], index=['dtype'])
+    #                 print(pd.concat([df, dtype_df]))
+
+    #             print()
+
+
+    def print_summary(
+        self,
+        table_names: Optional[List[str]] = None,
+        verbose: bool = True,
+        limit: int = 5,
+    ):
+        """Prints a friendly summary of all tables in the database."""
+        with pd.option_context('display.max_columns', None,
+                              'display.width', None,
+                              'display.max_colwidth', None):
+
+            summaries = self.get_summaries(
+                table_names=table_names,
+                verbose=verbose,
+                limit=limit
+            )
+
+            print("\n=== Database Summary ===")
+            for table_name, df_sample in summaries.items():
+                print("-" * (len(table_name) + 7))
+                print(f"Table: {table_name}")
+                print("-" * (len(table_name) + 7))
+                if df_sample.empty:
+                    print("Empty table")
+                else:
+                    # Get full table for accurate counts
+                    with self.lock:
+                        full_df = pd.read_sql_query(f"SELECT * FROM {table_name}", self.conn)
+                    print(f"\nSample rows ({len(df_sample)} shown):\n")
+                    dtype_df = pd.DataFrame([df_sample.dtypes], index=['dtype'])
+                    non_null_counts = pd.DataFrame([full_df.notna().sum()], index=['non-null count'])
+                    print(pd.concat([df_sample, dtype_df, non_null_counts]))
+
+                print()
+
     @property
     def summary(self):
-        output = []
-        for table in self.get_table_names():
-            output.append(f"\nTable: {table} (n = {self.get_row_count(table):,})")
-            output.append("-" * (len(table) + 16))
+        self()
+        # output = []
+        # for table in self.get_table_names():
+        #     output.append(f"\nTable: {table} (n = {self.get_row_count(table):,})")
+        #     output.append("-" * (len(table) + 16))
 
-            # Get first 5 rows
-            df = self.get_rows(table_name=table, limit=5)
+        #     # Get first 5 rows
+        #     df = self.get_rows(table_name=table, limit=5)
 
-            # Primary key
-            pk = self.get_primary_key(table)
-            if pk:
-                df.set_index(pk, inplace=True)
+        #     # Primary key
+        #     pk = self.get_primary_key(table)
+        #     if pk:
+        #         df.set_index(pk, inplace=True)
 
-            # Convert BLOB to readable format
-            for col in df.columns:
-                if df[col].dtype == object:
-                    df[col] = df[col].apply(
-                        lambda x: "<BLOB>" if isinstance(x, bytes) else x
-                    )
+        #     # Convert BLOB to readable format
+        #     for col in df.columns:
+        #         if df[col].dtype == object:
+        #             df[col] = df[col].apply(
+        #                 lambda x: "<BLOB>" if isinstance(x, bytes) else x
+        #             )
 
-            output.append(str(df))
+        #     output.append(str(df))
 
-        output = "\n".join(output)
-        print(output)
+        # output = "\n".join(output)
+        # print(output)
+
+
+# EOF

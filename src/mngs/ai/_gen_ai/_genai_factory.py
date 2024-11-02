@@ -1,10 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-<<<<<<< HEAD
-# Time-stamp: "2024-10-27 12:43:40 (ywatanabe)"
-=======
-# Time-stamp: "2024-10-27 13:02:01 (ywatanabe)"
->>>>>>> e52b4928e775444fa510e102daa6d177fa616df9
+# Time-stamp: "2024-10-27 13:38:02 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/chat.py
 
 
@@ -23,11 +19,7 @@ import pandas as pd
 """Functions & Classes"""
 
 """Parameters"""
-<<<<<<< HEAD
-MODELS = pd.DataFrame(MODELS)
 
-=======
->>>>>>> e52b4928e775444fa510e102daa6d177fa616df9
 def genai_factory(
     model="gpt-3.5-turbo",
     stream=False,

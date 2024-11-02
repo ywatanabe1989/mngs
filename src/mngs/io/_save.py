@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-13 01:05:27 (ywatanabe)"
+# Time-stamp: "2024-10-27 23:28:40 (ywatanabe)"
 # File: /home/ywatanabe/proj/_mngs_repo_openhands/src/mngs/io/_save.py
 
 
@@ -151,6 +151,7 @@ def save(
     verbose: bool = True,
     from_cwd: bool = False,
     dry_run: bool = False,
+    no_csv: bool=False,
     **kwargs,
 ) -> None:
     """
@@ -267,6 +268,7 @@ def save(
             verbose=verbose,
             from_cwd=from_cwd,
             dry_run=dry_run,
+            no_csv=no_csv,
             **kwargs,
         )
         symlink(spath, spath_cwd, from_cwd, verbose)
@@ -292,7 +294,7 @@ def symlink(spath, spath_cwd, from_cwd, verbose):
             )
 
 
-def _save(obj, spath, verbose=True, from_cwd=False, dry_run=False, **kwargs):
+def _save(obj, spath, verbose=True, from_cwd=False, dry_run=False, no_csv=False, **kwargs):
     # csv
     if spath.endswith(".csv"):
         if isinstance(obj, (pd.Series, pd.DataFrame)):  # Series or DataFrame
@@ -357,14 +359,15 @@ def _save(obj, spath, verbose=True, from_cwd=False, dry_run=False, **kwargs):
         _save_image(obj, spath, **kwargs)
         ext = os.path.splitext(spath)[1].lower()
         try:
-            ext_wo_dot = ext.replace(".", "")
-            save(
-                obj.to_sigma(),
-                spath.replace(ext_wo_dot, "csv"),
-                from_cwd=from_cwd,
-                dry_run=dry_run,
-                **kwargs,
-            )
+            if not no_csv:
+                ext_wo_dot = ext.replace(".", "")
+                save(
+                    obj.to_sigma(),
+                    spath.replace(ext_wo_dot, "csv"),
+                    from_cwd=from_cwd,
+                    dry_run=dry_run,
+                    **kwargs,
+                )
         except Exception as e:
             print(e)
 

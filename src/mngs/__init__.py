@@ -142,6 +142,9 @@ from . import str
 
 #     from ._sh import sh
 
+# Direct access
+# from .general._is_ipython import is_script
+# is_script = is_script()
 
 # Modules
 from .gen._print_config import print_config
