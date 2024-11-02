@@ -21,7 +21,7 @@ class MultiTaskLoss(nn.Module):
 
     def __init__(self, are_regression=[False, False], reduction="none"):
         super().__init__()
-        mngs.general.fix_seeds(np=np, torch=torch, show=False)
+        mngs.reproduce.fix_seeds(np=np, torch=torch, show=False)
         n_tasks = len(are_regression)
 
         self.register_buffer("are_regression", torch.tensor(are_regression))

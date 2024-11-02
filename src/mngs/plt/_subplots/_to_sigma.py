@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Time-stamp: "ywatanabe (2024-11-02 23:55:19)"
+# File: ./mngs_repo/src/mngs/plt/_subplots/_to_sigma.py
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
 # Time-stamp: "2024-10-27 00:34:10 (ywatanabe)"
@@ -12,30 +16,11 @@ This script does XYZ.
 """
 Imports
 """
-import os
-import re
 import sys
-
-import matplotlib
-import matplotlib.pyplot as plt
-import mngs
-import seaborn as sns
-
-mngs.gen.reload(mngs)
-import logging
-import warnings
-from glob import glob
-from pprint import pprint
 
 import numpy as np
 import pandas as pd
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
 import xarray as xr
-from icecream import ic
-from natsort import natsorted
-from tqdm import tqdm
 
 # sys.path = ["."] + sys.path
 # from scripts import utils, load

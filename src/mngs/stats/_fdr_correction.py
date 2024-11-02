@@ -156,7 +156,7 @@ if __name__ == "__main__":
 
     arr = pvals_corrected['fdr_p_value'].to_numpy().astype(float)
     tor = pvals_corrected_torch.numpy().astype(float)
-    print(mngs.general.isclose(arr, tor))
+    print(mngs.gen.isclose(arr, tor))
 
 # #!/usr/bin/env python3
 # # Time-stamp: "2024-10-06 09:26:33 (ywatanabe)"
@@ -222,7 +222,7 @@ if __name__ == "__main__":
 #     Correction for multiple comparison using FDR :footcite:`GenoveseEtAl2002`.
 
 #     This covers Benjamini/Hochberg for independent or positively correlated and
-#     Benjamini/Yekutieli for general or negatively correlated tests.
+#     Benjamini/Yekutieli for gen or negatively correlated tests.
 
 #     Parameters
 #     ----------
@@ -393,4 +393,4 @@ if __name__ == "__main__":
 
 #     arr = pvals_corrected.astype(float)
 #     tor = pvals_corrected_torch.numpy().astype(float)
-#     print(mngs.general.isclose(arr, tor))
+#     print(mngs.gen.isclose(arr, tor))

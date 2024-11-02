@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Time-stamp: "2024-04-10 15:57:54 (ywatanabe)"
 
-import mngs
+
 
 # FUnctions
 
@@ -10,7 +10,7 @@ if __name__ == "__main__":
     import sys
 
     import matplotlib.pyplot as plt
-    import mngs
+    
     import torch
 
     # Start

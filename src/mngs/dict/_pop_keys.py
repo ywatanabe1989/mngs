@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-02 04:06:26 (ywatanabe)"
+# Time-stamp: "2024-11-02 12:40:04 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/dict/_pop_keys.py
 
 import numpy as np
+
 
 def pop_keys(keys_list, keys_to_pop):
     """Remove specified keys from a list of keys.

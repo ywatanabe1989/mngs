@@ -15,7 +15,7 @@ def merge_labels(*ys, to_int=False):
     if not len(ys) > 1:  # Check if more than two arguments are passed
         return ys[0]
     else:
-        y = [mngs.general.connect_nums(zs) for zs in zip(*ys)]
+        y = [mngs.gen.connect_nums(zs) for zs in zip(*ys)]
         if to_int:
             conv_d = {z: i for i, z in enumerate(np.unique(y))}
             y = [conv_d[z] for z in y]

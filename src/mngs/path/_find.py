@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-02 19:53:58 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/path/_find.py
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
 # Time-stamp: "2024-04-17 09:34:43"
@@ -12,8 +16,6 @@ import os
 import sys
 
 import matplotlib.pyplot as plt
-
-# Imports
 import mngs
 
 
@@ -101,3 +103,6 @@ if __name__ == "__main__":
 """
 /ssh:ywatanabe@444:/home/ywatanabe/proj/entrance/mngs/path/_find.py
 """
+
+
+# EOF

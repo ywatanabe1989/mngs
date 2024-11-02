@@ -1,21 +1,21 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-02 16:23:36 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/io/_load.py
+#!/usr/bin/env python3
 
 import json
 import os
 import pickle
 import warnings
-from glob import glob
 
 import h5py
 import joblib
 import mne
-import mngs
 import numpy as np
 import pandas as pd
 import torch
 import yaml
-from docx import Document
-from openpyxl import load_workbook
 from PIL import Image
 
 
@@ -249,7 +249,7 @@ def _load_eeg_data(filename, **kwargs):
             # Load BioSemi data format
             raw = mne.io.read_raw_bdf(filename, preload=True, **kwargs)
         elif extension == "gdf":
-            # Load General data format
+            # Load Gen data format
             raw = mne.io.read_raw_gdf(filename, preload=True, **kwargs)
         elif extension == "cnt":
             # Load Neuroscan CNT data
@@ -518,78 +518,6 @@ def load_study_rdb(study_name, rdb_raw_bytes_url):
     return study
 
 
-# def load_configs(IS_DEBUG=None, show=False, verbose=False):
-#     """
-#     Load and process configuration files from the ./config directory.
-
-#     This function loads all YAML files in the ./config directory, processes debug configurations,
-#     and returns a consolidated configuration dictionary.
-
-#     Parameters:
-#     -----------
-#     IS_DEBUG : bool, optional
-#         Flag to enable debug mode. If None, it will be determined from the ./config/IS_DEBUG.yaml file.
-#     show : bool, optional
-#         If True, print debug information. Default is False.
-#     verbose : bool, optional
-#         If True, print verbose debug information. Default is False.
-
-#     Returns:
-#     --------
-#     mngs.gen.DotDict
-#         A dictionary-like object containing all loaded and processed configurations.
-
-#     Notes:
-#     ------
-#     - If the CI environment variable is set to "True", IS_DEBUG will be set to True.
-#     - Debug configurations (keys starting with "DEBUG_") will replace their non-debug counterparts when IS_DEBUG is True.
-#     """
-
-#     if os.getenv("CI") == "True":
-#         IS_DEBUG = True
-
-#     def use_debug_values(config, IS_DEBUG):
-#         """
-#         Update configuration with debug values if IS_DEBUG is True.
-
-#         Parameters:
-#         -----------
-#         config : dict
-#             The configuration dictionary to update.
-#         IS_DEBUG : bool
-#             Flag indicating whether debug mode is active.
-
-#         Returns:
-#         --------
-#         dict
-#             The updated configuration dictionary.
-#         """
-#         if IS_DEBUG:
-#             debug_keys = mngs.gen.search("^DEBUG_", list(config.keys()))[1]
-#             for dk in debug_keys:
-#                 dk_wo_debug_prefix = dk.split("DEBUG_")[1]
-#                 config[dk_wo_debug_prefix] = config[dk]
-#                 if show or verbose:
-#                     print(f"\n{dk} -> {dk_wo_debug_prefix}\n")
-#         return config
-
-#     # Check ./config/IS_DEBUG.yaml file if IS_DEBUG argument is not passed
-#     if IS_DEBUG is None:
-#         IS_DEBUG_PATH = "./config/IS_DEBUG.yaml"
-#         if os.path.exists(IS_DEBUG_PATH):
-#             IS_DEBUG = mngs.io.load("./config/IS_DEBUG.yaml").get("IS_DEBUG")
-#         else:
-#             IS_DEBUG = False
-
-#     # Main
-#     CONFIGS = {}
-#     for lpath in glob("./config/*.yaml"):
-#         CONFIG = use_debug_values(mngs.io.load(lpath), IS_DEBUG)
-#         CONFIGS.update(CONFIG)
-
-#     CONFIGS = mngs.gen.DotDict(CONFIGS)
-
-#     return CONFIGS
 
 
 ################################################################################
@@ -771,65 +699,4 @@ def load_study_rdb(study_name, rdb_raw_bytes_url):
     return study
 
 
-def load_configs(IS_DEBUG=None, show=False, verbose=False):
-    """
-    Load configuration files from the ./config directory.
-
-    Parameters:
-    -----------
-    IS_DEBUG : bool, optional
-        If True, use debug configurations. If None, check ./config/IS_DEBUG.yaml.
-    show : bool, optional
-        If True, display additional information during loading.
-    verbose : bool, optional
-        If True, print verbose output during loading.
-
-    Returns:
-    --------
-    mngs.gen.DotDict
-        A dictionary-like object containing the loaded configurations.
-    """
-
-    def apply_debug_values(config, IS_DEBUG):
-        if IS_DEBUG:
-            if isinstance(config, (dict, mngs.gen.DotDict)):
-                for key, value in list(config.items()):
-                    try:
-                        if key.startswith("DEBUG_"):
-                            dk_wo_debug_prefix = key.split("DEBUG_")[1]
-                            config[dk_wo_debug_prefix] = value
-                            if show or verbose:
-                                print(f"\n{key} -> {dk_wo_debug_prefix}\n")
-                        elif isinstance(value, (dict, mngs.gen.DotDict)):
-                            config[key] = apply_debug_values(value, IS_DEBUG)
-                    except Exception as e:
-                        print(e)
-        return config
-
-    if os.getenv("CI") == "True":
-        IS_DEBUG = True
-
-    try:
-        # Check ./config/IS_DEBUG.yaml file if IS_DEBUG argument is not passed
-        if IS_DEBUG is None:
-            IS_DEBUG_PATH = "./config/IS_DEBUG.yaml"
-            if os.path.exists(IS_DEBUG_PATH):
-                IS_DEBUG = mngs.io.load("./config/IS_DEBUG.yaml").get("IS_DEBUG")
-            else:
-                IS_DEBUG = False
-
-        # Main
-        CONFIGS = {}
-        for lpath in glob("./config/*.yaml"):
-            config = mngs.io.load(lpath)
-            if config:
-                CONFIG = apply_debug_values(config, IS_DEBUG)
-                CONFIGS.update(CONFIG)
-
-        CONFIGS = mngs.gen.DotDict(CONFIGS)
-
-    except Exception as e:
-        print(e)
-        CONFIGS = mngs.gen.DotDict({})
-
-    return CONFIGS
+# EOF

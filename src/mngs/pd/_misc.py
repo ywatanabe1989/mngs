@@ -96,7 +96,7 @@ def merge_columns(_df, *columns):
     merged = deepcopy(df[columns[0]])  # initialization
     for c in columns[1:]:
         merged = mngs.ml.utils.merge_labels(list(merged), deepcopy(df[c]))
-    df.loc[:, mngs.general.connect_strs(columns)] = merged
+    df.loc[:, mngs.gen.connect_strs(columns)] = merged
     return df
 
 
@@ -104,7 +104,7 @@ def merge_columns(_df, *columns):
 #     def merge_row(row):
 #         return "-".join(
 #             [
-#                 mngs.general.connect_nums(zs)
+#                 mngs.gen.connect_nums(zs)
 #                 for zs in zip(np.array(row.index), np.array(row))
 #             ]
 #         )

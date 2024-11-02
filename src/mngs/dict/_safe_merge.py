@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-02 04:08:45 (ywatanabe)"
+# Time-stamp: "ywatanabe (2024-11-03 00:47:50)"
 # File: ./mngs_repo/src/mngs/dict/_safe_merge.py
 
 """
@@ -11,13 +11,16 @@ Input:
 Output:
     - A single merged dictionary
 Prerequisites:
-    - mngs.general package with search function
+    - mngs.gen package with search function
 """
 
-from typing import Dict, Any
-from ..general import search
+from typing import Any as _Any
+from typing import Dict
 
-def safe_merge(*dicts: Dict[Any, Any]) -> Dict[Any, Any]:
+from ..utils import search
+
+
+def safe_merge(*dicts: Dict[_Any, _Any]) -> Dict[_Any, _Any]:
     """Merges dictionaries while checking for key conflicts.
 
     Example
@@ -29,12 +32,12 @@ def safe_merge(*dicts: Dict[Any, Any]) -> Dict[Any, Any]:
 
     Parameters
     ----------
-    *dicts : Dict[Any, Any]
+    *dicts : Dict[_Any, _Any]
         Variable number of dictionaries to merge
 
     Returns
     -------
-    Dict[Any, Any]
+    Dict[_Any, _Any]
         Merged dictionary
 
     Raises
@@ -43,12 +46,10 @@ def safe_merge(*dicts: Dict[Any, Any]) -> Dict[Any, Any]:
         If overlapping keys are found between dictionaries
     """
     try:
-        merged_dict: Dict[Any, Any] = {}
+        merged_dict: Dict[_Any, _Any] = {}
         for current_dict in dicts:
             overlap_check = search(
-                merged_dict.keys(),
-                current_dict.keys(),
-                only_perfect_match=True
+                merged_dict.keys(), current_dict.keys(), only_perfect_match=True
             )
             if overlap_check != ([], []):
                 raise ValueError("Overlapping keys found between dictionaries")
@@ -56,5 +57,6 @@ def safe_merge(*dicts: Dict[Any, Any]) -> Dict[Any, Any]:
         return merged_dict
     except Exception as error:
         raise ValueError(f"Dictionary merge failed: {str(error)}")
+
 
 # EOF

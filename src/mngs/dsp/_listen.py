@@ -6,7 +6,7 @@ import os
 import sys
 
 import matplotlib.pyplot as plt
-import mngs
+
 
 # Imports
 import numpy as np

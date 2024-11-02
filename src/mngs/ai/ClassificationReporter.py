@@ -119,7 +119,7 @@ class ClassificationReporter(object):
     def __init__(self, sdir):
         self.sdir = sdir
         self.folds_dict = defaultdict(list)
-        mngs.general.fix_seeds(
+        mngs.reproduce.fix_seeds(
             os=os, random=random, np=np, torch=torch, show=False
         )
 
@@ -275,14 +275,14 @@ class ClassificationReporter(object):
         ## Preparation
         # for convenience
         true_class = (
-            mngs.general.torch_to_arr(true_class).astype(int).reshape(-1)
+            mngs.gen.torch_to_arr(true_class).astype(int).reshape(-1)
         )
         pred_class = (
-            mngs.general.torch_to_arr(pred_class)
+            mngs.gen.torch_to_arr(pred_class)
             .astype(np.float64)
             .reshape(-1)
         )
-        pred_proba = mngs.general.torch_to_arr(pred_proba).astype(np.float64)
+        pred_proba = mngs.gen.torch_to_arr(pred_proba).astype(np.float64)
 
         # for curves
         mngs.plt.configure_mpl(
@@ -418,7 +418,7 @@ class ClassificationReporter(object):
 
             if n_folds != 0:
                 ## listed scalars
-                if mngs.general.is_listed_X(self.folds_dict[k], [float, int]):
+                if mngs.gen.is_listed_X(self.folds_dict[k], [float, int]):
                     mm = np.mean(self.folds_dict[k])
                     ss = np.std(self.folds_dict[k], ddof=1)
                     sr = pd.DataFrame(
@@ -429,7 +429,7 @@ class ClassificationReporter(object):
                     self.folds_dict[k] = sr.round(n_round)
 
                 ## listed pd.DataFrames
-                elif mngs.general.is_listed_X(
+                elif mngs.gen.is_listed_X(
                     self.folds_dict[k], pd.DataFrame
                 ):
                     zero_df_for_mm = 0 * self.folds_dict[k][0].copy()
@@ -462,7 +462,7 @@ class ClassificationReporter(object):
                         print("\n\n----------------------------------------\n")
 
                 ## listed figures
-                elif mngs.general.is_listed_X(
+                elif mngs.gen.is_listed_X(
                     self.folds_dict[k], matplotlib.figure.Figure
                 ):
                     pass
@@ -504,7 +504,7 @@ class ClassificationReporter(object):
                 mngs.io.save(self.folds_dict[k], self.sdir + f"{k}.csv")
 
             ## listed pd.DataFrame
-            elif mngs.general.is_listed_X(self.folds_dict[k], pd.DataFrame):
+            elif mngs.gen.is_listed_X(self.folds_dict[k], pd.DataFrame):
                 mngs.io.save(
                     self.folds_dict[k],
                     self.sdir + f"{k}.csv",
@@ -513,7 +513,7 @@ class ClassificationReporter(object):
                 )
 
             ## listed figures
-            elif mngs.general.is_listed_X(
+            elif mngs.gen.is_listed_X(
                 self.folds_dict[k], matplotlib.figure.Figure
             ):
                 for i_fold, fig in enumerate(self.folds_dict[k]):
@@ -642,12 +642,12 @@ if __name__ == "__main__":
     sdir = mngs.io.mk_spath(
         "./tmp/sdir-ClassificationReporter/"
     )  # "/tmp/sdir/"
-    sys.stdout, sys.stderr = mngs.general.tee(sys, sdir)
+    sys.stdout, sys.stderr = mngs.gen.tee(sys, sdir)
 
     ################################################################################
     ## Fixes seeds
     ################################################################################
-    mngs.general.fix_seeds(np=np)
+    mngs.reproduce.fix_seeds(np=np)
 
     ## Loads
     mnist = load_digits()
@@ -726,7 +726,7 @@ if __name__ == "__main__":
         mngs.io.touch(ff)
 
     files_to_reproduce = [
-        mngs.general.get_this_fpath(when_ipython="/dev/null"),
+        mngs.gen.get_this_fpath(when_ipython="/dev/null"),
         *fake_fpaths,
     ]
     # reporter.save(files_to_reproduce=files_to_reproduce)

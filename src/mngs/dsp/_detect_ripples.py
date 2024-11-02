@@ -1,43 +1,17 @@
-#!./env/bin/python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-05 08:25:07 (ywatanabe)"
-# /home/ywatanabe/proj/mngs/src/mngs/dsp/_detect_ripples.py
-
-
-"""
-This script does XYZ.
-"""
-
-
-"""
-Imports
-"""
-import sys
-
-import matplotlib.pyplot as plt
-import mngs
-
-mngs.gen.reload(mngs)
+# Time-stamp: "ywatanabe (2024-11-02 23:48:41)"
+# File: ./mngs_repo/src/mngs/dsp/_detect_ripples.py
 
 import numpy as np
 import pandas as pd
 from scipy.signal import find_peaks
 
-"""
-Config
-"""
-# CONFIG = mngs.gen.load_configs()
-
-
-"""
-Functions & Classes
-"""
-
-
-def main():
-    xx, tt, fs = mngs.dsp.demo_sig(sig_type="ripple")
-    df = detect_ripples(xx, fs, 80, 140)
-    print(df)
+from ..gen import to_z
+from ._demo_sig import demo_sig
+from ._hilbert import hilbert
+from ._resample import resample
+from .filt import bandpass, gauss
 
 
 def detect_ripples(
@@ -71,7 +45,6 @@ def detect_ripples(
     except ValueError as e:
         print("Caught an error:", e)
 
-
 def _preprocess(xx, fs, low_hz, high_hz, smoothing_sigma_ms=4):
     # Ensures three dimensional
     if xx.ndim == 2:
@@ -83,7 +56,7 @@ def _preprocess(xx, fs, low_hz, high_hz, smoothing_sigma_ms=4):
 
     # Downsampling
     fs_tgt = low_hz * 3
-    xx = mngs.dsp.resample(xx, float(fs), float(fs_tgt))
+    xx = resample(xx, float(fs), float(fs_tgt))
     fs = fs_tgt
 
     # Subtracts the global mean to reduce false detection due to EMG signal
@@ -92,7 +65,7 @@ def _preprocess(xx, fs, low_hz, high_hz, smoothing_sigma_ms=4):
     # Bandpass Filtering
     xx = (
         (
-            mngs.dsp.filt.bandpass(
+            bandpass(
                 np.array(xx),
                 fs_tgt,
                 RIPPLE_BANDS,
@@ -104,18 +77,17 @@ def _preprocess(xx, fs, low_hz, high_hz, smoothing_sigma_ms=4):
 
     # Calculate RMS
     xx = xx**2
-    _, xx = mngs.dsp.hilbert(xx)
-    xx = mngs.dsp.filt.gauss(xx, smoothing_sigma_ms * 1e-3 * fs_tgt).squeeze(
+    _, xx = hilbert(xx)
+    xx = gauss(xx, smoothing_sigma_ms * 1e-3 * fs_tgt).squeeze(
         -2
     )
     xx = np.sqrt(xx)
 
     # Scales across channels
     xx = xx.mean(axis=1)
-    xx = mngs.gen.to_z(xx, dim=-1)
+    xx = to_z(xx, dim=-1)
 
     return xx, fs_tgt
-
 
 def _find_events(xx_r, fs_r, sd, min_duration_ms):
     def _find_events_1d(xx_ri, fs_r, sd, min_duration_ms):
@@ -183,7 +155,6 @@ def _find_events(xx_r, fs_r, sd, min_duration_ms):
 
     return dfs
 
-
 def _drop_ripples_at_edges(df, low_hz, xx_r, fs_r):
     edge_s = 1 / low_hz * 3
     indi_drop = (df.start_s < edge_s) + (
@@ -192,20 +163,17 @@ def _drop_ripples_at_edges(df, low_hz, xx_r, fs_r):
     df = df[~indi_drop]
     return df
 
-
 def _calc_relative_peak_position(df):
     delta_s = df.peak_s - df.start_s
     rel_peak = delta_s / df.duration_s
     df["rel_peak_pos"] = np.round(rel_peak, 3)
     return df
 
-
 # def _calc_incidence(df, xx_r, fs_r):
 #     n_ripples = len(df)
 #     rec_s = xx_r.shape[-1] / fs_r
 #     df["incidence_hz"] = n_ripples / rec_s
 #     return df
-
 
 def _sort_columns(df):
     sorted_columns = [
@@ -220,15 +188,23 @@ def _sort_columns(df):
     df = df[sorted_columns]
     return df
 
+def main():
+    xx, tt, fs = demo_sig(sig_type="ripple")
+    df = detect_ripples(xx, fs, 80, 140)
+    print(df)
 
 if __name__ == "__main__":
+    import sys
+
+    import matplotlib.pyplot as plt
+    import mngs
+
     # # Argument Parser
     # import argparse
     # parser = argparse.ArgumentParser(description='')
     # parser.add_argument('--var', '-v', type=int, default=1, help='')
     # parser.add_argument('--flag', '-f', action='store_true', default=False, help='')
     # args = parser.parse_args()
-
     # Main
     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
         sys, plt, verbose=False
@@ -237,57 +213,3 @@ if __name__ == "__main__":
     mngs.gen.close(CONFIG, verbose=False, notify=False)
 
 # EOF
-
-
-# # append iEEG traces
-# iEEG_traces = []
-# for (
-#     i_rip,
-#     rip,
-# ) in (
-#     rip_df.reset_index().iterrows()
-# ):  # rip_df = rips_df.iloc[i_trial]
-
-#     start_pts = int(rip["start_time"] * CONFIG["FS_iEEG"])
-#     end_pts = int(rip["end_time"] * CONFIG["FS_iEEG"])
-#     # start_pts = int(rip["start_time"] * FS_TGT)
-#     # end_pts = int(rip["end_time"] * FS_TGT)
-#     iEEG_traces.append(
-#         # iEEG[i_trial][:, start_pts:end_pts]
-#         np.array(iEEG)[i_trial][:, start_pts:end_pts]
-#     )
-# rip_df["iEEG trace"] = iEEG_traces
-
-
-# # append ripple band filtered iEEG traces
-# ripple_band_iEEG_traces = []
-# for (
-#     i_rip,
-#     rip,
-# ) in (
-#     rip_df.reset_index().iterrows()
-# ):  # rip_df = rips_df.iloc[i_trial]
-#     start_pts = int(rip["start_time"] * CONFIG["FS_iEEG"])
-#     end_pts = int(rip["end_time"] * CONFIG["FS_iEEG"])
-
-#     ripple_band_iEEG_traces.append(
-#         iEEG_ripple_band_passed[i_trial][:, start_pts:end_pts]
-#     )
-# rip_df["ripple band iEEG trace"] = ripple_band_iEEG_traces
-
-# # ripple peak amplitude
-# ripple_peak_amplitude = [
-#     np.abs(rbt).max(axis=-1) for rbt in ripple_band_iEEG_traces
-# ]
-# ripple_band_baseline_sd = iEEG_ripple_band_passed[i_trial].std(
-#     axis=-1
-# )
-# rip_df["ripple_peak_amplitude_sd"] = [
-#     (rpa / ripple_band_baseline_sd).mean()
-#     for rpa in ripple_peak_amplitude
-# ]
-
-# rip_df["ripple_amplitude_sd"] = [
-#     (np.abs(rbt).mean(axis=-1) / ripple_band_baseline_sd).mean()
-#     for rbt in rip_df["ripple band iEEG trace"]
-# ]

@@ -33,7 +33,7 @@ def silhouette_score_slow(
     To obtain the values for each sample, use silhouette_samples
 
     The best value is 1 and the worst value is -1. Values near 0 indicate
-    overlapping clusters. Negative values generally indicate that a sample has
+    overlapping clusters. Negative values genly indicate that a sample has
     been assigned to the wrong cluster, as a different cluster is more similar.
 
     Parameters
@@ -244,7 +244,7 @@ def silhouette_score_block(
     To obtain the values for each sample, use silhouette_samples
 
     The best value is 1 and the worst value is -1. Values near 0 indicate
-    overlapping clusters. Negative values generally indicate that a sample has
+    overlapping clusters. Negative values genly indicate that a sample has
     been assigned to the wrong cluster, as a different cluster is more similar.
 
     Parameters

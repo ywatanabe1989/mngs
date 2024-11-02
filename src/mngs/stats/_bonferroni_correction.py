@@ -69,4 +69,4 @@ if __name__ == "__main__":
 
     arr = pvals_corrected.astype(float)
     tor = pvals_corrected_torch.numpy().astype(float)
-    print(mngs.general.isclose(arr, tor))
+    print(mngs.gen.isclose(arr, tor))

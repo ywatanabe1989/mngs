@@ -5,9 +5,9 @@
 import sys
 
 import matplotlib.pyplot as plt
-import mngs
+
 import numpy as np
-from mngs.general import batch_fn, torch_fn
+from mngs.gen import batch_fn, torch_fn
 from mngs.nn import PAC
 import torch
 
@@ -99,7 +99,7 @@ def pac(
 
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
-    import mngs
+    
     import numpy as np
 
     # Start
