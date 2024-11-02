@@ -3,7 +3,7 @@
 # Time-stamp: "2024-04-29 10:41:48 (ywatanabe)"
 
 import torch
-from mngs.general import torch_fn
+from mngs.gen import torch_fn
 from mngs.nn import ModulationIndex
 
 
@@ -30,7 +30,7 @@ if __name__ == "__main__":
     import sys
 
     import matplotlib.pyplot as plt
-    import mngs
+    
     import seaborn as sns
     import tensorpac
     from tensorpac import Pac

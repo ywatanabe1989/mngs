@@ -1,35 +1,24 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-13 01:58:46 (ywatanabe)"
+# Time-stamp: "ywatanabe (2024-11-02 23:48:27)"
+# File: ./mngs_repo/src/mngs/dsp/_demo_sig.py
 
-
-"""
-This script provides functions for generating demo signals for digital signal processing tasks.
-"""
-
-# Imports
 import random
 import sys
 import warnings
 
 import matplotlib.pyplot as plt
 import mne
-import mngs
 import numpy as np
 from mne.datasets import sample
-from mne.simulation import (
-    add_ecg,
-    add_eog,
-    add_noise,
-    simulate_raw,
-    simulate_sparse_stc,
-)
 from ripple_detection.simulate import simulate_LFP, simulate_time
 from scipy.signal import chirp
 from tensorpac.signals import pac_signals_wavelet
 
+from ..io._load_configs import load_configs
+
 # Config
-CONFIG = mngs.gen.load_configs(verbose=False)
+CONFIG = load_configs(verbose=False)
 
 # Functions
 def demo_sig(
@@ -206,7 +195,6 @@ def _demo_sig_pac(
 
     return signals
 
-
 def _demo_sig_tensorpac(
     batch_size=8,
     n_chs=19,
@@ -231,7 +219,6 @@ def _demo_sig_tensorpac(
     x_4d = np.stack([x_3d for _ in range(n_chs)], axis=1)
     return x_4d, tt
 
-
 def _demo_sig_meg(
     batch_size=8, n_chs=19, t_sec=10, fs=512, verbose=False, **kwargs
 ):
@@ -249,7 +236,6 @@ def _demo_sig_meg(
     return raw.get_data(
         picks=raw.ch_names[: batch_size * n_chs], verbose=verbose
     ).reshape(batch_size, n_chs, -1)
-
 
 def _demo_sig_periodic_1d(
     t_sec=10, fs=512, freqs_hz=None, verbose=False, **kwargs
@@ -274,7 +260,6 @@ def _demo_sig_periodic_1d(
     ).sum(axis=0)
     return summed
 
-
 def _demo_sig_chirp_1d(
     t_sec=10, fs=512, low_hz=None, high_hz=None, verbose=False, **kwargs
 ):
@@ -294,7 +279,6 @@ def _demo_sig_chirp_1d(
     x *= 1.0 + 0.5 * np.sin(2.0 * np.pi * 3.0 * t)
     return x
 
-
 def _demo_sig_ripple_1d(t_sec=10, fs=512, **kwargs):
     n_samples = t_sec * fs
     t = simulate_time(n_samples, fs)
@@ -302,10 +286,12 @@ def _demo_sig_ripple_1d(t_sec=10, fs=512, **kwargs):
     mid_time = np.random.permutation(t)[:n_ripples]
     return simulate_LFP(t, mid_time, noise_amplitude=1.2, ripple_amplitude=5)
 
-
 if __name__ == "__main__":
+    import mngs
+
     # Start
     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt)
+    import mngs
 
     SIG_TYPES = [
         "uniform",
@@ -341,3 +327,4 @@ if __name__ == "__main__":
 /home/ywatanabe/proj/entrance/mngs/dsp/_demo_sig.py
 """
 
+# EOF

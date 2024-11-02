@@ -112,7 +112,7 @@ def conf_mat(
 
     cm = pd.DataFrame(data=cm).copy()
 
-    labels_to_latex = lambda labels: [mngs.general.to_latex_style(label) for label in labels] if labels is not None else None
+    labels_to_latex = lambda labels: [mngs.gen.to_latex_style(label) for label in labels] if labels is not None else None
     pred_labels = labels_to_latex(pred_labels)
     true_labels = labels_to_latex(true_labels)
     labels = labels_to_latex(labels)
@@ -356,13 +356,13 @@ if __name__ == "__main__":
 
 #     # To LaTeX styles
 #     if pred_labels is not None:
-#         pred_labels = [mngs.general.to_latex_style(l) for l in pred_labels]
+#         pred_labels = [mngs.gen.to_latex_style(l) for l in pred_labels]
 #     if true_labels is not None:
-#         true_labels = [mngs.general.to_latex_style(l) for l in true_labels]
+#         true_labels = [mngs.gen.to_latex_style(l) for l in true_labels]
 #     if labels is not None:
-#         labels = [mngs.general.to_latex_style(l) for l in labels]
+#         labels = [mngs.gen.to_latex_style(l) for l in labels]
 #     if sorted_labels is not None:
-#         sorted_labels = [mngs.general.to_latex_style(l) for l in sorted_labels]
+#         sorted_labels = [mngs.gen.to_latex_style(l) for l in sorted_labels]
 
 #     # Prediction Labels: columns
 #     if pred_labels is not None:

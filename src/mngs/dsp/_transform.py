@@ -8,7 +8,7 @@ import warnings
 import numpy as np
 import pandas as pd
 import torch
-from mngs.general import torch_fn
+from ..decorators import torch_fn
 
 
 def to_sktime_df(arr):
@@ -52,6 +52,7 @@ def to_segments(x, window_size, overlap_factor=1, dim=-1):
 
 
 if __name__ == "__main__":
+    import mngs
     x, t, f = mngs.dsp.demo_sig()
 
     y = to_segments(x, 256)
@@ -64,3 +65,6 @@ if __name__ == "__main__":
 
     x = torch.randn(16, 160, 1000).cuda()
     print(_normalize_time(x))
+
+
+# EOF

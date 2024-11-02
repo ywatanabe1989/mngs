@@ -9,9 +9,9 @@ This script does XYZ.
 import sys
 
 import matplotlib.pyplot as plt
-import mngs
+
 import torch
-from mngs.general import torch_fn
+from mngs.gen import torch_fn
 from mngs.nn import Hilbert
 
 

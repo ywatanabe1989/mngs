@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-24 14:50:41 (ywatanabe)"
+# Time-stamp: "2024-10-27 13:24:32 (ywatanabe)"
 # /home/ywatanabe/proj/_mngs_repo_openhands/src/mngs/plt/ax/_rotate_labels.py
 
 """This script does XYZ."""
@@ -35,6 +35,15 @@ def rotate_labels(ax, x=45, y=45, x_ha='center', y_ha='center'):
     rotate_labels(ax)
     plt.show()
     """
+    # Get current tick positions
+    xticks = ax.get_xticks()
+    yticks = ax.get_yticks()
+
+    # Set ticks explicitly
+    ax.set_xticks(xticks)
+    ax.set_yticks(yticks)
+
+    # Set labels with rotation
     ax.set_xticklabels(ax.get_xticklabels(), rotation=x, ha=x_ha)
     ax.set_yticklabels(ax.get_yticklabels(), rotation=y, ha=y_ha)
     return ax

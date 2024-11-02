@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-02 12:33:56 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/_sh.py
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
 # Time-stamp: "2024-10-21 19:16:26 (ywatanabe)"
@@ -63,7 +67,7 @@ if __name__ == "__main__":
     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
         sys, plt, verbose=False
     )
-    shell("ls")
+    sh("ls")
     mngs.gen.close(CONFIG, verbose=False, notify=False)
 
 # EOF

@@ -1,38 +1,9 @@
-#!./env/bin/python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-26 20:56:18 (ywatanabe)"
+# Time-stamp: "ywatanabe (2024-11-02 22:50:46)"
+# File: ./mngs_repo/src/mngs/dsp/_crop.py
 
-
-"""
-This script does XYZ.
-"""
-
-
-"""
-Imports
-"""
-import os
-import sys
-
-import matplotlib.pyplot as plt
-import mngs
 import numpy as np
-import pandas as pd
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-
-"""
-Config
-"""
-# CONFIG = mngs.gen.load_configs()
-
-
-"""
-Functions & Classes
-"""
-import numpy as np
-
 
 def crop(sig_2d, window_length, overlap_factor=0.0, axis=-1, time=None):
     """
@@ -101,7 +72,6 @@ def crop(sig_2d, window_length, overlap_factor=0.0, axis=-1, time=None):
     else:
         return cropped_windows, cropped_times
 
-
 def main():
     import random
 
@@ -131,15 +101,18 @@ def main():
     end = start + window_pts
     assert np.allclose(sig2d[:, start:end], xx[i_seg])
 
-
 if __name__ == "__main__":
-    # # Argument Parser
-    # import argparse
     # parser = argparse.ArgumentParser(description='')
+    # import argparse
+    # # Argument Parser
+    import sys
+
+    import matplotlib.pyplot as plt
+    import mngs
+
     # parser.add_argument('--var', '-v', type=int, default=1, help='')
     # parser.add_argument('--flag', '-f', action='store_true', default=False, help='')
     # args = parser.parse_args()
-
     # Main
     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
         sys, plt, verbose=False
