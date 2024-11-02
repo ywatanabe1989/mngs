@@ -3,7 +3,7 @@
 # Time-stamp: "2024-04-29 10:41:48 (ywatanabe)"
 
 import torch
-from mngs.gen import torch_fn
+from ..decorators import torch_fn
 from mngs.nn import ModulationIndex
 
 

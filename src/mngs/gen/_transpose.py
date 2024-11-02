@@ -3,7 +3,7 @@
 # Time-stamp: "2024-08-24 09:47:16 (ywatanabe)"
 # /home/ywatanabe/proj/mngs_repo/src/mngs/gen/_transpose.py
 
-from mngs.gen import numpy_fn
+from ..decorators import numpy_fn
 import numpy as np
 
 

@@ -11,7 +11,7 @@ import sys
 import matplotlib.pyplot as plt
 
 import torch
-from mngs.gen import torch_fn
+from ..decorators import torch_fn
 from mngs.nn import Hilbert
 
 

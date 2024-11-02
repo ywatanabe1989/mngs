@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Time-stamp: "2024-04-05 12:14:08 (ywatanabe)"
 
-from mngs.gen import torch_fn
+from ..decorators import torch_fn
 
 
 @torch_fn

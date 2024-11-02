@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 import numpy as np
 import torch
-from mngs.gen import numpy_fn, torch_fn
+from ...decorators import numpy_fn, torch_fn
 from scipy.signal import firwin, freqz, lfilter
 
 

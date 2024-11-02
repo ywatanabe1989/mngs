@@ -1,7 +1,7 @@
-#!./env/bin/python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-27 13:02:07 (ywatanabe)"
-# /home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/PARAMS.py
+# Time-stamp: "2024-11-03 04:44:33 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/ai/_gen_ai/PARAMS.py
 
 # https://openai.com/api/pricing/
 # https://www.anthropic.com/pricing#anthropic-api
@@ -92,7 +92,21 @@ MODELS = pd.DataFrame([
         "provider": "Google",
     },
     {
+        "name": "gemini-1.5-pro",
+        "input_cost": 3.50,
+        "output_cost": 10.50,
+        "api_key_env": "GOOGLE_API_KEY",
+        "provider": "Google",
+    },
+    {
         "name": "gemini-1.5-flash-latest",
+        "input_cost": 0.15,
+        "output_cost": 0.0375,
+        "api_key_env": "GOOGLE_API_KEY",
+        "provider": "Google",
+    },
+    {
+        "name": "gemini-1.5-flash",
         "input_cost": 0.15,
         "output_cost": 0.0375,
         "api_key_env": "GOOGLE_API_KEY",
@@ -204,3 +218,6 @@ MODELS = pd.DataFrame([
         "provider": "Llama",
     },
 ])
+
+
+# EOF

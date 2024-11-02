@@ -1,0 +1,1 @@
+../../../src/mngs/types/_ArrayLike.py

@@ -1,10 +1,7 @@
-"""
-This script does XYZ.
-"""
-
-# Imports
-
-# Functions
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-03 02:13:54 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/gen/_paste.py
 def paste():
     import textwrap
 
@@ -18,21 +15,4 @@ def paste():
         print(f"Could not execute clipboard content: {e}")
 
 
-if __name__ == "__main__":
-    # Start
-    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt)
-
-    import ipdb
-
-    ipdb.set_trace()
-    print("hello")  # copy this to your clipboar
-    mngs.gen.paste()
-
-    # Close
-    mngs.gen.close(CONFIG)
-
 # EOF
-
-"""
-/ssh:ywatanabe@444:/home/ywatanabe/proj/entrance/mngs/gen/_paste.py
-"""

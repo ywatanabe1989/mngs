@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-02 13:06:29 (ywatanabe)"
+# Time-stamp: "2024-11-03 02:11:54 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/gen/_list_packages.py
-
 """
 Functionality:
     * Lists and analyzes installed Python packages and their modules
@@ -19,6 +18,7 @@ from typing import Optional
 
 import pandas as pd
 import pkg_resources
+
 from ._inspect_module import inspect_module
 
 
@@ -83,17 +83,16 @@ def list_packages(
     combined_df = pd.concat(all_dfs, ignore_index=True)
     return combined_df.drop_duplicates().sort_values("Name")
 
-
 def main() -> Optional[int]:
     """Main function for testing package listing functionality."""
     df = list_packages(verbose=True)
     __import__("ipdb").set_trace()
     return 0
 
-
 if __name__ == '__main__':
     import matplotlib.pyplot as plt
-    
+    import mngs
+
 
     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
         sys,

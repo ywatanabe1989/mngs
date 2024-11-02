@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-02 15:23:00 (ywatanabe)"
+# Time-stamp: "2024-11-03 03:44:59 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/gen/__init__.py
+
 #!/usr/bin/env python3
 
 """Gen utility functions and classes for the MNGS project."""
@@ -85,7 +86,7 @@ del os, importlib, inspect, current_dir, filename, module_name, module, name, ob
 # #     # natglob,
 # #     partial_at,
 # #     # pop_keys,
-# #     print_block,
+# #     printc,
 # #     print_,
 # #     readable_bytes,
 # #     replace,

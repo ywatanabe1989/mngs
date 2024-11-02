@@ -3,7 +3,7 @@
 # Time-stamp: "2024-04-05 12:15:42 (ywatanabe)"
 
 import torch as _torch
-from mngs.gen import torch_fn as _torch_fn
+from ..decorators import torch_fn as _torch_fn
 
 
 @_torch_fn

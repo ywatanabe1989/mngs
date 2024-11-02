@@ -5,8 +5,8 @@
 
 import numpy as np
 import torch
-from mngs.gen import torch_fn
-from mngs.torch import nanstd
+from ..decorators import torch_fn
+from ..torch import nanstd
 
 # def to_z(x, axis):
 #     if isinstance(x, torch.Tensor):  # [REVISED]

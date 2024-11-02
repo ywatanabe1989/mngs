@@ -4,7 +4,7 @@
 # File: ./mngs_repo/src/mngs/dsp/filt.py
 
 import numpy as np
-from mngs.gen import torch_fn
+from ..decorators import torch_fn
 from mngs.nn import (
     BandPassFilter,
     BandStopFilter,

@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-03 02:11:18 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/gen/_less.py
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
 # Time-stamp: "2024-04-21 12:05:35"
@@ -7,18 +11,12 @@
 This script does XYZ.
 """
 
-import os
 import sys
 
 import matplotlib.pyplot as plt
+import mngs
 
 # Imports
-
-import numpy as np
-import pandas as pd
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
 
 # # Config
 # CONFIG = mngs.gen.load_configs()
@@ -46,21 +44,4 @@ def less(output):
     os.remove(tmpfile_name)
 
 
-# (YOUR AWESOME CODE)
-
-if __name__ == "__main__":
-    # Start
-    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
-        sys, plt, verbose=False
-    )
-
-    # (YOUR AWESOME CODE)
-
-    # Close
-    mngs.gen.close(CONFIG, verbose=False, notify=False)
-
 # EOF
-
-"""
-/ssh:ywatanabe@444:/home/ywatanabe/proj/entrance/mngs/gen/_less.py
-"""

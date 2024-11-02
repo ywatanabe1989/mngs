@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "ywatanabe (2024-11-03 00:11:11)"
+# Time-stamp: "2024-11-03 02:19:21 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/decorators/_converters.py
-
 """
 Functionality:
     - Provides utility functions and decorators for seamless data type conversions between NumPy, PyTorch, and Pandas
@@ -225,6 +224,33 @@ def numpy_fn(func: Callable) -> Callable:
 
     return wrapper
 
+
+# def batch_fn(*non_batch_dims):
+#     def decorator(func):
+#         def wrapper(x):
+#             # Save the original shape
+#             orig_shape = x.shape
+#             # Compute the shape for batch dimensions and non-batch dimensions
+#             batch_shape = orig_shape[: len(orig_shape) + sum(non_batch_dims)]
+#             non_batch_shape = orig_shape[
+#                 len(orig_shape) + sum(non_batch_dims) :
+#             ]
+
+#             # Reshape x to merge batch dimensions
+#             x_reshaped = x.reshape(-1, *non_batch_shape)
+
+#             # Apply the function
+#             y = func(x_reshaped)
+
+#             # Compute the new shape for the output
+#             new_shape = batch_shape + y.shape[1:]
+#             y_reshaped = y.reshape(new_shape)
+
+#             return y_reshaped
+
+#         return wrapper
+
+#     return decorator
 
 def batch_fn(func: Callable) -> Callable:
     @wraps(func)

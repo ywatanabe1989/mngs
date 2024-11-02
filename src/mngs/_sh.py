@@ -1,34 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-02 12:33:56 (ywatanabe)"
+# Time-stamp: "2024-11-03 02:23:16 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/_sh.py
-#!./env/bin/python3
-# -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-21 19:16:26 (ywatanabe)"
-# Author: Yusuke Watanabe (ywata1989@gmail.com)
 
-
-"""
-This script does XYZ.
-"""
-
-
-"""
-Imports
-"""
 import subprocess
 import mngs
-
-"""
-Config
-"""
-# CONFIG = mngs.gen.load_configs()
-
-
-"""
-Functions & Classes
-"""
-
 
 def sh(command_str, verbose=True):
     """
@@ -69,5 +45,6 @@ if __name__ == "__main__":
     )
     sh("ls")
     mngs.gen.close(CONFIG, verbose=False, notify=False)
+
 
 # EOF

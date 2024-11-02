@@ -1,9 +1,13 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-03 03:35:59 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/ai/loss/MultiTaskLoss.py
+
+import numpy as np
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
-import numpy as np
-import mngs
+
+from ..reproduce import fix_seeds
 
 
 class MultiTaskLoss(nn.Module):
@@ -21,7 +25,7 @@ class MultiTaskLoss(nn.Module):
 
     def __init__(self, are_regression=[False, False], reduction="none"):
         super().__init__()
-        mngs.reproduce.fix_seeds(np=np, torch=torch, show=False)
+        fix_seeds(np=np, torch=torch, show=False)
         n_tasks = len(are_regression)
 
         self.register_buffer("are_regression", torch.tensor(are_regression))
@@ -38,3 +42,6 @@ class MultiTaskLoss(nn.Module):
             coeffs[i] * losses[i] + torch.log(stds[i]) for i in range(len(losses))
         ]
         return scaled_losses
+
+
+# EOF
