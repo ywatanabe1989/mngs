@@ -7,7 +7,7 @@ import sys
 import matplotlib.pyplot as plt
 
 import numpy as np
-from mngs.gen import batch_fn, torch_fn
+from ..decorators import batch_fn, torch_fn
 from mngs.nn import PAC
 import torch
 

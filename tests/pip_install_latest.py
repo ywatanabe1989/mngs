@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-11 08:56:53 (ywatanabe)"
-# /home/ywatanabe/proj/_mngs_repo_openhands/tests/pip_install_latest.py
+# Time-stamp: "2024-11-03 02:42:30 (ywatanabe)"
+# File: ./mngs_repo/tests/pip_install_latest.py
 
 import argparse
 import logging
-import os
 import subprocess
-import sys
 
 import requests
 

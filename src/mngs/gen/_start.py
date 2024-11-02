@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-02 03:19:57 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/gen/utils/_start.py
+# Time-stamp: "2024-11-03 03:34:23 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/gen/_start.py
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Time-stamp: "2024-10-28 11:13:18 (ywatanabe)"
@@ -12,7 +13,9 @@ import re
 from datetime import datetime
 from pprint import pprint
 from time import sleep
-
+from ..io._load import load
+from ..reproduce._gen_ID import gen_ID
+from ..reproduce._fix_seeds import fix_seeds
 import matplotlib
 
 
@@ -54,7 +57,7 @@ def start(
     \"""
 
     # Imports
-    
+
     import matplotlib.pyplot as plt
     import numpy as np
     import pandas as pd
@@ -94,7 +97,7 @@ def start(
     try:
         IS_DEBUG_PATH = "./config/IS_DEBUG.yaml"
         if _os.path.exists(IS_DEBUG_PATH):
-            IS_DEBUG = mngs.io.load(IS_DEBUG_PATH).get("IS_DEBUG", False)
+            IS_DEBUG = load(IS_DEBUG_PATH).get("IS_DEBUG", False)
         else:
             IS_DEBUG = False
 
@@ -103,9 +106,10 @@ def start(
         IS_DEBUG = False
 
     # ID
-    ID = mngs.gen.gen_ID(N=4)
+    ID = gen_ID(N=4)
     ID = ID if not IS_DEBUG else "DEBUG_" + ID
     PID = _os.getpid()
+    import mngs
     print(
         f"\n{'#'*40}\n## mngs v{mngs.__version__}\n## {ID} (PID: {PID})\n{'#'*40}\n"
     )
@@ -166,7 +170,7 @@ def start(
         or (torch is not None)
         or (tf is not None)
     ):
-        mngs.reproduce.fix_seeds(
+        fix_seeds(
             os=os,
             random=random,
             np=np,
@@ -261,7 +265,7 @@ if __name__ == "__main__":
     import sys
 
     import matplotlib.pyplot as plt
-    
+
     import numpy as np
     import pandas as pd
     import torch

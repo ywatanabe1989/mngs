@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 import re
-from collections import defaultdict
-from pprint import pprint
+from collections import defaultdict as _defaultdict
+from pprint import pprint as _pprint
 
 import matplotlib
 import mngs
@@ -15,7 +15,7 @@ class LearningCurveLogger(object):
     def __init__(
         self,
     ):
-        self.logged_dict = defaultdict(dict)
+        self.logged_dict = _defaultdict(dict)
 
         warnings.warn(
             '\n"gt_label" will be removed in the feature. Please use "true_class" instead.\n',
@@ -183,7 +183,7 @@ class LearningCurveLogger(object):
         )
         print("\n----------------------------------------\n")
         print(f"\n{step}: (mean of batches)\n")
-        pprint(df_pivot_i_epoch_step)
+        _pprint(df_pivot_i_epoch_step)
         print("\n----------------------------------------\n")
 
     @staticmethod

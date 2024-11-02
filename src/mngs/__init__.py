@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-03 01:11:57 (ywatanabe)"
+# Time-stamp: "2024-11-03 02:41:36 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/__init__.py
 
 ########################################
@@ -37,7 +37,7 @@ from . import plt
 from . import stats
 from . import torch
 from . import tex
-from . import typing
+from . import types
 from . import resource
 from . import web
 from . import db

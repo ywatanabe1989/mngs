@@ -7,7 +7,7 @@ mngs.dsp.wavelet function
 """
 
 
-from mngs.gen import batch_fn, torch_fn
+from ..decorators import batch_fn, torch_fn
 from mngs.nn import Wavelet
 
 

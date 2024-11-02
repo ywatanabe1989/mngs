@@ -8,7 +8,7 @@ This script does XYZ.
 
 import torch
 import torch.nn as nn
-from mngs.gen import torch_fn
+from ..decorators import torch_fn
 from mngs.nn import PSD
 
 

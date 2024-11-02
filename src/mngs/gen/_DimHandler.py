@@ -18,7 +18,7 @@ import sys
 import matplotlib.pyplot as plt
 
 
-# from mngs.gen import torch_fn
+
 import numpy as np
 import torch
 

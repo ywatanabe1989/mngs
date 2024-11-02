@@ -38,7 +38,7 @@ from ..path._clean import clean
 from ..path._getsize import getsize
 from ..path._split import split
 from ..str._color_text import color_text
-from ..typing._is_listed_X import is_listed_X
+from ..types._is_listed_X import is_listed_X
 from ._save_text import save_text
 from ._save_listed_scalars_as_csv import _save_listed_scalars_as_csv
 from ._save_listed_dfs_as_csv import _save_listed_dfs_as_csv

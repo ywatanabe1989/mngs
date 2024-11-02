@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-13 20:39:12 (ywatanabe)"
-# /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_ChatGPT.py
-
+# Time-stamp: "2024-11-03 02:59:04 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/ai/_gen_ai/_Google.py
 
 """Imports"""
 import os
@@ -14,8 +13,6 @@ import mngs
 from mngs.ai._gen_ai._BaseGenAI import BaseGenAI
 
 """Functions & Classes"""
-
-
 class Google(BaseGenAI):
     def __init__(
         self,

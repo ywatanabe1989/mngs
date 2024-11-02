@@ -5,7 +5,7 @@
 
 import torch
 import torchaudio.transforms as T
-from mngs.gen import torch_fn
+from ..decorators import torch_fn
 
 
 @torch_fn
