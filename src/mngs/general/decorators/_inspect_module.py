@@ -1,16 +1,47 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-06 01:01:19 (ywatanabe)"
-# /home/ywatanabe/proj/_mngs_repo_openhands/src/mngs/general/_inspect_module.py
+# Time-stamp: "2024-11-02 02:09:22 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/general/decorators/_inspect_module.py
 
-import mngs
 import inspect
 import sys
-from typing import Optional, Set, List, Tuple
+import warnings
+from typing import Any, List, Optional, Set, Union
+
 import pandas as pd
 
+
 def inspect_module(
-    module: object,
+        module: Union[str, Any],
+        columns: List[str] = ["Type", "Name", "Docstring", "Depth"],
+        prefix: str = "",
+        max_depth: int = 5,
+        visited: Optional[Set[str]] = None,
+        docstring: bool = False,
+        tree: bool = True,
+        current_depth: int = 0,
+        print_output: bool = False,
+        skip_depwarnings: bool = True,
+        drop_duplicates: bool = True,
+        root_only: bool = False,
+    ) -> pd.DataFrame:
+    return _inspect_module(
+        module=module,
+        prefix=prefix,
+        max_depth=max_depth,
+        visited=visited,
+        docstring=docstring,
+        tree=tree,
+        current_depth=current_depth,
+        print_output=print_output,
+        skip_depwarnings=skip_depwarnings,
+        drop_duplicates=drop_duplicates,
+        root_only=root_only,
+    )[columns]
+
+def _inspect_module(
+    module: Union[str, Any],
+    columns: List[str] = ["Type", "Name", "Docstring", "Depth"],
     prefix: str = "",
     max_depth: int = 5,
     visited: Optional[Set[str]] = None,
@@ -18,9 +49,11 @@ def inspect_module(
     tree: bool = True,
     current_depth: int = 0,
     print_output: bool = False,
+    skip_depwarnings: bool = True,
+    drop_duplicates: bool = True,
+    root_only: bool = False,
 ) -> pd.DataFrame:
-    """
-    List the contents of a module recursively and return as a DataFrame.
+    """List the contents of a module recursively and return as a DataFrame.
 
     Example
     -------
@@ -35,73 +68,163 @@ def inspect_module(
 
     Parameters
     ----------
-    module : object
-        The module to inspect
-    prefix : str, optional
-        Prefix for the current module, used for recursive calls
-    max_depth : int, optional
-        Maximum depth for recursion
-    visited : Set[str], optional
-        Set of visited module names to prevent infinite recursion
-    docstring : bool, optional
-        Whether to include docstrings in the output
-    tree : bool, optional
-        Whether to display the output in a tree-like structure
-    current_depth : int, optional
-        Current depth in the module hierarchy
-    print_output : bool, optional
-        Whether to print the output or not
+    module : Union[str, Any]
+        Module to inspect (string name or actual module)
+    columns : List[str]
+        Columns to include in output DataFrame
+    prefix : str
+        Prefix for nested modules
+    max_depth : int
+        Maximum recursion depth
+    visited : Optional[Set[str]]
+        Set of visited modules to prevent cycles
+    docstring : bool
+        Whether to include docstrings
+    tree : bool
+        Whether to display tree structure
+    current_depth : int
+        Current recursion depth
+    print_output : bool
+        Whether to print results
+    skip_depwarnings : bool
+        Whether to skip DeprecationWarnings
+    drop_duplicates : bool
+        Whether to remove duplicate module entries
+    root_only : bool
+        Whether to show only root-level modules
 
     Returns
     -------
     pd.DataFrame
-        DataFrame containing (Type, Name, Docstring, Depth) for each module content
+        Module structure with specified columns
     """
+    if skip_depwarnings:
+        warnings.filterwarnings("ignore", category=DeprecationWarning)
+        warnings.filterwarnings("ignore", category=UserWarning)
+
+    if isinstance(module, str):
+        try:
+            module = __import__(module)
+        except ImportError as err:
+            print(f"Error importing module {module}: {err}")
+            return pd.DataFrame(columns=columns)
+
     if visited is None:
         visited = set()
 
     content_list = []
 
-    if max_depth < 0 or module.__name__ in visited:
-        return pd.DataFrame(content_list, columns=['Type', 'Name', 'Docstring', 'Depth'])
-
-    visited.add(module.__name__)
-
     try:
-        module_version = f" (v{module.__version__})" if hasattr(module, '__version__') else ""
-        content_list.append(('M', f"{prefix}.{module.__name__}" if prefix else module.__name__, module_version, current_depth))
-    except Exception:
-        pass
+        module_name = getattr(module, "__name__", "")
+        if max_depth < 0 or module_name in visited:
+            return pd.DataFrame(content_list, columns=columns)
 
-    for name, obj in inspect.getmembers(module):
-        if name.startswith("_"):
-            continue
+        visited.add(module_name)
+        base_name = module_name.split(".")[-1]
+        full_path = f"{prefix}.{base_name}" if prefix else base_name
 
-        full_name = f"{prefix}.{name}" if prefix else name
+        try:
+            module_version = (
+                f" (v{module.__version__})"
+                if hasattr(module, "__version__")
+                else ""
+            )
+            content_list.append(
+                ("M", full_path, module_version, current_depth)
+            )
+        except Exception:
+            pass
 
-        if inspect.ismodule(obj) and obj.__name__.startswith("mngs"):
-            content_list.append(('M', full_name, obj.__doc__ if docstring and obj.__doc__ else "", current_depth))
-            sub_df = inspect_module(obj, full_name, max_depth - 1, visited, docstring, tree, current_depth + 1, print_output)
-            content_list.extend(sub_df.values.tolist())
-        elif inspect.isfunction(obj):
-            content_list.append(('F', full_name, obj.__doc__ if docstring and obj.__doc__ else "", current_depth))
-        elif inspect.isclass(obj):
-            content_list.append(('C', full_name, obj.__doc__ if docstring and obj.__doc__ else "", current_depth))
+        for name, obj in inspect.getmembers(module):
+            if name.startswith("_"):
+                continue
 
-    df = pd.DataFrame(content_list, columns=['Type', 'Name', 'Docstring', 'Depth'])
+            obj_name = f"{full_path}.{name}"
+
+            if inspect.ismodule(obj):
+                if obj.__name__ not in visited:
+                    content_list.append(
+                        (
+                            "M",
+                            obj_name,
+                            obj.__doc__ if docstring and obj.__doc__ else "",
+                            current_depth,
+                        )
+                    )
+                    try:
+                        sub_df = _inspect_module(
+                            obj,
+                            columns=columns,
+                            prefix=full_path,
+                            max_depth=max_depth - 1,
+                            visited=visited,
+                            docstring=docstring,
+                            tree=tree,
+                            current_depth=current_depth + 1,
+                            print_output=print_output,
+                            skip_depwarnings=skip_depwarnings,
+                            drop_duplicates=drop_duplicates,
+                            root_only=root_only,
+                        )
+                        if sub_df is not None and not sub_df.empty:
+                            content_list.extend(sub_df.values.tolist())
+                    except Exception as err:
+                        print(f"Error processing module {obj_name}: {err}")
+            elif inspect.isfunction(obj):
+                content_list.append(
+                    (
+                        "F",
+                        obj_name,
+                        obj.__doc__ if docstring and obj.__doc__ else "",
+                        current_depth,
+                    )
+                )
+            elif inspect.isclass(obj):
+                content_list.append(
+                    (
+                        "C",
+                        obj_name,
+                        obj.__doc__ if docstring and obj.__doc__ else "",
+                        current_depth,
+                    )
+                )
+
+    except Exception as err:
+        print(f"Error processing module structure: {err}")
+        return pd.DataFrame(columns=columns)
+
+    df = pd.DataFrame(content_list, columns=columns)
+
+    if drop_duplicates:
+        df = df.drop_duplicates(subset="Name", keep="first")
+
+    if root_only:
+        mask = df['Name'].str.count(r'\.') <= 1
+        df = df[mask]
 
     if tree and current_depth == 0 and print_output:
         _print_module_contents(df)
 
-    return df
+    return df[columns]
+
 
 def _print_module_contents(df: pd.DataFrame) -> None:
+    """Prints module contents in tree structure.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        DataFrame containing module structure
+    """
     df_sorted = df.sort_values(['Depth', 'Name'])
     depth_last = {}
 
     for index, row in df_sorted.iterrows():
         depth = row['Depth']
-        is_last = index == len(df_sorted) - 1 or df_sorted.iloc[index + 1]['Depth'] <= depth
+        is_last = (
+            index == len(df_sorted) - 1
+            or df_sorted.iloc[index + 1]['Depth'] <= depth
+        )
 
         prefix = ""
         for d in range(depth):
@@ -111,108 +234,27 @@ def _print_module_contents(df: pd.DataFrame) -> None:
                 prefix += "    " if depth_last.get(d, False) else "│   "
 
         print(f"{prefix}({row['Type']}) {row['Name']}{row['Docstring']}")
-
         depth_last[depth] = is_last
 
+
 if __name__ == "__main__":
+    import mngs
     sys.setrecursionlimit(10_000)
-    df = inspect_module(mngs, docstring=True, print_output=False)
+    df = inspect_module(mngs, docstring=True, print_output=False, columns=["Name"])
     print(mngs.pd.round(df))
+    #                                 Name
+    # 0                               mngs
+    # 1                            mngs.ai
+    # 3     mngs.ai.ClassificationReporter
+    # 4           mngs.ai.ClassifierServer
+    # 5              mngs.ai.EarlyStopping
+    # ...                              ...
+    # 5373                     mngs.typing
+    # 5375                 mngs.typing.Any
+    # 5376            mngs.typing.Iterable
+    # 5377                        mngs.web
+    # 5379          mngs.web.summarize_url
 
-# #!/usr/bin/env python3
-# # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-10-06 00:53:42 (ywatanabe)"
-# # /home/ywatanabe/proj/_mngs_repo_openhands/src/mngs/general/_inspect_module.py
+    # [5361 rows x 1 columns]
 
-# import mngs
-# import inspect
-# import sys
-# from typing import Optional, Set
-
-# def inspect_module(
-#     module: object,
-#     prefix: str = "",
-#     max_depth: int = 5,
-#     visited: Optional[Set[str]] = None,
-#     docstring: bool = False,
-#     tree: bool = True,
-#     indent: str = ""
-# ) -> None:
-#     """
-#     List the contents of a module recursively.
-
-#     Example
-#     -------
-#     >>> import mngs
-#     >>> inspect_module(mngs)
-#     Module: mngs
-#     ├── Function: mngs.some_function
-#     └── Class: mngs.SomeClass
-#     ...
-
-#     Parameters
-#     ----------
-#     module : object
-#         The module to inspect
-#     prefix : str, optional
-#         Prefix for the current module, used for recursive calls
-#     max_depth : int, optional
-#         Maximum depth for recursion
-#     visited : Set[str], optional
-#         Set of visited module names to prevent infinite recursion
-#     docstring : bool, optional
-#         Whether to include docstrings in the output
-#     tree : bool, optional
-#         Whether to display the output in a tree-like structure
-#     indent : str, optional
-#         Current indentation for tree structure
-
-#     Returns
-#     -------
-#     None
-#     """
-
-#     try:
-#         print(f"{module.__name__}" f"{module.__version__}")
-#     except Exception as e:
-#         pass
-
-#     if visited is None:
-#         visited = set()
-
-#     if max_depth == 0 or module.__name__ in visited:
-#         return
-
-#     visited.add(module.__name__)
-
-#     for index, (name, obj) in enumerate(inspect.getmembers(module)):
-#         if name.startswith("_"):
-#             continue
-
-#         full_name = f"{prefix}.{name}" if prefix else name
-
-#         is_last = index == len(inspect.getmembers(module)) - 1
-#         tree_prefix = "└── " if is_last else "├── " if tree else ""
-#         next_indent = indent + ("    " if is_last else "│   ") if tree else indent
-
-#         if inspect.ismodule(obj) and obj.__name__.startswith("mngs"):
-#             print(f"{indent}{tree_prefix}Module: {full_name}")
-#             inspect_module(obj, full_name, max_depth - 1, visited, docstring, tree, next_indent)
-#         elif inspect.isfunction(obj):
-#             print(f"{indent}{tree_prefix}Function: {full_name}")
-#             if docstring and obj.__doc__:
-#                 doc_lines = obj.__doc__.strip().split('\n')
-#                 for i, line in enumerate(doc_lines):
-#                     doc_prefix = "     " if i == 0 else "     "
-#                     print(f"{next_indent}{doc_prefix}{line.strip()}")
-#         elif inspect.isclass(obj):
-#             print(f"{indent}{tree_prefix}Class: {full_name}")
-#             if docstring and obj.__doc__:
-#                 doc_lines = obj.__doc__.strip().split('\n')
-#                 for i, line in enumerate(doc_lines):
-#                     doc_prefix = "     " if i == 0 else "     "
-#                     print(f"{next_indent}{doc_prefix}{line.strip()}")
-
-# if __name__ == "__main__":
-#     sys.setrecursionlimit(10_000)
-#     inspect_module(mngs, docstring=True)
+# EOF

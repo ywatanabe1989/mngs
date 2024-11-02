@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Time-stamp: "2024-10-27 13:08:58 (ywatanabe)"
+# Time-stamp: "2024-10-27 13:21:04 (ywatanabe)"
 
 ########################################
 # Warnings
@@ -11,8 +11,8 @@ warnings.filterwarnings("ignore", message="There is no current event loop", cate
 # Try import
 ########################################
 import os
-from .gen._suppress_output import suppress_output
-_do_suppress = os.getenv("MNGS_SUPPRESS_IMPORTING_MESSAGES", "").lower() == "true"
+# from .gen._suppress_output import suppress_output
+# _do_suppress = os.getenv("MNGS_SUPPRESS_IMPORTING_MESSAGES", "").lower() == "true"
 # with suppress_output(suppress=__do_suppress):
 
 ########################################
@@ -54,6 +54,7 @@ from . import pd
 #             self._mod = import_module(f'.{self._name}', 'mngs')
 #         return getattr(self._mod, attr)
 
+# # Replace direct imports with lazy ones
 # io = LazyModule('io')
 # path = LazyModule('path')
 # general = LazyModule('general')
@@ -75,74 +76,10 @@ from . import pd
 # db = LazyModule('db')
 # pd = LazyModule('pd')
 
-# additional_modules = [
-#     "io",
-#     "path",
-#     "general",
-#     "gen",
-#     "ai",
-#     "ml",
-#     "dsp",
-#     "gists",
-#     "linalg",
-#     "nn",
-#     "os",
-#     "plt",
-#     "stats",
-#     "torch",
-#     "tex",
-#     "typing",
-#     "res",
-#     "web",
-#     "db",
-#     "pd",
-# ]
 
-# for module_name in additional_modules:
-#     module = try_import(f".{module_name}")
-#     if module:
-#         globals()[module_name] = module
-
-# with suppress_output(suppress=suppress):
-#     try:
-#         from ._sh import sh
-#     except ImportError as e:
-#         warnings.warn(f"Warning: Failed to import some core modules. Error: {e}")
-
-#     # Additional modules
-#     additional_modules = [
-#         "io",
-#         "path",
-#         "general",
-#         "gen",
-#         "ai",
-#         "ml",
-#         "dsp",
-#         "gists",
-#         "linalg",
-#         "nn",
-#         "os",
-#         "plt",
-#         "stats",
-#         "torch",
-#         "tex",
-#         "typing",
-#         "res",
-#         "web",
-#         "db",
-#         "pd",
-#     ]
-#     for module in additional_modules:
-#         try:
-#             exec(f"from . import {module}")
-#         except ImportError as e:
-#             warnings.warn(f"Warning: Failed to import {module}. Error: {e}")
-
-
-#     from ._sh import sh
-
-
-# Modules
+########################################
+# Modules (python -m mngs print_config)
+########################################
 from .gen._print_config import print_config
 # Usage: python -m mngs print_config
 
