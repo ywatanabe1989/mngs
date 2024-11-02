@@ -1,23 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-03 03:34:23 (ywatanabe)"
+# Time-stamp: "2024-11-03 03:40:18 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/gen/_start.py
 
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-28 11:13:18 (ywatanabe)"
-
-import inspect
 import os as _os
 import re
 from datetime import datetime
 from pprint import pprint
 from time import sleep
-from ..io._load import load
-from ..reproduce._gen_ID import gen_ID
-from ..reproduce._fix_seeds import fix_seeds
-import matplotlib
 
+import matplotlib
+import mngs
+
+from ..io._load import load
+from ..path import split
+from ..reproduce._fix_seeds import fix_seeds
+from ..reproduce._gen_ID import gen_ID
 
 
 def start(
@@ -117,11 +115,12 @@ def start(
 
     # Defines SDIR
     if sdir is None:
-        __file__ = inspect.stack()[1].filename
-        if "ipython" in __file__:
-            __file__ = f"/tmp/fake_{_os.getenv('USER')}.py"
-        spath = __file__
-        _sdir, sfname, _ = mngs.path.split(spath)
+        # __file__ = inspect.stack()[1].filename
+        # if "ipython" in __file__:
+        #     __file__ = f"/tmp/fake_{_os.getenv('USER')}.py"
+        # spath = __file__
+        spath = mngs.path.get_spath()
+        _sdir, sfname, _ = split(spath)
         sdir = _sdir + sfname + "/" + "RUNNING" + "/" + ID + "/"
         sdir = sdir.replace("/./", "/")
         if sdir_suffix:
@@ -214,7 +213,6 @@ def start(
 
     return CONFIGS, sys.stdout, sys.stderr, plt, CC
 
-
 def simplify_relative_path(sdir):
     """
     Simplify the relative path by removing specific patterns.
@@ -254,7 +252,6 @@ def clear_python_log_dir(log_dir):
     except Exception as e:
         print(f"Failed to clear directory {log_dir}: {e}")
 
-
 if __name__ == "__main__":
     """
     This script does XYZ.
@@ -266,21 +263,15 @@ if __name__ == "__main__":
 
     import matplotlib.pyplot as plt
 
-    import numpy as np
-    import pandas as pd
-    import torch
-    import torch.nn as nn
-    import torch.nn.functional as F
-
     # Config
-    CONFIG = mngs.gen.load_configs()
+    CONFIG = mngs.io.load_configs()
 
     # Functions
     # Your awesome code here :)
 
     if __name__ == "__main__":
         # Start
-        CONFIG, sys.stdout, sys.stderr, plt, CC = start(sys, plt)
+        CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt)
 
         # Your awesome code here :)
 
@@ -292,6 +283,5 @@ if __name__ == "__main__":
 """
 /home/ywatanabe/proj/entrance/mngs/gen/_start.py
 """
-
 
 # EOF

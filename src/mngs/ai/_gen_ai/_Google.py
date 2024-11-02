@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-03 02:59:04 (ywatanabe)"
+# Time-stamp: "2024-11-03 03:42:32 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/ai/_gen_ai/_Google.py
 
 """Imports"""

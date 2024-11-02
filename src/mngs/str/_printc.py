@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-03 03:44:47 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/str/_print_block.py
+# Time-stamp: "2024-11-03 03:47:51 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/str/_printc.py
 
 from ._color_text import color_text
 

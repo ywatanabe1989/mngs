@@ -13,7 +13,7 @@ from glob import glob
 from ..io import save as mngs_io_save
 from ..io import flush as mngs_io_flush
 from ..utils._notify import notify as mngs_gen_notify
-from ..str._print_block import print_block
+from ..str._printc import printc
 
 
 def _format_diff_time(diff_time):
@@ -143,7 +143,7 @@ def running2finished(
         ):
             time.sleep(0.1)
         if os.path.exists(dest_dir):
-            mngs_str_print_block(
+            mngs_str_printc(
                 f"Congratulations! The script completed.\n\n{dest_dir}",
                 c="yellow",
             )

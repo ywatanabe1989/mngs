@@ -1,12 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "ywatanabe (2024-11-03 00:52:24)"
+# Time-stamp: "2024-11-03 04:30:46 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/io/_glob.py
 
 import re
 from glob import glob as _glob
 
-from natsort import natsorted
+# from natsort import natsorted
+try:
+    from natsort import natsorted
+except ImportError as e:
+    import sys
+    print(f"Error importing natsort: {e}", file=sys.stderr)
+    print(f"Python path: {sys.path}", file=sys.stderr)
+    raise
 
 
 def glob(expression, ensure_one=False):
