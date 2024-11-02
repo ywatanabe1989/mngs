@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-02 04:09:12 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/general/misc.py
 
-import collections
-import contextlib
 import math
 import os
 import re
@@ -9,10 +10,9 @@ import shutil
 import threading
 import time
 import warnings
-from bisect import bisect_left, bisect_right
-from collections import defaultdict
-from contextlib import contextmanager
-from functools import partial, wraps
+from bisect import bisect_left
+from collections import abc, defaultdict
+from functools import wraps
 from glob import glob
 
 import mngs
@@ -21,385 +21,21 @@ import pandas as pd
 import readchar
 import torch
 import xarray as xr
-# from mngs.gen import deprecated
 from natsort import natsorted
 
-from .decorators._deprecated import deprecated
-from collections import abc
-import os
-from contextlib import contextmanager, redirect_stderr, redirect_stdout
+from ._deprecated import deprecated
+
 
 ################################################################################
 ## strings
 ################################################################################
-def decapitalize(s):
-    """Converts the first character of a string to lowercase.
-
-    Parameters
-    ----------
-    s : str
-        The input string to be decapitalized.
-
-    Returns
-    -------
-    str
-        The input string with its first character converted to lowercase.
-
-    Example
-    -------
-    >>> decapitalize("Hello")
-    'hello'
-    >>> decapitalize("WORLD")
-    'wORLD'
-    """
-    if not s:
-        return s
-    return s[0].lower() + s[1:]
 
 
-def connect_strs(strs, filler="_"):
-    """Connects a list of strings using a specified filler.
-
-    Parameters
-    ----------
-    strs : list or tuple of str
-        The list of strings to be connected.
-    filler : str, optional
-        The string used to connect the input strings (default is "_").
-
-    Returns
-    -------
-    str
-        A single string with all input strings connected by the filler.
-
-    Example
-    -------
-    >>> connect_strs(['a', 'b', 'c'], filler='_')
-    'a_b_c'
-    >>> connect_strs(['hello', 'world'], filler='-')
-    'hello-world'
-    """
-    if isinstance(strs, (list, tuple)):
-        connected = ""
-        for s in strs:
-            connected += filler + s
-        return connected[len(filler) :]
-    else:
-        return strs
 
 
-def connect_nums(nums, filler="_"):
-    """Connects a list of numbers using a specified filler.
-
-    Parameters
-    ----------
-    nums : list or tuple of int or float
-        The list of numbers to be connected.
-    filler : str, optional
-        The string used to connect the input numbers (default is "_").
-
-    Returns
-    -------
-    str
-        A single string with all input numbers connected by the filler.
-
-    Example
-    -------
-    >>> connect_nums([1, 2, 3], filler='_')
-    '1_2_3'
-    >>> connect_nums([3.14, 2.718, 1.414], filler='-')
-    '3.14-2.718-1.414'
-    """
-    if isinstance(nums, (list, tuple)):
-        connected = ""
-        for n in nums:
-            connected += filler + str(n)
-        return connected[len(filler) :]
-    else:
-        return nums
 
 
-def squeeze_spaces(string, pattern=" +", repl=" "):
-    """Replace multiple occurrences of a pattern in a string with a single replacement.
 
-    Parameters
-    ----------
-    string : str
-        The input string to be processed.
-    pattern : str, optional
-        The regular expression pattern to match (default is " +", which matches one or more spaces).
-    repl : str or callable, optional
-        The replacement string or function (default is " ", a single space).
-
-    Returns
-    -------
-    str
-        The processed string with pattern occurrences replaced.
-
-    Example
-    -------
-    >>> squeeze_spaces("Hello   world")
-    'Hello world'
-    >>> squeeze_spaces("a---b--c-d", pattern="-+", repl="-")
-    'a-b-c-d'
-    """
-    return re.sub(pattern, repl, string)
-
-
-import re
-
-import numpy as np
-
-
-# def search(patterns, strings, only_perfect_match=False, as_bool=False, ensure_one=False):
-#     """Search for patterns in strings using regular expressions.
-
-#     Parameters
-#     ----------
-#     patterns : str or list of str
-#         The pattern(s) to search for. Can be a single string or a list of strings.
-#     strings : str or list of str
-#         The string(s) to search in. Can be a single string or a list of strings.
-#     only_perfect_match : bool, optional
-#         If True, only exact matches are considered (default is False).
-#     as_bool : bool, optional
-#         If True, return a boolean array instead of indices (default is False).
-
-#     Returns
-#     -------
-#     tuple
-#         A tuple containing two elements:
-#         - If as_bool is False: (list of int, list of str)
-#           The first element is a list of indices where matches were found.
-#           The second element is a list of matched strings.
-#         - If as_bool is True: (numpy.ndarray of bool, list of str)
-#           The first element is a boolean array indicating matches.
-#           The second element is a list of matched strings.
-
-#     Example
-#     -------
-#     >>> patterns = ['orange', 'banana']
-#     >>> strings = ['apple', 'orange', 'apple', 'apple_juice', 'banana', 'orange_juice']
-#     >>> search(patterns, strings)
-#     ([1, 4, 5], ['orange', 'banana', 'orange_juice'])
-
-#     >>> patterns = 'orange'
-#     >>> strings = ['apple', 'orange', 'apple', 'apple_juice', 'banana', 'orange_juice']
-#     >>> search(patterns, strings)
-#     ([1, 5], ['orange', 'orange_juice'])
-#     """
-
-#     def to_list(s_or_p):
-#         if isinstance(s_or_p, (np.ndarray, pd.Series, xr.DataArray)):
-#             return s_or_p.tolist()
-#         elif isinstance(s_or_p, collections.abc.KeysView):
-#             return list(s_or_p)
-#         elif not isinstance(s_or_p, (list, tuple, pd.Index)):
-#             return [s_or_p]
-#         return s_or_p
-
-#     patterns = to_list(patterns)
-#     strings = to_list(strings)
-
-#     if not only_perfect_match:
-#         indi_matched = []
-#         for pattern in patterns:
-#             for i_str, string in enumerate(strings):
-#                 m = re.search(pattern, string)
-#                 if m is not None:
-#                     indi_matched.append(i_str)
-#     else:
-#         indi_matched = []
-#         for pattern in patterns:
-#             for i_str, string in enumerate(strings):
-#                 if pattern == string:
-#                     indi_matched.append(i_str)
-
-#     indi_matched = natsorted(indi_matched)
-#     keys_matched = list(np.array(strings)[indi_matched])
-
-#     if ensure_one:
-#         asssert len(indi_matched) == 1
-
-#     if as_bool:
-#         bool_matched = np.zeros(len(strings), dtype=bool)
-#         if np.unique(indi_matched).size != 0:
-#             bool_matched[np.unique(indi_matched)] = True
-#         return bool_matched, keys_matched
-#     else:
-#         return indi_matched, keys_matched
-
-def search(patterns, strings, only_perfect_match=False, as_bool=False, ensure_one=False):
-    """Search for patterns in strings using regular expressions.
-
-    Parameters
-    ----------
-    patterns : str or list of str
-        The pattern(s) to search for. Can be a single string or a list of strings.
-    strings : str or list of str
-        The string(s) to search in. Can be a single string or a list of strings.
-    only_perfect_match : bool, optional
-        If True, only exact matches are considered (default is False).
-    as_bool : bool, optional
-        If True, return a boolean array instead of indices (default is False).
-    ensure_one : bool, optional
-        If True, ensures only one match is found (default is False).
-
-    Returns
-    -------
-    tuple
-        A tuple containing two elements:
-        - If as_bool is False: (list of int, list of str)
-          The first element is a list of indices where matches were found.
-          The second element is a list of matched strings.
-        - If as_bool is True: (numpy.ndarray of bool, list of str)
-          The first element is a boolean array indicating matches.
-          The second element is a list of matched strings.
-
-    Example
-    -------
-    >>> patterns = ['orange', 'banana']
-    >>> strings = ['apple', 'orange', 'apple', 'apple_juice', 'banana', 'orange_juice']
-    >>> search(patterns, strings)
-    ([1, 4, 5], ['orange', 'banana', 'orange_juice'])
-
-    >>> patterns = 'orange'
-    >>> strings = ['apple', 'orange', 'apple', 'apple_juice', 'banana', 'orange_juice']
-    >>> search(patterns, strings)
-    ([1, 5], ['orange', 'orange_juice'])
-    """
-
-    def to_list(string_or_pattern):
-        if isinstance(string_or_pattern, (np.ndarray, pd.Series, xr.DataArray)):
-            return string_or_pattern.tolist()
-        elif isinstance(string_or_pattern, abc.KeysView):
-            return list(string_or_pattern)
-        elif not isinstance(string_or_pattern, (list, tuple, pd.Index)):
-            return [string_or_pattern]
-        return string_or_pattern
-
-    patterns = to_list(patterns)
-    strings = to_list(strings)
-
-    indices_matched = []
-    for pattern in patterns:
-        for index_str, string in enumerate(strings):
-            if only_perfect_match:
-                if pattern == string:
-                    indices_matched.append(index_str)
-            else:
-                if re.search(pattern, string):
-                    indices_matched.append(index_str)
-
-    indices_matched = natsorted(indices_matched)
-    keys_matched = list(np.array(strings)[indices_matched])
-
-    if ensure_one:
-        assert len(indices_matched) == 1, "Expected exactly one match, but found {}".format(len(indices_matched))
-
-    if as_bool:
-        bool_matched = np.zeros(len(strings), dtype=bool)
-        bool_matched[np.unique(indices_matched)] = True
-        return bool_matched, keys_matched
-    else:
-        return indices_matched, keys_matched
-
-
-def grep(str_list, search_key):
-    """Search for a key in a list of strings and return matching items.
-
-    Parameters
-    ----------
-    str_list : list of str
-        The list of strings to search through.
-    search_key : str
-        The key to search for in the strings.
-
-    Returns
-    -------
-    list
-        A list of strings from str_list that contain the search_key.
-
-    Example
-    -------
-    >>> grep(['apple', 'banana', 'cherry'], 'a')
-    ['apple', 'banana']
-    >>> grep(['cat', 'dog', 'elephant'], 'e')
-    ['elephant']
-    """
-    """
-    Example:
-        str_list = ['apple', 'orange', 'apple', 'apple_juice', 'banana', 'orange_juice']
-        search_key = 'orange'
-        print(grep(str_list, search_key))
-        # ([1, 5], ['orange', 'orange_juice'])
-    """
-    matched_keys = []
-    indi = []
-    for ii, string in enumerate(str_list):
-        m = re.search(search_key, string)
-        if m is not None:
-            matched_keys.append(string)
-            indi.append(ii)
-    return indi, matched_keys
-
-
-def pop_keys(keys_list, keys_to_pop):
-    """Remove specified keys from a list of keys.
-
-    Parameters
-    ----------
-    keys_list : list
-        The original list of keys.
-    keys_to_pop : list
-        The list of keys to remove from keys_list.
-
-    Returns
-    -------
-    list
-        A new list with the specified keys removed.
-
-    Example
-    -------
-    >>> keys_list = ['a', 'b', 'c', 'd', 'e', 'bde']
-    >>> keys_to_pop = ['b', 'd']
-    >>> pop_keys(keys_list, keys_to_pop)
-    ['a', 'c', 'e', 'bde']
-    """
-    indi_to_remain = [k not in keys_to_pop for k in keys_list]
-    keys_remainded_list = list(np.array(keys_list)[list(indi_to_remain)])
-    return keys_remainded_list
-
-
-def readable_bytes(num, suffix="B"):
-    """Convert a number of bytes to a human-readable format.
-
-    Parameters
-    ----------
-    num : int
-        The number of bytes to convert.
-    suffix : str, optional
-        The suffix to append to the unit (default is "B" for bytes).
-
-    Returns
-    -------
-    str
-        A human-readable string representation of the byte size.
-
-    Example
-    -------
-    >>> readable_bytes(1024)
-    '1.0 KiB'
-    >>> readable_bytes(1048576)
-    '1.0 MiB'
-    >>> readable_bytes(1073741824)
-    '1.0 GiB'
-    """
-    for unit in ["", "Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi"]:
-        if abs(num) < 1024.0:
-            return "%3.1f %s%s" % (num, unit, suffix)
-        num /= 1024.0
-    return "%.1f %s%s" % (num, "Yi", suffix)
 
 
 ################################################################################
@@ -542,45 +178,6 @@ def isclose(mutable_a, mutable_b):
 ################################################################################
 ## dictionary
 ################################################################################
-def merge_dicts_wo_overlaps(*dicts):
-    """Merge multiple dictionaries without overlapping keys.
-
-    This function merges multiple dictionaries into a single dictionary,
-    ensuring that there are no overlapping keys between the input dictionaries.
-
-    Parameters
-    ----------
-    *dicts : dict
-        Variable number of dictionaries to merge.
-
-    Returns
-    -------
-    dict
-        A new dictionary containing all key-value pairs from the input dictionaries.
-
-    Raises
-    ------
-    AssertionError
-        If there are overlapping keys between the input dictionaries.
-
-    Example
-    -------
-    >>> d1 = {'a': 1, 'b': 2}
-    >>> d2 = {'c': 3, 'd': 4}
-    >>> merge_dicts_wo_overlaps(d1, d2)
-    {'a': 1, 'b': 2, 'c': 3, 'd': 4}
-
-    >>> d3 = {'b': 5}  # This would raise an AssertionError due to overlapping key 'b'
-    >>> merge_dicts_wo_overlaps(d1, d3)
-    AssertionError
-    """
-    merged_dict = {}
-    for dict in dicts:
-        assert mngs.general.search(
-            merged_dict.keys(), dict.keys(), only_perfect_match=True
-        ) == ([], [])
-        merged_dict.update(dict)
-    return merged_dict
 
 
 def listed_dict(keys=None):
@@ -643,10 +240,6 @@ def is_defined_local(x_str):
         # True
     """
     return x_str in locals()
-
-
-# def does_exist(suspicious_var_str):
-#     return suspicious_var_str in globals()
 
 
 ################################################################################
@@ -1174,88 +767,7 @@ def uq(*args, **kwargs):
     return unique(*args, **kwargs)
 
 
-def print_block(message, char="-", n=40, c=None):
-    """Print a message surrounded by a character border.
 
-    This function prints a given message surrounded by a border made of
-    a specified character. The border can be colored if desired.
-
-    Parameters
-    ----------
-    message : str
-        The message to be printed inside the border.
-    char : str, optional
-        The character used to create the border (default is "-").
-    n : int, optional
-        The width of the border (default is 40).
-    c : str, optional
-        The color of the border. Can be 'red', 'green', 'yellow', 'blue',
-        'magenta', 'cyan', 'white', or 'grey' (default is None, which means no color).
-
-    Returns
-    -------
-    None
-
-    Example
-    -------
-    >>> print_block("Hello, World!", char="*", n=20, c="blue")
-    ********************
-    * Hello, World!    *
-    ********************
-
-    Note: The actual output will be in green color.
-    """
-    border = char * n
-    text = f"\n{border}\n{message}\n{border}\n"
-    if c is not None:
-        text = color_text(text, c)
-    print(text)
-
-print_ = print_block
-
-def color_text(text, c="green"):
-    """Apply ANSI color codes to text.
-
-    Parameters
-    ----------
-    text : str
-        The text to be colored.
-    c : str, optional
-        The color to apply. Available colors are 'red', 'green', 'yellow',
-        'blue', 'magenta', 'cyan', 'white', and 'grey' (default is "green").
-
-    Returns
-    -------
-    str
-        The input text with ANSI color codes applied.
-
-    Example
-    -------
-    >>> print(color_text("Hello, World!", "blue"))
-    # This will print "Hello, World!" in blue text
-    """
-    ANSI_COLORS = {
-        "red": "\033[91m",
-        "green": "\033[92m",
-        "yellow": "\033[93m",
-        "blue": "\033[94m",
-        "magenta": "\033[95m",
-        "cyan": "\033[96m",
-        "white": "\033[97m",
-        "grey": "\033[90m",
-        "gray": "\033[90m",
-        "reset": "\033[0m",
-    }
-    ANSI_COLORS["tra"] = ANSI_COLORS["white"]
-    ANSI_COLORS["val"] = ANSI_COLORS["green"]
-    ANSI_COLORS["tes"] = ANSI_COLORS["red"]
-
-    start_code = ANSI_COLORS.get(c, ANSI_COLORS["reset"])
-    end_code = ANSI_COLORS["reset"]
-    return f"{start_code}{text}{end_code}"
-
-
-ct = color_text
 
 
 # def mv_col(dataframe, column_name, position):
@@ -1265,154 +777,8 @@ ct = color_text
 #     return dataframe
 
 
-def symlink(tgt, src, force=False):
-    """Create a symbolic link.
-
-    This function creates a symbolic link from the target to the source.
-    If the force parameter is True, it will remove any existing file at
-    the source path before creating the symlink.
-
-    Parameters
-    ----------
-    tgt : str
-        The target path (the file or directory to be linked to).
-    src : str
-        The source path (where the symbolic link will be created).
-    force : bool, optional
-        If True, remove the existing file at the src path before creating
-        the symlink (default is False).
-
-    Returns
-    -------
-    None
-
-    Raises
-    ------
-    OSError
-        If the symlink creation fails.
-
-    Example
-    -------
-    >>> symlink('/path/to/target', '/path/to/link')
-    >>> symlink('/path/to/target', '/path/to/existing_file', force=True)
-    """
-    if force:
-        try:
-            os.remove(src)
-        except FileNotFoundError:
-            pass
-
-    # Calculate the relative path from src to tgt
-    src_dir = os.path.dirname(src)
-    relative_tgt = os.path.relpath(tgt, src_dir)
-
-    os.symlink(relative_tgt, src)
-    print(
-        mngs.gen.ct(
-            f"\nSymlink was created: {src} -> {relative_tgt}\n", c="yellow"
-        )
-    )
 
 
-#     os.symlink(tgt, src)
-#     print(mngs.gen.ct(f"\nSymlink was created: {src} -> {tgt}\n", c="yellow"))
-# Symlink was created: ./scripts/ml/clf/sct_optuna/optuna_studies/optuna_study_stent_3_classes/best_trial -> /home/ywatanabe/proj/ecog_stent_sheep_visual/scripts/ml/clf/sct_optuna/RUNNING/2024Y-03M-29D-21h55m09s_IBSy/objective/Trial#00068/
-
-
-def to_even(n):
-    """Convert a number to the nearest even number less than or equal to itself.
-
-    Parameters
-    ----------
-    n : int or float
-        The input number to be converted.
-
-    Returns
-    -------
-    int
-        The nearest even number less than or equal to the input.
-
-    Example
-    -------
-    >>> to_even(5)
-    4
-    >>> to_even(6)
-    6
-    >>> to_even(3.7)
-    2
-    """
-    return int(n) - (int(n) % 2)
-
-
-def to_odd(n):
-    """Convert a number to the nearest odd number less than or equal to itself.
-
-    Parameters
-    ----------
-    n : int or float
-        The input number to be converted.
-
-    Returns
-    -------
-    int
-        The nearest odd number less than or equal to the input.
-
-    Example
-    -------
-    >>> to_odd(6)
-    5
-    >>> to_odd(7)
-    7
-    >>> to_odd(5.8)
-    5
-    """
-    return int(n) - ((int(n) + 1) % 2)
-
-
-@deprecated("Use mngs.io.glob instead.")
-def natglob(expression):
-    """
-    Perform a natural-sorted glob operation on the given expression.
-
-    This function is deprecated. Use mngs.io.glob instead.
-
-    Parameters
-    ----------
-    expression : str
-        The glob expression to evaluate. Can include wildcards and curly brace expansions.
-
-    Returns
-    -------
-    list
-        A naturally sorted list of file paths matching the glob expression.
-
-    Example
-    -------
-    >>> natglob("*.txt")
-    ['1.txt', '2.txt', '10.txt']
-    >>> natglob("file_{1..3}.txt")
-    ['file_1.txt', 'file_2.txt', 'file_3.txt']
-
-    Notes
-    -----
-    This function first attempts to evaluate the expression as a Python expression.
-    If that fails, it treats the expression as a literal glob pattern.
-    """
-    glob_pattern = re.sub(r"{[^}]*}", "*", expression)
-    try:
-        return natsorted(glob(eval(glob_pattern)))
-    except:
-        return natsorted(glob(glob_pattern))
-
-
-# def natglob(expression):
-#     glob_pattern = re.sub(r"{[^}]*}", "*", expression)
-#     if isinsntace(eval(glob_pattern), str):
-#         abort
-#     else:
-#         glob_pattern = eval(glob_pattern)
-#         return natsorted(glob(glob_pattern))
-#     # return natsorted(glob(expression))
 
 
 def float_linspace(start, stop, num_points):
@@ -1498,3 +864,6 @@ def replace(string, replacements=None):
         if v is not None:
             string = string.replace("{" + k + "}", v)
     return string
+
+
+# EOF

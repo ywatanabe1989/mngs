@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-# Time-stamp: "2024-10-27 13:21:04 (ywatanabe)"
+# -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-02 11:29:20 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/__init__.py
+#!/usr/bin/env python3
+# Time-stamp: "2024-10-27 13:34:51 (ywatanabe)"
 
 ########################################
 # Warnings
@@ -39,6 +43,7 @@ from . import res
 from . import web
 from . import db
 from . import pd
+from . import str
 
 # ########################################
 # # Lazy importing
@@ -89,3 +94,6 @@ __license__ = "MIT"
 __author__ = "ywatanabe1989"
 __author_email__ = "ywatanabe@alumni.u-tokyo.ac.jp"
 __url__ = "https://github.com/ywatanabe1989/mngs"
+
+
+# EOF

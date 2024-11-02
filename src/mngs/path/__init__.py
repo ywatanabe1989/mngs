@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-24 18:40:14 (ywatanabe)"
+# Time-stamp: "2024-10-25 12:14:00 (ywatanabe)"
 # Author: Yusuke Watanabe (ywata1989@gmail.com)
 
 # try:
@@ -21,3 +21,4 @@
 from ._find import find_dir, find_file, find_git_root
 from ._path import file_size, spath, split, this_path
 from ._version import find_latest, increment_version
+from ._clean import clean

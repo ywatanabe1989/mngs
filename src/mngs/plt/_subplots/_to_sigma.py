@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-05 18:56:18 (ywatanabe)"
+# Time-stamp: "2024-10-27 00:34:10 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/_to_sigma.py
 
 
@@ -203,7 +203,10 @@ def format_plotting_args(record):
         return df
 
     elif method == "sns_barplot":
-        __import__("ipdb").set_trace()
+        df = args
+
+        # When xyhue, without errorbar
+        df = pd.DataFrame(pd.Series(np.array(df).diagonal(), index=df.columns)).T
         return df
 
     elif method == "sns_boxplot":
@@ -235,7 +238,6 @@ def format_plotting_args(record):
         return df
 
     elif method == "sns_scatterplot":
-        __import__("ipdb").set_trace()
         return df
 
     elif method == "sns_violinplot":

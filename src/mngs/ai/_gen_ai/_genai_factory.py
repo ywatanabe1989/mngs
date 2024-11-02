@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-27 13:02:01 (ywatanabe)"
+# Time-stamp: "2024-10-27 13:38:02 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/ml/chat.py
 
 
@@ -19,6 +19,7 @@ import pandas as pd
 """Functions & Classes"""
 
 """Parameters"""
+
 def genai_factory(
     model="gpt-3.5-turbo",
     stream=False,

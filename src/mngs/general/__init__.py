@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-02 03:53:14 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/general/__init__.py
+#!/usr/bin/env python3
 
 """General utility functions and classes for the MNGS project."""
 
@@ -7,9 +11,9 @@ from ..io import *
 
 # Machine Learning utilities
 from ..ml.utils.grid_search import count_grids, yield_grids
-
+from ._is_ipython import is_ipython, is_script
 #
-from .decorators._converters import (
+from ._converters import (
     batch_fn,
     numpy_fn,
     squeeze_if,
@@ -24,17 +28,17 @@ None # to keep order when black is applied
 
 from ._suppress_output import suppress_output, quiet
 # Data processing utilities
-from .data_processing._ci import ci
-from .data_processing._DimHandler import DimHandler
-from .data_processing._norm import to_z
-from .data_processing._symlog import symlog
-from .data_processing._to_rank import to_rank
-from .data_processing._transpose import transpose
-from .decorators._alternate_kwarg import alternate_kwarg
+from ._ci import ci
+from ._DimHandler import DimHandler
+from ._norm import to_z, to_nanz
+from ._symlog import symlog
+from ._to_rank import to_rank
+from ._transpose import transpose
+from ._alternate_kwarg import alternate_kwarg
 
 # Core utilities
-from .decorators._cache import cache
-from .decorators._deprecated import deprecated
+from ._cache import cache
+from ._deprecated import deprecated
 
 # Miscellaneous utilities
 from .misc import (
@@ -75,32 +79,35 @@ from .misc import (
 )
 from ._parse_str import parse_str
 # Utils
-from .system_ops._email import send_gmail
-from .system_ops._notify import notify
-from .system_ops._shell import run_shellcommand, run_shellscript
-from .system_ops._tee import tee
-from .system_ops._timeout import timeout
-from .utils._close import close
-from .utils._dict2str import dict2str
-from .utils._dict_replace import dict_replace
-from .utils._DotDict import DotDict
-from .utils._embed import embed
+from ._email import send_gmail
+from ._notify import notify
+from ._shell import run_shellcommand, run_shellscript
+from ._tee import tee
+from ._timeout import timeout
+from ._close import close
+from ._dict2str import dict2str
+from ._dict_replace import dict_replace
+from ._DotDict import DotDict
+from ._embed import embed
 
 # LaTeX utilities
-from .utils._latex import add_hat_in_latex_style, to_latex_style
-from .utils._less import less
-from .utils._mask_api import mask_api
-from .utils._not_implemented import not_implemented
-from .utils._paste import paste
-from .utils._reproduce import fix_seeds, gen_ID, gen_timestamp
-from .utils._src import src
-from .utils._start import start
-from .utils._TimeStamper import TimeStamper
-from .utils._title2path import title2path
-from .utils._title_case import title_case
-from .utils._wrap import wrap
+from ._latex import add_hat_in_latex_style, to_latex_style
+from ._less import less
+from ._mask_api import mask_api
+from ._not_implemented import not_implemented
+from ._paste import paste
+from ._reproduce import fix_seeds, gen_ID, gen_timestamp
+from ._src import src
+from ._start import start
+from ._TimeStamper import TimeStamper
+from ._title2path import title2path
+from ._title_case import title_case
+from ._wrap import wrap
 
 from ._inspect_module import inspect_module
 
 # Placeholder for unused variables
 _ = None
+
+
+# EOF
