@@ -1,3 +1,9 @@
+<!-- ---
+!-- title: README.md
+!-- author: ywatanabe
+!-- date: 2024-11-04 03:16:41
+!-- --- -->
+
 # [`mngs.ai`](https://github.com/ywatanabe1989/mngs/tree/main/src/mngs/ai/)
 
 ## Overview
@@ -112,9 +118,6 @@ The `mngs.ai` module is built on top of PyTorch, leveraging GPU acceleration for
 
 ## Contributing
 Contributions to improve `mngs.ai` are welcome. Please submit pull requests or open issues on the GitHub repository.
-
-## License
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## Contact
 Yusuke Watanabe (ywata1989@gmail.com)
