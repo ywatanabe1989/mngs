@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-06 08:45:27 (ywatanabe)"
+# Time-stamp: "2024-10-24 10:13:22 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/general/_tee.py
 
 
@@ -58,18 +58,12 @@ Functions & Classes
 class Tee(object):
     """Example:
     import sys
-
     sys.stdout = Tee(sys.stdout, "stdout.txt")
     sys.stderr = Tee(sys.stderr, "stderr.txt")
-
-    print("abc") # stdout
-    print(1 / 0) # stderr
-    # cat stdout.txt
-    # cat stderr.txt
     """
-
     def __init__(self, sys_stdout_or_stderr, spath):
         self._files = [sys_stdout_or_stderr, open(spath, "w")]
+        self._is_stderr = sys_stdout_or_stderr is sys.stderr
 
     def __getattr__(self, attr, *args):
         return self._wrap(attr, *args)
@@ -77,10 +71,43 @@ class Tee(object):
     def _wrap(self, attr, *args):
         def g(*a, **kw):
             for f in self._files:
-                res = getattr(f, attr, *args)(*a, **kw)
+                if self._is_stderr and f is not sys.stderr:
+                    # Filter tqdm lines from log file
+                    msg = a[0] if a else ""
+                    if not re.match(r'^[\s]*[0-9]+%.*\[A*$', msg):
+                        res = getattr(f, attr, *args)(*a, **kw)
+                else:
+                    res = getattr(f, attr, *args)(*a, **kw)
             return res
-
         return g
+
+
+# class Tee(object):
+#     """Example:
+#     import sys
+
+#     sys.stdout = Tee(sys.stdout, "stdout.txt")
+#     sys.stderr = Tee(sys.stderr, "stderr.txt")
+
+#     print("abc") # stdout
+#     print(1 / 0) # stderr
+#     # cat stdout.txt
+#     # cat stderr.txt
+#     """
+
+#     def __init__(self, sys_stdout_or_stderr, spath):
+#         self._files = [sys_stdout_or_stderr, open(spath, "w")]
+
+#     def __getattr__(self, attr, *args):
+#         return self._wrap(attr, *args)
+
+#     def _wrap(self, attr, *args):
+#         def g(*a, **kw):
+#             for f in self._files:
+#                 res = getattr(f, attr, *args)(*a, **kw)
+#             return res
+
+#         return g
 
 
 def tee(sys, sdir=None, verbose=True):
