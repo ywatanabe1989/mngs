@@ -1,11 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-02 15:21:38 (ywatanabe)"
+# Time-stamp: "2024-11-03 06:33:08 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/utils/_email.py
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-19 04:23:40 (ywatanabe)"
-# /home/ywatanabe/proj/_mngs_repo_openhands/src/mngs/gen/system_ops/_email.py
 
 import os
 import smtplib
