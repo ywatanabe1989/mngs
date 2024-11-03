@@ -1,14 +1,9 @@
 # src from here --------------------------------------------------------------------------------
-# #!./env/bin/python3
+# #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-10-13 19:14:05 (ywatanabe)"
+# # Time-stamp: "2024-11-03 07:23:53 (ywatanabe)"
+# # File: ./mngs_repo/src/mngs/dsp/utils/_differential_bandpass_filters.py
 # 
-# """
-# This script does XYZ.
-# """
-# 
-# 
-# # Imports
 # import sys
 # 
 # import matplotlib.pyplot as plt
@@ -16,14 +11,14 @@
 # import numpy as np
 # import torch
 # import torch.nn as nn
-# 
+# from ...gen._to_even import to_even
+# from ...gen._to_odd import to_odd
 # 
 # import warnings
 # 
 # warnings.simplefilter("ignore", UserWarning)
 # from torchaudio.prototype.functional import sinc_impulse_response
 # warnings.resetwarnings()
-# 
 # 
 # # Functions
 # def init_bandpass_filters(
@@ -47,7 +42,6 @@
 #     filters = build_bandpass_filters(sig_len, fs, pha_mids, amp_mids, cycle)
 #     return filters, pha_mids, amp_mids
 # 
-# 
 # def build_bandpass_filters(sig_len, fs, pha_mids, amp_mids, cycle):
 #     def _define_freqs(mids, factor):
 #         lows = mids - mids / factor
@@ -57,12 +51,12 @@
 #     def define_order(low_hz, fs, sig_len, cycle):
 #         order = cycle * int((fs // low_hz))
 #         order = order if 3 * order >= sig_len else (sig_len - 1) // 3
-#         order = mngs.gen.to_even(order)
+#         order = to_even(order)
 #         return order
 # 
 #     def _calc_filters(lows_hz, highs_hz, fs, order):
 #         nyq = fs / 2.0
-#         order = mngs.gen.to_odd(order)
+#         order = to_odd(order)
 #         # lowpass filters
 #         irs_ll = sinc_impulse_response(lows_hz / nyq, window_size=order)
 #         irs_hh = sinc_impulse_response(highs_hz / nyq, window_size=order)
@@ -80,8 +74,9 @@
 #     amp_bp_filters = _calc_filters(amp_lows, amp_highs, fs, order)
 #     return torch.vstack([pha_bp_filters, amp_bp_filters])
 # 
-# 
 # if __name__ == "__main__":
+#     import mngs
+# 
 #     # Start
 #     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
 #         sys, plt, agg=True
@@ -121,6 +116,8 @@
 # """
 # /home/ywatanabe/proj/entrance/mngs/nn/_DifferentiableBandPassFilterInitializer.py
 # """
+# 
+# # EOF
 
 # test from here --------------------------------------------------------------------------------
 #!/usr/bin/env python3
@@ -136,7 +133,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from src.mngs.dsp/utils/_differential_bandpass_filters.py import *
+from src.mngs.dsp.utils._differential_bandpass_filters import *
 
 class Test_MainFunctionality:
     def setup_method(self):

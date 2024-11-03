@@ -1,4 +1,9 @@
 # src from here --------------------------------------------------------------------------------
+# #!/usr/bin/env python3
+# # -*- coding: utf-8 -*-
+# # Time-stamp: "2024-11-04 00:58:53 (ywatanabe)"
+# # File: ./mngs_repo/src/mngs/plt/_subplots/_FigWrapper.py
+# 
 # #!./env/bin/python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-10-26 05:27:26 (ywatanabe)"
@@ -8,7 +13,6 @@
 # 
 # import numpy as np
 # import pandas as pd
-# from mngs.gen import deprecated
 # 
 # 
 # class FigWrapper:
@@ -85,10 +89,6 @@
 # 
 #         return pd.concat(dfs, axis=1) if dfs else pd.DataFrame()
 # 
-#     @deprecated("Use supxyt() instead.")
-#     def set_supxyt(self, *args, **kwargs):
-#         return self.supxyt(*args, **kwargs)
-# 
 #     def supxyt(self, x=False, y=False, t=False):
 #         """Sets xlabel, ylabel and title"""
 #         if x is not False:
@@ -101,6 +101,9 @@
 # 
 #     def tight_layout(self, rect=[0, 0.03, 1, 0.95]):
 #         self.fig.tight_layout(rect=rect)
+# 
+# 
+# # EOF
 
 # test from here --------------------------------------------------------------------------------
 #!/usr/bin/env python3
@@ -116,7 +119,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from src.mngs.plt/_subplots/_FigWrapper.py import *
+from src.mngs.plt._subplots._FigWrapper import *
 
 class Test_MainFunctionality:
     def setup_method(self):

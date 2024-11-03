@@ -1,6 +1,11 @@
 # src from here --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
+# # Time-stamp: "2024-11-03 07:17:53 (ywatanabe)"
+# # File: ./mngs_repo/src/mngs/nn/_Filters.py
+# 
+# #!/usr/bin/env python3
+# # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-05-30 09:35:17 (ywatanabe)"
 # 
 # """
@@ -18,6 +23,7 @@
 # import torch.nn as nn
 # import torch.nn.functional as F
 # from mngs.dsp.utils import build_bandpass_filters, init_bandpass_filters
+# from ..gen._to_even import to_even
 # 
 # 
 # class BaseFilter1D(nn.Module):
@@ -260,7 +266,7 @@
 # class GaussianFilter(BaseFilter1D):
 #     def __init__(self, sigma):
 #         super().__init__()
-#         self.sigma = mngs.gen.to_even(sigma)
+#         self.sigma = to_even(sigma)
 #         self.register_buffer("kernels", self.init_kernels(sigma))
 # 
 #     @staticmethod
@@ -428,6 +434,9 @@
 # """
 # /home/ywatanabe/proj/entrance/mngs/dsp/nn/_Filters.py
 # """
+# 
+# 
+# # EOF
 
 # test from here --------------------------------------------------------------------------------
 #!/usr/bin/env python3
@@ -443,7 +452,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from src.mngs.nn/_Filters.py import *
+from src.mngs.nn._Filters import *
 
 class Test_MainFunctionality:
     def setup_method(self):

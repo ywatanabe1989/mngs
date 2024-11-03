@@ -1,8 +1,8 @@
 # src from here --------------------------------------------------------------------------------
-# #!./env/bin/python3
+# #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-10-27 13:02:07 (ywatanabe)"
-# # /home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/PARAMS.py
+# # Time-stamp: "2024-11-03 04:44:33 (ywatanabe)"
+# # File: ./mngs_repo/src/mngs/ai/_gen_ai/PARAMS.py
 # 
 # # https://openai.com/api/pricing/
 # # https://www.anthropic.com/pricing#anthropic-api
@@ -93,7 +93,21 @@
 #         "provider": "Google",
 #     },
 #     {
+#         "name": "gemini-1.5-pro",
+#         "input_cost": 3.50,
+#         "output_cost": 10.50,
+#         "api_key_env": "GOOGLE_API_KEY",
+#         "provider": "Google",
+#     },
+#     {
 #         "name": "gemini-1.5-flash-latest",
+#         "input_cost": 0.15,
+#         "output_cost": 0.0375,
+#         "api_key_env": "GOOGLE_API_KEY",
+#         "provider": "Google",
+#     },
+#     {
+#         "name": "gemini-1.5-flash",
 #         "input_cost": 0.15,
 #         "output_cost": 0.0375,
 #         "api_key_env": "GOOGLE_API_KEY",
@@ -205,6 +219,9 @@
 #         "provider": "Llama",
 #     },
 # ])
+# 
+# 
+# # EOF
 
 # test from here --------------------------------------------------------------------------------
 #!/usr/bin/env python3
@@ -220,7 +237,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from src.mngs.ai/_gen_ai/PARAMS.py import *
+from src.mngs.ai._gen_ai.PARAMS import *
 
 class Test_MainFunctionality:
     def setup_method(self):

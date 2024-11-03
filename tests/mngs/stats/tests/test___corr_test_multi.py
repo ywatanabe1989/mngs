@@ -8,7 +8,7 @@
 # import mngs
 # from scipy import stats
 # from typing import Any, Literal, Dict, Callable
-# from ..decorators import numpy_fn
+# from ...decorators import numpy_fn
 # import multiprocessing as mp
 # from functools import partial
 # import pandas as pd
@@ -345,7 +345,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from src.mngs.stats/_corr_test.py import *
+from src.mngs.stats.tests.__corr_test_multi import *
 
 class Test_MainFunctionality:
     def setup_method(self):

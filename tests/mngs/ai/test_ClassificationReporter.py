@@ -1,12 +1,15 @@
 # src from here --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
+# # -*- coding: utf-8 -*-
+# # Time-stamp: "2024-11-03 03:36:09 (ywatanabe)"
+# # File: ./mngs_repo/src/mngs/ai/ClassificationReporter.py
 # 
 # import os
 # import random
 # import sys
-# from collections import defaultdict
-# from glob import glob
-# from pprint import pprint
+# from collections import defaultdict as _defaultdict
+# from glob import glob as _glob
+# from pprint import pprint as _pprint
 # 
 # import matplotlib
 # import matplotlib.pyplot as plt
@@ -16,6 +19,8 @@
 # import torch
 # from sklearn.metrics import (balanced_accuracy_score, classification_report,
 #                              confusion_matrix, matthews_corrcoef)
+# 
+# from ..reproduce import fix_seeds
 # 
 # 
 # class MultiClassificationReporter(object):
@@ -119,8 +124,8 @@
 # 
 #     def __init__(self, sdir):
 #         self.sdir = sdir
-#         self.folds_dict = defaultdict(list)
-#         mngs.reproduce.fix_seeds(
+#         self.folds_dict = _defaultdict(list)
+#         fix_seeds(
 #             os=os, random=random, np=np, torch=torch, show=False
 #         )
 # 
@@ -183,7 +188,7 @@
 # 
 #         if show:
 #             print(f"\nConfusion Matrix in fold#{i_fold}: \n")
-#             pprint(conf_mat)
+#             _pprint(conf_mat)
 #             print()
 # 
 #         return conf_mat
@@ -223,7 +228,7 @@
 #         clf_report.index.name = None
 #         if show:
 #             print(f"\nClassification Report for fold#{i_fold}:\n")
-#             pprint(clf_report)
+#             _pprint(clf_report)
 #             print()
 #         return clf_report
 # 
@@ -359,11 +364,11 @@
 #         self,
 #     ):
 # 
-#         folds_dirs = glob(self.sdir_for_roc_csv + "fold#*")
+#         folds_dirs = _glob(self.sdir_for_roc_csv + "fold#*")
 #         n_folds = len(folds_dirs)
 # 
 #         # get class names
-#         _csv_files = glob(os.path.join(folds_dirs[0], "*"))
+#         _csv_files = _glob(os.path.join(folds_dirs[0], "*"))
 #         classes_str = [
 #             csv_file.split("/")[-1].split(".csv")[0] for csv_file in _csv_files
 #         ]
@@ -457,9 +462,9 @@
 #                             f"\n{k}\n"
 #                             f"\n{n_folds}-fold-CV mean:\n"
 #                         )
-#                         pprint(self.folds_dict[k][0])
+#                         _pprint(self.folds_dict[k][0])
 #                         print(f"\n\n{n_folds}-fold-CV std.:\n")
-#                         pprint(self.folds_dict[k][1])
+#                         _pprint(self.folds_dict[k][1])
 #                         print("\n\n----------------------------------------\n")
 # 
 #                 ## listed figures
@@ -648,7 +653,7 @@
 #     ################################################################################
 #     ## Fixes seeds
 #     ################################################################################
-#     mngs.reproduce.fix_seeds(np=np)
+#     fix_seeds(np=np)
 # 
 #     ## Loads
 #     mnist = load_digits()
@@ -775,7 +780,9 @@
 #         tgt="Test2",
 #     )
 # 
-#     ## EOF
+#     #
+# 
+# # EOF
 
 # test from here --------------------------------------------------------------------------------
 #!/usr/bin/env python3
@@ -791,7 +798,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from src.mngs.ai/ClassificationReporter.py import *
+from src.mngs.ai.ClassificationReporter import *
 
 class Test_MainFunctionality:
     def setup_method(self):

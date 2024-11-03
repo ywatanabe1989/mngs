@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-03 03:44:59 (ywatanabe)"
+# Time-stamp: "2024-11-04 01:19:02 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/gen/_tee.py
 
 import os as _os
 import sys
-from mngs.path import get_spath
-from mngs.path import split
+
+from ..path import get_spath, split
 from ..str._printc import printc
+
 
 class Tee(object):
     """Example:
@@ -72,7 +73,7 @@ def tee(sys, sdir=None, verbose=True):
 
     if verbose:
         message = f"Standard output/error are being logged at:\n\t{spath_stdout}\n\t{spath_stderr}"
-        mngs.gen.printc(message)
+        printc(message)
 
     return sys_stdout, sys_stderr
 
@@ -81,12 +82,13 @@ main = tee
 if __name__ == "__main__":
     # # Argument Parser
     import matplotlib.pyplot as plt
+    import mngs
+
     # import argparse
     # parser = argparse.ArgumentParser(description='')
     # parser.add_argument('--var', '-v', type=int, default=1, help='')
     # parser.add_argument('--flag', '-f', action='store_true', default=False, help='')
     # args = parser.parse_args()
-
     # Main
     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
         sys, plt, verbose=False

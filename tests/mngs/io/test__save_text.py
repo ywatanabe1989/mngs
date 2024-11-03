@@ -1,10 +1,10 @@
 # src from here --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-02 17:00:45 (ywatanabe)"
+# # Time-stamp: "2024-11-03 06:25:32 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/io/_save_text.py
 # 
-# def save_text(obj, spath):
+# def _save_text(obj, spath):
 #     with open(spath, "w") as file:
 #         file.write(obj)
 # 
@@ -25,7 +25,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from src.mngs.io/_save_text.py import *
+from src.mngs.io._save_text import *
 
 class Test_MainFunctionality:
     def setup_method(self):

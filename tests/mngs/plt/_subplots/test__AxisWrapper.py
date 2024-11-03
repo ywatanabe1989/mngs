@@ -1,8 +1,8 @@
 # src from here --------------------------------------------------------------------------------
-# #!./env/bin/python3
+# #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-10-07 21:19:31 (ywatanabe)"
-# # /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/AxisWrapper.py
+# # Time-stamp: "2024-11-04 00:58:26 (ywatanabe)"
+# # File: ./mngs_repo/src/mngs/plt/_subplots/_AxisWrapper.py
 # 
 # from collections import OrderedDict
 # from contextlib import contextmanager
@@ -12,7 +12,6 @@
 # import numpy as np
 # import pandas as pd
 # import seaborn as sns
-# from mngs.gen import not_implemented
 # from scipy.stats import gaussian_kde
 # 
 # from ._to_sigma import to_sigma as _to_sigma
@@ -25,7 +24,6 @@
 # 
 #     wrapper.__doc__ = getattr(sns, func.__name__.split("sns_")[-1]).__doc__
 #     return wrapper
-# 
 # 
 # class AxisWrapper:
 #     """
@@ -792,6 +790,8 @@
 # 
 #     def shift(self, dx=0, dy=0):
 #         self.axis = mngs.plt.ax.shift(self.axis, dx=dx, dy=dy)
+# 
+# # EOF
 
 # test from here --------------------------------------------------------------------------------
 #!/usr/bin/env python3
@@ -807,7 +807,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from src.mngs.plt/_subplots/_AxisWrapper.py import *
+from src.mngs.plt._subplots._AxisWrapper import *
 
 class Test_MainFunctionality:
     def setup_method(self):

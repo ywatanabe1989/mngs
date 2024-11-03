@@ -1,8 +1,8 @@
 # src from here --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-10-19 11:30:45 (ywatanabe)"
-# # /home/ywatanabe/proj/_mngs_repo_openhands/src/mngs/gen/system_ops/_notify.py
+# # Time-stamp: "2024-11-03 06:36:03 (ywatanabe)"
+# # File: ./mngs_repo/src/mngs/utils/_notify.py
 # 
 # """This script does XYZ."""
 # 
@@ -12,11 +12,10 @@
 # import socket
 # import subprocess
 # import sys
-# 
-# 
+# import warnings
 # 
 # from ._email import send_gmail
-# import warnings
+# 
 # 
 # def get_username():
 #     try:
@@ -29,7 +28,7 @@
 #     return socket.gethostname()
 # 
 # 
-# def get_git_branch():
+# def get_git_branch(mngs):
 #     try:
 #         branch = (
 #             subprocess.check_output(
@@ -41,7 +40,9 @@
 #             .strip()
 #         )
 #         return branch
+# 
 #     except Exception as e:
+#         print(e)
 #         return "main"
 # 
 # 
@@ -69,6 +70,8 @@
 #     attachment_paths=None,
 #     verbose=False,
 # ):
+#     import mngs
+# 
 #     try:
 #         message = str(message)
 #     except Exception as e:
@@ -90,7 +93,7 @@
 #         script_name = FAKE_PYTHON_SCRIPT_NAME
 # 
 #     sender = f"{get_username()}@{get_hostname()}"
-#     branch = get_git_branch()
+#     branch = get_git_branch(mngs)
 #     footer = gen_footer(sender, script_name, mngs, branch)
 # 
 #     full_message = script_name + "\n\n" + message + "\n\n" + footer
@@ -205,7 +208,7 @@
 # #     cc_string=$(IFS=,; echo "${cc_addresses[*]}" | sed "s/'/'\\\\''/g")
 # 
 # #     python -c "
-# # 
+# #
 # 
 # # cc_list = [$(printf "'%s', " "${cc_addresses[@]}")]
 # # cc_list = [addr.strip() for addr in cc_list if addr.strip()]
@@ -223,7 +226,9 @@
 # # main "$@"
 # # # { main "$@"; } 2>&1 | tee "$LOG_FILE"
 # 
-# # # EOF
+# #
+# 
+# # EOF
 
 # test from here --------------------------------------------------------------------------------
 #!/usr/bin/env python3
@@ -239,7 +244,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from src.mngs.utils/_notify.py import *
+from src.mngs.utils._notify import *
 
 class Test_MainFunctionality:
     def setup_method(self):

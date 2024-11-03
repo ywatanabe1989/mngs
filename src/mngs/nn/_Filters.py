@@ -1,11 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-03 07:17:53 (ywatanabe)"
+# Time-stamp: "2024-11-04 02:05:28 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/nn/_Filters.py
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# Time-stamp: "2024-05-30 09:35:17 (ywatanabe)"
 
 """
 This script does XYZ.
@@ -16,12 +12,11 @@ import sys
 from abc import abstractmethod
 
 import matplotlib.pyplot as plt
-import mngs
 import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from mngs.dsp.utils import build_bandpass_filters, init_bandpass_filters
+from ..dsp.utils import build_bandpass_filters, init_bandpass_filters
 from ..gen._to_even import to_even
 
 

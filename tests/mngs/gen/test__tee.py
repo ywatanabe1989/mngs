@@ -1,60 +1,14 @@
 # src from here --------------------------------------------------------------------------------
-# #!./env/bin/python3
+# #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-06-06 08:45:27 (ywatanabe)"
-# # /home/ywatanabe/proj/mngs/src/mngs/gen/_tee.py
+# # Time-stamp: "2024-11-03 03:44:59 (ywatanabe)"
+# # File: ./mngs_repo/src/mngs/gen/_tee.py
 # 
-# 
-# """
-# This script does XYZ.
-# """
-# 
-# 
-# """
-# Imports
-# """
 # import os as _os
-# import re
 # import sys
-# 
-# # mngs.gen.reload(mngs)
-# import warnings
-# from glob import glob
-# from pprint import pprint
-# 
-# import matplotlib
-# import matplotlib.pyplot as plt
-# 
-# import numpy as np
-# import pandas as pd
-# import seaborn as sns
-# import torch
-# import torch.nn as nn
-# import torch.nn.functional as F
-# import xarray as xr
-# from icecream import ic
-# from natsort import natsorted
-# from tqdm import tqdm
-# 
-# # sys.path = ["."] + sys.path
-# # from scripts import utils, load
-# 
-# """
-# Warnings
-# """
-# # warnings.simplefilter("ignore", UserWarning)
-# 
-# 
-# """
-# Config
-# """
-# # CONFIG = mngs.gen.load_configs()
-# 
-# 
-# """
-# Functions & Classes
-# """
-# 
+# from mngs.path import get_spath
+# from mngs.path import split
+# from ..str._printc import printc
 # 
 # class Tee(object):
 #     """Example:
@@ -83,7 +37,6 @@
 # 
 #         return g
 # 
-# 
 # def tee(sys, sdir=None, verbose=True):
 #     """
 #     import sys
@@ -100,12 +53,13 @@
 #     ## Determines sdir
 #     ####################
 #     if sdir is None:
-#         __file__ = inspect.stack()[1].filename
-#         if "ipython" in __file__:
-#             __file__ = f"/tmp/mngs/fake_{_os.getenv('USER')}.py"
-#         spath = __file__
+#         # __file__ = inspect.stack()[1].filename
+#         # if "ipython" in __file__:
+#         #     __file__ = f"/tmp/mngs/fake_{_os.getenv('USER')}.py"
+#         # spath = __file__
+#         spath = get_spath()
 # 
-#         _sdir, sfname, _ = mngs.path.split(spath)
+#         _sdir, sfname, _ = split(spath)
 #         sdir = _sdir + sfname
 # 
 #     sdir += "logs/"
@@ -119,15 +73,15 @@
 # 
 #     if verbose:
 #         message = f"Standard output/error are being logged at:\n\t{spath_stdout}\n\t{spath_stderr}"
-#         mngs.gen.print_block(message)
+#         mngs.gen.printc(message)
 # 
 #     return sys_stdout, sys_stderr
-# 
 # 
 # main = tee
 # 
 # if __name__ == "__main__":
 #     # # Argument Parser
+#     import matplotlib.pyplot as plt
 #     # import argparse
 #     # parser = argparse.ArgumentParser(description='')
 #     # parser.add_argument('--var', '-v', type=int, default=1, help='')
@@ -157,7 +111,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from src.mngs.gen/_tee.py import *
+from src.mngs.gen._tee import *
 
 class Test_MainFunctionality:
     def setup_method(self):
