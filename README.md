@@ -1,7 +1,7 @@
 <!-- ---
 !-- title: README.md
 !-- author: ywatanabe
-!-- date: 2024-11-04 03:25:38
+!-- date: 2024-11-04 03:32:46
 !-- --- -->
 
 
@@ -63,6 +63,9 @@ $ pip install git+https://github.com/ywatanabe1989/mngs.git@develop
 - [`mngs.gists`](./src/mngs/gists#readme): Code snippets
 - [`mngs.resource`](./src/mngs/resource#readme): Resource management
 - [`mngs.web`](./src/mngs/web#readme): Web-related functions
+
+## Modules and functions list
+[`./docs/mngs_modules.csv`](./docs/mngs_modules.csv)
 
 <!-- ## Documentation
  !-- For detailed documentation, please visit our [GitHub Pages](https://ywatanabe1989.github.io/mngs/). -->
