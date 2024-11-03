@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-03 03:40:18 (ywatanabe)"
+# Time-stamp: "2024-11-03 06:18:57 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/gen/_start.py
 
 import os as _os
@@ -16,6 +16,7 @@ from ..io._load import load
 from ..path import split
 from ..reproduce._fix_seeds import fix_seeds
 from ..reproduce._gen_ID import gen_ID
+from ..dict import DotDict
 
 
 def start(
@@ -159,7 +160,7 @@ def start(
         sys.stdout, sys.stderr = mngs.gen.tee(
             sys, sdir=sdir, verbose=verbose
         )
-        CONFIG["sys"] = sys
+        CONFIGS["sys"] = sys
 
     # Random seeds
     if (
@@ -202,7 +203,7 @@ def start(
     if agg:
         matplotlib.use("Agg")
 
-    CONFIGS = mngs.gen.DotDict(CONFIGS)
+    CONFIGS = DotDict(CONFIGS)
 
     if verbose:
         print(f"\n{'-'*40}\n")

@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-03 18:57:14 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/gen/_mat2py.py
 
 '''Helper script for loading .mat files into python.
 For .mat with multiple variables use mat2dict to get return dictionary with .mat variables.
@@ -18,7 +21,8 @@ JB'''
 
 import numpy as np
 import h5py
-import glob, os
+from glob import glob as _glob
+import os
 from scipy.io import loadmat
 
 
@@ -70,6 +74,9 @@ def mat2npy(fname, typ):
 def dir2npy(dir, typ, regex = '*'):
     '''Function saves np array from 1st entry in each regex + .mat file in dir'''
     os.chdir(dir)
-    for fname in glob.glob(regex + '.mat'):
+    for fname in _glob(regex + '.mat'):
         print('File ' + fname + ' to' + ' .npa')
         mat2npy(dir + fname, typ)
+
+
+# EOF
