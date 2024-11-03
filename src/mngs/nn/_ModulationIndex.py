@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-04 02:08:01 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/nn/_ModulationIndex.py
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 # Time-stamp: "2024-10-15 14:12:55 (ywatanabe)"
 
 """
@@ -8,13 +13,13 @@ This script defines the ModulationIndex module.
 
 # Imports
 import sys
+import warnings
 
-import mngs
 import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import warnings
+
 
 # Functions
 class ModulationIndex(nn.Module):
@@ -215,3 +220,6 @@ if __name__ == "__main__":
 """
 /home/ywatanabe/proj/entrance/mngs/nn/_ModulationIndex.py
 """
+
+
+# EOF

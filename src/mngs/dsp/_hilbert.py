@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-02 21:28:58 (ywatanabe)"
+# Time-stamp: "2024-11-04 02:07:11 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/dsp/_hilbert.py
 
 """
 This script does XYZ.
@@ -9,10 +10,9 @@ This script does XYZ.
 import sys
 
 import matplotlib.pyplot as plt
+from ..nn._Hilbert import Hilbert
 
-import torch
 from ..decorators import torch_fn
-from mngs.nn import Hilbert
 
 
 # Functions
@@ -24,8 +24,9 @@ def hilbert(
     y = Hilbert(x.shape[-1], dim=dim)(x)
     return y[..., 0], y[..., 1]
 
-
 if __name__ == "__main__":
+    import mngs
+
     # Start
     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt)
 
@@ -71,3 +72,6 @@ if __name__ == "__main__":
 """
 /home/ywatanabe/proj/entrance/mngs/dsp/_hilbert.py
 """
+
+
+# EOF

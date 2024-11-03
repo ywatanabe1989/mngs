@@ -7,7 +7,7 @@
 # import numpy as np
 # import torch
 # from ..decorators import torch_fn
-# from mngs.torch import nanstd
+# from ..torch import nanstd
 # 
 # # def to_z(x, axis):
 # #     if isinstance(x, torch.Tensor):  # [REVISED]
@@ -78,7 +78,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from src.mngs.gen/_norm.py import *
+from src.mngs.gen._norm import *
 
 class Test_MainFunctionality:
     def setup_method(self):

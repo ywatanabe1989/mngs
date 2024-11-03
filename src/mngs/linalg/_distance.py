@@ -1,12 +1,13 @@
-#!./env/bin/python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-08-24 12:02:42 (ywatanabe)"
-# /home/ywatanabe/proj/mngs/src/mngs/linalg/_distance.py
+# Time-stamp: "2024-11-04 02:58:04 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/linalg/_distance.py
 
-
-import scipy.spatial.distance as _distance
-from mngs.gen import wrap, numpy_fn
 import numpy as np
+import scipy.spatial.distance as _distance
+
+from ..decorators._numpy_fn import numpy_fn
+from ..decorators._wrap import wrap
 
 
 @numpy_fn
@@ -57,3 +58,6 @@ edist = euclidean_distance
 # Optionally, manually copy the original docstring
 # euclidean_distance.__doc__ = _distance.euclidean.__doc__
 cdist.__doc__ = _distance.cdist.__doc__
+
+
+# EOF

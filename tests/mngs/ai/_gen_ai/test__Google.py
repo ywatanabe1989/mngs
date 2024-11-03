@@ -1,9 +1,8 @@
 # src from here --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-09-13 20:39:12 (ywatanabe)"
-# # /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_ChatGPT.py
-# 
+# # Time-stamp: "2024-11-03 04:37:54 (ywatanabe)"
+# # File: ./mngs_repo/src/mngs/ai/_gen_ai/_Google.py
 # 
 # """Imports"""
 # import os
@@ -15,8 +14,6 @@
 # from mngs.ai._gen_ai._BaseGenAI import BaseGenAI
 # 
 # """Functions & Classes"""
-# 
-# 
 # class Google(BaseGenAI):
 #     def __init__(
 #         self,
@@ -119,10 +116,7 @@
 # 
 # 
 # def main():
-#     # ai = mngs.ai.GenAI("gpt-4o")
-#     # ai = mngs.ai.GenAI("gemini-1.5-pro-latest", stream=False)
 #     ai = mngs.ai.GenAI("gemini-1.5-flash-latest", stream=False)
-#     # ai = mngs.ai.GenAI("gpt-4o", stream=False)
 #     print(ai("hi"))
 # 
 # 
@@ -149,7 +143,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from src.mngs.ai/_gen_ai/_Google.py import *
+from src.mngs.ai._gen_ai._Google import *
 
 class Test_MainFunctionality:
     def setup_method(self):

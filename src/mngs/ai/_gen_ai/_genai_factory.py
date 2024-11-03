@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-04 02:01:42 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/ai/_gen_ai/_genai_factory.py
+
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
 # Time-stamp: "2024-10-27 13:38:02 (ywatanabe)"
@@ -16,9 +21,7 @@ from ._Perplexity import Perplexity
 from .PARAMS import MODELS
 import pandas as pd
 
-"""Functions & Classes"""
-
-"""Parameters"""
+"""Functions & Classes""""""Parameters"""
 
 def genai_factory(
     model="gpt-3.5-turbo",
@@ -40,7 +43,14 @@ def genai_factory(
 
     provider = MODELS[MODELS.name == model].provider.iloc[0]
 
-    model_class = globals()[provider]
+    # model_class = globals()[provider]
+    model_class = {
+        "OpenAI": OpenAI,
+        "Anthropic": Anthropic,
+        "Google": Google,
+        "Llama": Llama,
+        "Perplexity": Perplexity,
+    }[provider]
 
     # Select a random API key from the list
     if isinstance(api_key, (list, tuple)):

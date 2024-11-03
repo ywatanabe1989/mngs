@@ -1,6 +1,11 @@
 # src from here --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
+# # Time-stamp: "2024-11-03 03:25:00 (ywatanabe)"
+# # File: ./mngs_repo/src/mngs/pd/_find_pval.py
+# 
+# #!/usr/bin/env python3
+# # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-10-06 11:09:07 (ywatanabe)"
 # # /home/ywatanabe/proj/_mngs_repo_openhands/src/mngs/stats/_find_pval_col.py
 # 
@@ -16,9 +21,10 @@
 # """
 # 
 # import re
-# from typing import Optional, Union, List, Dict
-# import pandas as pd
+# from typing import Dict, List, Optional, Union
+# 
 # import numpy as np
+# import pandas as pd
 # 
 # 
 # def find_pval(
@@ -48,7 +54,7 @@
 #         Name(s) of the column(s) or key(s) that match p-value patterns, or None if not found
 #     """
 #     if isinstance(data, pd.DataFrame):
-#         return find_pval_col(data, multiple)
+#         return _find_pval_col(data, multiple)
 #     elif isinstance(data, (np.ndarray, list, dict)):
 #         return _find_pval(data, multiple)
 #     else:
@@ -75,7 +81,7 @@
 #     return matches if multiple else (matches[0] if matches else None)
 # 
 # 
-# def find_pval_col(
+# def _find_pval_col(
 #     df: pd.DataFrame, multiple: bool = False
 # ) -> Union[Optional[str], List[str]]:
 #     """
@@ -105,6 +111,9 @@
 #     matches = [col for col in df.columns if pattern.search(str(col))]
 # 
 #     return matches if multiple else (matches[0] if matches else None)
+# 
+# 
+# # EOF
 
 # test from here --------------------------------------------------------------------------------
 #!/usr/bin/env python3
@@ -120,7 +129,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from src.mngs.stats/_find_pval.py import *
+from src.mngs.pd._find_pval import *
 
 class Test_MainFunctionality:
     def setup_method(self):

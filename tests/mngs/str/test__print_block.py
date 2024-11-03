@@ -1,12 +1,12 @@
 # src from here --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-02 04:00:55 (ywatanabe)"
-# # File: ./mngs_repo/src/mngs/gen/_print_block.py
+# # Time-stamp: "2024-11-03 03:44:47 (ywatanabe)"
+# # File: ./mngs_repo/src/mngs/str/_print_block.py
 # 
 # from ._color_text import color_text
 # 
-# def print_block(message, char="-", n=40, c=None):
+# def printc(message, char="-", n=40, c="cyan"):
 #     """Print a message surrounded by a character border.
 # 
 #     This function prints a given message surrounded by a border made of
@@ -43,9 +43,6 @@
 #         text = color_text(text, c)
 #     print(text)
 # 
-# print_ = print_block
-# 
-# 
 # # EOF
 
 # test from here --------------------------------------------------------------------------------
@@ -62,7 +59,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from src.mngs.str/_print_block.py import *
+from src.mngs.str._print_block import *
 
 class Test_MainFunctionality:
     def setup_method(self):

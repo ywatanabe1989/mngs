@@ -1,16 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-13 19:16:42 (ywatanabe)"
-# /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_OpenAI.py
+# Time-stamp: "2024-11-04 02:04:11 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/ai/_gen_ai/_OpenAI.py
 
 """Imports"""
-
-from mngs.ai._gen_ai._BaseGenAI import BaseGenAI
+from ._BaseGenAI import BaseGenAI
 from openai import OpenAI as _OpenAI
 
 """Functions & Classes"""
-
-
 class OpenAI(BaseGenAI):
     def __init__(
         self,

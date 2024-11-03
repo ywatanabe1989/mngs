@@ -1,5 +1,5 @@
 #!/bin/bash
-# Time-stamp: "2024-11-03 02:31:37 (ywatanabe)"
+# Time-stamp: "2024-11-04 01:15:38 (ywatanabe)"
 # File: ./mngs_repo/docs/generate_test_structure.sh
 
 
@@ -87,6 +87,12 @@ create_test_directories() {
 generate_test_template() {
     local src_file=$1
     local test_file=$2
+
+    # Convert path from slash to dot notation
+    local import_path=${src_file#$SRC}
+    import_path=${import_path%.py}
+    import_path=${import_path//\//.}
+    
     cat > "$test_file" << EOF
 # src from here --------------------------------------------------------------------------------
 $(sed 's/^/# /' "$src_file")
@@ -105,7 +111,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from src.mngs.${src_file#$SRC} import *
+from src.mngs.${import_path} import *
 
 class Test_MainFunctionality:
     def setup_method(self):

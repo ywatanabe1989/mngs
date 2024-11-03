@@ -1,7 +1,7 @@
-#!./env/bin/python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-07 21:19:31 (ywatanabe)"
-# /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/AxisWrapper.py
+# Time-stamp: "2024-11-04 00:58:26 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/plt/_subplots/_AxisWrapper.py
 
 from collections import OrderedDict
 from contextlib import contextmanager
@@ -11,7 +11,6 @@ import mngs
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from mngs.gen import not_implemented
 from scipy.stats import gaussian_kde
 
 from ._to_sigma import to_sigma as _to_sigma
@@ -24,7 +23,6 @@ def sns_copy_doc(func):
 
     wrapper.__doc__ = getattr(sns, func.__name__.split("sns_")[-1]).__doc__
     return wrapper
-
 
 class AxisWrapper:
     """
@@ -791,3 +789,5 @@ class AxisWrapper:
 
     def shift(self, dx=0, dy=0):
         self.axis = mngs.plt.ax.shift(self.axis, dx=dx, dy=dy)
+
+# EOF

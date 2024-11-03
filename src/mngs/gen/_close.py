@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-02 14:21:51 (ywatanabe)"
+# Time-stamp: "2024-11-03 06:39:18 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/gen/_close.py
 
 import os
@@ -72,9 +72,8 @@ def close(
     CONFIG.EXIT_STATUS = exit_status
     CONFIG = CONFIG.to_dict()
     CONFIG = _process_timestamp(CONFIG, verbose=verbose)
+    sys = CONFIG.pop("sys")
     _save_configs(CONFIG)
-
-    sys = CONFIG.get("sys")
     mngs_io_flush(sys=sys)
 
     # RUNNING to RUNNING2FINISHEDED
@@ -143,7 +142,7 @@ def running2finished(
         ):
             time.sleep(0.1)
         if os.path.exists(dest_dir):
-            mngs_str_printc(
+            printc(
                 f"Congratulations! The script completed.\n\n{dest_dir}",
                 c="yellow",
             )
@@ -167,7 +166,10 @@ if __name__ == "__main__":
 
     from icecream import ic
 
-    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs_gen_start(
+    from .._start import start
+
+
+    CONFIG, sys.stdout, sys.stderr, plt, CC = start(
         sys, plt, verbose=False
     )
 

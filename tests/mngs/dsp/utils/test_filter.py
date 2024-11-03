@@ -1,14 +1,15 @@
 # src from here --------------------------------------------------------------------------------
-# #!./env/bin/python3
+# #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-04-13 02:04:53 (ywatanabe)"
+# # Time-stamp: "2024-11-03 07:24:43 (ywatanabe)"
+# # File: ./mngs_repo/src/mngs/dsp/utils/filter.py
 # 
 # import matplotlib.pyplot as plt
-# 
 # import numpy as np
-# import torch
-# from ...decorators import numpy_fn, torch_fn
-# from scipy.signal import firwin, freqz, lfilter
+# from scipy.signal import firwin, freqz
+# 
+# from ...decorators import numpy_fn
+# from ...gen._to_even import to_even
 # 
 # 
 # @numpy_fn
@@ -83,7 +84,7 @@
 #         order = cycle * int((fs // low_freq))
 #         if 3 * order < sig_len:
 #             order = (sig_len - 1) // 3
-#         order = mngs.gen.to_even(order)
+#         order = to_even(order)
 #         return order
 # 
 #     fs = int(fs)
@@ -112,7 +113,6 @@
 # 
 #     return h
 # 
-# 
 # @numpy_fn
 # def plot_filter_responses(filter, fs, worN=8000, title=None):
 #     """
@@ -126,6 +126,7 @@
 #     Returns:
 #     - matplotlib.figure.Figure: The figure object containing the impulse and frequency response plots.
 #     """
+#     import mngs
 # 
 #     ww, hh = freqz(filter, worN=worN, fs=fs)
 # 
@@ -148,8 +149,8 @@
 # 
 #     return fig
 # 
-# 
 # if __name__ == "__main__":
+#     import mngs
 #     # Example usage
 #     xx, tt, fs = mngs.dsp.demo_sig()
 #     batch_size, n_chs, seq_len = xx.shape
@@ -362,7 +363,6 @@
 # #         batch_size, n_chs, n_filts, n_time
 # #     )
 # 
-# 
 # # if __name__ == "__main__":
 # #     import torch
 # #     import torch.nn.functional as F
@@ -408,6 +408,8 @@
 # 
 # #     y = apply_filters(x, filters)
 # #     print(y.shape)  # (33, 32, 20, 30)
+# 
+# # EOF
 
 # test from here --------------------------------------------------------------------------------
 #!/usr/bin/env python3
@@ -423,7 +425,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from src.mngs.dsp/utils/filter.py import *
+from src.mngs.dsp.utils.filter import *
 
 class Test_MainFunctionality:
     def setup_method(self):

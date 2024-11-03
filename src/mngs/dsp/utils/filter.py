@@ -1,13 +1,14 @@
-#!./env/bin/python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-13 02:04:53 (ywatanabe)"
+# Time-stamp: "2024-11-03 07:24:43 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/dsp/utils/filter.py
 
 import matplotlib.pyplot as plt
-
 import numpy as np
-import torch
-from ...decorators import numpy_fn, torch_fn
-from scipy.signal import firwin, freqz, lfilter
+from scipy.signal import firwin, freqz
+
+from ...decorators import numpy_fn
+from ...gen._to_even import to_even
 
 
 @numpy_fn
@@ -82,7 +83,7 @@ def design_filter(
         order = cycle * int((fs // low_freq))
         if 3 * order < sig_len:
             order = (sig_len - 1) // 3
-        order = mngs.gen.to_even(order)
+        order = to_even(order)
         return order
 
     fs = int(fs)
@@ -111,7 +112,6 @@ def design_filter(
 
     return h
 
-
 @numpy_fn
 def plot_filter_responses(filter, fs, worN=8000, title=None):
     """
@@ -125,6 +125,7 @@ def plot_filter_responses(filter, fs, worN=8000, title=None):
     Returns:
     - matplotlib.figure.Figure: The figure object containing the impulse and frequency response plots.
     """
+    import mngs
 
     ww, hh = freqz(filter, worN=worN, fs=fs)
 
@@ -147,8 +148,8 @@ def plot_filter_responses(filter, fs, worN=8000, title=None):
 
     return fig
 
-
 if __name__ == "__main__":
+    import mngs
     # Example usage
     xx, tt, fs = mngs.dsp.demo_sig()
     batch_size, n_chs, seq_len = xx.shape
@@ -361,7 +362,6 @@ if __name__ == "__main__":
 #         batch_size, n_chs, n_filts, n_time
 #     )
 
-
 # if __name__ == "__main__":
 #     import torch
 #     import torch.nn.functional as F
@@ -407,3 +407,5 @@ if __name__ == "__main__":
 
 #     y = apply_filters(x, filters)
 #     print(y.shape)  # (33, 32, 20, 30)
+
+# EOF

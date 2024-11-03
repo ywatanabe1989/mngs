@@ -1,10 +1,14 @@
 # src from here --------------------------------------------------------------------------------
-# #!/usr/bin/env python
+# #!/usr/bin/env python3
+# # -*- coding: utf-8 -*-
+# # Time-stamp: "2024-11-03 03:35:59 (ywatanabe)"
+# # File: ./mngs_repo/src/mngs/ai/loss/MultiTaskLoss.py
+# 
+# import numpy as np
 # import torch
 # import torch.nn as nn
-# import torch.nn.functional as F
-# import numpy as np
-# import mngs
+# 
+# from ..reproduce import fix_seeds
 # 
 # 
 # class MultiTaskLoss(nn.Module):
@@ -22,7 +26,7 @@
 # 
 #     def __init__(self, are_regression=[False, False], reduction="none"):
 #         super().__init__()
-#         mngs.reproduce.fix_seeds(np=np, torch=torch, show=False)
+#         fix_seeds(np=np, torch=torch, show=False)
 #         n_tasks = len(are_regression)
 # 
 #         self.register_buffer("are_regression", torch.tensor(are_regression))
@@ -39,6 +43,9 @@
 #             coeffs[i] * losses[i] + torch.log(stds[i]) for i in range(len(losses))
 #         ]
 #         return scaled_losses
+# 
+# 
+# # EOF
 
 # test from here --------------------------------------------------------------------------------
 #!/usr/bin/env python3
@@ -54,7 +61,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from src.mngs.ai/loss/MultiTaskLoss.py import *
+from src.mngs.ai.loss.MultiTaskLoss import *
 
 class Test_MainFunctionality:
     def setup_method(self):

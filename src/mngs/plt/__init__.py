@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-03 01:04:39 (ywatanabe)"
+# Time-stamp: "2024-11-04 01:00:21 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/plt/__init__.py
 
 #!/usr/bin/env python3
@@ -30,7 +30,9 @@ for filename in os.listdir(current_dir):
 # Clean up temporary variables
 del os, importlib, inspect, current_dir, filename, module_name, module, name, obj
 
+from ._subplots._SubplotsManager import subplots
 from ._PARAMS import PARAMS
+
 # EOF
 
 # #!/usr/bin/env python3

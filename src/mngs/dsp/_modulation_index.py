@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-29 10:41:48 (ywatanabe)"
+# Time-stamp: "2024-11-04 02:09:55 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/dsp/_modulation_index.py
 
 import torch
+
 from ..decorators import torch_fn
-from mngs.nn import ModulationIndex
+from ..nn._ModulationIndex import ModulationIndex
 
 
 @torch_fn
@@ -15,7 +17,6 @@ def modulation_index(pha, amp, n_bins=18, amp_prob=False):
     """
     return ModulationIndex(n_bins=n_bins, amp_prob=amp_prob)(pha, amp)
 
-
 def _reshape(x, batch_size=2, n_chs=4):
     return (
         torch.tensor(x)
@@ -25,16 +26,11 @@ def _reshape(x, batch_size=2, n_chs=4):
         .repeat(batch_size, n_chs, 1, 1, 1)
     )
 
-
 if __name__ == "__main__":
     import sys
 
     import matplotlib.pyplot as plt
-    
-    import seaborn as sns
-    import tensorpac
-    from tensorpac import Pac
-    from tqdm import tqdm
+    import mngs
 
     # Start
     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
@@ -74,9 +70,10 @@ if __name__ == "__main__":
     # Close
     mngs.gen.close(CONFIG)
 
-
 # EOF
 
 """
 /home/ywatanabe/proj/entrance/mngs/dsp/_modulation_index.py
 """
+
+# EOF

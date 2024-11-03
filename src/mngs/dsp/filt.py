@@ -1,53 +1,43 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "ywatanabe (2024-11-03 00:02:09)"
+# Time-stamp: "2024-11-04 02:05:47 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/dsp/filt.py
 
+import mngs
 import numpy as np
+
 from ..decorators import torch_fn
-from mngs.nn import (
-    BandPassFilter,
-    BandStopFilter,
-    GaussianFilter,
-    HighPassFilter,
-    LowPassFilter,
-)
+from ..nn import (BandPassFilter, BandStopFilter, GaussianFilter,
+                  HighPassFilter, LowPassFilter)
 
 
 @torch_fn
 def gauss(x, sigma, t=None):
     return GaussianFilter(sigma)(x, t=t)
 
-
 @torch_fn
 def bandpass(x, fs, bands, t=None):
     return BandPassFilter(bands, fs, x.shape[-1])(x, t=t)
-
 
 @torch_fn
 def bandstop(x, fs, bands, t=None):
     return BandStopFilter(bands, fs, x.shape[-1])(x, t=t)
 
-
 @torch_fn
 def lowpass(x, fs, cutoffs_hz, t=None):
     return LowPassFilter(cutoffs_hz, fs, x.shape[-1])(x, t=t)
-
 
 @torch_fn
 def highpass(x, fs, cutoffs_hz, t=None):
     return HighPassFilter(cutoffs_hz, fs, x.shape[-1])(x, t=t)
 
-
 def _custom_print(x):
     print(type(x), x.shape)
-
 
 if __name__ == "__main__":
     import sys
 
     import matplotlib.pyplot as plt
-
     import torch
 
     # Start
@@ -149,6 +139,5 @@ if __name__ == "__main__":
 """
 /home/ywatanabe/proj/mngs/src/mngs/dsp/filt.py
 """
-
 
 # EOF
