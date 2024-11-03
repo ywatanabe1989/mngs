@@ -1,20 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-24 10:19:09 (ywatanabe)"
+# Time-stamp: "2024-11-04 04:44:15 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/dsp/_pac.py
 
 import sys
 
 import matplotlib.pyplot as plt
-
 import numpy as np
-from ..decorators import batch_fn, torch_fn
-from mngs.nn import PAC
 import torch
+
+from ..decorators import batch_fn, torch_fn
+from ..nn._PAC import PAC
 
 """
 mngs.dsp.pac function
 """
-
 
 @torch_fn
 @batch_fn
@@ -95,12 +95,9 @@ def pac(
     else:
         return process_ch_batching(m, x, batch_size_ch, device), m.PHA_MIDS_HZ, m.AMP_MIDS_HZ
 
-
-
 if __name__ == "__main__":
+    import mngs
     import matplotlib.pyplot as plt
-    
-    import numpy as np
 
     # Start
     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt)
@@ -179,3 +176,5 @@ if __name__ == "__main__":
 """
 /home/ywatanabe/proj/entrance/mngs/dsp/_pac.py
 """
+
+# EOF

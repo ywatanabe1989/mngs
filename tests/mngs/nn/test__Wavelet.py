@@ -1,6 +1,11 @@
 # src from here --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
+# # Time-stamp: "2024-11-03 07:17:26 (ywatanabe)"
+# # File: ./mngs_repo/src/mngs/nn/_Wavelet.py
+# 
+# #!/usr/bin/env python3
+# # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-05-30 11:04:45 (ywatanabe)"
 # 
 # 
@@ -9,6 +14,8 @@
 # import torch
 # import torch.nn as nn
 # import torch.nn.functional as F
+# from ..gen._to_even import to_even
+# from ..gen._to_odd import to_odd
 # 
 # 
 # class Wavelet(nn.Module):
@@ -156,13 +163,13 @@
 #     def kernel_size(
 #         self,
 #     ):
-#         return mngs.gen.to_even(self.kernel.shape[-1])
+#         return to_even(self.kernel.shape[-1])
 # 
 #     @property
 #     def radius(
 #         self,
 #     ):
-#         return mngs.gen.to_even(self.kernel_size // 2)
+#         return to_even(self.kernel_size // 2)
 # 
 # 
 # if __name__ == "__main__":
@@ -178,6 +185,9 @@
 #     ax = mngs.plt.ax.set_ticks(ax, xticks=tt, yticks=ff)
 #     ax = mngs.plt.ax.set_n_ticks(ax)
 #     plt.show()
+# 
+# 
+# # EOF
 
 # test from here --------------------------------------------------------------------------------
 #!/usr/bin/env python3
@@ -193,7 +203,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from src.mngs.nn/_Wavelet.py import *
+from src.mngs.nn._Wavelet import *
 
 class Test_MainFunctionality:
     def setup_method(self):

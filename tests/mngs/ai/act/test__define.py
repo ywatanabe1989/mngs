@@ -24,7 +24,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from src.mngs.ai/act/_define.py import *
+from src.mngs.ai.act._define import *
 
 class Test_MainFunctionality:
     def setup_method(self):

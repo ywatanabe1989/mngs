@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-03 20:50:45 (ywatanabe)"
+# Time-stamp: "2024-11-04 04:42:10 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/gen/_tee.py
 
 import os as _os
 import re
 import sys
 
-import mngs
-from mngs.path import get_spath, split
+from ..path import get_spath, split
+from ..str._printc import printc
 
 
 class Tee(object):
@@ -73,7 +73,7 @@ def tee(sys, sdir=None, verbose=True):
 
     if verbose:
         message = f"Standard output/error are being logged at:\n\t{spath_stdout}\n\t{spath_stderr}"
-        mngs.gen.printc(message)
+        printc(message)
 
     return sys_stdout, sys_stderr
 
@@ -82,6 +82,7 @@ main = tee
 if __name__ == "__main__":
     # # Argument Parser
     import matplotlib.pyplot as plt
+    import mngs
 
     # import argparse
     # parser = argparse.ArgumentParser(description='')

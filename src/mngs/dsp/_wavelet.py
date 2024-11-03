@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-05-30 11:06:27 (ywatanabe)"
+# Time-stamp: "2024-11-04 02:12:00 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/dsp/_wavelet.py
 
-"""
-mngs.dsp.wavelet function
-"""
+"""mngs.dsp.wavelet function"""
 
 
 from ..decorators import batch_fn, torch_fn
-from mngs.nn import Wavelet
+from ..nn._Wavelet import Wavelet
 
 
 # Functions
@@ -214,3 +213,6 @@ if __name__ == "__main__":
 """
 /home/ywatanabe/proj/entrance/mngs/dsp/_wavelet.py
 """
+
+
+# EOF

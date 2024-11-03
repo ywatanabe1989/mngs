@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-13 01:32:37 (ywatanabe)"
+# Time-stamp: "2024-11-04 02:11:25 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/dsp/_psd.py
 
-"""
-This script does XYZ.
-"""
+"""This script does XYZ."""
 
 import torch
-import torch.nn as nn
+
 from ..decorators import torch_fn
-from mngs.nn import PSD
+from ..nn._PSD import PSD
 
 
 @torch_fn
@@ -21,7 +20,6 @@ def psd(
 ):
     """
     import matplotlib.pyplot as plt
-    
 
     x, t, fs = mngs.dsp.demo_sig()  # (batch_size, n_chs, seq_len)
     pp, ff = psd(x, fs)
@@ -36,7 +34,6 @@ def psd(
     """
     psd, freqs = PSD(fs, prob=prob, dim=dim)(x)
     return psd, freqs
-
 
 def band_powers(self, psd):
     """
@@ -60,12 +57,11 @@ def band_powers(self, psd):
     avg_band_powers = self.calc_band_avg_power(psd, freqs)
     return (avg_band_powers,)
 
-
 if __name__ == "__main__":
     import sys
+    import mngs
 
     import matplotlib.pyplot as plt
-    
 
     # Start
     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt)
@@ -102,3 +98,5 @@ if __name__ == "__main__":
 """
 /home/ywatanabe/proj/entrance/mngs/dsp/_psd.py
 """
+
+# EOF

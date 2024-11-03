@@ -1,8 +1,8 @@
 # src from here --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-02 16:08:22 (ywatanabe)"
-# # File: ./mngs_repo/src/mngs/typing/_ArrayLike.py
+# # Time-stamp: "2024-11-03 02:55:10 (ywatanabe)"
+# # File: ./mngs_repo/src/mngs/types/_ArrayLike.py
 # 
 # from typing import List, Tuple, Union
 # 
@@ -18,7 +18,8 @@
 #     _pd.Series,
 #     _pd.DataFrame,
 #     _xr.DataArray,
-#     _torch.Tensor,
+#     _torch.tensor,
+#     # _torch.Tensor,
 # ]
 # 
 # 
@@ -38,7 +39,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from src.mngs.types/_ArrayLike.py import *
+from src.mngs.types._ArrayLike import *
 
 class Test_MainFunctionality:
     def setup_method(self):

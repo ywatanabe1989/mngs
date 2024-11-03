@@ -1,4 +1,9 @@
 # src from here --------------------------------------------------------------------------------
+# #!/usr/bin/env python3
+# # -*- coding: utf-8 -*-
+# # Time-stamp: "2024-11-03 03:42:26 (ywatanabe)"
+# # File: ./mngs_repo/src/mngs/gen/_DimHandler.py
+# 
 # #!./env/bin/python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-04-23 11:45:42"
@@ -165,12 +170,13 @@
 # 
 # if __name__ == "__main__":
 #     import torch
+#     import mngs
 # 
 #     # Start
 #     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt)
 # 
 #     # Example1:
-#     mngs.gen.print_block("Example 1")
+#     mngs.gen.printc("Example 1")
 #     dh = DimHandler()
 #     x = torch.rand(1, 2, 3, 4, 5, 6)  # Example tensor
 #     print(x.shape)  # torch.Size([1, 2, 3, 4, 5, 6])
@@ -180,7 +186,7 @@
 #     print(x.shape)  # torch.Size([2, 4, 5, 1, 3, 6])
 # 
 #     # Example 2:
-#     mngs.gen.print_block("Example 2")
+#     mngs.gen.printc("Example 2")
 #     dh = DimHandler()
 #     x = torch.rand(1, 2, 3, 4, 5, 6)  # Example tensor
 #     print(x.shape)  # torch.Size([1, 2, 3, 4, 5, 6])
@@ -199,6 +205,9 @@
 # """
 # /ssh:ywatanabe@444:/home/ywatanabe/proj/entrance/mngs/gen/_DimHandler.py
 # """
+# 
+# 
+# # EOF
 
 # test from here --------------------------------------------------------------------------------
 #!/usr/bin/env python3
@@ -214,7 +223,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from src.mngs.gen/_DimHandler.py import *
+from src.mngs.gen._DimHandler import *
 
 class Test_MainFunctionality:
     def setup_method(self):

@@ -48,7 +48,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from src.mngs.torch/_apply_to.py import *
+from src.mngs.torch._apply_to import *
 
 class Test_MainFunctionality:
     def setup_method(self):

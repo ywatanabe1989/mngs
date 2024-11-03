@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-04 19:34:41 (ywatanabe)"
+# Time-stamp: "2024-11-04 02:07:36 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/dsp/_mne.py
 
 import mne
 import pandas as pd
-from mngs.dsp.PARAMS import EEG_MONTAGE_1020
+from .PARAMS import EEG_MONTAGE_1020
 
 
 def get_eeg_pos(channel_names=EEG_MONTAGE_1020):
@@ -26,3 +27,6 @@ def get_eeg_pos(channel_names=EEG_MONTAGE_1020):
 
 if __name__ == "__main__":
     print(get_eeg_pos())
+
+
+# EOF

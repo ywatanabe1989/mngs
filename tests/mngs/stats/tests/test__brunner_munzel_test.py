@@ -21,8 +21,8 @@
 # import pandas as pd
 # import xarray as xr
 # import torch
-# from ..types import List, Tuple, Dict, Any, Union, Sequence, Literal, Iterable, ArrayLike
-# from ..decorators import numpy_fn
+# from ...types import List, Tuple, Dict, Any, Union, Sequence, Literal, Iterable, ArrayLike
+# from ...decorators import numpy_fn
 # 
 # @numpy_fn
 # def brunner_munzel_test(
@@ -205,7 +205,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from src.mngs.stats/_brunner_munzel_test.py import *
+from src.mngs.stats.tests._brunner_munzel_test import *
 
 class Test_MainFunctionality:
     def setup_method(self):

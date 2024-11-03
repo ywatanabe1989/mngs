@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-04 01:30:56 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/ai/_gen_ai/_Llama.py
+
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
 # Time-stamp: "2024-07-29 14:34:11 (ywatanabe)"
@@ -7,9 +12,7 @@
 This script implements the Llama model using the BaseGenAI structure.
 """
 
-"""
-Imports
-"""
+"""Imports"""
 import os
 import sys
 from typing import List, Optional

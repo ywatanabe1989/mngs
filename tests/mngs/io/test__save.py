@@ -1,7 +1,7 @@
 # src from here --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-02 21:18:21 (ywatanabe)"
+# # Time-stamp: "2024-11-03 06:27:54 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/io/_save.py
 # 
 # """
@@ -40,9 +40,10 @@
 # from ..path._split import split
 # from ..str._color_text import color_text
 # from ..types._is_listed_X import is_listed_X
-# from ._save_text import save_text
+# from ._save_text import _save_text
 # from ._save_listed_scalars_as_csv import _save_listed_scalars_as_csv
 # from ._save_listed_dfs_as_csv import _save_listed_dfs_as_csv
+# from ._save_image import _save_image
 # 
 # def save(
 #     obj: Any,
@@ -177,8 +178,8 @@
 #         logging.error(
 #             f"Error occurred while saving: {str(e)}"
 #             f"Debug: Initial fpath = {inspect.stack()[1].filename}"
-#             f"Debug: Final fpath = {fpath}"
-#             f"Debug: fdir = {fdir}, fname = {fname}"
+#             # f"Debug: Final fpath = {fpath}"
+#             # f"Debug: fdir = {fdir}, fname = {fname}"
 #             f"Debug: Final spath = {spath}"
 #         )
 # 
@@ -330,7 +331,7 @@
 #         spath.endswith(ext)
 #         for ext in [".txt", ".md", ".py", ".html", ".css", ".js"]
 #     ):
-#         save_text(obj, spath)
+#         _save_text(obj, spath)
 # 
 #     else:
 #         raise ValueError(f"Unsupported file format. {spath} was not saved.")
@@ -362,7 +363,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from src.mngs.io/_save.py import *
+from src.mngs.io._save import *
 
 class Test_MainFunctionality:
     def setup_method(self):

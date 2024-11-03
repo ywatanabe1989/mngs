@@ -1,7 +1,7 @@
 # src from here --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-02 14:21:51 (ywatanabe)"
+# # Time-stamp: "2024-11-03 06:39:18 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/gen/_close.py
 # 
 # import os
@@ -14,7 +14,7 @@
 # from ..io import save as mngs_io_save
 # from ..io import flush as mngs_io_flush
 # from ..utils._notify import notify as mngs_gen_notify
-# from ..str._print_block import print_block
+# from ..str._printc import printc
 # 
 # 
 # def _format_diff_time(diff_time):
@@ -73,9 +73,8 @@
 #     CONFIG.EXIT_STATUS = exit_status
 #     CONFIG = CONFIG.to_dict()
 #     CONFIG = _process_timestamp(CONFIG, verbose=verbose)
+#     sys = CONFIG.pop("sys")
 #     _save_configs(CONFIG)
-# 
-#     sys = CONFIG.get("sys")
 #     mngs_io_flush(sys=sys)
 # 
 #     # RUNNING to RUNNING2FINISHEDED
@@ -144,7 +143,7 @@
 #         ):
 #             time.sleep(0.1)
 #         if os.path.exists(dest_dir):
-#             mngs_str_print_block(
+#             printc(
 #                 f"Congratulations! The script completed.\n\n{dest_dir}",
 #                 c="yellow",
 #             )
@@ -168,7 +167,10 @@
 # 
 #     from icecream import ic
 # 
-#     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs_gen_start(
+#     from .._start import start
+# 
+# 
+#     CONFIG, sys.stdout, sys.stderr, plt, CC = start(
 #         sys, plt, verbose=False
 #     )
 # 
@@ -195,7 +197,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from src.mngs.gen/_close.py import *
+from src.mngs.gen._close import *
 
 class Test_MainFunctionality:
     def setup_method(self):

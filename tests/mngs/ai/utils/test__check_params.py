@@ -2,7 +2,7 @@
 # #!/usr/bin/env python3
 # # Time-stamp: "2024-02-17 12:38:40 (ywatanabe)"
 # 
-# from pprint import pprint
+# from pprint import pprint as _pprint
 # from time import sleep
 # 
 # # def get_params(model, tgt_name=None, sleep_sec=2, show=False):
@@ -24,7 +24,7 @@
 # 
 # #     if tgt_name is None:
 # #         print()
-# #         pprint(name_shape_dict)
+# #         _pprint(name_shape_dict)
 # #         print()
 # 
 # 
@@ -64,7 +64,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from src.mngs.ai/utils/_check_params.py import *
+from src.mngs.ai.utils._check_params import *
 
 class Test_MainFunctionality:
     def setup_method(self):
