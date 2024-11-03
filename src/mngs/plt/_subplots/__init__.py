@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "ywatanabe (2024-11-02 23:57:32)"
+# Time-stamp: "2024-11-04 00:55:34 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/plt/_subplots/__init__.py
+
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
 # Time-stamp: "2024-06-10 23:24:25 (ywatanabe)"
