@@ -4,7 +4,7 @@
 
 import torch
 import torch.nn.functional as F
-from mngs.general import torch_fn
+from ...decorators import torch_fn
 
 
 def _zero_pad_1d(x, target_length):

@@ -1,38 +1,23 @@
-#!./env/bin/python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-20 14:11:59"
+# Time-stamp: "ywatanabe (2024-11-02 23:09:49)"
+# File: ./mngs_repo/src/mngs/dsp/add_noise.py
 
-"""
-Functions to add noise to signals.
-"""
-
-# Imports
-import sys
-
-import matplotlib.pyplot as plt
-import mngs
-import numpy as np
-import pandas as pd
 import torch
-from mngs.general import torch_fn
+from ..decorators import torch_fn
 
-
-# Functions
 def _uniform(shape, amp=1.0):
     a, b = -amp, amp
     return -amp + (2 * amp) * torch.rand(shape)
-
 
 @torch_fn
 def gauss(x, amp=1.0):
     noise = amp * torch.randn(x.shape)
     return x + noise.to(x.device)
 
-
 @torch_fn
 def white(x, amp=1.0):
     return x + _uniform(x.shape, amp=amp).to(x.device)
-
 
 @torch_fn
 def pink(x, amp=1.0, dim=-1):
@@ -53,11 +38,10 @@ def pink(x, amp=1.0, dim=-1):
     indices = torch.arange(1, noise.size(0), dtype=x.dtype, device=x.device)
     noise[1:] /= torch.sqrt(indices)
     noise = torch.fft.irfft(noise, n=cols)
-    noise = noise - noise.mean()  # [REVISED]
+    noise = noise - noise.mean()
     noise_amp = torch.sqrt(torch.mean(noise**2))
-    noise = noise * (amp / noise_amp)  # [REVISED]
+    noise = noise * (amp / noise_amp)
     return x + noise.to(x.device)
-
 
 @torch_fn
 def brown(x, amp=1.0, dim=-1):
@@ -66,8 +50,10 @@ def brown(x, amp=1.0, dim=-1):
     noise = mngs.dsp.norm.minmax(noise, amp=amp, dim=dim)
     return x + noise.to(x.device)
 
-
 if __name__ == "__main__":
+    import sys
+
+    import matplotlib.pyplot as plt
     import mngs
 
     # Start
@@ -117,3 +103,5 @@ if __name__ == "__main__":
 """
 /home/ywatanabe/proj/entrance/mngs/dsp/add_noise.py
 """
+
+# EOF

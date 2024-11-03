@@ -1,11 +1,19 @@
-#!./env/bin/python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-26 04:41:21 (ywatanabe)"
-# /home/ywatanabe/proj/mngs_repo/src/mngs/io/_glob.py
+# Time-stamp: "2024-11-03 04:30:46 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/io/_glob.py
 
 import re
-from natsort import natsorted
 from glob import glob as _glob
+
+# from natsort import natsorted
+try:
+    from natsort import natsorted
+except ImportError as e:
+    import sys
+    print(f"Error importing natsort: {e}", file=sys.stderr)
+    print(f"Python path: {sys.path}", file=sys.stderr)
+    raise
 
 
 def glob(expression, ensure_one=False):
@@ -44,3 +52,6 @@ def glob(expression, ensure_one=False):
         assert len(found_paths) == 1
 
     return found_paths
+
+
+# EOF

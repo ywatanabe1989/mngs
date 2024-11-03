@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-03 03:03:13 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/ai/silhoute_score_block.py
 
 # https://gist.github.com/AlexandreAbraham/5544803
 
@@ -6,12 +9,12 @@
 
 # License: BSD Style.
 
-from itertools import combinations
+from itertools import combinations as _combinations
 
 import numpy as np
-
 # from sklearn.externals.joblib import Parallel, delayed
-from joblib import Parallel, delayed
+from joblib import Parallel as _Parallel
+from joblib import delayed as _delayed
 from sklearn.metrics.pairwise import distance_metrics, pairwise_distances
 from sklearn.utils import check_random_state
 
@@ -33,7 +36,7 @@ def silhouette_score_slow(
     To obtain the values for each sample, use silhouette_samples
 
     The best value is 1 and the worst value is -1. Values near 0 indicate
-    overlapping clusters. Negative values generally indicate that a sample has
+    overlapping clusters. Negative values genly indicate that a sample has
     been assigned to the wrong cluster, as a different cluster is more similar.
 
     Parameters
@@ -244,7 +247,7 @@ def silhouette_score_block(
     To obtain the values for each sample, use silhouette_samples
 
     The best value is 1 and the worst value is -1. Values near 0 indicate
-    overlapping clusters. Negative values generally indicate that a sample has
+    overlapping clusters. Negative values genly indicate that a sample has
     been assigned to the wrong cluster, as a different cluster is more similar.
 
     Parameters
@@ -400,8 +403,8 @@ def _intra_cluster_distances_block(X, labels, metric, n_jobs=1, **kwds):
         Mean intra-cluster distance
     """
     intra_dist = np.zeros(labels.size, dtype=float)
-    values = Parallel(n_jobs=n_jobs)(
-        delayed(_intra_cluster_distances_block_)(
+    values = _Parallel(n_jobs=n_jobs)(
+        _delayed(_intra_cluster_distances_block_)(
             X[np.where(labels == label)[0]], metric, **kwds
         )
         for label in np.unique(labels)
@@ -452,18 +455,18 @@ def _nearest_cluster_distance_block(X, labels, metric, n_jobs=1, **kwds):
     # Compute cluster distance between pairs of clusters
     unique_labels = np.unique(labels)
 
-    values = Parallel(n_jobs=n_jobs)(
-        delayed(_nearest_cluster_distance_block_)(
+    values = _Parallel(n_jobs=n_jobs)(
+        _delayed(_nearest_cluster_distance_block_)(
             X[np.where(labels == label_a)[0]],
             X[np.where(labels == label_b)[0]],
             metric,
             **kwds
         )
-        for label_a, label_b in combinations(unique_labels, 2)
+        for label_a, label_b in _combinations(unique_labels, 2)
     )
 
     for (label_a, label_b), (values_a, values_b) in zip(
-        combinations(unique_labels, 2), values
+        _combinations(unique_labels, 2), values
     ):
 
         indices_a = np.where(labels == label_a)[0]
@@ -496,3 +499,6 @@ if __name__ == "__main__":
     s = silhouette_score_block(X, y, n_jobs=2)
     t = time.time() - t0
     print("Block silhouette parallel (%fs): %f" % (t, s))
+
+
+# EOF

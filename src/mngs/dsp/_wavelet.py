@@ -6,8 +6,8 @@
 mngs.dsp.wavelet function
 """
 
-import mngs
-from mngs.general import batch_fn, torch_fn
+
+from ..decorators import batch_fn, torch_fn
 from mngs.nn import Wavelet
 
 

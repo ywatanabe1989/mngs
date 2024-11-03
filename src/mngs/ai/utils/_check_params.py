@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Time-stamp: "2024-02-17 12:38:40 (ywatanabe)"
 
-from pprint import pprint
+from pprint import pprint as _pprint
 from time import sleep
 
 # def get_params(model, tgt_name=None, sleep_sec=2, show=False):
@@ -23,7 +23,7 @@ from time import sleep
 
 #     if tgt_name is None:
 #         print()
-#         pprint(name_shape_dict)
+#         _pprint(name_shape_dict)
 #         print()
 
 

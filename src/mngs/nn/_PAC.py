@@ -220,7 +220,7 @@ class PAC(nn.Module):
         fp16=False,
     ):
 
-        # A static, general purpose BandPassFilter
+        # A static, gen purpose BandPassFilter
         if not trainable:
             # First, bands definitions for phase and amplitude are declared
             self.BANDS_PHA = self.calc_bands_pha(

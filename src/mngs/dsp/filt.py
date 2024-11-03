@@ -1,11 +1,10 @@
-#!./env/bin/python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-05-30 09:37:02 (ywatanabe)"
+# Time-stamp: "ywatanabe (2024-11-03 00:02:09)"
+# File: ./mngs_repo/src/mngs/dsp/filt.py
 
-
-import mngs
 import numpy as np
-from mngs.general import torch_fn
+from ..decorators import torch_fn
 from mngs.nn import (
     BandPassFilter,
     BandStopFilter,
@@ -48,7 +47,7 @@ if __name__ == "__main__":
     import sys
 
     import matplotlib.pyplot as plt
-    import mngs
+
     import torch
 
     # Start
@@ -150,3 +149,6 @@ if __name__ == "__main__":
 """
 /home/ywatanabe/proj/mngs/src/mngs/dsp/filt.py
 """
+
+
+# EOF

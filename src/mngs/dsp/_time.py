@@ -3,7 +3,7 @@
 # Time-stamp: "2024-06-30 12:11:01 (ywatanabe)"
 # /mnt/ssd/ripple-wm-code/scripts/externals/mngs/src/mngs/dsp/_time.py
 
-import mngs
+
 import numpy as np
 
 
@@ -23,7 +23,7 @@ if __name__ == "__main__":
     import sys
 
     import matplotlib.pyplot as plt
-    import mngs
+    
 
     # # Argument Parser
     # import argparse

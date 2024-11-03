@@ -1,6 +1,6 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-04 18:57:28 (ywatanabe)"
+# Time-stamp: "2024-10-26 05:27:26 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/_FigWrapper.py
 
 from functools import wraps
@@ -33,7 +33,7 @@ class FigWrapper:
             @wraps(original_attr)
             def wrapper(*args, track=None, id=None, **kwargs):
                 results = original_attr(*args, **kwargs)
-                self._track(track, id, attr, args, kwargs)
+                # self._track(track, id, attr, args, kwargs)
                 return results
 
             return wrapper

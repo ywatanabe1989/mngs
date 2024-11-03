@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 import re
-from collections import defaultdict
-from pprint import pprint
+from collections import defaultdict as _defaultdict
+from pprint import pprint as _pprint
 
 import matplotlib
 import mngs
@@ -15,7 +15,7 @@ class LearningCurveLogger(object):
     def __init__(
         self,
     ):
-        self.logged_dict = defaultdict(dict)
+        self.logged_dict = _defaultdict(dict)
 
         warnings.warn(
             '\n"gt_label" will be removed in the feature. Please use "true_class" instead.\n',
@@ -183,13 +183,13 @@ class LearningCurveLogger(object):
         )
         print("\n----------------------------------------\n")
         print(f"\n{step}: (mean of batches)\n")
-        pprint(df_pivot_i_epoch_step)
+        _pprint(df_pivot_i_epoch_step)
         print("\n----------------------------------------\n")
 
     @staticmethod
     def _find_keys_to_plot(logged_dict):
         _steps_str = list(logged_dict.keys())
-        _, keys_to_plot = mngs.general.search(
+        _, keys_to_plot = mngs.gen.search(
             "_plot",
             list(logged_dict[_steps_str[0]].keys()),
         )
@@ -207,7 +207,7 @@ class LearningCurveLogger(object):
                     capitalized.append(s.capitalize())
                 else:
                     capitalized.append(s)
-            renamed = mngs.general.connect_strs(capitalized, filler=" ")
+            renamed = mngs.gen.connect_strs(capitalized, filler=" ")
             return renamed
 
         if isinstance(keys, str):
@@ -269,7 +269,7 @@ if __name__ == "__main__":
     ## Sets tee
     ################################################################################
     sdir = mngs.io.path.mk_spath("")  # "/tmp/sdir/"
-    sys.stdout, sys.stderr = mngs.general.tee(sys, sdir)
+    sys.stdout, sys.stderr = mngs.gen.tee(sys, sdir)
 
     ################################################################################
     ## NN
@@ -464,4 +464,4 @@ if __name__ == "__main__":
         scattersize=50,
     )
     fig.show()
-    # mngs.general.save(fig, sdir + f"fold#{i_fold}.png")
+    # mngs.gen.save(fig, sdir + f"fold#{i_fold}.png")

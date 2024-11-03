@@ -5,7 +5,7 @@
 
 import torch
 import torchaudio.transforms as T
-from mngs.general import torch_fn
+from ..decorators import torch_fn
 
 
 @torch_fn
@@ -22,7 +22,7 @@ if __name__ == "__main__":
     import sys
 
     import matplotlib.pyplot as plt
-    import mngs
+    
 
     # Start
     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt)

@@ -1,11 +1,7 @@
-#!./env/bin/python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-17 09:19:59"
-# Author: Yusuke Watanabe (ywata1989@gmail.com)
-
-"""
-This script does XYZ.
-"""
+# Time-stamp: "2024-11-02 20:48:24 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/path/_version.py
 
 import os
 import re
@@ -13,9 +9,6 @@ import sys
 from glob import glob
 
 import matplotlib.pyplot as plt
-
-# Imports
-import mngs
 
 
 # Functions
@@ -88,6 +81,8 @@ def increment_version(dirname, fname, ext, version_prefix="_v"):
 
 
 if __name__ == "__main__":
+    import mngs
+
     # Start
     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt)
 
@@ -101,3 +96,6 @@ if __name__ == "__main__":
 """
 /ssh:ywatanabe@444:/home/ywatanabe/proj/entrance/mngs/path/_version.py
 """
+
+
+# EOF

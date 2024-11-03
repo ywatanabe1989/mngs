@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-02 23:35:05 (ywatanabe)"
-# /home/ywatanabe/proj/_mngs_repo_openhands/src/mngs/tex/_preview.py
+# Time-stamp: "ywatanabe (2024-11-02 23:58:12)"
+# File: ./mngs_repo/src/mngs/tex/_preview.py
 
-import mngs
 import numpy as np
+
 
 def preview(tex_str_list):
     r"""
@@ -26,7 +26,8 @@ def preview(tex_str_list):
     matplotlib.figure.Figure
         Figure containing the previews
     """
-    fig, axes = mngs.plt.subplots(nrows=len(tex_str_list), ncols=1, figsize=(10, 3*len(tex_str_list)))
+    from ..plt import subplots
+    fig, axes = subplots(nrows=len(tex_str_list), ncols=1, figsize=(10, 3*len(tex_str_list)))
     axes = np.atleast_1d(axes)
     for ax, tex_string in zip(axes, tex_str_list):
         ax.text(0.5, 0.7, tex_string, size=20, ha='center', va='center')
@@ -34,3 +35,6 @@ def preview(tex_str_list):
         ax.hide_spines()
     fig.tight_layout()
     return fig
+
+
+# EOF

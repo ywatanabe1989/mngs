@@ -3,10 +3,10 @@
 # Time-stamp: "2024-04-13 02:04:53 (ywatanabe)"
 
 import matplotlib.pyplot as plt
-import mngs
+
 import numpy as np
 import torch
-from mngs.general import numpy_fn, torch_fn
+from ...decorators import numpy_fn, torch_fn
 from scipy.signal import firwin, freqz, lfilter
 
 

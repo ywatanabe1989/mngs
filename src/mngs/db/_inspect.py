@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-21 21:10:52 (ywatanabe)"
+# Time-stamp: "2024-10-24 13:13:33 (ywatanabe)"
 # /mnt/ssd/mngs_repo/src/mngs/db/_inspect.py
 
 import sqlite3
 from typing import List, Tuple, Any, Optional, Dict
-import pandas as pd
 import os
 import mngs
 
@@ -90,6 +89,8 @@ class Inspector:
     def inspect(
             self, table_names: Optional[List[str]] = None, verbose=True,
     ) -> List[Dict[str, Any]]:
+        import pandas as pd
+
         if table_names is None:
             table_names = self.get_table_names()
 
@@ -101,6 +102,7 @@ class Inspector:
             meta = {}
             meta["table_name"] = table_name
             meta["n_total_rows"] = total_rows
+
 
             sample_data = pd.DataFrame(
                 [

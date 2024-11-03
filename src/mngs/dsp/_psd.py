@@ -8,7 +8,7 @@ This script does XYZ.
 
 import torch
 import torch.nn as nn
-from mngs.general import torch_fn
+from ..decorators import torch_fn
 from mngs.nn import PSD
 
 
@@ -21,7 +21,7 @@ def psd(
 ):
     """
     import matplotlib.pyplot as plt
-    import mngs
+    
 
     x, t, fs = mngs.dsp.demo_sig()  # (batch_size, n_chs, seq_len)
     pp, ff = psd(x, fs)
@@ -65,7 +65,7 @@ if __name__ == "__main__":
     import sys
 
     import matplotlib.pyplot as plt
-    import mngs
+    
 
     # Start
     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt)

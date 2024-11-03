@@ -5,7 +5,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from mngs.general import numpy_fn, torch_fn
+from ..decorators import numpy_fn, torch_fn
 
 
 class Spectrogram(nn.Module):

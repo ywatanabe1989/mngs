@@ -1,11 +1,24 @@
-import sys
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-02 03:23:44 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/io/_flush.py
+
 import os
+import sys
+import warnings
+
 
 def flush(sys=sys):
     """
     Flushes the system's stdout and stderr, and syncs the file system.
     This ensures all pending write operations are completed.
     """
-    sys.stdout.flush()
-    sys.stderr.flush()
-    os.sync()
+    if sys is None:
+        warnings.warn("flush needs sys. Skipping.")
+    else:
+        sys.stdout.flush()
+        sys.stderr.flush()
+        os.sync()
+
+
+# EOF

@@ -11,7 +11,7 @@ This script does XYZ.
 import sys
 
 import matplotlib.pyplot as plt
-import mngs
+
 import numpy as np
 import tensorpac
 

@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-03 03:36:09 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/ai/ClassificationReporter.py
 
 import os
 import random
 import sys
-from collections import defaultdict
-from glob import glob
-from pprint import pprint
+from collections import defaultdict as _defaultdict
+from glob import glob as _glob
+from pprint import pprint as _pprint
 
 import matplotlib
 import matplotlib.pyplot as plt
@@ -15,6 +18,8 @@ import pandas as pd
 import torch
 from sklearn.metrics import (balanced_accuracy_score, classification_report,
                              confusion_matrix, matthews_corrcoef)
+
+from ..reproduce import fix_seeds
 
 
 class MultiClassificationReporter(object):
@@ -118,8 +123,8 @@ class ClassificationReporter(object):
 
     def __init__(self, sdir):
         self.sdir = sdir
-        self.folds_dict = defaultdict(list)
-        mngs.general.fix_seeds(
+        self.folds_dict = _defaultdict(list)
+        fix_seeds(
             os=os, random=random, np=np, torch=torch, show=False
         )
 
@@ -182,7 +187,7 @@ class ClassificationReporter(object):
 
         if show:
             print(f"\nConfusion Matrix in fold#{i_fold}: \n")
-            pprint(conf_mat)
+            _pprint(conf_mat)
             print()
 
         return conf_mat
@@ -222,7 +227,7 @@ class ClassificationReporter(object):
         clf_report.index.name = None
         if show:
             print(f"\nClassification Report for fold#{i_fold}:\n")
-            pprint(clf_report)
+            _pprint(clf_report)
             print()
         return clf_report
 
@@ -275,14 +280,14 @@ class ClassificationReporter(object):
         ## Preparation
         # for convenience
         true_class = (
-            mngs.general.torch_to_arr(true_class).astype(int).reshape(-1)
+            mngs.gen.torch_to_arr(true_class).astype(int).reshape(-1)
         )
         pred_class = (
-            mngs.general.torch_to_arr(pred_class)
+            mngs.gen.torch_to_arr(pred_class)
             .astype(np.float64)
             .reshape(-1)
         )
-        pred_proba = mngs.general.torch_to_arr(pred_proba).astype(np.float64)
+        pred_proba = mngs.gen.torch_to_arr(pred_proba).astype(np.float64)
 
         # for curves
         mngs.plt.configure_mpl(
@@ -358,11 +363,11 @@ class ClassificationReporter(object):
         self,
     ):
 
-        folds_dirs = glob(self.sdir_for_roc_csv + "fold#*")
+        folds_dirs = _glob(self.sdir_for_roc_csv + "fold#*")
         n_folds = len(folds_dirs)
 
         # get class names
-        _csv_files = glob(os.path.join(folds_dirs[0], "*"))
+        _csv_files = _glob(os.path.join(folds_dirs[0], "*"))
         classes_str = [
             csv_file.split("/")[-1].split(".csv")[0] for csv_file in _csv_files
         ]
@@ -418,7 +423,7 @@ class ClassificationReporter(object):
 
             if n_folds != 0:
                 ## listed scalars
-                if mngs.general.is_listed_X(self.folds_dict[k], [float, int]):
+                if mngs.gen.is_listed_X(self.folds_dict[k], [float, int]):
                     mm = np.mean(self.folds_dict[k])
                     ss = np.std(self.folds_dict[k], ddof=1)
                     sr = pd.DataFrame(
@@ -429,7 +434,7 @@ class ClassificationReporter(object):
                     self.folds_dict[k] = sr.round(n_round)
 
                 ## listed pd.DataFrames
-                elif mngs.general.is_listed_X(
+                elif mngs.gen.is_listed_X(
                     self.folds_dict[k], pd.DataFrame
                 ):
                     zero_df_for_mm = 0 * self.folds_dict[k][0].copy()
@@ -456,13 +461,13 @@ class ClassificationReporter(object):
                             f"\n{k}\n"
                             f"\n{n_folds}-fold-CV mean:\n"
                         )
-                        pprint(self.folds_dict[k][0])
+                        _pprint(self.folds_dict[k][0])
                         print(f"\n\n{n_folds}-fold-CV std.:\n")
-                        pprint(self.folds_dict[k][1])
+                        _pprint(self.folds_dict[k][1])
                         print("\n\n----------------------------------------\n")
 
                 ## listed figures
-                elif mngs.general.is_listed_X(
+                elif mngs.gen.is_listed_X(
                     self.folds_dict[k], matplotlib.figure.Figure
                 ):
                     pass
@@ -504,7 +509,7 @@ class ClassificationReporter(object):
                 mngs.io.save(self.folds_dict[k], self.sdir + f"{k}.csv")
 
             ## listed pd.DataFrame
-            elif mngs.general.is_listed_X(self.folds_dict[k], pd.DataFrame):
+            elif mngs.gen.is_listed_X(self.folds_dict[k], pd.DataFrame):
                 mngs.io.save(
                     self.folds_dict[k],
                     self.sdir + f"{k}.csv",
@@ -513,7 +518,7 @@ class ClassificationReporter(object):
                 )
 
             ## listed figures
-            elif mngs.general.is_listed_X(
+            elif mngs.gen.is_listed_X(
                 self.folds_dict[k], matplotlib.figure.Figure
             ):
                 for i_fold, fig in enumerate(self.folds_dict[k]):
@@ -642,12 +647,12 @@ if __name__ == "__main__":
     sdir = mngs.io.mk_spath(
         "./tmp/sdir-ClassificationReporter/"
     )  # "/tmp/sdir/"
-    sys.stdout, sys.stderr = mngs.general.tee(sys, sdir)
+    sys.stdout, sys.stderr = mngs.gen.tee(sys, sdir)
 
     ################################################################################
     ## Fixes seeds
     ################################################################################
-    mngs.general.fix_seeds(np=np)
+    fix_seeds(np=np)
 
     ## Loads
     mnist = load_digits()
@@ -726,7 +731,7 @@ if __name__ == "__main__":
         mngs.io.touch(ff)
 
     files_to_reproduce = [
-        mngs.general.get_this_fpath(when_ipython="/dev/null"),
+        mngs.gen.get_this_fpath(when_ipython="/dev/null"),
         *fake_fpaths,
     ]
     # reporter.save(files_to_reproduce=files_to_reproduce)
@@ -774,4 +779,6 @@ if __name__ == "__main__":
         tgt="Test2",
     )
 
-    ## EOF
+    #
+
+# EOF

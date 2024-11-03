@@ -1,44 +1,32 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-03 03:00:47 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/ai/__init__.py
 
-try:
-    from . import act, clustering, layer, metrics, optim, plt, sk, utils
-except ImportError as e:
-    pass # print(f"Warning: Failed to import some modules.")
+import os
+import importlib
+import inspect
 
-try:
-    from ._gen_ai._genai_factory import genai_factory as GenAI
-except ImportError as e:
-    pass # print(f"Warning: Failed to import GenAI.")
+# Get the current directory
+current_dir = os.path.dirname(__file__)
 
-try:
-    from .ClassificationReporter import (
-        ClassificationReporter,
-        MultiClassificationReporter,
-    )
-except ImportError as e:
-    pass # print(f"Warning: Failed to import ClassificationReporter.")
+# Iterate through all Python files in the current directory
+for filename in os.listdir(current_dir):
+    if filename.endswith(".py") and not filename.startswith("__"):
+        module_name = filename[:-3]  # Remove .py extension
+        module = importlib.import_module(f".{module_name}", package=__name__)
 
-try:
-    from .ClassifierServer import ClassifierServer
-except ImportError as e:
-    pass # print(f"Warning: Failed to import ClassifierServer.")
+        # Import only functions and classes from the module
+        for name, obj in inspect.getmembers(module):
+            if inspect.isfunction(obj) or inspect.isclass(obj):
+                if not name.startswith("_"):
+                    globals()[name] = obj
 
-try:
-    from .EarlyStopping import EarlyStopping
-except ImportError as e:
-    pass # print(f"Warning: Failed to import EarlyStopping.")
+# Clean up temporary variables
+del os, importlib, inspect, current_dir, filename, module_name, module, name, obj
 
-try:
-    from .LearningCurveLogger import LearningCurveLogger
-except ImportError as e:
-    pass # print(f"Warning: Failed to import LearningCurveLogger.")
-
-try:
-    from .loss.MultiTaskLoss import MultiTaskLoss
-except ImportError as e:
-    pass # print(f"Warning: Failed to import MultiTaskLoss.")
-
-# #!/usr/bin/env python3
+from ._gen_ai._genai_factory import genai_factory as GenAI
+# EOF
 
 # from . import act, clustering, layer, metrics, optim, plt, sk, utils
 # from ._gen_ai._genai_factory import genai_factory as GenAI
@@ -49,6 +37,9 @@ except ImportError as e:
 # from .ClassifierServer import ClassifierServer
 # from .EarlyStopping import EarlyStopping
 # from .LearningCurveLogger import LearningCurveLogger
-
-# # from ._switchers import switch_layer, switch_act, switch_optim
 # from .loss.MultiTaskLoss import MultiTaskLoss
+
+# from ._switchers import switch_layer, switch_act, switch_optim
+
+
+# EOF
