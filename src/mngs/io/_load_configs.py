@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-02 13:13:51 (ywatanabe)"
+# Time-stamp: "2024-11-04 15:56:17 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/io/_load_configs.py
 
 import os
@@ -27,13 +27,28 @@ def load_configs(IS_DEBUG=None, show=False, verbose=False):
         A dictionary-like object containing the loaded configurations.
     """
 
+    # def apply_debug_values(config, IS_DEBUG):
+    #     if IS_DEBUG:
+    #         if isinstance(config, (dict, DotDict)):
+    #             for key, value in list(config.items()):
+    #                 try:
+    #                     if key.startswith("DEBUG_"):
+    #                         dk_wo_debug_prefix = key.split("DEBUG_")[1]
+    #                         config[dk_wo_debug_prefix] = value
+    #                         if show or verbose:
+    #                             print(f"\n{key} -> {dk_wo_debug_prefix}\n")
+    #                     elif isinstance(value, (dict, DotDict)):
+    #                         config[key] = apply_debug_values(value, IS_DEBUG)
+    #                 except Exception as e:
+    #                     print(e)
+    #     return config
     def apply_debug_values(config, IS_DEBUG):
         if IS_DEBUG:
             if isinstance(config, (dict, DotDict)):
                 for key, value in list(config.items()):
                     try:
-                        if key.startswith("DEBUG_"):
-                            dk_wo_debug_prefix = key.split("DEBUG_")[1]
+                        if key.startswith(("DEBUG_", "debug_")):
+                            dk_wo_debug_prefix = key.split("_", 1)[1]
                             config[dk_wo_debug_prefix] = value
                             if show or verbose:
                                 print(f"\n{key} -> {dk_wo_debug_prefix}\n")

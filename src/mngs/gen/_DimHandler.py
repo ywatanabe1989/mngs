@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-03 03:42:26 (ywatanabe)"
+# Time-stamp: "2024-11-05 00:39:26 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/gen/_DimHandler.py
-
-#!./env/bin/python3
-# -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-23 11:45:42"
-# Author: Yusuke Watanabe (ywata1989@gmail.com)
 
 """
 This script demonstrates DimHandler, which:
@@ -21,9 +16,6 @@ This script demonstrates DimHandler, which:
 import sys
 
 import matplotlib.pyplot as plt
-
-
-
 import numpy as np
 import torch
 
@@ -168,7 +160,6 @@ class DimHandler:
 
 
 if __name__ == "__main__":
-    import torch
     import mngs
 
     # Start

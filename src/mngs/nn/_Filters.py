@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-04 02:05:28 (ywatanabe)"
+# Time-stamp: "2024-11-05 01:06:41 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/nn/_Filters.py
 
 """
@@ -18,7 +18,10 @@ import torch.nn as nn
 import torch.nn.functional as F
 from ..dsp.utils import build_bandpass_filters, init_bandpass_filters
 from ..gen._to_even import to_even
-
+from ..dsp.utils._ensure_3d import ensure_3d
+from ..dsp.utils.filter import design_filter
+from ..dsp.utils._ensure_even_len import ensure_even_len
+from ..dsp.utils._zero_pad import zero_pad
 
 class BaseFilter1D(nn.Module):
     def __init__(self, fp16=False, in_place=False):
@@ -44,7 +47,7 @@ class BaseFilter1D(nn.Module):
         if self.fp16:
             x = x.half()
 
-        x = mngs.dsp.ensure_3d(x)
+        x = ensure_3d(x)
         batch_size, n_chs, seq_len = x.shape
 
         # Kernel Check
@@ -141,7 +144,7 @@ class BandPassFilter(BaseFilter1D):
     @staticmethod
     def init_kernels(seq_len, fs, bands):
         filters = [
-            mngs.dsp.utils.design_filter(
+            design_filter(
                 seq_len,
                 fs,
                 low_hz=ll,
@@ -151,8 +154,8 @@ class BandPassFilter(BaseFilter1D):
             for ll, hh in bands
         ]
 
-        kernels = mngs.dsp.utils.zero_pad(filters)
-        kernels = mngs.dsp.utils.ensure_even_len(kernels)
+        kernels = zero_pad(filters)
+        kernels = ensure_even_len(kernels)
         # kernels = torch.tensor(kernels).clone().detach()
         kernels = kernels.clone().detach().requires_grad_(True)
         return kernels
@@ -181,15 +184,15 @@ class BandStopFilter(BaseFilter1D):
 
     @staticmethod
     def init_kernels(seq_len, fs, bands):
-        kernels = mngs.dsp.utils.zero_pad(
+        kernels = zero_pad(
             [
-                mngs.dsp.utils.design_filter(
+                design_filter(
                     seq_len, fs, low_hz=ll, high_hz=hh, is_bandstop=True
                 )
                 for ll, hh in bands
             ]
         )
-        kernels = mngs.dsp.utils.ensure_even_len(kernels)
+        kernels = ensure_even_len(kernels)
         return torch.tensor(kernels)
 
 
@@ -213,15 +216,15 @@ class LowPassFilter(BaseFilter1D):
 
     @staticmethod
     def init_kernels(seq_len, fs, cutoffs_hz):
-        kernels = mngs.dsp.utils.zero_pad(
+        kernels = zero_pad(
             [
-                mngs.dsp.utils.design_filter(
+                design_filter(
                     seq_len, fs, low_hz=None, high_hz=cc, is_bandstop=False
                 )
                 for cc in cutoffs_hz
             ]
         )
-        kernels = mngs.dsp.utils.ensure_even_len(kernels)
+        kernels = ensure_even_len(kernels)
         return torch.tensor(kernels)
 
 
@@ -245,15 +248,15 @@ class HighPassFilter(BaseFilter1D):
 
     @staticmethod
     def init_kernels(seq_len, fs, cutoffs_hz):
-        kernels = mngs.dsp.utils.zero_pad(
+        kernels = zero_pad(
             [
-                mngs.dsp.utils.design_filter(
+                design_filter(
                     seq_len, fs, low_hz=cc, high_hz=None, is_bandstop=False
                 )
                 for cc in cutoffs_hz
             ]
         )
-        kernels = mngs.dsp.utils.ensure_even_len(kernels)
+        kernels = ensure_even_len(kernels)
         return torch.tensor(kernels)
 
 
@@ -270,7 +273,7 @@ class GaussianFilter(BaseFilter1D):
         kernel = torch.exp(-0.5 * (kernel_range / sigma) ** 2)
         kernel /= kernel.sum()
         kernels = kernel.unsqueeze(0)  # n_filters = 1
-        kernels = mngs.dsp.utils.ensure_even_len(kernels)
+        kernels = ensure_even_len(kernels)
         return torch.tensor(kernels)
 
 

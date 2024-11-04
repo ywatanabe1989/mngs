@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "ywatanabe (2024-11-02 23:48:41)"
+# Time-stamp: "2024-11-05 00:24:54 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/dsp/_detect_ripples.py
 
 import numpy as np
 import pandas as pd
 from scipy.signal import find_peaks
 
-from ..gen import to_z
+from ..gen._norm import to_z
 from ._demo_sig import demo_sig
 from ._hilbert import hilbert
 from ._resample import resample

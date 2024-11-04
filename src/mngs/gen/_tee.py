@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-04 04:42:10 (ywatanabe)"
+# Time-stamp: "2024-11-05 00:26:35 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/gen/_tee.py
 
 import os as _os
 import re
 import sys
 
-from ..path import get_spath, split
+from ..path import split
 from ..str._printc import printc
 
 
@@ -53,12 +53,10 @@ def tee(sys, sdir=None, verbose=True):
     ## Determines sdir
     ####################
     if sdir is None:
-        # __file__ = inspect.stack()[1].filename
-        # if "ipython" in __file__:
-        #     __file__ = f"/tmp/mngs/fake_{_os.getenv('USER')}.py"
-        # spath = __file__
-        spath = get_spath()
-
+        __file__ = inspect.stack()[1].filename
+        if "ipython" in __file__:
+            __file__ = f"/tmp/mngs/{_os.getenv('USER')}.py"
+        spath = __file__
         _sdir, sfname, _ = split(spath)
         sdir = _sdir + sfname
 
@@ -66,7 +64,7 @@ def tee(sys, sdir=None, verbose=True):
 
     _os.makedirs(sdir, exist_ok=True)
 
-    spath_stdout = sdir + "stdout.log"  # for printing
+    spath_stdout = sdir + "stdout.log"
     spath_stderr = sdir + "stderr.log"
     sys_stdout = Tee(sys.stdout, spath_stdout)
     sys_stderr = Tee(sys.stdout, spath_stderr)

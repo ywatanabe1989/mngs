@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-04 10:57:06 (ywatanabe)"
+# Time-stamp: "2024-11-04 16:12:50 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/resource/_get_processor_usages.py
 
 """
@@ -122,10 +122,44 @@ def _get_gpu_usage(n_round: int = 1) -> Tuple[float, float]:
         gpu_usage_perc, vram_usage_mib = result.stdout.strip().split(",")
         vram_usage_gb = float(vram_usage_mib) / 1024
         return round(float(gpu_usage_perc), n_round), round(vram_usage_gb, n_round)
-    except subprocess.CalledProcessError as err:
-        raise RuntimeError(f"Failed to execute nvidia-smi: {err}")
-    except Exception as err:
-        raise RuntimeError(f"Failed to get GPU/VRAM usage: {err}")
+    except:
+        return 0.0, 0.0
+    # except subprocess.CalledProcessError as err:
+    #     raise RuntimeError(f"Failed to execute nvidia-smi: {err}")
+    # except Exception as err:
+    #     raise RuntimeError(f"Failed to get GPU/VRAM usage: {err}")
+
+
+# def _get_gpu_usage(n_round: int = 1) -> Tuple[float, float]:
+#     """Gets GPU and VRAM usage statistics.
+
+#     Parameters
+#     ----------
+#     n_round : int, optional
+#         Number of decimal places to round to
+
+#     Returns
+#     -------
+#     Tuple[float, float]
+#         GPU usage percentage and VRAM usage in GiB
+#     """
+#     try:
+#         result = subprocess.run(
+#             [
+#                 "nvidia-smi",
+#                 "--query-gpu=utilization.gpu,memory.used",
+#                 "--format=csv,nounits,noheader",
+#             ],
+#             capture_output=True,
+#             text=True,
+#             check=True,
+#         )
+#         gpu_usage_perc, vram_usage_mib = result.stdout.strip().split(",")
+#         vram_usage_gb = float(vram_usage_mib) / 1024
+#         return round(float(gpu_usage_perc), n_round), round(vram_usage_gb, n_round)
+#     except Exception as e:
+#         print(e)
+#         return 0.0, 0.0  # Return zeros when nvidia-smi is not available
 
 
 if __name__ == "__main__":

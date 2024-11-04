@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-03 06:39:18 (ywatanabe)"
+# Time-stamp: "2024-11-05 01:11:44 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/gen/_close.py
 
 import os
@@ -69,44 +69,51 @@ def _escape_ANSI_from_log_files(log_files):
 def close(
     CONFIG, message=":)", notify=True, verbose=True, exit_status=None
 ):
-    CONFIG.EXIT_STATUS = exit_status
-    CONFIG = CONFIG.to_dict()
-    CONFIG = _process_timestamp(CONFIG, verbose=verbose)
-    sys = CONFIG.pop("sys")
-    _save_configs(CONFIG)
-    mngs_io_flush(sys=sys)
-
-    # RUNNING to RUNNING2FINISHEDED
-    CONFIG = running2finished(CONFIG, exit_status=exit_status)
-    mngs_io_flush(sys=sys)
-
-    # ANSI code escape
-    log_files = glob(CONFIG["SDIR"] + "logs/*.log")
-    _escape_ANSI_from_log_files(log_files)
-    mngs_io_flush(sys=sys)
-
-    if notify:
-        try:
-            message = (
-                f"[DEBUG]\n" + str(message)
-                if CONFIG.get("DEBUG", False)
-                else str(message)
-            )
-            mngs_gen_notify(
-                message=message,
-                ID=CONFIG["ID"],
-                attachment_paths=log_files,
-                verbose=verbose,
-            )
-            mngs_io_flush(sys=sys)
-        except Exception as e:
-            print(e)
-
     try:
-        sys.stdout.close()
-        sys.stderr.close()
-    except Exception as e:
-        print(e)
+        CONFIG.EXIT_STATUS = exit_status
+        CONFIG = CONFIG.to_dict()
+        CONFIG = _process_timestamp(CONFIG, verbose=verbose)
+        sys = CONFIG.pop("sys")
+        _save_configs(CONFIG)
+        mngs_io_flush(sys=sys)
+
+        # RUNNING to RUNNING2FINISHEDED
+        CONFIG = running2finished(CONFIG, exit_status=exit_status)
+        mngs_io_flush(sys=sys)
+
+        # ANSI code escape
+        log_files = glob(CONFIG["SDIR"] + "logs/*.log")
+        _escape_ANSI_from_log_files(log_files)
+        mngs_io_flush(sys=sys)
+
+        if notify:
+            try:
+                message = (
+                    f"[DEBUG]\n" + str(message)
+                    if CONFIG.get("DEBUG", False)
+                    else str(message)
+                )
+                mngs_gen_notify(
+                    message=message,
+                    ID=CONFIG["ID"],
+                    attachment_paths=log_files,
+                    verbose=verbose,
+                )
+                mngs_io_flush(sys=sys)
+            except Exception as e:
+                print(e)
+
+    finally:
+        # Ensure file handles are closed
+        if hasattr(sys, 'stdout') and hasattr(sys.stdout, 'close'):
+            sys.stdout.close()
+        if hasattr(sys, 'stderr') and hasattr(sys.stderr, 'close'):
+            sys.stderr.close()
+    # try:
+    #     sys.stdout.close()
+    #     sys.stderr.close()
+    # except Exception as e:
+    #     print(e)
 
 
 def running2finished(

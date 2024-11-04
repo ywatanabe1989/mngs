@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-04 11:23:25 (ywatanabe)"
+# Time-stamp: "2024-11-04 16:28:53 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/resource/_log_processor_usages.py
 
 """
@@ -119,37 +119,57 @@ def _log_processor_usages(
         _add(path, verbose=verbose)
         time.sleep(interval_s)
 
-def _ensure_log_file(path: str, init: bool) -> None:
-    os.makedirs(os.path.dirname(path), exist_ok=True)
+# def _ensure_log_file(path: str, init: bool) -> None:
+#     def _create_path(path):
+#         os.makedirs(os.path.dirname(path), exist_ok=True)
+#         empty_df = pd.DataFrame()
+#         save(empty_df, path, verbose=False)
+#         printc(f"{path} created.")
 
-    if not os.path.exists(path):
-        printc(f"{path} was newly created.")
-        save(pd.DataFrame(), path, verbose=False)
+#     if not os.path.exists(path):
+#         _create_path(path)
 
-    if init and os.path.exists(path):
-        try:
-            sh(f"rm {path}")
-            save(pd.DataFrame(), path, verbose=False)
-            printc(f"{path} was newly created.")
-        except Exception as err:
-            raise RuntimeError(f"Failed to init log file: {err}")
+#     else:
+#         if init and os.path.exists(path):
+#             try:
+#                 sh(f"rm -f {path}")
+#                 _create_path(path)
+#             except Exception as err:
+#                 raise RuntimeError(f"Failed to init log file: {err}")
+
+# def _add(path: str, verbose: bool = True) -> None:
+#     past = load(path)
+#     now = get_processor_usages()
+
+#     combined = pd.concat([past, now]).round(3)
+#     save(combined, path, verbose=verbose)
+
 
 def _add(path: str, verbose: bool = True) -> None:
-    try:
-        past = load(path) if os.path.exists(path) else pd.DataFrame()
-        now = get_processor_usages()
+    """Appends current resource usage to CSV file."""
+    now = get_processor_usages()
 
-        # Reset index before concatenation to ensure continuity
-        if not past.empty:
-            now.index = [past.index.max() + 1]
+    # Append mode without loading entire file
+    with open(path, 'a') as f:
+        now.to_csv(f, header=f.tell()==0, index=False)
 
-        combined = pd.concat([past, now]).round(3)
-        save(combined, path, verbose=verbose)
+def _ensure_log_file(path: str, init: bool) -> None:
+    """Creates or reinitializes log file with headers."""
+    def _create_path(path):
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        # Write only headers
+        headers = ["Timestamp", "CPU [%]", "RAM [GiB]", "GPU [%]", "VRAM [GiB]"]
+        pd.DataFrame(columns=headers).to_csv(path, index=False)
+        printc(f"{path} created.")
 
-        if verbose:
-            print(f"\n{combined}")
-    except Exception as err:
-        raise RuntimeError(f"Failed to update log: {err}")
+    if not os.path.exists(path):
+        _create_path(path)
+    elif init:
+        try:
+            sh(f"rm -f {path}")
+            _create_path(path)
+        except Exception as err:
+            raise RuntimeError(f"Failed to init log file: {err}")
 
 main = log_processor_usages
 
