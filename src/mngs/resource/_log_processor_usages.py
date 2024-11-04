@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-04 11:16:58 (ywatanabe)"
+# Time-stamp: "2024-11-04 11:23:25 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/resource/_log_processor_usages.py
 
 """
@@ -20,6 +20,8 @@ import math
 import os
 import sys
 import time
+from multiprocessing import Process
+from typing import Union
 
 import matplotlib.pyplot as plt
 import mngs
@@ -33,6 +35,52 @@ from ._get_processor_usages import get_processor_usages
 
 """Functions & Classes"""
 def log_processor_usages(
+    path: str = "/tmp/mngs/processor_usages.csv",
+    limit_min: float = 30,
+    interval_s: float = 1,
+    init: bool = True,
+    verbose: bool = False,
+    background: bool = False,
+) -> Union[None, Process]:
+    """Logs system resource usage over time.
+
+    Parameters
+    ----------
+    path : str
+        Path to save the log file
+    limit_min : float
+        Monitoring duration in minutes
+    interval_s : float
+        Sampling interval in seconds
+    init : bool
+        Whether to clear existing log file
+    verbose : bool
+        Whether to print the log
+    background : bool
+        Whether to run in background
+
+    Returns
+    -------
+    Union[None, Process]
+        Process object if background=True, None otherwise
+    """
+    if background:
+        process = Process(
+            target=_log_processor_usages,
+            args=(path, limit_min, interval_s, init, verbose)
+        )
+        process.start()
+        return process
+
+    return _log_processor_usages(
+        path=path,
+        limit_min=limit_min,
+        interval_s=interval_s,
+        init=init,
+        verbose=verbose,
+    )
+
+def _log_processor_usages(
     path: str = "/tmp/mngs/processor_usages.csv",
     limit_min: float = 30,
     interval_s: float = 1,
@@ -85,7 +133,6 @@ def _ensure_log_file(path: str, init: bool) -> None:
             printc(f"{path} was newly created.")
         except Exception as err:
             raise RuntimeError(f"Failed to init log file: {err}")
-
 
 def _add(path: str, verbose: bool = True) -> None:
     try:
