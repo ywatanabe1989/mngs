@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-04 11:15:10 (ywatanabe)"
+# Time-stamp: "2024-11-04 11:16:58 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/resource/_log_processor_usages.py
 
 """
@@ -20,7 +20,6 @@ import math
 import os
 import sys
 import time
-from datetime import datetime
 
 import matplotlib.pyplot as plt
 import mngs
@@ -29,7 +28,6 @@ import pandas as pd
 from .._sh import sh
 from ..io._load import load
 from ..io._save import save
-from ..path import clean
 from ..str import printc
 from ._get_processor_usages import get_processor_usages
 
