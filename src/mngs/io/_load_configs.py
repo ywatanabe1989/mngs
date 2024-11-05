@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-04 15:56:17 (ywatanabe)"
+# Time-stamp: "2024-11-05 08:06:03 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/io/_load_configs.py
 
 import os
@@ -9,82 +9,119 @@ from ..io._load import load
 from ._glob import glob
 
 def load_configs(IS_DEBUG=None, show=False, verbose=False):
-    """
-    Load configuration files from the ./config directory.
+    """Load YAML configuration files from ./config directory.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     IS_DEBUG : bool, optional
-        If True, use debug configurations. If None, check ./config/IS_DEBUG.yaml.
-    show : bool, optional
-        If True, display additional information during loading.
-    verbose : bool, optional
-        If True, print verbose output during loading.
+        Debug mode flag. If None, reads from IS_DEBUG.yaml
+    show : bool
+        Show configuration changes
+    verbose : bool
+        Print detailed information
 
-    Returns:
-    --------
+    Returns
+    -------
     DotDict
-        A dictionary-like object containing the loaded configurations.
+        Merged configuration dictionary
     """
-
-    # def apply_debug_values(config, IS_DEBUG):
-    #     if IS_DEBUG:
-    #         if isinstance(config, (dict, DotDict)):
-    #             for key, value in list(config.items()):
-    #                 try:
-    #                     if key.startswith("DEBUG_"):
-    #                         dk_wo_debug_prefix = key.split("DEBUG_")[1]
-    #                         config[dk_wo_debug_prefix] = value
-    #                         if show or verbose:
-    #                             print(f"\n{key} -> {dk_wo_debug_prefix}\n")
-    #                     elif isinstance(value, (dict, DotDict)):
-    #                         config[key] = apply_debug_values(value, IS_DEBUG)
-    #                 except Exception as e:
-    #                     print(e)
-    #     return config
     def apply_debug_values(config, IS_DEBUG):
-        if IS_DEBUG:
-            if isinstance(config, (dict, DotDict)):
-                for key, value in list(config.items()):
-                    try:
-                        if key.startswith(("DEBUG_", "debug_")):
-                            dk_wo_debug_prefix = key.split("_", 1)[1]
-                            config[dk_wo_debug_prefix] = value
-                            if show or verbose:
-                                print(f"\n{key} -> {dk_wo_debug_prefix}\n")
-                        elif isinstance(value, (dict, DotDict)):
-                            config[key] = apply_debug_values(value, IS_DEBUG)
-                    except Exception as e:
-                        print(e)
+        """Apply debug values if IS_DEBUG is True."""
+        if not IS_DEBUG or not isinstance(config, (dict, DotDict)):
+            return config
+
+        for key, value in list(config.items()):
+            if key.startswith(("DEBUG_", "debug_")):
+                dk_wo_debug_prefix = key.split("_", 1)[1]
+                config[dk_wo_debug_prefix] = value
+                if show or verbose:
+                    print(f"{key} -> {dk_wo_debug_prefix}")
+            elif isinstance(value, (dict, DotDict)):
+                config[key] = apply_debug_values(value, IS_DEBUG)
         return config
 
-    if os.getenv("CI") == "True":
-        IS_DEBUG = True
-
     try:
-        # Check ./config/IS_DEBUG.yaml file if IS_DEBUG argument is not passed
-        if IS_DEBUG is None:
-            IS_DEBUG_PATH = "./config/IS_DEBUG.yaml"
-            if os.path.exists(IS_DEBUG_PATH):
-                IS_DEBUG = load("./config/IS_DEBUG.yaml").get("IS_DEBUG")
-            else:
-                IS_DEBUG = False
+        # Set debug mode
+        IS_DEBUG = IS_DEBUG or os.getenv("CI") == "True" or (
+            os.path.exists("./config/IS_DEBUG.yaml") and
+            load("./config/IS_DEBUG.yaml").get("IS_DEBUG")
+        )
 
-        # Main
+        # Load and merge configs
         CONFIGS = {}
         for lpath in glob("./config/*.yaml"):
-            config = load(lpath)
-            if config:
-                CONFIG = apply_debug_values(config, IS_DEBUG)
-                CONFIGS.update(CONFIG)
+            if config := load(lpath):
+                CONFIGS.update(apply_debug_values(config, IS_DEBUG))
 
-        CONFIGS = DotDict(CONFIGS)
+        return DotDict(CONFIGS)
 
     except Exception as e:
-        print(e)
-        CONFIGS = DotDict({})
+        print(f"Error loading configs: {e}")
+        return DotDict({})
+# def load_configs(IS_DEBUG=None, show=False, verbose=False):
+#     """
+#     Load configuration files from the ./config directory.
 
-    return CONFIGS
+#     Parameters:
+#     -----------
+#     IS_DEBUG : bool, optional
+#         If True, use debug configurations. If None, check ./config/IS_DEBUG.yaml.
+#     show : bool, optional
+#         If True, display additional information during loading.
+#     verbose : bool, optional
+#         If True, print verbose output during loading.
 
+#     Returns:
+#     --------
+#     DotDict
+#         A dictionary-like object containing the loaded configurations.
+#     """
+
+#     def apply_debug_values(config, IS_DEBUG):
+#         if IS_DEBUG:
+#             if isinstance(config, (dict, DotDict)):
+#                 for key, value in list(config.items()):
+#                     try:
+#                         if key.startswith(("DEBUG_", "debug_")):
+#                             dk_wo_debug_prefix = key.split("_", 1)[1]
+#                             config[dk_wo_debug_prefix] = value
+#                             if show or verbose:
+#                                 print(f"\n{key} -> {dk_wo_debug_prefix}\n")
+#                         elif isinstance(value, (dict, DotDict)):
+#                             config[key] = apply_debug_values(value, IS_DEBUG)
+#                     except Exception as e:
+#                         print(e)
+#         return config
+
+#     if os.getenv("CI") == "True":
+#         IS_DEBUG = True
+
+#     try:
+#         # Check ./config/IS_DEBUG.yaml file if IS_DEBUG argument is not passed
+#         if IS_DEBUG is None:
+#             IS_DEBUG_PATH = "./config/IS_DEBUG.yaml"
+#             if os.path.exists(IS_DEBUG_PATH):
+#                 IS_DEBUG = load("./config/IS_DEBUG.yaml").get("IS_DEBUG")
+#             else:
+#                 IS_DEBUG = False
+
+#         # Main
+#         CONFIGS = {}
+#         for lpath in glob("./config/*.yaml"):
+#             config = load(lpath)
+#             if config:
+#                 CONFIG = apply_debug_values(config, IS_DEBUG)
+#                 CONFIGS.update(CONFIG)
+
+#         CONFIGS = DotDict(CONFIGS)
+
+#     except Exception as e:
+#         print(e)
+#         CONFIGS = DotDict({})
+
+#     return CONFIGS
+
+
+# 
 
 # EOF
