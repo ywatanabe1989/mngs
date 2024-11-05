@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-04 01:33:54 (ywatanabe)"
+# Time-stamp: "2024-11-05 21:13:05 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/ai/_gen_ai/_Perplexity.py
 
 """
@@ -39,7 +39,12 @@ class Perplexity(BaseGenAI):
         n_keep: int = 1,
         temperature: float = 1.0,
         chat_history: Optional[List[Dict[str, str]]] = None,
+        max_tokens: Optional[int] = None,  # Added parameter
     ) -> None:
+        # Set max_tokens based on model if not provided
+        if max_tokens is None:
+            max_tokens = 128_000 if "128k" in model else 32_000
+
         super().__init__(
             system_setting=system_setting,
             model=model,
@@ -49,6 +54,7 @@ class Perplexity(BaseGenAI):
             temperature=temperature,
             provider="Perplexity",
             chat_history=chat_history,
+            max_tokens=max_tokens,
         )
 
     def _init_client(self) -> OpenAI:
@@ -61,7 +67,7 @@ class Perplexity(BaseGenAI):
         output = self.client.chat.completions.create(
             model=self.model,
             messages=self.history,
-            max_tokens=4_096,
+            max_tokens=self.max_tokens,
             stream=False,
             temperature=self.temperature,
         )
@@ -76,7 +82,7 @@ class Perplexity(BaseGenAI):
         stream = self.client.chat.completions.create(
             model=self.model,
             messages=self.history,
-            max_tokens=4_096,
+            max_tokens=self.max_tokens,
             n=1,
             stream=self.stream,
             temperature=self.temperature,

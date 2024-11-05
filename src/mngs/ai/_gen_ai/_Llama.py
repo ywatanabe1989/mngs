@@ -1,16 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-04 01:30:56 (ywatanabe)"
+# Time-stamp: "2024-11-05 21:11:08 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/ai/_gen_ai/_Llama.py
-
-#!./env/bin/python3
-# -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-29 14:34:11 (ywatanabe)"
-# /home/ywatanabe/proj/mngs/src/mngs/ml/_gen_AI/_Llama.py
-
-"""
-This script implements the Llama model using the BaseGenAI structure.
-"""
 
 """Imports"""
 import os
@@ -28,11 +19,7 @@ except:
 
 from ._BaseGenAI import BaseGenAI
 
-"""
-Functions & Classes
-"""
-
-
+"""Functions & Classes"""
 def print_envs():
     settings = {
         "MASTER_ADDR": os.getenv("MASTER_ADDR", "localhost"),
@@ -54,7 +41,7 @@ class Llama(BaseGenAI):
         tokenizer_path: str = "",
         system_setting: str = "",
         model: str = "Meta-Llama-3-8B",
-        max_seq_len: int = 512,
+        max_seq_len: int = 32_768,
         max_batch_size: int = 4,
         max_gen_len: Optional[int] = None,
         stream: bool = False,
@@ -75,7 +62,7 @@ class Llama(BaseGenAI):
 
         self.ckpt_dir = (
             ckpt_dir if ckpt_dir else f"Meta-{model}/"
-        )  # consolidated.00.pth
+        )
         self.tokenizer_path = (
             tokenizer_path
             if tokenizer_path
@@ -88,7 +75,7 @@ class Llama(BaseGenAI):
         super().__init__(
             system_setting=system_setting,
             model=model,
-            api_key="",  # Llama3 doesn't use an API key
+            api_key="",
             stream=stream,
             seed=seed,
             n_keep=n_keep,
