@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-04 01:00:21 (ywatanabe)"
+# Time-stamp: "2024-11-06 00:01:06 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/plt/__init__.py
 
 #!/usr/bin/env python3
@@ -32,7 +32,7 @@ del os, importlib, inspect, current_dir, filename, module_name, module, name, ob
 
 from ._subplots._SubplotsManager import subplots
 from ._PARAMS import PARAMS
-
+from . import ax
 # EOF
 
 # #!/usr/bin/env python3

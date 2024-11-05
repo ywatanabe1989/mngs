@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-06 00:04:26 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/plt/ax/_joyplot.py
+
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
 # Time-stamp: "2024-08-26 08:38:55 (ywatanabe)"
@@ -5,6 +10,7 @@
 
 import joypy
 import mngs
+from ._set_xyt import set_xyt
 
 # def plot_joy(df, cols_NT):
 #     df_plot = df[cols_NT]
@@ -34,6 +40,9 @@ def joyplot(ax, data, **kwargs):
         xlabel = "Density"
         ylabel = None
 
-    ax = mngs.plt.ax.set_xyt(ax, xlabel, ylabel, "Joyplot")
+    ax = set_xyt(ax, xlabel, ylabel, "Joyplot")
 
     return ax
+
+
+# EOF
