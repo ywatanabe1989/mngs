@@ -1,12 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-06 00:09:46 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/plt/ax/_set_ticks.py
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 # Time-stamp: "2024-09-06 23:33:56 (ywatanabe)"
 
 import matplotlib.pyplot as plt
 import mngs
 import numpy as np
-
-
+from ...types import is_listed_X
+from ...dict._to_str import to_str
 # fixme, quite slow
 def set_ticks(ax, xvals=None, xticks=None, yvals=None, yticks=None):
     ax = set_x_ticks(ax, x_vals=xvals, x_ticks=xticks)
@@ -85,8 +90,8 @@ def set_x_ticks(ax, x_vals=None, x_ticks=None):
     x_vals_passed = x_vals is not None
     x_ticks_passed = x_ticks is not None
 
-    if mngs.gen.is_listed_X(x_ticks, dict):
-        x_ticks = [mngs.gen.dict2str(xt, delimiter="\n") for xt in x_ticks]
+    if is_listed_X(x_ticks, dict):
+        x_ticks = [to_str(xt, delimiter="\n") for xt in x_ticks]
 
     if (not x_vals_passed) and (not x_ticks_passed):
         # Do nothing
@@ -191,8 +196,8 @@ def set_y_ticks(ax, y_vals=None, y_ticks=None):
     y_vals_passed = y_vals is not None
     y_ticks_passed = y_ticks is not None
 
-    if mngs.gen.is_listed_X(y_ticks, dict):
-        y_ticks = [mngs.gen.dict2str(yt, delimiter="\n") for yt in y_ticks]
+    if is_listed_X(y_ticks, dict):
+        y_ticks = [to_str(yt, delimiter="\n") for yt in y_ticks]
 
     if (not y_vals_passed) and (not y_ticks_passed):
         # Do nothing
@@ -237,3 +242,6 @@ if __name__ == "__main__":
     )
 
     plt.show()
+
+
+# EOF

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "ywatanabe (2024-11-02 23:48:27)"
+# Time-stamp: "2024-11-06 01:45:32 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/dsp/_demo_sig.py
 
 import random
