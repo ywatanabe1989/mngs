@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-05 01:11:44 (ywatanabe)"
+# Time-stamp: "2024-11-05 23:19:10 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/gen/_close.py
 
 import os
@@ -8,7 +8,7 @@ import re
 import shutil
 import time
 from datetime import datetime
-from glob import glob
+from glob import glob as glob
 
 from ..io import save as mngs_io_save
 from ..io import flush as mngs_io_flush
@@ -82,7 +82,7 @@ def close(
         mngs_io_flush(sys=sys)
 
         # ANSI code escape
-        log_files = glob(CONFIG["SDIR"] + "logs/*.log")
+        log_files = _glob(CONFIG["SDIR"] + "logs/*.log")
         _escape_ANSI_from_log_files(log_files)
         mngs_io_flush(sys=sys)
 
