@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "ywatanabe (2024-11-07 20:34:47)"
+# Time-stamp: "ywatanabe (2024-11-07 20:50:04)"
 # File: ./mngs_repo/src/mngs/__init__.py
 
 # os.getenv("MNGS_SENDER_GMAIL")
@@ -8,10 +8,24 @@
 # os.getenv("MNGS_RECIPIENT_GMAIL")
 # os.getenv("MNGS_DIR", "/tmp/mngs/")
 
+import os
+import warnings
+import asyncio
+
+# Configure event loop before any async operations
+# try:
+#     loop = asyncio.new_event_loop()
+#     asyncio.set_event_loop(loop)
+# except Exception:
+#     pass
+
+# Configure warnings
+warnings.filterwarnings('ignore', category=DeprecationWarning)
+
 ########################################
 # Warnings
 ########################################
-import warnings
+
 from ._sh import sh
 from . import io
 from . import path
@@ -44,7 +58,7 @@ from . import dev
 # # Usage: python -m mngs print_config
 
 __copyright__ = "Copyright (C) 2024 Yusuke Watanabe"
-__version__ = "1.9.7"
+__version__ = "1.9.8"
 __license__ = "MIT"
 __author__ = "ywatanabe1989"
 __author_email__ = "ywatanabe@alumni.u-tokyo.ac.jp"
