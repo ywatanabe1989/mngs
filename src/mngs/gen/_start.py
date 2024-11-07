@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-07 00:40:12 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/gen/_start.py
+# Time-stamp: "ywatanabe (2024-11-08 01:17:24)"
+# File: ./mngs/src/mngs/gen/_start.py
 
 """
 Functionality:
@@ -131,7 +131,7 @@ def _setup_configs(
 
 
 def _setup_matplotlib(
-    plt: Optional[plt_module], agg: bool, **mpl_kwargs: Any
+    plt: Optional[plt_module] = None, agg: bool = False, **mpl_kwargs: Any
 ) -> Tuple[Optional[plt_module], Optional[Dict[str, Any]]]:
     """Configure matplotlib settings.
 
