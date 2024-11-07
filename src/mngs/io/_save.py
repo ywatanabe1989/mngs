@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-03 06:27:54 (ywatanabe)"
+# Time-stamp: "2024-11-07 06:07:10 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/io/_save.py
 
 """
@@ -39,10 +39,11 @@ from ..path._getsize import getsize
 from ..path._split import split
 from ..str._color_text import color_text
 from ..types._is_listed_X import is_listed_X
-from ._save_text import _save_text
-from ._save_listed_scalars_as_csv import _save_listed_scalars_as_csv
-from ._save_listed_dfs_as_csv import _save_listed_dfs_as_csv
 from ._save_image import _save_image
+from ._save_listed_dfs_as_csv import _save_listed_dfs_as_csv
+from ._save_listed_scalars_as_csv import _save_listed_scalars_as_csv
+from ._save_text import _save_text
+
 
 def save(
     obj: Any,
@@ -137,7 +138,8 @@ def save(
             fpath = inspect.stack()[1].filename
 
             if ("ipython" in fpath) or ("<stdin>" in fpath):
-                fpath = f'/tmp/{os.getenv("USER")}.py'
+                # fpath = f'/tmp/{os.getenv("USER")}.py'
+                fpath = os.getenv("MNGS_DIR", "~/.cache/mngs/") + os.getenv("USER") + ".py"
 
             fdir, fname, _ = split(fpath)
             spath = fdir + fname + "/" + sfname_or_spath

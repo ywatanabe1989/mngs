@@ -1,7 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-04 01:03:35 (ywatanabe)"
+# Time-stamp: "2024-11-07 06:05:01 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/__init__.py
+
+# os.getenv("MNGS_SENDER_GMAIL")
+# os.getenv("MNGS_SENDER_GMAIL_PASSWORD")
+# os.getenv("MNGS_RECIPIENT_GMAIL")
+# os.getenv("MNGS_DIR", "/tmp/mngs/")
 
 ########################################
 # Warnings
@@ -43,6 +48,7 @@ from . import web
 from . import db
 from . import pd
 from . import str
+from . import parallel
 
 # ########################################
 # # Modules (python -m mngs print_config)
