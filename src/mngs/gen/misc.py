@@ -128,8 +128,6 @@ def isclose(mutable_a, mutable_b):
 ################################################################################
 
 
-
-
 ################################################################################
 ## variables
 ################################################################################
@@ -186,12 +184,10 @@ def is_later_or_equal(package, tgt_version, format="MAJOR.MINOR.PATCH"):
     >>> is_later_or_equal('pandas', '2.0.0')
     False
     """
-    
+
     import numpy as np
 
-    indi, matched = mngs.gen.search(
-        ["MAJOR", "MINOR", "PATCH"], format.split(".")
-    )
+    indi, matched = mngs.gen.search(["MAJOR", "MINOR", "PATCH"], format.split("."))
     imp_major, imp_minor, imp_patch = [
         int(v) for v in np.array(package.__version__.split("."))[indi]
     ]
@@ -277,9 +273,7 @@ def _copy_a_file(src, dst, allow_overwrite=False):
                 print(f'\nCopied "{src}" to "{dst}" (overwritten).\n')
 
             if not allow_overwrite:
-                print(
-                    f'\n"{dst}" exists and copying from "{src}" was aborted.\n'
-                )
+                print(f'\n"{dst}" exists and copying from "{src}" was aborted.\n')
 
 
 def copy_files(src_files, dists, allow_overwrite=False):
@@ -497,6 +491,7 @@ def describe(df, method="mean_std", round_factor=3, axis=0):
                 "iqr": np.round(iqr, round_factor),
             }
 
+
 def _return_counting_process():
     import multiprocessing
 
@@ -592,8 +587,6 @@ class ThreadWithReturnValue(threading.Thread):
         return self._return
 
 
-
-
 def unique(data, axis=None):
     """
     Identifies unique elements in the data along the specified axis and their counts, returning a DataFrame.
@@ -613,9 +606,7 @@ def unique(data, axis=None):
     if axis is None:
         df = pd.DataFrame({"uq": uqs, "n": counts})
     else:
-        df = pd.DataFrame(
-            uqs, columns=[f"axis_{i}" for i in range(uqs.shape[1])]
-        )
+        df = pd.DataFrame(uqs, columns=[f"axis_{i}" for i in range(uqs.shape[1])])
         df["n"] = counts
 
     df["n"] = df["n"].apply(lambda x: f"{int(x):,}")
@@ -684,18 +675,11 @@ def uq(*args, **kwargs):
     return unique(*args, **kwargs)
 
 
-
-
-
 # def mv_col(dataframe, column_name, position):
 #     temp_col = dataframe[column_name]
 #     dataframe.drop(labels=[column_name], axis=1, inplace=True)
 #     dataframe.insert(loc=position, column=column_name, value=temp_col)
 #     return dataframe
-
-
-
-
 
 
 def float_linspace(start, stop, num_points):
@@ -728,9 +712,7 @@ def float_linspace(start, stop, num_points):
     num_points = int(num_points)  # Ensure num_points is an integer
 
     if num_points < 2:
-        return (
-            np.array([start, stop]) if num_points == 2 else np.array([start])
-        )
+        return np.array([start, stop]) if num_points == 2 else np.array([start])
 
     step = (stop - start) / (num_points - 1)
     values = [start + i * step for i in range(num_points)]

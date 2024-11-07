@@ -1,15 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-04 02:01:42 (ywatanabe)"
+# Time-stamp: "2024-11-07 19:08:37 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/ai/_gen_ai/_genai_factory.py
 
-#!./env/bin/python3
-# -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-27 13:38:02 (ywatanabe)"
-# /home/ywatanabe/proj/mngs/src/mngs/ml/chat.py
-
-
-"""Imports"""
 import os
 import random
 
@@ -19,8 +12,8 @@ from ._Llama import Llama
 from ._OpenAI import OpenAI
 from ._Perplexity import Perplexity
 from .PARAMS import MODELS
-import pandas as pd
 
+"""Imports"""
 """Functions & Classes""""""Parameters"""
 
 def genai_factory(
@@ -67,7 +60,6 @@ def genai_factory(
         max_tokens=max_tokens,
     )
 
-
 def main(
     model="gpt-3.5-turbo",
     stream=False,
@@ -78,7 +70,6 @@ def main(
     m = genai_factory(model, stream=stream, seed=seed, temperature=temperature)
     out = m(prompt)
     return out
-
 
 ################################################################################
 # Helper functions
@@ -95,30 +86,28 @@ def main(
 #             return api_key
 #     raise ValueError(f"Model {model} is not supported.")
 
+# def test_all(seed=None, temperature=1.0):
+#     model_names = [
+#         "claude-3-5-sonnet-20240620",
+#         # "gpt-4",
+#         # "claude-3-opus-20240229",
+#         # "gemini-pro",
+#         # "llama-3-sonar-large-32k-online",
+#     ]
 
-def test_all(seed=None, temperature=1.0):
-    model_names = [
-        "claude-3-5-sonnet-20240620",
-        # "gpt-4",
-        # "claude-3-opus-20240229",
-        # "gemini-pro",
-        # "llama-3-sonar-large-32k-online",
-    ]
+#     for model_name in model_names:
+#         for stream in [False, True]:
+#             model = GenAI(
+#                 model_name, stream=stream, seed=seed, temperature=temperature
+#             )
+#             # prompt = "Hi. Tell me your name just within a line."
+#             prompt = "Hi. Tell me about the hippocampus."
 
-    for model_name in model_names:
-        for stream in [False, True]:
-            model = GenAI(
-                model_name, stream=stream, seed=seed, temperature=temperature
-            )
-            # prompt = "Hi. Tell me your name just within a line."
-            prompt = "Hi. Tell me about the hippocampus."
-
-            print(
-                f"\n{'-'*40}\n{model.model}\nStream: {stream}\nSeed: {seed}\nTemperature: {temperature}\n{'-'*40}"
-            )
-            print(model(prompt))
-            print(model.available_models)
-
+#             print(
+#                 f"\n{'-'*40}\n{model.model}\nStream: {stream}\nSeed: {seed}\nTemperature: {temperature}\n{'-'*40}"
+#             )
+#             print(model(prompt))
+#             print(model.available_models)
 
 def main(
     model="gemini-1.5-pro-latest",
@@ -138,7 +127,6 @@ def main(
     out = m(prompt)
 
     return out
-
 
 if __name__ == "__main__":
     import sys

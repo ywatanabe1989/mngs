@@ -1,93 +1,140 @@
-"""
-This script does XYZ.
-"""
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-07 18:58:37 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/dsp/_listen.py
 
-import os
 import sys
+from typing import Tuple
 
 import matplotlib.pyplot as plt
-
-
-# Imports
+import mngs
 import numpy as np
-import pandas as pd
 import sounddevice as sd
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
+from scipy.signal import resample
 
-# Config
+"""
+Functionality:
+    - Provides audio playback functionality for multichannel signal arrays
+    - Includes device selection and audio information display utilities
+Input:
+    - Multichannel signal arrays (numpy.ndarray)
+    - Sampling frequency and channel selection
+Output:
+    - Audio playback through specified output device
+Prerequisites:
+    - PortAudio library (install with: sudo apt-get install portaudio19-dev)
+    - sounddevice package
+"""
+
+"""Imports"""
+"""Config"""
 CONFIG = mngs.gen.load_configs()
 
-# Functions
-def listen(x, fs, chs=(0, 1)):
+"""Functions"""
+def listen(
+    signal_array: np.ndarray,
+    sampling_freq: int,
+    channels: Tuple[int, ...] = (0, 1),
+    target_fs: int = 44_100,
+) -> None:
     """
     Play selected channels of a multichannel signal array as audio.
 
-    Parameters:
-    - x (numpy.ndarray): Signal array of shape (batch_size, n_chs, seq_len).
-    - fs (int): Sampling frequency of the signal.
-    - chs (tuple of int): Tuple of channel indices to listen to.
+    Example
+    -------
+    >>> signal = np.random.randn(1, 2, 1000)  # Random stereo signal
+    >>> listen(signal, 16000, channels=(0, 1))
 
-    Returns:
-    - None
+    Parameters
+    ----------
+    signal_array : np.ndarray
+        Signal array of shape (batch_size, n_channels, sequence_length)
+    sampling_freq : int
+        Original sampling frequency of the signal
+    channels : Tuple[int, ...]
+        Tuple of channel indices to listen to
+    target_fs : int
+        Target sampling frequency for playback
 
-    Memo:
-        The PortAudio package is required.
-        sudo yum update && sudo yum install -y portaudio portaudio-devel
+    Returns
+    -------
+    None
     """
-    COMMON_FS = 44100
+    if not isinstance(signal_array, np.ndarray):
+        signal_array = np.array(signal_array)
 
-    # Ensure the input channels are within the range of available channels
-    if max(chs) >= x.shape[1]:
-        raise ValueError("Channel index out of range")
+    if len(signal_array.shape) != 3:
+        raise ValueError(f"Expected 3D array, got shape {signal_array.shape}")
 
-    # Extract the desired channels (average if more than one)
-    selected_channels = x[:, chs, :].mean(axis=1)
+    if max(channels) >= signal_array.shape[1]:
+        raise ValueError(f"Channel index {max(channels)} out of range (max: {signal_array.shape[1]-1})")
 
-    # Flatten the batch dimension by averaging (or any other method as necessary)
-    signal_to_play = selected_channels.mean(axis=0)
+    selected_channels = signal_array[:, channels, :].mean(axis=1)
+    audio_signal = selected_channels.mean(axis=0)
 
-    # Resample the signal to the common sample rate if necessary
-    if fs != COMMON_FS:
-        from scipy.signal import resample
+    if sampling_freq != target_fs:
+        num_samples = int(round(len(audio_signal) * target_fs / sampling_freq))
+        audio_signal = resample(audio_signal, num_samples)
 
-        num_samples = int(round(len(signal_to_play) * common_fs / fs))
-        signal_to_play = resample(signal_to_play, num_samples)
+    sd.play(audio_signal, target_fs)
+    sd.wait()
 
-    # Play the sound
-    sd.play(signal_to_play, fs)
-    sd.wait()  # Wait until the sound is finished playing
+def print_device_info() -> None:
+    """
+    Display information about the default audio output device.
 
+    Example
+    -------
+    >>> print_device_info()
+    Default Output Device Info:
+    <device info details>
+    """
+    try:
+        device_info = sd.query_devices(kind="output")
+        print(f"Default Output Device Info: \n{device_info}")
+    except sd.PortAudioError as err:
+        print(f"Error querying audio devices: {err}")
 
-def print_device_info():
-    device_info = sd.query_devices(kind="output")
-    print(f"Default Output Device Info: \n{device_info}")
+def list_and_select_device() -> int:
+    """
+    List available audio devices and prompt user to select one.
 
+    Example
+    -------
+    >>> device_id = list_and_select_device()
+    Available audio devices:
+    ...
+    Enter the ID of the device you want to use:
 
-def list_and_select_device():
-    print("Available audio devices:")
-    print(sd.query_devices())
-    device_id = int(input("Enter the ID of the device you want to use: "))
-    return device_id
-
+    Returns
+    -------
+    int
+        Selected device ID
+    """
+    try:
+        print("Available audio devices:")
+        devices = sd.query_devices()
+        print(devices)
+        device_id = int(input("Enter the ID of the device you want to use: "))
+        if device_id not in range(len(devices)):
+            raise ValueError(f"Invalid device ID: {device_id}")
+        return device_id
+    except (ValueError, sd.PortAudioError) as err:
+        print(f"Error during device selection: {err}")
+        return 0
 
 if __name__ == "__main__":
-    # Start
+    import mngs
+
     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt)
 
-    xx, tt, fs = mngs.dsp.demo_sig("chirp")
+    signal, time_points, sampling_freq = mngs.dsp.demo_sig("chirp")
 
     device_id = list_and_select_device()
     sd.default.device = device_id
 
-    listen(xx, common_fs)
+    listen(signal, sampling_freq)
 
-    # Close
     mngs.gen.close(CONFIG)
 
 # EOF
-
-"""
-/ssh:ywatanabe@444:/home/ywatanabe/proj/entrance/mngs/dsp/_listen.py
-"""

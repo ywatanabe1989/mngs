@@ -99,9 +99,7 @@ def start(
     ID = gen_ID(N=4)
     ID = ID if not IS_DEBUG else "DEBUG_" + ID
     PID = _os.getpid()
-    print(
-        f"\n{'#'*40}\n## mngs v{mngs.__version__}\n## {ID} (PID: {PID})\n{'#'*40}\n"
-    )
+    print(f"\n{'#'*40}\n## mngs v{mngs.__version__}\n## {ID} (PID: {PID})\n{'#'*40}\n")
     sleep(1)
 
     ########################################
@@ -149,9 +147,7 @@ def start(
 
     # Logging (tee)
     if sys is not None:
-        sys.stdout, sys.stderr = mngs.gen.tee(
-            sys, sdir=sdir, verbose=verbose
-        )
+        sys.stdout, sys.stderr = mngs.gen.tee(sys, sdir=sdir, verbose=verbose)
         CONFIGS["sys"] = sys
 
     # Random seeds
@@ -203,6 +199,7 @@ def start(
 
     return CONFIGS, sys.stdout, sys.stderr, plt, CC
 
+
 def _simplify_relative_path(sdir):
     """
     Simplify the relative path by removing specific patterns.
@@ -226,9 +223,7 @@ def _simplify_relative_path(sdir):
     """
     base_path = _os.getcwd()
     relative_sdir = _os.path.relpath(sdir, base_path) if base_path else sdir
-    simplified_path = relative_sdir.replace("scripts/", "./").replace(
-        "RUNNING/", ""
-    )
+    simplified_path = relative_sdir.replace("scripts/", "./").replace("RUNNING/", "")
     # Remove date-time pattern and random string
     simplified_path = re.sub(
         r"\d{4}Y-\d{2}M-\d{2}D-\d{2}h\d{2}m\d{2}s_\w+/?$", "", simplified_path
@@ -259,6 +254,7 @@ def _clear_python_log_dir(log_dir):
             _os.system(f"rm -rf {log_dir}")
     except Exception as e:
         print(f"Failed to clear directory {log_dir}: {e}")
+
 
 if __name__ == "__main__":
     """

@@ -7,7 +7,9 @@ ansi-escapes
 anthropic
 black
 bs4
+catboost
 chardet
+# dbus-python
 epc
 flake8
 flask
@@ -58,6 +60,7 @@ readability
 readability-lxml
 readchar
 reportlab
+requests
 ripple_detection
 ruamel.yaml
 ruff-lsp

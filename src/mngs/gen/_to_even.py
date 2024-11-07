@@ -3,6 +3,7 @@
 # Time-stamp: "2024-11-02 04:02:23 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/gen/_to_even.py
 
+
 def to_even(n):
     """Convert a number to the nearest even number less than or equal to itself.
 

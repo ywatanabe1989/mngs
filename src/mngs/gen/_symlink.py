@@ -6,6 +6,7 @@
 import os
 from ..str._color_text import color_text
 
+
 def symlink(tgt, src, force=False):
     """Create a symbolic link.
 
@@ -48,10 +49,7 @@ def symlink(tgt, src, force=False):
     relative_tgt = os.path.relpath(tgt, src_dir)
 
     os.symlink(relative_tgt, src)
-    print(
-        color_text(
-            f"\nSymlink was created: {src} -> {relative_tgt}\n", c="yellow"
-        )
-    )
+    print(color_text(f"\nSymlink was created: {src} -> {relative_tgt}\n", c="yellow"))
+
 
 # EOF

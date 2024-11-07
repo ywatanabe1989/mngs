@@ -21,6 +21,7 @@ import mngs
 # # Config
 # CONFIG = mngs.gen.load_configs()
 
+
 # Functions
 def less(output):
     """

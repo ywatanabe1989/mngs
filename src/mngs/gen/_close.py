@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-05 23:19:10 (ywatanabe)"
+# Time-stamp: "ywatanabe (2024-11-07 20:35:22)"
 # File: ./mngs_repo/src/mngs/gen/_close.py
 
 import os
@@ -8,12 +8,12 @@ import re
 import shutil
 import time
 from datetime import datetime
-from glob import glob as glob
+from glob import glob as _glob
 
-from ..io import save as mngs_io_save
 from ..io import flush as mngs_io_flush
-from ..utils._notify import notify as mngs_gen_notify
+from ..io import save as mngs_io_save
 from ..str._printc import printc
+from ..utils._notify import notify as mngs_gen_notify
 
 
 def _format_diff_time(diff_time):
@@ -66,9 +66,7 @@ def _escape_ANSI_from_log_files(log_files):
             file.write(cleaned_content)
 
 
-def close(
-    CONFIG, message=":)", notify=True, verbose=True, exit_status=None
-):
+def close(CONFIG, message=":)", notify=True, verbose=True, exit_status=None):
     try:
         CONFIG.EXIT_STATUS = exit_status
         CONFIG = CONFIG.to_dict()
@@ -104,21 +102,27 @@ def close(
                 print(e)
 
     finally:
-        # Ensure file handles are closed
-        if hasattr(sys, 'stdout') and hasattr(sys.stdout, 'close'):
-            sys.stdout.close()
-        if hasattr(sys, 'stderr') and hasattr(sys.stderr, 'close'):
-            sys.stderr.close()
-    # try:
-    #     sys.stdout.close()
-    #     sys.stderr.close()
-    # except Exception as e:
-    #     print(e)
+        # Only close if they're custom file objects
+        if hasattr(sys, 'stdout') and hasattr(sys.stdout, 'close') and not sys.stdout.closed:
+            if sys.stdout != sys.__stdout__:
+                sys.stdout.close()
+        if hasattr(sys, 'stderr') and hasattr(sys.stderr, 'close') and not sys.stderr.closed:
+            if sys.stderr != sys.__stderr__:
+                sys.stderr.close()
+    # finally:
+    #     # Ensure file handles are closed
+    #     if hasattr(sys, 'stdout') and hasattr(sys.stdout, 'close'):
+    #         sys.stdout.close()
+    #     if hasattr(sys, 'stderr') and hasattr(sys.stderr, 'close'):
+    #         sys.stderr.close()
+    # # try:
+    # #     sys.stdout.close()
+    # #     sys.stderr.close()
+    # # except Exception as e:
+    # #     print(e)
 
 
-def running2finished(
-    CONFIG, exit_status=None, remove_src_dir=True, max_wait=60
-):
+def running2finished(CONFIG, exit_status=None, remove_src_dir=True, max_wait=60):
     if exit_status == 0:
         dest_dir = CONFIG["SDIR"].replace("RUNNING/", "FINISHED_SUCCESS/")
     elif exit_status == 1:
@@ -143,10 +147,7 @@ def running2finished(
                 shutil.copy2(s, d)
 
         start_time = time.time()
-        while (
-            not os.path.exists(dest_dir)
-            and time.time() - start_time < max_wait
-        ):
+        while not os.path.exists(dest_dir) and time.time() - start_time < max_wait:
             time.sleep(0.1)
         if os.path.exists(dest_dir):
             printc(
@@ -170,21 +171,16 @@ if __name__ == "__main__":
     import sys
 
     import matplotlib.pyplot as plt
-
     from icecream import ic
 
     from .._start import start
 
-
-    CONFIG, sys.stdout, sys.stderr, plt, CC = start(
-        sys, plt, verbose=False
-    )
+    CONFIG, sys.stdout, sys.stderr, plt, CC = start(sys, plt, verbose=False)
 
     ic("aaa")
     ic("bbb")
     ic("ccc")
 
     close(CONFIG)
-
 
 # EOF

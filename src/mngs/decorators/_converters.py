@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-04 02:49:08 (ywatanabe)"
+# Time-stamp: "2024-11-07 05:53:09 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/decorators/_converters.py
 
 from typing import Callable, Optional
@@ -21,7 +21,7 @@ Prerequisites:
 """
 
 import warnings
-from functools import lru_cache
+from functools import lru_cache as _lru_cache
 from typing import Any as _Any
 from typing import Dict, Tuple, Union
 
@@ -36,7 +36,7 @@ class ConversionWarning(UserWarning):
 warnings.simplefilter("always", ConversionWarning)
 
 
-@lru_cache(maxsize=None)
+@_lru_cache(maxsize=None)
 def _cached_warning(message: str) -> None:
     warnings.warn(message, category=ConversionWarning)
 

@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-25 12:09:22 (ywatanabe)"
-# File: 2024-10-25 12:09:20
+# Time-stamp: "2024-11-07 17:40:59 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/str/__init__.py
 
-import os
 import importlib
 import inspect
+import os
 
 # Get the current directory
 current_dir = os.path.dirname(__file__)

@@ -89,9 +89,7 @@ class DimHandler:
 
         self.shape_fit = x.shape
 
-        non_keepdims = [
-            ii for ii in range(len(self.shape_fit)) if ii not in keepdims
-        ]
+        non_keepdims = [ii for ii in range(len(self.shape_fit)) if ii not in keepdims]
 
         self.n_non_keepdims = [self.shape_fit[nkd] for nkd in non_keepdims]
         self.n_keepdims = [self.shape_fit[kd] for kd in keepdims]
@@ -132,9 +130,7 @@ class DimHandler:
         self.shape_fit = x.shape
 
         non_keepdims = [
-            int(ii)
-            for ii in torch.arange(len(self.shape_fit))
-            if ii not in keepdims
+            int(ii) for ii in torch.arange(len(self.shape_fit)) if ii not in keepdims
         ]
 
         self.n_non_keepdims = [self.shape_fit[nkd] for nkd in non_keepdims]

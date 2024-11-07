@@ -7,6 +7,6 @@ def is_ipython():
 
     return ipython_mode
 
+
 def is_script():
     return not is_ipython()
-
