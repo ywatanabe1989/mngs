@@ -1,5 +1,5 @@
-# Time-stamp: "ywatanabe (2024-11-08 00:29:32)"
-# File: ./mngs_repo/.github/workflows/pytest.yml
+# Time-stamp: "2024-11-08 01:47:01 (ywatanabe)"
+# File: ./mngs/.github/workflows/pytest.yml
 
 name: pytest
 
