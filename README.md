@@ -1,7 +1,7 @@
 <!-- ---
 !-- title: ./mngs/README.md
 !-- author: ywatanabe
-!-- date: 2024-11-08 02:01:17
+!-- date: 2024-11-08 02:05:12
 !-- --- -->
 
 
@@ -24,9 +24,9 @@ A Python utility package for simplifying common research and development tasks.
  !--     <img src="./docs/lazy_python.gif" alt="Lazy Python" width="200px">
  !-- </div> -->
 
+<!-- $ sudo apt-get install libportaudio2 -->
 ## Installation
 ```bash
-$ sudo apt-get install libportaudio2
 $ pip install mngs
 # or
 $ pip install git+https://github.com/ywatanabe1989/mngs.git@develop
