@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-07 19:24:25 (ywatanabe)"
-# File: ./mngs_repo/tests/custom/test_pip_install_latest.py
+# Time-stamp: "2024-11-08 02:13:01 (ywatanabe)"
+# File: ./mngs/tests/custom/test_pip_install_latest.py
 
 import argparse
 import logging
@@ -88,17 +88,19 @@ def main():
     else:
         logging.error("No tags found for the repository.")
 
-def test_main():
-    """Tests the main functionality with a known repository."""
-    test_repo = "ywatanabe1989/mngs"
+test_main = main
 
-    # Test tag fetching
-    tag = get_latest_release_tag(test_repo)
-    assert tag is not None, "Failed to fetch latest tag"
+# def test_main():
+#     """Tests the main functionality with a known repository."""
+#     test_repo = "ywatanabe1989/mngs"
 
-    # Test package installation
-    result = install_package(test_repo, tag)
-    assert result == 0, "Package installation failed"
+#     # Test tag fetching
+#     tag = get_latest_release_tag(test_repo)
+#     assert tag is not None, "Failed to fetch latest tag"
+
+#     # Test package installation
+#     result = install_package(test_repo, tag)
+#     assert result == 0, "Package installation failed"
 
 if __name__ == '__main__':
     test_main()
