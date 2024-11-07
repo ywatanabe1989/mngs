@@ -1,4 +1,4 @@
-# Time-stamp: "ywatanabe (2024-11-08 01:10:05)"
+# Time-stamp: "2024-11-08 01:42:51 (ywatanabe)"
 # File: ./mngs/.github/workflows/install-pypi-latest.yml
 
 name: install-pypi-latest
@@ -7,7 +7,7 @@ on:
   push:
     branches:
       - main      
-      - develop
+      # - develop
 
 jobs:
   build:

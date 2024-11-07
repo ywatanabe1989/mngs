@@ -1,4 +1,4 @@
-# Time-stamp: "ywatanabe (2024-11-08 01:10:04)"
+# Time-stamp: "2024-11-08 01:42:47 (ywatanabe)"
 # File: ./mngs/.github/workflows/install-latest-release.yml
 
 name: install-latest-release
@@ -7,7 +7,7 @@ on:
   push:
     branches:
       - main
-      - develop
+      # - develop
 
 jobs:
   build:
