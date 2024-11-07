@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-07 17:14:38 (ywatanabe)"
+# Time-stamp: "2024-11-07 17:22:58 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/__init__.py
 
 
@@ -63,7 +63,7 @@ warnings.filterwarnings("ignore", message="There is no current event loop", cate
 # # Usage: python -m mngs print_config
 
 __copyright__ = "Copyright (C) 2024 Yusuke Watanabe"
-__version__ = "1.9.2"
+__version__ = "1.9.3"
 __license__ = "MIT"
 __author__ = "ywatanabe1989"
 __author_email__ = "ywatanabe@alumni.u-tokyo.ac.jp"
