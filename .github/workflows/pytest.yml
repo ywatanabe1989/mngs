@@ -1,4 +1,4 @@
-# Time-stamp: "ywatanabe (2024-11-07 20:18:51)"
+# Time-stamp: "ywatanabe (2024-11-08 00:29:32)"
 # File: ./mngs_repo/.github/workflows/pytest.yml
 
 name: pytest
@@ -27,7 +27,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install --ignore-installed packaging importlib-metadata
         pip install -r requirements.txt
-        pip install pytest pytest-cov
+        pip install pytest pytest-cov pytest-xdist
     - name: Run tests
       run: |
         pytest tests/ -v --cov=./ --cov-report=xml
