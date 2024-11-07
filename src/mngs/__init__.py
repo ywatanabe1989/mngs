@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-07 06:05:01 (ywatanabe)"
+# Time-stamp: "ywatanabe (2024-11-07 20:27:37)"
 # File: ./mngs_repo/src/mngs/__init__.py
 
 # os.getenv("MNGS_SENDER_GMAIL")
@@ -12,20 +12,6 @@
 # Warnings
 ########################################
 import warnings
-warnings.filterwarnings("ignore", message="There is no current event loop", category=DeprecationWarning)
-
-########################################
-# Try import
-########################################
-# import os
-# from .gen._suppress_output import suppress_output
-# _do_suppress = os.getenv("MNGS_SUPPRESS_IMPORTING_MESSAGES", "").lower() == "true"
-# with suppress_output(suppress=__do_suppress):
-
-
-########################################
-# Core Modules
-########################################
 from ._sh import sh
 from . import io
 from . import path
@@ -49,6 +35,7 @@ from . import db
 from . import pd
 from . import str
 from . import parallel
+from . import dev
 
 # ########################################
 # # Modules (python -m mngs print_config)
@@ -57,7 +44,7 @@ from . import parallel
 # # Usage: python -m mngs print_config
 
 __copyright__ = "Copyright (C) 2024 Yusuke Watanabe"
-__version__ = "1.9.2"
+__version__ = "1.9.6"
 __license__ = "MIT"
 __author__ = "ywatanabe1989"
 __author_email__ = "ywatanabe@alumni.u-tokyo.ac.jp"

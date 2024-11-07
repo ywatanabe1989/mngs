@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-02 14:27:20 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/utils/_gen_timestamp.py
+# Time-stamp: "2024-11-07 17:11:41 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/reproduce/_gen_timestamp.py
+
 
 def gen_timestamp():
     from datetime import datetime
@@ -10,5 +11,6 @@ def gen_timestamp():
     now_str = now.strftime("%Y-%m%d-%H%M")
     return now_str
 
+timestamp = gen_timestamp
 
 # EOF
