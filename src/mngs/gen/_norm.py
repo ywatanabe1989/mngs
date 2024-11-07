@@ -1,22 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-28 19:42:58 (ywatanabe)"
+# Time-stamp: "2024-11-05 00:24:36 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/gen/_norm.py
 
-
-import numpy as np
 import torch
+
 from ..decorators import torch_fn
 from ..torch import nanstd
-
-# def to_z(x, axis):
-#     if isinstance(x, torch.Tensor):  # [REVISED]
-#         return (x - x.mean(dim=axis, keepdim=True)) / x.std(
-#             dim=axis, keepdim=True
-#         )  # [REVISED]
-#     if isinstance(x, np.ndarray):  # [REVISED]
-#         return (x - x.mean(axis=axis, keepdims=True)) / x.std(
-#             axis=axis, keepdims=True
-#         )
 
 
 @torch_fn
@@ -62,3 +52,6 @@ def unbias(x, dim=-1, fn="mean", device="cuda"):
 #         return torch.tensor(z)
 #     if x_type == "numpy":
 #         return z
+
+
+# EOF

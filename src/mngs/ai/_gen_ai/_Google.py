@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-04 01:30:19 (ywatanabe)"
+# Time-stamp: "2024-11-05 21:10:38 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/ai/_gen_ai/_Google.py
 
 """
@@ -41,7 +41,7 @@ class Google(BaseGenAI):
         n_keep: int = 1,
         temperature: float = 1.0,
         chat_history: Optional[List[Dict[str, str]]] = None,
-        max_tokens: int = 4_096,
+        max_tokens: int = 32_768,
     ) -> None:
         if not api_key:
             raise ValueError("GOOGLE_API_KEY environment variable not set")

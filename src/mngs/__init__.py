@@ -1,7 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-04 01:03:35 (ywatanabe)"
+# Time-stamp: "2024-11-07 05:38:49 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/__init__.py
+
+########################################
+# MNGS variables
+########################################
+# sender_gmail = os.getenv("MNGS_SENDER_GMAIL")
+# sender_password = os.getenv("MNGS_SENDER_GMAIL_PASSWORD")
+# recipient_email = recipient_email or os.getenv("MNGS_RECIPIENT_GMAIL")
+# os.getenv("MNGS_CACHE_DIR")
+
 
 ########################################
 # Warnings

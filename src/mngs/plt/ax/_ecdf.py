@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-06 00:03:51 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/plt/ax/_ecdf.py
+
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
 # Time-stamp: "2024-07-05 20:06:17 (ywatanabe)"
@@ -6,6 +11,7 @@
 import mngs
 import numpy as np
 import pandas as pd
+from ...pd._force_df import force_df
 
 # def ecdf(ax, data):
 #     data = np.hstack(data)
@@ -54,7 +60,7 @@ def ecdf(ax, data, **kwargs):
     # ax.set_aspect(1.0)  # Set aspect ratio
 
     # Create a DataFrame to hold the ECDF_PERC data
-    df = mngs.pd.force_df(
+    df = force_df(
         {
             "x": data_sorted,
             "y": ecdf_perc,

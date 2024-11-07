@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-04 01:36:30 (ywatanabe)"
+# Time-stamp: "2024-11-05 21:08:29 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/ai/_gen_ai/_BaseGenAI.py
 
 """
@@ -88,6 +88,30 @@ class BaseGenAI(ABC):
 
         stream_obj = to_stream(error_msgs)
         return True, self._yield_stream(stream_obj) if not return_stream else stream_obj
+
+    # def __call_chunks__(self, prompt: Optional[str], format_output: bool = False, return_stream: bool = False):
+    #     if len(prompt) > self.chunk_size:
+    #         chunks = [prompt[i:i+self.chunk_size]
+    #                  for i in range(0, len(prompt), self.chunk_size)]
+
+    #         # Send chunks for understanding
+    #         for i, chunk in enumerate(chunks[:-1]):
+    #             self._process_chunk(chunk, f"Part {i+1}/{len(chunks)}")
+
+    #         # Final chunk with request for response
+    #         final_prompt = (
+    #             f"{chunks[-1]}\n\n"
+    #             "Above are all the changes. Based on ALL the changes shown above, "
+    #             "generate a single, comprehensive commit message."
+    #         )
+    #         return super().__call_simple__(final_prompt, format_output, return_stream)
+
+    #     return super().__call_simple__(prompt, format_output, return_stream)
+
+    # def _process_chunk(self, chunk: str, part_label: str):
+    #     prompt = f"{part_label}:\n{chunk}\n\nPlease read and understand this part. No response needed yet."
+    #     self.update_history("user", prompt)
+    #     self.update_history("assistant", "Understood.")
 
     def __call__(
         self,

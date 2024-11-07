@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-05 00:31:00 (ywatanabe)"
+# Time-stamp: "2024-11-05 00:21:46 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/gen/_start.py
 
 import inspect
@@ -11,15 +11,14 @@ from pprint import pprint
 from time import sleep
 
 import matplotlib
+import mngs
 
 from ..dict import DotDict
 from ..io._load import load
-from ..io._load_configs import load_configs
-from ..gen._tee import tee
 from ..path import split
 from ..reproduce._fix_seeds import fix_seeds
 from ..reproduce._gen_ID import gen_ID
-from ..plt._configure_mpl import configure_mpl
+
 
 def start(
     sys=None,
@@ -100,9 +99,8 @@ def start(
     ID = gen_ID(N=4)
     ID = ID if not IS_DEBUG else "DEBUG_" + ID
     PID = _os.getpid()
-    mngs_version = _get_mngs_version()
     print(
-        f"\n{'#'*40}\n## mngs v{mngs_version}\n## {ID} (PID: {PID})\n{'#'*40}\n"
+        f"\n{'#'*40}\n## mngs v{mngs.__version__}\n## {ID} (PID: {PID})\n{'#'*40}\n"
     )
     sleep(1)
 
@@ -114,6 +112,7 @@ def start(
         if "ipython" in __file__:
             __file__ = f"/tmp/fake_{_os.getenv('USER')}.py"
         spath = __file__
+        # spath = mngs.path.get_spath()
         _sdir, sfname, _ = split(spath)
         sdir = _sdir + sfname + "/" + "RUNNING" + "/" + ID + "/"
         sdir = sdir.replace("/./", "/")
@@ -136,7 +135,7 @@ def start(
     ########################################
     # CONFIGs
     ########################################
-    CONFIGS = load_configs(IS_DEBUG).to_dict()
+    CONFIGS = mngs.io.load_configs(IS_DEBUG).to_dict()
     CONFIGS["ID"] = ID
     CONFIGS["START_TIME"] = start_time
     CONFIGS["SDIR"] = sdir
@@ -150,7 +149,7 @@ def start(
 
     # Logging (tee)
     if sys is not None:
-        sys.stdout, sys.stderr = tee(
+        sys.stdout, sys.stderr = mngs.gen.tee(
             sys, sdir=sdir, verbose=verbose
         )
         CONFIGS["sys"] = sys
@@ -174,7 +173,7 @@ def start(
 
     # Matplotlib configuration
     if plt is not None:
-        plt, CC = configure_mpl(
+        plt, CC = mngs.plt.configure_mpl(
             plt,
             fig_size_mm=(160, 100),
             fig_scale=fig_scale,
@@ -260,31 +259,6 @@ def _clear_python_log_dir(log_dir):
             _os.system(f"rm -rf {log_dir}")
     except Exception as e:
         print(f"Failed to clear directory {log_dir}: {e}")
-
-def _get_mngs_version():
-    """Gets mngs version without importing the package."""
-    import mngs
-    return mngs.__version__
-    # try:
-    #     # Try reading from pyproject.toml first
-    #     import tomli
-    #     with open("pyproject.toml", "rb") as f:
-    #         version = tomli.load(f)["project"]["version"]
-    # except:
-    #     try:
-    #         # Fallback to setup.py
-    #         import ast
-    #         with open("setup.py", "r") as f:
-    #             setup_content = f.read()
-    #         for node in ast.walk(ast.parse(setup_content)):
-    #             if isinstance(node, ast.Call) and node.func.id == 'setup':
-    #                 for kw in node.keywords:
-    #                     if kw.arg == 'version':
-    #                         version = ast.literal_eval(kw.value)
-    #                         break
-    #     except:
-    #         version = "unknown"
-    # return version
 
 if __name__ == "__main__":
     """

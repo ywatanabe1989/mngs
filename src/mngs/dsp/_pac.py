@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-04 02:10:33 (ywatanabe)"
+# Time-stamp: "2024-11-04 04:44:15 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/dsp/_pac.py
 
 import sys

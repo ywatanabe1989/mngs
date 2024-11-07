@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-03 06:36:03 (ywatanabe)"
+# Time-stamp: "2024-11-07 05:38:14 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/utils/_notify.py
 
 """This script does XYZ."""

@@ -1,6 +1,6 @@
 #! ./env/bin/python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-15 14:25:49 (ywatanabe)"
+# Time-stamp: "2024-10-24 10:18:53 (ywatanabe)"
 
 """
 This script defines PAC nn.Module.

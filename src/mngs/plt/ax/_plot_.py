@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-06 00:03:06 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/plt/ax/_plot_.py
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 # Time-stamp: "2024-09-29 13:59:59 (ywatanabe)"
 
 import numpy as np
 import pandas as pd
-from mngs.gen import deprecated
+from ...decorators import deprecated
 
 
 @deprecated("Use plot_() instead.")
@@ -224,3 +229,6 @@ def plot_(
         )
     else:
         raise ValueError("Either yy, mean, or median must be provided")
+
+
+# EOF

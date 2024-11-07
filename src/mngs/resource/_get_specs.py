@@ -1,7 +1,7 @@
-#!./env/bin/python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-21 23:09:40"
-# Author: Yusuke Watanabe (ywata1989@gmail.com)
+# Time-stamp: "2024-11-04 14:16:49 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/resource/_get_specs.py
 
 """
 This script provides detailed system information including system basics, boot time, CPU, memory, disk, network, and custom user environment variables.
@@ -15,7 +15,8 @@ from pprint import pprint
 import matplotlib.pyplot as plt
 import psutil as _psutil
 import yaml as _yaml
-
+from ._utils._get_env_info import get_env_info
+from ..str import readable_bytes
 
 def get_specs(
     system=True,
@@ -62,11 +63,9 @@ def get_specs(
         PermissionError: If the function lacks necessary permissions to access certain system information, especially disk and network details.
     """
 
-    import mngs
-
     # To prevent import errors, _SUPPLE_INFO is collected here.
     global _SUPPLE_INFO
-    _SUPPLE_INFO = mngs.res._utils.get_env_info()._asdict()
+    _SUPPLE_INFO = get_env_info()._asdict()
 
     collected_info = {}  # OrderedDict()
 
@@ -144,15 +143,15 @@ def _memory_info():
 
     return {
         "Memory": {
-            "Total": mngs.gen.readable_bytes(svmem.total),
-            "Available": mngs.gen.readable_bytes(svmem.available),
-            "Used": mngs.gen.readable_bytes(svmem.used),
+            "Total": readable_bytes(svmem.total),
+            "Available": readable_bytes(svmem.available),
+            "Used": readable_bytes(svmem.used),
             "Percentage": svmem.percent,
         },
         "SWAP": {
-            "Total": mngs.gen.readable_bytes(swap.total),
-            "Free": mngs.gen.readable_bytes(swap.free),
-            "Used": mngs.gen.readable_bytes(swap.used),
+            "Total": readable_bytes(swap.total),
+            "Free": readable_bytes(swap.free),
+            "Used": readable_bytes(swap.used),
             "Percentage": swap.percent,
         },
     }
@@ -169,9 +168,9 @@ def _disk_info():
             partitions_info[partition.device] = {
                 "Mountpoint": partition.mountpoint,
                 "File system type": partition.fstype,
-                "Total Size": mngs.gen.readable_bytes(usage.total),
-                "Used": mngs.gen.readable_bytes(usage.used),
-                "Free": mngs.gen.readable_bytes(usage.free),
+                "Total Size": readable_bytes(usage.total),
+                "Used": readable_bytes(usage.used),
+                "Free": readable_bytes(usage.free),
                 "Percentage": usage.percent,
             }
         except PermissionError:
@@ -180,8 +179,8 @@ def _disk_info():
     disk_io = _psutil.disk_io_counters()
     return {
         "Partitions": partitions_info,
-        "Total read": mngs.gen.readable_bytes(disk_io.read_bytes),
-        "Total write": mngs.gen.readable_bytes(disk_io.write_bytes),
+        "Total read": readable_bytes(disk_io.read_bytes),
+        "Total write": readable_bytes(disk_io.write_bytes),
     }
 
 
@@ -206,8 +205,8 @@ def _network_info():
     net_io = _psutil.net_io_counters()
     return {
         "Interfaces": interfaces,
-        "Total Sent": mngs.gen.readable_bytes(net_io.bytes_sent),
-        "Total Received": mngs.gen.readable_bytes(net_io.bytes_recv),
+        "Total Sent": readable_bytes(net_io.bytes_sent),
+        "Total Received": readable_bytes(net_io.bytes_recv),
     }
 
 
@@ -277,3 +276,6 @@ if __name__ == "__main__":
 """
 /home/ywatanabe/proj/entrance/mngs/res/_get_specs.py
 """
+
+
+# EOF

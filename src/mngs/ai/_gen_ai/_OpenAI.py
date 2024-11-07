@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-04 02:04:11 (ywatanabe)"
+# Time-stamp: "2024-11-05 21:15:56 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/ai/_gen_ai/_OpenAI.py
 
 """Imports"""
@@ -19,8 +19,21 @@ class OpenAI(BaseGenAI):
         n_keep=1,
         temperature=1.0,
         chat_history=None,
-        max_tokens=4096,
+        max_tokens=None,
     ):
+        # Set max_tokens based on model
+        if max_tokens is None:
+            if "gpt-4-turbo" in model:
+                max_tokens = 128_000
+            elif "gpt-4" in model:
+                max_tokens = 8_192
+            elif "gpt-3.5-turbo-16k" in model:
+                max_tokens = 16_384
+            elif "gpt-3.5" in model:
+                max_tokens = 4_096
+            else:
+                max_tokens = 4_096
+
         super().__init__(
             system_setting=system_setting,
             model=model,
@@ -60,11 +73,49 @@ class OpenAI(BaseGenAI):
 
         return out_text
 
+    # def _api_call_stream(self):
+    #     kwargs = dict(
+    #         model=self.model,
+    #         messages=self.history,
+    #         max_tokens=self.max_tokens,
+    #         n=1,
+    #         stream=self.stream,
+    #         seed=self.seed,
+    #         temperature=self.temperature,
+    #         stream_options={"include_usage": True},
+    #     )
+
+    #     if kwargs.get("model") in ["o1-mini", "o1-preview"]:
+    #         full_response = self._api_call_static()
+    #         for char in full_response:
+    #             yield char
+    #         return
+
+    #     stream = self.client.chat.completions.create(**kwargs)
+
+    #     for chunk in stream:
+    #         if chunk:
+    #             try:
+    #                 self.input_tokens += chunk.usage.prompt_tokens
+    #             except:
+    #                 pass
+    #             try:
+    #                 self.output_tokens += chunk.usage.completion_tokens
+    #             except:
+    #                 pass
+
+    #             try:
+    #                 current_text = chunk.choices[0].delta.content
+    #                 if current_text:
+    #                     yield f"{current_text}"
+    #             except Exception as e:
+    #                 pass
+
     def _api_call_stream(self):
         kwargs = dict(
             model=self.model,
             messages=self.history,
-            max_tokens=4096,
+            max_tokens=self.max_tokens,
             n=1,
             stream=self.stream,
             seed=self.seed,
@@ -79,6 +130,7 @@ class OpenAI(BaseGenAI):
             return
 
         stream = self.client.chat.completions.create(**kwargs)
+        buffer = ""
 
         for chunk in stream:
             if chunk:
@@ -94,9 +146,17 @@ class OpenAI(BaseGenAI):
                 try:
                     current_text = chunk.choices[0].delta.content
                     if current_text:
-                        yield f"{current_text}"
+                        buffer += current_text
+                        # Yield complete sentences or words
+                        if any(char in '.!?\n ' for char in current_text):
+                            yield buffer
+                            buffer = ""
                 except Exception as e:
                     pass
+
+        # Yield any remaining text
+        if buffer:
+            yield buffer
 
 
 def main():

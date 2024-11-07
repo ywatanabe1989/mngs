@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-06 00:04:57 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/plt/ax/_conf_mat.py
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 # Time-stamp: "2024-09-28 11:02:59 (ywatanabe)"
 # /home/ywatanabe/proj/_mngs_repo_openhands/src/mngs/plt/ax/_conf_mat.py
 
@@ -11,7 +16,7 @@ import numpy as np
 import pandas as pd
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import mngs
-
+from ._extend import extend
 def conf_mat(
     ax,
     data,
@@ -107,7 +112,7 @@ def conf_mat(
     if y_labels is not None:
         ax.set_yticklabels(y_labels)
 
-    ax = mngs.plt.ax.extend(ax, x_extend_ratio, y_extend_ratio)
+    ax = extend(ax, x_extend_ratio, y_extend_ratio)
     if data.shape[0] == data.shape[1]:
         ax.set_box_aspect(1)
         ax.set_xticklabels(

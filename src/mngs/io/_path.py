@@ -1,15 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-02 18:45:47 (ywatanabe)"
+# Time-stamp: "2024-11-05 23:18:40 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/io/_path.py
 
-
 import fnmatch
-import glob
-import inspect
 import os
 import re
-from glob import glob
+from glob import glob as _glob
 
 from ..path._split import split
 from ..path._this_path import this_path
@@ -220,6 +217,7 @@ def find(rootdir, type="f", exp=["*"]):
                 # Construct the full path
                 path = os.path.join(root, name)
 
+
                 # If an _exp is provided, use fnmatch to filter names
                 if _exp and not fnmatch.fnmatch(name, _exp):
                     continue
@@ -269,7 +267,7 @@ def find_latest(dirname, fname, ext, version_prefix="_v"):
     )
 
     glob_pattern = os.path.join(dirname, f"{fname}{version_prefix}*{ext}")
-    files = glob(glob_pattern)
+    files = _glob(glob_pattern)
 
     highest_version = 0
     latest_file = None
