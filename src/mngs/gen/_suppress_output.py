@@ -1,6 +1,7 @@
 import os
 from contextlib import contextmanager, redirect_stderr, redirect_stdout
 
+
 @contextmanager
 def suppress_output(suppress=True):
     """
@@ -20,5 +21,6 @@ def suppress_output(suppress=True):
     else:
         # If suppress is False, just yield without redirecting output
         yield
+
 
 quiet = suppress_output

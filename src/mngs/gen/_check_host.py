@@ -7,10 +7,13 @@
 from .._sh import sh
 import sys
 
+
 def check_host(keyword):
-    return keyword in sh('echo $(hostname)', verbose=False)
+    return keyword in sh("echo $(hostname)", verbose=False)
+
 
 is_host = check_host
+
 
 def verify_host(keyword):
     if is_host(keyword):
@@ -20,7 +23,8 @@ def verify_host(keyword):
         print(f"Host verification failed for keyword: {keyword}")
         sys.exit(1)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     # check_host("ywata")
     verify_host("titan")
     verify_host("ywata")

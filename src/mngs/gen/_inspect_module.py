@@ -12,19 +12,19 @@ import pandas as pd
 
 
 def inspect_module(
-        module: Union[str, Any],
-        columns: List[str] = ["Type", "Name", "Docstring", "Depth"],
-        prefix: str = "",
-        max_depth: int = 5,
-        visited: Optional[Set[str]] = None,
-        docstring: bool = False,
-        tree: bool = True,
-        current_depth: int = 0,
-        print_output: bool = False,
-        skip_depwarnings: bool = True,
-        drop_duplicates: bool = True,
-        root_only: bool = False,
-    ) -> pd.DataFrame:
+    module: Union[str, Any],
+    columns: List[str] = ["Type", "Name", "Docstring", "Depth"],
+    prefix: str = "",
+    max_depth: int = 5,
+    visited: Optional[Set[str]] = None,
+    docstring: bool = False,
+    tree: bool = True,
+    current_depth: int = 0,
+    print_output: bool = False,
+    skip_depwarnings: bool = True,
+    drop_duplicates: bool = True,
+    root_only: bool = False,
+) -> pd.DataFrame:
     return _inspect_module(
         module=module,
         prefix=prefix,
@@ -38,6 +38,7 @@ def inspect_module(
         drop_duplicates=drop_duplicates,
         root_only=root_only,
     )[columns]
+
 
 def _inspect_module(
     module: Union[str, Any],
@@ -57,7 +58,7 @@ def _inspect_module(
 
     Example
     -------
-    >>> 
+    >>>
     >>> df = inspect_module(mngs)
     >>> print(df)
        Type           Name                    Docstring  Depth
@@ -125,13 +126,9 @@ def _inspect_module(
 
         try:
             module_version = (
-                f" (v{module.__version__})"
-                if hasattr(module, "__version__")
-                else ""
+                f" (v{module.__version__})" if hasattr(module, "__version__") else ""
             )
-            content_list.append(
-                ("M", full_path, module_version, current_depth)
-            )
+            content_list.append(("M", full_path, module_version, current_depth))
         except Exception:
             pass
 
@@ -199,7 +196,7 @@ def _inspect_module(
         df = df.drop_duplicates(subset="Name", keep="first")
 
     if root_only:
-        mask = df['Name'].str.count(r'\.') <= 1
+        mask = df["Name"].str.count(r"\.") <= 1
         df = df[mask]
 
     if tree and current_depth == 0 and print_output:
@@ -216,14 +213,13 @@ def _print_module_contents(df: pd.DataFrame) -> None:
     df : pd.DataFrame
         DataFrame containing module structure
     """
-    df_sorted = df.sort_values(['Depth', 'Name'])
+    df_sorted = df.sort_values(["Depth", "Name"])
     depth_last = {}
 
     for index, row in df_sorted.iterrows():
-        depth = row['Depth']
+        depth = row["Depth"]
         is_last = (
-            index == len(df_sorted) - 1
-            or df_sorted.iloc[index + 1]['Depth'] <= depth
+            index == len(df_sorted) - 1 or df_sorted.iloc[index + 1]["Depth"] <= depth
         )
 
         prefix = ""
@@ -238,7 +234,7 @@ def _print_module_contents(df: pd.DataFrame) -> None:
 
 
 if __name__ == "__main__":
-    
+
     sys.setrecursionlimit(10_000)
     df = inspect_module(mngs, docstring=True, print_output=False, columns=["Name"])
     print(mngs.pd.round(df))

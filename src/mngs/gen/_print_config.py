@@ -24,9 +24,8 @@ import argparse
 from pprint import pprint
 import sys
 
-def print_config(key):
 
-    
+def print_config(key):
 
     CONFIG = mngs.io.load_configs()
 
@@ -65,14 +64,21 @@ def print_config(key):
         print("Available configurations:")
         pprint(value)
 
+
 def print_config_main(args=None):
     if args is None:
         args = sys.argv[1:]
 
     parser = argparse.ArgumentParser(description="Print configuration values")
-    parser.add_argument("key", nargs='?', default=None, help="Configuration key (dot-separated for nested structures)")
+    parser.add_argument(
+        "key",
+        nargs="?",
+        default=None,
+        help="Configuration key (dot-separated for nested structures)",
+    )
     parsed_args = parser.parse_args(args)
     print_config(parsed_args.key)
+
 
 if __name__ == "__main__":
     print_config_main()

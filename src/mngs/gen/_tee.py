@@ -17,6 +17,7 @@ class Tee(object):
     sys.stdout = Tee(sys.stdout, "stdout.txt")
     sys.stderr = Tee(sys.stderr, "stderr.txt")
     """
+
     def __init__(self, sys_stdout_or_stderr, spath):
         self._files = [sys_stdout_or_stderr, open(spath, "w")]
         self._is_stderr = sys_stdout_or_stderr is sys.stderr
@@ -30,12 +31,14 @@ class Tee(object):
                 if self._is_stderr and f is not sys.stderr:
                     # Filter tqdm lines from log file
                     msg = a[0] if a else ""
-                    if not re.match(r'^[\s]*[0-9]+%.*\[A*$', msg):
+                    if not re.match(r"^[\s]*[0-9]+%.*\[A*$", msg):
                         res = getattr(f, attr, *args)(*a, **kw)
                 else:
                     res = getattr(f, attr, *args)(*a, **kw)
             return res
+
         return g
+
 
 def tee(sys, sdir=None, verbose=True):
     """
@@ -75,6 +78,7 @@ def tee(sys, sdir=None, verbose=True):
 
     return sys_stdout, sys_stderr
 
+
 main = tee
 
 if __name__ == "__main__":
@@ -88,9 +92,7 @@ if __name__ == "__main__":
     # parser.add_argument('--flag', '-f', action='store_true', default=False, help='')
     # args = parser.parse_args()
     # Main
-    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
-        sys, plt, verbose=False
-    )
+    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt, verbose=False)
     main(sys, CONFIG["SDIR"])
     mngs.gen.close(CONFIG, verbose=False, notify=False)
 

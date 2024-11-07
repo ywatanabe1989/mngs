@@ -13,7 +13,6 @@ import inspect
 import subprocess
 
 
-
 # # Config
 # CONFIG = mngs.gen.load_configs()
 
@@ -40,9 +39,7 @@ def src(obj):
         # mngs.gen.less(source_code)
 
         # Open a subprocess to use `less` for displaying the source code
-        process = subprocess.Popen(
-            ["less"], stdin=subprocess.PIPE, encoding="utf8"
-        )
+        process = subprocess.Popen(["less"], stdin=subprocess.PIPE, encoding="utf8")
         process.communicate(input=source_code)
         if process.returncode != 0:
             print(f"Process exited with return code {process.returncode}")
@@ -94,9 +91,7 @@ def src(obj):
 
 if __name__ == "__main__":
     # Start
-    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
-        sys, plt, verbose=False
-    )
+    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt, verbose=False)
 
     # (YOUR AWESOME CODE)
 

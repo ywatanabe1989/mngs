@@ -13,6 +13,7 @@ from ..torch import nanstd
 def to_z(x, dim=-1, device="cuda"):
     return (x - x.mean(dim=dim, keepdim=True)) / x.std(dim=dim, keepdim=True)
 
+
 @torch_fn
 def to_nanz(x, dim=-1, device="cuda"):
     nan_mean = torch.nanmean(x, dim=dim, keepdim=True)
