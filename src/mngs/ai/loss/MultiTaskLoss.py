@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-03 03:35:59 (ywatanabe)"
+# Time-stamp: "2024-11-07 19:07:29 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/ai/loss/MultiTaskLoss.py
 
 import numpy as np
 import torch
 import torch.nn as nn
 
-from ..reproduce import fix_seeds
+from ...reproduce import fix_seeds
 
 
 class MultiTaskLoss(nn.Module):

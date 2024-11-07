@@ -1,7 +1,7 @@
 <!-- ---
-!-- title: README.md
+!-- title: ./mngs_repo/README.md
 !-- author: ywatanabe
-!-- date: 2024-11-04 03:34:32
+!-- date: 2024-11-07 18:52:08
 !-- --- -->
 
 
@@ -25,6 +25,7 @@ A Python utility package for simplifying common research and development tasks.
 
 ## Installation
 ```bash
+$ sudo apt-get install libportaudio2
 $ pip install mngs
 # or
 $ pip install git+https://github.com/ywatanabe1989/mngs.git@develop

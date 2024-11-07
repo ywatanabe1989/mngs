@@ -1,6 +1,6 @@
 #!/bin/bash
-# Time-stamp: "2024-11-03 02:42:16 (ywatanabe)"
-# File: ./mngs_repo/update_package.sh
+# Time-stamp: "2024-11-07 18:18:23 (ywatanabe)"
+# File: ./mngs_repo/docs/update_package.sh
 
 
 rm -rf build dist/* src/mngs.egg-info

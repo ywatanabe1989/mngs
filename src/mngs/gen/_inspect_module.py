@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-02 02:09:22 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/gen/decorators/_inspect_module.py
+# Time-stamp: "2024-11-07 18:58:55 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/gen/_inspect_module.py
 
 import inspect
 import sys
 import warnings
 from typing import Any, List, Optional, Set, Union
 
+import mngs
 import pandas as pd
 
 
@@ -204,7 +205,6 @@ def _inspect_module(
 
     return df[columns]
 
-
 def _print_module_contents(df: pd.DataFrame) -> None:
     """Prints module contents in tree structure.
 
@@ -231,7 +231,6 @@ def _print_module_contents(df: pd.DataFrame) -> None:
 
         print(f"{prefix}({row['Type']}) {row['Name']}{row['Docstring']}")
         depth_last[depth] = is_last
-
 
 if __name__ == "__main__":
 

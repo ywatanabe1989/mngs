@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "ywatanabe (2024-11-07 20:27:37)"
+# Time-stamp: "ywatanabe (2024-11-07 20:34:47)"
 # File: ./mngs_repo/src/mngs/__init__.py
 
 # os.getenv("MNGS_SENDER_GMAIL")
@@ -44,7 +44,7 @@ from . import dev
 # # Usage: python -m mngs print_config
 
 __copyright__ = "Copyright (C) 2024 Yusuke Watanabe"
-__version__ = "1.9.6"
+__version__ = "1.9.7"
 __license__ = "MIT"
 __author__ = "ywatanabe1989"
 __author_email__ = "ywatanabe@alumni.u-tokyo.ac.jp"
