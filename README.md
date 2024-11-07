@@ -1,7 +1,7 @@
 <!-- ---
-!-- title: ./mngs_repo/README.md
+!-- title: ./mngs/README.md
 !-- author: ywatanabe
-!-- date: 2024-11-07 18:52:08
+!-- date: 2024-11-08 02:01:17
 !-- --- -->
 
 
@@ -10,9 +10,10 @@ A Python utility package for simplifying common research and development tasks.
 
 <!-- badges -->
 [![PyPI version](https://badge.fury.io/py/mngs.svg)](https://badge.fury.io/py/mngs)
-![CI](https://github.com/ywatanabe1989/mngs/actions/workflows/pypi_latest.yml/badge.svg)
-![CI](https://github.com/ywatanabe1989/mngs/actions/workflows/latest_release.yml/badge.svg)
-![CI](https://github.com/ywatanabe1989/mngs/actions/workflows/develop.yml/badge.svg)
+![CI](https://github.com/ywatanabe1989/mngs/actions/workflows/install-pypi-latest.yml/badge.svg)
+![CI](https://github.com/ywatanabe1989/mngs/actions/workflows/install-latest-release.yml/badge.svg)
+![CI](https://github.com/ywatanabe1989/mngs/actions/workflows/install-develop-branch.yml/badge.svg)
+![CI](https://github.com/ywatanabe1989/mngs/actions/workflows/pytest.yml/badge.svg)
 <!-- [![Tests](https://github.com/ywatanabe1989/mngs/actions/workflows/tests.yml/badge.svg)](https://github.com/ywatanabe1989/mngs/actions/workflows/tests.yml) -->
 <!-- [![Coverage](https://codecov.io/gh/ywatanabe1989/mngs/branch/main/graph/badge.svg)](https://codecov.io/gh/ywatanabe1989/mngs) -->
 <!-- [![Python Versions](https://img.shields.io/pypi/pyversions/mngs.svg)](https://pypi.org/project/mngs/) -->
