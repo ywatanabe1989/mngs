@@ -9,7 +9,7 @@ black
 bs4
 catboost
 chardet
-dbus-python
+# dbus-python
 epc
 flake8
 flask

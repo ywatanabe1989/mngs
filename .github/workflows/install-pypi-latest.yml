@@ -1,5 +1,5 @@
-# Time-stamp: "ywatanabe (2024-11-08 00:28:42)"
-# File: ./mngs_repo/.github/workflows/install-pypi-latest.yml
+# Time-stamp: "ywatanabe (2024-11-08 01:01:15)"
+# File: ./mngs/.github/workflows/install-pypi-latest.yml
 
 name: install-pypi-latest
 
@@ -19,4 +19,4 @@ jobs:
       run: |
           pip install -U pip        
           pip install mngs
-          python ./tests/test_mngs_run.py
+          python ./tests/custom/test_mngs_run.py
