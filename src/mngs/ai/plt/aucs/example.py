@@ -1,13 +1,19 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-07 18:56:57 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/ai/plt/aucs/example.py
 
 import matplotlib.pyplot as plt
 import mngs
+import numpy as np
+from sklearn import datasets, svm
+from sklearn.model_selection import train_test_split
+from .roc_auc import roc_auc
+from .pre_rec_auc import pre_rec_auc
 
 ################################################################################
 ## MNIST
 ################################################################################
-from sklearn import datasets, metrics, svm
-from sklearn.model_selection import train_test_split
 
 digits = datasets.load_digits()
 
@@ -39,17 +45,18 @@ plt.rcParams["legend.fontsize"] = "xx-small"
 scale = 0.75
 plt.rcParams["figure.figsize"] = (16 * scale, 9 * scale)
 
-
 ################################################################################
 ## Main
 ################################################################################
 ## ROC Curve
-fig_roc, metrics_roc = mngs.ml.plt.roc_auc(plt, y_test, predicted_proba, labels)
+fig_roc, metrics_roc = roc_auc(plt, y_test, predicted_proba, labels)
 fig_roc.show()
 ## Precision-Recall Curve
-fig_pre_rec, metrics_pre_rec = mngs.ml.plt.pre_rec_auc(
+fig_pre_rec, metrics_pre_rec = pre_rec_auc(
     plt, y_test, predicted_proba, labels
 )
 fig_pre_rec.show()
 
-## EOF
+#
+
+# EOF

@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-07 18:53:03 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/ai/loss/_L1L2Losses.py
+
 import torch
 
 
@@ -17,9 +22,12 @@ def l2(model, lambda_l2=0.01):
     return l2
 
 def elastic(model, alpha=1.0, l1_ratio=0.5):
-    assert 0 =< l1_ratio =< 1
-    
+    assert 0 <= l1_ratio <= 1
+
     L1 = l1(model)
     L2 = l2(model)
 
     return alpha * (l1_ratio * L1 + (1 - l1_ratio) * L2)
+
+
+# EOF

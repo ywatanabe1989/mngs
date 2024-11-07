@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-05 23:19:10 (ywatanabe)"
+# Time-stamp: "2024-11-07 19:19:26 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/gen/_close.py
 
 import os
@@ -8,12 +8,12 @@ import re
 import shutil
 import time
 from datetime import datetime
-from glob import glob as glob
+from glob import glob as _glob
 
-from ..io import save as mngs_io_save
 from ..io import flush as mngs_io_flush
-from ..utils._notify import notify as mngs_gen_notify
+from ..io import save as mngs_io_save
 from ..str._printc import printc
+from ..utils._notify import notify as mngs_gen_notify
 
 
 def _format_diff_time(diff_time):
@@ -104,16 +104,24 @@ def close(
                 print(e)
 
     finally:
-        # Ensure file handles are closed
-        if hasattr(sys, 'stdout') and hasattr(sys.stdout, 'close'):
-            sys.stdout.close()
-        if hasattr(sys, 'stderr') and hasattr(sys.stderr, 'close'):
-            sys.stderr.close()
-    # try:
-    #     sys.stdout.close()
-    #     sys.stderr.close()
-    # except Exception as e:
-    #     print(e)
+        # Only close if they're custom file objects
+        if hasattr(sys, 'stdout') and hasattr(sys.stdout, 'close') and not sys.stdout.closed:
+            if sys.stdout != sys.__stdout__:
+                sys.stdout.close()
+        if hasattr(sys, 'stderr') and hasattr(sys.stderr, 'close') and not sys.stderr.closed:
+            if sys.stderr != sys.__stderr__:
+                sys.stderr.close()
+    # finally:
+    #     # Ensure file handles are closed
+    #     if hasattr(sys, 'stdout') and hasattr(sys.stdout, 'close'):
+    #         sys.stdout.close()
+    #     if hasattr(sys, 'stderr') and hasattr(sys.stderr, 'close'):
+    #         sys.stderr.close()
+    # # try:
+    # #     sys.stdout.close()
+    # #     sys.stderr.close()
+    # # except Exception as e:
+    # #     print(e)
 
 
 def running2finished(
@@ -170,7 +178,6 @@ if __name__ == "__main__":
     import sys
 
     import matplotlib.pyplot as plt
-
     from icecream import ic
 
     from .._start import start

@@ -1,5 +1,11 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-07 19:30:31 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/gen/_suppress_output.py
+
 import os
 from contextlib import contextmanager, redirect_stderr, redirect_stdout
+
 
 @contextmanager
 def suppress_output(suppress=True):
@@ -22,3 +28,6 @@ def suppress_output(suppress=True):
         yield
 
 quiet = suppress_output
+
+
+# EOF

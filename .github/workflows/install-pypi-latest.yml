@@ -1,0 +1,22 @@
+# Time-stamp: "2024-11-07 19:28:29 (ywatanabe)"
+# File: ./mngs_repo/.github/workflows/install-pypi-latest.yml
+
+name: install-pypi-latest
+
+on:
+  push:
+    branches:
+      - main      
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: install-pypi-latest
+      run: |
+          pip install -U pip
+          pip install mngs
+          python ./tests/test_mngs_run.py
