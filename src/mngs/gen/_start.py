@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "ywatanabe (2024-11-08 01:17:24)"
+# Time-stamp: "2024-11-08 01:41:01 (ywatanabe)"
 # File: ./mngs/src/mngs/gen/_start.py
 
 """
@@ -33,7 +33,7 @@ import sys as sys_module
 import matplotlib.pyplot as plt_module
 
 import matplotlib
-import mngs
+# import mngs
 
 from ..dict import DotDict
 from ..gen._tee import tee
@@ -131,8 +131,8 @@ def _setup_configs(
 
 
 def _setup_matplotlib(
-    plt: Optional[plt_module] = None, agg: bool = False, **mpl_kwargs: Any
-) -> Tuple[Optional[plt_module], Optional[Dict[str, Any]]]:
+    plt: plt_module = None, agg: bool = False, **mpl_kwargs: Any
+) -> Tuple[Any, Optional[Dict[str, Any]]]:
     """Configure matplotlib settings.
 
     Parameters
@@ -161,8 +161,8 @@ def _setup_matplotlib(
 
 
 def start(
-    sys: Optional[sys_module] = None,
-    plt: Optional[plt_module] = None,
+    sys: sys_module = None,
+    plt: plt_module = None,
     sdir: Optional[str] = None,
     sdir_suffix: Optional[str] = None,
     args: Optional[Any] = None,
@@ -187,7 +187,7 @@ def start(
     line_width: float = 0.5,
     clear: bool = False,
     verbose: bool = True,
-) -> Tuple[DotDict, Any, Any, Optional[plt_module], Optional[Dict[str, Any]]]:
+) -> Tuple[DotDict, Any, Any, Any, Optional[Dict[str, Any]]]:
     """Initialize experiment environment with reproducibility settings.
 
     Parameters
@@ -297,178 +297,6 @@ def start(
     _print_header(ID, PID, CONFIGS, verbose)
 
     return CONFIGS, sys.stdout, sys.stderr, plt, CC
-
-
-# def start(
-#     sys=None,
-#     plt=None,
-#     sdir=None,
-#     sdir_suffix=None,
-#     verbose=True,
-#     args=None,
-#     # Random seeds
-#     os=None,
-#     random=None,
-#     np=None,
-#     torch=None,
-#     tf=None,
-#     seed=42,
-#     # matplotlib
-#     agg=False,
-#     fig_size_mm=(160, 100),
-#     fig_scale=1.0,
-#     dpi_display=100,
-#     dpi_save=300,
-#     font_size_base=10,
-#     font_size_title=10,
-#     font_size_axis_label=8,
-#     font_size_tick_label=7,
-#     font_size_legend=6,
-#     hide_top_right_spines=True,
-#     alpha=0.9,
-#     line_width=0.5,
-#     clear: bool = False,
-# ):
-#     """
-#     Example:
-
-#     \"""
-#     This script does XYZ.
-#     \"""
-
-#     # Imports
-
-#     import matplotlib.pyplot as plt
-#     import numpy as np
-#     import pandas as pd
-#     import torch
-#     import torch.nn as nn
-#     import torch.nn.functional as F
-
-#     # Config
-#     CONFIG = mngs.gen.load_configs()
-
-#     # Functions
-#     # (Your awesome code here)
-
-#     if __name__ == '__main__':
-#         # Start
-#         CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt)
-
-#         # (Your awesome code here)
-
-#         # Close
-#         mngs.gen.close(CONFIG)
-
-#     # EOF
-
-#     \"""
-#     /home/ywatanabe/template.py
-#     \"""
-#     """
-
-#     IS_DEBUG = _get_debug_mode()
-
-#     # ID
-#     ID = gen_ID(N=4) if not IS_DEBUG else "DEBUG_" + gen_ID(N=4)
-#     PID = _os.getpid()
-#     print(
-#         f"\n{'#'*40}\n## mngs v{_get_mngs_version()}\n## {ID} (PID: {PID})\n{'#'*40}\n"
-#     )
-#     sleep(1)
-
-#     ########################################
-#     # Defines SDIR (Do not change this section)
-#     ########################################
-#     if sdir is None:
-#         __file__ = inspect.stack()[1].filename
-#         if "ipython" in __file__:
-#             __file__ = f"/tmp/fake_{_os.getenv('USER')}.py"
-#         spath = __file__
-#         _sdir, sfname, _ = split(spath)
-#         sdir = _sdir + sfname + "/" + "RUNNING" + "/" + ID + "/"
-#         sdir = sdir.replace("/./", "/")
-#         if sdir_suffix:
-#             sdir = sdir[:-1] + f"-{sdir_suffix}/"
-#     if clear:
-#         _clear_python_log_dir(_sdir + sfname + "/")
-#     _os.makedirs(sdir, exist_ok=True)
-#     relative_sdir = _simplify_relative_path(sdir)
-#     ########################################
-
-#     ########################################
-#     # CONFIGs
-#     ########################################
-#     CONFIGS = load_configs(IS_DEBUG).to_dict()
-#     CONFIGS["ID"] = ID
-#     CONFIGS["PID"] = PID
-#     CONFIGS["START_TIME"] = datetime.now()
-#     CONFIGS["SDIR"] = sdir
-#     CONFIGS["REL_SDIR"] = relative_sdir
-#     if verbose:
-#         print(f"\n{'-'*40}\n")
-#         print(f"CONFIG:")
-#         for k, v in CONFIGS.items():
-#             print(f"\n{k}:\n{v}\n")
-#         print(f"\n{'-'*40}\n")
-
-#     ########################################
-#     # Logging (tee)
-#     ########################################
-#     if sys is not None:
-#         sys.stdout, sys.stderr = tee(
-#             sys, sdir=sdir, verbose=verbose
-#         )
-#         CONFIGS["sys"] = sys
-
-#     ########################################
-#     # Random seeds
-#     ########################################
-#     fix_seeds(
-#         os=os,
-#         random=random,
-#         np=np,
-#         torch=torch,
-#         seed=seed,
-#         verbose=verbose,
-#     )
-
-#     ########################################
-#     # Matplotlib configuration
-#     ########################################
-#     if plt is not None:
-#         plt.close("all")
-#         plt, CC = configure_mpl(
-#             plt,
-#             fig_size_mm=(160, 100),
-#             fig_scale=fig_scale,
-#             dpi_display=dpi_display,
-#             dpi_save=dpi_save,
-#             # font_size_base=font_size_base,
-#             # font_size_title=font_size_title,
-#             # font_size_axis_label=font_size_axis_label,
-#             # font_size_tick_label=font_size_tick_label,
-#             # font_size_legend=font_size_legend,
-#             hide_top_right_spines=hide_top_right_spines,
-#             alpha=alpha,
-#             line_width=line_width,
-#             verbose=verbose,
-#         )
-#         CC["gray"] = CC["grey"]
-#         if agg:
-#             matplotlib.use("Agg")
-
-#     if args is not None:
-#         CONFIGS['ARGS'] = vars(args) if hasattr(args, '__dict__') else args
-
-#     CONFIGS = DotDict(CONFIGS)
-
-#     if verbose:
-#         print(f"\n{'-'*40}\n")
-#         pprint(CONFIGS)
-#         print(f"\n{'-'*40}\n")
-
-#     return CONFIGS, sys.stdout, sys.stderr, plt, CC
 
 
 def _simplify_relative_path(sdir: str) -> str:
