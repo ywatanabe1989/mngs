@@ -1,35 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-07 05:38:49 (ywatanabe)"
+# Time-stamp: "2024-11-07 17:14:38 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/__init__.py
 
-########################################
-# MNGS variables
-########################################
-# sender_gmail = os.getenv("MNGS_SENDER_GMAIL")
-# sender_password = os.getenv("MNGS_SENDER_GMAIL_PASSWORD")
-# recipient_email = recipient_email or os.getenv("MNGS_RECIPIENT_GMAIL")
-# os.getenv("MNGS_CACHE_DIR")
 
-
-########################################
-# Warnings
-########################################
 import warnings
-warnings.filterwarnings("ignore", message="There is no current event loop", category=DeprecationWarning)
-
-########################################
-# Try import
-########################################
-# import os
-# from .gen._suppress_output import suppress_output
-# _do_suppress = os.getenv("MNGS_SUPPRESS_IMPORTING_MESSAGES", "").lower() == "true"
-# with suppress_output(suppress=__do_suppress):
-
-
-########################################
-# Core Modules
-########################################
 from ._sh import sh
 from . import io
 from . import path
@@ -52,6 +27,34 @@ from . import web
 from . import db
 from . import pd
 from . import str
+from . import dev
+
+########################################
+# MNGS variables
+########################################
+# sender_gmail = os.getenv("MNGS_SENDER_GMAIL")
+# sender_password = os.getenv("MNGS_SENDER_GMAIL_PASSWORD")
+# recipient_email = recipient_email or os.getenv("MNGS_RECIPIENT_GMAIL")
+# os.getenv("MNGS_CACHE_DIR")
+
+
+########################################
+# Warnings
+########################################
+warnings.filterwarnings("ignore", message="There is no current event loop", category=DeprecationWarning)
+
+########################################
+# Try import
+########################################
+# import os
+# from .gen._suppress_output import suppress_output
+# _do_suppress = os.getenv("MNGS_SUPPRESS_IMPORTING_MESSAGES", "").lower() == "true"
+# with suppress_output(suppress=__do_suppress):
+
+
+########################################
+# Core Modules
+########################################
 
 # ########################################
 # # Modules (python -m mngs print_config)

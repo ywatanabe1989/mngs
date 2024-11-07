@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-07 17:14:09 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/str/__init__.py
+# Time-stamp: "2024-11-07 17:06:37 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/dev/__init__.py
 
 
 import importlib
@@ -12,13 +12,8 @@ import os
 current_dir = os.path.dirname(__file__)
 
 # Iterate through all Python files in the current directory
-# for filename in os.listdir(current_dir):
-#     if filename.endswith(".py") and not filename.startswith("__"):
 for filename in os.listdir(current_dir):
-    filepath = os.path.join(current_dir, filename)
-    real_path = os.path.realpath(filepath)  # Resolve symlinks
-    if os.path.isfile(real_path) and filename.endswith(".py") and not filename.startswith("__"):
-
+    if filename.endswith(".py") and not filename.startswith("__"):
         module_name = filename[:-3]  # Remove .py extension
         module = importlib.import_module(f".{module_name}", package=__name__)
 
