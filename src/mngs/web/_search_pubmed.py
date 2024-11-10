@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-11 05:26:14 (ywatanabe)"
+# Time-stamp: "2024-11-11 07:14:52 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/web/_search_pubmed.py
 
 """
@@ -28,59 +28,33 @@ from typing import Any, Dict, List, Union
 
 import aiohttp
 import mngs
+import pandas as pd
 import requests
 
 """Functions & Classes"""
+def _search_pubmed(query: str, retmax: int = 300) -> Dict[str, Any]:
+    try:
+        base_url = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
+        search_url = f"{base_url}esearch.fcgi"
+        params = {
+            "db": "pubmed",
+            "term": query,
+            "retmax": retmax,
+            "retmode": "json",
+            "usehistory": "y",
+        }
 
-
-def search_pubmed(query: str, retmax: int = 10) -> Dict[str, Any]:
-    """[Previous docstring remains the same]"""
-    base_url = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
-    search_url = f"{base_url}esearch.fcgi"
-    params = {
-        "db": "pubmed",
-        "term": query,
-        "retmax": retmax,
-        "retmode": "json",
-        "usehistory": "y",
-    }
-
-    # print(f"Searching PubMed for: {query}")
-    response = requests.get(search_url, params=params)
-    if not response.ok:
-        # print(f"Error: {response.status_code} - {response.text}")
+        response = requests.get(search_url, params=params, timeout=10)
+        if not response.ok:
+            mngs.str.printc("PubMed API request failed", c="red")
+            return {}
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        mngs.str.printc(f"Network error: {e}", c="red")
         return {}
-    return response.json()
 
 
-# def search_pubmed(query: str, max_retries: int = 3, retry_delay: int = 5) -> Dict:
-#     """Search PubMed with retries and proper API usage."""
-#     base_url = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi"
-#     params = {
-#         "db": "pubmed",
-#         "term": query,
-#         "retmax": 100,
-#         "retmode": "json",
-#         "usehistory": "y",
-#         "tool": "mngs",  # Add tool name
-#         "email": "your.email@example.com"  # Add your email
-#     }
-
-#     for attempt in range(max_retries):
-#         try:
-#             response = requests.get(base_url, params=params, timeout=30)
-#             response.raise_for_status()
-#             return response.json()
-#         except requests.exceptions.RequestException as e:
-#             if attempt == max_retries - 1:
-#                 raise RuntimeError(f"Failed to connect to PubMed after {max_retries} attempts: {e}")
-#             # print(f"Connection failed, retrying in {retry_delay} seconds...")
-#             time.sleep(retry_delay)
-
-#     return {}
-
-
-def fetch_details(
+def _fetch_details(
     webenv: str, query_key: str, retstart: int = 0, retmax: int = 100
 ) -> Dict[str, Any]:
     """Fetches detailed information including abstracts for articles.
@@ -106,7 +80,7 @@ def fetch_details(
         "retmax": retmax,
         "retmode": "xml",
         "rettype": "abstract",
-        "field": "abstract,mesh"  # Add MeSH terms
+        "field": "abstract,mesh",
     }
 
     abstract_response = requests.get(efetch_url, params=efetch_params)
@@ -134,7 +108,7 @@ def fetch_details(
     }
 
 
-def parse_abstract_xml(xml_text: str) -> Dict[str, str]:
+def _parse_abstract_xml(xml_text: str) -> Dict[str, tuple]:
     """Parses XML response to extract abstracts.
 
     Parameters
@@ -153,19 +127,25 @@ def parse_abstract_xml(xml_text: str) -> Dict[str, str]:
     for article in root.findall(".//PubmedArticle"):
         pmid = article.find(".//PMID").text
         abstract_element = article.find(".//Abstract/AbstractText")
-        abstract = abstract_element.text if abstract_element is not None else ""
+        abstract = (
+            abstract_element.text if abstract_element is not None else ""
+        )
+
+        # DOI
+        doi_element = article.find(".//ArticleId[@IdType='doi']")
+        doi = doi_element.text if doi_element is not None else ""
 
         # Get MeSH terms
         keywords = []
         mesh_terms = article.findall(".//MeshHeading/DescriptorName")
         keywords = [term.text for term in mesh_terms if term is not None]
 
-        results[pmid] = (abstract, keywords)
+        results[pmid] = (abstract, keywords, doi)
 
     return results
 
 
-def get_citation(pmid: str) -> str:
+def _get_citation(pmid: str) -> str:
     """Gets official citation in BibTeX format.
 
     Parameters
@@ -186,9 +166,28 @@ def get_citation(pmid: str) -> str:
         "rettype": "bibtex",
         "retmode": "text",
     }
-
     response = requests.get(cite_url, params=params)
     return response.text if response.ok else ""
+
+
+def get_crossref_metrics(doi: str) -> Dict[str, Any]:
+    """Get article metrics from CrossRef using DOI."""
+    base_url = "https://api.crossref.org/works/"
+    headers = {
+        "User-Agent": "mailto:your.email@example.com"
+    }  # Replace with your email
+
+    response = requests.get(f"{base_url}{doi}", headers=headers)
+    if response.ok:
+        data = response.json()["message"]
+        return {
+            "citations": data.get("is-referenced-by-count", 0),
+            "type": data.get("type", ""),
+            "publisher": data.get("publisher", ""),
+            "references": len(data.get("reference", [])),
+            "doi": data.get("DOI", ""),
+        }
+    return {}
 
 
 def save_bibtex(
@@ -210,98 +209,53 @@ def save_bibtex(
             if pmid == "uids":
                 continue
 
-            citation = get_citation(pmid)
+            citation = _get_citation(pmid)
             if citation:
                 bibtex_file.write(citation)
             else:
-                # Fallback to our formatted entry
+                # Use default tuple if pmid not in abstracts
+                default_data = ("", [], "")  # abstract, keywords, doi
                 bibtex_entry = format_bibtex(
-                    paper, pmid, abstracts.get(pmid, "")
+                    paper, pmid, abstracts.get(pmid, default_data)
                 )
                 bibtex_file.write(bibtex_entry + "\n")
+    mngs.str.printc(f"Saved to: {str(bibtex_file)}", c="yellow")
 
 
-# def format_bibtex(paper: Dict[str, Any], pmid: str, abstract: str = "") -> str:
-#     """Formats paper metadata as BibTeX entry.
-
-#     Parameters
-#     ----------
-#     paper : Dict[str, Any]
-#         Paper metadata dictionary
-#     pmid : str
-#         PubMed ID
-#     abstract : str, optional
-#         Paper abstract
-
-#     Returns
-#     -------
-#     str
-#         Formatted BibTeX entry
-#     """
-#     authors = paper.get("authors", [{"name": "Unknown"}])
-#     author_names = " and ".join(author["name"] for author in authors)
-#     year = paper.get("pubdate", "").split()[0]
-#     title = paper.get("title", "No Title")
-#     journal = paper.get("source", "Unknown Journal")
-
-#     entry = f"""@article{{pmid{pmid},
-#     author = {{{author_names}}},
-#     title = {{{title}}},
-#     journal = {{{journal}}},
-#     year = {{{year}}},
-#     pmid = {{{pmid}}},
-#     abstract = {{{abstract}}}
-# }}
-# """
-#     return entry
-# def format_bibtex(paper: Dict[str, Any], pmid: str, abstract: str = "") -> str:
-#     authors = paper.get("authors", [{"name": "Unknown"}])
-#     author_names = " and ".join(author["name"] for author in authors)
-#     year = paper.get("pubdate", "").split()[0]
-#     title = paper.get("title", "No Title")
-#     journal = paper.get("source", "Unknown Journal")
-
-#     # Create citation key: FirstAuthorLastName_Year_FirstTitleWord
-#     first_author = authors[0]["name"].split()[-1].lower()  # Get last name of first author
-#     first_title_word = title.split()[0].lower()
-#     citation_key = f"{first_author}_{year}_{first_title_word}"
-
-#     entry = f"""@article{{{citation_key},
-#     author = {{{author_names}}},
-#     title = {{{title}}},
-#     journal = {{{journal}}},
-#     year = {{{year}}},
-#     pmid = {{{pmid}}},
-#     abstract = {{{abstract}}}
-# }}
-# """
-#     return entry
 
 
-def format_bibtex(paper: Dict[str, Any], pmid: str, abstract_data) -> str:
-    abstract, keywords = abstract_data if isinstance(abstract_data, tuple) else (abstract_data, [])
+def format_bibtex(
+    paper: Dict[str, Any], pmid: str, abstract_data: tuple
+) -> str:
+    abstract, keywords, doi = abstract_data
+
+    # Get CrossRef and Scimago metrics
+    crossref_metrics = get_crossref_metrics(doi) if doi else {}
+    journal = paper.get("source", "Unknown Journal")
+    # journal_metrics = get_journal_metrics(journal)
+
     authors = paper.get("authors", [{"name": "Unknown"}])
     author_names = " and ".join(author["name"] for author in authors)
     year = paper.get("pubdate", "").split()[0]
     title = paper.get("title", "No Title")
-    journal = paper.get("source", "Unknown Journal")
 
-    # Better name formatting
+    # Name formatting
     first_author = authors[0]["name"]
     first_name = first_author.split()[0]
-    last_name = first_author.split()[-1]  # Take last part as surname
-    # Remove special characters and spaces, convert to lowercase
+    last_name = first_author.split()[-1]
     clean_first_name = "".join(c for c in first_name if c.isalnum())
     clean_last_name = "".join(c for c in last_name if c.isalnum())
 
-    # Clean first word of title
+    # Title words
+    title_words = title.split()
     first_title_word = "".join(
-        c.lower() for c in title.split()[0] if c.isalnum()
+        c.lower() for c in title_words[0] if c.isalnum()
     )
-    second_title_word = "".join(
-        c.lower() for c in title.split()[1] if c.isalnum()
+    second_title_word = (
+        "".join(c.lower() for c in title_words[1] if c.isalnum())
+        if len(title_words) > 1
+        else ""
     )
-
 
     citation_key = f"{clean_first_name}.{clean_last_name}_{year}_{first_title_word}_{second_title_word}"
 
@@ -311,23 +265,14 @@ def format_bibtex(paper: Dict[str, Any], pmid: str, abstract_data) -> str:
     journal = {{{journal}}},
     year = {{{year}}},
     pmid = {{{pmid}}},
+    doi = {{{doi}}},
+    publisher = {{{crossref_metrics.get('publisher', '')}}},
+    references = {{{crossref_metrics.get('references', 0)}}},
     keywords = {{{", ".join(keywords)}}},
     abstract = {{{abstract}}}
 }}
 """
     return entry
-
-
-# async def fetch_async(
-#     session: aiohttp.ClientSession, url: str, params: Dict
-# ) -> Dict:
-#     """Asynchronous fetch helper."""
-#     async with session.get(url, params=params) as response:
-#         if response.status == 200:
-#             if "json" in params.get("retmode", ""):
-#                 return await response.json()
-#             return await response.text()
-#         return {}
 
 
 async def fetch_async(
@@ -344,7 +289,7 @@ async def fetch_async(
         return {}
 
 
-async def batch_fetch_details(
+async def batch__fetch_details(
     pmids: List[str], batch_size: int = 20
 ) -> List[Dict]:
     """Fetches details for multiple PMIDs concurrently.
@@ -395,11 +340,11 @@ async def batch_fetch_details(
         return results
 
 
-def main(args: argparse.Namespace, n_entries: int = 10) -> int:
-    query = args.query or "epilepsy prediction"
+def search_pubmed(query: str, n_entries: int = 10) -> int:
+    # query = args.query or "epilepsy prediction"
     # print(f"Using query: {query}")
 
-    search_results = search_pubmed(query)
+    search_results = _search_pubmed(query)
     if not search_results:
         # print("No results found or error occurred")
         return 1
@@ -412,7 +357,7 @@ def main(args: argparse.Namespace, n_entries: int = 10) -> int:
     # print(f"Saving results to: {output_file}")
 
     # Process in larger batches asynchronously
-    results = asyncio.run(batch_fetch_details(pmids[:n_entries]))
+    results = asyncio.run(batch__fetch_details(pmids[:n_entries]))
     # here, results seems long string
 
     # Process results and save
@@ -422,7 +367,7 @@ def main(args: argparse.Namespace, n_entries: int = 10) -> int:
             json_response = results[i + 1]
 
             if isinstance(xml_response, str):
-                abstracts = parse_abstract_xml(xml_response)
+                abstracts = _parse_abstract_xml(xml_response)
                 if (
                     isinstance(json_response, dict)
                     and "result" in json_response
@@ -431,18 +376,18 @@ def main(args: argparse.Namespace, n_entries: int = 10) -> int:
                     save_bibtex(details, abstracts, output_file)
 
     # Process results and save
-    temp_bibtex = []  # Store entries temporarily
+    temp_bibtex = []
     for i in range(0, len(results), 2):
         xml_response = results[i]
         json_response = results[i + 1]
 
         if isinstance(xml_response, str):
-            abstracts = parse_abstract_xml(xml_response)
+            abstracts = _parse_abstract_xml(xml_response)
             if isinstance(json_response, dict) and "result" in json_response:
                 details = json_response["result"]
                 for pmid in details:
                     if pmid != "uids":
-                        citation = get_citation(pmid)
+                        citation = _get_citation(pmid)
                         if citation:
                             temp_bibtex.append(citation)
                         else:
@@ -463,16 +408,16 @@ def parse_args() -> argparse.Namespace:
         description="PubMed article search and retrieval tool"
     )
     parser.add_argument(
-        "--bibtex",
-        "-b",
-        action="store_true",
-        help="Save results as BibTeX file",
-    )
-
-    parser.add_argument(
         "--query",
         "-q",
         type=str,
+        help='Search query (default: "epilepsy prediction")',
+    )
+    parser.add_argument(
+        "--n_entries",
+        "-n",
+        type=int,
+        default=10,
         help='Search query (default: "epilepsy prediction")',
     )
     args = parser.parse_args()
@@ -493,7 +438,7 @@ def run_main() -> None:
     )
 
     args = parse_args()
-    exit_status = main(args)
+    exit_status = search_pubmed(args.query, args.n_entries)
 
     mngs.gen.close(
         CONFIG,
@@ -502,6 +447,7 @@ def run_main() -> None:
         message="",
         exit_status=exit_status,
     )
+
 
 
 if __name__ == "__main__":

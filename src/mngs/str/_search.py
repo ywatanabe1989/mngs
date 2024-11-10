@@ -1,10 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-02 04:05:04 (ywatanabe)"
+# Time-stamp: "2024-11-11 06:03:22 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/str/_search.py
 
-import numpy as np
 import re
+from collections import abc
+
+import numpy as np
+import pandas as pd
+import xarray as xr
+from natsort import natsorted
+
 
 def search(patterns, strings, only_perfect_match=False, as_bool=False, ensure_one=False):
     """Search for patterns in strings using regular expressions.
@@ -80,6 +86,5 @@ def search(patterns, strings, only_perfect_match=False, as_bool=False, ensure_on
         return bool_matched, keys_matched
     else:
         return indices_matched, keys_matched
-
 
 # EOF
