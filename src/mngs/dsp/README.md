@@ -1,3 +1,10 @@
+<!-- ---
+!-- title: ./mngs_repo/src/mngs/dsp/README.md
+!-- author: ywatanabe
+!-- date: 2024-11-08 09:20:11
+!-- --- -->
+
+
 # [`mngs.dsp`](https://github.com/ywatanabe1989/mngs/tree/main/src/mngs/dsp/)
 
 ## Overview
@@ -32,7 +39,7 @@ pip install mngs
 <div style="display: flex; justify-content: center; flex-wrap: wrap;">
   <img src="./_wavelet/wavelet.png" height="300" style="border: 2px solid gray; margin: 5px;">
   <img src="./_hilbert/traces.png" height="300" style="border: 2px solid gray; margin: 5px;">
-  <img src="./_modulation_index/modulation_index.png" height="300" style="border: 2px solid gray; margin: 5px;">
+  <img src="./_Modulation_index/Modulation_index.png" height="300" style="border: 2px solid gray; margin: 5px;">
   <img src="./_pac/pac_with_trainable_bandpass_fp32.png" height="300" style="border: 2px solid gray; margin: 5px;">
 </div>
 
@@ -112,7 +119,7 @@ pac, freqs_pha, freqs_amp = mngs.dsp.pac(xx, fs) # This process is computational
 - `mngs.dsp.chirp(t, f0, f1, method)`: Generates chirp signal
 - `mngs.dsp.hilbert(signal)`: Performs Hilbert transform
 - `mngs.dsp.phase_amplitude_coupling(signal, fs)`: Calculates Phase-Amplitude Coupling
-- `mngs.dsp.modulation_index(signal, fs)`: Computes Modulation Index
+- `mngs.dsp.Modulation_index(signal, fs)`: Computes Modulation Index
 - `mngs.dsp.psd(signal, fs)`: Estimates Power Spectral Density
 - `mngs.dsp.resample(signal, orig_fs, new_fs)`: Resamples signal to new frequency
 - `mngs.dsp.add_noise(signal, snr)`: Adds noise to signal with specified SNR
@@ -138,4 +145,3 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 Yusuke Watanabe (ywata1989@gmail.com)
 
 For more information and updates, please visit the [mngs GitHub repository](https://github.com/ywatanabe1989/mngs).
-
