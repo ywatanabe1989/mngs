@@ -1,15 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-13 14:49:52 (ywatanabe)"
+# Time-stamp: "2024-11-13 14:53:28 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/plt/_subplots/_AxisWrapper.py
 
 from collections import OrderedDict
 from functools import wraps
 
-import matplotlib.pyplot as plt
-import pandas as pd
-
-from ...plt import ax as ax_module
 from ._AxisWrapperMixins import (
     AdjustmentMixin,
     BasicPlotMixin,
@@ -19,7 +15,7 @@ from ._AxisWrapperMixins import (
 
 
 class AxisWrapper(
-        BasicPlotMixin, SeabornMixin, AdjustmentMixin, TrackingMixin
+    BasicPlotMixin, SeabornMixin, AdjustmentMixin, TrackingMixin
 ):
     """Wrapper class for matplotlib axis with additional functionality."""
 
@@ -49,11 +45,13 @@ class AxisWrapper(
             original_attr = getattr(self.axis, attr)
 
             if callable(original_attr):
+
                 @wraps(original_attr)
                 def wrapper(*args, track=None, id=None, **kwargs):
                     results = original_attr(*args, **kwargs)
                     self._track(track, id, attr, args, kwargs)
                     return results
+
                 return wrapper
             else:
                 return original_attr

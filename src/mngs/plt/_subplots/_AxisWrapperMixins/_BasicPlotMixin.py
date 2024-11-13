@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-13 14:41:57 (ywatanabe)"
+# Time-stamp: "2024-11-13 14:53:50 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_BasicPlotMixin.py
 
 from typing import List, Optional
 
+import matplotlib.pyplot as plt
 import mngs
 import numpy as np
 import pandas as pd
@@ -215,7 +216,6 @@ class BasicPlotMixin:
                 self.axis, xx, yy, width, height, **kwargs
             )
         self._track(track, id, method_name, None, None)
-
 
     def fillv(
         self,

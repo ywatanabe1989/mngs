@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-13 14:38:51 (ywatanabe)"
+# Time-stamp: "2024-11-13 14:53:51 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/__init__.py
 
-import os as __os
 import importlib as __importlib
 import inspect as __inspect
+import os as __os
 
 # Get the current directory
 current_dir = __os.path.dirname(__file__)
@@ -23,6 +23,16 @@ for filename in __os.listdir(current_dir):
                     globals()[name] = obj
 
 # Clean up temporary variables
-del __os, __importlib, __inspect, current_dir, filename, module_name, module, name, obj
+del (
+    __os,
+    __importlib,
+    __inspect,
+    current_dir,
+    filename,
+    module_name,
+    module,
+    name,
+    obj,
+)
 
 # EOF

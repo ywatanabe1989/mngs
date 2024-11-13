@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-11 07:14:52 (ywatanabe)"
+# Time-stamp: "2024-11-13 14:30:43 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/web/_search_pubmed.py
 
 """

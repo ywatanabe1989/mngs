@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "ywatanabe (2024-11-07 20:35:22)"
+# Time-stamp: "2024-11-13 14:33:50 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/gen/_close.py
 
 import os

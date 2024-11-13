@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-11 04:37:28 (ywatanabe)"
+# Time-stamp: "2024-11-13 14:34:22 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/gen/_start.py
 
 import inspect
@@ -23,6 +23,7 @@ from ..path import split
 from ..plt._configure_mpl import configure_mpl
 from ..reproduce._fix_seeds import fix_seeds
 from ..reproduce._gen_ID import gen_ID
+from ..io import flush
 
 """
 Functionality:
@@ -257,6 +258,7 @@ def start(
 
     # Logging
     if sys is not None:
+        flush(sys)
         sys.stdout, sys.stderr = tee(sys, sdir=sdir, verbose=verbose)
         CONFIGS["sys"] = sys
 
