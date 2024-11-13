@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-12 15:17:21 (ywatanabe)"
+# Time-stamp: "2024-11-13 14:25:06 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/io/_save.py
 
 """
