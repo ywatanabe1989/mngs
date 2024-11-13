@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-13 13:13:55 (ywatanabe)"
+# Time-stamp: "2024-11-13 14:43:38 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_TrackingMixin.py
 
 """
@@ -18,7 +18,7 @@ from contextlib import contextmanager
 
 import pandas as pd
 
-from ._to_sigma import to_sigma as _to_sigma
+from .._to_sigma import to_sigma as _to_sigma
 
 
 class TrackingMixin:

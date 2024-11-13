@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-13 13:33:33 (ywatanabe)"
+# Time-stamp: "2024-11-13 14:41:57 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_BasicPlotMixin.py
 
 from typing import List, Optional
@@ -215,6 +215,149 @@ class BasicPlotMixin:
                 self.axis, xx, yy, width, height, **kwargs
             )
         self._track(track, id, method_name, None, None)
+
+
+    def fillv(
+        self,
+        starts,
+        ends,
+        color="red",
+        alpha=0.2,
+        track=True,
+        id=None,
+        **kwargs,
+    ):
+        # Method name
+        method_name = "fillv"
+
+        self.axis = ax_module.fillv(
+            self.axis, starts, ends, color=color, alpha=alpha
+        )
+
+        # Tracking
+        out = (starts, ends)
+        self._track(track, id, method_name, out, None)
+
+    def boxplot_(self, data, track=True, id=None, **kwargs):
+        # Method name
+        method_name = "boxplot_"
+
+        # Deep Copy
+        _data = data.copy()
+
+        # # NaN Handling
+        # data = np.hstack(data)
+        # data = data[~np.isnan(data)]
+
+        n = len(data)
+
+        if kwargs.get("label"):
+            kwargs["label"] = kwargs["label"] + f" (n={n})"
+
+        # Plotting
+        with self._no_tracking():
+            self.axis.boxplot(data, **kwargs)
+
+        out = pd.DataFrame(
+            {
+                "data": _data,
+                "n": [n for _ in range(len(data))],
+            }
+        )
+
+        # Tracking
+        self._track(track, id, method_name, out, None)
+
+    def raster(
+        self,
+        positions,
+        time=None,
+        labels=None,
+        colors=None,
+        track=True,
+        id=None,
+        **kwargs,
+    ):
+        """
+        Create raster plot with optional labels and colors.
+
+        Parameters
+        ----------
+        positions : list of lists
+            Event positions for each channel
+        time : array-like, optional
+            Time indices
+        labels : list, optional
+            Labels for each channel
+        colors : list, optional
+            Colors for each channel
+        track : bool, default True
+            Whether to track the plotting data
+        id : str, optional
+            Identifier for tracking
+        **kwargs : dict
+            Additional arguments for eventplot
+        """
+        # Method name
+        method_name = "raster"
+
+        # Handle colors
+        if colors is None:
+            colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
+        if len(colors) < len(positions):
+            colors = colors * (len(positions) // len(colors) + 1)
+
+        # Plotting
+        with self._no_tracking():
+            for i, (pos, color) in enumerate(zip(positions, colors)):
+                label = (
+                    labels[i]
+                    if labels is not None and i < len(labels)
+                    else None
+                )
+                self.axis.eventplot(pos, colors=color, label=label, **kwargs)
+
+            if labels is not None:
+                self.axis.legend()
+
+            df = ax_module.raster_plot(self.axis, positions, time=time)[1]
+
+        if id is not None:
+            df.columns = [f"{id}_{method_name}_{col}" for col in df.columns]
+        out = df
+
+        # Tracking
+        self._track(track, id, method_name, out, None)
+
+    def ecdf(self, data, track=True, id=None, **kwargs):
+        # Method name
+        method_name = "ecdf"
+
+        # Plotting
+        with self._no_tracking():
+            self.axis, df = ax_module.ecdf(self.axis, data, **kwargs)
+        out = df
+
+        # Tracking
+        self._track(track, id, method_name, out, None)
+
+    def joyplot(
+        self,
+        data,
+        track=True,
+        id=None,
+        **kwargs,
+    ):
+        # Method name
+        method_name = "joyplot"
+
+        # Plotting
+        with self._no_tracking():
+            self.axis = ax_module.joyplot(self.axis, data, **kwargs)
+
+        # Tracking
+        out = data
+        self._track(track, id, method_name, out, None)
 
 
 # class BasicPlotMixin:
