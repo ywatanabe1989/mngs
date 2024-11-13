@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-11 06:03:22 (ywatanabe)"
+# Time-stamp: "2024-11-13 14:25:59 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/str/_search.py
 
 import re
@@ -12,7 +12,13 @@ import xarray as xr
 from natsort import natsorted
 
 
-def search(patterns, strings, only_perfect_match=False, as_bool=False, ensure_one=False):
+def search(
+    patterns,
+    strings,
+    only_perfect_match=False,
+    as_bool=False,
+    ensure_one=False,
+):
     """Search for patterns in strings using regular expressions.
 
     Parameters
@@ -53,7 +59,9 @@ def search(patterns, strings, only_perfect_match=False, as_bool=False, ensure_on
     """
 
     def to_list(string_or_pattern):
-        if isinstance(string_or_pattern, (np.ndarray, pd.Series, xr.DataArray)):
+        if isinstance(
+            string_or_pattern, (np.ndarray, pd.Series, xr.DataArray)
+        ):
             return string_or_pattern.tolist()
         elif isinstance(string_or_pattern, abc.KeysView):
             return list(string_or_pattern)
@@ -78,7 +86,11 @@ def search(patterns, strings, only_perfect_match=False, as_bool=False, ensure_on
     keys_matched = list(np.array(strings)[indices_matched])
 
     if ensure_one:
-        assert len(indices_matched) == 1, "Expected exactly one match, but found {}".format(len(indices_matched))
+        assert (
+            len(indices_matched) == 1
+        ), "Expected exactly one match, but found {}".format(
+            len(indices_matched)
+        )
 
     if as_bool:
         bool_matched = np.zeros(len(strings), dtype=bool)
@@ -86,5 +98,6 @@ def search(patterns, strings, only_perfect_match=False, as_bool=False, ensure_on
         return bool_matched, keys_matched
     else:
         return indices_matched, keys_matched
+
 
 # EOF

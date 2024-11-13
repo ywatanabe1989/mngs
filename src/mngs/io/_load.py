@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-02 16:23:36 (ywatanabe)"
+# Time-stamp: "2024-11-11 08:02:07 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/io/_load.py
-#!/usr/bin/env python3
 
 import json
 import os
@@ -17,6 +16,10 @@ import pandas as pd
 import torch
 import yaml
 from PIL import Image
+
+#!/usr/bin/env python3
+
+
 
 
 def load(lpath, show=False, verbose=False, **kwargs):
@@ -59,6 +62,9 @@ def load(lpath, show=False, verbose=False, **kwargs):
             lpath = lpath.replace('f"', '')
 
     lpath = lpath.replace("/./", "/")
+
+    if not os.path.exists(lpath):
+        raise FileNotFoundError(f"{lpath} not found.")
 
     try:
         extension = "." + lpath.split(".")[-1]
