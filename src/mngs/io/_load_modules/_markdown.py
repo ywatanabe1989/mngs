@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-14 07:41:28 (ywatanabe)"
+# Time-stamp: "2024-11-14 07:55:42 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/io/_load_modules/_markdown.py
 
-def _load_markdown(lpath_md, style="plain_text"):
+def _load_markdown(lpath_md, style="plain_text", **kwargs):
     """
     Load and convert Markdown content from a file.
 

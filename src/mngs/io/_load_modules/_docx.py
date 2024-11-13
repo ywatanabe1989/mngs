@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-14 07:41:22 (ywatanabe)"
+# Time-stamp: "2024-11-14 07:55:35 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/io/_load_modules/_docx.py
 
-def _load_docx(lpath):
+from typing import Any
+
+
+def _load_docx(lpath: str, **kwargs) -> Any:
     """
     Load and extract text content from a .docx file.
 

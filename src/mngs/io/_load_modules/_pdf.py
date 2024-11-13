@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-14 07:41:32 (ywatanabe)"
+# Time-stamp: "2024-11-14 07:55:46 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/io/_load_modules/_pdf.py
 
-def _load_pdf(lpath):
+def _load_pdf(lpath, **kwargs):
     """Load PDF file and return extracted text."""
     try:
         if not lpath.endswith(".pdf"):

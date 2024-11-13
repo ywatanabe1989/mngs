@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-14 07:41:31 (ywatanabe)"
+# Time-stamp: "2024-11-14 07:55:45 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/io/_load_modules/_optuna.py
 
 def load_yaml_as_an_optuna_dict(fpath_yaml, trial):

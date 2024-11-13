@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-14 07:41:26 (ywatanabe)"
+# Time-stamp: "2024-11-14 07:55:39 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/io/_load_modules/_joblib.py
+
+from typing import Any
 
 import joblib
 
 
-def _load_joblib(lpath, **kwargs):
+def _load_joblib(lpath: str, **kwargs) -> Any:
     """Load joblib file."""
     if not lpath.endswith(".joblib"):
         raise ValueError("File must have .joblib extension")

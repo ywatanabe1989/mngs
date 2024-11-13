@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-14 07:41:19 (ywatanabe)"
+# Time-stamp: "2024-11-14 07:55:32 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/io/_load_modules/_catboost.py
 
 from typing import Union
