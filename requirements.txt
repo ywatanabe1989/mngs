@@ -80,6 +80,7 @@ tabulate
 tensorpac
 termplotlib
 tk
+tldr
 torch
 torchaudio
 torchsummary
