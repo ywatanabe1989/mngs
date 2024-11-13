@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-07 06:07:10 (ywatanabe)"
+# Time-stamp: "2024-11-12 15:16:23 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/io/_save.py
 
 """
@@ -138,8 +138,8 @@ def save(
             fpath = inspect.stack()[1].filename
 
             if ("ipython" in fpath) or ("<stdin>" in fpath):
-                # fpath = f'/tmp/{os.getenv("USER")}.py'
-                fpath = os.getenv("MNGS_DIR", "~/.cache/mngs/") + os.getenv("USER") + ".py"
+                fpath = f'/tmp/{os.getenv("USER")}.py'
+                # fpath = os.getenv("MNGS_DIR", "~/.cache/mngs/") + os.getenv("USER") + ".py"
 
             fdir, fname, _ = split(fpath)
             spath = fdir + fname + "/" + sfname_or_spath
