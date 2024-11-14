@@ -1,9 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-15 02:40:14 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/db/_BaseSQLiteDB.py
+
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_BaseSQLiteDB.py"
+
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 # Time-stamp: "2024-11-11 18:14:30 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/db/_BaseSQLiteDB.py
 
 from typing import List, Optional
+
 from ..str import printc as _printc
 from ._BaseSQLiteDB_modules._BatchMixin import _BatchMixin
 from ._BaseSQLiteDB_modules._BlobMixin import _BlobMixin
@@ -16,6 +25,7 @@ from ._BaseSQLiteDB_modules._RowMixin import _RowMixin
 from ._BaseSQLiteDB_modules._TableMixin import _TableMixin
 from ._BaseSQLiteDB_modules._TransactionMixin import _TransactionMixin
 
+
 class BaseSQLiteDB(
     _ConnectionMixin,
     _QueryMixin,
@@ -26,9 +36,13 @@ class BaseSQLiteDB(
     _BatchMixin,
     _BlobMixin,
     _ImportExportMixin,
-    _MaintenanceMixin
+    _MaintenanceMixin,
 ):
     """Comprehensive SQLite database management class."""
+
+    def __init__(self, db_path: str, use_temp: bool = False):
+        """Initializes database with option for temporary copy."""
+        _ConnectionMixin.__init__(self, db_path, use_temp)
 
     def __call__(
         self,
@@ -54,6 +68,7 @@ class BaseSQLiteDB(
     @property
     def summary(self):
         self()
+
 
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
