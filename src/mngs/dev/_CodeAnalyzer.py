@@ -1,15 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-15 12:05:42 (ywatanabe)"
+# Time-stamp: "2024-11-15 12:45:01 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/dev/_CodeAnalyzer.py
 
 __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/dev/_CodeAnalyzer.py"
 
 
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-15 09:52:42 (ywatanabe)"
 
 import ast
 
@@ -99,7 +95,7 @@ class CodeAnalyzer:
     def _trace_calls(self, node, depth=0):
         sequence_orig = self.sequence
 
-        if isinstance(node, ast.FunctionDef):
+        if isinstance(node, (ast.FunctionDef, ast.ClassDef)):
 
             if node.name not in self.skip_functions:
                 # Track all function definitions
@@ -191,30 +187,19 @@ class CodeAnalyzer:
                 if depth > 1:
                     seq_current = seq_prev + 1
                     seq_prev = seq_current
-                else:  # depth == 0
+                else:
                     seq_current = 0
                     seq_prev = 0
 
             filtered_flow[ii] = (depth, call, seq_current)
 
-        # filtered_flow = [
-        #     (depth, call, 0 if depth == 1 else seq)
-        #     for depth, call, seq in filtered_flow
-        # ]
-
         for depth, call, seq in filtered_flow:
             prefix = "    " * depth
             if depth == 1:
-                output.append("")
-
-            if depth != 1:
-                output.append(
-                    f"{prefix}[{int(seq) if isinstance(seq, float) else seq}] └── {call}"
-                )
+                line = f"\n{prefix}[{int(seq) if isinstance(seq, float) else seq:02d}] {call}"
             else:
-                output.append(
-                    f"{prefix}[{int(seq) if isinstance(seq, float) else seq}] {call}"
-                )
+                line = f"{prefix}[{int(seq) if isinstance(seq, float) else seq:02d}] └── {call}"
+            output.append(line)
 
         return "\n".join(output)
 
@@ -222,19 +207,19 @@ class CodeAnalyzer:
         with open(self.file_path, "r") as file:
             content = file.read()
 
-            # Find main guard position and truncate content
-            if "if __name__" in content:
-                main_guard_pos = content.find("if __name__")
-                content = content[:main_guard_pos].strip()
+            # # Find main guard position and truncate content
+            # if "if __name__" in content:
+            #     main_guard_pos = content.find("if __name__")
+            #     content = content[:main_guard_pos].strip()
 
             tree = ast.parse(content)
         self._trace_calls(tree)
         return self._format_output()
 
 
-def analyze_current_file():
-    analyzer = CodeAnalyzer()
-    return analyzer.analyze()
+# def analyze_current_file():
+#     analyzer = CodeAnalyzer()
+#     return analyzer.analyze()
 
 
 def analyze_code(lpath):
@@ -242,7 +227,7 @@ def analyze_code(lpath):
 
 
 def main(args):
-    diagram = analyze_current_file()
+    diagram = analyze_code(__file__)
     print(diagram)
     return 0
 
