@@ -1,15 +1,16 @@
+# dbus-python
 GitPython
 Pillow
 PyYAML
 Pyarrow
 accelerate
+aiohttp
 ansi-escapes
 anthropic
 black
 bs4
 catboost
 chardet
-# dbus-python
 epc
 flake8
 flask
@@ -79,6 +80,7 @@ tabulate
 tensorpac
 termplotlib
 tk
+tldr
 torch
 torchaudio
 torchsummary

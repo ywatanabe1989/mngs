@@ -1,7 +1,29 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-08 01:41:01 (ywatanabe)"
-# File: ./mngs/src/mngs/gen/_start.py
+# Time-stamp: "2024-11-13 14:34:22 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/gen/_start.py
+
+import inspect
+import os as _os
+import re
+import sys as sys_module
+from datetime import datetime
+from pprint import pprint
+from time import sleep
+from typing import Any, Dict, Optional, Tuple
+
+import matplotlib
+import matplotlib.pyplot as plt_module
+
+from ..dict import DotDict
+from ..gen._tee import tee
+from ..io._load import load
+from ..io._load_configs import load_configs
+from ..path import split
+from ..plt._configure_mpl import configure_mpl
+from ..reproduce._fix_seeds import fix_seeds
+from ..reproduce._gen_ID import gen_ID
+from ..io import flush
 
 """
 Functionality:
@@ -21,29 +43,6 @@ Prerequisites:
     * matplotlib
     * mngs package
 """
-
-import inspect
-import os as _os
-import re
-from datetime import datetime
-from pprint import pprint
-from time import sleep
-from typing import Any, Dict, Optional, Tuple
-import sys as sys_module
-import matplotlib.pyplot as plt_module
-
-import matplotlib
-# import mngs
-
-from ..dict import DotDict
-from ..gen._tee import tee
-from ..io._load import load
-from ..io._load_configs import load_configs
-from ..path import split
-from ..plt._configure_mpl import configure_mpl
-from ..reproduce._fix_seeds import fix_seeds
-from ..reproduce._gen_ID import gen_ID
-
 
 def _print_header(
     ID: str, PID: int, configs: Dict[str, Any], verbose: bool = True
@@ -71,7 +70,6 @@ def _print_header(
         print(f"\n{'-'*40}\n")
     sleep(1)
 
-
 def _initialize_env(IS_DEBUG: bool) -> Tuple[str, int]:
     """Initialize environment with ID and PID.
 
@@ -89,7 +87,6 @@ def _initialize_env(IS_DEBUG: bool) -> Tuple[str, int]:
     ID = gen_ID(N=4) if not IS_DEBUG else "DEBUG_" + gen_ID(N=4)
     PID = _os.getpid()
     return ID, PID
-
 
 def _setup_configs(
     IS_DEBUG: bool, ID: str, PID: int, sdir: str, relative_sdir: str, verbose: bool
@@ -129,7 +126,6 @@ def _setup_configs(
     )
     return CONFIGS
 
-
 def _setup_matplotlib(
     plt: plt_module = None, agg: bool = False, **mpl_kwargs: Any
 ) -> Tuple[Any, Optional[Dict[str, Any]]]:
@@ -158,7 +154,6 @@ def _setup_matplotlib(
             matplotlib.use("Agg")
         return plt, CC
     return plt, None
-
 
 def start(
     sys: sys_module = None,
@@ -263,6 +258,7 @@ def start(
 
     # Logging
     if sys is not None:
+        flush(sys)
         sys.stdout, sys.stderr = tee(sys, sdir=sdir, verbose=verbose)
         CONFIGS["sys"] = sys
 
@@ -298,7 +294,6 @@ def start(
 
     return CONFIGS, sys.stdout, sys.stderr, plt, CC
 
-
 def _simplify_relative_path(sdir: str) -> str:
     """
     Simplify the relative path by removing specific patterns.
@@ -329,7 +324,6 @@ def _simplify_relative_path(sdir: str) -> str:
     )
     return simplified_path
 
-
 def _get_debug_mode() -> bool:
     # Debug mode check
     try:
@@ -346,14 +340,12 @@ def _get_debug_mode() -> bool:
         IS_DEBUG = False
     return IS_DEBUG
 
-
 def _clear_python_log_dir(log_dir: str) -> None:
     try:
         if _os.path.exists(log_dir):
             _os.system(f"rm -rf {log_dir}")
     except Exception as e:
         print(f"Failed to clear directory {log_dir}: {e}")
-
 
 def _get_mngs_version() -> str:
     """Gets mngs version"""
@@ -365,17 +357,12 @@ def _get_mngs_version() -> str:
         print(e)
         return "(not found)"
 
-
 if __name__ == "__main__":
-    """
-    This script does XYZ.
-    """
-
-    # Imports
     import os
     import sys
 
     import matplotlib.pyplot as plt
+    import mngs
 
     # Config
     CONFIG = mngs.io.load_configs()

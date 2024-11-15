@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-07 19:08:37 (ywatanabe)"
+# Time-stamp: "2024-11-08 20:31:33 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/ai/_gen_ai/_genai_factory.py
 
 import os
@@ -11,6 +11,7 @@ from ._Google import Google
 from ._Llama import Llama
 from ._OpenAI import OpenAI
 from ._Perplexity import Perplexity
+from ._DeepSeek import DeepSeek
 from .PARAMS import MODELS
 
 """Imports"""
@@ -43,6 +44,7 @@ def genai_factory(
         "Google": Google,
         "Llama": Llama,
         "Perplexity": Perplexity,
+        "DeepSeek": DeepSeek,
     }[provider]
 
     # Select a random API key from the list
@@ -71,43 +73,6 @@ def main(
     out = m(prompt)
     return out
 
-################################################################################
-# Helper functions
-################################################################################
-# def model2apikey(model):
-#     """Retrieve the API key for a given model from environment variables."""
-#     for config in MODEL_CONFIG.values():
-#         if model in config["models"]:
-#             api_key = os.getenv(config["api_key_env"])
-#             if not api_key:
-#                 raise EnvironmentError(
-#                     f"API key for {model} not found in environment."
-#                 )
-#             return api_key
-#     raise ValueError(f"Model {model} is not supported.")
-
-# def test_all(seed=None, temperature=1.0):
-#     model_names = [
-#         "claude-3-5-sonnet-20240620",
-#         # "gpt-4",
-#         # "claude-3-opus-20240229",
-#         # "gemini-pro",
-#         # "llama-3-sonar-large-32k-online",
-#     ]
-
-#     for model_name in model_names:
-#         for stream in [False, True]:
-#             model = GenAI(
-#                 model_name, stream=stream, seed=seed, temperature=temperature
-#             )
-#             # prompt = "Hi. Tell me your name just within a line."
-#             prompt = "Hi. Tell me about the hippocampus."
-
-#             print(
-#                 f"\n{'-'*40}\n{model.model}\nStream: {stream}\nSeed: {seed}\nTemperature: {temperature}\n{'-'*40}"
-#             )
-#             print(model(prompt))
-#             print(model.available_models)
 
 def main(
     model="gemini-1.5-pro-latest",
@@ -120,6 +85,25 @@ def main(
     m = mngs.ai.GenAI(
         model=model,
         api_key=os.getenv("GOOGLE_API_KEY"),
+        stream=stream,
+        seed=seed,
+        temperature=temperature,
+    )
+    out = m(prompt)
+
+    return out
+
+def main(
+    model="deepseek-coder",
+    stream=False,
+    prompt="Hi, please tell me about the hippocampus",
+    seed=None,
+    temperature=1.0,
+):
+
+    m = mngs.ai.GenAI(
+        model=model,
+        api_key=os.getenv("DEEPSEEK_API_KEY"),
         stream=stream,
         seed=seed,
         temperature=temperature,
