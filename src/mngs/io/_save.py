@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-16 13:50:36 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/io/_save.py
+
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/io/_save.py"
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 # Time-stamp: "2024-11-13 14:25:06 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/io/_save.py
 
@@ -38,6 +45,7 @@ from ..path._clean import clean
 from ..path._getsize import getsize
 from ..path._split import split
 from ..str._color_text import color_text
+from ..str._readable_bytes import readable_bytes
 from ..types._is_listed_X import is_listed_X
 from ._save_image import _save_image
 from ._save_listed_dfs_as_csv import _save_listed_dfs_as_csv
@@ -340,6 +348,7 @@ def _save(
     if verbose:
         if os.path.exists(spath):
             file_size = getsize(spath)
+            file_size = readable_bytes(file_size)
             print(
                 color_text(f"\nSaved to: {spath} ({file_size})", c="yellow")
             )

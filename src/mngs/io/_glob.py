@@ -1,22 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-03 04:30:46 (ywatanabe)"
+# Time-stamp: "2024-11-16 12:49:08 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/io/_glob.py
 
-import re
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/io/_glob.py"
+
+import re as _re
 from glob import glob as _glob
-
-# from natsort import natsorted
-try:
-    from natsort import natsorted
-except ImportError as e:
-    import sys
-    print(f"Error importing natsort: {e}", file=sys.stderr)
-    print(f"Python path: {sys.path}", file=sys.stderr)
-    raise
+from ..str._parse import parse as _parse
+from natsort import natsorted as _natsorted
 
 
-def glob(expression, ensure_one=False):
+def glob(expression, parse=False, ensure_one=False):
     """
     Perform a glob operation with natural sorting and extended pattern support.
 
@@ -42,16 +37,21 @@ def glob(expression, ensure_one=False):
     >>> glob('data/{a,b}/*.txt')
     ['data/a/file1.txt', 'data/a/file2.txt', 'data/b/file1.txt']
     """
-    glob_pattern = re.sub(r"{[^}]*}", "*", expression)
+    glob_pattern = _re.sub(r"{[^}]*}", "*", expression)
     try:
-        found_paths = natsorted(_glob(eval(glob_pattern)))
+        found_paths = _natsorted(_glob(eval(glob_pattern)))
     except:
-        found_paths = natsorted(_glob(glob_pattern))
+        found_paths = _natsorted(_glob(glob_pattern))
 
     if ensure_one:
         assert len(found_paths) == 1
 
-    return found_paths
+    if parse:
+        parsed = [_parse(found_path, expression) for found_path in found_paths]
+        return found_paths, parsed
+
+    else:
+        return found_paths
 
 
 # EOF
