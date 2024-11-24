@@ -1,11 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-24 17:01:23 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/str/_printc.py
+
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/str/_printc.py"
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 # Time-stamp: "2024-11-03 03:47:51 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/str/_printc.py
 
 from ._color_text import color_text
+from pprint import pprint as _pprint
 
-def printc(message, char="-", n=40, c="cyan"):
+def printc(message, c="blue", char="-", n=40):
     """Print a message surrounded by a character border.
 
     This function prints a given message surrounded by a border made of
@@ -40,6 +48,7 @@ def printc(message, char="-", n=40, c="cyan"):
     text = f"\n{border}\n{message}\n{border}\n"
     if c is not None:
         text = color_text(text, c)
+
     print(text)
 
 # EOF
