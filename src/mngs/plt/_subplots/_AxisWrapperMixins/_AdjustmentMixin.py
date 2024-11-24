@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-17 14:12:21 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_AdjustmentMixin.py
+
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_AdjustmentMixin.py"
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 # Time-stamp: "2024-11-13 14:53:49 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_AdjustmentMixin.py
 
@@ -33,8 +40,42 @@ class AdjustmentMixin:
             self.axis, x=x, y=y, x_ha=x_ha, y_ha=y_ha
         )
 
-    def legend(self, location: str = "upper left") -> None:
-        return self.axis.legend(loc=location)
+
+    def legend(self, loc: str = "upper left") -> None:
+        """Places legend at specified location, including outside positions.
+
+        Parameters
+        ----------
+        loc : str
+            Legend position. Standard matplotlib positions plus:
+            - "right out", "left out", "top out", "bottom out"
+            - "right", "left", "top", "bottom" (same as above)
+            - "center right out", "center left out" (same as right/left out)
+            - "upper center out", "lower center out" (same as top/bottom out)
+        """
+        outside_positions = {
+            # Right variants
+            "right out": ("center left", (1.05, 0.5)),
+            "right": ("center left", (1.05, 0.5)),
+            "center right out": ("center left", (1.05, 0.5)),
+            # Left variants
+            "left out": ("center right", (-0.15, 0.5)),
+            "left": ("center right", (-0.15, 0.5)),
+            "center left out": ("center right", (-0.15, 0.5)),
+            # Top variants
+            "top out": ("upper center", (0.5, 1.15)),
+            "top": ("upper center", (0.5, 1.15)),
+            "upper center out": ("upper center", (0.5, 1.15)),
+            # Bottom variants
+            "bottom out": ("lower center", (0.5, -0.15)),
+            "bottom": ("lower center", (0.5, -0.15)),
+            "lower center out": ("lower center", (0.5, -0.15)),
+        }
+
+        if loc in outside_positions:
+            location, bbox = outside_positions[loc]
+            return self.axis.legend(loc=location, bbox_to_anchor=bbox)
+        return self.axis.legend(loc=loc)
 
     def set_xyt(
         self,
