@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-15 12:45:01 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/dev/_CodeAnalyzer.py
+# Time-stamp: "2024-11-20 10:27:28 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/dev/_analyze_code_flow.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/dev/_CodeAnalyzer.py"
-
-
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/dev/_analyze_code_flow.py"
 
 import ast
 
@@ -13,7 +11,7 @@ import matplotlib.pyplot as plt
 import mngs
 
 
-class CodeAnalyzer:
+class CodeFlowAnalyzer:
     def __init__(self, file_path: str):
         self.file_path = file_path
         self.execution_flow = []
@@ -89,6 +87,9 @@ class CodeAnalyzer:
             "mngs.str.printc",
             "printc",
             "mngs.io.load_configs",
+            "parse_args",
+            "run_main",
+            "load_configs",
         }
         # self.seen_calls = set()  # Track unique function calls
 
@@ -204,30 +205,31 @@ class CodeAnalyzer:
         return "\n".join(output)
 
     def analyze(self):
-        with open(self.file_path, "r") as file:
-            content = file.read()
+        if self.file_path:
+            try:
+                with open(self.file_path, "r") as file:
+                    content = file.read()
 
-            # # Find main guard position and truncate content
-            # if "if __name__" in content:
-            #     main_guard_pos = content.find("if __name__")
-            #     content = content[:main_guard_pos].strip()
+                    # Find main guard position and truncate content
+                    if "if __name__" in content:
+                        main_guard_pos = content.find("if __name__")
+                        content = content[:main_guard_pos].strip()
 
-            tree = ast.parse(content)
-        self._trace_calls(tree)
-        return self._format_output()
-
-
-# def analyze_current_file():
-#     analyzer = CodeAnalyzer()
-#     return analyzer.analyze()
+                    tree = ast.parse(content)
+                self._trace_calls(tree)
+                return self._format_output()
+            except Exception as e:
+                print(e)
+                return str(e)
 
 
-def analyze_code(lpath):
-    return CodeAnalyzer(lpath).analyze()
+
+def analyze_code_flow(lpath):
+    return CodeFlowAnalyzer(lpath).analyze()
 
 
 def main(args):
-    diagram = analyze_code(__file__)
+    diagram = analyze_code_flow(__file__)
     print(diagram)
     return 0
 
