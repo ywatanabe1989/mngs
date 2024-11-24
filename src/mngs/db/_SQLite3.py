@@ -1,32 +1,26 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-15 02:40:14 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/db/_BaseSQLiteDB.py
+# Time-stamp: "2024-11-24 22:36:49 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/db/_SQLite3.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_BaseSQLiteDB.py"
-
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-11 18:14:30 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/db/_BaseSQLiteDB.py
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_SQLite3.py"
 
 from typing import List, Optional
 
 from ..str import printc as _printc
-from ._BaseSQLiteDB_modules._BatchMixin import _BatchMixin
-from ._BaseSQLiteDB_modules._BlobMixin import _BlobMixin
-from ._BaseSQLiteDB_modules._ConnectionMixin import _ConnectionMixin
-from ._BaseSQLiteDB_modules._ImportExportMixin import _ImportExportMixin
-from ._BaseSQLiteDB_modules._IndexMixin import _IndexMixin
-from ._BaseSQLiteDB_modules._MaintenanceMixin import _MaintenanceMixin
-from ._BaseSQLiteDB_modules._QueryMixin import _QueryMixin
-from ._BaseSQLiteDB_modules._RowMixin import _RowMixin
-from ._BaseSQLiteDB_modules._TableMixin import _TableMixin
-from ._BaseSQLiteDB_modules._TransactionMixin import _TransactionMixin
+from ._SQLite3Mixins._BatchMixin import _BatchMixin
+from ._SQLite3Mixins._BlobMixin import _BlobMixin
+from ._SQLite3Mixins._ConnectionMixin import _ConnectionMixin
+from ._SQLite3Mixins._ImportExportMixin import _ImportExportMixin
+from ._SQLite3Mixins._IndexMixin import _IndexMixin
+from ._SQLite3Mixins._MaintenanceMixin import _MaintenanceMixin
+from ._SQLite3Mixins._QueryMixin import _QueryMixin
+from ._SQLite3Mixins._RowMixin import _RowMixin
+from ._SQLite3Mixins._TableMixin import _TableMixin
+from ._SQLite3Mixins._TransactionMixin import _TransactionMixin
 
 
-class BaseSQLiteDB(
+class SQLite3(
     _ConnectionMixin,
     _QueryMixin,
     _TransactionMixin,
@@ -69,6 +63,7 @@ class BaseSQLiteDB(
     def summary(self):
         self()
 
+BaseSQLiteDB = SQLite3
 
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
