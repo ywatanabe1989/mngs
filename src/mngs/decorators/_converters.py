@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-17 21:31:05 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/decorators/_converters.py
+
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_converters.py"
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 # Time-stamp: "2024-11-07 05:53:09 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/decorators/_converters.py
 
@@ -143,6 +150,12 @@ def to_torch(*args: _Any, return_fn: Callable = _return_if, **kwargs: _Any) -> _
         if isinstance(data, tuple):
             return [_to_torch(item) for item in data if item is not None]
 
+        if isinstance(data, dict):  # Add this block
+            result = {k: _to_torch(v) for k, v in data.items()}
+            if 'axis' in result:
+                result['dim'] = result.pop('axis')
+            return result
+
         return data
 
     converted_args = [_to_torch(arg) for arg in args if arg is not None]
@@ -166,6 +179,11 @@ def to_numpy(*args: _Any, return_fn: Callable = _return_if, **kwargs: _Any) -> _
             return np.array(data)
         if isinstance(data, tuple):
             return [_to_numpy(item) for item in data if item is not None]
+        if isinstance(data, dict):  # Add this block
+            result = {k: _to_numpy(v) for k, v in data.items()}
+            if 'dim' in result:
+                result['axis'] = result.pop('dim')
+            return result
         return data
 
     converted_args = [_to_numpy(arg) for arg in args if arg is not None]
