@@ -1,14 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-20 23:48:32 (ywatanabe)"
+# Time-stamp: "2024-11-25 00:29:19 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/decorators/_torch_fn.py
 
 __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_torch_fn.py"
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-06 15:45:12 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/decorators/_torch_fn.py
 
 """
 Functionality:
@@ -41,18 +36,46 @@ from ._converters import (
 )
 
 def torch_fn(func: Callable) -> Callable:
+    """Decorates functions to handle PyTorch tensor conversions.
+
+    Automatically converts input arguments to PyTorch tensors and handles output
+    conversions based on input type (maintaining torch.Tensor or converting back
+    to numpy.ndarray).
+
+    Example
+    -------
+    >>> @torch_fn
+    ... def custom_softmax(x):
+    ...     return F.softmax(x, dim=-1)
+    >>> array_data = np.array([1, 2, 3])
+    >>> result = custom_softmax(array_data)
+    >>> print(type(result), result)
+    <class 'numpy.ndarray'> [0.09003057 0.24472847 0.66524096]
+
+    Parameters
+    ----------
+    func : Callable
+        Function that expects PyTorch tensor inputs
+
+    Returns
+    -------
+    Callable
+        Wrapped function that handles data type conversions
+    """
     @wraps(func)
     def wrapper(*args: _Any, **kwargs: _Any) -> _Any:
         is_torch_input = is_torch(*args, **kwargs)
-        # Skip conversion if inputs are already torch tensors
-        if is_torch_input:
-            results = func(*args, **kwargs)
-        else:
-            converted_args, converted_kwargs = to_torch(
-                *args, return_fn=_return_always, **kwargs
-            )
-            results = func(*converted_args, **converted_kwargs)
-            results = to_numpy(results, return_fn=_return_if)[0]
+        converted_args, converted_kwargs = to_torch(*args, return_fn=_return_always, **kwargs)
+        results = func(*converted_args, **converted_kwargs)
+
+        # Convert back to numpy only if input wasn't torch
+        if not is_torch_input:
+            if isinstance(results, tuple):
+                results = tuple(to_numpy(r, return_fn=_return_if) for r in results)
+            else:
+                results = to_numpy(results, return_fn=_return_if)
+                if isinstance(results, tuple) and len(results) == 1:
+                    results = results[0]
         return results
 
     return wrapper

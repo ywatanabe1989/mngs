@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-17 12:26:47 (ywatanabe)"
+# Time-stamp: "2024-11-25 00:31:08 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/io/_glob.py
 
 __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/io/_glob.py"

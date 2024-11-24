@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-24 19:28:37 (ywatanabe)"
+# Time-stamp: "2024-11-25 00:27:26 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/decorators/_batch_fn.py
 
 __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_batch_fn.py"
@@ -117,6 +117,49 @@ def _process_batch_data(
 
     return _combine_results(results)
 
+#     return wrapper
+
+
+# def batch_fn(func: Callable) -> Callable:
+#     @wraps(func)
+#     def wrapper(
+#         x: Union[List, torch.Tensor], *args: _Any, **kwargs: _Any
+#     ) -> Union[List, torch.Tensor, Tuple[torch.Tensor, ...]]:
+#         batch_size = int(kwargs.pop("batch_size", 4))
+#         if len(x) <= batch_size:
+#             return func(x, *args, **kwargs, batch_size=batch_size)
+#         n_batches = (len(x) + batch_size - 1) // batch_size
+#         results = []
+#         for i_batch in _tqdm(
+#             range(n_batches),
+#             desc=f"Processing {len(x)} items in batches of {batch_size}",
+#         ):
+#             start = i_batch * batch_size
+#             end = min((i_batch + 1) * batch_size, len(x))
+#             batch_result = func(
+#                 x[start:end], *args, **kwargs, batch_size=batch_size
+#             )
+#             if isinstance(batch_result, torch.Tensor):
+#                 batch_result = batch_result.cpu()
+#             elif isinstance(batch_result, tuple):
+#                 batch_result = tuple(
+#                     val.cpu() if isinstance(val, torch.Tensor) else val
+#                     for val in batch_result
+#                 )
+#             results.append(batch_result)
+#         if isinstance(results[0], tuple):
+#             n_vars = len(results[0])
+#             combined_results = [
+#                 torch.vstack([res[i_var] for res in results])
+#                 for i_var in range(n_vars)
+#             ]
+#             return tuple(combined_results)
+#         elif isinstance(results[0], torch.Tensor):
+#             return torch.vstack(results)
+#         else:
+#             return sum(results, [])
+
+#     return wrapper
 
 def batch_fn(func: Callable) -> Callable:
     """Decorator for processing large data arrays in batches along multiple dimensions.

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-20 15:17:00 (ywatanabe)"
+# Time-stamp: "2024-11-25 00:31:50 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/io/_save.py
 
 __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/io/_save.py"
@@ -45,6 +45,7 @@ from ..path._clean import clean
 from ..path._getsize import getsize
 from ..path._split import split
 from ..str._color_text import color_text
+from ..str._readable_bytes import readable_bytes
 from ..types._is_listed_X import is_listed_X
 from ._save_image import _save_image
 from ._save_listed_dfs_as_csv import _save_listed_dfs_as_csv
