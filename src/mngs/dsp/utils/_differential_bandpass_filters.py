@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-18 02:47:29 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/dsp/utils/_differential_bandpass_filters.py
+
+__file__ = "/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/dsp/utils/_differential_bandpass_filters.py"
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 # Time-stamp: "2024-11-03 07:23:53 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/dsp/utils/_differential_bandpass_filters.py
 
@@ -15,9 +22,9 @@ from ...gen._to_odd import to_odd
 
 import warnings
 
-warnings.simplefilter("ignore", UserWarning)
-from torchaudio.prototype.functional import sinc_impulse_response
-warnings.resetwarnings()
+# warnings.simplefilter("ignore", UserWarning)
+# from torchaudio.prototype.functional import sinc_impulse_response
+# warnings.resetwarnings()
 
 # Functions
 def init_bandpass_filters(
@@ -54,6 +61,7 @@ def build_bandpass_filters(sig_len, fs, pha_mids, amp_mids, cycle):
         return order
 
     def _calc_filters(lows_hz, highs_hz, fs, order):
+        from torchaudio.prototype.functional import sinc_impulse_response
         nyq = fs / 2.0
         order = to_odd(order)
         # lowpass filters
