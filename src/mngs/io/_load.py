@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-14 07:44:06 (ywatanabe)"
+# Time-stamp: "2024-11-17 20:05:43 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/io/_load.py
+
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/io/_load.py"
 
 import os
 
 from typing import Any
 from ..decorators import preserve_doc
-from ..str import clean
+from ..str._clean_path import clean_path
 from ._load_modules._catboost import _load_catboost
 from ._load_modules._con import _load_con
 from ._load_modules._db import _load_sqlite3db
@@ -75,7 +77,7 @@ def load(
     >>> image = load('image.png')
     >>> model = load('model.pth')
     """
-    lpath = clean(lpath)
+    lpath = clean_path(lpath)
 
     if not os.path.exists(lpath):
         raise FileNotFoundError(f"{lpath} not found.")
