@@ -1,8 +1,19 @@
 # src from here --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
+# # Time-stamp: "2024-11-11 14:16:58 (ywatanabe)"
+# # File: ./mngs_repo/src/mngs/db/_delete_duplicates.py
+# 
+# import sqlite3
+# from typing import List, Optional, Tuple, Union
+# import pandas as pd
+# 
+# #!/usr/bin/env python3
+# # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-10-20 02:17:10 (ywatanabe)"
 # # /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/db/_delete_duplicates_clean.py
+# 
+# 
 # 
 # """
 # Functionality:
@@ -15,11 +26,8 @@
 #     - sqlite3, pandas, tqdm, mngs
 # """
 # 
-# import sqlite3
-# import pandas as pd
-# from typing import Union, List, Optional, Tuple
-# from tqdm import tqdm
-# import mngs
+# 
+# 
 # 
 # def _sort_db(
 #     cursor: sqlite3.Cursor,
@@ -388,6 +396,9 @@
 # 
 #     finally:
 #         conn.close()
+# 
+# 
+# # EOF
 
 # test from here --------------------------------------------------------------------------------
 #!/usr/bin/env python3
@@ -403,7 +414,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs.db._delete_duplicates import *
+from mngs..db._delete_duplicates import *
 
 class Test_MainFunctionality:
     def setup_method(self):

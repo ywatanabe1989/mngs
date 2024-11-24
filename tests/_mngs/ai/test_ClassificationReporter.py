@@ -1,7 +1,7 @@
 # src from here --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-03 03:36:09 (ywatanabe)"
+# # Time-stamp: "2024-11-13 12:54:17 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/ai/ClassificationReporter.py
 # 
 # import os
@@ -17,8 +17,12 @@
 # import numpy as np
 # import pandas as pd
 # import torch
-# from sklearn.metrics import (balanced_accuracy_score, classification_report,
-#                              confusion_matrix, matthews_corrcoef)
+# from sklearn.metrics import (
+#     balanced_accuracy_score,
+#     classification_report,
+#     confusion_matrix,
+#     matthews_corrcoef,
+# )
 # 
 # from ..reproduce import fix_seeds
 # 
@@ -125,9 +129,7 @@
 #     def __init__(self, sdir):
 #         self.sdir = sdir
 #         self.folds_dict = _defaultdict(list)
-#         fix_seeds(
-#             os=os, random=random, np=np, torch=torch, show=False
-#         )
+#         fix_seeds(os=os, random=random, np=np, torch=torch, show=False)
 # 
 #     def add(
 #         self,
@@ -280,13 +282,9 @@
 # 
 #         ## Preparation
 #         # for convenience
-#         true_class = (
-#             mngs.gen.torch_to_arr(true_class).astype(int).reshape(-1)
-#         )
+#         true_class = mngs.gen.torch_to_arr(true_class).astype(int).reshape(-1)
 #         pred_class = (
-#             mngs.gen.torch_to_arr(pred_class)
-#             .astype(np.float64)
-#             .reshape(-1)
+#             mngs.gen.torch_to_arr(pred_class).astype(np.float64).reshape(-1)
 #         )
 #         pred_proba = mngs.gen.torch_to_arr(pred_proba).astype(np.float64)
 # 
@@ -424,7 +422,7 @@
 # 
 #             if n_folds != 0:
 #                 ## listed scalars
-#                 if mngs.gen.is_listed_X(self.folds_dict[k], [float, int]):
+#                 if is_listed_X(self.folds_dict[k], [float, int]):
 #                     mm = np.mean(self.folds_dict[k])
 #                     ss = np.std(self.folds_dict[k], ddof=1)
 #                     sr = pd.DataFrame(
@@ -435,9 +433,7 @@
 #                     self.folds_dict[k] = sr.round(n_round)
 # 
 #                 ## listed pd.DataFrames
-#                 elif mngs.gen.is_listed_X(
-#                     self.folds_dict[k], pd.DataFrame
-#                 ):
+#                 elif is_listed_X(self.folds_dict[k], pd.DataFrame):
 #                     zero_df_for_mm = 0 * self.folds_dict[k][0].copy()
 #                     zero_df_for_ss = 0 * self.folds_dict[k][0].copy()
 # 
@@ -468,9 +464,7 @@
 #                         print("\n\n----------------------------------------\n")
 # 
 #                 ## listed figures
-#                 elif mngs.gen.is_listed_X(
-#                     self.folds_dict[k], matplotlib.figure.Figure
-#                 ):
+#                 elif is_listed_X(self.folds_dict[k], matplotlib.figure.Figure):
 #                     pass
 # 
 #                 else:
@@ -510,7 +504,7 @@
 #                 mngs.io.save(self.folds_dict[k], self.sdir + f"{k}.csv")
 # 
 #             ## listed pd.DataFrame
-#             elif mngs.gen.is_listed_X(self.folds_dict[k], pd.DataFrame):
+#             elif is_listed_X(self.folds_dict[k], pd.DataFrame):
 #                 mngs.io.save(
 #                     self.folds_dict[k],
 #                     self.sdir + f"{k}.csv",
@@ -519,9 +513,7 @@
 #                 )
 # 
 #             ## listed figures
-#             elif mngs.gen.is_listed_X(
-#                 self.folds_dict[k], matplotlib.figure.Figure
-#             ):
+#             elif is_listed_X(self.folds_dict[k], matplotlib.figure.Figure):
 #                 for i_fold, fig in enumerate(self.folds_dict[k]):
 #                     mngs.io.save(
 #                         self.folds_dict[k][i_fold],
@@ -798,7 +790,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs.ai.ClassificationReporter import *
+from mngs..ai.ClassificationReporter import *
 
 class Test_MainFunctionality:
     def setup_method(self):

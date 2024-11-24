@@ -4,6 +4,7 @@
 # # Time-stamp: "2024-11-02 04:02:23 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/gen/_to_even.py
 # 
+# 
 # def to_even(n):
 #     """Convert a number to the nearest even number less than or equal to itself.
 # 
@@ -45,7 +46,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs.gen._to_even import *
+from mngs..gen._to_even import *
 
 class Test_MainFunctionality:
     def setup_method(self):

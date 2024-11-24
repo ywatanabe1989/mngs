@@ -35,9 +35,7 @@
 #     assert set(src_dims) == set(
 #         tgt_dims
 #     ), "Source and target dimensions must contain the same elements"
-#     return arr_like.transpose(
-#         *[np.where(src_dims == dim)[0][0] for dim in tgt_dims]
-#     )
+#     return arr_like.transpose(*[np.where(src_dims == dim)[0][0] for dim in tgt_dims])
 
 # test from here --------------------------------------------------------------------------------
 #!/usr/bin/env python3
@@ -53,7 +51,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs.gen._transpose import *
+from mngs..gen._transpose import *
 
 class Test_MainFunctionality:
     def setup_method(self):

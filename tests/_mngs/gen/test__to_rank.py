@@ -9,6 +9,7 @@
 # # /home/ywatanabe/proj/mngs_repo/src/mngs/gen/data_processing/_to_rank.py
 # 
 # import torch
+# 
 # # from .._converters import
 # from ..decorators import torch_fn
 # 
@@ -28,8 +29,7 @@
 #             start = ties[i]
 #             end = start + 1
 #             while (
-#                 end < len(sorted_tensor)
-#                 and sorted_tensor[end] == sorted_tensor[start]
+#                 end < len(sorted_tensor) and sorted_tensor[end] == sorted_tensor[start]
 #             ):
 #                 end += 1
 #             ranks[indices[start:end]] = ranks[indices[start:end]].mean()
@@ -53,7 +53,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs.gen._to_rank import *
+from mngs..gen._to_rank import *
 
 class Test_MainFunctionality:
     def setup_method(self):

@@ -25,9 +25,8 @@
 # from pprint import pprint
 # import sys
 # 
-# def print_config(key):
 # 
-#     
+# def print_config(key):
 # 
 #     CONFIG = mngs.io.load_configs()
 # 
@@ -66,14 +65,21 @@
 #         print("Available configurations:")
 #         pprint(value)
 # 
+# 
 # def print_config_main(args=None):
 #     if args is None:
 #         args = sys.argv[1:]
 # 
 #     parser = argparse.ArgumentParser(description="Print configuration values")
-#     parser.add_argument("key", nargs='?', default=None, help="Configuration key (dot-separated for nested structures)")
+#     parser.add_argument(
+#         "key",
+#         nargs="?",
+#         default=None,
+#         help="Configuration key (dot-separated for nested structures)",
+#     )
 #     parsed_args = parser.parse_args(args)
 #     print_config(parsed_args.key)
+# 
 # 
 # if __name__ == "__main__":
 #     print_config_main()
@@ -92,7 +98,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs.gen._print_config import *
+from mngs..gen._print_config import *
 
 class Test_MainFunctionality:
     def setup_method(self):

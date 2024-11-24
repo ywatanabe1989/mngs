@@ -1,7 +1,14 @@
 # src from here --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-03 06:27:54 (ywatanabe)"
+# # Time-stamp: "2024-11-16 16:48:41 (ywatanabe)"
+# # File: ./mngs_repo/src/mngs/io/_save.py
+# 
+# __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/io/_save.py"
+# 
+# #!/usr/bin/env python3
+# # -*- coding: utf-8 -*-
+# # Time-stamp: "2024-11-13 14:25:06 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/io/_save.py
 # 
 # """
@@ -40,10 +47,12 @@
 # from ..path._split import split
 # from ..str._color_text import color_text
 # from ..types._is_listed_X import is_listed_X
-# from ._save_text import _save_text
-# from ._save_listed_scalars_as_csv import _save_listed_scalars_as_csv
-# from ._save_listed_dfs_as_csv import _save_listed_dfs_as_csv
 # from ._save_image import _save_image
+# from ._save_listed_dfs_as_csv import _save_listed_dfs_as_csv
+# from ._save_listed_scalars_as_csv import _save_listed_scalars_as_csv
+# from ._save_text import _save_text
+# from ..str._readable_bytes import readable_bytes
+# 
 # 
 # def save(
 #     obj: Any,
@@ -339,6 +348,7 @@
 #     if verbose:
 #         if os.path.exists(spath):
 #             file_size = getsize(spath)
+#             file_size = readable_bytes(file_size)
 #             print(
 #                 color_text(f"\nSaved to: {spath} ({file_size})", c="yellow")
 #             )
@@ -363,7 +373,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs.io._save import *
+from mngs..io._save import *
 
 class Test_MainFunctionality:
     def setup_method(self):

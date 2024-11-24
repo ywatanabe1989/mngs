@@ -14,6 +14,7 @@
 # def to_z(x, dim=-1, device="cuda"):
 #     return (x - x.mean(dim=dim, keepdim=True)) / x.std(dim=dim, keepdim=True)
 # 
+# 
 # @torch_fn
 # def to_nanz(x, dim=-1, device="cuda"):
 #     nan_mean = torch.nanmean(x, dim=dim, keepdim=True)
@@ -71,7 +72,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs.gen._norm import *
+from mngs..gen._norm import *
 
 class Test_MainFunctionality:
     def setup_method(self):

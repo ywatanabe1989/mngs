@@ -1,6 +1,12 @@
 # src from here --------------------------------------------------------------------------------
+# #!/usr/bin/env python3
+# # -*- coding: utf-8 -*-
+# # Time-stamp: "2024-11-07 19:30:31 (ywatanabe)"
+# # File: ./mngs_repo/src/mngs/gen/_suppress_output.py
+# 
 # import os
 # from contextlib import contextmanager, redirect_stderr, redirect_stdout
+# 
 # 
 # @contextmanager
 # def suppress_output(suppress=True):
@@ -22,7 +28,11 @@
 #         # If suppress is False, just yield without redirecting output
 #         yield
 # 
+# 
 # quiet = suppress_output
+# 
+# 
+# # EOF
 
 # test from here --------------------------------------------------------------------------------
 #!/usr/bin/env python3
@@ -38,7 +48,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs.gen._suppress_output import *
+from mngs..gen._suppress_output import *
 
 class Test_MainFunctionality:
     def setup_method(self):

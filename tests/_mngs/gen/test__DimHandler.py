@@ -90,9 +90,7 @@
 # 
 #         self.shape_fit = x.shape
 # 
-#         non_keepdims = [
-#             ii for ii in range(len(self.shape_fit)) if ii not in keepdims
-#         ]
+#         non_keepdims = [ii for ii in range(len(self.shape_fit)) if ii not in keepdims]
 # 
 #         self.n_non_keepdims = [self.shape_fit[nkd] for nkd in non_keepdims]
 #         self.n_keepdims = [self.shape_fit[kd] for kd in keepdims]
@@ -133,9 +131,7 @@
 #         self.shape_fit = x.shape
 # 
 #         non_keepdims = [
-#             int(ii)
-#             for ii in torch.arange(len(self.shape_fit))
-#             if ii not in keepdims
+#             int(ii) for ii in torch.arange(len(self.shape_fit)) if ii not in keepdims
 #         ]
 # 
 #         self.n_non_keepdims = [self.shape_fit[nkd] for nkd in non_keepdims]
@@ -214,7 +210,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs.gen._DimHandler import *
+from mngs..gen._DimHandler import *
 
 class Test_MainFunctionality:
     def setup_method(self):

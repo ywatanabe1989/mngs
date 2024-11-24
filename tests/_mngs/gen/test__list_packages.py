@@ -27,15 +27,21 @@
 #     max_depth: int = 1,
 #     root_only: bool = True,
 #     skip_errors: bool = True,
-#     verbose: bool = False
+#     verbose: bool = False,
 # ) -> pd.DataFrame:
 #     """Lists all installed packages and their modules."""
 #     sys.setrecursionlimit(10_000)
 # 
 #     # Skip known problematic packages
 #     skip_patterns = [
-#         'nvidia', 'cuda', 'pillow', 'fonttools', 'ipython',
-#         'jsonschema', 'readme', 'importlib-metadata'
+#         "nvidia",
+#         "cuda",
+#         "pillow",
+#         "fonttools",
+#         "ipython",
+#         "jsonschema",
+#         "readme",
+#         "importlib-metadata",
 #     ]
 # 
 #     # Get installed packages, excluding problematic ones
@@ -47,16 +53,27 @@
 # 
 #     # Focus on commonly used packages first
 #     safelist = [
-#         'numpy', 'pandas', 'scipy', 'matplotlib', 'sklearn',
-#         'torch', 'tensorflow', 'keras', 'xarray', 'dask',
-#         'pytest', 'requests', 'flask', 'django', 'seaborn'
+#         "numpy",
+#         "pandas",
+#         "scipy",
+#         "matplotlib",
+#         "sklearn",
+#         "torch",
+#         "tensorflow",
+#         "keras",
+#         "xarray",
+#         "dask",
+#         "pytest",
+#         "requests",
+#         "flask",
+#         "django",
+#         "seaborn",
 #     ]
 # 
 #     # Prioritize safelist packages
-#     installed_packages = (
-#         [pkg for pkg in installed_packages if pkg in safelist] +
-#         [pkg for pkg in installed_packages if pkg not in safelist]
-#     )
+#     installed_packages = [pkg for pkg in installed_packages if pkg in safelist] + [
+#         pkg for pkg in installed_packages if pkg not in safelist
+#     ]
 # 
 #     all_dfs = []
 #     for package_name in installed_packages:
@@ -68,7 +85,7 @@
 #                 columns=["Name"],
 #                 root_only=root_only,
 #                 max_depth=max_depth,
-#                 skip_depwarnings=True
+#                 skip_depwarnings=True,
 #             )
 #             if not df.empty:
 #                 all_dfs.append(df)
@@ -84,16 +101,17 @@
 #     combined_df = pd.concat(all_dfs, ignore_index=True)
 #     return combined_df.drop_duplicates().sort_values("Name")
 # 
+# 
 # def main() -> Optional[int]:
 #     """Main function for testing package listing functionality."""
 #     df = list_packages(verbose=True)
 #     __import__("ipdb").set_trace()
 #     return 0
 # 
-# if __name__ == '__main__':
+# 
+# if __name__ == "__main__":
 #     import matplotlib.pyplot as plt
 #     import mngs
-# 
 # 
 #     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
 #         sys,
@@ -129,7 +147,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs.gen._list_packages import *
+from mngs..gen._list_packages import *
 
 class Test_MainFunctionality:
     def setup_method(self):

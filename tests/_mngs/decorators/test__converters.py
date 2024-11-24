@@ -1,7 +1,7 @@
 # src from here --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-04 02:49:08 (ywatanabe)"
+# # Time-stamp: "2024-11-07 05:53:09 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/decorators/_converters.py
 # 
 # from typing import Callable, Optional
@@ -22,7 +22,7 @@
 # """
 # 
 # import warnings
-# from functools import lru_cache
+# from functools import lru_cache as _lru_cache
 # from typing import Any as _Any
 # from typing import Dict, Tuple, Union
 # 
@@ -37,7 +37,7 @@
 # warnings.simplefilter("always", ConversionWarning)
 # 
 # 
-# @lru_cache(maxsize=None)
+# @_lru_cache(maxsize=None)
 # def _cached_warning(message: str) -> None:
 #     warnings.warn(message, category=ConversionWarning)
 # 
@@ -196,7 +196,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs.decorators._converters import *
+from mngs..decorators._converters import *
 
 class Test_MainFunctionality:
     def setup_method(self):

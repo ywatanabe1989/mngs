@@ -1,7 +1,7 @@
 # src from here --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-07 18:04:13 (ywatanabe)"
+# # Time-stamp: "2024-11-13 14:33:50 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/gen/_close.py
 # 
 # import os
@@ -67,9 +67,7 @@
 #             file.write(cleaned_content)
 # 
 # 
-# def close(
-#     CONFIG, message=":)", notify=True, verbose=True, exit_status=None
-# ):
+# def close(CONFIG, message=":)", notify=True, verbose=True, exit_status=None):
 #     try:
 #         CONFIG.EXIT_STATUS = exit_status
 #         CONFIG = CONFIG.to_dict()
@@ -105,21 +103,27 @@
 #                 print(e)
 # 
 #     finally:
-#         # Ensure file handles are closed
-#         if hasattr(sys, 'stdout') and hasattr(sys.stdout, 'close'):
-#             sys.stdout.close()
-#         if hasattr(sys, 'stderr') and hasattr(sys.stderr, 'close'):
-#             sys.stderr.close()
-#     # try:
-#     #     sys.stdout.close()
-#     #     sys.stderr.close()
-#     # except Exception as e:
-#     #     print(e)
+#         # Only close if they're custom file objects
+#         if hasattr(sys, 'stdout') and hasattr(sys.stdout, 'close') and not sys.stdout.closed:
+#             if sys.stdout != sys.__stdout__:
+#                 sys.stdout.close()
+#         if hasattr(sys, 'stderr') and hasattr(sys.stderr, 'close') and not sys.stderr.closed:
+#             if sys.stderr != sys.__stderr__:
+#                 sys.stderr.close()
+#     # finally:
+#     #     # Ensure file handles are closed
+#     #     if hasattr(sys, 'stdout') and hasattr(sys.stdout, 'close'):
+#     #         sys.stdout.close()
+#     #     if hasattr(sys, 'stderr') and hasattr(sys.stderr, 'close'):
+#     #         sys.stderr.close()
+#     # # try:
+#     # #     sys.stdout.close()
+#     # #     sys.stderr.close()
+#     # # except Exception as e:
+#     # #     print(e)
 # 
 # 
-# def running2finished(
-#     CONFIG, exit_status=None, remove_src_dir=True, max_wait=60
-# ):
+# def running2finished(CONFIG, exit_status=None, remove_src_dir=True, max_wait=60):
 #     if exit_status == 0:
 #         dest_dir = CONFIG["SDIR"].replace("RUNNING/", "FINISHED_SUCCESS/")
 #     elif exit_status == 1:
@@ -144,10 +148,7 @@
 #                 shutil.copy2(s, d)
 # 
 #         start_time = time.time()
-#         while (
-#             not os.path.exists(dest_dir)
-#             and time.time() - start_time < max_wait
-#         ):
+#         while not os.path.exists(dest_dir) and time.time() - start_time < max_wait:
 #             time.sleep(0.1)
 #         if os.path.exists(dest_dir):
 #             printc(
@@ -175,17 +176,13 @@
 # 
 #     from .._start import start
 # 
-# 
-#     CONFIG, sys.stdout, sys.stderr, plt, CC = start(
-#         sys, plt, verbose=False
-#     )
+#     CONFIG, sys.stdout, sys.stderr, plt, CC = start(sys, plt, verbose=False)
 # 
 #     ic("aaa")
 #     ic("bbb")
 #     ic("ccc")
 # 
 #     close(CONFIG)
-# 
 # 
 # # EOF
 
@@ -203,7 +200,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs.gen._close import *
+from mngs..gen._close import *
 
 class Test_MainFunctionality:
     def setup_method(self):
