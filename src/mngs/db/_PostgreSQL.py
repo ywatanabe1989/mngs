@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-24 23:05:18 (ywatanabe)"
+# Time-stamp: "2024-11-25 01:48:54 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/db/_PostgreSQL.py
 
 __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQL.py"
@@ -21,6 +21,7 @@ from ._PostgreSQLMixins._RowMixin import _RowMixin
 from ._PostgreSQLMixins._SchemaMixin import _SchemaMixin
 from ._PostgreSQLMixins._TableMixin import _TableMixin
 from ._PostgreSQLMixins._TransactionMixin import _TransactionMixin
+from ._PostgreSQLMixins._BlobMixin import _BlobMixin
 
 
 class PostgresDB(
@@ -35,6 +36,7 @@ class PostgresDB(
     _SchemaMixin,
     _TableMixin,
     _TransactionMixin,
+    _BlobMixin,
 ):
 
     def __init__(

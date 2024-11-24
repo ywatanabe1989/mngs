@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-12 09:29:47 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/db/_BaseSQLiteDB_modules/_ImportExportMixin.py
+# Time-stamp: "2024-11-25 01:36:18 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/db/_SQLite3Mixins/_ImportExportMixin.py
+
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_SQLite3Mixins/_ImportExportMixin.py"
 
 from typing import List
 
 import pandas as pd
 
+from .._BaseMixins._BaseImportExportMixin import _BaseImportExportMixin
 
-class _ImportExportMixin:
+class _ImportExportMixin(_BaseImportExportMixin):
     """Import/Export functionality"""
 
     def load_from_csv(

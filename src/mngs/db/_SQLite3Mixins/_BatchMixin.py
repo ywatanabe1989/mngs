@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-12 09:29:43 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/db/_BaseSQLiteDB_modules/_BatchMixin.py
+# Time-stamp: "2024-11-25 01:34:32 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/db/_SQLite3Mixins/_BatchMixin.py
+
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_SQLite3Mixins/_BatchMixin.py"
 
 from typing import Any as _Any
 from typing import Dict, List, Optional
+from .._BaseMixins._BaseBatchMixin import _BaseBatchMixin
 
 
-class _BatchMixin:
+class _BatchMixin(_BaseBatchMixin):
     """Batch operations functionality"""
 
     def _run_many(

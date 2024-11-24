@@ -1,13 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-25 01:38:47 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/db/_SQLite3Mixins/_TableMixin.py
+
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_SQLite3Mixins/_TableMixin.py"
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 # Time-stamp: "2024-11-11 19:13:19 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/db/_BaseSQLiteDB_modules/_TableMixin.py
 
 import sqlite3
 from typing import Any, Dict, List, Union
 import pandas as pd
+from .._BaseMixins._BaseTableMixin import _BaseTableMixin
 
-class _TableMixin:
+class _TableMixin(_BaseTableMixin):
     """Table management functionality"""
 
     def create_table(

@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-12 09:29:48 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/db/_BaseSQLiteDB_modules/_IndexMixin.py
+# Time-stamp: "2024-11-25 01:36:45 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/db/_SQLite3Mixins/_IndexMixin.py
+
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_SQLite3Mixins/_IndexMixin.py"
 
 from typing import List
+from .._BaseMixins._BaseIndexMixin import _BaseIndexMixin
 
-
-class _IndexMixin:
+class _IndexMixin(_BaseIndexMixin):
     """Index management functionality"""
 
     def create_index(

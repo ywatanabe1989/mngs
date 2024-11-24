@@ -1,18 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-17 19:39:29 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/db/_BaseSQLiteDB_modules/_ConnectionMixin.py
+# Time-stamp: "2024-11-25 01:35:39 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/db/_SQLite3Mixins/_ConnectionMixin.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_BaseSQLiteDB_modules/_ConnectionMixin.py"
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-11 19:46:45 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/db/_BaseSQLiteDB_modules/_ConnectionMixin.py
-
-import sqlite3
-import threading
-from typing import Optional
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_SQLite3Mixins/_ConnectionMixin.py"
 
 """
 1. Functionality:
@@ -27,12 +18,16 @@ from typing import Optional
    - threading
 """
 
+import sqlite3
+import threading
+from typing import Optional
 import os
 import shutil
 import tempfile
+from .._BaseMixins._BaseConnectionMixin import _BaseConnectionMixin
 
 
-class _ConnectionMixin:
+class _ConnectionMixin(_BaseConnectionMixin):
     """Connection management functionality"""
 
     def __init__(self, db_path: str, use_temp_db: bool = False):

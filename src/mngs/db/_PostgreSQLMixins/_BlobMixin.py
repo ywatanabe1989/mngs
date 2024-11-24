@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-25 01:35:02 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/db/_SQLite3Mixins/_BlobMixin.py
+# Time-stamp: "2024-11-25 01:53:41 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/db/_PostgreSQLMixins/_BlobMixin.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_SQLite3Mixins/_BlobMixin.py"
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQLMixins/_BlobMixin.py"
 
-import sqlite3
+import psycopg2
+import numpy as np
 from typing import Any as _Any
 from typing import Dict, List, Optional, Tuple, Union
-
-import numpy as np
 from .._BaseMixins._BaseBlobMixin import _BaseBlobMixin
 
+
 class _BlobMixin(_BaseBlobMixin):
-    """BLOB data handling functionality"""
+    """BLOB data handling functionality for PostgreSQL"""
 
     def save_array(
         self,
@@ -47,7 +47,8 @@ class _BlobMixin(_BaseBlobMixin):
                                 f"Element for id {id_} must be a NumPy array"
                             )
 
-                        binary = arr.tobytes()
+                        binary = psycopg2.Binary(arr.tobytes())
+                        # binary = Binary(arr.tobytes())
                         columns = [
                             column,
                             f"{column}_dtype",
@@ -59,16 +60,17 @@ class _BlobMixin(_BaseBlobMixin):
                             columns = list(additional_columns.keys()) + columns
                             values = list(additional_columns.values()) + values
 
-                        update_cols = [f"{col}=?" for col in columns]
-                        query = f"UPDATE {table_name} SET {','.join(update_cols)} WHERE id=?"
+                        update_cols = [f"{col}=%s" for col in columns]
+                        query = f"UPDATE {table_name} SET {','.join(update_cols)} WHERE id=%s"
                         values.append(id_)
-                        self.execute(query, tuple(values))
+                        self.execute(query, values)
 
                 else:
                     if not isinstance(data, np.ndarray):
                         raise ValueError("Single input must be a NumPy array")
 
-                    binary = data.tobytes()
+                    binary = psycopg2.Binary(arr.tobytes())
+                    # binary = Binary(data.tobytes())
                     columns = [column, f"{column}_dtype", f"{column}_shape"]
                     values = [binary, str(data.dtype), str(data.shape)]
 
@@ -77,14 +79,14 @@ class _BlobMixin(_BaseBlobMixin):
                         values = list(additional_columns.values()) + values
 
                     if where is not None:
-                        update_cols = [f"{col}=?" for col in columns]
+                        update_cols = [f"{col}=%s" for col in columns]
                         query = f"UPDATE {table_name} SET {','.join(update_cols)} WHERE {where}"
-                        self.execute(query, tuple(values))
+                        self.execute(query, values)
                     else:
-                        placeholders = ",".join(["?" for _ in columns])
+                        placeholders = ",".join(["%s" for _ in columns])
                         columns_str = ",".join(columns)
                         query = f"INSERT INTO {table_name} ({columns_str}) VALUES ({placeholders})"
-                        self.execute(query, tuple(values))
+                        self.execute(query, values)
 
             except Exception as err:
                 raise ValueError(f"Failed to save array: {err}")
@@ -105,7 +107,7 @@ class _BlobMixin(_BaseBlobMixin):
                 query = f"SELECT id FROM {table_name}"
                 if where:
                     query += f" WHERE {where}"
-                self.cursor.execute(query)
+                self.execute(query)
                 ids = [row[0] for row in self.cursor.fetchall()]
             elif isinstance(ids, int):
                 ids = [ids]
@@ -115,7 +117,7 @@ class _BlobMixin(_BaseBlobMixin):
 
             for idx in range(0, len(unique_ids), batch_size):
                 batch_ids = unique_ids[idx : idx + batch_size]
-                placeholders = ",".join("?" for _ in batch_ids)
+                placeholders = ",".join(["%s" for _ in batch_ids])
 
                 try:
                     query = f"""
@@ -125,11 +127,11 @@ class _BlobMixin(_BaseBlobMixin):
                         FROM {table_name}
                         WHERE id IN ({placeholders})
                     """
-                    self.cursor.execute(query, tuple(batch_ids))
+                    self.execute(query, batch_ids)
                     has_metadata = True
-                except sqlite3.OperationalError:
+                except psycopg2.Error:
                     query = f"SELECT id, {column} FROM {table_name} WHERE id IN ({placeholders})"
-                    self.cursor.execute(query, tuple(batch_ids))
+                    self.execute(query, batch_ids)
                     has_metadata = False
 
                 if where:
@@ -143,14 +145,14 @@ class _BlobMixin(_BaseBlobMixin):
                         if has_metadata:
                             id_val, blob, dtype_str, shape_str = result
                             data = np.frombuffer(
-                                blob, dtype=np.dtype(dtype_str)
+                                bytes(blob), dtype=np.dtype(dtype_str)
                             ).reshape(eval(shape_str))
                         else:
                             id_val, blob = result
                             data = (
-                                np.frombuffer(blob, dtype=dtype)
+                                np.frombuffer(bytes(blob), dtype=dtype)
                                 if dtype
-                                else np.frombuffer(blob)
+                                else np.frombuffer(bytes(blob))
                             )
                             if shape:
                                 data = data.reshape(shape)
@@ -175,6 +177,7 @@ class _BlobMixin(_BaseBlobMixin):
         if binary_data is None:
             return None
 
+        binary_data = bytes(binary_data)
         if dtype_str and shape_str:
             return np.frombuffer(
                 binary_data, dtype=np.dtype(dtype_str)
