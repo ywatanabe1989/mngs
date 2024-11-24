@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-15 02:40:22 (ywatanabe)"
+# Time-stamp: "2024-11-17 19:39:29 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/db/_BaseSQLiteDB_modules/_ConnectionMixin.py
 
 __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_BaseSQLiteDB_modules/_ConnectionMixin.py"
-
-
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
@@ -37,7 +35,7 @@ import tempfile
 class _ConnectionMixin:
     """Connection management functionality"""
 
-    def __init__(self, db_path: str, use_temp: bool = False):
+    def __init__(self, db_path: str, use_temp_db: bool = False):
         self.lock = threading.Lock()
         self._maintenance_lock = threading.Lock()
         self.conn: Optional[sqlite3.Connection] = None
@@ -45,7 +43,7 @@ class _ConnectionMixin:
         self.db_path = db_path
         self.temp_path = None
         if db_path:
-            self.connect(db_path, use_temp)
+            self.connect(db_path, use_temp_db)
 
     def __enter__(self):
         return self
@@ -62,13 +60,13 @@ class _ConnectionMixin:
         shutil.copy2(db_path, self.temp_path)
         return self.temp_path
 
-    def connect(self, db_path: str, use_temp: bool = False) -> None:
+    def connect(self, db_path: str, use_temp_db: bool = False) -> None:
         """Establishes database connection"""
         if self.conn:
             self.close()
 
         path_to_connect = (
-            self._create_temp_copy(db_path) if use_temp else db_path
+            self._create_temp_copy(db_path) if use_temp_db else db_path
         )
 
         self.conn = sqlite3.connect(
@@ -102,9 +100,9 @@ class _ConnectionMixin:
             except OSError:
                 pass
 
-    def reconnect(self, use_temp: bool = False) -> None:
+    def reconnect(self, use_temp_db: bool = False) -> None:
         if self.db_path:
-            self.connect(self.db_path, use_temp)
+            self.connect(self.db_path, use_temp_db)
         else:
             raise ValueError("No database path specified for reconnection")
 

@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-15 02:40:14 (ywatanabe)"
+# Time-stamp: "2024-11-17 19:38:49 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/db/_BaseSQLiteDB.py
 
 __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_BaseSQLiteDB.py"
-
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
@@ -40,9 +39,9 @@ class BaseSQLiteDB(
 ):
     """Comprehensive SQLite database management class."""
 
-    def __init__(self, db_path: str, use_temp: bool = False):
+    def __init__(self, db_path: str, use_temp_db: bool = False):
         """Initializes database with option for temporary copy."""
-        _ConnectionMixin.__init__(self, db_path, use_temp)
+        _ConnectionMixin.__init__(self, db_path, use_temp_db)
 
     def __call__(
         self,
