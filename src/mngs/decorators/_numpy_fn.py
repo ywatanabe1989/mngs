@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-20 23:48:47 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/decorators/_numpy_fn.py
+
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_numpy_fn.py"
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 # Time-stamp: "2024-11-04 02:45:09 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/decorators/_numpy_fn.py
 
@@ -47,6 +54,22 @@ def numpy_fn(func: Callable) -> Callable:
             else to_torch(results, return_fn=_return_if, device=device)[0][0]
         )
 
+    return wrapper
+
+def numpy_method(func: Callable) -> Callable:
+    @wraps(func)
+    def wrapper(self, *args: _Any, **kwargs: _Any) -> _Any:
+        is_torch_input = is_torch(*args, **kwargs)
+        device = "cuda" if is_cuda(*args, **kwargs) else "cpu"
+        converted_args, converted_kwargs = to_numpy(
+            *args, return_fn=_return_always, **kwargs
+        )
+        results = func(self, *converted_args, **converted_kwargs)
+        return (
+            results
+            if not is_torch_input
+            else to_torch(results, return_fn=_return_if, device=device)[0][0]
+        )
     return wrapper
 
 

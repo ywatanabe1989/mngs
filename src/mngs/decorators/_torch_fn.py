@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-20 23:48:32 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/decorators/_torch_fn.py
+
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_torch_fn.py"
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 # Time-stamp: "2024-11-06 15:45:12 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/decorators/_torch_fn.py
 
@@ -33,23 +40,6 @@ from ._converters import (
     to_torch,
 )
 
-
-# def torch_fn(func: Callable) -> Callable:
-#     @wraps(func)
-#     def wrapper(*args: _Any, **kwargs: _Any) -> _Any:
-#         is_torch_input = is_torch(*args, **kwargs)
-#         converted_args, converted_kwargs = to_torch(
-#             *args, return_fn=_return_always, **kwargs
-#         )
-#         results = func(*converted_args, **converted_kwargs)
-#         return (
-#             to_numpy(results, return_fn=_return_if)[0]
-#             if not is_torch_input
-#             else results
-#         )
-
-#     return wrapper
-
 def torch_fn(func: Callable) -> Callable:
     @wraps(func)
     def wrapper(*args: _Any, **kwargs: _Any) -> _Any:
@@ -65,6 +55,21 @@ def torch_fn(func: Callable) -> Callable:
             results = to_numpy(results, return_fn=_return_if)[0]
         return results
 
+    return wrapper
+
+def torch_method(func: Callable) -> Callable:
+    @wraps(func)
+    def wrapper(self, *args: _Any, **kwargs: _Any) -> _Any:
+        is_torch_input = is_torch(*args, **kwargs)
+        if is_torch_input:
+            results = func(self, *args, **kwargs)
+        else:
+            converted_args, converted_kwargs = to_torch(
+                *args, return_fn=_return_always, **kwargs
+            )
+            results = func(self, *converted_args, **converted_kwargs)
+            results = to_numpy(results, return_fn=_return_if)[0]
+        return results
     return wrapper
 
 
