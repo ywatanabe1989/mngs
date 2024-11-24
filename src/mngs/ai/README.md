@@ -1,13 +1,16 @@
 <!-- ---
-!-- title: README.md
+!-- title: ./mngs_repo/src/mngs/ai/README.md
 !-- author: ywatanabe
-!-- date: 2024-11-04 03:16:41
+!-- date: 2024-11-20 00:28:42
 !-- --- -->
+
 
 # [`mngs.ai`](https://github.com/ywatanabe1989/mngs/tree/main/src/mngs/ai/)
 
 ## Overview
 The `mngs.ai` module provides a collection of artificial intelligence and machine learning utilities, focusing on deep learning with PyTorch and various AI-related tasks.
+
+python -c "import mngs; from pprint import pprint; pprint(dir(mngs.ai))"
 
 ## Installation
 ```bash

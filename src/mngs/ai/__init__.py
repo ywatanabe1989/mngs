@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-20 10:53:14 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/ai/__init__.py
+
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/__init__.py"
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 # Time-stamp: "ywatanabe (2024-11-07 19:44:34)"
 # File: ./mngs_repo/src/mngs/ai/__init__.py
 
@@ -26,5 +33,17 @@ for filename in os.listdir(current_dir):
 
 # Clean up temporary variables
 del os, importlib, inspect, current_dir, filename, module_name, module, name, obj
+
+from . import metrics
+from . import act
+from . import clustering
+from . import layer
+from . import loss
+from . import optim
+from . import plt
+from . import sk
+from . import utils
+from . import feature_extraction
+
 
 # EOF

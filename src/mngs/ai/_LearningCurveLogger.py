@@ -1,101 +1,170 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-20 08:49:50 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/ai/_LearningCurveLogger.py
 
-import re
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_LearningCurveLogger.py"
+
+"""
+Functionality:
+    - Records and visualizes learning curves during model training
+    - Supports tracking of multiple metrics across training/validation/test phases
+    - Generates plots showing training progress over iterations and epochs
+
+Input:
+    - Training metrics dictionary containing loss, accuracy, predictions etc.
+    - Step information (Training/Validation/Test)
+
+Output:
+    - Learning curve plots
+    - Dataframes with recorded metrics
+    - Training progress prints
+
+Prerequisites:
+    - PyTorch
+    - scikit-learn
+    - matplotlib
+    - pandas
+    - numpy
+"""
+
+import re as _re
 from collections import defaultdict as _defaultdict
 from pprint import pprint as _pprint
+from typing import Dict as _Dict
+from typing import List as _List
+from typing import Union as _Union
+from typing import Optional as _Optional
+from typing import Any as _Any
 
-import matplotlib
-import mngs
-import pandas as pd
-import numpy as np
-import warnings
+import matplotlib as _matplotlib
+import pandas as _pd
+import numpy as _np
+import warnings as _warnings
+import torch as _torch
 
 
-class LearningCurveLogger(object):
-    def __init__(
-        self,
-    ):
-        self.logged_dict = _defaultdict(dict)
+class LearningCurveLogger:
+    """Records and visualizes learning metrics during model training.
+
+    Example
+    -------
+    >>> logger = LearningCurveLogger()
+    >>> metrics = {
+    ...     "loss_plot": 0.5,
+    ...     "balanced_ACC_plot": 0.8,
+    ...     "pred_proba": pred_proba,
+    ...     "true_class": labels,
+    ...     "i_fold": 0,
+    ...     "i_epoch": 1,
+    ...     "i_global": 100
+    ... }
+    >>> logger(metrics, "Training")
+    >>> fig = logger.plot_learning_curves(plt)
+    """
+
+    def __init__(self) -> None:
+        self.logged_dict: _Dict[str, _Dict] = _defaultdict(dict)
 
         warnings.warn(
-            '\n"gt_label" will be removed in the feature. Please use "true_class" instead.\n',
+            '\n"gt_label" will be removed in the future. Please use "true_class" instead.\n',
             DeprecationWarning,
         )
 
-    def __call__(self, dict_to_log, step):
-        """
-        dict_to_log | str
-            Example:
-                dict_to_log = {
-                    "loss_plot": float(loss),
-                    "balanced_ACC_plot": float(bACC),
-                    "pred_proba": pred_proba.detach().cpu().numpy(),
-                    "true_class": T.cpu().numpy(),
-                    "i_fold": i_fold,
-                    "i_epoch": i_epoch,
-                    "i_global": i_global,
-                }
+    def __call__(self, dict_to_log: _Dict[str, _Any], step: str) -> None:
+        """Logs metrics for a training step.
 
-        step | str
-            "Training", "Validation", or "Test"
+        Parameters
+        ----------
+        dict_to_log : _Dict[str, _Any]
+            _Dictionary containing metrics to log
+        step : str
+            Phase of training ('Training', 'Validation', or 'Test')
         """
-        ########################################
-        ## delete here in the future
-        ## rename "gt_label" to "true_class"
-        if "gt_label" in dict_to_log.keys():
+        if "gt_label" in dict_to_log:
             dict_to_log["true_class"] = dict_to_log.pop("gt_label")
-            # del dict_to_log["gt_label"]
-        ########################################
 
-        # assert step in ["Training", "Validation", "Test"]
-
-        ## Initialize self.logged_dict
-        for k_to_log in dict_to_log.keys():
+        for k_to_log in dict_to_log:
             try:
                 self.logged_dict[step][k_to_log].append(dict_to_log[k_to_log])
             except:
-                self.logged_dict[step].update({k_to_log: []})
-                self.logged_dict[step][k_to_log].append(dict_to_log[k_to_log])
+                self.logged_dict[step][k_to_log] = [dict_to_log[k_to_log]]
 
     @property
-    def dfs(self):
+    def dfs(self) -> _Dict[str, _pd.DataFrame]:
+        """Returns DataFrames of logged metrics.
+
+        Returns
+        -------
+        _Dict[str, _pd.DataFrame]
+            _Dictionary of DataFrames for each step
+        """
         return self._to_dfs_pivot(
             self.logged_dict,
             pivot_column=None,
         )
 
-    def get_x_of_i_epoch(self, x, step, i_epoch):
+    def get_x_of_i_epoch(self, x: str, step: str, i_epoch: int) -> _np.ndarray:
+        """Gets metric values for a specific epoch.
+
+        Parameters
+        ----------
+        x : str
+            Name of metric to retrieve
+        step : str
+            Training phase
+        i_epoch : int
+            Epoch number
+
+        Returns
+        -------
+        _np.ndarray
+            Array of metric values for specified epoch
         """
-        lc_logger.get_x_of_i_epoch("true_label_diag", "Validation", 3)
-        """
-        # assert step in ['Training', "Validation", "Test"]
-        indi = np.array(self.logged_dict[step]["i_epoch"]) == i_epoch
-        x_all_arr = np.array(self.logged_dict[step][x])
+        indi = _np.array(self.logged_dict[step]["i_epoch"]) == i_epoch
+        x_all_arr = _np.array(self.logged_dict[step][x])
         assert len(indi) == len(x_all_arr)
         return x_all_arr[indi]
 
     def plot_learning_curves(
         self,
-        plt,
-        plt_config_dict=None,
-        title=None,
-        max_n_ticks=4,
-        linewidth=1,
-        scattersize=50,
-    ):
+        plt: _Any,
+        plt_config_dict: _Optional[_Dict] = None,
+        title: _Optional[str] = None,
+        max_n_ticks: int = 4,
+        linewidth: float = 1,
+        scattersize: float = 50,
+    ) -> _matplotlib.figure.Figure:
+        """Plots learning curves from logged metrics.
+
+        Parameters
+        ----------
+        plt : _matplotlib.pyplot
+            _Matplotlib pyplot object
+        plt_config_dict : _Dict, optional
+            Plot configuration parameters
+        title : str, optional
+            Plot title
+        max_n_ticks : int
+            Maximum number of ticks on axes
+        linewidth : float
+            Width of plot lines
+        scattersize : float
+            Size of scatter points
+
+        Returns
+        -------
+        _matplotlib.figure.Figure
+            Figure containing learning curves
         """
-        Plots learning curves from self.logged_dict
-        """
+
         if plt_config_dict is not None:
-            mngs.plt.configure_mpl(plt, **plt_config_dict)
+            _plt_module.configure_mpl(plt, **plt_config_dict)
 
         self.dfs_pivot_i_global = self._to_dfs_pivot(
             self.logged_dict, pivot_column="i_global"
         )
 
-        ########################################
-        ## Parameters
-        ########################################
         COLOR_DICT = {
             "Training": "blue",
             "Validation": "green",
@@ -104,39 +173,39 @@ class LearningCurveLogger(object):
 
         keys_to_plot = self._find_keys_to_plot(self.logged_dict)
 
-        ########################################
-        ## Plots
-        ########################################
-        fig, axes = plt.subplots(len(keys_to_plot), 1, sharex=True, sharey=False)
+        fig, axes = plt.subplots(
+            len(keys_to_plot), 1, sharex=True, sharey=False
+        )
         axes[-1].set_xlabel("Iteration#")
         fig.text(0.5, 0.95, title, ha="center")
 
         for i_plt, plt_k in enumerate(keys_to_plot):
             ax = axes[i_plt]
             ax.set_ylabel(self._rename_if_key_to_plot(plt_k))
-            ax.xaxis.set_major_locator(matplotlib.ticker.MaxNLocator(max_n_ticks))
-            ax.yaxis.set_major_locator(matplotlib.ticker.MaxNLocator(max_n_ticks))
+            ax.xaxis.set_major_locator(
+                _matplotlib.ticker.MaxNLocator(max_n_ticks)
+            )
+            ax.yaxis.set_major_locator(
+                _matplotlib.ticker.MaxNLocator(max_n_ticks)
+            )
 
-            if re.search("[aA][cC][cC]", plt_k):  # acc, ylim, yticks
+            if _re.search("[aA][cC][cC]", plt_k):
                 ax.set_ylim(0, 1)
                 ax.set_yticks([0, 0.5, 1.0])
 
             for step_k in self.dfs_pivot_i_global.keys():
-
-                if step_k == re.search("^[Tt]rain", step_k):  # line
-                    # if step_k == "Training":  # line
+                if step_k == _re.search("^[Tt]rain", step_k):
                     ax.plot(
                         self.dfs_pivot_i_global[step_k].index,
                         self.dfs_pivot_i_global[step_k][plt_k],
                         label=step_k,
-                        color=mngs.plt.colors.to_RGBA(COLOR_DICT[step_k], alpha=0.9),
+                        color=_plt_module.colors.to_RGBA(
+                            COLOR_DICT[step_k], alpha=0.9
+                        ),
                         linewidth=linewidth,
                     )
                     ax.legend()
 
-                    ########################################
-                    ## Epoch starts points; just in "Training" not to b duplicated
-                    ########################################
                     epoch_starts = abs(
                         self.dfs_pivot_i_global[step_k]["i_epoch"]
                         - self.dfs_pivot_i_global[step_k]["i_epoch"].shift(-1)
@@ -150,24 +219,22 @@ class LearningCurveLogger(object):
                     ):
                         ax.axvline(
                             x=i_global_epoch_start,
-                            ymin=-1e4,  # ax.get_ylim()[0],
-                            ymax=1e4,  # ax.get_ylim()[1],
+                            ymin=-1e4,
+                            ymax=1e4,
                             linestyle="--",
-                            color=mngs.plt.colors.to_RGBA("gray", alpha=0.5),
+                            color=_plt_module.colors.to_RGBA(
+                                "gray", alpha=0.5
+                            ),
                         )
-                        # ax.text(
-                        #     i_global_epoch_start,
-                        #     ax.get_ylim()[1] * 1.0,
-                        #     f"epoch#{i_epoch}",
-                        # )
-                    ########################################
 
-                if (step_k == "Validation") or (step_k == "Test"):  # scatter
+                if (step_k == "Validation") or (step_k == "Test"):
                     ax.scatter(
                         self.dfs_pivot_i_global[step_k].index,
                         self.dfs_pivot_i_global[step_k][plt_k],
                         label=step_k,
-                        color=mngs.plt.colors.to_RGBA(COLOR_DICT[step_k], alpha=0.9),
+                        color=_plt_module.colors.to_RGBA(
+                            COLOR_DICT[step_k], alpha=0.9
+                        ),
                         s=scattersize,
                         alpha=0.9,
                     )
@@ -175,8 +242,17 @@ class LearningCurveLogger(object):
 
         return fig
 
-    def print(self, step):
-        df_pivot_i_epoch = self._to_dfs_pivot(self.logged_dict, pivot_column="i_epoch")
+    def print(self, step: str) -> None:
+        """Prints metrics for given step.
+
+        Parameters
+        ----------
+        step : str
+            Training phase to print metrics for
+        """
+        df_pivot_i_epoch = self._to_dfs_pivot(
+            self.logged_dict, pivot_column="i_epoch"
+        )
         df_pivot_i_epoch_step = df_pivot_i_epoch[step]
         df_pivot_i_epoch_step.columns = self._rename_if_key_to_plot(
             df_pivot_i_epoch_step.columns
@@ -187,68 +263,85 @@ class LearningCurveLogger(object):
         print("\n----------------------------------------\n")
 
     @staticmethod
-    def _find_keys_to_plot(logged_dict):
-        _steps_str = list(logged_dict.keys())
-        _, keys_to_plot = mngs.gen.search(
-            "_plot",
-            list(logged_dict[_steps_str[0]].keys()),
-        )
+    def _find_keys_to_plot(logged_dict: _Dict) -> _List[str]:
+        """Find metrics to plot from logged dictionary.
+
+        Parameters
+        ----------
+        logged_dict : _Dict
+            _Dictionary of logged metrics
+
+        Returns
+        -------
+        _List[str]
+            _List of metric names to plot
+        """
+        for step_k in logged_dict.keys():
+            break
+
+        keys_to_plot = []
+        for k in logged_dict[step_k].keys():
+            if _re.search("_plot$", k):
+                keys_to_plot.append(k)
         return keys_to_plot
 
     @staticmethod
-    def _rename_if_key_to_plot(keys):
-        def _rename_key_to_plot(key_to_plot):
-            # renamed = key_to_plot[:-5]
-            renamed = re.sub("_plot", "", key_to_plot).replace("_", " ")
-            # renamed = renamed.replace("_", " ")
-            capitalized = []
-            for s in renamed.split(" "):
-                if not re.search("^[A-Z]", s):
-                    capitalized.append(s.capitalize())
-                else:
-                    capitalized.append(s)
-            renamed = mngs.gen.connect_strs(capitalized, filler=" ")
-            return renamed
+    def _rename_if_key_to_plot(
+        x: _Union[str, _pd.Index]
+    ) -> _Union[str, _pd.Index]:
+        """Rename metric keys for plotting.
 
-        if isinstance(keys, str):
-            keys = [keys]
+        Parameters
+        ----------
+        x : str or _pd.Index
+            Metric name(s) to rename
 
-        out = []
-        for key in keys:
-            if key[-5:] == "_plot":
-                out.append(_rename_key_to_plot(key))
+        Returns
+        -------
+        str or _pd.Index
+            Renamed metric name(s)
+        """
+        if isinstance(x, str):
+            if _re.search("_plot$", x):
+                return x.replace("_plot", "")
             else:
-                out.append(key)
-
-        if len(out) == 1:
-            out = out[0]
-
-        return out
-
-    # @staticmethod
-    # def _to_dfs_pivot_i_global(logged_dict):
-    #     dfs_pivot_i_global = {}
-    #     for step in logged_dict.keys():
-    #         df_step = mngs.pd.force_df(logged_dict[step])
-    #         df_step_pvt_on_i_global = df_step.pivot_table(
-    #             columns="i_global", aggfunc="mean"
-    #         ).T
-    #         dfs_pivot_i_global[step] = df_step_pvt_on_i_global
-
-    #     return dfs_pivot_i_global
+                return x
+        else:
+            return x.str.replace("_plot", "")
 
     @staticmethod
-    def _to_dfs_pivot(logged_dict, pivot_column=None):
-        dfs_pivot = {}
-        for step in logged_dict.keys():
-            df_step = mngs.pd.force_df(logged_dict[step])
-            if pivot_column is not None:
-                dfs_pivot[step] = df_step.pivot_table(
-                    columns=pivot_column, aggfunc="mean"
-                ).T
-            else:
-                dfs_pivot[step] = df_step
+    def _to_dfs_pivot(
+        logged_dict: _Dict[str, _Dict],
+        pivot_column: _Optional[str] = None,
+    ) -> _Dict[str, _pd.DataFrame]:
+        """Convert logged dictionary to pivot DataFrames.
 
+        Parameters
+        ----------
+        logged_dict : _Dict[str, _Dict]
+            _Dictionary of logged metrics
+        pivot_column : str, optional
+            Column to pivot on
+
+        Returns
+        -------
+        _Dict[str, _pd.DataFrame]
+            _Dictionary of pivot DataFrames
+        """
+
+        dfs_pivot = {}
+        for step_k in logged_dict.keys():
+            if pivot_column is None:
+                df = _pd.DataFrame(logged_dict[step_k])
+            else:
+                df = (
+                    _pd.DataFrame(logged_dict[step_k])
+                    .groupby(pivot_column)
+                    .mean()
+                    .reset_index()
+                    .set_index(pivot_column)
+                )
+            dfs_pivot[step_k] = df
         return dfs_pivot
 
 
@@ -298,22 +391,24 @@ if __name__ == "__main__":
     train_size = int(n_samples * 0.8)  # train_size is 48000
 
     subset1_indices = list(range(0, train_size))  # [0,1,.....47999]
-    subset2_indices = list(range(train_size, n_samples))  # [48000,48001,.....59999]
+    subset2_indices = list(
+        range(train_size, n_samples)
+    )  # [48000,48001,.....59999]
 
     _ds_tra = Subset(_ds_tra_val, subset1_indices)
     _ds_val = Subset(_ds_tra_val, subset2_indices)
 
     ## to tensors
     ds_tra = TensorDataset(
-        _ds_tra.dataset.data.to(torch.float32),
+        _ds_tra.dataset.data.to(_torch.float32),
         _ds_tra.dataset.targets,
     )
     ds_val = TensorDataset(
-        _ds_val.dataset.data.to(torch.float32),
+        _ds_val.dataset.data.to(_torch.float32),
         _ds_val.dataset.targets,
     )
     ds_tes = TensorDataset(
-        _ds_tes.data.to(torch.float32),
+        _ds_tes.data.to(_torch.float32),
         _ds_tes.targets,
     )
 
@@ -345,7 +440,7 @@ if __name__ == "__main__":
     ################################################################################
     model = Perceptron()
     loss_func = nn.CrossEntropyLoss()
-    optimizer = torch.optim.SGD(model.parameters(), lr=1e-3)
+    optimizer = _torch.optim.SGD(model.parameters(), lr=1e-3)
     softmax = nn.Softmax(dim=-1)
 
     ################################################################################
@@ -465,3 +560,5 @@ if __name__ == "__main__":
     )
     fig.show()
     # mngs.gen.save(fig, sdir + f"fold#{i_fold}.png")
+
+# EOF

@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-20 00:22:25 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/ai/silhoute_score_block.py
+
+__file__ = "/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/silhoute_score_block.py"
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 # Time-stamp: "2024-11-03 03:03:13 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/ai/silhoute_score_block.py
 
@@ -11,12 +18,13 @@
 
 from itertools import combinations as _combinations
 
-import numpy as np
+import numpy as _np
 # from sklearn.externals.joblib import Parallel, delayed
 from joblib import Parallel as _Parallel
 from joblib import delayed as _delayed
-from sklearn.metrics.pairwise import distance_metrics, pairwise_distances
-from sklearn.utils import check_random_state
+from sklearn.metrics.pairwise import distance_metrics as _distance_metrics
+from sklearn.metrics.pairwise import pairwise_distances as _pairwise_distances
+from sklearn.utils import check_random_state as _check_random_state
 
 
 def silhouette_score_slow(
@@ -50,7 +58,7 @@ def silhouette_score_slow(
     metric : string, or callable
         The metric to use when calculating distance between instances in a
         feature array. If metric is a string, it must be one of the options
-        allowed by metrics.pairwise.pairwise_distances. If X is the distance
+        allowed by metrics.pairwise._pairwise_distances. If X is the distance
         array itself, use "precomputed" as the metric.
 
     sample_size : int or None
@@ -83,13 +91,13 @@ def silhouette_score_slow(
 
     """
     if sample_size is not None:
-        random_state = check_random_state(random_state)
+        random_state = _check_random_state(random_state)
         indices = random_state.permutation(X.shape[0])[:sample_size]
         if metric == "precomputed":
             raise ValueError("Distance matrix cannot be precomputed")
         else:
             X, labels = X[indices], labels[indices]
-    return np.mean(silhouette_samples_slow(X, labels, metric=metric, **kwds))
+    return _np.mean(silhouette_samples_slow(X, labels, metric=metric, **kwds))
 
 
 def silhouette_samples_slow(X, labels, metric="euclidean", **kwds):
@@ -121,7 +129,7 @@ def silhouette_samples_slow(X, labels, metric="euclidean", **kwds):
     metric : string, or callable
         The metric to use when calculating distance between instances in a
         feature array. If metric is a string, it must be one of the options
-        allowed by metrics.pairwise.pairwise_distances. If X is the distance
+        allowed by metrics.pairwise._pairwise_distances. If X is the distance
         array itself, use "precomputed" as the metric.
 
     `**kwds` : optional keyword parameters
@@ -144,20 +152,20 @@ def silhouette_samples_slow(X, labels, metric="euclidean", **kwds):
     http://en.wikipedia.org/wiki/Silhouette_(clustering)
 
     """
-    metric = distance_metrics()[metric]
+    metric = _distance_metrics()[metric]
     n = labels.shape[0]
-    A = np.array(
+    A = _np.array(
         [_intra_cluster_distance_slow(X, labels, metric, i) for i in range(n)]
     )
-    B = np.array(
+    B = _np.array(
         [
             _nearest_cluster_distance_slow(X, labels, metric, i)
             for i in range(n)
         ]
     )
-    sil_samples = (B - A) / np.maximum(A, B)
+    sil_samples = (B - A) / _np.maximum(A, B)
     # nan values are for clusters of size 1, and should be 0
-    return np.nan_to_num(sil_samples)
+    return _np.nan_to_num(sil_samples)
 
 
 def _intra_cluster_distance_slow(X, labels, metric, i):
@@ -183,10 +191,10 @@ def _intra_cluster_distance_slow(X, labels, metric, i):
     a : float
         Mean intra-cluster distance for sample i
     """
-    indices = np.where(labels == labels[i])[0]
+    indices = _np.where(labels == labels[i])[0]
     if len(indices) == 0:
         return 0.0
-    a = np.mean([metric(X[i], X[j]) for j in indices if not i == j])
+    a = _np.mean([metric(X[i], X[j]) for j in indices if not i == j])
     return a
 
 
@@ -214,10 +222,10 @@ def _nearest_cluster_distance_slow(X, labels, metric, i):
         Mean nearest-cluster distance for sample i
     """
     label = labels[i]
-    b = np.min(
+    b = _np.min(
         [
-            np.mean(
-                [metric(X[i], X[j]) for j in np.where(labels == cur_label)[0]]
+            _np.mean(
+                [metric(X[i], X[j]) for j in _np.where(labels == cur_label)[0]]
             )
             for cur_label in set(labels)
             if not cur_label == label
@@ -261,7 +269,7 @@ def silhouette_score_block(
     metric : string, or callable
         The metric to use when calculating distance between instances in a
         feature array. If metric is a string, it must be one of the options
-        allowed by metrics.pairwise.pairwise_distances. If X is the distance
+        allowed by metrics.pairwise._pairwise_distances. If X is the distance
         array itself, use "precomputed" as the metric.
 
     sample_size : int or None
@@ -294,13 +302,13 @@ def silhouette_score_block(
 
     """
     if sample_size is not None:
-        random_state = check_random_state(random_state)
+        random_state = _check_random_state(random_state)
         indices = random_state.permutation(X.shape[0])[:sample_size]
         if metric == "precomputed":
             raise ValueError("Distance matrix cannot be precomputed")
         else:
             X, labels = X[indices], labels[indices]
-    return np.mean(
+    return _np.mean(
         silhouette_samples_block(
             X, labels, metric=metric, n_jobs=n_jobs, **kwds
         )
@@ -336,7 +344,7 @@ def silhouette_samples_block(X, labels, metric="euclidean", n_jobs=1, **kwds):
     metric : string, or callable
         The metric to use when calculating distance between instances in a
         feature array. If metric is a string, it must be one of the options
-        allowed by metrics.pairwise.pairwise_distances. If X is the distance
+        allowed by metrics.pairwise._pairwise_distances. If X is the distance
         array itself, use "precomputed" as the metric.
 
     `**kwds` : optional keyword parameters
@@ -365,13 +373,13 @@ def silhouette_samples_block(X, labels, metric="euclidean", n_jobs=1, **kwds):
     B = _nearest_cluster_distance_block(
         X, labels, metric, n_jobs=n_jobs, **kwds
     )
-    sil_samples = (B - A) / np.maximum(A, B)
+    sil_samples = (B - A) / _np.maximum(A, B)
     # nan values are for clusters of size 1, and should be 0
-    return np.nan_to_num(sil_samples)
+    return _np.nan_to_num(sil_samples)
 
 
 def _intra_cluster_distances_block_(subX, metric, **kwds):
-    distances = pairwise_distances(subX, metric=metric, **kwds)
+    distances = _pairwise_distances(subX, metric=metric, **kwds)
     return distances.sum(axis=1) / (distances.shape[0] - 1)
 
 
@@ -389,7 +397,7 @@ def _intra_cluster_distances_block(X, labels, metric, n_jobs=1, **kwds):
     metric : string, or callable
         The metric to use when calculating distance between instances in a
         feature array. If metric is a string, it must be one of the options
-        allowed by metrics.pairwise.pairwise_distances. If X is the distance
+        allowed by metrics.pairwise._pairwise_distances. If X is the distance
         array itself, use "precomputed" as the metric.
 
     `**kwds` : optional keyword parameters
@@ -402,20 +410,20 @@ def _intra_cluster_distances_block(X, labels, metric, n_jobs=1, **kwds):
     a : array [n_samples_a]
         Mean intra-cluster distance
     """
-    intra_dist = np.zeros(labels.size, dtype=float)
+    intra_dist = _np.zeros(labels.size, dtype=float)
     values = _Parallel(n_jobs=n_jobs)(
         _delayed(_intra_cluster_distances_block_)(
-            X[np.where(labels == label)[0]], metric, **kwds
+            X[_np.where(labels == label)[0]], metric, **kwds
         )
-        for label in np.unique(labels)
+        for label in _np.unique(labels)
     )
-    for label, values_ in zip(np.unique(labels), values):
-        intra_dist[np.where(labels == label)[0]] = values_
+    for label, values_ in zip(_np.unique(labels), values):
+        intra_dist[_np.where(labels == label)[0]] = values_
     return intra_dist
 
 
 def _nearest_cluster_distance_block_(subX_a, subX_b, metric, **kwds):
-    dist = pairwise_distances(subX_a, subX_b, metric=metric, **kwds)
+    dist = _pairwise_distances(subX_a, subX_b, metric=metric, **kwds)
     dist_a = dist.mean(axis=1)
     dist_b = dist.mean(axis=0)
     return dist_a, dist_b
@@ -435,7 +443,7 @@ def _nearest_cluster_distance_block(X, labels, metric, n_jobs=1, **kwds):
     metric : string, or callable
         The metric to use when calculating distance between instances in a
         feature array. If metric is a string, it must be one of the options
-        allowed by metrics.pairwise.pairwise_distances. If X is the distance
+        allowed by metrics.pairwise._pairwise_distances. If X is the distance
         array itself, use "precomputed" as the metric.
 
     `**kwds` : optional keyword parameters
@@ -450,15 +458,15 @@ def _nearest_cluster_distance_block(X, labels, metric, n_jobs=1, **kwds):
     b : float
         Mean nearest-cluster distance for sample i
     """
-    inter_dist = np.empty(labels.size, dtype=float)
-    inter_dist.fill(np.inf)
+    inter_dist = _np.empty(labels.size, dtype=float)
+    inter_dist.fill(_np.inf)
     # Compute cluster distance between pairs of clusters
-    unique_labels = np.unique(labels)
+    unique_labels = _np.unique(labels)
 
     values = _Parallel(n_jobs=n_jobs)(
         _delayed(_nearest_cluster_distance_block_)(
-            X[np.where(labels == label_a)[0]],
-            X[np.where(labels == label_b)[0]],
+            X[_np.where(labels == label_a)[0]],
+            X[_np.where(labels == label_b)[0]],
             metric,
             **kwds
         )
@@ -469,11 +477,11 @@ def _nearest_cluster_distance_block(X, labels, metric, n_jobs=1, **kwds):
         _combinations(unique_labels, 2), values
     ):
 
-        indices_a = np.where(labels == label_a)[0]
-        inter_dist[indices_a] = np.minimum(values_a, inter_dist[indices_a])
+        indices_a = _np.where(labels == label_a)[0]
+        inter_dist[indices_a] = _np.minimum(values_a, inter_dist[indices_a])
         del indices_a
-        indices_b = np.where(labels == label_b)[0]
-        inter_dist[indices_b] = np.minimum(values_b, inter_dist[indices_b])
+        indices_b = _np.where(labels == label_b)[0]
+        inter_dist[indices_b] = _np.minimum(values_b, inter_dist[indices_b])
         del indices_b
     return inter_dist
 
@@ -484,9 +492,9 @@ if __name__ == "__main__":
     # from sklearn.metrics.cluster.unsupervised import silhouette_score
     from sklearn.metrics import silhouette_score
 
-    np.random.seed(0)
-    X = np.random.random((10000, 100))
-    y = np.repeat(np.arange(100), 100)
+    _np.random.seed(0)
+    X = _np.random.random((10000, 100))
+    y = _np.repeat(_np.arange(100), 100)
     t0 = time.time()
     s = silhouette_score(X, y)
     t = time.time() - t0
