@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-25 23:18:26 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/types/_ArrayLike.py
+
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/types/_ArrayLike.py"
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 # Time-stamp: "2024-11-03 02:55:10 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/types/_ArrayLike.py
 
@@ -20,6 +27,14 @@ ArrayLike = Union[
     _torch.tensor,
     # _torch.Tensor,
 ]
+
+
+def is_array_like(obj) -> bool:
+    """Check if object is array-like."""
+    return isinstance(
+        obj,
+        (List, Tuple, _np.ndarray, _pd.Series, _pd.DataFrame, _xr.DataArray),
+    ) or _torch.is_tensor(obj)
 
 
 # EOF
