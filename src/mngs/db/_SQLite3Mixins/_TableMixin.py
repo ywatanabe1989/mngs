@@ -15,7 +15,7 @@ from typing import Any, Dict, List, Union
 import pandas as pd
 from .._BaseMixins._BaseTableMixin import _BaseTableMixin
 
-class _TableMixin(_BaseTableMixin):
+class _TableMixin:
     """Table management functionality"""
 
     def create_table(

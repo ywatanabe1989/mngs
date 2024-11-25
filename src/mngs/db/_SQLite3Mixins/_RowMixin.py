@@ -11,7 +11,7 @@ from typing import Optional
 import pandas as pd
 from .._BaseMixins._BaseRowMixin import _BaseRowMixin
 
-class _RowMixin(_BaseRowMixin):
+class _RowMixin:
     """Row operations functionality"""
 
     def get_rows(

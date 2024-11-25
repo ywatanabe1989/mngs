@@ -29,7 +29,7 @@ from typing import Dict, List, Optional
 from .._BaseMixins._BaseBatchMixin import _BaseBatchMixin
 import sqlite3
 
-class _BatchMixin(_BaseBatchMixin):
+class _BatchMixin:
     """Batch operations functionality"""
 
     def _run_many(

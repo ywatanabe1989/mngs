@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-25 01:37:48 (ywatanabe)"
+# Time-stamp: "2024-11-25 06:05:34 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/db/_SQLite3Mixins/_QueryMixin.py
 
 __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_SQLite3Mixins/_QueryMixin.py"
@@ -11,7 +11,7 @@ from typing import List, Tuple
 import pandas as pd
 from .._BaseMixins._BaseQueryMixin import _BaseQueryMixin
 
-class _QueryMixin(_BaseQueryMixin):
+class _QueryMixin:
     """Query execution functionality"""
 
     def _sanitize_parameters(self, parameters):

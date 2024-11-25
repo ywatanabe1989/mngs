@@ -12,7 +12,7 @@ from typing import Dict, List, Optional, Tuple, Union
 import numpy as np
 from .._BaseMixins._BaseBlobMixin import _BaseBlobMixin
 
-class _BlobMixin(_BaseBlobMixin):
+class _BlobMixin:
     """BLOB data handling functionality"""
 
     def save_array(

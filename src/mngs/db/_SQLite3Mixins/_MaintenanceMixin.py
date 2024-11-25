@@ -13,7 +13,7 @@ import pandas as pd
 
 from .._BaseMixins._BaseMaintenanceMixin import _BaseMaintenanceMixin
 
-class _MaintenanceMixin(_BaseMaintenanceMixin):
+class _MaintenanceMixin:
     """Database maintenance functionality"""
 
     @contextlib.contextmanager

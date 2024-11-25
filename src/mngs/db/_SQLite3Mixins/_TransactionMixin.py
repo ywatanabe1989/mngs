@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-25 01:39:19 (ywatanabe)"
+# Time-stamp: "2024-11-25 06:05:34 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/db/_SQLite3Mixins/_TransactionMixin.py
 
 __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_SQLite3Mixins/_TransactionMixin.py"
@@ -9,7 +9,7 @@ import sqlite3
 import contextlib
 from .._BaseMixins._BaseTransactionMixin import _BaseTransactionMixin
 
-class _TransactionMixin(_BaseTransactionMixin):
+class _TransactionMixin:
     """Transaction management functionality"""
 
     @contextlib.contextmanager

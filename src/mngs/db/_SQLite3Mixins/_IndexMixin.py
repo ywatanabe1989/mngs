@@ -8,7 +8,7 @@ __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_SQLite3Mixins/_IndexMixi
 from typing import List
 from .._BaseMixins._BaseIndexMixin import _BaseIndexMixin
 
-class _IndexMixin(_BaseIndexMixin):
+class _IndexMixin:
     """Index management functionality"""
 
     def create_index(

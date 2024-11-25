@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-25 04:26:36 (ywatanabe)"
+# Time-stamp: "2024-11-25 06:05:35 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/db/_SQLite3Mixins/_ConnectionMixin.py
 
 __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_SQLite3Mixins/_ConnectionMixin.py"
@@ -27,7 +27,7 @@ import tempfile
 from .._BaseMixins._BaseConnectionMixin import _BaseConnectionMixin
 import contextlib
 
-class _ConnectionMixin(_BaseConnectionMixin):
+class _ConnectionMixin:
     """Connection management functionality"""
 
     def __init__(self, db_path: str, use_temp_db: bool = False):

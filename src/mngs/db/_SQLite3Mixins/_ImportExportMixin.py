@@ -11,7 +11,7 @@ import pandas as pd
 
 from .._BaseMixins._BaseImportExportMixin import _BaseImportExportMixin
 
-class _ImportExportMixin(_BaseImportExportMixin):
+class _ImportExportMixin:
     """Import/Export functionality"""
 
     def load_from_csv(
