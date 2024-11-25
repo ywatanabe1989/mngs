@@ -1,23 +1,27 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-04 04:44:15 (ywatanabe)"
+# Time-stamp: "2024-11-25 23:29:34 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/dsp/_pac.py
+
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/dsp/_pac.py"
 
 import sys
 
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
+from mngs.decorators import torch_fn
 
-from ..decorators import batch_fn, torch_fn
+from ..decorators import batch_torch_fn
 from ..nn._PAC import PAC
 
 """
 mngs.dsp.pac function
 """
 
-@torch_fn
-@batch_fn
+# @torch_fn
+# @batch_fn
+@batch_torch_fn
 def pac(
     x,
     fs,
@@ -96,8 +100,8 @@ def pac(
         return process_ch_batching(m, x, batch_size_ch, device), m.PHA_MIDS_HZ, m.AMP_MIDS_HZ
 
 if __name__ == "__main__":
-    import mngs
     import matplotlib.pyplot as plt
+    import mngs
 
     # Start
     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt)
@@ -138,8 +142,8 @@ if __name__ == "__main__":
             ) = mngs.dsp.utils.pac.calc_pac_with_tensorpac(xx, fs, T_SEC)
 
             # Validates the consitency in frequency definitions
-            assert np.allclose(pha_mids_mngs, _pha_mids_tp)
-            assert np.allclose(amp_mids_mngs, _amp_mids_tp)
+            assert np.allclose(pha_mids_mngs.detach().cpu().numpy(), _pha_mids_tp)
+            assert np.allclose(amp_mids_mngs.detach().cpu().numpy(), _amp_mids_tp)
 
             mngs.io.save(
                 (pac_mngs, pac_tp, pha_mids_mngs, amp_mids_mngs),
@@ -171,10 +175,105 @@ if __name__ == "__main__":
                 fig, f"pac_with_{trainable_str}_bandpass_{fp_str}.png"
             )
 
+def run_method_tests():
+    import mngs
+
+    # Test parameters
+    FS = 512
+    T_SEC = 4
+
+    class PACProcessor:
+        @batch_torch_fn
+        def process_pac(self, x, fs, **kwargs):
+            return pac(x, fs, **kwargs)
+
+        @torch_fn
+        def process_signal(self, x):
+            return x * 2
+
+    def run_method_basic_tests():
+        processor = PACProcessor()
+
+        # Generate test signal
+        xx, tt, fs = mngs.dsp.demo_sig(
+            batch_size=1, n_chs=1, fs=FS, t_sec=T_SEC, sig_type="pac"
+        )
+
+        try:
+            # Test method with batch processing
+            result_batch, pha_mids, amp_mids = processor.process_pac(
+                xx,
+                fs,
+                pha_n_bands=50,
+                amp_n_bands=30,
+                batch_size=1
+            )
+            assert torch.is_tensor(result_batch)
+
+            # Test basic torch method
+            result_torch = processor.process_signal(xx)
+            assert torch.is_tensor(result_torch)
+
+            mngs.str.printc("Passed: Basic method tests", "yellow")
+        except Exception as err:
+            mngs.str.printc(f"Failed: Basic method tests - {str(err)}", "red")
+
+    def run_method_cuda_tests():
+        if not torch.cuda.is_available():
+            mngs.str.printc("CUDA method tests skipped: No GPU available", "yellow")
+            return
+
+        processor = PACProcessor()
+        xx, tt, fs = mngs.dsp.demo_sig(
+            batch_size=1, n_chs=1, fs=FS, t_sec=T_SEC, sig_type="pac"
+        )
+
+        try:
+            # Test with CUDA
+            result_cuda, _, _ = processor.process_pac(xx, fs, device="cuda")
+            assert result_cuda.device.type == "cuda"
+
+            result_torch = processor.process_signal(xx, device="cuda")
+            assert result_torch.device.type == "cuda"
+
+            mngs.str.printc("Passed: CUDA method tests", "yellow")
+        except Exception as err:
+            mngs.str.printc(f"Failed: CUDA method tests - {str(err)}", "red")
+
+    def run_method_batch_size_tests():
+        processor = PACProcessor()
+        batch_sizes = [1, 2, 4]
+
+        for batch_size in batch_sizes:
+            try:
+                xx, tt, fs = mngs.dsp.demo_sig(
+                    batch_size=batch_size, n_chs=1, fs=FS, t_sec=T_SEC, sig_type="pac"
+                )
+
+                result, _, _ = processor.process_pac(xx, fs, batch_size=batch_size)
+                assert result.shape[0] == batch_size
+
+                mngs.str.printc(f"Passed: Method batch size test with size={batch_size}", "yellow")
+            except Exception as err:
+                mngs.str.printc(f"Failed: Method batch size test with size={batch_size} - {str(err)}", "red")
+
+    # Execute method test suites
+    test_suites = [
+        ("Method Basic Tests", run_method_basic_tests),
+        ("Method CUDA Tests", run_method_cuda_tests),
+        ("Method Batch Size Tests", run_method_batch_size_tests),
+    ]
+
+    for test_name, test_func in test_suites:
+        test_func()
+
+if __name__ == "__main__":
+    run_method_tests()
+
 # EOF
 
 """
-/home/ywatanabe/proj/entrance/mngs/dsp/_pac.py
+python -m mngs.dsp._pac
 """
 
 # EOF

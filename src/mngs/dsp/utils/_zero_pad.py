@@ -1,6 +1,9 @@
-#!./env/bin/python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-04-11 08:26:19 (ywatanabe)"
+# Time-stamp: "2024-11-25 23:34:44 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/dsp/utils/_zero_pad.py
+
+__file__ = "/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/dsp/utils/_zero_pad.py"
 
 import torch
 import torch.nn.functional as F
@@ -17,3 +20,6 @@ def _zero_pad_1d(x, target_length):
 def zero_pad(xs, dim=0):
     max_len = max([len(x) for x in xs])
     return torch.stack([_zero_pad_1d(x, max_len) for x in xs], dim=dim)
+
+
+# EOF
