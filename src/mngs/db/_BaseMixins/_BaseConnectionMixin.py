@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-24 22:54:44 (ywatanabe)"
+# Time-stamp: "2024-11-25 06:02:43 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/db/_BaseMixins/_BaseConnectionMixin.py
 
 __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_BaseMixins/_BaseConnectionMixin.py"
 
-# _BaseDB_modules/_BaseConnectionMixin.py
 import threading
 from typing import Optional
 
@@ -31,10 +30,10 @@ class _BaseConnectionMixin:
     def reconnect(self):
         raise NotImplementedError
 
-    def execute(self):
+    def execute(self, query: str, parameters = ()) -> None:
         raise NotImplementedError
 
-    def executemany(self):
+    def executemany(self, query: str, parameters) -> None:
         raise NotImplementedError
 
 
