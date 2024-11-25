@@ -1,11 +1,9 @@
-#! ./env/bin/python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-24 10:18:53 (ywatanabe)"
+# Time-stamp: "2024-11-25 22:43:53 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/nn/_PAC.py
 
-"""
-This script defines PAC nn.Module.
-"""
-
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/nn/_PAC.py"
 
 # Imports
 import sys
@@ -46,9 +44,6 @@ class PAC(nn.Module):
             if not isinstance(n_perm, int):
                 raise ValueError("n_perm should be None or an integer.")
 
-        # if (n_perm is not None) and amp_prob:
-        #     raise ValueError("n_perm and amp_prob cannot both be specified.")
-
         # caps amp_end_hz
         factor = 0.8
         amp_end_hz = int(min(fs / 2 / (1 + factor) - 1, amp_end_hz))
@@ -68,7 +63,7 @@ class PAC(nn.Module):
 
         self.hilbert = mngs.nn.Hilbert(seq_len, dim=-1, fp16=fp16)
 
-        self.modulation_index = mngs.nn.ModulationIndex(
+        self.Modulation_index = mngs.nn.ModulationIndex(
             n_bins=18,
             fp16=fp16,
             amp_prob=amp_prob,
@@ -83,7 +78,7 @@ class PAC(nn.Module):
 
         """x.shape: (batch_size, n_chs, seq_len) or (batch_size, n_chs, n_segments, seq_len)"""
 
-        with torch.set_grad_enabled(self.trainable):
+        with torch.set_grad_enabled(bool(self.trainable)):
             x = self._ensure_4d_input(x)
             # (batch_size, n_chs, n_segments, seq_len)
 
@@ -118,7 +113,7 @@ class PAC(nn.Module):
             pha = pha[..., edge_len:-edge_len].half()
             amp = amp[..., edge_len:-edge_len].half()
 
-            pac_or_amp_prob = self.modulation_index(pha, amp)#.squeeze()
+            pac_or_amp_prob = self.Modulation_index(pha, amp)#.squeeze()
             # print(pac_or_amp_prob.shape)
             # pac_or_amp_prob = pac_or_amp_prob.squeeze()
 
@@ -134,7 +129,7 @@ class PAC(nn.Module):
         return (observed - mm) / (ss + 1e-5)
 
         # if self.amp_prob:
-        #     amp_prob = self.modulation_index(pha, amp).squeeze()
+        #     amp_prob = self.Modulation_index(pha, amp).squeeze()
         #     amp_prob.shape  # torch.Size([2, 8, 50, 50, 3, 18])
         #     pac_surrogates = self.generate_surrogates(pha, amp)
         #     # torch.Size([2, 8, 3, 50, 50, 3, 18])
@@ -142,7 +137,7 @@ class PAC(nn.Module):
         #     return amp_prob
 
         # elif not self.amp_prob:
-        #     pac = self.modulation_index(pha, amp).squeeze() # torch.Size([2, 8, 50, 50])
+        #     pac = self.Modulation_index(pha, amp).squeeze() # torch.Size([2, 8, 50, 50])
 
         # if self.n_perm is not None:
         #     pac_surrogates = self.generate_surrogates(pha, amp)
@@ -194,7 +189,7 @@ class PAC(nn.Module):
                 _pha = pha[start:end].unsqueeze(1).to(device)  # n_chs = 1
                 _amp = amp[start:end].unsqueeze(1).to(device)  # n_chs = 1
 
-                _surrogate_pacs = self.modulation_index(_pha, _amp).cpu()
+                _surrogate_pacs = self.Modulation_index(_pha, _amp).cpu()
                 surrogate_pacs.append(_surrogate_pacs)
 
                 # # Optionally clear cache if memory is an issue
@@ -364,7 +359,7 @@ if __name__ == "__main__":
     """
     amp_prob = m(xx)
     amp_prob = amp_prob.reshape(-1, amp_prob.shape[-1])
-    xx = m.modulation_index.pha_bin_centers
+    xx = m.Modulation_index.pha_bin_centers
     plt.bar(xx, amp_prob[0])
     """
 
@@ -418,3 +413,6 @@ if __name__ == "__main__":
 # matplotlib.use("TkAgg")
 # plt.scatter(pac_mngs[i_batch, i_ch].reshape(-1), pac_tp.reshape(-1))
 # plt.show()
+
+
+# EOF

@@ -1,10 +1,24 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-25 13:00:36 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/nn/_Filters.py
+
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/nn/_Filters.py"
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 # Time-stamp: "2024-11-05 01:06:41 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/nn/_Filters.py
 
 """
-This script does XYZ.
+Implements various neural network filter layers:
+    - BaseFilter1D: Abstract base class for 1D filters
+    - BandPassFilter: Implements bandpass filtering
+    - BandStopFilter: Implements bandstop filtering
+    - LowPassFilter: Implements lowpass filtering
+    - HighPassFilter: Implements highpass filtering
+    - GaussianFilter: Implements Gaussian smoothing
+    - DifferentiableBandPassFilter: Implements learnable bandpass filtering
 """
 
 # Imports
