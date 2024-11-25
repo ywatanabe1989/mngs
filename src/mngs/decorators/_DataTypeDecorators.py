@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-25 23:25:26 (ywatanabe)"
+# Time-stamp: "2024-11-26 08:51:45 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/decorators/DataTypeDecorator.py
 
 __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/DataTypeDecorator.py"

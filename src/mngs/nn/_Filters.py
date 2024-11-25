@@ -1,14 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-25 13:00:36 (ywatanabe)"
+# Time-stamp: "2024-11-26 08:58:29 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/nn/_Filters.py
 
 __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/nn/_Filters.py"
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-05 01:06:41 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/nn/_Filters.py
 
 """
 Implements various neural network filter layers:
@@ -373,7 +368,7 @@ if __name__ == "__main__":
         sys, plt, fig_scale=5
     )
 
-    xx, tt, fs = mngs.dsp.demo_sig(sig_type="chirp")
+    xx, tt, fs = mngs.dsp.demo_sig(sig_type="chirp", fs=1024)
     xx = torch.tensor(xx).cuda()
     # bands = np.array([[2, 3], [3, 4]])
     # BandPassFilter(bands, fs, xx.shape)
