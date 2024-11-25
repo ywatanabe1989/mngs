@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-02 04:02:32 (ywatanabe)"
+# Time-stamp: "2024-11-25 23:40:22 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/gen/_to_odd.py
+
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/gen/_to_odd.py"
+
 def to_odd(n):
     """Convert a number to the nearest odd number less than or equal to itself.
 
