@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-25 00:29:19 (ywatanabe)"
+# Time-stamp: "2024-11-25 13:10:50 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/decorators/_torch_fn.py
 
 __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_torch_fn.py"
@@ -20,14 +20,13 @@ Prerequisites:
 
 from functools import wraps
 from typing import Any as _Any
-from typing import Callable
+from typing import Callable, Tuple
 
 import numpy as np
 import pandas as pd
 import torch
 
 from ._converters import (
-    _conversion_warning,
     _return_always,
     _return_if,
     is_torch,
@@ -35,50 +34,39 @@ from ._converters import (
     to_torch,
 )
 
+
+
 def torch_fn(func: Callable) -> Callable:
-    """Decorates functions to handle PyTorch tensor conversions.
-
-    Automatically converts input arguments to PyTorch tensors and handles output
-    conversions based on input type (maintaining torch.Tensor or converting back
-    to numpy.ndarray).
-
-    Example
-    -------
-    >>> @torch_fn
-    ... def custom_softmax(x):
-    ...     return F.softmax(x, dim=-1)
-    >>> array_data = np.array([1, 2, 3])
-    >>> result = custom_softmax(array_data)
-    >>> print(type(result), result)
-    <class 'numpy.ndarray'> [0.09003057 0.24472847 0.66524096]
-
-    Parameters
-    ----------
-    func : Callable
-        Function that expects PyTorch tensor inputs
-
-    Returns
-    -------
-    Callable
-        Wrapped function that handles data type conversions
-    """
     @wraps(func)
     def wrapper(*args: _Any, **kwargs: _Any) -> _Any:
         is_torch_input = is_torch(*args, **kwargs)
-        converted_args, converted_kwargs = to_torch(*args, return_fn=_return_always, **kwargs)
-        results = func(*converted_args, **converted_kwargs)
 
-        # Convert back to numpy only if input wasn't torch
+        # Convert inputs to torch tensors
+        converted_args = to_torch(*args, **kwargs)
+        if isinstance(converted_args, tuple):
+            results = func(*converted_args)
+        else:
+            results = func(converted_args)
+
+        # Convert output data based on input type
         if not is_torch_input:
-            if isinstance(results, tuple):
-                results = tuple(to_numpy(r, return_fn=_return_if) for r in results)
-            else:
-                results = to_numpy(results, return_fn=_return_if)
-                if isinstance(results, tuple) and len(results) == 1:
+            if isinstance(results, (list, tuple)):
+                results = tuple(to_numpy(r) for r in results)
+                if len(results) == 1:
                     results = results[0]
+            else:
+                results = to_numpy(results)
+
+            # Only convert to list/Series if results is not a tuple
+            if not isinstance(results, tuple):
+                if isinstance(args[0], list):
+                    results = results.tolist()
+                elif isinstance(args[0], pd.Series):
+                    results = pd.Series(results)
         return results
 
     return wrapper
+
 
 def torch_method(func: Callable) -> Callable:
     @wraps(func)
@@ -87,38 +75,78 @@ def torch_method(func: Callable) -> Callable:
         if is_torch_input:
             results = func(self, *args, **kwargs)
         else:
-            converted_args, converted_kwargs = to_torch(
-                *args, return_fn=_return_always, **kwargs
-            )
+            converted = to_torch(*args, return_fn=_return_always, **kwargs)
+            converted_args = [
+                arg[0] if isinstance(arg, tuple) else arg
+                for arg in converted[0]
+            ]
+            converted_kwargs = {
+                k: v[0] if isinstance(v, tuple) else v
+                for k, v in converted[1].items()
+            }
             results = func(self, *converted_args, **converted_kwargs)
             results = to_numpy(results, return_fn=_return_if)[0]
         return results
+
     return wrapper
 
 
 if __name__ == "__main__":
-    import scipy
+    import numpy as np
+    import pandas as pd
     import torch.nn.functional as F
 
-    @torch_fn
-    def torch_softmax(*args: _Any, **kwargs: _Any) -> torch.Tensor:
-        return F.softmax(*args, **kwargs)
+    def run_tests():
+        @torch_fn
+        def basic_operation(x: torch.Tensor) -> torch.Tensor:
+            return x + 1.0
 
-    def custom_print(data: _Any) -> None:
-        print(type(data), data)
+        @torch_fn
+        def softmax_operation(x: torch.Tensor) -> torch.Tensor:
+            return F.softmax(x, dim=-1)
 
-    test_data = [1, 2, 3]
-    test_list = test_data
-    test_tensor = torch.tensor(test_data).float()
-    test_tensor_cuda = torch.tensor(test_data).float().cuda()
-    test_array = np.array(test_data)
-    test_df = pd.DataFrame({"col1": test_data})
+        @torch_fn
+        def multi_return(x: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
+            return x * 2.0, x + 1.0
 
-    print("Testing torch_fn:")
-    custom_print(torch_softmax(test_list, dim=-1))
-    custom_print(torch_softmax(test_array, dim=-1))
-    custom_print(torch_softmax(test_df, dim=-1))
-    custom_print(torch_softmax(test_tensor, dim=-1))
-    custom_print(torch_softmax(test_tensor_cuda, dim=-1))
+        # Test data
+        test_inputs = [
+            [1.0, 2.0, 3.0],
+            np.array([1.0, 2.0, 3.0]),
+            torch.tensor([1.0, 2.0, 3.0]),
+            pd.Series([1.0, 2.0, 3.0]),
+        ]
+
+        print("\nTest 1: Basic functionality")
+        for data in test_inputs:
+            result = basic_operation(data)
+            print(f"Input type: {type(data)}, Output type: {type(result)}")
+
+        print("\nTest 2: Softmax operation")
+        for data in test_inputs:
+            result = softmax_operation(data)
+            print(f"Input type: {type(data)}, Output type: {type(result)}")
+
+        print("\nTest 3: Multiple returns")
+        result1, result2 = multi_return(np.array([1.0, 2.0, 3.0]))
+        print(f"Output types: {type(result1)}, {type(result2)}")
+
+
+if __name__ == "__main__":
+    run_tests()
+    import scipy
+    import torch.nn.functional as F
+    import numpy as np
+    import mngs
+
+    eeg_1min = np.random.rand(1, 16, 24000)
+    pac, freqs_pha, freqs_amp = mngs.dsp.pac(
+        eeg_1min,
+        400,
+        batch_size=1,
+        batch_size_ch=8,
+        fp16=True,
+        n_perm=16,
+    )
 
 # EOF
