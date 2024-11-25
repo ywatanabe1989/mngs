@@ -1,13 +1,20 @@
 # src from here --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
+# # Time-stamp: "2024-11-11 14:17:00 (ywatanabe)"
+# # File: ./mngs_repo/src/mngs/db/_inspect.py
+# 
+# import os
+# import sqlite3
+# from typing import Any, Dict, List, Optional, Tuple
+# 
+# #!/usr/bin/env python3
+# # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-10-24 13:13:33 (ywatanabe)"
 # # /mnt/ssd/mngs_repo/src/mngs/db/_inspect.py
 # 
-# import sqlite3
-# from typing import List, Tuple, Any, Optional, Dict
-# import os
-# import mngs
+# 
+# 
 # 
 # 
 # class Inspector:
@@ -158,6 +165,9 @@
 # # python -c "import mngs; mngs.db.inspect(\"./data/db_all/Patient_23_005.db\", table_names=[\"eeg_data_reindexed\"])"
 # # python -c "import mngs; mngs.db.inspect(\"./data/db_all/Patient_23_005.db\", table_names=[\"eeg_data\"])"
 # # python -c "import mngs; mngs.db.inspect(\"./data/db_all/Patient_23_005.db\", table_names=[\"sqlite_sequence\"])"
+# 
+# 
+# # EOF
 
 # test from here --------------------------------------------------------------------------------
 #!/usr/bin/env python3
@@ -173,7 +183,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs.db._inspect import *
+from mngs..db._inspect import *
 
 class Test_MainFunctionality:
     def setup_method(self):

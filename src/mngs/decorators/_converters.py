@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-17 21:31:05 (ywatanabe)"
+# Time-stamp: "2024-11-25 00:27:54 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/decorators/_converters.py
 
 __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_converters.py"

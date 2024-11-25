@@ -1,20 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-15 02:40:22 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/db/_BaseSQLiteDB_modules/_ConnectionMixin.py
+# Time-stamp: "2024-11-25 06:05:35 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/db/_SQLite3Mixins/_ConnectionMixin.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_BaseSQLiteDB_modules/_ConnectionMixin.py"
-
-
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-11 19:46:45 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/db/_BaseSQLiteDB_modules/_ConnectionMixin.py
-
-import sqlite3
-import threading
-from typing import Optional
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_SQLite3Mixins/_ConnectionMixin.py"
 
 """
 1. Functionality:
@@ -29,23 +18,35 @@ from typing import Optional
    - threading
 """
 
+import sqlite3
+import threading
+from typing import Optional
 import os
 import shutil
 import tempfile
-
+from .._BaseMixins._BaseConnectionMixin import _BaseConnectionMixin
+import contextlib
 
 class _ConnectionMixin:
     """Connection management functionality"""
 
-    def __init__(self, db_path: str, use_temp: bool = False):
+    def __init__(self, db_path: str, use_temp_db: bool = False):
         self.lock = threading.Lock()
         self._maintenance_lock = threading.Lock()
-        self.conn: Optional[sqlite3.Connection] = None
-        self.cursor: Optional[sqlite3.Cursor] = None
         self.db_path = db_path
-        self.temp_path = None
+        self.conn = None
+        self.cursor = None
         if db_path:
-            self.connect(db_path, use_temp)
+            self.connect(db_path, use_temp_db)
+
+        # self.lock = threading.Lock()
+        # self._maintenance_lock = threading.Lock()
+        # self.conn: Optional[sqlite3.Connection] = None
+        # self.cursor: Optional[sqlite3.Cursor] = None
+        # self.db_path = db_path
+        # self.temp_path = None
+        # if db_path:
+        #     self.connect(db_path, use_temp_db)
 
     def __enter__(self):
         return self
@@ -62,26 +63,60 @@ class _ConnectionMixin:
         shutil.copy2(db_path, self.temp_path)
         return self.temp_path
 
-    def connect(self, db_path: str, use_temp: bool = False) -> None:
-        """Establishes database connection"""
+    def connect(self, db_path: str, use_temp_db: bool = False) -> None:
         if self.conn:
             self.close()
 
-        path_to_connect = (
-            self._create_temp_copy(db_path) if use_temp else db_path
-        )
+        path_to_connect = self._create_temp_copy(db_path) if use_temp_db else db_path
 
-        self.conn = sqlite3.connect(
-            path_to_connect, timeout=60.0, isolation_level="EXCLUSIVE"
-        )
+        self.conn = sqlite3.connect(path_to_connect, timeout=60.0)
         self.cursor = self.conn.cursor()
 
         with self.lock:
-            self.cursor.execute("PRAGMA journal_mode = DELETE")
-            self.cursor.execute("PRAGMA synchronous = OFF")
-            self.cursor.execute("PRAGMA locking_mode = EXCLUSIVE")
-            self.conn.rollback()
+            # WAL mode settings
+            self.cursor.execute("PRAGMA journal_mode = WAL")
+            self.cursor.execute("PRAGMA synchronous = NORMAL")
+            self.cursor.execute("PRAGMA busy_timeout = 60000")
+            self.cursor.execute("PRAGMA mmap_size = 30000000000")
+            self.cursor.execute("PRAGMA temp_store = MEMORY")
+            self.cursor.execute("PRAGMA cache_size = -2000")
             self.conn.commit()
+
+    # def connect(self, db_path: str, use_temp_db: bool = False) -> None:
+    #     """Establishes database connection"""
+    #     if self.conn:
+    #         self.close()
+
+    #     path_to_connect = (
+    #         self._create_temp_copy(db_path) if use_temp_db else db_path
+    #     )
+
+    #     self.conn = sqlite3.connect(
+    #         path_to_connect, timeout=60.0, isolation_level="EXCLUSIVE"
+    #     )
+    #     self.cursor = self.conn.cursor()
+
+    #     with self.lock:
+    #         # Enable WAL mode
+    #         self.cursor.execute("PRAGMA journal_mode = WAL")
+    #         self.cursor.execute("PRAGMA synchronous = NORMAL")
+    #         self.cursor.execute("PRAGMA cache_size = -2000")  # 2MB cache
+    #         self.cursor.execute("PRAGMA mmap_size = 30000000000")  # 30GB memory map
+    #         self.cursor.execute("PRAGMA page_size = 4096")
+    #         self.cursor.execute("PRAGMA locking_mode = EXCLUSIVE")
+    #         self.conn.rollback()
+    #         self.conn.commit()
+
+    @contextlib.contextmanager
+    def transaction(self):
+        with self.lock:  # Thread-safe lock
+            try:
+                self.begin()
+                yield
+                self.commit()
+            except Exception as e:
+                self.rollback()
+                raise e
 
     def close(self) -> None:
         if self.cursor:
@@ -102,9 +137,9 @@ class _ConnectionMixin:
             except OSError:
                 pass
 
-    def reconnect(self, use_temp: bool = False) -> None:
+    def reconnect(self, use_temp_db: bool = False) -> None:
         if self.db_path:
-            self.connect(self.db_path, use_temp)
+            self.connect(self.db_path, use_temp_db)
         else:
             raise ValueError("No database path specified for reconnection")
 

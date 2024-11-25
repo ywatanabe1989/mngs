@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-24 17:55:17 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/gen/_close.py
+
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/gen/_close.py"
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 # Time-stamp: "2024-11-13 14:33:50 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/gen/_close.py
 
@@ -13,7 +20,7 @@ from glob import glob as _glob
 from ..io import flush as mngs_io_flush
 from ..io import save as mngs_io_save
 from ..str._printc import printc
-from ..utils._notify import notify as mngs_gen_notify
+from ..utils._notify import notify as mngs_utils_notify
 
 
 def _format_diff_time(diff_time):
@@ -91,9 +98,10 @@ def close(CONFIG, message=":)", notify=True, verbose=True, exit_status=None):
                     if CONFIG.get("DEBUG", False)
                     else str(message)
                 )
-                mngs_gen_notify(
+                mngs_utils_notify(
                     message=message,
                     ID=CONFIG["ID"],
+                    file=CONFIG.get("FILE"),
                     attachment_paths=log_files,
                     verbose=verbose,
                 )

@@ -14,19 +14,19 @@
 # 
 # 
 # def inspect_module(
-#         module: Union[str, Any],
-#         columns: List[str] = ["Type", "Name", "Docstring", "Depth"],
-#         prefix: str = "",
-#         max_depth: int = 5,
-#         visited: Optional[Set[str]] = None,
-#         docstring: bool = False,
-#         tree: bool = True,
-#         current_depth: int = 0,
-#         print_output: bool = False,
-#         skip_depwarnings: bool = True,
-#         drop_duplicates: bool = True,
-#         root_only: bool = False,
-#     ) -> pd.DataFrame:
+#     module: Union[str, Any],
+#     columns: List[str] = ["Type", "Name", "Docstring", "Depth"],
+#     prefix: str = "",
+#     max_depth: int = 5,
+#     visited: Optional[Set[str]] = None,
+#     docstring: bool = False,
+#     tree: bool = True,
+#     current_depth: int = 0,
+#     print_output: bool = False,
+#     skip_depwarnings: bool = True,
+#     drop_duplicates: bool = True,
+#     root_only: bool = False,
+# ) -> pd.DataFrame:
 #     return _inspect_module(
 #         module=module,
 #         prefix=prefix,
@@ -40,6 +40,7 @@
 #         drop_duplicates=drop_duplicates,
 #         root_only=root_only,
 #     )[columns]
+# 
 # 
 # def _inspect_module(
 #     module: Union[str, Any],
@@ -127,13 +128,9 @@
 # 
 #         try:
 #             module_version = (
-#                 f" (v{module.__version__})"
-#                 if hasattr(module, "__version__")
-#                 else ""
+#                 f" (v{module.__version__})" if hasattr(module, "__version__") else ""
 #             )
-#             content_list.append(
-#                 ("M", full_path, module_version, current_depth)
-#             )
+#             content_list.append(("M", full_path, module_version, current_depth))
 #         except Exception:
 #             pass
 # 
@@ -201,7 +198,7 @@
 #         df = df.drop_duplicates(subset="Name", keep="first")
 # 
 #     if root_only:
-#         mask = df['Name'].str.count(r'\.') <= 1
+#         mask = df["Name"].str.count(r"\.") <= 1
 #         df = df[mask]
 # 
 #     if tree and current_depth == 0 and print_output:
@@ -217,14 +214,13 @@
 #     df : pd.DataFrame
 #         DataFrame containing module structure
 #     """
-#     df_sorted = df.sort_values(['Depth', 'Name'])
+#     df_sorted = df.sort_values(["Depth", "Name"])
 #     depth_last = {}
 # 
 #     for index, row in df_sorted.iterrows():
-#         depth = row['Depth']
+#         depth = row["Depth"]
 #         is_last = (
-#             index == len(df_sorted) - 1
-#             or df_sorted.iloc[index + 1]['Depth'] <= depth
+#             index == len(df_sorted) - 1 or df_sorted.iloc[index + 1]["Depth"] <= depth
 #         )
 # 
 #         prefix = ""
@@ -273,7 +269,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs.gen._inspect_module import *
+from mngs..gen._inspect_module import *
 
 class Test_MainFunctionality:
     def setup_method(self):

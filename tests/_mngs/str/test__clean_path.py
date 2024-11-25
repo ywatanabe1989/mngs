@@ -1,6 +1,13 @@
 # src from here --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
+# # Time-stamp: "2024-11-15 19:23:55 (ywatanabe)"
+# # File: ./mngs_repo/src/mngs/str/_clean_path.py
+# 
+# __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/str/_clean_path.py"
+# 
+# #!/usr/bin/env python3
+# # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-02 11:24:24 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/str/_clean_path.py
 # 
@@ -19,7 +26,7 @@
 # import os
 # 
 # """Functions & Classes"""
-# def clean(path_string: str) -> str:
+# def clean_path(path_string: str) -> str:
 #     """Cleans and normalizes a file system path string.
 # 
 #     Example
@@ -70,7 +77,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs.str._clean_path import *
+from mngs..str._clean_path import *
 
 class Test_MainFunctionality:
     def setup_method(self):

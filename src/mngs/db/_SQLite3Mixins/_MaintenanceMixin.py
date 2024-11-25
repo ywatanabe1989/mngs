@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-12 14:43:54 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/db/_BaseSQLiteDB_modules/_MaintenanceMixin.py
+# Time-stamp: "2024-11-25 01:37:20 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/db/_SQLite3Mixins/_MaintenanceMixin.py
+
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_SQLite3Mixins/_MaintenanceMixin.py"
 
 import contextlib
 import sqlite3
 from typing import Callable
 from typing import ContextManager, Dict, List, Optional
 import pandas as pd
+
+from .._BaseMixins._BaseMaintenanceMixin import _BaseMaintenanceMixin
 
 class _MaintenanceMixin:
     """Database maintenance functionality"""

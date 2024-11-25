@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-16 13:50:36 (ywatanabe)"
+# Time-stamp: "2024-11-25 00:31:50 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/io/_save.py
 
 __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/io/_save.py"
@@ -51,6 +51,7 @@ from ._save_image import _save_image
 from ._save_listed_dfs_as_csv import _save_listed_dfs_as_csv
 from ._save_listed_scalars_as_csv import _save_listed_scalars_as_csv
 from ._save_text import _save_text
+from ..str._readable_bytes import readable_bytes
 
 
 def save(
@@ -147,7 +148,6 @@ def save(
 
             if ("ipython" in fpath) or ("<stdin>" in fpath):
                 fpath = f'/tmp/{os.getenv("USER")}.py'
-                # fpath = os.getenv("MNGS_DIR", "~/.cache/mngs/") + os.getenv("USER") + ".py"
 
             fdir, fname, _ = split(fpath)
             spath = fdir + fname + "/" + sfname_or_spath
@@ -215,17 +215,18 @@ def _save(
 ):
     # csv
     if spath.endswith(".csv"):
-        if isinstance(obj, (pd.Series, pd.DataFrame)):
-            obj.to_csv(spath, **kwargs)
+        _save_csv(obj, spath, **kwargs)
+        # if isinstance(obj, (pd.Series, pd.DataFrame)):
+        #     obj.to_csv(spath, **kwargs)
 
-        if is_listed_X(obj, [int, float]):
-            _save_listed_scalars_as_csv(
-                obj,
-                spath,
-                **kwargs,
-            )
-        if is_listed_X(obj, pd.DataFrame):
-            _save_listed_dfs_as_csv(obj, spath, **kwargs)
+        # if is_listed_X(obj, [int, float]):
+        #     _save_listed_scalars_as_csv(
+        #         obj,
+        #         spath,
+        #         **kwargs,
+        #     )
+        # if is_listed_X(obj, pd.DataFrame):
+        #     _save_listed_dfs_as_csv(obj, spath, **kwargs)
 
     # numpy
     elif spath.endswith(".npy"):
@@ -352,6 +353,30 @@ def _save(
             print(
                 color_text(f"\nSaved to: {spath} ({file_size})", c="yellow")
             )
+
+def _save_csv(obj, spath: str, **kwargs) -> None:
+    """Handle various input types for CSV saving."""
+    if isinstance(obj, (pd.Series, pd.DataFrame)):
+        obj.to_csv(spath, **kwargs)
+    elif isinstance(obj, np.ndarray):
+        pd.DataFrame(obj).to_csv(spath, **kwargs)
+    elif isinstance(obj, (int, float)):
+        pd.DataFrame([obj]).to_csv(spath, index=False, **kwargs)
+    elif isinstance(obj, (list, tuple)):
+        if all(isinstance(x, (int, float)) for x in obj):
+            pd.DataFrame(obj).to_csv(spath, index=False, **kwargs)
+        elif all(isinstance(x, pd.DataFrame) for x in obj):
+            pd.concat(obj).to_csv(spath, **kwargs)
+        else:
+            pd.DataFrame({"data": obj}).to_csv(spath, index=False, **kwargs)
+    elif isinstance(obj, dict):
+        pd.DataFrame.from_dict(obj).to_csv(spath, **kwargs)
+    else:
+        try:
+            pd.DataFrame({"data": [obj]}).to_csv(spath, index=False, **kwargs)
+        except:
+            raise ValueError(f"Unable to save type {type(obj)} as CSV")
+
 
 
 # EOF

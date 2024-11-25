@@ -8,10 +8,13 @@
 # from .._sh import sh
 # import sys
 # 
+# 
 # def check_host(keyword):
-#     return keyword in sh('echo $(hostname)', verbose=False)
+#     return keyword in sh("echo $(hostname)", verbose=False)
+# 
 # 
 # is_host = check_host
+# 
 # 
 # def verify_host(keyword):
 #     if is_host(keyword):
@@ -21,7 +24,8 @@
 #         print(f"Host verification failed for keyword: {keyword}")
 #         sys.exit(1)
 # 
-# if __name__ == '__main__':
+# 
+# if __name__ == "__main__":
 #     # check_host("ywata")
 #     verify_host("titan")
 #     verify_host("ywata")
@@ -44,7 +48,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs.gen._check_host import *
+from mngs..gen._check_host import *
 
 class Test_MainFunctionality:
     def setup_method(self):

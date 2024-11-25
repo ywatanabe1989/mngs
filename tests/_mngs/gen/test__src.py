@@ -14,7 +14,6 @@
 # import subprocess
 # 
 # 
-# 
 # # # Config
 # # CONFIG = mngs.gen.load_configs()
 # 
@@ -41,9 +40,7 @@
 #         # mngs.gen.less(source_code)
 # 
 #         # Open a subprocess to use `less` for displaying the source code
-#         process = subprocess.Popen(
-#             ["less"], stdin=subprocess.PIPE, encoding="utf8"
-#         )
+#         process = subprocess.Popen(["less"], stdin=subprocess.PIPE, encoding="utf8")
 #         process.communicate(input=source_code)
 #         if process.returncode != 0:
 #             print(f"Process exited with return code {process.returncode}")
@@ -95,9 +92,7 @@
 # 
 # if __name__ == "__main__":
 #     # Start
-#     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
-#         sys, plt, verbose=False
-#     )
+#     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt, verbose=False)
 # 
 #     # (YOUR AWESOME CODE)
 # 
@@ -124,7 +119,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs.gen._src import *
+from mngs..gen._src import *
 
 class Test_MainFunctionality:
     def setup_method(self):

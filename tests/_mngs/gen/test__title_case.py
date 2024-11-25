@@ -82,9 +82,7 @@
 # 
 # 
 # if __name__ == "__main__":
-#     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
-#         sys, plt, verbose=False
-#     )
+#     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt, verbose=False)
 #     main()
 #     mngs.gen.close(CONFIG, verbose=False, notify=False)
 # 
@@ -104,7 +102,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs.gen._title_case import *
+from mngs..gen._title_case import *
 
 class Test_MainFunctionality:
     def setup_method(self):

@@ -1,6 +1,11 @@
 # src from here --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
+# # Time-stamp: "2024-11-13 12:57:26 (ywatanabe)"
+# # File: ./mngs_repo/src/mngs/plt/ax/_raster_plot.py
+# 
+# #!/usr/bin/env python3
+# # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-09-12 09:53:15 (ywatanabe)"
 # # /home/ywatanabe/proj/mngs/src/mngs/plt/ax/_raster_plot.py
 # 
@@ -14,36 +19,92 @@
 # import numpy as np
 # import pandas as pd
 # 
+# # def raster_plot(ax, positions, time=None, **kwargs):
+# #     """
+# #     Create a raster plot using eventplot and return the plot along with a DataFrame.
 # 
-# def raster_plot(ax, positions, time=None, **kwargs):
+# #     Parameters
+# #     ----------
+# #     ax : matplotlib.axes.Axes
+# #         The axes on which to draw the raster plot.
+# #     positions : list of lists or array-like
+# #         Position of events for each channel. Each list corresponds to events of one channel.
+# #     time : array-like, optional
+# #         The time indices for the events. If None, time will be generated based on event positions.
+# #     **kwargs : dict
+# #         Additional keyword arguments to be passed to the eventplot function.
+# 
+# #     Returns
+# #     -------
+# #     ax : matplotlib.axes.Axes
+# #         The axes with the raster plot.
+# #     df : pandas.DataFrame
+# #         A DataFrame where rows correspond to time indices and columns correspond to channels.
+# #         Each cell contains the channel index for events at specific time indices.
+# 
+# #     Example
+# #     -------
+# #     positions = [[10, 50, 90], [20, 60, 100], [30, 70, 110]]
+# #     fig, ax = plt.subplots()
+# #     ax, df = raster_plot(ax, positions)
+# #     plt.show()
+# #     """
+# 
+# #     def ensure_list(positions):
+# #         return [
+# #             [pos] if isinstance(pos, (int, float)) else pos
+# #             for pos in positions
+# #         ]
+# 
+# #     def positions_to_df(positions, time):
+# #         if time is None:
+# #             time = np.linspace(
+# #                 0, np.max([np.max(pos) for pos in positions]), 1000
+# #             )
+# 
+# #         digi = np.full((len(positions), len(time)), np.nan, dtype=float)
+# 
+# #         for channel_index, channel_positions in enumerate(positions):
+# #             for position in channel_positions:
+# #                 insert_index = bisect_left(time, position)
+# #                 if insert_index == len(time):
+# #                     insert_index -= 1
+# #                 digi[channel_index, insert_index] = channel_index
+# 
+# #         return pd.DataFrame(digi.T, index=time)
+# 
+# #     positions = ensure_list(positions)
+# #     df = positions_to_df(positions, time)
+# 
+# #     ax.eventplot(positions, orientation="horizontal", **kwargs)
+# #     return ax, df
+# 
+# 
+# def raster_plot(ax, positions, time=None, labels=None, colors=None, **kwargs):
 #     """
-#     Create a raster plot using eventplot and return the plot along with a DataFrame.
+#     Create a raster plot using eventplot with custom labels and colors.
 # 
 #     Parameters
 #     ----------
 #     ax : matplotlib.axes.Axes
 #         The axes on which to draw the raster plot.
 #     positions : list of lists or array-like
-#         Position of events for each channel. Each list corresponds to events of one channel.
+#         Position of events for each channel.
 #     time : array-like, optional
-#         The time indices for the events. If None, time will be generated based on event positions.
+#         The time indices for the events.
+#     labels : list, optional
+#         Labels for each channel.
+#     colors : list, optional
+#         Colors for each channel.
 #     **kwargs : dict
-#         Additional keyword arguments to be passed to the eventplot function.
+#         Additional keyword arguments for eventplot.
 # 
 #     Returns
 #     -------
 #     ax : matplotlib.axes.Axes
 #         The axes with the raster plot.
 #     df : pandas.DataFrame
-#         A DataFrame where rows correspond to time indices and columns correspond to channels.
-#         Each cell contains the channel index for events at specific time indices.
-# 
-#     Example
-#     -------
-#     positions = [[10, 50, 90], [20, 60, 100], [30, 70, 110]]
-#     fig, ax = plt.subplots()
-#     ax, df = raster_plot(ax, positions)
-#     plt.show()
+#         DataFrame with time indices and channel events.
 #     """
 # 
 #     def ensure_list(positions):
@@ -72,7 +133,22 @@
 #     positions = ensure_list(positions)
 #     df = positions_to_df(positions, time)
 # 
-#     ax.eventplot(positions, orientation="horizontal", **kwargs)
+#     # Handle colors and labels
+#     if colors is None:
+#         colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
+#     if len(colors) < len(positions):
+#         colors = colors * (len(positions) // len(colors) + 1)
+# 
+#     # Create event collection with colors
+#     for i, (pos, color) in enumerate(zip(positions, colors)):
+#         label = labels[i] if labels is not None and i < len(labels) else None
+#         ax.eventplot(
+#             pos, orientation="horizontal", colors=color, label=label, **kwargs
+#         )
+# 
+#     if labels is not None:
+#         ax.legend()
+# 
 #     return ax, df
 # 
 # 
@@ -110,7 +186,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs.plt.ax._raster_plot import *
+from mngs..plt.ax._raster_plot import *
 
 class Test_MainFunctionality:
     def setup_method(self):

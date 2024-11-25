@@ -1,6 +1,13 @@
 # src from here --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
+# # Time-stamp: "2024-11-16 16:26:59 (ywatanabe)"
+# # File: ./mngs_repo/src/mngs/gen/misc.py
+# 
+# __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/gen/misc.py"
+# 
+# #!/usr/bin/env python3
+# # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-02 12:50:29 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/gen/misc.py
 # 
@@ -129,8 +136,6 @@
 # ################################################################################
 # 
 # 
-# 
-# 
 # ################################################################################
 # ## variables
 # ################################################################################
@@ -187,12 +192,10 @@
 #     >>> is_later_or_equal('pandas', '2.0.0')
 #     False
 #     """
-#     
+# 
 #     import numpy as np
 # 
-#     indi, matched = mngs.gen.search(
-#         ["MAJOR", "MINOR", "PATCH"], format.split(".")
-#     )
+#     indi, matched = mngs.gen.search(["MAJOR", "MINOR", "PATCH"], format.split("."))
 #     imp_major, imp_minor, imp_patch = [
 #         int(v) for v in np.array(package.__version__.split("."))[indi]
 #     ]
@@ -278,9 +281,7 @@
 #                 print(f'\nCopied "{src}" to "{dst}" (overwritten).\n')
 # 
 #             if not allow_overwrite:
-#                 print(
-#                     f'\n"{dst}" exists and copying from "{src}" was aborted.\n'
-#                 )
+#                 print(f'\n"{dst}" exists and copying from "{src}" was aborted.\n')
 # 
 # 
 # def copy_files(src_files, dists, allow_overwrite=False):
@@ -498,6 +499,7 @@
 #                 "iqr": np.round(iqr, round_factor),
 #             }
 # 
+# 
 # def _return_counting_process():
 #     import multiprocessing
 # 
@@ -548,7 +550,7 @@
 #     """
 #     """
 #     Example:
-#         
+# 
 #         p1 = mngs.gen._return_counting_process()
 #         mngs.gen.wait_key(p1)
 #         # press q
@@ -593,8 +595,6 @@
 #         return self._return
 # 
 # 
-# 
-# 
 # def unique(data, axis=None):
 #     """
 #     Identifies unique elements in the data along the specified axis and their counts, returning a DataFrame.
@@ -614,9 +614,7 @@
 #     if axis is None:
 #         df = pd.DataFrame({"uq": uqs, "n": counts})
 #     else:
-#         df = pd.DataFrame(
-#             uqs, columns=[f"axis_{i}" for i in range(uqs.shape[1])]
-#         )
+#         df = pd.DataFrame(uqs, columns=[f"axis_{i}" for i in range(uqs.shape[1])])
 #         df["n"] = counts
 # 
 #     df["n"] = df["n"].apply(lambda x: f"{int(x):,}")
@@ -685,18 +683,11 @@
 #     return unique(*args, **kwargs)
 # 
 # 
-# 
-# 
-# 
 # # def mv_col(dataframe, column_name, position):
 # #     temp_col = dataframe[column_name]
 # #     dataframe.drop(labels=[column_name], axis=1, inplace=True)
 # #     dataframe.insert(loc=position, column=column_name, value=temp_col)
 # #     return dataframe
-# 
-# 
-# 
-# 
 # 
 # 
 # def float_linspace(start, stop, num_points):
@@ -729,9 +720,7 @@
 #     num_points = int(num_points)  # Ensure num_points is an integer
 # 
 #     if num_points < 2:
-#         return (
-#             np.array([start, stop]) if num_points == 2 else np.array([start])
-#         )
+#         return np.array([start, stop]) if num_points == 2 else np.array([start])
 # 
 #     step = (stop - start) / (num_points - 1)
 #     values = [start + i * step for i in range(num_points)]
@@ -739,49 +728,6 @@
 #     return np.array(values)
 # 
 # 
-# def replace(string, replacements=None):
-#     """Replace placeholders in the string with corresponding values from replacements.
-# 
-#     This function replaces placeholders in the format {key} within the input string
-#     with corresponding values from the replacements dictionary. If replacements is
-#     a string, it replaces the entire input string.
-# 
-#     Parameters
-#     ----------
-#     string : str
-#         The string containing placeholders in the format {key}.
-#     replacements : dict or str, optional
-#         A dictionary containing key-value pairs for replacing placeholders in the string,
-#         or a single string to replace the entire string.
-# 
-#     Returns
-#     -------
-#     str
-#         The input string with placeholders replaced by their corresponding values.
-# 
-#     Examples
-#     --------
-#     >>> replace("Hello, {name}!", {"name": "World"})
-#     'Hello, World!'
-#     >>> replace("Original string", "New string")
-#     'New string'
-#     >>> replace("Value: {x}", {"x": 42})
-#     'Value: 42'
-#     >>> template = "Hello, {name}! You are {age} years old."
-#     >>> replacements = {"name": "Alice", "age": "30"}
-#     >>> replace(template, replacements)
-#     'Hello, Alice! You are 30 years old.'
-#     """
-#     if isinstance(replacements, str):
-#         return replacements
-# 
-#     if replacements is None:
-#         replacements = {}
-# 
-#     for k, v in replacements.items():
-#         if v is not None:
-#             string = string.replace("{" + k + "}", v)
-#     return string
 # 
 # 
 # # EOF
@@ -800,7 +746,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs.gen.misc import *
+from mngs..gen.misc import *
 
 class Test_MainFunctionality:
     def setup_method(self):

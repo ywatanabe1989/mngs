@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-17 21:49:55 (ywatanabe)"
+# Time-stamp: "2024-11-25 00:28:38 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/decorators/_pandas_fn.py
 
 __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_pandas_fn.py"
@@ -19,16 +19,7 @@ Prerequisites:
     - Core converter utilities from _converters module
 """
 
-from ._converters import (
-    _conversion_warning,
-    _return_if,
-    is_torch,
-    is_cuda,
-    to_numpy,
-    to_torch,
-)
 from functools import wraps
-
 from typing import Any as _Any
 from typing import Callable
 
@@ -36,36 +27,7 @@ import numpy as np
 import pandas as pd
 import torch
 
-
-# def pandas_fn(func: Callable) -> Callable:
-#     @wraps(func)
-#     def wrapper(*args: _Any, **kwargs: _Any) -> _Any:
-#         is_torch_input = is_torch(*args, **kwargs)
-#         device = "cuda" if is_cuda(*args, **kwargs) else "cpu"
-
-#         def to_pandas(data: _Any) -> pd.DataFrame:
-#             if isinstance(data, pd.DataFrame):
-#                 return data
-#             elif isinstance(data, pd.Series):
-#                 return pd.DataFrame(data)
-#             elif isinstance(data, (np.ndarray, list)):
-#                 return pd.DataFrame(data)
-#             elif isinstance(data, torch.Tensor):
-#                 return pd.DataFrame(data.detach().cpu().numpy())
-#             else:
-#                 return pd.DataFrame([data])
-
-#         converted_args = [to_pandas(arg) for arg in args]
-#         converted_kwargs = {key: to_pandas(val) for key, val in kwargs.items()}
-#         results = func(*converted_args, **converted_kwargs)
-#         if is_torch_input:
-#             return to_torch(results, return_fn=_return_if, device=device)[0]
-#         elif isinstance(results, (pd.DataFrame, pd.Series)):
-#             return results
-#         else:
-#             return to_numpy(results, return_fn=_return_if)[0]
-
-#     return wrapper
+from ._converters import _return_if, is_cuda, is_torch, to_numpy, to_torch
 
 
 def pandas_fn(func: Callable) -> Callable:
@@ -94,6 +56,7 @@ def pandas_fn(func: Callable) -> Callable:
     Callable
         Wrapped function that handles data type conversions
     """
+
     @wraps(func)
     def wrapper(*args: _Any, **kwargs: _Any) -> _Any:
         is_torch_input = is_torch(*args, **kwargs)
@@ -142,6 +105,37 @@ def pandas_fn(func: Callable) -> Callable:
                 results = results[0]
 
         return results
+
+    return wrapper
+
+
+def pandas_method(func: Callable) -> Callable:
+    @wraps(func)
+    def wrapper(self, *args: _Any, **kwargs: _Any) -> _Any:
+        is_torch_input = is_torch(*args, **kwargs)
+        device = "cuda" if is_cuda(*args, **kwargs) else "cpu"
+
+        def to_pandas(data: _Any) -> pd.DataFrame:
+            if isinstance(data, pd.DataFrame):
+                return data
+            elif isinstance(data, pd.Series):
+                return pd.DataFrame(data)
+            elif isinstance(data, (np.ndarray, list)):
+                return pd.DataFrame(data)
+            elif isinstance(data, torch.Tensor):
+                return pd.DataFrame(data.detach().cpu().numpy())
+            else:
+                return pd.DataFrame([data])
+
+        converted_args = [to_pandas(arg) for arg in args]
+        converted_kwargs = {key: to_pandas(val) for key, val in kwargs.items()}
+        results = func(self, *converted_args, **converted_kwargs)
+        if is_torch_input:
+            return to_torch(results, return_fn=_return_if, device=device)[0]
+        elif isinstance(results, (pd.DataFrame, pd.Series)):
+            return results
+        else:
+            return to_numpy(results, return_fn=_return_if)[0]
 
     return wrapper
 

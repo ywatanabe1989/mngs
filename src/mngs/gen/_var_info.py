@@ -1,14 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-17 12:47:02 (ywatanabe)"
+# Time-stamp: "2024-11-25 00:35:31 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/gen/_var_info.py
 
 __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/gen/_var_info.py"
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-03 10:33:13 (ywatanabe)"
-# File: placeholder.py
 
 from typing import Any, Union
 import numpy as np

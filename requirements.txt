@@ -11,6 +11,7 @@ black
 bs4
 catboost
 chardet
+einops
 epc
 flake8
 flask
@@ -57,6 +58,7 @@ pytest-env
 pytest-xdist
 python-docx
 python-lsp-server
+pytorch_pretrained_vit
 readability
 readability-lxml
 readchar
@@ -81,9 +83,6 @@ tensorpac
 termplotlib
 tk
 tldr
-torch
-torchaudio
-torchsummary
 transformers
 twine
 umap-learn
@@ -91,6 +90,10 @@ wheel
 xarray
 xlrd
 xmltodict
-psycopg2-binary>=2.9.9
+torchsummary
+torch
+torchvision
+torchaudio
+psycopg2-binary>=2.9.9  # Changed from psycopg2
 sqlalchemy>=2.0.0
 

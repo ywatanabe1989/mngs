@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-17 20:50:51 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/str/_clean_path.py
+
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/str/_clean_path.py"
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 # Time-stamp: "2024-11-02 11:24:24 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/str/_clean_path.py
 
@@ -18,7 +25,7 @@ Prerequisites:
 import os
 
 """Functions & Classes"""
-def clean(path_string: str) -> str:
+def clean_path(path_string: str) -> str:
     """Cleans and normalizes a file system path string.
 
     Example
@@ -41,6 +48,9 @@ def clean(path_string: str) -> str:
     try:
         if not isinstance(path_string, str):
             raise TypeError("Input must be a string")
+
+        if path_string.startswith("f\""):
+            path_string = path_string.replace("f\"", "")[:-1]
 
         # Normalize path separators
         cleaned_path = os.path.normpath(path_string)

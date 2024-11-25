@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-24 17:54:38 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/utils/_notify.py
+
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/utils/_notify.py"
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 # Time-stamp: "2024-11-07 05:38:14 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/utils/_notify.py
 
@@ -62,6 +69,7 @@ Sent via
 def notify(
     subject="",
     message=":)",
+    file=None,
     ID="auto",
     sender_name=None,
     recipient_email=None,
@@ -81,15 +89,18 @@ def notify(
     sender_password = os.getenv("MNGS_SENDER_GMAIL_PASSWORD")
     recipient_email = recipient_email or os.getenv("MNGS_RECIPIENT_GMAIL")
 
-    if sys.argv[0]:
-        script_name = os.path.basename(sys.argv[0])
+    if file is not None:
+        script_name = str(file)
     else:
-        frames = inspect.stack()
-        script_name = (
-            os.path.basename(frames[-1].filename) if frames else "(Not found)"
-        )
-    if (script_name == "-c") or (not script_name.endswith(".py")):
-        script_name = FAKE_PYTHON_SCRIPT_NAME
+        if sys.argv[0]:
+            script_name = os.path.basename(sys.argv[0])
+        else:
+            frames = inspect.stack()
+            script_name = (
+                os.path.basename(frames[-1].filename) if frames else "(Not found)"
+            )
+        if (script_name == "-c") or (not script_name.endswith(".py")):
+            script_name = FAKE_PYTHON_SCRIPT_NAME
 
     sender = f"{get_username()}@{get_hostname()}"
     branch = get_git_branch(mngs)

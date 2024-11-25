@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-17 21:51:07 (ywatanabe)"
+# Time-stamp: "2024-11-25 00:29:19 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/decorators/_torch_fn.py
 
 __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_torch_fn.py"
@@ -34,24 +34,6 @@ from ._converters import (
     to_numpy,
     to_torch,
 )
-
-
-# def torch_fn(func: Callable) -> Callable:
-#     @wraps(func)
-#     def wrapper(*args: _Any, **kwargs: _Any) -> _Any:
-#         is_torch_input = is_torch(*args, **kwargs)
-#         # Skip conversion if inputs are already torch tensors
-#         if is_torch_input:
-#             results = func(*args, **kwargs)
-#         else:
-#             converted_args, converted_kwargs = to_torch(
-#                 *args, return_fn=_return_always, **kwargs
-#             )
-#             results = func(*converted_args, **converted_kwargs)
-#             results = to_numpy(results, return_fn=_return_if)[0]
-#         return results
-
-#     return wrapper
 
 def torch_fn(func: Callable) -> Callable:
     """Decorates functions to handle PyTorch tensor conversions.
@@ -96,6 +78,21 @@ def torch_fn(func: Callable) -> Callable:
                     results = results[0]
         return results
 
+    return wrapper
+
+def torch_method(func: Callable) -> Callable:
+    @wraps(func)
+    def wrapper(self, *args: _Any, **kwargs: _Any) -> _Any:
+        is_torch_input = is_torch(*args, **kwargs)
+        if is_torch_input:
+            results = func(self, *args, **kwargs)
+        else:
+            converted_args, converted_kwargs = to_torch(
+                *args, return_fn=_return_always, **kwargs
+            )
+            results = func(self, *converted_args, **converted_kwargs)
+            results = to_numpy(results, return_fn=_return_if)[0]
+        return results
     return wrapper
 
 

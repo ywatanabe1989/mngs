@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-12 09:29:45 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/db/_BaseSQLiteDB_modules/_BlobMixin.py
+# Time-stamp: "2024-11-25 01:35:02 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/db/_SQLite3Mixins/_BlobMixin.py
+
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_SQLite3Mixins/_BlobMixin.py"
 
 import sqlite3
 from typing import Any as _Any
 from typing import Dict, List, Optional, Tuple, Union
 
 import numpy as np
-
+from .._BaseMixins._BaseBlobMixin import _BaseBlobMixin
 
 class _BlobMixin:
     """BLOB data handling functionality"""

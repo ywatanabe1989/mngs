@@ -4,7 +4,7 @@
 # # Time-stamp: "2024-11-03 18:57:14 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/gen/_mat2py.py
 # 
-# '''Helper script for loading .mat files into python.
+# """Helper script for loading .mat files into python.
 # For .mat with multiple variables use mat2dict to get return dictionary with .mat variables.
 # For .mat with 1 matrix use mat2npa to return np.array
 # For .mat with 1 matrix use mat2npy to save np.array to .npy
@@ -18,7 +18,7 @@
 # 
 # 
 # September 07, 2017
-# JB'''
+# JB"""
 # 
 # import numpy as np
 # import h5py
@@ -28,36 +28,42 @@
 # 
 # 
 # def mat2dict(fname):
-#     ''' Function returns a dictionary with .mat variables'''
+#     """Function returns a dictionary with .mat variables"""
 #     try:
 #         D = h5py.File(fname)
 #         d = {}
-#         for key, value in D.items(): d[key] = value
-#         d['__hdf__'] = True
+#         for key, value in D.items():
+#             d[key] = value
+#         d["__hdf__"] = True
 #     except:
 #         d = loadmat(fname)
-#         d['__hdf__'] = False
+#         d["__hdf__"] = False
 #     return d
 # 
 # 
 # def keys2npa(d, typ):
-#     import pdb; pdb.set_trace()
+#     import pdb
+# 
+#     pdb.set_trace()
 #     d2 = {}
 #     for key in public_keys(d):
 #         x = np.array(d[key], dtype=typ)
-#         if d['__hdf__']: x = np.squeeze(np.swapaxes(x, 0, -1))
-#         assert (type(x.flatten()[0]) == typ)
+#         if d["__hdf__"]:
+#             x = np.squeeze(np.swapaxes(x, 0, -1))
+#         assert type(x.flatten()[0]) == typ
 #         d2[key] = x.copy()
 #     return d2
 # 
 # 
 # def public_keys(d):
-#     return [k for k in d.keys() if not k.startswith('_') ]
+#     return [k for k in d.keys() if not k.startswith("_")]
 # 
 # 
 # def mat2npa(fname, typ):
-#     '''Function returns np array from 1st entry in .mat file'''
-#     import pdb; pdb.set_trace()
+#     """Function returns np array from 1st entry in .mat file"""
+#     import pdb
+# 
+#     pdb.set_trace()
 #     d = keys2npa(mat2dict(fname), typ)
 #     return d[d.keys()[0]]
 # 
@@ -67,16 +73,16 @@
 # 
 # 
 # def mat2npy(fname, typ):
-#     '''Function save np array from 1st entry in .mat file to .npy file'''
+#     """Function save np array from 1st entry in .mat file to .npy file"""
 #     x = mat2npa(fname, typ)
-#     save_npa(fname=fname.replace('.mat', ''), x=x)
+#     save_npa(fname=fname.replace(".mat", ""), x=x)
 # 
 # 
-# def dir2npy(dir, typ, regex = '*'):
-#     '''Function saves np array from 1st entry in each regex + .mat file in dir'''
+# def dir2npy(dir, typ, regex="*"):
+#     """Function saves np array from 1st entry in each regex + .mat file in dir"""
 #     os.chdir(dir)
-#     for fname in _glob(regex + '.mat'):
-#         print('File ' + fname + ' to' + ' .npa')
+#     for fname in _glob(regex + ".mat"):
+#         print("File " + fname + " to" + " .npa")
 #         mat2npy(dir + fname, typ)
 # 
 # 
@@ -96,7 +102,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs.gen._mat2py import *
+from mngs..gen._mat2py import *
 
 class Test_MainFunctionality:
     def setup_method(self):

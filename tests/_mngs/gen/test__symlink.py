@@ -7,6 +7,7 @@
 # import os
 # from ..str._color_text import color_text
 # 
+# 
 # def symlink(tgt, src, force=False):
 #     """Create a symbolic link.
 # 
@@ -49,11 +50,8 @@
 #     relative_tgt = os.path.relpath(tgt, src_dir)
 # 
 #     os.symlink(relative_tgt, src)
-#     print(
-#         color_text(
-#             f"\nSymlink was created: {src} -> {relative_tgt}\n", c="yellow"
-#         )
-#     )
+#     print(color_text(f"\nSymlink was created: {src} -> {relative_tgt}\n", c="yellow"))
+# 
 # 
 # # EOF
 
@@ -71,7 +69,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs.gen._symlink import *
+from mngs..gen._symlink import *
 
 class Test_MainFunctionality:
     def setup_method(self):

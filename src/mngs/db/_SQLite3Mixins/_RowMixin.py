@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-12 09:13:08 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/db/_BaseSQLiteDB_modules/_RowMixin.py
+# Time-stamp: "2024-11-25 01:38:17 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/db/_SQLite3Mixins/_RowMixin.py
+
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_SQLite3Mixins/_RowMixin.py"
 
 import sqlite3
 from typing import List
 from typing import Optional
 import pandas as pd
-
+from .._BaseMixins._BaseRowMixin import _BaseRowMixin
 
 class _RowMixin:
     """Row operations functionality"""

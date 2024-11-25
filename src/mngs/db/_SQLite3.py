@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-24 22:36:49 (ywatanabe)"
+# Time-stamp: "2024-11-25 06:08:26 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/db/_SQLite3.py
 
 __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_SQLite3.py"
@@ -62,6 +62,7 @@ class SQLite3(
     @property
     def summary(self):
         self()
+
 
 BaseSQLiteDB = SQLite3
 

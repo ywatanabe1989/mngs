@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-16 12:49:08 (ywatanabe)"
+# Time-stamp: "2024-11-25 00:31:08 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/io/_glob.py
 
 __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/io/_glob.py"
@@ -23,11 +23,16 @@ def glob(expression, parse=False, ensure_one=False):
     expression : str
         The glob pattern to match against file paths. Supports standard glob syntax
         and curly brace expansion (e.g., 'dir/{a,b}/*.txt').
+    parse : bool, optional
+        Whether to parse the matched paths. Default is False.
+    ensure_one : bool, optional
+        Ensure exactly one match is found. Default is False.
 
     Returns:
     --------
-    list
-        A naturally sorted list of file paths that match the given expression.
+    Union[List[str], Tuple[List[str], List[dict]]]
+        If parse=False: A naturally sorted list of file paths
+        If parse=True: Tuple of (paths, parsed results)
 
     Examples:
     ---------
@@ -36,6 +41,15 @@ def glob(expression, parse=False, ensure_one=False):
 
     >>> glob('data/{a,b}/*.txt')
     ['data/a/file1.txt', 'data/a/file2.txt', 'data/b/file1.txt']
+
+    >>> paths, parsed = glob('data/subj_{id}/run_{run}.txt', parse=True)
+    >>> paths
+    ['data/subj_001/run_01.txt', 'data/subj_001/run_02.txt']
+    >>> parsed
+    [{'id': '001', 'run': '01'}, {'id': '001', 'run': '02'}]
+
+    >>> paths, parsed = glob('data/subj_{id}/run_{run}.txt', parse=True, ensure_one=True)
+    AssertionError  # if more than one file matches
     """
     glob_pattern = _re.sub(r"{[^}]*}", "*", expression)
     try:
@@ -53,5 +67,33 @@ def glob(expression, parse=False, ensure_one=False):
     else:
         return found_paths
 
+def parse_glob(expression, ensure_one=False):
+    """
+    Convenience function for glob with parsing enabled.
+
+    Parameters:
+    -----------
+    expression : str
+        The glob pattern to match against file paths.
+    ensure_one : bool, optional
+        Ensure exactly one match is found. Default is False.
+
+    Returns:
+    --------
+    Tuple[List[str], List[dict]]
+        Matched paths and parsed results.
+
+    Examples:
+    ---------
+    >>> paths, parsed = pglob('data/subj_{id}/run_{run}.txt')
+    >>> paths
+    ['data/subj_001/run_01.txt', 'data/subj_001/run_02.txt']
+    >>> parsed
+    [{'id': '001', 'run': '01'}, {'id': '001', 'run': '02'}]
+
+    >>> paths, parsed = pglob('data/subj_{id}/run_{run}.txt', ensure_one=True)
+    AssertionError  # if more than one file matches
+    """
+    return glob(expression, parse=True, ensure_one=ensure_one)
 
 # EOF

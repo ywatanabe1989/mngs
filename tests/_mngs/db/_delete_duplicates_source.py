@@ -1,1 +1,1 @@
-../../../src/mngs/db/_delete_duplicates_clean.py
+../../../src/mngs/db/_delete_duplicates.py

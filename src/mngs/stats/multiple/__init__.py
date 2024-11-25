@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Time-stamp: "2024-11-03 03:22:30 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/stats/descriptive/__init__.py
+# File: ./mngs_repo/src/mngs/stats/desc/__init__.py
 
 import os
 import importlib

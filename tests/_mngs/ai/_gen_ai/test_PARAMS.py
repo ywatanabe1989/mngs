@@ -1,13 +1,29 @@
 # src from here --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-03 04:44:33 (ywatanabe)"
+# # Time-stamp: "2024-11-08 20:26:20 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/ai/_gen_ai/PARAMS.py
 # 
-# # https://openai.com/api/pricing/
-# # https://www.anthropic.com/pricing#anthropic-api
 # import pandas as pd
-# MODELS = pd.DataFrame([
+# 
+# DEEPSEEK_MODELS = [
+#     {
+#         "name": "deepseek-chat",
+#         "input_cost": 0.014,
+#         "output_cost": 0.28,
+#         "api_key_env": "DEEPSEEK_API_KEY",
+#         "provider": "DeepSeek",
+#     },
+#     {
+#         "name": "deepseek-coder",
+#         "input_cost": 0.014,
+#         "output_cost": 0.28,
+#         "api_key_env": "DEEPSEEK_API_KEY",
+#         "provider": "DeepSeek",
+#     },
+# ]
+# 
+# OPENAI_MODELS = [
 #     {
 #         "name": "o1-mini",
 #         "input_cost": 3.00,
@@ -57,6 +73,9 @@
 #         "api_key_env": "OPENAI_API_KEY",
 #         "provider": "OpenAI",
 #     },
+# ]
+# 
+# ANTHROPIC_MODELS = [
 #     {
 #         "name": "claude-3-5-sonnet-20241022",
 #         "input_cost": 3.00,
@@ -85,6 +104,9 @@
 #         "api_key_env": "ANTHROPIC_API_KEY",
 #         "provider": "Anthropic",
 #     },
+# ]
+# 
+# GOOGLE_MODELS = [
 #     {
 #         "name": "gemini-1.5-pro-latest",
 #         "input_cost": 3.50,
@@ -113,6 +135,9 @@
 #         "api_key_env": "GOOGLE_API_KEY",
 #         "provider": "Google",
 #     },
+# ]
+# 
+# PERPLEXITY_MODELS = [
 #     {
 #         "name": "llama-3.1-sonar-small-128k-online",
 #         "input_cost": 0.20,
@@ -197,6 +222,9 @@
 #         "api_key_env": "PERPLEXITY_API_KEY",
 #         "provider": "Perplexity",
 #     },
+# ]
+# 
+# LLAMA_MODELS = [
 #     {
 #         "name": "llama-3-70b",
 #         "input_cost": 0.00,
@@ -218,7 +246,23 @@
 #         "api_key_env": "LLAMA_API_KEY",
 #         "provider": "Llama",
 #     },
-# ])
+# ]
+# 
+# MODELS = pd.DataFrame(
+#     OPENAI_MODELS
+#     + ANTHROPIC_MODELS
+#     + GOOGLE_MODELS
+#     + PERPLEXITY_MODELS
+#     + LLAMA_MODELS
+#     + DEEPSEEK_MODELS
+# )
+# 
+# # EOF
+# 
+# 
+# # curl -L -X GET 'https://api.deepseek.com/models' \
+# # -H 'Accept: application/json' \
+# # -H 'Authorization: Bearer sk-43412ea536ff482e87a38010231ce7c3'
 # 
 # 
 # # EOF
@@ -237,7 +281,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs.ai._gen_ai.PARAMS import *
+from mngs..ai._gen_ai.PARAMS import *
 
 class Test_MainFunctionality:
     def setup_method(self):

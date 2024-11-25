@@ -25,7 +25,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs.ai.utils._sliding_window_data_augmentation import *
+from mngs..ai.utils._sliding_window_data_augmentation import *
 
 class Test_MainFunctionality:
     def setup_method(self):

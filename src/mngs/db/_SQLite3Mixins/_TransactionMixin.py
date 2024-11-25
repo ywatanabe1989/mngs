@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-11 16:08:55 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/db/_BaseSQLiteDB_modules/_TransactionMixin.py
+# Time-stamp: "2024-11-25 06:05:34 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/db/_SQLite3Mixins/_TransactionMixin.py
+
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_SQLite3Mixins/_TransactionMixin.py"
 
 import sqlite3
 import contextlib
+from .._BaseMixins._BaseTransactionMixin import _BaseTransactionMixin
 
 class _TransactionMixin:
     """Transaction management functionality"""

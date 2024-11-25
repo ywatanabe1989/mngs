@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-13 14:34:22 (ywatanabe)"
+# Time-stamp: "2024-11-24 17:09:20 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/gen/_start.py
+
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/gen/_start.py"
 
 import inspect
 import os as _os
@@ -24,6 +26,9 @@ from ..plt._configure_mpl import configure_mpl
 from ..reproduce._fix_seeds import fix_seeds
 from ..reproduce._gen_ID import gen_ID
 from ..io import flush
+from ..dev._analyze_code_flow import analyze_code_flow
+from ..str._clean_path import clean_path
+from ..str._printc import printc as _printc
 
 """
 Functionality:
@@ -45,7 +50,7 @@ Prerequisites:
 """
 
 def _print_header(
-    ID: str, PID: int, configs: Dict[str, Any], verbose: bool = True
+        ID: str, PID: int, file: str, args: Any, configs: Dict[str, Any], verbose: bool = True
 ) -> None:
     """Prints formatted header with mngs version, ID, and PID information.
 
@@ -60,8 +65,21 @@ def _print_header(
     verbose : bool, optional
         Whether to print detailed information, by default True
     """
-    print(
-        f"\n{'#'*40}\n## mngs v{_get_mngs_version()}\n## {ID} (PID: {PID})\n{'#'*40}\n"
+    _printc(
+        (
+        f"## mngs v{_get_mngs_version()}\n"
+        f"## {ID} (PID: {PID})"
+        ),
+        char="#"
+    )
+
+    _printc(
+        (
+        f"{file}\n"
+        f"{args}"
+            ),
+        c="yellow",
+        char="="
     )
     sleep(1)
     if verbose:
@@ -89,7 +107,7 @@ def _initialize_env(IS_DEBUG: bool) -> Tuple[str, int]:
     return ID, PID
 
 def _setup_configs(
-    IS_DEBUG: bool, ID: str, PID: int, sdir: str, relative_sdir: str, verbose: bool
+        IS_DEBUG: bool, ID: str, PID: int, file: str, sdir: str, relative_sdir: str, verbose: bool
 ) -> Dict[str, Any]:
     """Setup configuration dictionary with basic parameters.
 
@@ -120,6 +138,7 @@ def _setup_configs(
             "ID": ID,
             "PID": PID,
             "START_TIME": datetime.now(),
+            "FILE": file,
             "SDIR": sdir,
             "REL_SDIR": relative_sdir,
         }
@@ -158,6 +177,7 @@ def _setup_matplotlib(
 def start(
     sys: sys_module = None,
     plt: plt_module = None,
+    file: Optional[str] = None,
     sdir: Optional[str] = None,
     sdir_suffix: Optional[str] = None,
     args: Optional[Any] = None,
@@ -172,11 +192,13 @@ def start(
     fig_scale: float = 1.0,
     dpi_display: int = 100,
     dpi_save: int = 300,
-    font_size_base: int = 10,
-    font_size_title: int = 10,
-    font_size_axis_label: int = 8,
-    font_size_tick_label: int = 7,
-    font_size_legend: int = 6,
+    fontsize="small",
+    autolayout=True,
+    # font_size_base: int = 10,
+    # font_size_title: int = 10,
+    # font_size_axis_label: int = 8,
+    # font_size_tick_label: int = 7,
+    # font_size_legend: int = 6,
     hide_top_right_spines: bool = True,
     alpha: float = 0.9,
     line_width: float = 0.5,
@@ -238,13 +260,15 @@ def start(
     # Defines SDIR (Do not change this section)
     ########################################
     if sdir is None:
-        __file__ = inspect.stack()[1].filename
-        if "ipython" in __file__:
-            __file__ = f"/tmp/fake_{_os.getenv('USER')}.py"
+        if file:
+            __file__ = file
+        else:
+            __file__ = inspect.stack()[1].filename
+            if "ipython" in __file__:
+                __file__ = f"/tmp/{_os.getenv('USER')}.py"
         _spath = __file__
         _sdir, sfname, _ = split(_spath)
-        sdir = _sdir + sfname + "/" + "RUNNING" + "/" + ID + "/"
-        sdir = sdir.replace("/./", "/")
+        sdir = clean_path(_sdir + sfname + f"/RUNNING/{ID}/")
         if sdir_suffix:
             sdir = sdir[:-1] + f"-{sdir_suffix}/"
     if clear:
@@ -254,7 +278,7 @@ def start(
     ########################################
 
     # Setup configs after having all necessary parameters
-    CONFIGS = _setup_configs(IS_DEBUG, ID, PID, sdir, relative_sdir, verbose)
+    CONFIGS = _setup_configs(IS_DEBUG, ID, PID, file, sdir, relative_sdir, verbose)
 
     # Logging
     if sys is not None:
@@ -276,11 +300,13 @@ def start(
         hide_top_right_spines=hide_top_right_spines,
         alpha=alpha,
         line_width=line_width,
-        font_size_base=font_size_base,
-        font_size_title=font_size_title,
-        font_size_axis_label=font_size_axis_label,
-        font_size_tick_label=font_size_tick_label,
-        font_size_legend=font_size_legend,
+        fontsize=fontsize,
+        autolayout=autolayout,
+        # font_size_base=font_size_base,
+        # font_size_title=font_size_title,
+        # font_size_axis_label=font_size_axis_label,
+        # font_size_tick_label=font_size_tick_label,
+        # font_size_legend=font_size_legend,
         verbose=verbose,
     )
 
@@ -290,7 +316,10 @@ def start(
 
     CONFIGS = DotDict(CONFIGS)
 
-    _print_header(ID, PID, CONFIGS, verbose)
+    _print_header(ID, PID, file, args, CONFIGS, verbose)
+
+    structure = analyze_code_flow(file)
+    _printc(structure)
 
     return CONFIGS, sys.stdout, sys.stderr, plt, CC
 

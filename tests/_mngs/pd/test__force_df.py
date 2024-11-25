@@ -1,17 +1,18 @@
 # src from here --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-09-29 05:55:52 (ywatanabe)"
-# # /home/ywatanabe/proj/_mngs_repo_openhands/src/mngs/pd/_force_df.py
+# # Time-stamp: "2024-11-13 12:54:05 (ywatanabe)"
+# # File: ./mngs_repo/src/mngs/pd/_force_df.py
 # 
 # import numpy as np
 # import pandas as pd
 # import mngs
 # 
+# 
 # # def force_df(permutable_dict, filler=""):
 # def force_df(permutable_dict, filler=np.nan):
 # 
-#     if mngs.gen.is_listed_X(permutable_dict, pd.Series):
+#     if is_listed_X(permutable_dict, pd.Series):
 #         permutable_dict = [sr.to_dict() for sr in permutable_dict]
 #     ## Deep copy
 #     permutable_dict = permutable_dict.copy()
@@ -37,6 +38,9 @@
 #     out_df = pd.DataFrame(permutable_dict)
 # 
 #     return out_df
+# 
+# 
+# # EOF
 
 # test from here --------------------------------------------------------------------------------
 #!/usr/bin/env python3
@@ -52,7 +56,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs.pd._force_df import *
+from mngs..pd._force_df import *
 
 class Test_MainFunctionality:
     def setup_method(self):
