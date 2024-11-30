@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-26 08:57:13 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/decorators/__init__.py
+
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/__init__.py"
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 # Time-stamp: "2024-11-02 13:05:15 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/decorators/__init__.py
 
@@ -23,6 +30,29 @@ for filename in os.listdir(current_dir):
                     globals()[name] = obj
 
 # Clean up temporary variables
-del os, importlib, inspect, current_dir, filename, module_name, module, name, obj
+del (
+    os,
+    importlib,
+    inspect,
+    current_dir,
+    filename,
+    module_name,
+    module,
+    name,
+    obj,
+)
+
+# from ._DataTypeDecorators import (
+#     torch_fn,
+#     numpy_fn,
+#     pandas_fn,
+#     xarray_fn,
+#     batch_fn,
+#     batch_torch_fn,
+#     batch_numpy_fn,
+#     batch_pandas_fn,
+#     batch_xarray_fn,
+# )
+
 
 # EOF

@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-24 12:04:35 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/stats/descriptive/_nan.py
+# Time-stamp: "2024-11-25 20:51:05 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/stats/desc/_nan.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/stats/descriptive/_nan.py"
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/stats/desc/_nan.py"
 
 from mngs.decorators import torch_fn, batch_fn
 import torch
 
-@batch_fn
 @torch_fn
+@batch_fn
 def nanmax(x, axis=-1, dim=None, batch_size=None, keepdims=False):
     min_value = torch.finfo(x.dtype).min
     dim = axis if dim is None else dim
@@ -20,8 +20,8 @@ def nanmax(x, axis=-1, dim=None, batch_size=None, keepdims=False):
         x = x.nan_to_num(min_value).max(dim=dim, keepdims=keepdims)[0]
     return x
 
-@batch_fn
 @torch_fn
+@batch_fn
 def nanmin(x, axis=-1, dim=None, batch_size=None, keepdims=False):
     max_value = torch.finfo(x.dtype).max
     dim = axis if dim is None else dim
@@ -32,24 +32,24 @@ def nanmin(x, axis=-1, dim=None, batch_size=None, keepdims=False):
         x = x.nan_to_num(max_value).min(dim=dim, keepdims=keepdims)[0]
     return x
 
-@batch_fn
 @torch_fn
+@batch_fn
 def nansum(x, axis=-1, dim=None, batch_size=None, keepdims=False):
     return torch.nansum(x, dim=dim, keepdims=keepdims)
 
-@batch_fn
 @torch_fn
+@batch_fn
 def nanmean(x, axis=-1, dim=None, batch_size=None, keepdims=False):
     return torch.nanmean(x, dim=dim, keepdims=keepdims)
 
-@batch_fn
 @torch_fn
+@batch_fn
 def nanvar(x, axis=-1, dim=None, batch_size=None, keepdims=False):
     tensor_mean = nanmean(x, dim=dim, keepdims=True)
     return (x - tensor_mean).square().nanmean(dim=dim, keepdims=keepdims)
 
-@batch_fn
 @torch_fn
+@batch_fn
 def nanstd(x, axis=-1, dim=None, batch_size=None, keepdims=False):
     return torch.sqrt(nanvar(x, dim=dim, keepdims=keepdims))
 
@@ -60,8 +60,8 @@ def nanstd(x, axis=-1, dim=None, batch_size=None, keepdims=False):
 #     _std = nanstd(x, dim=dim, keepdims=True)
 #     zscores = (x - _mean) / _std
 #     return zscores if keepdims else zscores.squeeze(dim)
-@batch_fn
 @torch_fn
+@batch_fn
 def nanzscore(x, axis=-1, dim=None, batch_size=None, keepdims=True):
     dim = axis if dim is None else dim
     if isinstance(dim, (tuple, list)):
@@ -110,8 +110,8 @@ def nanzscore(x, axis=-1, dim=None, batch_size=None, keepdims=True):
 #     correction = n**2 / ((n - 1) * (n - 2))
 #     return correction * s
 
-@batch_fn
 @torch_fn
+@batch_fn
 def nankurtosis(x, axis=-1, dim=None, batch_size=None, keepdims=False):
     zscores = nanzscore(x, axis=axis, keepdims=True)
     return (
@@ -120,15 +120,15 @@ def nankurtosis(x, axis=-1, dim=None, batch_size=None, keepdims=False):
     )
 
 
-@batch_fn
 @torch_fn
+@batch_fn
 def nanskewness(x, axis=-1, dim=None, batch_size=None, keepdims=False):
     zscores = nanzscore(x, axis=axis, keepdims=True)
     return torch.nanmean(torch.pow(zscores, 3.0), dim=dim, keepdims=keepdims)
 
 
-@batch_fn
 @torch_fn
+@batch_fn
 def nanprod(x, axis=-1, dim=None, batch_size=None, keepdims=False):
     dim = axis if dim is None else dim
     if isinstance(dim, (tuple, list)):
@@ -139,8 +139,8 @@ def nanprod(x, axis=-1, dim=None, batch_size=None, keepdims=False):
     return x
 
 
-@batch_fn
 @torch_fn
+@batch_fn
 def nancumprod(x, axis=-1, dim=None, batch_size=None, keepdims=False):
     dim = axis if dim is None else dim
     if isinstance(dim, (tuple, list)):
@@ -148,8 +148,8 @@ def nancumprod(x, axis=-1, dim=None, batch_size=None, keepdims=False):
     return x.nan_to_num(1).cumprod(dim=dim)
 
 
-@batch_fn
 @torch_fn
+@batch_fn
 def nancumsum(x, axis=-1, dim=None, batch_size=None, keepdims=False):
     dim = axis if dim is None else dim
     if isinstance(dim, (tuple, list)):
@@ -157,8 +157,8 @@ def nancumsum(x, axis=-1, dim=None, batch_size=None, keepdims=False):
     return x.nan_to_num(0).cumsum(dim=dim)
 
 
-@batch_fn
 @torch_fn
+@batch_fn
 def nanargmin(x, axis=-1, dim=None, batch_size=None, keepdims=False):
     max_value = torch.finfo(x.dtype).max
     dim = axis if dim is None else dim
@@ -170,8 +170,8 @@ def nanargmin(x, axis=-1, dim=None, batch_size=None, keepdims=False):
     return x
 
 
-@batch_fn
 @torch_fn
+@batch_fn
 def nanargmax(x, axis=-1, dim=None, batch_size=None, keepdims=False):
     min_value = torch.finfo(x.dtype).min
     dim = axis if dim is None else dim
@@ -183,8 +183,8 @@ def nanargmax(x, axis=-1, dim=None, batch_size=None, keepdims=False):
     return x
 
 
-@batch_fn
 @torch_fn
+@batch_fn
 def nanquantile(x, q, axis=-1, dim=None, batch_size=None, keepdims=False):
     dim = axis if dim is None else dim
     if isinstance(dim, (tuple, list)):
@@ -199,26 +199,26 @@ def nanquantile(x, q, axis=-1, dim=None, batch_size=None, keepdims=False):
     return x
 
 
-@batch_fn
 @torch_fn
+@batch_fn
 def nanq25(x, axis=-1, dim=None, batch_size=None, keepdims=False):
     return nanquantile(x, 25, axis=axis, dim=dim, keepdims=keepdims)
 
 
-@batch_fn
 @torch_fn
+@batch_fn
 def nanq50(x, axis=-1, dim=None, batch_size=None, keepdims=False):
     return nanquantile(x, 50, axis=axis, dim=dim, keepdims=keepdims)
 
 
-@batch_fn
 @torch_fn
+@batch_fn
 def nanq75(x, axis=-1, dim=None, batch_size=None, keepdims=False):
     return nanquantile(x, 75, axis=axis, dim=dim, keepdims=keepdims)
 
 
-@batch_fn
 @torch_fn
+@batch_fn
 def nancount(x, axis=-1, dim=None, batch_size=None, keepdims=False):
     """Count number of non-NaN values along specified dimensions.
 

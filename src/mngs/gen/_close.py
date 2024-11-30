@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-24 17:55:17 (ywatanabe)"
+# Time-stamp: "2024-11-26 10:08:41 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/gen/_close.py
 
 __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/gen/_close.py"
@@ -73,6 +73,17 @@ def _escape_ANSI_from_log_files(log_files):
             file.write(cleaned_content)
 
 
+def _args_to_str(args_dict):
+    """Convert args dictionary to formatted string."""
+    if args_dict:
+        max_key_length = max(len(str(k)) for k in args_dict.keys())
+        return "\n".join(
+            f"{str(k):<{max_key_length}} : {str(v)}"
+            for k, v in sorted(args_dict.items())
+        )
+    else:
+        return ""
+
 def close(CONFIG, message=":)", notify=True, verbose=True, exit_status=None):
     try:
         CONFIG.EXIT_STATUS = exit_status
@@ -80,16 +91,19 @@ def close(CONFIG, message=":)", notify=True, verbose=True, exit_status=None):
         CONFIG = _process_timestamp(CONFIG, verbose=verbose)
         sys = CONFIG.pop("sys")
         _save_configs(CONFIG)
-        mngs_io_flush(sys=sys)
+        # mngs_io_flush(sys=sys)
 
         # RUNNING to RUNNING2FINISHEDED
         CONFIG = running2finished(CONFIG, exit_status=exit_status)
-        mngs_io_flush(sys=sys)
+        # mngs_io_flush(sys=sys)
 
         # ANSI code escape
         log_files = _glob(CONFIG["SDIR"] + "logs/*.log")
         _escape_ANSI_from_log_files(log_files)
-        mngs_io_flush(sys=sys)
+        # mngs_io_flush(sys=sys)
+
+        if CONFIG.get("ARGS"):
+            message += f"\n{_args_to_str(CONFIG.get('ARGS'))}"
 
         if notify:
             try:
@@ -105,7 +119,7 @@ def close(CONFIG, message=":)", notify=True, verbose=True, exit_status=None):
                     attachment_paths=log_files,
                     verbose=verbose,
                 )
-                mngs_io_flush(sys=sys)
+                # mngs_io_flush(sys=sys)
             except Exception as e:
                 print(e)
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-29 04:25:14 (ywatanabe)"
+# Time-stamp: "2024-12-01 05:13:49 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/db/_SQLite3Mixins/_BlobMixin.py
 
 __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_SQLite3Mixins/_BlobMixin.py"
