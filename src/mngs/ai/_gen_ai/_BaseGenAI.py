@@ -1,14 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-28 02:42:44 (ywatanabe)"
+# Time-stamp: "2024-12-01 06:21:41 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/ai/_gen_ai/_BaseGenAI.py
 
 __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_BaseGenAI.py"
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-08 20:04:24 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/ai/_gen_ai/_BaseGenAI.py
 
 """
 Functionality:
@@ -37,6 +32,7 @@ import numpy as np
 from ._calc_cost import calc_cost
 from ._format_output_func import format_output_func
 from .PARAMS import MODELS
+import base64
 
 """Functions & Classes"""
 
@@ -125,37 +121,15 @@ class BaseGenAI(ABC):
             self._yield_stream(stream_obj) if not return_stream else stream_obj
         )
 
-    # def __call_chunks__(self, prompt: Optional[str], format_output: bool = False, return_stream: bool = False):
-    #     if len(prompt) > self.chunk_size:
-    #         chunks = [prompt[i:i+self.chunk_size]
-    #                  for i in range(0, len(prompt), self.chunk_size)]
-
-    #         # Send chunks for understanding
-    #         for i, chunk in enumerate(chunks[:-1]):
-    #             self._process_chunk(chunk, f"Part {i+1}/{len(chunks)}")
-
-    #         # Final chunk with request for response
-    #         final_prompt = (
-    #             f"{chunks[-1]}\n\n"
-    #             "Above are all the changes. Based on ALL the changes shown above, "
-    #             "generate a single, comprehensive commit message."
-    #         )
-    #         return super().__call_simple__(final_prompt, format_output, return_stream)
-
-    #     return super().__call_simple__(prompt, format_output, return_stream)
-
-    # def _process_chunk(self, chunk: str, part_label: str):
-    #     prompt = f"{part_label}:\n{chunk}\n\nPlease read and understand this part. No response needed yet."
-    #     self.update_history("user", prompt)
-    #     self.update_history("assistant", "Understood.")
-
     def __call__(
         self,
         prompt: Optional[str],
+        images: List[Any] = None,
         format_output: bool = False,
         return_stream: bool = False,
     ) -> Union[str, Generator]:
-        self.update_history("user", prompt or "")
+
+        self.update_history("user", prompt or "", images=images)
 
         error_flag, error_obj = self.gen_error(return_stream)
         if error_flag:
@@ -204,14 +178,24 @@ class BaseGenAI(ABC):
         """Returns client"""
         pass
 
+    # @abstractmethod
+    # def _api_format_history(self):
+    #     """Returns chat_history by handling differences in API expectations"""
+    #     pass
+
+    # fixme; _api_format_history should be implemented for all providers
+    def _api_format_history(self, history):
+        """Returns chat_history by handling differences in API expectations"""
+        return history
+
     @abstractmethod
     def _api_call_static(self) -> str:
-        """Returns out_text"""
+        """Returns out_text by handling differences in API expectations"""
         pass
 
     @abstractmethod
     def _api_call_stream(self) -> Generator:
-        """Returns stream"""
+        """Returns stream by handling differences in API expectations"""
         pass
 
     def _get_available_models(self) -> List[str]:
@@ -251,7 +235,55 @@ class BaseGenAI(ABC):
             history.pop(0)
         return history
 
-    def update_history(self, role: str, content: str) -> None:
+    @staticmethod
+    def _ensure_base64_encoding(image, max_size=512):
+        from PIL import Image
+        import io
+
+        def resize_image(img):
+            # Calculate new dimensions while maintaining aspect ratio
+            ratio = max_size / max(img.size)
+            if ratio < 1:
+                new_size = tuple(int(dim * ratio) for dim in img.size)
+                img = img.resize(new_size, Image.Resampling.LANCZOS)
+            return img
+
+        if isinstance(image, str):
+            try:
+                # Try to open and resize as file path
+                img = Image.open(image)
+                img = resize_image(img)
+                buffer = io.BytesIO()
+                img.save(buffer, format="JPEG")
+                return base64.b64encode(buffer.getvalue()).decode("utf-8")
+            except:
+                # If fails, assume it's already base64 string
+                return image
+        elif isinstance(image, bytes):
+            # Convert bytes to image, resize, then back to base64
+            img = Image.open(io.BytesIO(image))
+            img = resize_image(img)
+            buffer = io.BytesIO()
+            img.save(buffer, format="JPEG")
+            return base64.b64encode(buffer.getvalue()).decode("utf-8")
+        else:
+            raise ValueError("Unsupported image format")
+
+    def update_history(self, role: str, content: str, images=None) -> None:
+        if images is not None:
+            content = [
+                {"type": "text", "text": content},
+                *[
+                    {
+                        "type": "_image",
+                        "_image": self._ensure_base64_encoding(
+                            image
+                        ),
+                    }
+                    for image in images
+                ],
+            ]
+
         self.history.append({"role": role, "content": content})
 
         if len(self.history) > self.n_keep:
@@ -259,6 +291,7 @@ class BaseGenAI(ABC):
 
         self.history = self._ensure_alternative_history(self.history)
         self.history = self._ensure_start_from_user(self.history)
+        self.history = self._api_format_history(self.history)
 
     def verify_model(self) -> None:
         if self.model not in self.available_models:

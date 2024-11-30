@@ -1,19 +1,33 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-09 02:52:10 (ywatanabe)"
+# Time-stamp: "2024-12-01 06:26:23 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/ai/_gen_ai/_OpenAI.py
 
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_OpenAI.py"
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Time-stamp: "2024-12-01 06:25:27 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/ai/_gen_ai/_OpenAI.py
+
+import os
+
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_OpenAI.py"
+
 """Imports"""
-from ._BaseGenAI import BaseGenAI
 from openai import OpenAI as _OpenAI
 
+from ._BaseGenAI import BaseGenAI
+
 """Functions & Classes"""
+
+
 class OpenAI(BaseGenAI):
     def __init__(
         self,
         system_setting="",
         model="",
-        api_key="",
+        api_key=os.getenv("OPENAI_API_KEY"),
         stream=False,
         seed=None,
         n_keep=1,
@@ -73,44 +87,6 @@ class OpenAI(BaseGenAI):
 
         return out_text
 
-    # def _api_call_stream(self):
-    #     kwargs = dict(
-    #         model=self.model,
-    #         messages=self.history,
-    #         max_tokens=self.max_tokens,
-    #         n=1,
-    #         stream=self.stream,
-    #         seed=self.seed,
-    #         temperature=self.temperature,
-    #         stream_options={"include_usage": True},
-    #     )
-
-    #     if kwargs.get("model") in ["o1-mini", "o1-preview"]:
-    #         full_response = self._api_call_static()
-    #         for char in full_response:
-    #             yield char
-    #         return
-
-    #     stream = self.client.chat.completions.create(**kwargs)
-
-    #     for chunk in stream:
-    #         if chunk:
-    #             try:
-    #                 self.input_tokens += chunk.usage.prompt_tokens
-    #             except:
-    #                 pass
-    #             try:
-    #                 self.output_tokens += chunk.usage.completion_tokens
-    #             except:
-    #                 pass
-
-    #             try:
-    #                 current_text = chunk.choices[0].delta.content
-    #                 if current_text:
-    #                     yield f"{current_text}"
-    #             except Exception as e:
-    #                 pass
-
     def _api_call_stream(self):
         kwargs = dict(
             model=self.model,
@@ -148,7 +124,7 @@ class OpenAI(BaseGenAI):
                     if current_text:
                         buffer += current_text
                         # Yield complete sentences or words
-                        if any(char in '.!?\n ' for char in current_text):
+                        if any(char in ".!?\n " for char in current_text):
                             yield buffer
                             buffer = ""
                 except Exception as e:
@@ -158,16 +134,59 @@ class OpenAI(BaseGenAI):
         if buffer:
             yield buffer
 
+    def _api_format_history(self, history):
+        formatted_history = []
+        for msg in history:
+            if isinstance(msg["content"], list):
+                content = []
+                for item in msg["content"]:
+                    if item["type"] == "text":
+                        content.append({"type": "text", "text": item["text"]})
+                    elif item["type"] == "_image":
+                        content.append(
+                            {
+                                "type": "image_url",
+                                "image_url": {
+                                    "url": f"data:image/jpeg;base64,{item['_image']}"
+                                },
+                            }
+                        )
+                formatted_msg = {"role": msg["role"], "content": content}
+            else:
+                formatted_msg = {
+                    "role": msg["role"],
+                    "content": msg["content"],
+                }
+            formatted_history.append(formatted_msg)
+        return formatted_history
 
-def main():
-    model = "o1-mini"
-    # model = "o1-preview"
-    # model = "gpt-4o"
-    stream = True
-    max_tokens = 4906
-    m = mngs.ai.GenAI(model, stream=stream, max_tokens=max_tokens)
-    m("hi")
 
+def main() -> None:
+    import mngs
+
+    ai = mngs.ai.GenAI(
+        model="gpt-4o",
+        api_key=os.getenv("OPENAI_API_KEY"),
+    )
+    print(
+        ai(
+            "hi, could you tell me what is in the pic?",
+            images=[
+                "/home/ywatanabe/Downloads/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg"
+            ],
+        )
+    )
+    pass
+
+
+# def main():
+#     model = "o1-mini"
+#     # model = "o1-preview"
+#     # model = "gpt-4o"
+#     stream = True
+#     max_tokens = 4906
+#     m = mngs.ai.GenAI(model, stream=stream, max_tokens=max_tokens)
+#     m("hi")
 
 if __name__ == "__main__":
     import sys
@@ -180,5 +199,10 @@ if __name__ == "__main__":
     )
     main()
     mngs.gen.close(CONFIG, verbose=False, notify=False)
+
+# EOF
+"""
+python -m mngs.ai._gen_ai._OpenAI
+"""
 
 # EOF
