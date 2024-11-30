@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-28 02:25:44 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/ai/_gen_ai/PARAMS.py
+
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/PARAMS.py"
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 # Time-stamp: "2024-11-08 20:26:20 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/ai/_gen_ai/PARAMS.py
 
@@ -247,6 +254,111 @@ LLAMA_MODELS = [
     },
 ]
 
+# distil-whisper-large-v3-en	HuggingFace	-	-	25 MB	Card
+# gemma2-9b-it	Google	8,192	-	-	Card
+# gemma-7b-it	Google	8,192	-	-	Card
+# llama3-groq-70b-8192-tool-use-preview	Groq	8,192	-	-	Card
+# llama3-groq-8b-8192-tool-use-preview	Groq	8,192	-	-	Card
+# llama-3.1-70b-versatile	Meta	128k	32,768	-	Card
+# llama-3.1-70b-specdec	Meta	128k	8,192		Card
+# llama-3.1-8b-instant	Meta	128k	8,192	-	Card
+# llama-3.2-1b-preview	Meta	128k	8,192	-	Card
+# llama-3.2-3b-preview	Meta	128k	8,192	-	Card
+# llama-3.2-11b-vision-preview	Meta	128k	8,192	-	Card
+# llama-3.2-90b-vision-preview	Meta	128k	8,192	-	Card
+# llama-guard-3-8b	Meta	8,192	-	-	Card
+# llama3-70b-8192	Meta	8,192	-	-	Card
+# llama3-8b-8192	Meta	8,192	-	-	Card
+# mixtral-8x7b-32768	Mistral	32,768	-	-	Card
+# whisper-large-v3	OpenAI	-	-	25 MB	Card
+# whisper-large-v3-turbo	OpenAI	-	-	25 MB	Card
+GROQ_MODELS = [
+    {
+        "name": "llama-3.2-1b-preview",
+        "input_cost": 0.04,
+        "output_cost": 0.04,
+        "api_key_env": "GROQ_API_KEY",
+        "provider": "Groq",
+    },
+    {
+        "name": "llama-3.2-3b-preview",
+        "input_cost": 0.06,
+        "output_cost": 0.06,
+        "api_key_env": "GROQ_API_KEY",
+        "provider": "Groq",
+    },
+    {
+        "name": "llama-3.1-70b-versatile",
+        "input_cost": 0.59,
+        "output_cost": 0.79,
+        "api_key_env": "GROQ_API_KEY",
+        "provider": "Groq",
+    },
+    {
+        "name": "llama-3.1-8b-instant",
+        "input_cost": 0.05,
+        "output_cost": 0.08,
+        "api_key_env": "GROQ_API_KEY",
+        "provider": "Groq",
+    },
+    {
+        "name": "llama3-70b-8192",
+        "input_cost": 0.59,
+        "output_cost": 0.79,
+        "api_key_env": "GROQ_API_KEY",
+        "provider": "Groq",
+    },
+    {
+        "name": "llama3-8b-8192",
+        "input_cost": 0.05,
+        "output_cost": 0.08,
+        "api_key_env": "GROQ_API_KEY",
+        "provider": "Groq",
+    },
+    {
+        "name": "mixtral-8x7b-32768",
+        "input_cost": 0.24,
+        "output_cost": 0.24,
+        "api_key_env": "GROQ_API_KEY",
+        "provider": "Groq",
+    },
+    {
+        "name": "gemma-7b-it",
+        "input_cost": 0.07,
+        "output_cost": 0.07,
+        "api_key_env": "GROQ_API_KEY",
+        "provider": "Groq",
+    },
+    {
+        "name": "gemma2-9b-it",
+        "input_cost": 0.20,
+        "output_cost": 0.20,
+        "api_key_env": "GROQ_API_KEY",
+        "provider": "Groq",
+    },
+    {
+        "name": "llama3-groq-70b-8192-tool-use-preview",
+        "input_cost": 0.89,
+        "output_cost": 0.89,
+        "api_key_env": "GROQ_API_KEY",
+        "provider": "Groq",
+    },
+    {
+        "name": "llama3-groq-8b-8192-tool-use-preview",
+        "input_cost": 0.19,
+        "output_cost": 0.19,
+        "api_key_env": "GROQ_API_KEY",
+        "provider": "Groq",
+    },
+    {
+        "name": "llama-guard-3-8b",
+        "input_cost": 0.20,
+        "output_cost": 0.20,
+        "api_key_env": "GROQ_API_KEY",
+        "provider": "Groq",
+    },
+]
+
 MODELS = pd.DataFrame(
     OPENAI_MODELS
     + ANTHROPIC_MODELS
@@ -254,6 +366,7 @@ MODELS = pd.DataFrame(
     + PERPLEXITY_MODELS
     + LLAMA_MODELS
     + DEEPSEEK_MODELS
+    + GROQ_MODELS
 )
 
 # EOF

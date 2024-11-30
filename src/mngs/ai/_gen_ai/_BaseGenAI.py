@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-28 02:42:44 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/ai/_gen_ai/_BaseGenAI.py
+
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_BaseGenAI.py"
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 # Time-stamp: "2024-11-08 20:04:24 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/ai/_gen_ai/_BaseGenAI.py
 
@@ -25,18 +32,22 @@ from abc import ABC, abstractmethod
 from typing import Any, Dict, Generator, List, Optional, Union
 
 import matplotlib.pyplot as plt
+import numpy as np
 
 from ._calc_cost import calc_cost
 from ._format_output_func import format_output_func
 from .PARAMS import MODELS
 
 """Functions & Classes"""
+
+
 def to_stream(string: Union[str, List[str]]) -> Generator[str, None, None]:
     """Converts string or list of strings to generator for streaming."""
     chunks = string if isinstance(string, list) else [string]
     for chunk in chunks:
         if chunk:
             yield chunk
+
 
 class BaseGenAI(ABC):
     def __init__(
@@ -75,7 +86,30 @@ class BaseGenAI(ABC):
             print(error)
             self._error_messages.append(f"\nError:\n{str(error)}")
 
-    def gen_error(self, return_stream: bool) -> tuple[bool, Optional[Union[str, Generator]]]:
+    @classmethod
+    def list_models(cls, provider: Optional[str] = None) -> List[str]:
+        """List available models for the provider. If provider is None, list all models."""
+        if provider:
+            indi = [
+                provider.lower() in api_key_env.lower()
+                for api_key_env in MODELS["api_key_env"]
+            ]
+            models = MODELS[indi].name.tolist()
+            providers = MODELS[indi].provider.tolist()
+
+        else:
+            indi = np.arange(len(MODELS))
+            models = MODELS.name.tolist()
+            providers = MODELS.provider.tolist()
+
+        for provider, model in zip(providers, models):
+            print(f"- {provider} - {model}")
+
+        return models
+
+    def gen_error(
+        self, return_stream: bool
+    ) -> tuple[bool, Optional[Union[str, Generator]]]:
         error_exists = bool(self._error_messages)
         if not error_exists:
             return False, None
@@ -87,7 +121,9 @@ class BaseGenAI(ABC):
             return True, "".join(error_msgs)
 
         stream_obj = to_stream(error_msgs)
-        return True, self._yield_stream(stream_obj) if not return_stream else stream_obj
+        return True, (
+            self._yield_stream(stream_obj) if not return_stream else stream_obj
+        )
 
     # def __call_chunks__(self, prompt: Optional[str], format_output: bool = False, return_stream: bool = False):
     #     if len(prompt) > self.chunk_size:
@@ -117,7 +153,7 @@ class BaseGenAI(ABC):
         self,
         prompt: Optional[str],
         format_output: bool = False,
-        return_stream: bool = False
+        return_stream: bool = False,
     ) -> Union[str, Generator]:
         self.update_history("user", prompt or "")
 
@@ -219,7 +255,7 @@ class BaseGenAI(ABC):
         self.history.append({"role": role, "content": content})
 
         if len(self.history) > self.n_keep:
-            self.history = self.history[-self.n_keep:]
+            self.history = self.history[-self.n_keep :]
 
         self.history = self._ensure_alternative_history(self.history)
         self.history = self._ensure_start_from_user(self.history)
@@ -243,11 +279,14 @@ class BaseGenAI(ABC):
     def cost(self) -> float:
         return calc_cost(self.model, self.input_tokens, self.output_tokens)
 
+
 def main() -> None:
     pass
 
+
 if __name__ == "__main__":
     import mngs
+
     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
         sys, plt, verbose=False
     )
@@ -276,7 +315,6 @@ if __name__ == "__main__":
 #     - API keys for respective AI providers
 #     - Model-specific implementation in child classes
 # """
-
 
 # """Imports"""
 # import sys
@@ -510,7 +548,6 @@ if __name__ == "__main__":
 #     ):
 #         return calc_cost(self.model, self.input_tokens, self.output_tokens)
 
-
 # def to_stream(string):
 #     chunks = string
 #     for chunk in chunks:
@@ -519,7 +556,6 @@ if __name__ == "__main__":
 
 # def main():
 #     pass
-
 
 # if __name__ == "__main__":
 #     import mngs

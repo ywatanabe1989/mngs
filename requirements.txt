@@ -96,4 +96,5 @@ torchvision
 torchaudio
 psycopg2-binary>=2.9.9  # Changed from psycopg2
 sqlalchemy>=2.0.0
+groq
 
