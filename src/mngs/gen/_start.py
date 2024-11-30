@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-24 17:09:20 (ywatanabe)"
+# Time-stamp: "2024-11-26 09:44:38 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/gen/_start.py
 
 __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/gen/_start.py"

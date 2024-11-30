@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-25 01:35:02 (ywatanabe)"
+# Time-stamp: "2024-11-29 04:29:53 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/db/_SQLite3Mixins/_BlobMixin.py
 
 __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_SQLite3Mixins/_BlobMixin.py"
@@ -25,7 +25,7 @@ class _BlobMixin:
         additional_columns: Dict[str, _Any] = None,
         batch_size: int = 1000,
     ) -> None:
-        with self.transaction():
+        with self.lock:
             if not isinstance(data, (np.ndarray, list)):
                 raise ValueError(
                     "Input must be a NumPy array or list of arrays"

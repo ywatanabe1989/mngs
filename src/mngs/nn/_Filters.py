@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-26 08:58:29 (ywatanabe)"
+# Time-stamp: "2024-11-26 22:23:40 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/nn/_Filters.py
 
 __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/nn/_Filters.py"
@@ -165,8 +165,8 @@ class BandPassFilter(BaseFilter1D):
 
         kernels = zero_pad(filters)
         kernels = ensure_even_len(kernels)
-        # kernels = torch.tensor(kernels).clone().detach()
-        kernels = kernels.clone().detach().requires_grad_(True)
+        kernels = torch.tensor(kernels).clone().detach()
+        # kernels = kernels.clone().detach().requires_grad_(True)
         return kernels
 
 

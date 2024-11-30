@@ -1,12 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-25 13:09:07 (ywatanabe)"
+# Time-stamp: "2024-11-26 22:16:44 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/decorators/_converters.py
 
 __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_converters.py"
 
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-07 05:53:09 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/decorators/_converters.py
+
 from typing import Callable, Optional
 
+import pandas as pd
+import xarray
 
 """
 Functionality:
@@ -19,9 +26,6 @@ Output:
 Prerequisites:
     - NumPy, PyTorch, Pandas packages
 """
-
-import pandas as pd
-import xarray
 
 import warnings
 from functools import lru_cache as _lru_cache
@@ -61,9 +65,7 @@ def _try_device(tensor: torch.Tensor, device: str) -> torch.Tensor:
         return tensor.to(device)
     except RuntimeError as error:
         if "cuda" in str(error).lower() and device == "cuda":
-            warnings.warn(
-                "CUDA memory insufficient, falling back to CPU.", UserWarning
-            )
+            warnings.warn("CUDA memory insufficient, falling back to CPU.", UserWarning)
             return tensor.cpu()
         raise error
 
@@ -99,11 +101,8 @@ def is_torch(*args: _Any, **kwargs: _Any) -> bool:
 
 
 def is_cuda(*args: _Any, **kwargs: _Any) -> bool:
-    return any(
-        (isinstance(arg, torch.Tensor) and arg.is_cuda) for arg in args
-    ) or any(
-        (isinstance(val, torch.Tensor) and val.is_cuda)
-        for val in kwargs.values()
+    return any((isinstance(arg, torch.Tensor) and arg.is_cuda) for arg in args) or any(
+        (isinstance(val, torch.Tensor) and val.is_cuda) for val in kwargs.values()
     )
 
 
@@ -124,47 +123,38 @@ def _return_if(*args: _Any, **kwargs: _Any) -> Union[Tuple, Dict, None]:
 
 def to_torch(*args: _Any, return_fn: Callable = _return_if, **kwargs: _Any) -> _Any:
     def _to_torch(data: _Any, device: Optional[str] = kwargs.get("device")) -> _Any:
-        if device is None:
-            device = "cuda" if torch.cuda.is_available() else "cpu"
+        try:
+            if device is None:
+                device = "cuda" if torch.cuda.is_available() else "cpu"
 
-        # Unwrap nested tuples
-        if isinstance(data, tuple):
-            # If it's a tuple with a dict as second element (common wrapper pattern)
-            if len(data) == 2 and isinstance(data[1], dict):
-                return _to_torch(data[0])
-            # If first element is also a tuple, unwrap it
-            if len(data) > 0 and isinstance(data[0], tuple):
-                return _to_torch(data[0])
-            return tuple(_to_torch(item) for item in data if item is not None)
+            if isinstance(data, (tuple, list)):
+                return [_to_torch(item) for item in data if item is not None]
 
-        if isinstance(data, (pd.Series, pd.DataFrame)):
-            new_data = torch.tensor(data.to_numpy()).squeeze().float()
-            new_data = _try_device(new_data, device)
-            if device == "cuda":
-                _conversion_warning(data, new_data)
-            return new_data
+            if isinstance(data, (pd.Series, pd.DataFrame)):
+                new_data = torch.tensor(data.to_numpy()).squeeze().float()
+                new_data = _try_device(new_data, device)
+                if device == "cuda":
+                    _conversion_warning(data, new_data)
+                return new_data
 
-        if isinstance(data, (np.ndarray, list)):
-            new_data = torch.tensor(data).float()
-            new_data = _try_device(new_data, device)
-            if device == "cuda":
-                _conversion_warning(data, new_data)
-            return new_data
+            if isinstance(data, (np.ndarray, list)):
+                new_data = torch.tensor(data).float()
+                new_data = _try_device(new_data, device)
+                if device == "cuda":
+                    _conversion_warning(data, new_data)
+                return new_data
 
-        if isinstance(data, xarray.core.dataarray.DataArray):
-            new_data = torch.tensor(np.array(data)).float()
-            new_data = _try_device(new_data, device)
-            if device == "cuda":
-                _conversion_warning(data, new_data)
-            return new_data
+            if isinstance(data, xarray.core.dataarray.DataArray):
+                new_data = torch.tensor(np.array(data)).float()
+                new_data = _try_device(new_data, device)
+                if device == "cuda":
+                    _conversion_warning(data, new_data)
+                return new_data
 
-        if isinstance(data, dict):
-            result = {k: _to_torch(v) for k, v in data.items()}
-            if 'axis' in result:
-                result['dim'] = result.pop('axis')
-            return result
-
-        return data
+            return data
+        except Exception as e:
+            print(e)
+            __import__("ipdb").set_trace()
 
     converted_args = [_to_torch(arg) for arg in args if arg is not None]
     converted_kwargs = {
@@ -174,68 +164,10 @@ def to_torch(*args: _Any, return_fn: Callable = _return_if, **kwargs: _Any) -> _
     if "axis" in converted_kwargs:
         converted_kwargs["dim"] = converted_kwargs.pop("axis")
 
-    result = return_fn(*converted_args, **converted_kwargs)
-
-    # Unwrap single-element tuples
-    if isinstance(result, tuple) and len(result) == 1:
-        return result[0]
-    return result
-
-# def to_torch(
-#     *args: _Any, return_fn: Callable = _return_if, **kwargs: _Any
-# ) -> _Any:
-#     def _to_torch(
-#         data: _Any, device: Optional[str] = kwargs.get("device")
-#     ) -> _Any:
-#         if device is None:
-#             device = "cuda" if torch.cuda.is_available() else "cpu"
-
-#         if isinstance(data, (pd.Series, pd.DataFrame)):
-#             new_data = torch.tensor(data.to_numpy()).squeeze().float()
-#             new_data = _try_device(new_data, device)
-#             if device == "cuda":
-#                 _conversion_warning(data, new_data)
-#             return new_data
-
-#         if isinstance(data, (np.ndarray, list)):
-#             new_data = torch.tensor(data).float()
-#             new_data = _try_device(new_data, device)
-#             if device == "cuda":
-#                 _conversion_warning(data, new_data)
-#             return new_data
-
-#         if isinstance(data, xarray.core.dataarray.DataArray):
-#             new_data = torch.tensor(np.array(data)).float()
-#             new_data = _try_device(new_data, device)
-#             if device == "cuda":
-#                 _conversion_warning(data, new_data)
-#             return new_data
-
-#         if isinstance(data, tuple):
-#             return [_to_torch(item) for item in data if item is not None]
-
-#         if isinstance(data, dict):  # Add this block
-#             result = {k: _to_torch(v) for k, v in data.items()}
-#             if "axis" in result:
-#                 result["dim"] = result.pop("axis")
-#             return result
-
-#         return data
-
-#     converted_args = [_to_torch(arg) for arg in args if arg is not None]
-#     converted_kwargs = {
-#         key: _to_torch(val) for key, val in kwargs.items() if val is not None
-#     }
-
-#     if "axis" in converted_kwargs:
-#         converted_kwargs["dim"] = converted_kwargs.pop("axis")
-
-#     return return_fn(*converted_args, **converted_kwargs)
+    return return_fn(*converted_args, **converted_kwargs)
 
 
-def to_numpy(
-    *args: _Any, return_fn: Callable = _return_if, **kwargs: _Any
-) -> _Any:
+def to_numpy(*args: _Any, return_fn: Callable = _return_if, **kwargs: _Any) -> _Any:
     def _to_numpy(data: _Any) -> _Any:
         if isinstance(data, (pd.Series, pd.DataFrame)):
             return data.to_numpy().squeeze()
@@ -245,11 +177,6 @@ def to_numpy(
             return np.array(data)
         if isinstance(data, tuple):
             return [_to_numpy(item) for item in data if item is not None]
-        if isinstance(data, dict):  # Add this block
-            result = {k: _to_numpy(v) for k, v in data.items()}
-            if "dim" in result:
-                result["axis"] = result.pop("dim")
-            return result
         return data
 
     converted_args = [_to_numpy(arg) for arg in args if arg is not None]

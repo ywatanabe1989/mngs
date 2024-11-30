@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-25 21:25:36 (ywatanabe)"
+# Time-stamp: "2024-11-27 21:36:51 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/ai/feature_extraction/vit.py
 
 __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/feature_extraction/vit.py"
@@ -24,7 +24,7 @@ import torch as _torch
 from pytorch_pretrained_vit import ViT
 from torchvision import transforms as _transforms
 
-from ...decorators import batch_torch_fn
+# from ...decorators import batch_torch_fn
 
 
 def _setup_device(device: Union[str, None]) -> str:
@@ -109,7 +109,7 @@ class VitFeatureExtractor:
 
     # @batch_method
     # @torch_method
-    @batch_torch_fn
+    # @batch_torch_fn
     def extract_features(
         self,
         arr,

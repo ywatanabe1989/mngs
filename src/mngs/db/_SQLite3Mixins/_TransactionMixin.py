@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-25 06:05:34 (ywatanabe)"
+# Time-stamp: "2024-11-29 04:32:42 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/db/_SQLite3Mixins/_TransactionMixin.py
 
 __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_SQLite3Mixins/_TransactionMixin.py"
@@ -14,13 +14,14 @@ class _TransactionMixin:
 
     @contextlib.contextmanager
     def transaction(self):
-        try:
-            self.begin()
-            yield
-            self.commit()
-        except Exception as e:
-            self.rollback()
-            raise e
+        with self.lock:
+            try:
+                self.begin()
+                yield
+                self.commit()
+            except Exception as e:
+                self.rollback()
+                raise e
 
     def begin(self) -> None:
         self.execute("BEGIN TRANSACTION")

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-25 23:23:15 (ywatanabe)"
+# Time-stamp: "2024-11-26 22:24:13 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/dsp/utils/_differential_bandpass_filters.py
 
 __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/dsp/utils/_differential_bandpass_filters.py"
@@ -48,20 +48,17 @@ def init_bandpass_filters(
 
 @torch_fn
 def build_bandpass_filters(sig_len, fs, pha_mids, amp_mids, cycle):
-    @torch_fn
     def _define_freqs(mids, factor):
         lows = mids - mids / factor
         highs = mids + mids / factor
         return lows, highs
 
-    @torch_fn
     def define_order(low_hz, fs, sig_len, cycle):
         order = cycle * int((fs // low_hz))
         order = order if 3 * order >= sig_len else (sig_len - 1) // 3
         order = to_even(order)
         return order
 
-    @torch_fn
     def _calc_filters(lows_hz, highs_hz, fs, order):
         nyq = fs / 2.0
         order = to_odd(order)
