@@ -1,1 +1,0 @@
-../../../src/mngs/gen/_type.py

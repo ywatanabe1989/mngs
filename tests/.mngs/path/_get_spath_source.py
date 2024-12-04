@@ -1,1 +1,0 @@
-../../../src/mngs/path/_get_spath.py
