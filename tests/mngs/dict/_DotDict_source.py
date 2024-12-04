@@ -1,0 +1,1 @@
+../../../src/mngs/dict/_DotDict.py

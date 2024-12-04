@@ -1,0 +1,1 @@
+../../../src/mngs/str/_squeeze_space.py

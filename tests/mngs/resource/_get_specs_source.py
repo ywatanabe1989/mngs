@@ -1,0 +1,1 @@
+../../../src/mngs/resource/_get_specs.py

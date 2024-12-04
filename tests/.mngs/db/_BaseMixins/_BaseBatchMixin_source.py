@@ -1,0 +1,1 @@
+../../../../src/mngs/db/_BaseMixins/_BaseBatchMixin.py
