@@ -45,15 +45,15 @@ matplotlib
 mne
 more-itertools
 natsort
-numpy>2.0.0
+numpy #>2.0.0
 obspy
 openai
 openpyxl
 optuna
-packaging<21.0
+packaging #<21.0
 pandas
 pebble 
-platformdirs<3.0
+platformdirs #<3.0
 plotly
 plyer
 psutil
@@ -90,9 +90,9 @@ setuptools
 six
 sktime
 sounddevice
-sphinx<4.5.0
+sphinx # <4.5.0
 sqlalchemy
-# statsmodels # Please ignore this package due to incompatibility with recent versions of numpy*
+statsmodels # Please ignore this package due to incompatibility with recent versions of numpy*
 sympy
 tabulate
 tensorpac
@@ -109,6 +109,6 @@ twine
 umap-learn
 webdriver-manager
 wheel
-# xarray # Please ignore this package due to incompatibility with recent versions of numpy*
+xarray # Please ignore this package due to incompatibility with recent versions of numpy*
 xlrd
 xmltodict
