@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-02-27 11:25:24 (ywatanabe)"
+# Timestamp: "2025-02-27 13:01:04 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/gen/_start.py
 
 __file__ = "./src/mngs/gen/_start.py"
@@ -48,6 +48,9 @@ Prerequisites:
     * matplotlib
     * mngs package
 """
+
+
+
 
 
 

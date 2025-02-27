@@ -1,13 +1,7 @@
 <!-- ---
-!-- Timestamp: 2025-02-27 11:24:31
+!-- Timestamp: 2025-02-27 13:00:27
 !-- Author: ywatanabe
 !-- File: /home/ywatanabe/proj/mngs_repo/README.md
-!-- --- -->
-
-<!-- ---
-!-- title: ./mngs/README.md
-!-- author: ywatanabe
-!-- date: 2024-11-08 02:05:12
 !-- --- -->
 
 
