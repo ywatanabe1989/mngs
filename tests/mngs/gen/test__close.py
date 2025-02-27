@@ -1,15 +1,10 @@
 # src from here --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-26 10:08:41 (ywatanabe)"
-# # File: ./mngs_repo/src/mngs/gen/_close.py
+# # Timestamp: "2025-02-14 21:12:25 (ywatanabe)"
+# # File: /home/ywatanabe/proj/mngs_repo/src/mngs/gen/_close.py
 # 
-# __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/gen/_close.py"
-# 
-# #!/usr/bin/env python3
-# # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-13 14:33:50 (ywatanabe)"
-# # File: ./mngs_repo/src/mngs/gen/_close.py
+# __file__ = "./src/mngs/gen/_close.py"
 # 
 # import os
 # import re
@@ -85,7 +80,7 @@
 #     else:
 #         return ""
 # 
-# def close(CONFIG, message=":)", notify=True, verbose=True, exit_status=None):
+# def close(CONFIG, message=":)", notify=False, verbose=True, exit_status=None):
 #     try:
 #         CONFIG.EXIT_STATUS = exit_status
 #         CONFIG = CONFIG.to_dict()

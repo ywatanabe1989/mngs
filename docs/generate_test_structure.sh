@@ -1,11 +1,14 @@
 #!/bin/bash
-# Time-stamp: "2024-12-05 10:23:20 (ywatanabe)"
-# File: ./mngs_repo/docs/generate_test_structure.sh
+# -*- coding: utf-8 -*-
+# Timestamp: "2025-02-27 11:23:18 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/docs/generate_test_structure.sh
 
+THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+LOG_PATH="$0.log"
+touch "$LOG_PATH"
 
-LOG_FILE="${0%.sh}.log"
-SRC_DIR="$(dirname "$0")/../src/mngs"
-TESTS_DIR="$(dirname "$0")/../tests/mngs"
+SRC_DIR="$THIS_DIR/../src/mngs"
+TESTS_DIR="$THIS_DIR/../tests/mngs"
 
 # Ensure absolute paths
 SRC_DIR=$(realpath "$SRC_DIR")
@@ -18,7 +21,7 @@ usage() {
     echo "Options:"
     echo " -f, --force          Force overwrite existing test files"
     echo " -u, --update-source  Update only source code section"
-    echo " -h, --help          Display this help message"
+    echo " -h, --help           Display this help message"
     echo
     echo "Example:"
     echo " $0"
@@ -238,7 +241,5 @@ main() {
 }
 
 main "$@"
-
-
 
 # EOF

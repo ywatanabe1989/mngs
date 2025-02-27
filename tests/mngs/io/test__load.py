@@ -1,7 +1,7 @@
 # src from here --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-17 20:05:43 (ywatanabe)"
+# # Time-stamp: "2024-12-12 06:50:46 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/io/_load.py
 # 
 # __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/io/_load.py"
@@ -11,7 +11,7 @@
 # from typing import Any
 # from ..decorators import preserve_doc
 # from ..str._clean_path import clean_path
-# from ._load_modules._catboost import _load_catboost
+# # from ._load_modules._catboost import _load_catboost
 # from ._load_modules._con import _load_con
 # from ._load_modules._db import _load_sqlite3db
 # from ._load_modules._docx import _load_docx
@@ -94,7 +94,7 @@
 #         # ML/DL Models
 #         "pth": _load_torch,
 #         "pt": _load_torch,
-#         "cbm": _load_catboost,
+#         # "cbm": _load_catboost,
 #         "joblib": _load_joblib,
 #         "pkl": _load_pickle,
 #         # Tabular Data

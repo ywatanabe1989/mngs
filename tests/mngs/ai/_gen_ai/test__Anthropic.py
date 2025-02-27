@@ -1,7 +1,13 @@
 # src from here --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-12-01 06:23:34 (ywatanabe)"
+# # Timestamp: "2025-02-26 09:02:48 (ywatanabe)"
+# # File: /home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_Anthropic.py
+# 
+# __file__ = "./src/mngs/ai/_gen_ai/_Anthropic.py"
+# #!/usr/bin/env python3
+# # -*- coding: utf-8 -*-
+# # Time-stamp: "2025-02-26 09:02:48 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/ai/_gen_ai/_Anthropic.py
 # 
 # __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_Anthropic.py"
@@ -49,6 +55,12 @@
 #         chat_history: Optional[List[Dict[str, str]]] = None,
 #         max_tokens: int = 100_000,
 #     ) -> None:
+# 
+#         if model == "claude-3-7-sonnet-2025-0219":
+#             max_tokens=128_000
+# 
+#         api_key = api_key or os.getenv("ANTHROPIC_API_KEY")
+# 
 #         if not api_key:
 #             raise ValueError("ANTHROPIC_API_KEY environment variable not set")
 # 
@@ -133,7 +145,12 @@
 #     ai = mngs.ai.GenAI(
 #         model="claude-3-5-sonnet-20241022",
 #         api_key=os.getenv("ANTHROPIC_API_KEY"),
+#         n_keep=10,
 #     )
+#     print(ai("hi"))
+#     print(ai("My name is Yusuke"))
+#     print(ai("do you remember my name?"))
+# 
 #     print(
 #         ai(
 #             "hi, could you tell me what is in the pic?",
@@ -154,6 +171,14 @@
 #     main()
 #     mngs.gen.close(CONFIG, verbose=False, notify=False)
 # 
+# 
+# 
+# 
+# 
+# """
+# python src/mngs/ai/_gen_ai/_Anthropic.py
+# python -m src.mngs.ai._gen_ai._Anthropic
+# """
 # 
 # # EOF
 
