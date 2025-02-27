@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-28 02:34:18 (ywatanabe)"
+# Time-stamp: "2024-12-15 15:16:28 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/ai/_gen_ai/_genai_factory.py
 
 __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_genai_factory.py"
@@ -138,5 +138,14 @@ if __name__ == "__main__":
     main(model="llama-3.1-70b-versatile", api_key=os.getenv("GROQ_API_KEY"))
 
     mngs.gen.close(CONFIG, verbose=False, notify=False)
+
+# EOF
+
+
+
+"""
+python src/mngs/ai/_gen_ai/_genai_factory.py
+python -m src.mngs.ai._gen_ai._genai_factory
+"""
 
 # EOF

@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-17 20:50:51 (ywatanabe)"
+# Timestamp: "2025-02-14 22:07:13 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/src/mngs/str/_clean_path.py
+
+__file__ = "./src/mngs/str/_clean_path.py"
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Time-stamp: "2025-02-14 22:07:13 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/str/_clean_path.py
 
 __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/str/_clean_path.py"
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-02 11:24:24 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/str/_clean_path.py
 
 """
 Functionality:
@@ -46,6 +47,8 @@ def clean_path(path_string: str) -> str:
         Normalized path string
     """
     try:
+        is_directory = path_string.endswith("/")
+
         if not isinstance(path_string, str):
             raise TypeError("Input must be a string")
 
@@ -57,6 +60,9 @@ def clean_path(path_string: str) -> str:
 
         # Remove redundant separators
         cleaned_path = os.path.normpath(cleaned_path)
+
+        if is_directory and (not cleaned_path.endswith("/")):
+            cleaned_path += "/"
 
         return cleaned_path
 

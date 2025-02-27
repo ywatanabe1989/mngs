@@ -16,7 +16,8 @@ epc
 flake8
 flask
 geom_median
-google-generativeai
+# google-generativeai
+google-genai
 googlesearch-python
 h5py
 html2text
@@ -97,4 +98,8 @@ torchaudio
 psycopg2-binary>=2.9.9  # Changed from psycopg2
 sqlalchemy>=2.0.0
 groq
-
+selenium
+webdriver-manager
+requests
+bs4
+google-search-results
