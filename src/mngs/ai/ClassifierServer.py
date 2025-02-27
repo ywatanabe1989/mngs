@@ -1,13 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-20 00:25:01 (ywatanabe)"
+# Time-stamp: "2024-12-12 06:49:15 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/ai/ClassifierServer.py
 
 __file__ = "/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/ClassifierServer.py"
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# Time-stamp: "2022-11-01 18:46:25 (ywatanabe)"
 
 """
 Functionality:
@@ -80,9 +76,6 @@ class ClassifierServer:
         self.random_state = random_state
 
         self.clf_candi = {
-            "CatBoostClassifier": _CatBoostClassifier(
-                class_weights=self.class_weight, verbose=False
-            ),
             "Perceptron": _Perceptron(
                 penalty="l2",
                 class_weight=self.class_weight,
@@ -138,79 +131,3 @@ class ClassifierServer:
 if __name__ == "__main__":
     clf_server = ClassifierServer()
     clf = clf_server("SVC", scaler=_StandardScaler())
-
-# #!/usr/bin/env python3
-# # -*- coding: utf-8 -*-
-# # Time-stamp: "2022-11-01 18:46:25 (ywatanabe)"
-
-# from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis as _QuadraticDiscriminantAnalysis
-# from sklearn.ensemble import AdaBoostClassifier as _AdaBoostClassifier
-# from sklearn.gaussian_process import GaussianProcessClassifier as _GaussianProcessClassifier
-# from sklearn.linear_model import (
-#     LogisticRegression as _LogisticRegression,
-#     PassiveAggressiveClassifier as _PassiveAggressiveClassifier,
-#     Perceptron as _Perceptron,
-#     RidgeClassifier as _RidgeClassifier,
-#     SGDClassifier as _SGDClassifier,
-# )
-# from sklearn.neighbors import KNeighborsClassifier as _KNeighborsClassifier
-# from sklearn.pipeline import make_pipeline as _make_pipeline
-# from sklearn.preprocessing import StandardScaler as _StandardScaler
-# from sklearn.svm import SVC as _SVC, LinearSVC as _LinearSVC
-
-
-# class ClassifierServer(object):
-#     def __init__(self, class_weight=None, random_state=42):
-#         self.class_weight = class_weight
-#         self.random_state = random_state
-
-#         self.clf_candi = {
-#             "CatBoostClassifier": _CatBoostClassifier(
-#                 class_weights=self.class_weight, verbose=False
-#             ),
-#             "Perceptron": _Perceptron(
-#                 penalty="l2", class_weight=self.class_weight, random_state=random_state
-#             ),
-#             "PassiveAggressiveClassifier": _PassiveAggressiveClassifier(
-#                 class_weight=self.class_weight, random_state=random_state
-#             ),
-#             "LogisticRegression": _LogisticRegression(
-#                 class_weight=self.class_weight, random_state=random_state
-#             ),
-#             "SGDClassifier": _SGDClassifier(
-#                 class_weight=self.class_weight, random_state=random_state
-#             ),
-#             "RidgeClassifier": _RidgeClassifier(
-#                 class_weight=self.class_weight, random_state=random_state
-#             ),
-#             "QuadraticDiscriminantAnalysis": _QuadraticDiscriminantAnalysis(),
-#             "GaussianProcessClassifier": _GaussianProcessClassifier(
-#                 random_state=random_state
-#             ),
-#             "KNeighborsClassifier": _KNeighborsClassifier(),
-#             "AdaBoostClassifier": _AdaBoostClassifier(random_state=random_state),
-#             "LinearSVC": _LinearSVC(
-#                 class_weight=self.class_weight, random_state=random_state
-#             ),
-#             "SVC": _SVC(class_weight=self.class_weight, random_state=random_state),
-#         }
-
-#     def __call__(self, clf_str, scaler=None):
-#         if scaler is not None:
-#             clf = _make_pipeline(scaler, self.clf_candi[clf_str])
-#         else:
-#             clf = self.clf_candi[clf_str]
-#         return clf
-
-#     @property
-#     def list(self):
-#         clf_list = list(self.clf_candi.keys())
-#         return clf_list
-
-
-# if __name__ == "__main__":
-#     clf_server = ClassifierServer()
-#     clf = clf_server("SVC", scaler=_StandardScaler())
-
-
-# EOF

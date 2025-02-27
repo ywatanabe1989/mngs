@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-17 21:42:13 (ywatanabe)"
+# Time-stamp: "2024-12-05 09:20:53 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/stats/desc/_describe.py
 
 __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/stats/desc/_describe.py"
@@ -35,22 +35,11 @@ from ._nan import (
     nanstd,
     nanvar,
 )
-from ._real import (
-    kurtosis,
-    mean,
-    q25,
-    q50,
-    q75,
-    skewness,
-    std,
-    zscore,
-    quantile,
-)
+from ._real import kurtosis, mean, q25, q50, q75, skewness, std
 
 
 def verify_non_leakage(
     x: torch.Tensor,
-
     dim: Optional[Union[int, Tuple[int, ...]]] = None,
 ):
     """
@@ -180,12 +169,21 @@ def describe(
 if __name__ == "__main__":
     from mngs.stats.desc._describe import describe, verify_non_leakage
 
-    x = np.random.rand(4, 3, 2)
-    print(mngs.stats.desc.nankurtosis(x, dim=(1,2)).shape)
+    # x = np.random.rand(4, 3, 2)
+    # x = np.random.rand(390, 250, 16, 100, 100)
+    # print(mngs.stats.desc.nankurtosis(x, dim=(1,2)).shape)
 
-    described, _ = describe(x, dim=(1, 2))
-    verify_non_leakage(x, dim=(1, 2))
-    # print(describe(x, dim=(1, 2), keepdims=False)[0].shape)
-    # print(describe(x, funcs="all", dim=(1, 2), keepdims=False)[0].shape)
+    x = np.random.rand(10, 250, 16, 100, 100)
+
+    described, _ = describe(x[:10], dim=(-2, -1), batch_size=1)
+    # verify_non_leakage(x, dim=(1, 2))
+    # # print(describe(x, dim=(1, 2), keepdims=False)[0].shape)
+    # # print(describe(x, funcs="all", dim=(1, 2), keepdims=False)[0].shape)
+
+
+"""
+python ./mngs_repo/src/mngs/stats/desc/_describe.py
+python -m src.mngs.stats.desc._describe
+"""
 
 # EOF

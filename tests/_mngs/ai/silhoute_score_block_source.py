@@ -1,1 +1,0 @@
-../../../src/mngs/ai/silhoute_score_block.py

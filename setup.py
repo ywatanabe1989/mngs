@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-02-03 15:44:51 (ywatanabe)"
+# Time-stamp: "2024-12-09 21:38:59 (ywatanabe)"
 
 import re
 from codecs import open
@@ -10,8 +10,6 @@ from setuptools import find_packages, setup
 
 ################################################################################
 PACKAGE_NAME = "mngs"
-# PACKAGE_DATA = {'data': ['']}
-# DATA_FILES = [('my_data, [data/data_file']),]
 PACKAGES = find_packages(where="src")
 DESCRIPTION = "For lazy python users (monogusa people in Japanse), especially in ML/DSP fields"
 KEYWORDS = ["utils", "utilities", "python", "machine learning"]
@@ -23,20 +21,12 @@ CLASSIFIERS = [
 
 root_dir = path.abspath(path.dirname(__file__))
 
-
 def _requirements():
     return [
         name.rstrip()
         for name in open(path.join(root_dir, "requirements.txt")).readlines()
+        if "--no-deps" not in name
     ]
-
-
-# def _test_requirements():
-#     return [
-#         name.rstrip()
-#         for name in open(path.join(root_dir, "test-requirements.txt")).readlines()
-#     ]
-
 
 with open(path.join(root_dir, "src", PACKAGE_NAME, "__init__.py")) as f:
     init_text = f.read()
@@ -67,14 +57,9 @@ setup(
     package_dir={"": "src"},
     name=PACKAGE_NAME,
     packages=PACKAGES,
-    # py_modules=PY_MODULES,
-    # package_data=PACKAGE_DATA,
-    # data_files=DATA_FILES,
     version=version,
     license=license,
     install_requires=_requirements(),
-    # tests_require=_test_requirements(),
-    # setup_requires=["pytest-runner"],
     author=author,
     author_email=author_email,
     url=url,

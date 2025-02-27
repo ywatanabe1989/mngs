@@ -1,32 +1,15 @@
 #!/bin/bash
-# Time-stamp: "2024-11-07 19:13:47 (ywatanabe)"
+# Time-stamp: "2024-12-05 10:23:20 (ywatanabe)"
 # File: ./mngs_repo/docs/generate_test_structure.sh
 
 
 LOG_FILE="${0%.sh}.log"
-SRC="./src/mngs/"
-TGT="./tests/_mngs/"
-
-# Safety checks
-if [[ ! -d "$SRC" ]]; then
-    echo "Error: Source directory '$SRC' does not exist"
-    exit 1
-fi
-
-if [[ ! -d "$(dirname "$TGT")" ]]; then
-    echo "Error: Parent of target directory '$(dirname "$TGT")' does not exist"
-    exit 1
-fi
+SRC_DIR="$(dirname "$0")/../src/mngs"
+TESTS_DIR="$(dirname "$0")/../tests/mngs"
 
 # Ensure absolute paths
-SRC=$(realpath "$SRC")
-TGT=$(realpath "$(dirname "$TGT")")/_mngs/
-
-# Verify paths are within project
-if [[ ! "$SRC" =~ ^$(realpath .)/* ]] || [[ ! "$TGT" =~ ^$(realpath .)/* ]]; then
-    echo "Error: Paths must be within project directory"
-    exit 1
-fi
+SRC_DIR=$(realpath "$SRC_DIR")
+TESTS_DIR=$(realpath "$TESTS_DIR")
 
 # Function definitions
 usage() {
@@ -64,47 +47,28 @@ confirm_operation() {
     fi
 }
 
-
-# move_obsolete_files() {
-#     if [ "$UPDATE_SOURCE" = false ]; then
-#         OLD_DIR="${TGT}/.old/$(date +%Y%m%d_%H%M%S)"
-#         mkdir -p "$OLD_DIR"
-
-#         find "$TGT" -name "test_*.py" | while read -r test_file; do
-#             # Convert test path to source path
-#             src_file="${test_file#$TGT}"             # Remove test prefix path
-#             src_file="${src_file#test_}"             # Remove 'test_' prefix
-#             src_file="$SRC${src_file}"               # Add source prefix path
-
-#             if [ ! -f "$src_file" ]; then
-#                 target_dir="$OLD_DIR/$(dirname "${test_file#$TGT}")"
-#                 mkdir -p "$target_dir"
-#                 mv "$test_file" "$target_dir/"
-#                 echo "Moved obsolete file: $test_file -> $target_dir/"
-#             fi
-#         done
-#     fi
-# }
-
 move_obsolete_files() {
     if [ "$UPDATE_SOURCE" = false ]; then
-        OLD_DIR="${TGT}/.old/$(date +%Y%m%d_%H%M%S)"
-        mkdir -p "$OLD_DIR"
+        OLD_DIR="$TESTS_DIR/.old/$(date +%Y%m%d_%H%M%S)"
+        [ -d "$TESTS_DIR" ] && mkdir -p "$OLD_DIR"
 
-        find "$TGT" -name "test_*.py" | while read -r test_file; do
+        find "$TESTS_DIR" -name "test_*.py" | while read -r test_file; do
+            # Skip if test_file is empty
+            [ -z "$test_file" ] && continue
+
             # Skip files in ./tests/custom
             [[ "$test_file" =~ ^./tests/custom ]] && continue
 
             # Rest of the function remains the same...
-            src_file="${test_file#$TGT}"
+            src_file="${test_file#$TESTS_DIR}"
             src_file="${src_file#test_}"
-            src_file="$SRC${src_file}"
+            src_file="$SRC_DIR${src_file}"
 
             if [ ! -f "$src_file" ]; then
-                target_dir="$OLD_DIR/$(dirname "${test_file#$TGT}")"
+                target_dir="$OLD_DIR/$(dirname "${test_file#$TESTS_DIR}")"
                 mkdir -p "$target_dir"
                 mv "$test_file" "$target_dir/"
-                echo "Moved obsolete file: $test_file -> $target_dir/"
+                # echo "Moved obsolete file: $test_file -> $target_dir/"
             fi
         done
     fi
@@ -112,34 +76,59 @@ move_obsolete_files() {
 
 create_test_directories() {
     if [ "$UPDATE_SOURCE" = false ]; then
-        find "$SRC" -type d \
+        [ ! -d "$SRC_DIR" ] && echo "Source directory not found: $SRC_DIR" && exit 1
+
+        find "$SRC_DIR" -type d \
              ! -path "*/\.*" \
              ! -path "*/deprecated*" \
              ! -path "*/archive*" \
              ! -path "*/backup*" \
              ! -path "*/tmp*" \
              ! -path "*/temp*" \
+             ! -path "*/RUNNING/*" \
+             ! -path "*/FINISHED/*" \
              ! -path "*/__pycache__*" \
             | while read -r dir; do
-            # test_dir="${dir/src/tests}"
-            test_dir="${dir/src\/mngs/tests\/_mngs}"
+            test_dir="${dir/src/tests}"
             mkdir -p "$test_dir"
             if [[ ! -f "$test_dir/__init__.py" ]] || [ "$FORCE" = true ]; then
                 echo "#!/usr/bin/env python3" > "$test_dir/__init__.py"
                 echo "# -*- coding: utf-8 -*-" >> "$test_dir/__init__.py"
-                echo "Created __init__.py: $test_dir/__init__.py"
+                # echo "Created __init__.py: $test_dir/__init__.py"
             fi
-            echo "Created directory: $test_dir"
+            # echo "Created directory: $test_dir"
         done
     fi
+}
+
+correct_permissions() {
+    find "$SRC_DIR" -type f -name "*.py" \
+         ! -path "*/\.*" \
+         ! -path "*/deprecated*" \
+         ! -path "*/archive*" \
+         ! -path "*/backup*" \
+         ! -path "*/tmp*" \
+         ! -path "*/temp*" \
+         ! -path "*/RUNNING/*" \
+         ! -path "*/FINISHED/*" \
+         ! -path "*/__pycache__*" \
+        | while read -r script_file; do
+        chmod +x $script_file
+        done
 }
 
 generate_test_template() {
     local src_file=$1
     local test_file=$2
 
+    # Check if source file exists
+    [ ! -f "$src_file" ] && echo "Source file not found: $src_file" && return 1
+
+    # Create test file directory if it doesn't exist
+    mkdir -p "$(dirname "$test_file")"
+
     # Convert path from slash to dot notation
-    local import_path=${src_file#$SRC}
+    local import_path=${src_file#$SRC_DIR}
     import_path=${import_path%.py}
     import_path=${import_path//\//.}
 
@@ -187,36 +176,40 @@ EOF
 }
 
 create_update_test_files() {
-    find "$SRC" -name "*.py" \
+    [ ! -d "$SRC_DIR" ] && echo "Source directory not found: $SRC_DIR" && exit 1
+
+    find "$SRC_DIR" -name "*.py" \
          ! -path "*/\.*" \
          ! -path "*/deprecated*" \
          ! -path "*/archive*" \
          ! -path "*/backup*" \
          ! -path "*/tmp*" \
          ! -path "*/temp*" \
+         ! -path "*/RUNNING/*" \
+         ! -path "*/FINISHED/*" \
          ! -path "*/__pycache__*" \
         | while read -r src_file; do
         base_name=$(basename "$src_file")
 
         [[ "$base_name" = "__init__.py" || "$base_name" = "__main__.py" ]] && continue
 
-        # test_file="${src_file/src/tests}"
-        test_file="${src_file/src\/mngs/tests\/_mngs}"        
+        test_file="${src_file/src/tests}"
         test_file="$(dirname "$test_file")/test_$(basename "${test_file%.py}").py"
 
         # Create symlink
         rel_path=$(realpath --relative-to="$(dirname "$test_file")" "$src_file")
         link_file="$(dirname "$test_file")/$(basename "${src_file%.py}")_source.py"
         [ -L "$link_file" ] && rm "$link_file"
-        ln -s "$rel_path" "$link_file"
-        echo "Created symlink: $link_file -> $rel_path"
+        ln -sf "$rel_path" "$link_file"
+
+        # echo "Created symlink: $link_file -> $rel_path"
 
         if [ "$UPDATE_SOURCE" = true ] && [ -f "$test_file" ]; then
             generate_test_template "$src_file" "$test_file"
-            echo "Updated source in: $test_file"
+            # echo "Updated source in: $test_file"
         elif [[ ! -f "$test_file" ]] || [ "$FORCE" = true ]; then
             generate_test_template "$src_file" "$test_file"
-            echo "Created test file: $test_file"
+            # echo "Created test file: $test_file"
         fi
     done
 }
@@ -227,6 +220,7 @@ main() {
 
     parse_arguments "$@"
     confirm_operation
+    correct_permissions
 
     {
         echo "Starting test structure generation..."
@@ -238,9 +232,13 @@ main() {
         create_update_test_files
 
         echo "Test structure generation completed."
+
+        tree ./tests
     } 2>&1 | tee "$LOG_FILE"
 }
 
 main "$@"
+
+
 
 # EOF
