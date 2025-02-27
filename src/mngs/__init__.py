@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-02-27 11:21:13 (ywatanabe)"
+# Timestamp: "2025-02-27 11:25:19 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/__init__.py
 
 __file__ = "./src/mngs/__init__.py"
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2025-02-27 11:21:13 (ywatanabe)"
+# Time-stamp: "2025-02-27 11:25:19 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/__init__.py
 
 # os.getenv("MNGS_SENDER_GMAIL")

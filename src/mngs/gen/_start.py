@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-02-15 00:02:10 (ywatanabe)"
+# Timestamp: "2025-02-27 11:25:24 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/gen/_start.py
 
 __file__ = "./src/mngs/gen/_start.py"
@@ -48,6 +48,9 @@ Prerequisites:
     * matplotlib
     * mngs package
 """
+
+
+
 
 def _print_header(
         ID: str, PID: int, file: str, args: Any, configs: Dict[str, Any], verbose: bool = True
@@ -245,7 +248,7 @@ def start(
     Returns
     -------
     tuple
-        (CONFIGS, stdout, stderr, plt, CC)
+        (CONFIGS, stdout, stderr, plt: Any = None, CC)
         - CONFIGS: Configuration dictionary
         - stdout, stderr: Redirected output streams
         - plt: Configured matplotlib.pyplot module
