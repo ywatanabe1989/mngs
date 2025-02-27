@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Time-stamp: "2024-12-05 09:23:06 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/decorators/_torch_fn.py
+
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_torch_fn.py"
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 # Time-stamp: "2024-11-06 15:45:12 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/decorators/_torch_fn.py
 
@@ -34,38 +41,39 @@ from ._converters import (
 )
 
 
-# def torch_fn(func: Callable) -> Callable:
-#     @wraps(func)
-#     def wrapper(*args: _Any, **kwargs: _Any) -> _Any:
-#         is_torch_input = is_torch(*args, **kwargs)
-#         converted_args, converted_kwargs = to_torch(
-#             *args, return_fn=_return_always, **kwargs
-#         )
-#         results = func(*converted_args, **converted_kwargs)
-#         return (
-#             to_numpy(results, return_fn=_return_if)[0]
-#             if not is_torch_input
-#             else results
-#         )
-
-#     return wrapper
-
 def torch_fn(func: Callable) -> Callable:
     @wraps(func)
     def wrapper(*args: _Any, **kwargs: _Any) -> _Any:
         is_torch_input = is_torch(*args, **kwargs)
-        # Skip conversion if inputs are already torch tensors
-        if is_torch_input:
-            results = func(*args, **kwargs)
-        else:
-            converted_args, converted_kwargs = to_torch(
-                *args, return_fn=_return_always, **kwargs
-            )
-            results = func(*converted_args, **converted_kwargs)
-            results = to_numpy(results, return_fn=_return_if)[0]
-        return results
+        converted_args, converted_kwargs = to_torch(
+            *args, return_fn=_return_always, **kwargs
+        )
+        results = func(*converted_args, **converted_kwargs)
+        print(type(results))
+        return (
+            to_numpy(results, return_fn=_return_if)[0]
+            if not is_torch_input
+            else results
+        )
 
     return wrapper
+
+# def torch_fn(func: Callable) -> Callable:
+#     @wraps(func)
+#     def wrapper(*args: _Any, **kwargs: _Any) -> _Any:
+#         is_torch_input = is_torch(*args, **kwargs)
+#         # Skip conversion if inputs are already torch tensors
+#         if is_torch_input:
+#             results = func(*args, **kwargs)
+#         else:
+#             converted_args, converted_kwargs = to_torch(
+#                 *args, return_fn=_return_always, **kwargs
+#             )
+#             results = func(*converted_args, **converted_kwargs)
+#             results = to_numpy(results, return_fn=_return_if)[0]
+#         return results
+
+#     return wrapper
 
 
 if __name__ == "__main__":
@@ -92,5 +100,14 @@ if __name__ == "__main__":
     custom_print(torch_softmax(test_df, dim=-1))
     custom_print(torch_softmax(test_tensor, dim=-1))
     custom_print(torch_softmax(test_tensor_cuda, dim=-1))
+
+# EOF
+
+
+
+"""
+python ./mngs_repo/src/mngs/decorators/_torch_fn.py
+python -m src.mngs.decorators._torch_fn
+"""
 
 # EOF

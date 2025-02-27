@@ -1,7 +1,7 @@
 <!-- ---
-!-- title: ./mngs/README.md
-!-- author: ywatanabe
-!-- date: 2024-11-08 02:05:12
+!-- Timestamp: 2025-02-27 13:00:27
+!-- Author: ywatanabe
+!-- File: /home/ywatanabe/proj/mngs_repo/README.md
 !-- --- -->
 
 
@@ -78,3 +78,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## Contact
 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
 
+<!-- EOF -->

@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-16 16:26:59 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/gen/misc.py
+
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/gen/misc.py"
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 # Time-stamp: "2024-11-02 12:50:29 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/gen/misc.py
 
@@ -542,7 +549,7 @@ def wait_key(process, tgt_key="q"):
     """
     """
     Example:
-        
+
         p1 = mngs.gen._return_counting_process()
         mngs.gen.wait_key(p1)
         # press q
@@ -720,49 +727,6 @@ def float_linspace(start, stop, num_points):
     return np.array(values)
 
 
-def replace(string, replacements=None):
-    """Replace placeholders in the string with corresponding values from replacements.
-
-    This function replaces placeholders in the format {key} within the input string
-    with corresponding values from the replacements dictionary. If replacements is
-    a string, it replaces the entire input string.
-
-    Parameters
-    ----------
-    string : str
-        The string containing placeholders in the format {key}.
-    replacements : dict or str, optional
-        A dictionary containing key-value pairs for replacing placeholders in the string,
-        or a single string to replace the entire string.
-
-    Returns
-    -------
-    str
-        The input string with placeholders replaced by their corresponding values.
-
-    Examples
-    --------
-    >>> replace("Hello, {name}!", {"name": "World"})
-    'Hello, World!'
-    >>> replace("Original string", "New string")
-    'New string'
-    >>> replace("Value: {x}", {"x": 42})
-    'Value: 42'
-    >>> template = "Hello, {name}! You are {age} years old."
-    >>> replacements = {"name": "Alice", "age": "30"}
-    >>> replace(template, replacements)
-    'Hello, Alice! You are 30 years old.'
-    """
-    if isinstance(replacements, str):
-        return replacements
-
-    if replacements is None:
-        replacements = {}
-
-    for k, v in replacements.items():
-        if v is not None:
-            string = string.replace("{" + k + "}", v)
-    return string
 
 
 # EOF

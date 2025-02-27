@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-07 05:53:09 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/decorators/_converters.py
+# Timestamp: "2025-01-18 03:46:52 (ywatanabe)"
+# File: _converters.py
+
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_converters.py"
+
 
 from typing import Callable, Optional
 
@@ -116,34 +119,38 @@ def _return_if(*args: _Any, **kwargs: _Any) -> Union[Tuple, Dict, None]:
 
 def to_torch(*args: _Any, return_fn: Callable = _return_if, **kwargs: _Any) -> _Any:
     def _to_torch(data: _Any, device: Optional[str] = kwargs.get("device")) -> _Any:
-        if device is None:
-            device = "cuda" if torch.cuda.is_available() else "cpu"
+        try:
+            if device is None:
+                device = "cuda" if torch.cuda.is_available() else "cpu"
 
-        if isinstance(data, (pd.Series, pd.DataFrame)):
-            new_data = torch.tensor(data.to_numpy()).squeeze().float()
-            new_data = _try_device(new_data, device)
-            if device == "cuda":
-                _conversion_warning(data, new_data)
-            return new_data
+            if isinstance(data, (tuple, list)):
+                return [_to_torch(item) for item in data if item is not None]
 
-        if isinstance(data, (np.ndarray, list)):
-            new_data = torch.tensor(data).float()
-            new_data = _try_device(new_data, device)
-            if device == "cuda":
-                _conversion_warning(data, new_data)
-            return new_data
+            if isinstance(data, (pd.Series, pd.DataFrame)):
+                new_data = torch.tensor(data.to_numpy()).squeeze().float()
+                new_data = _try_device(new_data, device)
+                if device == "cuda":
+                    _conversion_warning(data, new_data)
+                return new_data
 
-        if isinstance(data, xarray.core.dataarray.DataArray):
-            new_data = torch.tensor(np.array(data)).float()
-            new_data = _try_device(new_data, device)
-            if device == "cuda":
-                _conversion_warning(data, new_data)
-            return new_data
+            if isinstance(data, (np.ndarray, list)):
+                new_data = torch.tensor(data).float()
+                new_data = _try_device(new_data, device)
+                if device == "cuda":
+                    _conversion_warning(data, new_data)
+                return new_data
 
-        if isinstance(data, tuple):
-            return [_to_torch(item) for item in data if item is not None]
+            if isinstance(data, xarray.core.dataarray.DataArray):
+                new_data = torch.tensor(np.array(data)).float()
+                new_data = _try_device(new_data, device)
+                if device == "cuda":
+                    _conversion_warning(data, new_data)
+                return new_data
 
-        return data
+            return data
+        except Exception as e:
+            print(e)
+            __import__("ipdb").set_trace()
 
     converted_args = [_to_torch(arg) for arg in args if arg is not None]
     converted_kwargs = {

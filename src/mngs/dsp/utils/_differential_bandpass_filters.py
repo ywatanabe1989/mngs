@@ -1,25 +1,29 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-03 07:23:53 (ywatanabe)"
+# Time-stamp: "2024-11-26 22:24:13 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/dsp/utils/_differential_bandpass_filters.py
+
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/dsp/utils/_differential_bandpass_filters.py"
 
 import sys
 
 import matplotlib.pyplot as plt
-
 import numpy as np
 import torch
 import torch.nn as nn
+
+from ...decorators import torch_fn
 from ...gen._to_even import to_even
 from ...gen._to_odd import to_odd
 
-import warnings
+try:
+    from torchaudio.prototype.functional import sinc_impulse_response
+except:
+    pass
 
-warnings.simplefilter("ignore", UserWarning)
-from torchaudio.prototype.functional import sinc_impulse_response
-warnings.resetwarnings()
 
 # Functions
+@torch_fn
 def init_bandpass_filters(
     sig_len,
     fs,
@@ -41,6 +45,8 @@ def init_bandpass_filters(
     filters = build_bandpass_filters(sig_len, fs, pha_mids, amp_mids, cycle)
     return filters, pha_mids, amp_mids
 
+
+@torch_fn
 def build_bandpass_filters(sig_len, fs, pha_mids, amp_mids, cycle):
     def _define_freqs(mids, factor):
         lows = mids - mids / factor
@@ -72,6 +78,7 @@ def build_bandpass_filters(sig_len, fs, pha_mids, amp_mids, cycle):
     pha_bp_filters = _calc_filters(pha_lows, pha_highs, fs, order)
     amp_bp_filters = _calc_filters(amp_lows, amp_highs, fs, order)
     return torch.vstack([pha_bp_filters, amp_bp_filters])
+
 
 if __name__ == "__main__":
     import mngs
@@ -113,7 +120,7 @@ if __name__ == "__main__":
 # EOF
 
 """
-/home/ywatanabe/proj/entrance/mngs/nn/_DifferentiableBandPassFilterInitializer.py
+python -m mngs.dsp.utils._differential_bandpass_filters
 """
 
 # EOF

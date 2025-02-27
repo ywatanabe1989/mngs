@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-13 14:25:06 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/io/_save.py
+# Timestamp: "2025-02-15 00:04:02 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/src/mngs/io/_save.py
+
+__file__ = "./src/mngs/io/_save.py"
 
 """
 1. Functionality:
@@ -17,10 +19,11 @@
 """
 
 """Imports"""
+import gzip
 import inspect
 import json
 import logging
-import os
+import os as _os
 import pickle
 from typing import Any
 
@@ -38,19 +41,18 @@ from ..path._clean import clean
 from ..path._getsize import getsize
 from ..path._split import split
 from ..str._color_text import color_text
-from ..types._is_listed_X import is_listed_X
+from ..str._readable_bytes import readable_bytes
 from ._save_image import _save_image
-from ._save_listed_dfs_as_csv import _save_listed_dfs_as_csv
-from ._save_listed_scalars_as_csv import _save_listed_scalars_as_csv
 from ._save_text import _save_text
+from ..str._clean_path import clean_path
 
 
 def save(
     obj: Any,
-    sfname_or_spath: str,
+    specified_path: str,
     makedirs: bool = True,
     verbose: bool = True,
-    from_cwd: bool = False,
+    symlink_from_cwd: bool = False,
     dry_run: bool = False,
     no_csv: bool = False,
     **kwargs,
@@ -62,13 +64,13 @@ def save(
     ----------
     obj : Any
         The object to be saved. Can be a NumPy array, PyTorch tensor, Pandas DataFrame, or any serializable object.
-    sfname_or_spath : str
+    specified_path : str
         The file name or path where the object should be saved. The file extension determines the format.
     makedirs : bool, optional
         If True, create the directory path if it does not exist. Default is True.
     verbose : bool, optional
         If True, print a message upon successful saving. Default is True.
-    from_cwd : bool, optional
+    symlink_from_cwd : bool, optional
         If True, create a _symlink from the current working directory. Default is False.
     dry_run : bool, optional
         If True, simulate the saving process without actually writing files. Default is False.
@@ -121,103 +123,115 @@ def save(
     """
     try:
         ########################################
-        # Determines the save directory from the script.
-        # When save() is called in a /path/to/script.py, data will be saved under /path/to/ directoy.
-        # On the other hand, when save() is called in an ipython environment, data will be saved in /tmp/USERNAME/
-        # This process should be in this function for the intended behavior of inspect.
+        # DO NOT MODIFY THIS SECTION
+        ########################################
+        #
+        # Determine saving directory from the script.
+        #
+        # When called in /path/to/script.py,
+        # data will be saved under `/path/to/script.py_out/`
+        #
+        # On the other hand, when called in ipython environment,
+        # data will be saved under `/tmp/{_os.getenv("USER")/`
+        #
         ########################################
         spath, sfname = None, None
 
-        if sfname_or_spath.startswith('f"'):
-            sfname_or_spath = eval(sfname_or_spath)
+        # f-expression handling
+        if specified_path.startswith('f"'):
+            specified_path = eval(specified_path)
 
-        if sfname_or_spath.startswith("/"):
-            spath = sfname_or_spath
+        # When full path
+        if specified_path.startswith("/"):
+            spath = specified_path
 
+        # When relative path
         else:
-            fpath = inspect.stack()[1].filename
+            script_path = inspect.stack()[1].filename
 
-            if ("ipython" in fpath) or ("<stdin>" in fpath):
-                fpath = f'/tmp/{os.getenv("USER")}.py'
-                # fpath = os.getenv("MNGS_DIR", "~/.cache/mngs/") + os.getenv("USER") + ".py"
+            # Fake path if in ipython
+            if ("ipython" in script_path) or ("<stdin>" in script_path):
+                script_path = f'/tmp/{_os.getenv("USER")}'
 
-            fdir, fname, _ = split(fpath)
-            spath = fdir + fname + "/" + sfname_or_spath
+            sdir = clean_path(_os.path.splitext(script_path)[0] + "_out")
+            spath = _os.path.join(sdir, specified_path)
 
-        # Corrects the spath
-        spath = clean(spath)
+        # Sanitization
+        spath_final = clean(spath)
         ########################################
 
         # Potential path to _symlink
-        spath_cwd = os.getcwd() + "/" + sfname_or_spath
+        spath_cwd = _os.getcwd() + "/" + specified_path
         spath_cwd = clean(spath_cwd)
 
         # Removes spath and spath_cwd to prevent potential circular links
-        for path in [spath, spath_cwd]:
+        for path in [spath_final, spath_cwd]:
             sh(f"rm -f {path}", verbose=False)
 
         if dry_run:
-            print(color_text(f"\n(dry run) Saved to: {spath}", c="yellow"))
+            print(color_text(f"\n(dry run) Saved to: {spath_final}", c="yellow"))
             return
 
-        # Makes directory
+        # Ensure directory exists
         if makedirs:
-            os.makedirs(os.path.dirname(spath), exist_ok=True)
+            _os.makedirs(_os.path.dirname(spath_final), exist_ok=True)
 
+        # Main
         _save(
             obj,
-            spath,
+            spath_final,
             verbose=verbose,
-            from_cwd=from_cwd,
+            symlink_from_cwd=symlink_from_cwd,
             dry_run=dry_run,
             no_csv=no_csv,
             **kwargs,
         )
-        _symlink(spath, spath_cwd, from_cwd, verbose)
+
+        # Symbolic link
+        _symlink(spath, spath_cwd, symlink_from_cwd, verbose)
 
     except Exception as e:
         logging.error(
             f"Error occurred while saving: {str(e)}"
-            f"Debug: Initial fpath = {inspect.stack()[1].filename}"
-            # f"Debug: Final fpath = {fpath}"
+            f"Debug: Initial script_path = {inspect.stack()[1].filename}"
+            # f"Debug: Final script_path = {script_path}"
             # f"Debug: fdir = {fdir}, fname = {fname}"
             f"Debug: Final spath = {spath}"
         )
 
 
-def _symlink(spath, spath_cwd, from_cwd, verbose):
-    if from_cwd and (spath != spath_cwd):
-        os.makedirs(os.path.dirname(spath_cwd), exist_ok=True)
+def _symlink(spath, spath_cwd, symlink_from_cwd, verbose):
+    if symlink_from_cwd and (spath != spath_cwd):
+        _os.makedirs(_os.path.dirname(spath_cwd), exist_ok=True)
         sh(f"rm -f {spath_cwd}", verbose=False)
         sh(f"ln -sfr {spath} {spath_cwd}", verbose=False)
         if verbose:
-            print(
-                color_text(f"\n(_Symlinked to: {spath_cwd})", "yellow")
-            )
+            print(color_text(f"\n(Symlinked to: {spath_cwd})", "yellow"))
 
 
 def _save(
     obj,
     spath,
     verbose=True,
-    from_cwd=False,
+    symlink_from_cwd=False,
     dry_run=False,
     no_csv=False,
     **kwargs,
 ):
     # csv
     if spath.endswith(".csv"):
-        if isinstance(obj, (pd.Series, pd.DataFrame)):
-            obj.to_csv(spath, **kwargs)
+        _save_csv(obj, spath, **kwargs)
+        # if isinstance(obj, (pd.Series, pd.DataFrame)):
+        #     obj.to_csv(spath, **kwargs)
 
-        if is_listed_X(obj, [int, float]):
-            _save_listed_scalars_as_csv(
-                obj,
-                spath,
-                **kwargs,
-            )
-        if is_listed_X(obj, pd.DataFrame):
-            _save_listed_dfs_as_csv(obj, spath, **kwargs)
+        # if is_listed_X(obj, [int, float]):
+        #     _save_listed_scalars_as_csv(
+        #         obj,
+        #         spath,
+        #         **kwargs,
+        #     )
+        # if is_listed_X(obj, pd.DataFrame):
+        #     _save_listed_dfs_as_csv(obj, spath, **kwargs)
 
     # numpy
     elif spath.endswith(".npy"):
@@ -240,6 +254,11 @@ def _save(
     elif spath.endswith(".pkl"):
         with open(spath, "wb") as s:
             pickle.dump(obj, s)
+
+    # pkl.gz
+    elif spath.endswith(".pkl.gz"):
+        with gzip.open(spath, "wb") as f:
+            pickle.dump(obj, f)
 
     # joblib
     elif spath.endswith(".joblib"):
@@ -267,14 +286,14 @@ def _save(
         ]
     ):
         _save_image(obj, spath, **kwargs)
-        ext = os.path.splitext(spath)[1].lower()
+        ext = _os.path.splitext(spath)[1].lower()
         try:
             if not no_csv:
                 ext_wo_dot = ext.replace(".", "")
                 save(
                     obj.to_sigma(),
                     spath.replace(ext_wo_dot, "csv"),
-                    from_cwd=from_cwd,
+                    symlink_from_cwd=symlink_from_cwd,
                     dry_run=dry_run,
                     **kwargs,
                 )
@@ -283,9 +302,7 @@ def _save(
 
     # mp4
     elif spath.endswith(".mp4"):
-        obj.save(
-            spath, writer="ffmpeg", **kwargs
-        )
+        obj.save(spath, writer="ffmpeg", **kwargs)
         del obj
         # _mk_mp4(obj, spath)  # obj is matplotlib.pyplot.figure object
         # del obj
@@ -294,9 +311,7 @@ def _save(
     elif spath.endswith(".yaml"):
         yaml = YAML()
         yaml.preserve_quotes = True
-        yaml.indent(
-            mapping=4, sequence=4, offset=4
-        )
+        yaml.indent(mapping=4, sequence=4, offset=4)
 
         with open(spath, "w") as f:
             yaml.dump(obj, f)
@@ -338,14 +353,33 @@ def _save(
         raise ValueError(f"Unsupported file format. {spath} was not saved.")
 
     if verbose:
-        if os.path.exists(spath):
+        if _os.path.exists(spath):
             file_size = getsize(spath)
-            print(
-                color_text(f"\nSaved to: {spath} ({file_size})", c="yellow")
-            )
+            file_size = readable_bytes(file_size)
+            print(color_text(f"\nSaved to: {spath} ({file_size})", c="yellow"))
 
 
-# EOF
-
+def _save_csv(obj, spath: str, **kwargs) -> None:
+    """Handle various input types for CSV saving."""
+    if isinstance(obj, (pd.Series, pd.DataFrame)):
+        obj.to_csv(spath, **kwargs)
+    elif isinstance(obj, np.ndarray):
+        pd.DataFrame(obj).to_csv(spath, **kwargs)
+    elif isinstance(obj, (int, float)):
+        pd.DataFrame([obj]).to_csv(spath, index=False, **kwargs)
+    elif isinstance(obj, (list, tuple)):
+        if all(isinstance(x, (int, float)) for x in obj):
+            pd.DataFrame(obj).to_csv(spath, index=False, **kwargs)
+        elif all(isinstance(x, pd.DataFrame) for x in obj):
+            pd.concat(obj).to_csv(spath, **kwargs)
+        else:
+            pd.DataFrame({"data": obj}).to_csv(spath, index=False, **kwargs)
+    elif isinstance(obj, dict):
+        pd.DataFrame.from_dict(obj).to_csv(spath, **kwargs)
+    else:
+        try:
+            pd.DataFrame({"data": [obj]}).to_csv(spath, index=False, **kwargs)
+        except:
+            raise ValueError(f"Unable to save type {type(obj)} as CSV")
 
 # EOF

@@ -1,7 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-08 20:07:44 (ywatanabe)"
+# Timestamp: "2025-02-26 09:02:48 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_Anthropic.py
+
+__file__ = "./src/mngs/ai/_gen_ai/_Anthropic.py"
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Time-stamp: "2025-02-26 09:02:48 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/ai/_gen_ai/_Anthropic.py
+
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_Anthropic.py"
 
 """
 Functionality:
@@ -29,7 +37,10 @@ import matplotlib.pyplot as plt
 from ._BaseGenAI import BaseGenAI
 import re
 
+
 """Functions & Classes"""
+
+
 class Anthropic(BaseGenAI):
     def __init__(
         self,
@@ -43,6 +54,12 @@ class Anthropic(BaseGenAI):
         chat_history: Optional[List[Dict[str, str]]] = None,
         max_tokens: int = 100_000,
     ) -> None:
+
+        if model == "claude-3-7-sonnet-2025-0219":
+            max_tokens=128_000
+
+        api_key = api_key or os.getenv("ANTHROPIC_API_KEY")
+
         if not api_key:
             raise ValueError("ANTHROPIC_API_KEY environment variable not set")
 
@@ -60,6 +77,34 @@ class Anthropic(BaseGenAI):
 
     def _init_client(self) -> anthropic.Anthropic:
         return anthropic.Anthropic(api_key=self.api_key)
+
+    def _api_format_history(self, history):
+        formatted_history = []
+        for msg in history:
+            if isinstance(msg["content"], list):
+                content = []
+                for item in msg["content"]:
+                    if item["type"] == "text":
+                        content.append({"type": "text", "text": item["text"]})
+                    elif item["type"] == "_image":
+                        content.append(
+                            {
+                                "type": "image",
+                                "source": {
+                                    "type": "base64",
+                                    "media_type": "image/jpeg",
+                                    "data": item["_image"],
+                                },
+                            }
+                        )
+                formatted_msg = {"role": msg["role"], "content": content}
+            else:
+                formatted_msg = {
+                    "role": msg["role"],
+                    "content": msg["content"],
+                }
+            formatted_history.append(formatted_msg)
+        return formatted_history
 
     def _api_call_static(self) -> str:
         output = self.client.messages.create(
@@ -94,15 +139,44 @@ class Anthropic(BaseGenAI):
 
 
 def main() -> None:
+    import mngs
+
+    ai = mngs.ai.GenAI(
+        model="claude-3-5-sonnet-20241022",
+        api_key=os.getenv("ANTHROPIC_API_KEY"),
+        n_keep=10,
+    )
+    print(ai("hi"))
+    print(ai("My name is Yusuke"))
+    print(ai("do you remember my name?"))
+
+    print(
+        ai(
+            "hi, could you tell me what is in the pic?",
+            images=[
+                "/home/ywatanabe/Downloads/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg"
+            ],
+        )
+    )
     pass
+
 
 if __name__ == "__main__":
     import mngs
+
     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
         sys, plt, verbose=False
     )
     main()
     mngs.gen.close(CONFIG, verbose=False, notify=False)
 
+
+
+
+
+"""
+python src/mngs/ai/_gen_ai/_Anthropic.py
+python -m src.mngs.ai._gen_ai._Anthropic
+"""
 
 # EOF

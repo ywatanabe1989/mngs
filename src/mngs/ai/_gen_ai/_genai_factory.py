@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-08 20:31:33 (ywatanabe)"
+# Time-stamp: "2024-12-15 15:16:28 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/ai/_gen_ai/_genai_factory.py
 
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_genai_factory.py"
+
+"""Imports"""
 import os
 import random
 
@@ -12,10 +15,11 @@ from ._Llama import Llama
 from ._OpenAI import OpenAI
 from ._Perplexity import Perplexity
 from ._DeepSeek import DeepSeek
+from ._Groq import Groq
 from .PARAMS import MODELS
 
-"""Imports"""
-"""Functions & Classes""""""Parameters"""
+"""Functions & Classes""" """Parameters"""
+
 
 def genai_factory(
     model="gpt-3.5-turbo",
@@ -45,6 +49,7 @@ def genai_factory(
         "Llama": Llama,
         "Perplexity": Perplexity,
         "DeepSeek": DeepSeek,
+        "Groq": Groq,
     }[provider]
 
     # Select a random API key from the list
@@ -62,55 +67,64 @@ def genai_factory(
         max_tokens=max_tokens,
     )
 
-def main(
-    model="gpt-3.5-turbo",
-    stream=False,
-    prompt="Hi, please tell me about the hippocampus",
-    seed=None,
-    temperature=1.0,
-):
-    m = genai_factory(model, stream=stream, seed=seed, temperature=temperature)
-    out = m(prompt)
-    return out
+
+# def main(
+#     model="gpt-3.5-turbo",
+#     stream=False,
+#     prompt="Hi, please tell me about the hippocampus",
+#     seed=None,
+#     temperature=1.0,
+# ):
+#     m = genai_factory(model, stream=stream, seed=seed, temperature=temperature)
+#     out = m(prompt)
+#     return out
 
 
-def main(
-    model="gemini-1.5-pro-latest",
-    stream=False,
-    prompt="Hi, please tell me about the hippocampus",
-    seed=None,
-    temperature=1.0,
-):
+# def main(
+#     model="gemini-1.5-pro-latest",
+#     stream=False,
+#     prompt="Hi, please tell me about the hippocampus",
+#     seed=None,
+#     temperature=1.0,
+# ):
 
-    m = mngs.ai.GenAI(
-        model=model,
-        api_key=os.getenv("GOOGLE_API_KEY"),
-        stream=stream,
-        seed=seed,
-        temperature=temperature,
-    )
-    out = m(prompt)
+#     m = mngs.ai.GenAI(
+#         model=model,
+#         api_key=os.getenv("GOOGLE_API_KEY"),
+#         stream=stream,
+#         seed=seed,
+#         temperature=temperature,
+#     )
+#     out = m(prompt)
 
-    return out
+#     return out
+
 
 def main(
     model="deepseek-coder",
+    api_key=os.getenv("DEEPSEEK_API_KEY"),
+    # provider="",
     stream=False,
     prompt="Hi, please tell me about the hippocampus",
     seed=None,
     temperature=1.0,
 ):
 
+    import mngs
     m = mngs.ai.GenAI(
         model=model,
-        api_key=os.getenv("DEEPSEEK_API_KEY"),
+        api_key=api_key,
+        # provider=provider,
         stream=stream,
         seed=seed,
         temperature=temperature,
     )
     out = m(prompt)
 
+    print(out)
+
     return out
+
 
 if __name__ == "__main__":
     import sys
@@ -121,8 +135,17 @@ if __name__ == "__main__":
     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
         sys, plt, verbose=False
     )
-    test_all()
+    main(model="llama-3.1-70b-versatile", api_key=os.getenv("GROQ_API_KEY"))
 
     mngs.gen.close(CONFIG, verbose=False, notify=False)
+
+# EOF
+
+
+
+"""
+python src/mngs/ai/_gen_ai/_genai_factory.py
+python -m src.mngs.ai._gen_ai._genai_factory
+"""
 
 # EOF

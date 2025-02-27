@@ -1,10 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-05 01:06:41 (ywatanabe)"
+# Time-stamp: "2024-11-26 22:23:40 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/nn/_Filters.py
 
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/nn/_Filters.py"
+
 """
-This script does XYZ.
+Implements various neural network filter layers:
+    - BaseFilter1D: Abstract base class for 1D filters
+    - BandPassFilter: Implements bandpass filtering
+    - BandStopFilter: Implements bandstop filtering
+    - LowPassFilter: Implements lowpass filtering
+    - HighPassFilter: Implements highpass filtering
+    - GaussianFilter: Implements Gaussian smoothing
+    - DifferentiableBandPassFilter: Implements learnable bandpass filtering
 """
 
 # Imports
@@ -156,8 +165,8 @@ class BandPassFilter(BaseFilter1D):
 
         kernels = zero_pad(filters)
         kernels = ensure_even_len(kernels)
-        # kernels = torch.tensor(kernels).clone().detach()
-        kernels = kernels.clone().detach().requires_grad_(True)
+        kernels = torch.tensor(kernels).clone().detach()
+        # kernels = kernels.clone().detach().requires_grad_(True)
         return kernels
 
 
@@ -359,7 +368,7 @@ if __name__ == "__main__":
         sys, plt, fig_scale=5
     )
 
-    xx, tt, fs = mngs.dsp.demo_sig(sig_type="chirp")
+    xx, tt, fs = mngs.dsp.demo_sig(sig_type="chirp", fs=1024)
     xx = torch.tensor(xx).cuda()
     # bands = np.array([[2, 3], [3, 4]])
     # BandPassFilter(bands, fs, xx.shape)

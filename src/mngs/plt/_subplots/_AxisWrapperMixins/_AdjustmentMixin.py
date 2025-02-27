@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-13 14:53:49 (ywatanabe)"
+# Time-stamp: "2024-11-25 00:33:37 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_AdjustmentMixin.py
 
-from typing import List, Optional, Union
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_AdjustmentMixin.py"
 
 """
 Functionality:
@@ -16,6 +16,7 @@ Prerequisites:
     * matplotlib, mngs.plt.ax
 """
 
+from typing import List, Optional, Union
 from ....plt import ax as ax_module
 
 
@@ -33,8 +34,53 @@ class AdjustmentMixin:
             self.axis, x=x, y=y, x_ha=x_ha, y_ha=y_ha
         )
 
-    def legend(self, location: str = "upper left") -> None:
-        return self.axis.legend(loc=location)
+
+    def legend(self, loc: str = "upper left") -> None:
+        """Places legend at specified location, with support for outside positions.
+
+        Parameters
+        ----------
+        loc : str
+            Legend position. Standard matplotlib positions plus:
+            - upper/lower/center variants: e.g. "upper right out", "lower left out"
+            - directional shortcuts: "right", "left", "upper", "lower"
+            - center variants: "center right out", "center left out"
+            - alternative formats: "right upper out", "left lower out" etc.
+        """
+
+        outside_positions = {
+            # Upper right variants
+            "upper right out": ("center left", (1.15, 0.85)),
+            "right upper out": ("center left", (1.15, 0.85)),
+            # Center right variants
+            "center right out": ("center left", (1.15, 0.5)),
+            "right out": ("center left", (1.15, 0.5)),
+            "right": ("center left", (1.05, 0.5)),
+            # Lower right variants
+            "lower right out": ("center left", (1.15, 0.15)),
+            "right lower out": ("center left", (1.15, 0.15)),
+            # Upper left variants
+            "upper left out": ("center right", (-0.25, 0.85)),
+            "left upper out": ("center right", (-0.25, 0.85)),
+            # Center left variants
+            "center left out": ("center right", (-0.25, 0.5)),
+            "left out": ("center right", (-0.25, 0.5)),
+            "left": ("center right", (-0.15, 0.5)),
+            # Lower left variants
+            "lower left out": ("center right", (-0.25, 0.15)),
+            "left lower out": ("center right", (-0.25, 0.15)),
+            # Upper center variants
+            "upper center out": ("lower center", (0.5, 1.25)),
+            "upper out": ("lower center", (0.5, 1.25)),
+            # Lower center variants
+            "lower center out": ("upper center", (0.5, -0.25)),
+            "lower out": ("upper center", (0.5, -0.25)),
+        }
+
+        if loc in outside_positions:
+            location, bbox = outside_positions[loc]
+            return self.axis.legend(loc=location, bbox_to_anchor=bbox)
+        return self.axis.legend(loc=loc)
 
     def set_xyt(
         self,
@@ -112,93 +158,5 @@ class AdjustmentMixin:
 
     def shift(self, dx: float = 0, dy: float = 0) -> None:
         self.axis = ax_module.shift(self.axis, dx=dx, dy=dy)
-
-    # def rotate_labels(self, x=30, y=30, x_ha="right", y_ha="center"):
-    #     self.axis = ax_module.rotate_labels(
-    #         self.axis, x=x, y=y, x_ha=x_ha, y_ha=y_ha
-    #     )
-
-    # def legend(self, loc="upper left"):
-    #     return self.axis.legend(loc=loc)
-
-    # def set_xyt(
-    #     self,
-    #     x=None,
-    #     y=None,
-    #     t=None,
-    #     format_labels=True,
-    # ):
-    #     self.axis = ax_module.set_xyt(
-    #         self.axis,
-    #         x=x,
-    #         y=y,
-    #         t=t,
-    #         format_labels=format_labels,
-    #     )
-
-    # def set_supxyt(
-    #     self,
-    #     xlabel=None,
-    #     ylabel=None,
-    #     title=None,
-    #     format_labels=True,
-    # ):
-    #     self.axis = ax_module.set_supxyt(
-    #         self.axis,
-    #         xlabel=xlabel,
-    #         ylabel=ylabel,
-    #         title=title,
-    #         format_labels=format_labels,
-    #     )
-
-    # def set_ticks(
-    #     self,
-    #     xvals=None,
-    #     xticks=None,
-    #     yvals=None,
-    #     yticks=None,
-    #     **kwargs,
-    # ):
-
-    #     self.axis = ax_module.set_ticks(
-    #         self.axis,
-    #         xvals=xvals,
-    #         xticks=xticks,
-    #         yvals=yvals,
-    #         yticks=yticks,
-    #     )
-
-    # def set_n_ticks(self, n_xticks=4, n_yticks=4):
-    #     self.axis = ax_module.set_n_ticks(
-    #         self.axis, n_xticks=n_xticks, n_yticks=n_yticks
-    #     )
-
-    # def hide_spines(
-    #     self,
-    #     top=True,
-    #     bottom=True,
-    #     left=True,
-    #     right=True,
-    #     ticks=True,
-    #     labels=True,
-    # ):
-    #     self.axis = ax_module.hide_spines(
-    #         self.axis,
-    #         top=top,
-    #         bottom=bottom,
-    #         left=left,
-    #         right=right,
-    #         ticks=ticks,
-    #         labels=labels,
-    #     )
-
-    # def extend(self, x_ratio=1.0, y_ratio=1.0):
-    #     self.axis = ax_module.extend(
-    #         self.axis, x_ratio=x_ratio, y_ratio=y_ratio
-    #     )
-
-    # def shift(self, dx=0, dy=0):
-    #     self.axis = ax_module.shift(self.axis, dx=dx, dy=dy)
-
 
 # EOF

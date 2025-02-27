@@ -1,5 +1,5 @@
-# Time-stamp: "2024-11-08 02:12:08 (ywatanabe)"
-# File: ./mngs/.github/workflows/install-latest-release.yml
+# Timestamp: "2025-02-27 13:00:42 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/.github/workflows/install-latest-release.yml
 
 name: install-latest-release
 
@@ -20,3 +20,5 @@ jobs:
           python -m pip install -U pip
           python ./tests/custom/test_pip_install_latest.py ywatanabe1989/mngs
           python ./tests/custom/test_mngs_run.py
+
+# EOF

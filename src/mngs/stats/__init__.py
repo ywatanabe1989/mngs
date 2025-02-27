@@ -1,14 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-03 03:23:35 (ywatanabe)"
+# Time-stamp: "2024-11-17 12:29:22 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/stats/__init__.py
 
-#!/usr/bin/env python3
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-22 19:51:47 (ywatanabe)"
-# File: __init__.py
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/stats/__init__.py"
 
 import os
 import importlib
@@ -32,8 +27,10 @@ for filename in os.listdir(current_dir):
 # Clean up temporary variables
 del os, importlib, inspect, current_dir, filename, module_name, module, name, obj
 
-from . import descriptive
+from . import desc
 from . import multiple
 from . import tests
+from .desc import describe
+
 
 # EOF

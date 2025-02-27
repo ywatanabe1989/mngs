@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Time-stamp: "2024-11-26 18:46:08 (ywatanabe)"
+# File: ./mngs_repo/src/mngs/decorators/_pandas_fn.py
+
+__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_pandas_fn.py"
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 # Time-stamp: "2024-11-04 02:55:46 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/decorators/_pandas_fn.py
 
