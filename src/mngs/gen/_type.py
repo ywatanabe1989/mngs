@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-17 12:45:50 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/gen/_type.py
 
-__file__ = "./src/mngs/gen/_type.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/gen/_type.py"
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-

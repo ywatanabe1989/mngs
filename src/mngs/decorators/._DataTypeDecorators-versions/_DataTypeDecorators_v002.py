@@ -3,7 +3,7 @@
 # Time-stamp: "2024-12-05 09:34:05 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/decorators/_DataTypeDecorators.py
 
-__file__ = "./src/mngs/decorators/_DataTypeDecorators.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_DataTypeDecorators.py"
 
 """
 1. Functionality:

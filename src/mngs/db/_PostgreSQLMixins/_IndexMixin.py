@@ -3,7 +3,7 @@
 # Timestamp: "2025-02-27 22:15:05 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_PostgreSQLMixins/_IndexMixin.py
 
-__file__ = "./src/mngs/db/_PostgreSQLMixins/_IndexMixin.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQLMixins/_IndexMixin.py"
 
 from typing import List
 import psycopg2

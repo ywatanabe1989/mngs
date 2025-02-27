@@ -3,7 +3,7 @@
 # Timestamp: "2025-02-27 13:02:24 (ywatanabe)"
 # File: ./src/mngs/__init__.py
 
-__file__ = "./src/mngs/__init__.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/__init__.py"
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Time-stamp: "2025-02-27 13:02:24 (ywatanabe)"

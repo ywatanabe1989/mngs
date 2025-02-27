@@ -3,7 +3,7 @@
 # Timestamp: "2025-02-27 13:01:04 (ywatanabe)"
 # File: ./src/mngs/gen/_start.py
 
-__file__ = "./src/mngs/gen/_start.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/gen/_start.py"
 
 import inspect
 import os as _os
@@ -266,11 +266,11 @@ def start(
     if sdir is None:
         # Define __file__
         if file:
-            __file__ = file
+            THIS_FILE = file
         else:
-            __file__ = inspect.stack()[1].filename
+            THIS_FILE = inspect.stack()[1].filename
             if "ipython" in __file__:
-                __file__ = f"/tmp/{_os.getenv('USER')}.py"
+                THIS_FILE = f"/tmp/{_os.getenv('USER')}.py"
 
         # Define sdir
         sdir = clean_path(_os.path.splitext(__file__)[0] + f"_out/RUNNING/{ID}/")

@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-24 22:21:03 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/db/_Basemodules/_BaseRowMixin.py
 
-__file__ = "./src/mngs/db/_Basemodules/_BaseRowMixin.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_Basemodules/_BaseRowMixin.py"
 
 
 #!/usr/bin/env python3

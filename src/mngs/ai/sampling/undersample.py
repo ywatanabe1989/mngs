@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-24 10:13:17 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/ai/sampling/undersample.py
 
-__file__ = "./src/mngs/ai/sampling/undersample.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/sampling/undersample.py"
 
 from ...types import ArrayLike
 from imblearn.under_sampling import RandomUnderSampler

@@ -3,7 +3,7 @@
 # Time-stamp: "2024-12-15 15:16:28 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/ai/_gen_ai/_genai_factory.py
 
-__file__ = "./src/mngs/ai/_gen_ai/_genai_factory.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_genai_factory.py"
 
 """Imports"""
 import os

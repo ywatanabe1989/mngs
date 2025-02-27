@@ -3,7 +3,7 @@
 # Time-stamp: "2024-12-12 06:50:46 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/io/_load.py
 
-__file__ = "./src/mngs/io/_load.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/io/_load.py"
 
 import os
 

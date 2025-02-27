@@ -3,7 +3,7 @@
 # Time-stamp: "2024-12-19 15:37:46 (ywatanabe)"
 # File: ./Ninja/workspace/formats/json2md.py
 
-__file__ = "/home/ywatanabe/.emacs.d/lisp/Ninja/workspace/formats/json2md.py"
+THIS_FILE = "/home/ywatanabe/.emacs.d/lisp/Ninja/workspace/formats/json2md.py"
 
 import json
 import sys
@@ -64,7 +64,7 @@ python -m workspace.formats.json2md
 # # Time-stamp: "2024-12-19 15:29:28 (ywatanabe)"
 # # File: ./Ninja/workspace/formats/json2md.py
 
-# __file__ = "/home/ywatanabe/.emacs.d/lisp/Ninja/workspace/formats/json2md.py"
+# THIS_FILE = "/home/ywatanabe/.emacs.d/lisp/Ninja/workspace/formats/json2md.py"
 
 # import json
 # import sys

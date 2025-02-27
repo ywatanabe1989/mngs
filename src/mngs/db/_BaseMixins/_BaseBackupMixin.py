@@ -3,7 +3,7 @@
 # Timestamp: "2025-02-27 22:16:38 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_BaseMixins/_BaseBackupMixin.py
 
-__file__ = "./src/mngs/db/_BaseMixins/_BaseBackupMixin.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_BaseMixins/_BaseBackupMixin.py"
 
 from typing import Optional
 

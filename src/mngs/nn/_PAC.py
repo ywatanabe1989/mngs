@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-26 10:33:30 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/nn/_PAC.py
 
-__file__ = "./src/mngs/nn/_PAC.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/nn/_PAC.py"
 
 # Imports
 import sys

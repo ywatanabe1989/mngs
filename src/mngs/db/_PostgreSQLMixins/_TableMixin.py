@@ -3,7 +3,7 @@
 # Timestamp: "2025-02-27 22:15:38 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_PostgreSQLMixins/_TableMixin.py
 
-__file__ = "./src/mngs/db/_PostgreSQLMixins/_TableMixin.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQLMixins/_TableMixin.py"
 
 from typing import Any, Dict, List, Union
 import psycopg2

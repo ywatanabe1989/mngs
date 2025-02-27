@@ -3,7 +3,7 @@
 # Timestamp: "2025-01-18 03:44:07 (ywatanabe)"
 # File: _numpy_fn.py
 
-__file__ = "./src/mngs/decorators/_numpy_fn.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_numpy_fn.py"
 
 
 """

@@ -3,7 +3,7 @@
 # Timestamp: "2025-02-27 11:14:34 (ywatanabe)"
 # File: ./src/mngs/io/__init__.py
 
-__file__ = "./src/mngs/io/__init__.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/io/__init__.py"
 
 # import os
 # import importlib

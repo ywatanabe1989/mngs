@@ -3,7 +3,7 @@
 # Time-stamp: "2024-12-15 15:18:36 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/ai/_gen_ai/_Google.py
 
-__file__ = "./src/mngs/ai/_gen_ai/_Google.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_Google.py"
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-

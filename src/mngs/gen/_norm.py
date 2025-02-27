@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-19 01:09:55 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/gen/_norm.py
 
-__file__ = "./src/mngs/gen/_norm.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/gen/_norm.py"
 
 import torch
 

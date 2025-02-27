@@ -3,7 +3,7 @@
 # Timestamp: "2025-02-27 22:14:23 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_PostgreSQLMixins/_SchemaMixin.py
 
-__file__ = "./src/mngs/db/_PostgreSQLMixins/_SchemaMixin.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQLMixins/_SchemaMixin.py"
 
 from typing import List, Dict, Any, Optional
 from .._BaseMixins._BaseSchemaMixin import _BaseSchemaMixin

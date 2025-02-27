@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-20 08:49:50 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/ai/_LearningCurveLogger.py
 
-__file__ = "./src/mngs/ai/_LearningCurveLogger.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_LearningCurveLogger.py"
 
 """
 Functionality:

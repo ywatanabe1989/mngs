@@ -3,7 +3,7 @@
 # Timestamp: "2025-02-27 22:15:18 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_PostgreSQLMixins/_MaintenanceMixin.py
 
-__file__ = "./src/mngs/db/_PostgreSQLMixins/_MaintenanceMixin.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQLMixins/_MaintenanceMixin.py"
 
 import pandas as pd
 import contextlib

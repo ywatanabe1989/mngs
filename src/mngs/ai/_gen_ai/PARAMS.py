@@ -3,7 +3,7 @@
 # Timestamp: "2025-02-25 13:07:39 (ywatanabe)"
 # File: ./src/mngs/ai/_gen_ai/PARAMS.py
 
-__file__ = "./src/mngs/ai/_gen_ai/PARAMS.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/PARAMS.py"
 
 import pandas as pd
 

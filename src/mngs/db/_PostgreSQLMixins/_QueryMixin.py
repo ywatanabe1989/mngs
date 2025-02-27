@@ -3,7 +3,7 @@
 # Timestamp: "2025-02-27 22:15:24 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_PostgreSQLMixins/_QueryMixin.py
 
-__file__ = "./src/mngs/db/_PostgreSQLMixins/_QueryMixin.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQLMixins/_QueryMixin.py"
 
 from typing import List, Dict, Any, Optional, Union, Tuple
 from .._BaseMixins._BaseQueryMixin import _BaseQueryMixin

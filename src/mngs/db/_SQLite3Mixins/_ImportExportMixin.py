@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-25 01:36:18 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/db/_SQLite3Mixins/_ImportExportMixin.py
 
-__file__ = "./src/mngs/db/_SQLite3Mixins/_ImportExportMixin.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_SQLite3Mixins/_ImportExportMixin.py"
 
 from typing import List
 

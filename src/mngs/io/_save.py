@@ -3,7 +3,7 @@
 # Timestamp: "2025-02-15 00:04:02 (ywatanabe)"
 # File: ./src/mngs/io/_save.py
 
-__file__ = "./src/mngs/io/_save.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/io/_save.py"
 
 """
 1. Functionality:

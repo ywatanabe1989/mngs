@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-24 17:01:23 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/str/_printc.py
 
-__file__ = "./src/mngs/str/_printc.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/str/_printc.py"
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-

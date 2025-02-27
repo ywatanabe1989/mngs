@@ -3,7 +3,7 @@
 # Timestamp: "2025-01-22 01:21:11 (ywatanabe)"
 # File: _OpenAI.py
 
-__file__ = "./src/mngs/ai/_gen_ai/_OpenAI.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_OpenAI.py"
 
 
 """Imports"""

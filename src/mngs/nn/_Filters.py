@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-26 22:23:40 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/nn/_Filters.py
 
-__file__ = "./src/mngs/nn/_Filters.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/nn/_Filters.py"
 
 """
 Implements various neural network filter layers:

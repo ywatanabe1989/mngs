@@ -3,7 +3,7 @@
 # Time-stamp: "2024-12-15 17:21:12 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/ai/_gen_ai/_BaseGenAI.py
 
-__file__ = "./src/mngs/ai/_gen_ai/_BaseGenAI.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_BaseGenAI.py"
 
 """
 Functionality:
