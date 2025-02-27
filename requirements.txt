@@ -1,3 +1,5 @@
+# google-generativeai
+# semgrep
 GitPython
 Pillow
 PyYAML
@@ -6,17 +8,24 @@ accelerate
 aiohttp
 ansi-escapes
 anthropic
+attrdict
+bitsandbytes
 black
 bs4
+bs4
 chardet
+docutils<0.18
 einops
 epc
+fairscale
+fastapi
 flake8
 flask
 geom_median
-# google-generativeai
 google-genai
+google-search-results
 googlesearch-python
+groq
 h5py
 html2text
 icecream
@@ -27,6 +36,7 @@ jedi
 joblib
 joypy
 julius
+llama-stack
 lxml
 lxml_html_clean
 markdown
@@ -40,12 +50,17 @@ obspy
 openai
 openpyxl
 optuna
+packaging<21.0
 pandas
+pebble 
+platformdirs<3.0
 plotly
 plyer
 psutil
+psycopg2-binary
 pybids
 pyedflib
+pygments
 pyls
 pymatreader
 pyperclip
@@ -62,6 +77,7 @@ readability-lxml
 readchar
 reportlab
 requests
+requests
 ripple_detection
 ruamel.yaml
 ruff-lsp
@@ -69,49 +85,30 @@ scikit-image
 scikit-learn
 scipy
 seaborn
-# semgrep
+selenium
 setuptools
 six
 sktime
 sounddevice
+sphinx<4.5.0
+sqlalchemy
 statsmodels
 sympy
 tabulate
 tensorpac
 termplotlib
+timeout-decorator 
 tk
 tldr
+torch
+torchaudio
+torchsummary
+torchvision
 transformers
 twine
 umap-learn
+webdriver-manager
 wheel
 xarray
 xlrd
 xmltodict
-torchsummary
-torch
-torchvision
-torchaudio
-psycopg2-binary
-sqlalchemy
-groq
-<<<<<<< HEAD
-selenium
-webdriver-manager
-requests
-bs4
-google-search-results
-=======
-pebble 
-timeout-decorator 
-attrdict
-llama-stack
-pygments
-docutils<0.18
-packaging<21.0
-platformdirs<3.0
-sphinx<4.5.0
-fairscale
-fastapi
-bitsandbytes
->>>>>>> a8bb0813fb7ed7b4797f8504873171007ba58bfc
