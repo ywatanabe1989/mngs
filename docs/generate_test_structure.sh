@@ -1,7 +1,7 @@
 #!/bin/bash
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-02-27 11:23:18 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/docs/generate_test_structure.sh
+# Timestamp: "2025-02-27 22:01:01 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_dev/docs/generate_test_structure.sh
 
 THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 LOG_PATH="$0.log"
@@ -153,7 +153,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs.${import_path} import *
+from ...src.mngs.${import_path} import *
 
 class Test_MainFunctionality:
     def setup_method(self):
@@ -237,7 +237,7 @@ main() {
         echo "Test structure generation completed."
 
         tree ./tests
-    } 2>&1 | tee "$LOG_FILE"
+    } 2>&1 | tee "$LOG_PATH"
 }
 
 main "$@"

@@ -1,4 +1,4 @@
-# Timestamp: "2025-02-27 21:49:52 (ywatanabe)"
+# Timestamp: "2025-02-27 22:06:40 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_dev/.github/workflows/install-latest-release.yml
 
 name: install-latest-release
@@ -14,8 +14,6 @@ jobs:
     strategy:
       matrix:
         python-version: [3.9, '3.10', "3.11", "3.12"]
-    
-    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
 

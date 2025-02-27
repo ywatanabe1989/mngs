@@ -1,7 +1,7 @@
 # src from here --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Timestamp: "2025-02-15 00:02:10 (ywatanabe)"
+# # Timestamp: "2025-02-27 13:01:04 (ywatanabe)"
 # # File: /home/ywatanabe/proj/mngs_repo/src/mngs/gen/_start.py
 # 
 # __file__ = "./src/mngs/gen/_start.py"
@@ -49,6 +49,12 @@
 #     * matplotlib
 #     * mngs package
 # """
+# 
+# 
+# 
+# 
+# 
+# 
 # 
 # def _print_header(
 #         ID: str, PID: int, file: str, args: Any, configs: Dict[str, Any], verbose: bool = True
@@ -246,7 +252,7 @@
 #     Returns
 #     -------
 #     tuple
-#         (CONFIGS, stdout, stderr, plt, CC)
+#         (CONFIGS, stdout, stderr, plt: Any = None, CC)
 #         - CONFIGS: Configuration dictionary
 #         - stdout, stderr: Redirected output streams
 #         - plt: Configured matplotlib.pyplot module
@@ -434,7 +440,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs..gen._start import *
+from ...src.mngs..gen._start import *
 
 class Test_MainFunctionality:
     def setup_method(self):

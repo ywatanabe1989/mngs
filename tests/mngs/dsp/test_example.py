@@ -268,7 +268,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs..dsp.example import *
+from ...src.mngs..dsp.example import *
 
 class Test_MainFunctionality:
     def setup_method(self):

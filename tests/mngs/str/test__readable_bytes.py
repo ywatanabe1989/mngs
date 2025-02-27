@@ -51,7 +51,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs..str._readable_bytes import *
+from ...src.mngs..str._readable_bytes import *
 
 class Test_MainFunctionality:
     def setup_method(self):

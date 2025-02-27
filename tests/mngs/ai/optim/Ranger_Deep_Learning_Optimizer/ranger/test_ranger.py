@@ -198,7 +198,7 @@ project_root = str(Path(__file__).parent.parent.parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs..ai.optim.Ranger_Deep_Learning_Optimizer.ranger.ranger import *
+from ...src.mngs..ai.optim.Ranger_Deep_Learning_Optimizer.ranger.ranger import *
 
 class Test_MainFunctionality:
     def setup_method(self):
