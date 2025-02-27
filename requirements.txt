@@ -92,7 +92,7 @@ sktime
 sounddevice
 sphinx<4.5.0
 sqlalchemy
-# statsmodels # Ignore this package due to incompatibility with recent versions of numpy*
+# statsmodels # Please ignore this package due to incompatibility with recent versions of numpy*
 sympy
 tabulate
 tensorpac
@@ -109,6 +109,6 @@ twine
 umap-learn
 webdriver-manager
 wheel
-xarray
+# xarray # Please ignore this package due to incompatibility with recent versions of numpy*
 xlrd
 xmltodict
