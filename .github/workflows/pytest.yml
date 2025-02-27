@@ -1,7 +1,7 @@
-# Timestamp: "2025-02-27 13:01:34 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/.github/workflows/pytest.yml
+# Timestamp: "2025-02-27 21:45:33 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_dev/.github/workflows/pytest.yml
 
-# Time-stamp: "2025-02-27 13:01:34 (ywatanabe)"
+# Time-stamp: "2025-02-27 21:45:33 (ywatanabe)"
 # File: ./mngs/.github/workflows/pytest.yml
 
 name: pytest
@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.9, '3.10']
+        python-version: [3.9, '3.10', "3.11", "3.12"]
 
     steps:
     - uses: actions/checkout@v3
