@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-24 22:11:37 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/db/_PostgreSQL_modules/_BatchMixin.py
+# Timestamp: "2025-02-27 22:14:16 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_PostgreSQLMixins/_BatchMixin.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQL_modules/_BatchMixin.py"
+__file__ = "./src/mngs/db/_PostgreSQLMixins/_BatchMixin.py"
 
 from typing import List, Any, Optional, Dict, Union
 import pandas as pd
@@ -67,6 +67,5 @@ class _BatchMixin(_BaseBatchMixin):
             return 'BOOLEAN'
         else:
             return 'TEXT'
-
 
 # EOF

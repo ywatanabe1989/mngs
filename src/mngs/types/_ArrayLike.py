@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Timestamp: "2025-02-27 11:17:14 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/src/mngs/types/_ArrayLike.py
+# File: ./src/mngs/types/_ArrayLike.py
 
 __file__ = "./src/mngs/types/_ArrayLike.py"
 #!/usr/bin/env python3
@@ -9,7 +9,7 @@ __file__ = "./src/mngs/types/_ArrayLike.py"
 # Time-stamp: "2025-02-27 11:17:14 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/types/_ArrayLike.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/types/_ArrayLike.py"
+__file__ = "./src/mngs/types/_ArrayLike.py"
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-

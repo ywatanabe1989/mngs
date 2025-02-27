@@ -1,7 +1,7 @@
 <!-- ---
 !-- Timestamp: 2025-01-15 10:43:51
 !-- Author: ywatanabe
-!-- File: /home/ywatanabe/proj/mngs_repo/src/mngs/io/README.md
+!-- File: ./src/mngs/io/README.md
 !-- --- -->
 
 # MNGS IO Module

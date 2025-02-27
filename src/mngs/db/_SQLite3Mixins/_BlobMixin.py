@@ -3,7 +3,7 @@
 # Time-stamp: "2024-12-01 05:13:49 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/db/_SQLite3Mixins/_BlobMixin.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_SQLite3Mixins/_BlobMixin.py"
+__file__ = "./src/mngs/db/_SQLite3Mixins/_BlobMixin.py"
 
 import sqlite3
 from typing import Any as _Any

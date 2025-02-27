@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-17 12:00:05 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_BasicPlotMixin.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_BasicPlotMixin.py"
+__file__ = "./src/mngs/plt/_subplots/_AxisWrapperMixins/_BasicPlotMixin.py"
 
 from functools import wraps
 from typing import Any, Dict, List, Optional, Tuple, Union

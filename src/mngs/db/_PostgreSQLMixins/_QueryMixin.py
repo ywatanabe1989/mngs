@@ -1,12 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-24 22:30:57 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/db/_PostgreSQL_modules/_QueryMixin.py
+# Timestamp: "2025-02-27 22:15:24 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_PostgreSQLMixins/_QueryMixin.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQL_modules/_QueryMixin.py"
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+__file__ = "./src/mngs/db/_PostgreSQLMixins/_QueryMixin.py"
 
 from typing import List, Dict, Any, Optional, Union, Tuple
 from .._BaseMixins._BaseQueryMixin import _BaseQueryMixin
@@ -86,6 +83,5 @@ class _QueryMixin(_BaseQueryMixin):
 
         self.execute(query, params)
         return self.cursor.fetchone()[0]
-
 
 # EOF

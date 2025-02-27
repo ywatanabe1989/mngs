@@ -1,7 +1,7 @@
 <!-- ---
 !-- Timestamp: 2025-01-15 10:42:04
 !-- Author: ywatanabe
-!-- File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/README.md
+!-- File: ./src/mngs/plt/README.md
 !-- --- -->
 
 

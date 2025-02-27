@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-29 04:32:42 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/db/_SQLite3Mixins/_TransactionMixin.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_SQLite3Mixins/_TransactionMixin.py"
+__file__ = "./src/mngs/db/_SQLite3Mixins/_TransactionMixin.py"
 
 import sqlite3
 import contextlib

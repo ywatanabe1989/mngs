@@ -1,14 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-24 22:31:30 (ywatanabe)"
+# Time-stamp: "2025-02-27 22:13:18 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/db/_PostgreSQLMixins/__init__.py
-
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQLMixins/__init__.py"
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-22 19:51:47 (ywatanabe)"
-# File: __init__.py
 
 import os as __os
 import importlib as __importlib

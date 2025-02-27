@@ -3,7 +3,7 @@
 # Time-stamp: "2024-12-05 10:35:03 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/decorators/_DataTypeDecorators.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_DataTypeDecorators.py"
+__file__ = "./src/mngs/decorators/_DataTypeDecorators.py"
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
@@ -11,7 +11,7 @@ __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_DataTypeDecorato
 # File: ./mngs_repo/src/mngs/decorators/_DataTypeDecorators.py
 
 __file__ = (
-    "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_DataTypeDecorators.py"
+    "./src/mngs/decorators/_DataTypeDecorators.py"
 )
 
 #!/usr/bin/env python3
@@ -20,7 +20,7 @@ __file__ = (
 # File: ./mngs_repo/src/mngs/decorators/_DataTypeDecorators.py
 
 __file__ = (
-    "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_DataTypeDecorators.py"
+    "./src/mngs/decorators/_DataTypeDecorators.py"
 )
 
 """

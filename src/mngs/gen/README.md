@@ -1,7 +1,7 @@
 <!-- ---
 !-- Timestamp: 2025-01-15 10:53:31
 !-- Author: ywatanabe
-!-- File: /home/ywatanabe/proj/mngs_repo/src/mngs/gen/README.md
+!-- File: ./src/mngs/gen/README.md
 !-- --- -->
 
 # `mngs.gen` Quick Start Guide

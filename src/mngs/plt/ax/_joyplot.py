@@ -6,7 +6,7 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
 # Time-stamp: "2024-08-26 08:38:55 (ywatanabe)"
-# /home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_joyplot.py
+# ./src/mngs/plt/ax/_joyplot.py
 
 import joypy
 import mngs

@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-25 01:36:45 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/db/_SQLite3Mixins/_IndexMixin.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_SQLite3Mixins/_IndexMixin.py"
+__file__ = "./src/mngs/db/_SQLite3Mixins/_IndexMixin.py"
 
 from typing import List
 from .._BaseMixins._BaseIndexMixin import _BaseIndexMixin

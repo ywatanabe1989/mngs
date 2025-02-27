@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-25 00:35:31 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/gen/_var_info.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/gen/_var_info.py"
+__file__ = "./src/mngs/gen/_var_info.py"
 
 from typing import Any, Union
 import numpy as np

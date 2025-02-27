@@ -3,7 +3,7 @@
 # Timestamp: "2025-02-06 13:47:23 (ywatanabe)"
 # File: _Google.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_Google.py"
+__file__ = "./src/mngs/ai/_gen_ai/_Google.py"
 
 
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Timestamp: "2025-02-25 13:07:39 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/PARAMS.py
+# File: ./src/mngs/ai/_gen_ai/PARAMS.py
 
 __file__ = "./src/mngs/ai/_gen_ai/PARAMS.py"
 

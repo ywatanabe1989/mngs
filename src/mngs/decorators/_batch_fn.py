@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-26 18:46:28 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/decorators/_batch_fn.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_batch_fn.py"
+__file__ = "./src/mngs/decorators/_batch_fn.py"
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-

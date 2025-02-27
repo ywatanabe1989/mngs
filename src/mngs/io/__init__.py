@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Timestamp: "2025-02-27 11:14:34 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/src/mngs/io/__init__.py
+# File: ./src/mngs/io/__init__.py
 
 __file__ = "./src/mngs/io/__init__.py"
 

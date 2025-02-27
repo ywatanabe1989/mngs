@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Time-stamp: "2024-12-23 13:11:43 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/src/mngs/io/_load_modules/_txt.py
+# File: ./src/mngs/io/_load_modules/_txt.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/io/_load_modules/_txt.py"
+__file__ = "./src/mngs/io/_load_modules/_txt.py"
 
 import warnings
 

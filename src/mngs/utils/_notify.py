@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-24 17:54:38 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/utils/_notify.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/utils/_notify.py"
+__file__ = "./src/mngs/utils/_notify.py"
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-

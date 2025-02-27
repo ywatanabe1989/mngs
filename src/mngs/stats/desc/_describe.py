@@ -3,7 +3,7 @@
 # Time-stamp: "2024-12-05 09:20:53 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/stats/desc/_describe.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/stats/desc/_describe.py"
+__file__ = "./src/mngs/stats/desc/_describe.py"
 
 """
 Functionality:

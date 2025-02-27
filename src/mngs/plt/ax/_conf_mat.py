@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-17 15:07:52 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/plt/ax/_conf_mat.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_conf_mat.py"
+__file__ = "./src/mngs/plt/ax/_conf_mat.py"
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
@@ -23,7 +23,7 @@ Prerequisites:
     * matplotlib, seaborn, numpy, pandas
 """
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_conf_mat.py"
+__file__ = "./src/mngs/plt/ax/_conf_mat.py"
 
 import sys
 import matplotlib

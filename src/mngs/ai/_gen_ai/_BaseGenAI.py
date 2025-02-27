@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Time-stamp: "2025-02-02 04:35:15 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_BaseGenAI.py
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_BaseGenAI.py"
+# File: ./src/mngs/ai/_gen_ai/_BaseGenAI.py
+__file__ = "./src/mngs/ai/_gen_ai/_BaseGenAI.py"
 
 """
 Functionality:

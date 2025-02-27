@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-28 02:47:54 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/ai/_gen_ai/_Groq.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_Groq.py"
+__file__ = "./src/mngs/ai/_gen_ai/_Groq.py"
 
 """
 Functionality:

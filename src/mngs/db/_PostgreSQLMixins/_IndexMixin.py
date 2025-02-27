@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-24 22:23:16 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/db/_PostgreSQL_modules/_IndexMixin.py
+# Timestamp: "2025-02-27 22:15:05 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_PostgreSQLMixins/_IndexMixin.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQL_modules/_IndexMixin.py"
+__file__ = "./src/mngs/db/_PostgreSQLMixins/_IndexMixin.py"
 
 from typing import List
 import psycopg2
@@ -51,6 +51,5 @@ class _IndexMixin:
 
         except (Exception, psycopg2.Error) as err:
             raise ValueError(f"Failed to get indexes: {err}")
-
 
 # EOF

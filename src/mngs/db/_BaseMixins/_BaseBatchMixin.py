@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-25 01:43:41 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/db/_BaseMixins/_BaseBatchMixin.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_BaseMixins/_BaseBatchMixin.py"
+__file__ = "./src/mngs/db/_BaseMixins/_BaseBatchMixin.py"
 
 from typing import List, Any, Optional, Dict, Union
 import pandas as pd

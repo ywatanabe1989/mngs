@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Timestamp: "2025-02-14 21:12:25 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/src/mngs/gen/_close.py
+# File: ./src/mngs/gen/_close.py
 
 __file__ = "./src/mngs/gen/_close.py"
 

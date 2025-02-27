@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-24 22:14:24 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/db/_Basemodules/_BaseSchemaMixin.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_Basemodules/_BaseSchemaMixin.py"
+__file__ = "./src/mngs/db/_Basemodules/_BaseSchemaMixin.py"
 
 from typing import List, Dict, Any, Optional
 

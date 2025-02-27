@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Timestamp: "2025-02-14 22:07:13 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/src/mngs/str/_clean_path.py
+# File: ./src/mngs/str/_clean_path.py
 
 __file__ = "./src/mngs/str/_clean_path.py"
 #!/usr/bin/env python3
@@ -9,7 +9,7 @@ __file__ = "./src/mngs/str/_clean_path.py"
 # Time-stamp: "2025-02-14 22:07:13 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/str/_clean_path.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/str/_clean_path.py"
+__file__ = "./src/mngs/str/_clean_path.py"
 
 """
 Functionality:

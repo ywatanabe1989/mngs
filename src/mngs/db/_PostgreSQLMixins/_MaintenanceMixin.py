@@ -1,19 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-24 23:02:38 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/db/_PostgreSQLMixins/_MaintenanceMixin.py
+# Timestamp: "2025-02-27 22:15:18 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_PostgreSQLMixins/_MaintenanceMixin.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQLMixins/_MaintenanceMixin.py"
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-24 23:00:04 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/db/_PostgreSQLMixins/_MaintenanceMixin.py
+__file__ = "./src/mngs/db/_PostgreSQLMixins/_MaintenanceMixin.py"
 
 import pandas as pd
-
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQLMixins/_MaintenanceMixin.py"
-
 import contextlib
 from typing import ContextManager, Dict, List, Optional
 
@@ -174,6 +166,5 @@ class _MaintenanceMixin(_BaseMaintenanceMixin):
             return sample_tables
         except psycopg2.Error as err:
             raise ValueError(f"Failed to get summaries: {err}")
-
 
 # EOF

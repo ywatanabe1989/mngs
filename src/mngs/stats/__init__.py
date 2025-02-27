@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-17 12:29:22 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/stats/__init__.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/stats/__init__.py"
+__file__ = "./src/mngs/stats/__init__.py"
 
 import os
 import importlib

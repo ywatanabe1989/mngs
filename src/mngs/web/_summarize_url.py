@@ -1,7 +1,7 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
 # Time-stamp: "2024-07-29 21:43:30 (ywatanabe)"
-# /home/ywatanabe/proj/mngs_repo/src/mngs/web/_crawl.py
+# ./src/mngs/web/_crawl.py
 
 
 import requests

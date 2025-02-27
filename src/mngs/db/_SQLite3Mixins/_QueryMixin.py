@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-29 04:31:43 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/db/_SQLite3Mixins/_QueryMixin.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_SQLite3Mixins/_QueryMixin.py"
+__file__ = "./src/mngs/db/_SQLite3Mixins/_QueryMixin.py"
 
 import sqlite3
 from typing import List, Tuple

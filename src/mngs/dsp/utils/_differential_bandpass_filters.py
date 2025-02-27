@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-26 22:24:13 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/dsp/utils/_differential_bandpass_filters.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/dsp/utils/_differential_bandpass_filters.py"
+__file__ = "./src/mngs/dsp/utils/_differential_bandpass_filters.py"
 
 import sys
 

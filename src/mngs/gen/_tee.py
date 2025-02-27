@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Timestamp: "2025-02-15 00:02:15 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/src/mngs/gen/_tee.py
+# File: ./src/mngs/gen/_tee.py
 
 __file__ = "./src/mngs/gen/_tee.py"
 

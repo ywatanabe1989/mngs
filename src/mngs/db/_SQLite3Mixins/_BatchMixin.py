@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-29 04:36:14 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/db/_SQLite3Mixins/_BatchMixin.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_SQLite3Mixins/_BatchMixin.py"
+__file__ = "./src/mngs/db/_SQLite3Mixins/_BatchMixin.py"
 
 """
 Functionality:

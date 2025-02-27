@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-24 22:20:26 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/db/_Basemodules/_BaseIndexMixin.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_Basemodules/_BaseIndexMixin.py"
+__file__ = "./src/mngs/db/_Basemodules/_BaseIndexMixin.py"
 
 
 #!/usr/bin/env python3

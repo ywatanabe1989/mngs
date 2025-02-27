@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Timestamp: "2025-02-27 11:09:00 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/src/mngs/io/_load_configs.py
+# File: ./src/mngs/io/_load_configs.py
 
 __file__ = "./src/mngs/io/_load_configs.py"
 #!/usr/bin/env python3
