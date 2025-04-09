@@ -99,10 +99,10 @@ timeout-decorator
 attrdict
 llama-stack
 pygments
-docutils<0.18
-packaging<21.0
-platformdirs<3.0
-sphinx<4.5.0
+docutils
+packaging
+platformdirs
+sphinx
 fairscale
 fastapi
 bitsandbytes

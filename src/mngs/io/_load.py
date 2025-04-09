@@ -1,11 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Timestamp: "2025-04-04 22:08:46 (ywatanabe)"
+# File: /ssh:ywatanabe@spartan:/home/ywatanabe/proj/mngs_repo/src/mngs/io/_load.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "/ssh:ywatanabe@spartan:/home/ywatanabe/proj/mngs_repo/src/mngs/io/_load.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 # Time-stamp: "2024-12-12 06:50:46 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/io/_load.py
-
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/io/_load.py"
-
-import os
 
 from typing import Any
 from ..decorators import preserve_doc
@@ -21,6 +28,7 @@ from ._load_modules._joblib import _load_joblib
 from ._load_modules._json import _load_json
 from ._load_modules._markdown import _load_markdown
 from ._load_modules._numpy import _load_npy
+from ._load_modules._matlab import _load_matlab
 from ._load_modules._pandas import _load_csv, _load_excel, _load_tsv
 from ._load_modules._pdf import _load_pdf
 from ._load_modules._pickle import _load_pickle
@@ -107,6 +115,7 @@ def load(
         # Scientific Data
         "npy": _load_npy,
         "npz": _load_npy,
+        "mat": _load_matlab,
         "hdf5": _load_hdf5,
         "con": _load_con,
         # Documents
@@ -143,6 +152,5 @@ def load(
         return loader(lpath, **kwargs)
     except (ValueError, FileNotFoundError) as e:
         raise ValueError(f"Error loading file {lpath}: {str(e)}")
-
 
 # EOF
