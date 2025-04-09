@@ -1,3 +1,5 @@
+# google-generativeai
+# semgrep
 GitPython
 Pillow
 PyYAML
@@ -6,16 +8,30 @@ accelerate
 aiohttp
 ansi-escapes
 anthropic
+attrdict
+attrdict
+bitsandbytes
+bitsandbytes
 black
 bs4
+bs4
 chardet
+docutils
+docutils<0.18
 einops
 epc
+fairscale
+fairscale
+fastapi
+fastapi
 flake8
 flask
 geom_median
-google-generativeai
+google-genai
+google-search-results
 googlesearch-python
+groq
+groq
 h5py
 html2text
 icecream
@@ -26,6 +42,8 @@ jedi
 joblib
 joypy
 julius
+llama-stack
+llama-stack
 lxml
 lxml_html_clean
 markdown
@@ -34,17 +52,26 @@ matplotlib
 mne
 more-itertools
 natsort
-numpy>2.0.0
+numpy #>2.0.0
 obspy
 openai
 openpyxl
 optuna
+packaging
+packaging #<21.0
 pandas
+pebble 
+pebble 
+platformdirs
+platformdirs #<3.0
 plotly
 plyer
 psutil
+psycopg2-binary
 pybids
 pyedflib
+pygments
+pygments
 pyls
 pymatreader
 pyperclip
@@ -61,6 +88,7 @@ readability-lxml
 readchar
 reportlab
 requests
+requests
 ripple_detection
 ruamel.yaml
 ruff-lsp
@@ -68,41 +96,32 @@ scikit-image
 scikit-learn
 scipy
 seaborn
-# semgrep
+selenium
 setuptools
 six
 sktime
 sounddevice
-statsmodels
+sphinx
+sphinx # <4.5.0
+sqlalchemy
+statsmodels # Please ignore this package due to incompatibility with recent versions of numpy*
 sympy
 tabulate
 tensorpac
 termplotlib
+timeout-decorator 
+timeout-decorator 
 tk
 tldr
+torch
+torchaudio
+torchsummary
+torchvision
 transformers
 twine
 umap-learn
+webdriver-manager
 wheel
-xarray
+xarray # Please ignore this package due to incompatibility with recent versions of numpy*
 xlrd
 xmltodict
-torchsummary
-torch
-torchvision
-torchaudio
-psycopg2-binary
-sqlalchemy
-groq
-pebble 
-timeout-decorator 
-attrdict
-llama-stack
-pygments
-docutils
-packaging
-platformdirs
-sphinx
-fairscale
-fastapi
-bitsandbytes

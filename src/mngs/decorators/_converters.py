@@ -1,14 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-26 22:16:44 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/decorators/_converters.py
+# Timestamp: "2025-01-18 03:46:52 (ywatanabe)"
+# File: _converters.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_converters.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_converters.py"
 
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-07 05:53:09 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/decorators/_converters.py
 
 from typing import Callable, Optional
 

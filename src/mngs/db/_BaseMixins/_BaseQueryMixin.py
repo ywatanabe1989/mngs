@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-24 22:17:03 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/db/_Basemodules/_BaseQueryMixin.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_Basemodules/_BaseQueryMixin.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_Basemodules/_BaseQueryMixin.py"
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-

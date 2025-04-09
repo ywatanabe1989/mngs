@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-17 11:59:15 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/plt/ax/_plot_.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_plot_.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_plot_.py"
 
 from typing import Optional, Tuple, Union
 

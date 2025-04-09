@@ -1,7 +1,7 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
 # Time-stamp: "2024-08-29 23:08:35 (ywatanabe)"
-# /home/ywatanabe/proj/mngs_repo/src/mngs/pd/_replace.py
+# ./src/mngs/pd/_replace.py
 
 
 def replace(dataframe, replace_dict, regex=False, cols=None):

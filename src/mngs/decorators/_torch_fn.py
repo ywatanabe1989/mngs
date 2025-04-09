@@ -3,7 +3,7 @@
 # Time-stamp: "2024-12-05 09:23:06 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/decorators/_torch_fn.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_torch_fn.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_torch_fn.py"
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-

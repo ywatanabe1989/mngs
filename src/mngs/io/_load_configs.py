@@ -1,11 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-05 08:06:03 (ywatanabe)"
+# Timestamp: "2025-02-27 11:09:00 (ywatanabe)"
+# File: ./src/mngs/io/_load_configs.py
+
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/io/_load_configs.py"
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Time-stamp: "2025-02-27 11:09:00 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/io/_load_configs.py
 
 import os
 from ..dict import DotDict
-from ..io._load import load
+from ._load import load
 from ._glob import glob
 
 def load_configs(IS_DEBUG=None, show=False, verbose=False):
@@ -122,6 +128,6 @@ def load_configs(IS_DEBUG=None, show=False, verbose=False):
 #     return CONFIGS
 
 
-# 
+#
 
 # EOF

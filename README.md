@@ -1,7 +1,7 @@
 <!-- ---
-!-- title: ./mngs/README.md
-!-- author: ywatanabe
-!-- date: 2024-11-08 02:05:12
+!-- Timestamp: 2025-02-27 21:40:17
+!-- Author: ywatanabe
+!-- File: /home/ywatanabe/proj/mngs_dev/README.md
 !-- --- -->
 
 
@@ -14,22 +14,19 @@ A Python utility package for simplifying common research and development tasks.
 ![CI](https://github.com/ywatanabe1989/mngs/actions/workflows/install-latest-release.yml/badge.svg)
 ![CI](https://github.com/ywatanabe1989/mngs/actions/workflows/install-develop-branch.yml/badge.svg)
 ![CI](https://github.com/ywatanabe1989/mngs/actions/workflows/pytest.yml/badge.svg)
-<!-- [![Tests](https://github.com/ywatanabe1989/mngs/actions/workflows/tests.yml/badge.svg)](https://github.com/ywatanabe1989/mngs/actions/workflows/tests.yml) -->
-<!-- [![Coverage](https://codecov.io/gh/ywatanabe1989/mngs/branch/main/graph/badge.svg)](https://codecov.io/gh/ywatanabe1989/mngs) -->
-<!-- [![Python Versions](https://img.shields.io/pypi/pyversions/mngs.svg)](https://pypi.org/project/mngs/) -->
-<!-- [![License](https://img.shields.io/github/license/ywatanabe1989/mngs.svg)](https://github.com/ywatanabe1989/mngs/blob/main/LICENSE) -->
-
-<!-- <\!-- logo -\->
- !-- <div style="text-align: center;">
- !--     <img src="./docs/lazy_python.gif" alt="Lazy Python" width="200px">
- !-- </div> -->
 
 <!-- $ sudo apt-get install libportaudio2 -->
 ## Installation
 ```bash
+# 1. From pypi.org
 $ pip install mngs
-# or
+
+# 2. From git (direct)
 $ pip install git+https://github.com/ywatanabe1989/mngs.git@develop
+
+# 3. From git develop
+$ git clone git clone git@github.com:ywatanabe1989/mngs.git mngs_dev cd mngs_dev && 
+$ python3.11 -m venv .env && source .env/bin/activate && python -m pip install -e .
 ```
 
 ## Submodules
@@ -78,3 +75,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## Contact
 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
 
+<!-- EOF -->

@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-04 22:06:47 (ywatanabe)"
-# File: /ssh:ywatanabe@spartan:/home/ywatanabe/proj/mngs_repo/src/mngs/io/_load_modules/_matlab.py
+# Timestamp: "2025-04-10 08:07:03 (ywatanabe)"
+# File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/io/_load_modules/_matlab.py
 # ----------------------------------------
 import os
 __FILE__ = (
-    "/ssh:ywatanabe@spartan:/home/ywatanabe/proj/mngs_repo/src/mngs/io/_load_modules/_matlab.py"
+    "/ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/io/_load_modules/_matlab.py"
 )
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
 from typing import Any
-import warnings
+
 
 def _load_matlab(lpath: str, **kwargs) -> Any:
     """Load MATLAB file."""
@@ -20,15 +20,20 @@ def _load_matlab(lpath: str, **kwargs) -> Any:
 
     # Try using scipy.io first for binary .mat files
     try:
+        # For MATLAB v7.3 files (HDF5 format)
         from scipy.io import loadmat
+
         return loadmat(lpath, **kwargs)
     except Exception as e1:
-        # If scipy fails, try pymatreader
+        # If scipy fails, try pymatreader  or older MAT files
         try:
             from pymatreader import read_mat
+
             return read_mat(lpath, **kwargs)
         except Exception as e2:
             # Both methods failed
-            raise ValueError(f"Error loading file {lpath}: {str(e1)}\nAnd: {str(e2)}")
+            raise ValueError(
+                f"Error loading file {lpath}: {str(e1)}\nAnd: {str(e2)}"
+            )
 
 # EOF

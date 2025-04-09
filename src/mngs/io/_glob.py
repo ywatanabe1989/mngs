@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-25 00:31:08 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/io/_glob.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/io/_glob.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/io/_glob.py"
 
 import re as _re
 from glob import glob as _glob

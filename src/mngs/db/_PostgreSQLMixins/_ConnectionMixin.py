@@ -1,19 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-24 22:56:53 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/db/_PostgreSQLMixins/_ConnectionMixin.py
+# Timestamp: "2025-02-27 22:14:52 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_PostgreSQLMixins/_ConnectionMixin.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQLMixins/_ConnectionMixin.py"
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-24 22:55:50 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/db/_PostgreSQLMixins/_ConnectionMixin.py
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQLMixins/_ConnectionMixin.py"
 
 from typing import Any, Tuple
-
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQLMixins/_ConnectionMixin.py"
-
 import psycopg2
 
 from .._BaseMixins._BaseConnectionMixin import _BaseConnectionMixin
@@ -96,6 +88,5 @@ class _ConnectionMixin(_BaseConnectionMixin):
         except psycopg2.Error as err:
             self.conn.rollback()
             raise psycopg2.Error(f"Batch query execution failed: {err}")
-
 
 # EOF

@@ -1,22 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-12-01 06:26:23 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/ai/_gen_ai/_OpenAI.py
+# Timestamp: "2025-01-22 01:21:11 (ywatanabe)"
+# File: _OpenAI.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_OpenAI.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_OpenAI.py"
 
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# Time-stamp: "2024-12-01 06:25:27 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/ai/_gen_ai/_OpenAI.py
-
-import os
-
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_OpenAI.py"
 
 """Imports"""
+import os
 from openai import OpenAI as _OpenAI
-
 from ._BaseGenAI import BaseGenAI
 
 """Functions & Classes"""
@@ -35,6 +27,16 @@ class OpenAI(BaseGenAI):
         chat_history=None,
         max_tokens=None,
     ):
+        self.passed_model = model
+
+        # import mngs
+        # mngs.str.print_debug()
+        # mngs.gen.printc(model)
+
+        if model.startswith("o"):
+            for reasoning_effort in ["low", "midium", "high"]:
+                model = model.replace(f"-{reasoning_effort}", "")
+
         # Set max_tokens based on model
         if max_tokens is None:
             if "gpt-4-turbo" in model:
@@ -68,7 +70,7 @@ class OpenAI(BaseGenAI):
 
     def _api_call_static(self):
         kwargs = dict(
-            model=self.model,
+            model=self.passed_model,
             messages=self.history,
             seed=self.seed,
             stream=False,
@@ -76,8 +78,24 @@ class OpenAI(BaseGenAI):
             max_tokens=self.max_tokens,
         )
 
-        if kwargs.get("model") in ["o1-mini", "o1-preview"]:
+        # # o models adjustment
+        # import mngs
+        # mngs.str.print_debug()
+        # mngs.gen.printc(kwargs.get("model"))
+
+        if kwargs.get("model").startswith("o"):
             kwargs.pop("max_tokens")
+            for reasoning_effort in ["low", "midium", "high"]:
+                if reasoning_effort in kwargs["model"]:
+                    kwargs["reasoning_effort"] = reasoning_effort
+                    kwargs["model"] = kwargs["model"].replace(
+                        f"-{reasoning_effort}", ""
+                    )
+        # import mngs
+        # mngs.str.print_debug()
+        # mngs.gen.printc(kwargs.get("model"))
+        # mngs.gen.printc(kwargs.get("reasoning_effort"))
+        # mngs.str.print_debug()
 
         output = self.client.chat.completions.create(**kwargs)
         self.input_tokens += output.usage.prompt_tokens
@@ -99,7 +117,12 @@ class OpenAI(BaseGenAI):
             stream_options={"include_usage": True},
         )
 
-        if kwargs.get("model") in ["o1-mini", "o1-preview"]:
+        if kwargs.get("model").startswith("o"):
+            for reasoning_effort in ["low", "midium", "high"]:
+                kwargs["reasoning_effort"] = reasoning_effort
+                kwargs["model"] = kwargs["model"].replace(
+                    f"-{reasoning_effort}", ""
+                )
             full_response = self._api_call_static()
             for char in full_response:
                 yield char
@@ -165,17 +188,20 @@ def main() -> None:
     import mngs
 
     ai = mngs.ai.GenAI(
-        model="gpt-4o",
+        model="o1-low",
         api_key=os.getenv("OPENAI_API_KEY"),
     )
-    print(
-        ai(
-            "hi, could you tell me what is in the pic?",
-            images=[
-                "/home/ywatanabe/Downloads/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg"
-            ],
-        )
-    )
+
+    print(ai("hi, could you tell me what is in the pic?"))
+
+    # print(
+    #     ai(
+    #         "hi, could you tell me what is in the pic?",
+    #         images=[
+    #             "/home/ywatanabe/Downloads/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg"
+    #         ],
+    #     )
+    # )
     pass
 
 

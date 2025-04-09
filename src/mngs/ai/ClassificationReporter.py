@@ -1,14 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-20 00:17:42 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/ai/ClassificationReporter.py
+# Timestamp: "2025-02-15 01:38:28 (ywatanabe)"
+# File: ./src/mngs/ai/ClassificationReporter.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/ClassificationReporter.py"
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-13 12:54:17 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/ai/ClassificationReporter.py
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/ClassificationReporter.py"
 
 import os as _os
 import random as _random
@@ -356,7 +351,7 @@ class ClassificationReporter(object):
 # # Time-stamp: "2024-11-20 00:15:08 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/ai/ClassificationReporter.py
 
-# __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/ClassificationReporter.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/ClassificationReporter.py"
 
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -1131,8 +1126,6 @@ class ClassificationReporter(object):
 #         tgt="Test2",
 #     )
 
-#     #
-
-#
+# python -m mngs.ai.ClassificationReporter
 
 # EOF

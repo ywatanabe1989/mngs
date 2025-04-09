@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-25 11:50:05 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/io/_load_modules/_db.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/io/_load_modules/_db.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/io/_load_modules/_db.py"
 
 from typing import Any
 

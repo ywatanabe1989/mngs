@@ -3,7 +3,7 @@
 # Time-stamp: "2024-12-12 06:49:15 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/ai/ClassifierServer.py
 
-__file__ = "/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/ClassifierServer.py"
+THIS_FILE = "/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/ClassifierServer.py"
 
 """
 Functionality:

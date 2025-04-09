@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-20 10:27:28 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/dev/_analyze_code_flow.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/dev/_analyze_code_flow.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/dev/_analyze_code_flow.py"
 
 import ast
 

@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-20 00:22:25 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/ai/silhoute_score_block.py
 
-__file__ = "/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/silhoute_score_block.py"
+THIS_FILE = "/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/silhoute_score_block.py"
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-

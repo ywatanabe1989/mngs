@@ -1,18 +1,28 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-28 02:25:44 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/ai/_gen_ai/PARAMS.py
+# Timestamp: "2025-03-28 09:55:29 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/PARAMS.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/PARAMS.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/PARAMS.py"
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-08 20:26:20 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/ai/_gen_ai/PARAMS.py
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/PARAMS.py"
 
 import pandas as pd
 
+# https://api-docs.deepseek.com/quick_start/pricing
 DEEPSEEK_MODELS = [
+    {
+        "name": "deepseek-reasoner",
+        "input_cost": 0.14,
+        "output_cost": 2.19,
+        "api_key_env": "DEEPSEEK_API_KEY",
+        "provider": "DeepSeek",
+    },
     {
         "name": "deepseek-chat",
         "input_cost": 0.014,
@@ -29,18 +39,68 @@ DEEPSEEK_MODELS = [
     },
 ]
 
+# https://openai.com/api/pricing/
 OPENAI_MODELS = [
     {
-        "name": "o1-mini",
-        "input_cost": 3.00,
-        "output_cost": 12.00,
+        "name": "o3-mini",
+        "input_cost": 1.10,
+        "output_cost": 4.40,
         "api_key_env": "OPENAI_API_KEY",
         "provider": "OpenAI",
     },
     {
-        "name": "o1-preview",
+        "name": "o3-mini-low",
+        "input_cost": 1.10,
+        "output_cost": 4.40,
+        "api_key_env": "OPENAI_API_KEY",
+        "provider": "OpenAI",
+    },
+    {
+        "name": "o3-mini-medium",
+        "input_cost": 1.10,
+        "output_cost": 4.40,
+        "api_key_env": "OPENAI_API_KEY",
+        "provider": "OpenAI",
+    },
+    {
+        "name": "o3-mini-high",
+        "input_cost": 1.10,
+        "output_cost": 4.40,
+        "api_key_env": "OPENAI_API_KEY",
+        "provider": "OpenAI",
+    },
+    {
+        "name": "o1",
         "input_cost": 15.00,
-        "output_cost": 60.00,
+        "output_cost": 7.50,
+        "api_key_env": "OPENAI_API_KEY",
+        "provider": "OpenAI",
+    },
+    {
+        "name": "o1",
+        "input_cost": 15.00,
+        "output_cost": 7.50,
+        "api_key_env": "OPENAI_API_KEY",
+        "provider": "OpenAI",
+    },
+    {
+        "name": "o1-low",
+        "input_cost": 15.00,
+        "output_cost": 7.50,
+        "api_key_env": "OPENAI_API_KEY",
+        "provider": "OpenAI",
+    },
+    {
+        "name": "o1-medium",
+        "input_cost": 15.00,
+        "output_cost": 7.50,
+        "api_key_env": "OPENAI_API_KEY",
+        "provider": "OpenAI",
+    },
+    {
+        "name": "o1-mini-high",
+        "input_cost": 1.10,
+        "output_cost": 4.40,
         "api_key_env": "OPENAI_API_KEY",
         "provider": "OpenAI",
     },
@@ -81,11 +141,28 @@ OPENAI_MODELS = [
     },
 ]
 
+# https://docs.anthropic.com/en/docs/about-claude/models/all-models
+# https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching#pricing
+# https://docs.anthropic.com/en/docs/about-claude/models#model-comparison-table
 ANTHROPIC_MODELS = [
+    {
+        "name": "claude-3-7-sonnet-20250219",
+        "input_cost": 3.00,
+        "output_cost": 15.00,
+        "api_key_env": "ANTHROPIC_API_KEY",
+        "provider": "Anthropic",
+    },
     {
         "name": "claude-3-5-sonnet-20241022",
         "input_cost": 3.00,
         "output_cost": 15.00,
+        "api_key_env": "ANTHROPIC_API_KEY",
+        "provider": "Anthropic",
+    },
+    {
+        "name": "claude-3-5-haiku-20241022",
+        "input_cost": 0.80,
+        "output_cost": 4.00,
         "api_key_env": "ANTHROPIC_API_KEY",
         "provider": "Anthropic",
     },
@@ -112,7 +189,58 @@ ANTHROPIC_MODELS = [
     },
 ]
 
+# https://ai.google.dev/pricing#1_5flash
+
 GOOGLE_MODELS = [
+    {
+        "name": "gemini-2.5-pro-exp-03-25",
+        "input_cost": None,
+        "output_cost": None,
+        "api_key_env": "GOOGLE_API_KEY",
+        "provider": "Google",
+    },
+    {
+        "name": "gemini-2.0-flash",
+        "input_cost": None,
+        "output_cost": None,
+        "api_key_env": "GOOGLE_API_KEY",
+        "provider": "Google",
+    },
+    {
+        "name": "gemini-2.0-flash-lite-preview-02-05",
+        "input_cost": None,
+        "output_cost": None,
+        "api_key_env": "GOOGLE_API_KEY",
+        "provider": "Google",
+    },
+    {
+        "name": "gemini-2.0-pro-exp-02-05",
+        "input_cost": None,
+        "output_cost": None,
+        "api_key_env": "GOOGLE_API_KEY",
+        "provider": "Google",
+    },
+    {
+        "name": "gemini-2.0-flash-thinking-exp-01-21",
+        "input_cost": None,
+        "output_cost": None,
+        "api_key_env": "GOOGLE_API_KEY",
+        "provider": "Google",
+    },
+    {
+        "name": "gemini-exp-1206",
+        "input_cost": None,
+        "output_cost": None,
+        "api_key_env": "GOOGLE_API_KEY",
+        "provider": "Google",
+    },
+    {
+        "name": "gemini-2.0-flash-exp",
+        "input_cost": None,
+        "output_cost": None,
+        "api_key_env": "GOOGLE_API_KEY",
+        "provider": "Google",
+    },
     {
         "name": "gemini-1.5-pro-latest",
         "input_cost": 3.50,
@@ -254,25 +382,21 @@ LLAMA_MODELS = [
     },
 ]
 
-# distil-whisper-large-v3-en	HuggingFace	-	-	25 MB	Card
-# gemma2-9b-it	Google	8,192	-	-	Card
-# gemma-7b-it	Google	8,192	-	-	Card
-# llama3-groq-70b-8192-tool-use-preview	Groq	8,192	-	-	Card
-# llama3-groq-8b-8192-tool-use-preview	Groq	8,192	-	-	Card
-# llama-3.1-70b-versatile	Meta	128k	32,768	-	Card
-# llama-3.1-70b-specdec	Meta	128k	8,192		Card
-# llama-3.1-8b-instant	Meta	128k	8,192	-	Card
-# llama-3.2-1b-preview	Meta	128k	8,192	-	Card
-# llama-3.2-3b-preview	Meta	128k	8,192	-	Card
-# llama-3.2-11b-vision-preview	Meta	128k	8,192	-	Card
-# llama-3.2-90b-vision-preview	Meta	128k	8,192	-	Card
-# llama-guard-3-8b	Meta	8,192	-	-	Card
-# llama3-70b-8192	Meta	8,192	-	-	Card
-# llama3-8b-8192	Meta	8,192	-	-	Card
-# mixtral-8x7b-32768	Mistral	32,768	-	-	Card
-# whisper-large-v3	OpenAI	-	-	25 MB	Card
-# whisper-large-v3-turbo	OpenAI	-	-	25 MB	Card
 GROQ_MODELS = [
+    {
+        "name": "deepseek-r1-distill-llama-70b",
+        "input_cost": 0.01,
+        "output_cost": 0.01,
+        "api_key_env": "GROQ_API_KEY",
+        "provider": "Groq",
+    },
+    {
+        "name": "llama-3.3-70b-versatile",
+        "input_cost": 0.04,
+        "output_cost": 0.04,
+        "api_key_env": "GROQ_API_KEY",
+        "provider": "Groq",
+    },
     {
         "name": "llama-3.2-1b-preview",
         "input_cost": 0.04,
@@ -369,12 +493,11 @@ MODELS = pd.DataFrame(
     + GROQ_MODELS
 )
 
-# EOF
+
 
 
 # curl -L -X GET 'https://api.deepseek.com/models' \
 # -H 'Accept: application/json' \
 # -H 'Authorization: Bearer sk-43412ea536ff482e87a38010231ce7c3'
-
 
 # EOF

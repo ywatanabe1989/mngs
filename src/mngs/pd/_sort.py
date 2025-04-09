@@ -1,7 +1,7 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
 # Time-stamp: "2024-08-25 09:35:39 (ywatanabe)"
-# /home/ywatanabe/proj/mngs_repo/src/mngs/pd/_sort.py
+# ./src/mngs/pd/_sort.py
 
 import pandas as pd
 

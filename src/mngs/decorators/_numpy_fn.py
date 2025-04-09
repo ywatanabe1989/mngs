@@ -1,14 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-26 18:45:59 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/decorators/_numpy_fn.py
+# Timestamp: "2025-01-18 03:44:07 (ywatanabe)"
+# File: _numpy_fn.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_numpy_fn.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_numpy_fn.py"
 
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-04 02:45:09 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/decorators/_numpy_fn.py
 
 """
 1. Functionality:
@@ -26,7 +22,7 @@ __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_numpy_fn.py"
 from functools import wraps
 from typing import Any as _Any
 from typing import Callable
-
+import torch
 from ._converters import (
     _conversion_warning,
     _return_always,

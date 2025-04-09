@@ -1,3 +1,8 @@
+<!-- ---
+!-- Timestamp: 2025-01-15 11:02:49
+!-- Author: ywatanabe
+!-- File: ./src/mngs/path/README.md
+!-- --- -->
 # [`mngs.path`](https://github.com/ywatanabe1989/mngs/tree/main/src/mngs/path/)
 
 ## Overview

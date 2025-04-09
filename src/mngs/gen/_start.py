@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-26 09:44:38 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/gen/_start.py
+# Timestamp: "2025-02-27 13:01:04 (ywatanabe)"
+# File: ./src/mngs/gen/_start.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/gen/_start.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/gen/_start.py"
 
 import inspect
 import os as _os
@@ -48,6 +48,12 @@ Prerequisites:
     * matplotlib
     * mngs package
 """
+
+
+
+
+
+
 
 def _print_header(
         ID: str, PID: int, file: str, args: Any, configs: Dict[str, Any], verbose: bool = True
@@ -101,7 +107,6 @@ def _initialize_env(IS_DEBUG: bool) -> Tuple[str, int]:
     tuple
         (ID, PID) - Unique identifier and Process ID
     """
-
     ID = gen_ID(N=4) if not IS_DEBUG else "DEBUG_" + gen_ID(N=4)
     PID = _os.getpid()
     return ID, PID
@@ -164,7 +169,6 @@ def _setup_matplotlib(
     tuple
         (plt, CC) - Configured pyplot module and color cycle
     """
-
     if plt is not None:
         plt.close("all")
         plt, CC = configure_mpl(plt, **mpl_kwargs)
@@ -185,7 +189,6 @@ def start(
     random: Optional[Any] = None,
     np: Optional[Any] = None,
     torch: Optional[Any] = None,
-    tf: Optional[Any] = None,
     seed: int = 42,
     agg: bool = False,
     fig_size_mm: Tuple[int, int] = (160, 100),
@@ -194,6 +197,7 @@ def start(
     dpi_save: int = 300,
     fontsize="small",
     autolayout=True,
+    show_execution_flow=False,
     # font_size_base: int = 10,
     # font_size_title: int = 10,
     # font_size_axis_label: int = 8,
@@ -202,7 +206,7 @@ def start(
     hide_top_right_spines: bool = True,
     alpha: float = 0.9,
     line_width: float = 0.5,
-    clear: bool = False,
+    clear_logs: bool = False,
     verbose: bool = True,
 ) -> Tuple[DotDict, Any, Any, Any, Optional[Dict[str, Any]]]:
     """Initialize experiment environment with reproducibility settings.
@@ -221,7 +225,7 @@ def start(
         Whether to print detailed information
     args : object, optional
         Command line arguments or configuration object
-    os, random, np, torch, tf : modules, optional
+    os, random, np, torch : modules, optional
         Modules for random seed fixing
     seed : int, default=42
         Random seed for reproducibility
@@ -241,13 +245,13 @@ def start(
         Default alpha value for plots
     line_width : float, default=0.5
         Default line width for plots
-    clear : bool, default=False
+    clear_logs : bool, default=False
         Whether to clear existing log directory
 
     Returns
     -------
     tuple
-        (CONFIGS, stdout, stderr, plt, CC)
+        (CONFIGS, stdout, stderr, plt: Any = None, CC)
         - CONFIGS: Configuration dictionary
         - stdout, stderr: Redirected output streams
         - plt: Configured matplotlib.pyplot module
@@ -257,21 +261,25 @@ def start(
     ID, PID = _initialize_env(IS_DEBUG)
 
     ########################################
-    # Defines SDIR (Do not change this section)
+    # Defines SDIR (DO NOT MODIFY THIS SECTION)
     ########################################
     if sdir is None:
+        # Define __file__
         if file:
-            __file__ = file
+            THIS_FILE = file
         else:
-            __file__ = inspect.stack()[1].filename
+            THIS_FILE = inspect.stack()[1].filename
             if "ipython" in __file__:
-                __file__ = f"/tmp/{_os.getenv('USER')}.py"
-        _spath = __file__
-        _sdir, sfname, _ = split(_spath)
-        sdir = clean_path(_sdir + sfname + f"/RUNNING/{ID}/")
+                THIS_FILE = f"/tmp/{_os.getenv('USER')}.py"
+
+        # Define sdir
+        sdir = clean_path(_os.path.splitext(__file__)[0] + f"_out/RUNNING/{ID}/")
+
+        # Optional
         if sdir_suffix:
             sdir = sdir[:-1] + f"-{sdir_suffix}/"
-    if clear:
+
+    if clear_logs:
         _clear_python_log_dir(_sdir + sfname + "/")
     _os.makedirs(sdir, exist_ok=True)
     relative_sdir = _simplify_relative_path(sdir)
@@ -318,8 +326,9 @@ def start(
 
     _print_header(ID, PID, file, args, CONFIGS, verbose)
 
-    structure = analyze_code_flow(file)
-    _printc(structure)
+    if show_execution_flow:
+        structure = analyze_code_flow(file)
+        _printc(structure)
 
     return CONFIGS, sys.stdout, sys.stderr, plt, CC
 
@@ -408,7 +417,7 @@ if __name__ == "__main__":
         # Close
         mngs.gen.close(CONFIG)
 
-# EOF
+
 
 """
 /home/ywatanabe/proj/entrance/mngs/gen/_start.py

@@ -1,4 +1,7 @@
-# Time-stamp: "2024-11-08 01:47:25 (ywatanabe)"
+# Timestamp: "2025-02-27 22:06:31 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_dev/.github/workflows/install-develop-branch.yml
+
+# Time-stamp: "2025-02-27 22:06:31 (ywatanabe)"
 # File: ./mngs/.github/workflows/install-develop-branch.yml
 
 name: install-develop-branch
@@ -11,6 +14,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.9, '3.10', "3.11", "3.12"]
     steps:
     - uses: actions/checkout@v3
 
@@ -19,3 +25,5 @@ jobs:
           python -m pip install -U pip
           pip install git+https://github.com/ywatanabe1989/mngs.git@develop
           python ./tests/custom/test_mngs_run.py
+
+# EOF

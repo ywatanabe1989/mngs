@@ -1,5 +1,5 @@
-# Time-stamp: "2024-11-08 01:42:51 (ywatanabe)"
-# File: ./mngs/.github/workflows/install-pypi-latest.yml
+# Timestamp: "2025-02-27 22:06:46 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_dev/.github/workflows/install-pypi-latest.yml
 
 name: install-pypi-latest
 
@@ -7,16 +7,20 @@ on:
   push:
     branches:
       - main      
-      # - develop
+      - develop
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.9, '3.10', "3.11", "3.12"]
     steps:
     - uses: actions/checkout@v3
-
     - name: install-pypi-latest
       run: |
           pip install -U pip        
           pip install mngs
           python ./tests/custom/test_mngs_run.py
+
+# EOF

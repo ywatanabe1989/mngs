@@ -1,18 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-04 22:08:46 (ywatanabe)"
-# File: /ssh:ywatanabe@spartan:/home/ywatanabe/proj/mngs_repo/src/mngs/io/_load.py
+# Timestamp: "2025-04-10 08:05:53 (ywatanabe)"
+# File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/io/_load.py
 # ----------------------------------------
 import os
 __FILE__ = (
-    "/ssh:ywatanabe@spartan:/home/ywatanabe/proj/mngs_repo/src/mngs/io/_load.py"
+    "/ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/io/_load.py"
 )
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# Time-stamp: "2024-12-12 06:50:46 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/io/_load.py
 
 from typing import Any
 from ..decorators import preserve_doc
@@ -36,7 +32,7 @@ from ._load_modules._torch import _load_torch
 from ._load_modules._txt import _load_txt
 from ._load_modules._xml import _load_xml
 from ._load_modules._yaml import _load_yaml
-
+from ._load_modules._matlab import _load_matlab
 
 def load(
     lpath: str, show: bool = False, verbose: bool = False, **kwargs
@@ -72,7 +68,7 @@ def load(
     Supported Extensions
     -------------------
     - Data formats: .csv, .tsv, .xls, .xlsx, .xlsm, .xlsb, .json, .yaml, .yml
-    - Scientific: .npy, .npz, .hdf5, .con
+    - Scientific: .npy, .npz, .mat, .hdf5, .con
     - ML/DL: .pth, .pt, .cbm, .joblib, .pkl
     - Documents: .txt, .log, .event, .md, .docx, .pdf, .xml
     - Images: .jpg, .png, .tiff, .tif
@@ -117,6 +113,7 @@ def load(
         "npz": _load_npy,
         "mat": _load_matlab,
         "hdf5": _load_hdf5,
+        "mat": _load_matlab,
         "con": _load_con,
         # Documents
         "txt": _load_txt,

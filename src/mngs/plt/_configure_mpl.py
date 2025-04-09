@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-17 13:59:03 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/plt/_configure_mpl.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/plt/_configure_mpl.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/plt/_configure_mpl.py"
 
 from typing import Union
 

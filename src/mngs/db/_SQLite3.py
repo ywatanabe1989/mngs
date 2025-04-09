@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-25 06:08:26 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/db/_SQLite3.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_SQLite3.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_SQLite3.py"
 
 from typing import List, Optional
 

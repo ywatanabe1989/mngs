@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-24 22:24:54 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/db/_PostgreSQL_modules/_TableMixin.py
+# Timestamp: "2025-02-27 22:15:38 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_PostgreSQLMixins/_TableMixin.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQL_modules/_TableMixin.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQLMixins/_TableMixin.py"
 
 from typing import Any, Dict, List, Union
 import psycopg2
@@ -140,6 +140,5 @@ class _TableMixin:
 
         except (Exception, psycopg2.Error) as err:
             raise ValueError(f"Failed to get table stats: {err}")
-
 
 # EOF

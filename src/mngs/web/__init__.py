@@ -1,17 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-11 06:58:21 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/web/__init__.py
+# Timestamp: "2025-02-27 13:08:27 (ywatanabe)"
+# File: ./src/mngs/web/__init__.py
 
-#!./env/bin/python3
-# -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-13 19:04:32 (ywatanabe)"
-# /home/ywatanabe/proj/mngs_repo/src/mngs/web/__init__.py
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-22 19:51:47 (ywatanabe)"
-# File: __init__.py
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/web/__init__.py"
 
 import os
 import importlib
@@ -34,16 +26,5 @@ for filename in os.listdir(current_dir):
 
 # Clean up temporary variables
 del os, importlib, inspect, current_dir, filename, module_name, module, name, obj
-
-# EOF
-
-# try:
-#     from ._summarize_url import summarize_url
-# except ImportError as e:
-#     pass
-#     # print(f"Warning: Failed to import summarize_url from ._summarize_url.")
-
-# # from ._summarize_url import summarize_url
-
 
 # EOF
