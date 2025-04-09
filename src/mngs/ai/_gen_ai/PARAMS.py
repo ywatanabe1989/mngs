@@ -1,7 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-02-25 13:07:39 (ywatanabe)"
-# File: ./src/mngs/ai/_gen_ai/PARAMS.py
+# Timestamp: "2025-03-28 09:55:29 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/PARAMS.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/PARAMS.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
 
 THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/PARAMS.py"
 
@@ -185,6 +192,13 @@ ANTHROPIC_MODELS = [
 # https://ai.google.dev/pricing#1_5flash
 
 GOOGLE_MODELS = [
+    {
+        "name": "gemini-2.5-pro-exp-03-25",
+        "input_cost": None,
+        "output_cost": None,
+        "api_key_env": "GOOGLE_API_KEY",
+        "provider": "Google",
+    },
     {
         "name": "gemini-2.0-flash",
         "input_cost": None,
