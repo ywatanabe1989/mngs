@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-03-28 09:55:29 (ywatanabe)"
+# Timestamp: "2025-04-18 11:57:52 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/PARAMS.py
 # ----------------------------------------
 import os
@@ -41,6 +41,14 @@ DEEPSEEK_MODELS = [
 
 # https://openai.com/api/pricing/
 OPENAI_MODELS = [
+    # o3
+    {
+        "name": "o3",
+        "input_cost": 10.00,
+        "output_cost": 40.00,
+        "api_key_env": "OPENAI_API_KEY",
+        "provider": "OpenAI",
+    },
     {
         "name": "o3-mini",
         "input_cost": 1.10,
@@ -69,13 +77,36 @@ OPENAI_MODELS = [
         "api_key_env": "OPENAI_API_KEY",
         "provider": "OpenAI",
     },
+    # o4
     {
-        "name": "o1",
-        "input_cost": 15.00,
-        "output_cost": 7.50,
+        "name": "o4-mini",
+        "input_cost": 1.10,
+        "output_cost": 4.40,
         "api_key_env": "OPENAI_API_KEY",
         "provider": "OpenAI",
     },
+    {
+        "name": "o4-mini-low",
+        "input_cost": 1.10,
+        "output_cost": 4.40,
+        "api_key_env": "OPENAI_API_KEY",
+        "provider": "OpenAI",
+    },
+    {
+        "name": "o4-mini-medium",
+        "input_cost": 1.10,
+        "output_cost": 4.40,
+        "api_key_env": "OPENAI_API_KEY",
+        "provider": "OpenAI",
+    },
+    {
+        "name": "o4-mini-high",
+        "input_cost": 1.10,
+        "output_cost": 4.40,
+        "api_key_env": "OPENAI_API_KEY",
+        "provider": "OpenAI",
+    },
+    # o1
     {
         "name": "o1",
         "input_cost": 15.00,
@@ -97,13 +128,40 @@ OPENAI_MODELS = [
         "api_key_env": "OPENAI_API_KEY",
         "provider": "OpenAI",
     },
+    # {
+    #     "name": "o1-high",
+    #     "input_cost": 1.10,
+    #     "output_cost": 4.40,
+    #     "api_key_env": "OPENAI_API_KEY",
+    #     "provider": "OpenAI",
+    # },
+
+    # ------------------------------
+    # For everyday tasks
+    # ------------------------------
+    # GPT-4.1
     {
-        "name": "o1-mini-high",
-        "input_cost": 1.10,
-        "output_cost": 4.40,
+        "name": "gpt-4.1",
+        "input_cost": 2.00,
+        "output_cost": 8.00,
         "api_key_env": "OPENAI_API_KEY",
         "provider": "OpenAI",
     },
+    {
+        "name": "gpt-4.1-mini",
+        "input_cost": 0.40,
+        "output_cost": 1.60,
+        "api_key_env": "OPENAI_API_KEY",
+        "provider": "OpenAI",
+    },
+    {
+        "name": "gpt-4.1-nano",
+        "input_cost": 0.10,
+        "output_cost": 0.40,
+        "api_key_env": "OPENAI_API_KEY",
+        "provider": "OpenAI",
+    },
+    # GPT-4
     {
         "name": "gpt-4",
         "input_cost": 30.00,
@@ -382,6 +440,7 @@ LLAMA_MODELS = [
     },
 ]
 
+# https://console.groq.com/docs/models
 GROQ_MODELS = [
     {
         "name": "deepseek-r1-distill-llama-70b",
