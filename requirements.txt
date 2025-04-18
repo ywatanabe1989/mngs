@@ -9,15 +9,20 @@ aiohttp
 ansi-escapes
 anthropic
 attrdict
+attrdict
+bitsandbytes
 bitsandbytes
 black
 bs4
 bs4
 chardet
+docutils
 docutils<0.18
 einops
 epc
 fairscale
+fairscale
+fastapi
 fastapi
 flake8
 flask
@@ -25,6 +30,7 @@ geom_median
 google-genai
 google-search-results
 googlesearch-python
+groq
 groq
 h5py
 html2text
@@ -36,6 +42,7 @@ jedi
 joblib
 joypy
 julius
+llama-stack
 llama-stack
 lxml
 lxml_html_clean
@@ -50,9 +57,12 @@ obspy
 openai
 openpyxl
 optuna
+packaging
 packaging #<21.0
 pandas
 pebble 
+pebble 
+platformdirs
 platformdirs #<3.0
 plotly
 plyer
@@ -60,6 +70,7 @@ psutil
 psycopg2-binary
 pybids
 pyedflib
+pygments
 pygments
 pyls
 pymatreader
@@ -90,6 +101,7 @@ setuptools
 six
 sktime
 sounddevice
+sphinx
 sphinx # <4.5.0
 sqlalchemy
 statsmodels # Please ignore this package due to incompatibility with recent versions of numpy*
@@ -97,6 +109,7 @@ sympy
 tabulate
 tensorpac
 termplotlib
+timeout-decorator 
 timeout-decorator 
 tk
 tldr
