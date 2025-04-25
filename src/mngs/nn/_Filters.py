@@ -1,5 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Timestamp: "2025-04-25 18:12:39 (ywatanabe)"
+# File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/nn/_Filters.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./src/mngs/nn/_Filters.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 # Time-stamp: "2024-11-26 22:23:40 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/nn/_Filters.py
 
@@ -440,6 +451,5 @@ if __name__ == "__main__":
 """
 /home/ywatanabe/proj/entrance/mngs/dsp/nn/_Filters.py
 """
-
 
 # EOF
