@@ -1,7 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-02-27 11:14:34 (ywatanabe)"
-# File: ./src/mngs/io/__init__.py
+# Timestamp: "2025-04-22 09:27:44 (ywatanabe)"
+# File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/io/__init__.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "/ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/io/__init__.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
 
 THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/io/__init__.py"
 
@@ -45,7 +52,7 @@ from ._save_listed_dfs_as_csv import *
 from ._save_listed_scalars_as_csv import *
 from ._save_mp4 import *
 from ._save_optuna_study_as_csv_and_pngs import *
-from ._save_optuna_stury import *
+# from ._save_optuna_stury import *
 from ._save import *
 from ._save_text import *
 
