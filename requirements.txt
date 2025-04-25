@@ -52,18 +52,16 @@ matplotlib
 mne
 more-itertools
 natsort
-numpy #>2.0.0
+numpy
 obspy
 openai
 openpyxl
 optuna
 packaging
-packaging #<21.0
 pandas
 pebble 
 pebble 
 platformdirs
-platformdirs #<3.0
 plotly
 plyer
 psutil
