@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-18 11:57:52 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/PARAMS.py
+# Timestamp: "2025-04-27 03:11:57 (ywatanabe)"
+# File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/PARAMS.py
 # ----------------------------------------
 import os
 __FILE__ = (
-    "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/PARAMS.py"
+    "./src/mngs/ai/_gen_ai/PARAMS.py"
 )
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
@@ -135,7 +135,6 @@ OPENAI_MODELS = [
     #     "api_key_env": "OPENAI_API_KEY",
     #     "provider": "OpenAI",
     # },
-
     # ------------------------------
     # For everyday tasks
     # ------------------------------
@@ -247,27 +246,34 @@ ANTHROPIC_MODELS = [
     },
 ]
 
-# https://ai.google.dev/pricing#1_5flash
 
+# https://ai.google.dev/gemini-api/docs/pricing
 GOOGLE_MODELS = [
     {
+        "name": "gemini-2.5-flash-preview-04-17",
+        "input_cost": 0.15,
+        "output_cost": 3.50,
+        "api_key_env": "GOOGLE_API_KEY",
+        "provider": "Google",
+    },
+    {
         "name": "gemini-2.5-pro-exp-03-25",
-        "input_cost": None,
-        "output_cost": None,
+        "input_cost": 1.25,
+        "output_cost": 10.00,
         "api_key_env": "GOOGLE_API_KEY",
         "provider": "Google",
     },
     {
         "name": "gemini-2.0-flash",
-        "input_cost": None,
-        "output_cost": None,
+        "input_cost": 0.10,
+        "output_cost": 0.40,
         "api_key_env": "GOOGLE_API_KEY",
         "provider": "Google",
     },
     {
         "name": "gemini-2.0-flash-lite-preview-02-05",
-        "input_cost": None,
-        "output_cost": None,
+        "input_cost": 0.075,
+        "output_cost": 0.30,
         "api_key_env": "GOOGLE_API_KEY",
         "provider": "Google",
     },
@@ -551,8 +557,6 @@ MODELS = pd.DataFrame(
     + DEEPSEEK_MODELS
     + GROQ_MODELS
 )
-
-
 
 
 # curl -L -X GET 'https://api.deepseek.com/models' \
