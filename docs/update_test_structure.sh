@@ -1,6 +1,6 @@
 #!/bin/bash
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-27 23:24:57 (ywatanabe)"
+# Timestamp: "2025-04-27 23:45:07 (ywatanabe)"
 # File: ./docs/update_test_structure.sh
 
 THIS_DIR="$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)"
@@ -40,7 +40,7 @@ get_source_code_start_tag() {
 get_source_code_end_tag() {
     local src_file=$1
     printf "%s\n" \
-        "" \
+        "#" \
         "# --------------------------------------------------------------------------------" \
         "# End of Source code from: $src_file" \
         "# --------------------------------------------------------------------------------"
@@ -74,35 +74,55 @@ find_source_code_comment() {
     printf "%s %s" "$start_line" "$end_line"
 }
 
+# replace_or_add_source_code_comment() {
+#     local test_file=$1
+#     local src_file=$2
+#     local new_block
+#     new_block=$(get_source_code_as_comment "$src_file")
+
+#     if [ ! -f "$test_file" ]; then
+#         mkdir -p "$(dirname "$test_file")"
+#         printf '%s\n' "$new_block" > "$test_file"
+#     else
+#         read start_line end_line < <(find_source_code_comment "$test_file")
+
+#         # If no comment block exists yet
+#         if [ -z "$start_line" ] || [ -z "$end_line" ]; then
+#             printf '%s\n' "$new_block" > "$test_file.new"
+#             cat "$test_file" >> "$test_file.new"
+#             mv "$test_file.new" "$test_file"
+#         else
+#             # Use sed instead of awk to avoid escaping issues
+#             sed -e "${start_line},${end_line}d" "$test_file" > "$test_file.tmp"
+#             sed -i "${start_line}i\\${new_block}" "$test_file.tmp"
+#             mv "$test_file.tmp" "$test_file"
+#         fi
+#     fi
+# }
 replace_or_add_source_code_comment() {
     local test_file=$1
     local src_file=$2
-
     local new_block
     new_block=$(get_source_code_as_comment "$src_file")
 
     if [ ! -f "$test_file" ]; then
-        mkdir -p "$(dirname $test_file)"
+        mkdir -p "$(dirname "$test_file")"
         printf '%s\n' "$new_block" > "$test_file"
     else
         read start_line end_line < <(find_source_code_comment "$test_file")
 
-        awk -v nb="$new_block" -v start_line="$start_line" -v end_line="$end_line" '
-          NR==start_line {
-            print nb
-            in_block=1
-            next
-          }
-          in_block && NR==end_line {
-            in_block=0
-            next
-          }
-          !in_block {
-            print
-          }
-        ' "$test_file" > "$test_file".tmp
-
-        mv "$test_file".tmp "$test_file"
+        # If no comment block exists yet
+        if [ -z "$start_line" ] || [ -z "$end_line" ]; then
+            printf '%s\n' "$new_block" > "$test_file.new"
+            cat "$test_file" >> "$test_file.new"
+            mv "$test_file.new" "$test_file"
+        else
+            # Using temporary files for portability
+            head -n $((start_line-1)) "$test_file" > "$test_file.tmp"
+            echo "$new_block" >> "$test_file.tmp"
+            tail -n +$((end_line+1)) "$test_file" >> "$test_file.tmp"
+            mv "$test_file.tmp" "$test_file"
+        fi
     fi
 }
 
@@ -111,13 +131,18 @@ replace_or_add_source_code_comment() {
 ########################################
 add_pytest_main_guard_if_not_present() {
     local test_file=$1
+    # Only add if file exists and doesn't already have the guard
+    [ ! -f "$test_file" ] && return
     grep -q '^if __name__ == "__main__":' "$test_file" && return
-    {
-        printf '\nif __name__ == "__main__":\n'
-        printf '    import os\n'
-        printf '    import pytest\n'
-        printf '    pytest.main([os.path.abspath(__file__)])\n'
-    } >> "$test_file"
+
+    # Add the guard at the end
+    cat >> "$test_file" << 'EOL'
+
+if __name__ == "__main__":
+    import os
+    import pytest
+    pytest.main([os.path.abspath(__file__)])
+EOL
 }
 
 ########################################
@@ -137,7 +162,6 @@ construct_blacklist_patterns() {
        "*/2025Y*"
        "*/2024Y*"
        "*/__pycache__*"
-       "*/__init__.py*"
    )
    FIND_EXCLUDES=()
    PRUNE_ARGS=()
@@ -212,25 +236,24 @@ main() {
 
     # update tests: embed source comments & pytest guard
     find_files "$SRC_DIR" f "*.py" | while read -r src_file; do
-        local rel="${src_file#$SRC_DIR/}"
-        local rel_dir
+        # derive relative path and parts
+        rel="${src_file#$SRC_DIR/}"
         rel_dir=$(dirname "$rel")
-        local src_base
         src_base=$(basename "$rel")
 
-        local test_dir
+        # ensure test subdir exists
         test_dir="$TESTS_DIR/$rel_dir"
         mkdir -p "$test_dir"
 
-        local test_file
+        # build correct test file path
         test_file="$test_dir/test_$src_base"
 
         replace_or_add_source_code_comment "$test_file" "$src_file"
         add_pytest_main_guard_if_not_present "$test_file"
     done
 
-    cleanup_unnecessary_test_files
-    move_stale_test_files_to_old
+    # cleanup_unnecessary_test_files
+    # move_stale_test_files_to_old
 
     tree "$TESTS_DIR" 2>&1 | tee "$LOG_PATH"
 }
