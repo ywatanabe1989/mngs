@@ -1,11 +1,18 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/ai/_gen_ai/PARAMS.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/_gen_ai/PARAMS.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Timestamp: "2025-02-25 13:07:39 (ywatanabe)"
-# # File: ./src/mngs/ai/_gen_ai/PARAMS.py
+# # Timestamp: "2025-04-27 03:11:57 (ywatanabe)"
+# # File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/PARAMS.py
+# # ----------------------------------------
+# import os
+# __FILE__ = (
+#     "./src/mngs/ai/_gen_ai/PARAMS.py"
+# )
+# __DIR__ = os.path.dirname(__FILE__)
+# # ----------------------------------------
 # 
-# __file__ = "./src/mngs/ai/_gen_ai/PARAMS.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/PARAMS.py"
 # 
 # import pandas as pd
 # 
@@ -36,6 +43,14 @@
 # 
 # # https://openai.com/api/pricing/
 # OPENAI_MODELS = [
+#     # o3
+#     {
+#         "name": "o3",
+#         "input_cost": 10.00,
+#         "output_cost": 40.00,
+#         "api_key_env": "OPENAI_API_KEY",
+#         "provider": "OpenAI",
+#     },
 #     {
 #         "name": "o3-mini",
 #         "input_cost": 1.10,
@@ -64,13 +79,36 @@
 #         "api_key_env": "OPENAI_API_KEY",
 #         "provider": "OpenAI",
 #     },
+#     # o4
 #     {
-#         "name": "o1",
-#         "input_cost": 15.00,
-#         "output_cost": 7.50,
+#         "name": "o4-mini",
+#         "input_cost": 1.10,
+#         "output_cost": 4.40,
 #         "api_key_env": "OPENAI_API_KEY",
 #         "provider": "OpenAI",
 #     },
+#     {
+#         "name": "o4-mini-low",
+#         "input_cost": 1.10,
+#         "output_cost": 4.40,
+#         "api_key_env": "OPENAI_API_KEY",
+#         "provider": "OpenAI",
+#     },
+#     {
+#         "name": "o4-mini-medium",
+#         "input_cost": 1.10,
+#         "output_cost": 4.40,
+#         "api_key_env": "OPENAI_API_KEY",
+#         "provider": "OpenAI",
+#     },
+#     {
+#         "name": "o4-mini-high",
+#         "input_cost": 1.10,
+#         "output_cost": 4.40,
+#         "api_key_env": "OPENAI_API_KEY",
+#         "provider": "OpenAI",
+#     },
+#     # o1
 #     {
 #         "name": "o1",
 #         "input_cost": 15.00,
@@ -92,13 +130,39 @@
 #         "api_key_env": "OPENAI_API_KEY",
 #         "provider": "OpenAI",
 #     },
+#     # {
+#     #     "name": "o1-high",
+#     #     "input_cost": 1.10,
+#     #     "output_cost": 4.40,
+#     #     "api_key_env": "OPENAI_API_KEY",
+#     #     "provider": "OpenAI",
+#     # },
+#     # ------------------------------
+#     # For everyday tasks
+#     # ------------------------------
+#     # GPT-4.1
 #     {
-#         "name": "o1-mini-high",
-#         "input_cost": 1.10,
-#         "output_cost": 4.40,
+#         "name": "gpt-4.1",
+#         "input_cost": 2.00,
+#         "output_cost": 8.00,
 #         "api_key_env": "OPENAI_API_KEY",
 #         "provider": "OpenAI",
 #     },
+#     {
+#         "name": "gpt-4.1-mini",
+#         "input_cost": 0.40,
+#         "output_cost": 1.60,
+#         "api_key_env": "OPENAI_API_KEY",
+#         "provider": "OpenAI",
+#     },
+#     {
+#         "name": "gpt-4.1-nano",
+#         "input_cost": 0.10,
+#         "output_cost": 0.40,
+#         "api_key_env": "OPENAI_API_KEY",
+#         "provider": "OpenAI",
+#     },
+#     # GPT-4
 #     {
 #         "name": "gpt-4",
 #         "input_cost": 30.00,
@@ -184,20 +248,34 @@
 #     },
 # ]
 # 
-# # https://ai.google.dev/pricing#1_5flash
 # 
+# # https://ai.google.dev/gemini-api/docs/pricing
 # GOOGLE_MODELS = [
 #     {
+#         "name": "gemini-2.5-flash-preview-04-17",
+#         "input_cost": 0.15,
+#         "output_cost": 3.50,
+#         "api_key_env": "GOOGLE_API_KEY",
+#         "provider": "Google",
+#     },
+#     {
+#         "name": "gemini-2.5-pro-exp-03-25",
+#         "input_cost": 1.25,
+#         "output_cost": 10.00,
+#         "api_key_env": "GOOGLE_API_KEY",
+#         "provider": "Google",
+#     },
+#     {
 #         "name": "gemini-2.0-flash",
-#         "input_cost": None,
-#         "output_cost": None,
+#         "input_cost": 0.10,
+#         "output_cost": 0.40,
 #         "api_key_env": "GOOGLE_API_KEY",
 #         "provider": "Google",
 #     },
 #     {
 #         "name": "gemini-2.0-flash-lite-preview-02-05",
-#         "input_cost": None,
-#         "output_cost": None,
+#         "input_cost": 0.075,
+#         "output_cost": 0.30,
 #         "api_key_env": "GOOGLE_API_KEY",
 #         "provider": "Google",
 #     },
@@ -370,6 +448,7 @@
 #     },
 # ]
 # 
+# # https://console.groq.com/docs/models
 # GROQ_MODELS = [
 #     {
 #         "name": "deepseek-r1-distill-llama-70b",
@@ -482,15 +561,12 @@
 # )
 # 
 # 
-# 
-# 
 # # curl -L -X GET 'https://api.deepseek.com/models' \
 # # -H 'Accept: application/json' \
 # # -H 'Authorization: Bearer sk-43412ea536ff482e87a38010231ce7c3'
 # 
 # # EOF
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path
