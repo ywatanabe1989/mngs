@@ -1,14 +1,26 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Timestamp: "2025-04-27 19:25:33 (ywatanabe)"
+# File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/tests/mngs/plt/ax/test__set_ticks.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./tests/mngs/plt/ax/test__set_ticks.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
+
 # Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/plt/ax/_set_ticks.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-06 00:09:46 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/plt/ax/_set_ticks.py
-# 
+#
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-09-06 23:33:56 (ywatanabe)"
-# 
+#
 # import matplotlib.pyplot as plt
 # import mngs
 # import numpy as np
@@ -22,29 +34,29 @@
 #     if "TkAgg" in canvas_type:
 #         ax.get_figure().canvas.draw()  # Redraw the canvas once after making all updates
 #     return ax
-# 
-# 
+#
+#
 # def set_x_ticks(ax, x_vals=None, x_ticks=None):
 #     """
 #     Set custom tick labels on the x and y axes based on specified values and desired ticks.
-# 
+#
 #     Parameters:
 #     - ax: The axis object to modify.
 #     - x_vals: Array of x-axis values.
 #     - x_ticks: List of desired tick labels on the x-axis.
 #     - y_vals: Array of y-axis values.
 #     - y_ticks: List of desired tick labels on the y-axis.
-# 
+#
 #     Example:
 #         import matplotlib.pyplot as plt
 #         import numpy as np
-# 
+#
 #         fig, axes = plt.subplots(nrows=4)
 #         x = np.linspace(0, 10, 100)
 #         y = np.sin(x)
 #         for ax in axes:
 #             ax.plot(x, y)  # Plot a sine wave
-# 
+#
 #         set_ticks(axes[0])  # Do nothing # OK
 #         set_ticks(axes[1], x_vals=x+3) # OK
 #         set_ticks(axes[2], x_ticks=[1,2])  # OK
@@ -52,20 +64,20 @@
 #         fig.tight_layout()
 #         plt.show()
 #     """
-# 
+#
 #     def _avoid_overlaps(values):
 #         values = np.array(values)
 #         if ("int" in str(values.dtype)) or ("float" in str(values.dtype)):
 #             values = values.astype(float) + np.arange(len(values)) * 1e-5
 #         return values
-# 
+#
 #     def _set_x_vals(ax, x_vals):
 #         x_vals = _avoid_overlaps(x_vals)
 #         new_x_axis = np.linspace(*ax.get_xlim(), len(x_vals))
 #         ax.set_xticks(new_x_axis)
 #         ax.set_xticklabels([f"{xv}" for xv in x_vals])
 #         return ax
-# 
+#
 #     def _set_x_ticks(ax, x_ticks):
 #         x_ticks = np.array(x_ticks)
 #         if x_ticks.dtype.kind in ["U", "S", "O"]:  # If x_ticks are strings
@@ -88,72 +100,72 @@
 #             ax.set_xticks(ax.get_xticks()[x_indi])
 #             ax.set_xticklabels([f"{xt}" for xt in x_ticks])
 #         return ax
-# 
+#
 #     x_vals_passed = x_vals is not None
 #     x_ticks_passed = x_ticks is not None
-# 
+#
 #     if is_listed_X(x_ticks, dict):
 #         x_ticks = [to_str(xt, delimiter="\n") for xt in x_ticks]
-# 
+#
 #     if (not x_vals_passed) and (not x_ticks_passed):
 #         # Do nothing
 #         pass
-# 
+#
 #     elif x_vals_passed and (not x_ticks_passed):
 #         # Replaces the x axis to x_vals
 #         x_ticks = np.linspace(x_vals[0], x_vals[-1], 4)
 #         ax = _set_x_vals(ax, x_ticks)
-# 
+#
 #     elif (not x_vals_passed) and x_ticks_passed:
 #         # Locates 'x_ticks' on the original x axis
 #         ax.set_xticks(x_ticks)
-# 
+#
 #     elif x_vals_passed and x_ticks_passed:
 #         if x_vals == "auto":
 #             x_vals = np.arange(len(x_ticks))
-# 
+#
 #         # Replaces the original x axis to 'x_vals' and locates the 'x_ticks' on the new axis
 #         ax = _set_x_vals(ax, x_vals)
 #         ax = _set_x_ticks(ax, x_ticks)
-# 
+#
 #     return ax
-# 
-# 
+#
+#
 # def set_y_ticks(ax, y_vals=None, y_ticks=None):
 #     """
 #     Set custom tick labels on the y-axis based on specified values and desired ticks.
-# 
+#
 #     Parameters:
 #     - ax: The axis object to modify.
 #     - y_vals: Array of y-axis values where ticks should be placed.
 #     - y_ticks: List of labels for ticks on the y-axis.
-# 
+#
 #     Example:
 #         import matplotlib.pyplot as plt
 #         import numpy as np
-# 
+#
 #         fig, ax = plt.subplots()
 #         x = np.linspace(0, 10, 100)
 #         y = np.sin(x)
 #         ax.plot(x, y)  # Plot a sine wave
-# 
+#
 #         set_y_ticks(ax, y_vals=y, y_ticks=['Low', 'High'])  # Set custom y-axis ticks
 #         plt.show()
 #     """
-# 
+#
 #     def _avoid_overlaps(values):
 #         values = np.array(values)
 #         if ("int" in str(values.dtype)) or ("float" in str(values.dtype)):
 #             values = values.astype(float) + np.arange(len(values)) * 1e-5
 #         return values
-# 
+#
 #     def _set_y_vals(ax, y_vals):
 #         y_vals = _avoid_overlaps(y_vals)
 #         new_y_axis = np.linspace(*ax.get_ylim(), len(y_vals))
 #         ax.set_yticks(new_y_axis)
 #         ax.set_yticklabels([f"{yv:.2f}" for yv in y_vals])
 #         return ax
-# 
+#
 #     # def _set_y_ticks(ax, y_ticks):
 #     #     y_ticks = np.array(y_ticks)
 #     #     y_vals = np.array(
@@ -167,7 +179,7 @@
 #     #         np.array(np.abs(y_vals[:, np.newaxis] - y_ticks[np.newaxis, :])),
 #     #         axis=0,
 #     #     )
-# 
+#
 #     #     # y_indi = [np.argmin(np.abs(y_vals - yt)) for yt in y_ticks]
 #     #     ax.set_yticks(ax.get_yticks()[y_indi])
 #     #     ax.set_yticklabels([f"{yt}" for yt in y_ticks])
@@ -194,47 +206,47 @@
 #             ax.set_yticks(ax.get_yticks()[y_indi])
 #             ax.set_yticklabels([f"{yt}" for yt in y_ticks])
 #         return ax
-# 
+#
 #     y_vals_passed = y_vals is not None
 #     y_ticks_passed = y_ticks is not None
-# 
+#
 #     if is_listed_X(y_ticks, dict):
 #         y_ticks = [to_str(yt, delimiter="\n") for yt in y_ticks]
-# 
+#
 #     if (not y_vals_passed) and (not y_ticks_passed):
 #         # Do nothing
 #         pass
-# 
+#
 #     elif y_vals_passed and (not y_ticks_passed):
 #         # Replaces the y axis to y_vals
 #         ax = _set_y_vals(ax, y_vals)
-# 
+#
 #     elif (not y_vals_passed) and y_ticks_passed:
 #         # Locates 'y_ticks' on the original y axis
 #         ax.set_yticks(y_ticks)
-# 
+#
 #     elif y_vals_passed and y_ticks_passed:
 #         # Replaces the original y axis to 'y_vals' and locates the 'y_ticks' on the new axis
 #         if y_vals == "auto":
 #             y_vals = np.arange(len(y_ticks))
-# 
+#
 #         ax = _set_y_vals(ax, y_vals)
 #         ax = _set_y_ticks(ax, y_ticks)
 #     return ax
-# 
-# 
+#
+#
 # if __name__ == "__main__":
 #     import mngs
-# 
+#
 #     xx, tt, fs = mngs.dsp.demo_sig()
 #     pha, amp, freqs = mngs.dsp.wavelet(xx, fs)
-# 
+#
 #     i_batch, i_ch = 0, 0
 #     ff = freqs[i_batch, i_ch]
 #     fig, ax = mngs.plt.subplots()
-# 
+#
 #     ax.imshow2d(amp[i_batch, i_ch])
-# 
+#
 #     ax = set_ticks(
 #         ax,
 #         x_vals=tt,
@@ -242,47 +254,123 @@
 #         y_vals=ff,
 #         y_ticks=[0, 128, 256],
 #     )
-# 
+#
 #     plt.show()
-# 
-# 
+#
+#
 # # EOF
 
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-import os
+
 import sys
 from pathlib import Path
-import pytest
+
+import matplotlib
 import numpy as np
+import pytest
+
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
 
 # Add source code to the top of Python path
 project_root = str(Path(__file__).resolve().parents[3])
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
+from mngs.plt.ax._set_ticks import set_ticks, set_x_ticks, set_y_ticks
 
-from mngs.plt.ax._set_ticks import *
 
 class TestMainFunctionality:
     def setup_method(self):
         # Setup test fixtures
-        pass
+        self.fig = plt.figure(figsize=(6, 4))
+        self.ax = self.fig.add_subplot(111)
+        # Create a basic plot
+        xx = np.linspace(0, 10, 100)
+        yy = np.sin(xx)
+        self.ax.plot(xx, yy)
 
     def teardown_method(self):
         # Clean up after tests
-        pass
+        plt.close(self.fig)
 
-    def test_basic_functionality(self):
-        # Basic test case
-        raise NotImplementedError("Test not yet implemented")
+    def test_set_x_ticks_basic(self):
+        # Test with custom x tick locations
+        x_ticks = [0, 2.5, 5, 7.5, 10]
+        ax = set_x_ticks(self.ax, x_ticks=x_ticks)
 
-    def test_edge_cases(self):
-        # Edge case testing
-        raise NotImplementedError("Test not yet implemented")
+        # Check that the ticks were set correctly
+        assert len(ax.get_xticks()) == len(x_ticks)
+        assert np.allclose(ax.get_xticks(), x_ticks)
 
-    def test_error_handling(self):
-        # Error handling testing
-        raise NotImplementedError("Test not yet implemented")
+    def test_set_y_ticks_basic(self):
+        # Test with custom y tick locations
+        y_ticks = [-1, -0.5, 0, 0.5, 1]
+        ax = set_y_ticks(self.ax, y_ticks=y_ticks)
+
+        # Check that the ticks were set correctly
+        assert len(ax.get_yticks()) == len(y_ticks)
+        assert np.allclose(ax.get_yticks(), y_ticks)
+
+    def test_set_ticks_combined(self):
+        # Test setting both x and y ticks
+        x_ticks = [0, 5, 10]
+        y_ticks = [-1, 0, 1]
+
+        ax = set_ticks(self.ax, xticks=x_ticks, yticks=y_ticks)
+
+        # Check that the ticks were set correctly
+        assert np.allclose(ax.get_xticks(), x_ticks)
+        assert np.allclose(ax.get_yticks(), y_ticks)
+
+    def test_set_ticks_with_vals_and_ticks(self):
+        # Test with both vals and ticks
+        x_vals = np.linspace(0, 100, 11)  # [0, 10, 20, ..., 100]
+        x_ticks = [0, 50, 100]
+
+        # This should create a new mapping of the axis
+        ax = set_x_ticks(self.ax, x_vals=x_vals, x_ticks=x_ticks)
+
+        # Check the ticks after mapping
+        assert len(ax.get_xticks()) > 0
+        assert len(ax.get_xticklabels()) > 0
+
+    def test_string_ticks(self):
+        # Test with string tick labels
+        x_ticks = ["A", "B", "C", "D"]
+        ax = set_x_ticks(self.ax, x_ticks=x_ticks)
+
+        # Get the tick labels (need to render the figure for this)
+        fig = ax.get_figure()
+        fig.canvas.draw()
+        tick_labels = [label.get_text() for label in ax.get_xticklabels()]
+
+        # Check that the tick labels match
+        assert tick_labels == x_ticks
+
+    def test_dict_ticks(self):
+        # This test depends on the implementation of to_str from mngs.dict
+        # Testing with a mock instead
+        from unittest.mock import patch
+
+        with patch("mngs.plt.ax._set_ticks.is_listed_X", return_value=True):
+            with patch(
+                "mngs.plt.ax._set_ticks.to_str",
+                side_effect=lambda x, delimiter: f"formatted_{x}",
+            ):
+                x_ticks = [{"a": 1}, {"b": 2}]
+                ax = set_x_ticks(self.ax, x_ticks=x_ticks)
+
+                # Get the tick labels
+                fig = ax.get_figure()
+                fig.canvas.draw()
+                tick_labels = [
+                    label.get_text() for label in ax.get_xticklabels()
+                ]
+
+                # Check formatted labels (matching the mock's return value)
+                assert "formatted_" in tick_labels[0]
+
 
 if __name__ == "__main__":
     pytest.main([os.path.abspath(__file__)])
+
+# EOF

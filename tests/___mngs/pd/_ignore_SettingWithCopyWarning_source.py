@@ -1,1 +1,0 @@
-../../../src/mngs/pd/_ignore_SettingWithCopyWarning.py

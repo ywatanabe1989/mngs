@@ -1,35 +1,47 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Timestamp: "2025-04-27 16:38:34 (ywatanabe)"
+# File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/tests/mngs/plt/test__configure_mpl.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./tests/mngs/plt/test__configure_mpl.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
+
 # Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/plt/_configure_mpl.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-17 13:59:03 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/plt/_configure_mpl.py
-# 
+#
 # __file__ = "./src/mngs/plt/_configure_mpl.py"
-# 
+#
 # from typing import Union
-# 
+#
 # import matplotlib.pyplot as plt
 # import mngs
 # import numpy as np
-# 
-# 
+#
+#
 # def _convert_font_size(size: Union[str, int, float]) -> float:
 #     """Converts various font size specifications to numerical values.
-# 
+#
 #     Parameters
 #     ----------
 #     size : Union[str, int, float]
 #         Font size specification. Can be:
 #         - String: 'xx-small', 'x-small', 'small', 'medium', 'large', 'x-large', 'xx-large'
 #         - Numeric: direct point size value
-# 
+#
 #     Returns
 #     -------
 #     float
 #         Font size in points
 #     """
-# 
+#
 #     if isinstance(size, str):
 #         size_map = {
 #             "xx-small": 6,
@@ -45,8 +57,8 @@
 #         return float(size)
 #     else:
 #         raise ValueError(f"Unsupported font size type: {type(size)}")
-# 
-# 
+#
+#
 # def configure_mpl(
 #     plt,
 #     fig_size_mm=(160, 100),
@@ -62,7 +74,7 @@
 #     **kwargs,
 # ):
 #     """Configures Matplotlib settings for publication-quality plots.
-# 
+#
 #     Parameters
 #     ----------
 #     plt : matplotlib.pyplot
@@ -91,16 +103,16 @@
 #         Color transparency, by default 0.9
 #     verbose : bool, optional
 #         Whether to print configuration details, by default False
-# 
+#
 #     Returns
 #     -------
 #     tuple
 #         (plt, dict of RGBA colors)
 #     """
-# 
+#
 #     # Convert base font size
 #     base_size = _convert_font_size(fontsize)
-# 
+#
 #     # Colors
 #     RGBA = {
 #         k: mngs.plt.update_alpha(v, alpha)
@@ -114,10 +126,10 @@
 #         k: tuple(mngs.plt.update_alpha(v, alpha))
 #         for k, v in mngs.plt.PARAMS["RGBA_NORM_FOR_CYCLE"].items()
 #     }
-# 
+#
 #     # Normalize figure size from mm to inches
 #     figsize_inch = (fig_size_mm[0] / 25.4, fig_size_mm[1] / 25.4)
-# 
+#
 #     # Update Matplotlib configuration
 #     plt.rcParams.update(
 #         {
@@ -144,8 +156,8 @@
 #             "lines.linewidth": line_width,
 #         }
 #     )
-# 
-# 
+#
+#
 #     if verbose:
 #         print("\n" + "-" * 40)
 #         print("Matplotlib has been configured as follows:\n")
@@ -168,7 +180,7 @@
 #         for color_str, rgba in RGBA.items():
 #             print(f"  {color_str}: {rgba}")
 #         print("-" * 40)
-# 
+#
 #     # if verbose:
 #     #     print("\n" + "-" * 40)
 #     #     print("Matplotlib has been configured as follows:\n")
@@ -188,13 +200,13 @@
 #     #     for color_str, rgba in RGBA.items():
 #     #         print(f"  {color_str}: {rgba}")
 #     #     print("-" * 40)
-# 
+#
 #     return plt, RGBA_NORM
-# 
-# 
+#
+#
 # if __name__ == "__main__":
 #     plt, CC = configure_mpl(plt)
-# 
+#
 #     fig, axes = plt.subplots(nrows=2, sharex=True, sharey=True)
 #     x = np.linspace(0, 10, 100)
 #     for i_cc, cc_str in enumerate(CC):
@@ -205,44 +217,38 @@
 #     axes[0].legend()
 #     axes[1].legend()
 #     plt.show()
-# 
+#
 # # EOF
+
+import sys
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import os
-import sys
 from pathlib import Path
-import pytest
-import numpy as np
+
+import matplotlib.pyplot as plt
 
 # Add source code to the top of Python path
 project_root = str(Path(__file__).resolve().parents[3])
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs.plt._configure_mpl import *
+from mngs.plt._configure_mpl import _convert_font_size, configure_mpl
 
-class TestMainFunctionality:
-    def setup_method(self):
-        # Setup test fixtures
-        pass
 
-    def teardown_method(self):
-        # Clean up after tests
-        pass
+def test_convert_font_size_str():
+    assert _convert_font_size("small") == 10
+    assert _convert_font_size("XX-LARGE") == 18
 
-    def test_basic_functionality(self):
-        # Basic test case
-        raise NotImplementedError("Test not yet implemented")
 
-    def test_edge_cases(self):
-        # Edge case testing
-        raise NotImplementedError("Test not yet implemented")
+def test_convert_font_size_numeric():
+    assert _convert_font_size(12) == 12.0
 
-    def test_error_handling(self):
-        # Error handling testing
-        raise NotImplementedError("Test not yet implemented")
 
-if __name__ == "__main__":
-    pytest.main([os.path.abspath(__file__)])
+def test_configure_mpl_returns_cycle():
+    new_plt, cc = configure_mpl(plt, fontsize=8, hide_top_right_spines=False)
+    assert new_plt is plt
+    assert isinstance(cc, dict)
+    assert all(isinstance(v, tuple) for v in cc.values())
+
+# EOF

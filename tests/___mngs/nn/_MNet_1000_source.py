@@ -1,1 +1,0 @@
-../../../src/mngs/nn/_MNet_1000.py

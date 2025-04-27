@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-23 10:39:41 (ywatanabe)"
+# Timestamp: "2025-04-27 20:55:12 (ywatanabe)"
 # File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/__init__.py
 # ----------------------------------------
 import os
@@ -11,10 +11,6 @@ __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
 THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/__init__.py"
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# Time-stamp: "2025-02-27 13:02:24 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/__init__.py
 
 # os.getenv("MNGS_SENDER_GMAIL")
 # os.getenv("MNGS_SENDER_GMAIL_PASSWORD")
@@ -22,7 +18,6 @@ THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/__init__.py"
 # os.getenv("MNGS_DIR", "/tmp/mngs/")
 
 import warnings
-import asyncio
 
 # Configure event loop before any async operations
 # try:

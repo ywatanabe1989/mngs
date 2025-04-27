@@ -1,7 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-13 13:13:47 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_SeabornMixin.py
+# Timestamp: "2025-04-27 12:21:48 (ywatanabe)"
+# File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_SeabornMixin.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./src/mngs/plt/_subplots/_AxisWrapperMixins/_SeabornMixin.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
 
 from functools import wraps
 
@@ -283,6 +290,5 @@ class SeabornMixin:
     @sns_copy_doc
     def sns_jointplot(self, *args, track=True, id=None, **kwargs):
         self._sns_base("sns_jointplot", *args, track=track, id=id, **kwargs)
-
 
 # EOF

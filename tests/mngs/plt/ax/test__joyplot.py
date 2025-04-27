@@ -1,19 +1,31 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Timestamp: "2025-04-27 19:25:15 (ywatanabe)"
+# File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/tests/mngs/plt/ax/test__joyplot.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./tests/mngs/plt/ax/test__joyplot.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
+
 # Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/plt/ax/_joyplot.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-06 00:04:26 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/plt/ax/_joyplot.py
-# 
+#
 # #!./env/bin/python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-08-26 08:38:55 (ywatanabe)"
 # # ./src/mngs/plt/ax/_joyplot.py
-# 
+#
 # import joypy
 # import mngs
 # from ._set_xyt import set_xyt
-# 
+#
 # # def plot_joy(df, cols_NT):
 # #     df_plot = df[cols_NT]
 # #     fig, axes = joypy.joyplot(
@@ -27,42 +39,41 @@
 # #     plt.xlabel("Variables")
 # #     plt.ylabel("Rank")
 # #     return fig
-# 
-# 
+#
+#
 # def joyplot(ax, data, **kwargs):
 #     fig, axes = joypy.joyplot(
 #         data=data,
 #         **kwargs,
 #     )
-# 
+#
 #     if kwargs.get("orientation") == "vertical":
 #         xlabel = None
 #         ylabel = "Density"
 #     else:
 #         xlabel = "Density"
 #         ylabel = None
-# 
+#
 #     ax = set_xyt(ax, xlabel, ylabel, "Joyplot")
-# 
+#
 #     return ax
-# 
-# 
+#
+#
 # # EOF
+
+import sys
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import os
-import sys
 from pathlib import Path
+
 import pytest
-import numpy as np
 
 # Add source code to the top of Python path
 project_root = str(Path(__file__).resolve().parents[3])
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs.plt.ax._joyplot import *
 
 class TestMainFunctionality:
     def setup_method(self):
@@ -85,5 +96,8 @@ class TestMainFunctionality:
         # Error handling testing
         raise NotImplementedError("Test not yet implemented")
 
+
 if __name__ == "__main__":
     pytest.main([os.path.abspath(__file__)])
+
+# EOF

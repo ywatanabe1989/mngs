@@ -1,12 +1,24 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Timestamp: "2025-04-27 16:38:46 (ywatanabe)"
+# File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/tests/mngs/plt/test__PARAMS.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./tests/mngs/plt/test__PARAMS.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
+
 # Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/plt/_PARAMS.py
 # --------------------------------------------------------------------------------
 # #!./env/bin/python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-06-08 00:46:31 (ywatanabe)"
 # # /home/ywatanabe/proj/mngs/src/mngs/plt/_PARAMS.py
-# 
+#
 # import numpy as np
-# 
+#
 # # RGB
 # RGB = {
 #     "white": [255, 255, 255],
@@ -24,12 +36,12 @@
 #     "navy": [0, 0, 100],
 #     "orange": [228, 94, 50],
 # }
-# 
+#
 # RGB_NORM = {
 #     k: [round(r / 255, 2), round(g / 255, 2), round(b / 255, 2)]
 #     for k, (r, g, b) in RGB.items()
 # }
-# 
+#
 # # RGBA
 # DEF_ALPHA = 0.9
 # RGBA = {k: [r, g, b, DEF_ALPHA] for k, (r, g, b) in RGB.items()}
@@ -37,7 +49,7 @@
 # RGBA_NORM_FOR_CYCLE = {
 #     k: v for k, v in RGBA_NORM.items() if k not in ["white", "grey", "black"]
 # }
-# 
+#
 # # HEX
 # HEX = {
 #     "blue": "#0080C0",
@@ -53,8 +65,8 @@
 #     "navy": "#000064",
 #     "orange": "#E45E32",
 # }
-# 
-# 
+#
+#
 # PARAMS = dict(
 #     RGB=RGB,
 #     RGBA=RGBA,
@@ -62,44 +74,31 @@
 #     RGBA_NORM_FOR_CYCLE=RGBA_NORM_FOR_CYCLE,
 #     HEX=HEX,
 # )
-# 
+#
 # # pprint(PARAMS)
+
+import sys
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import os
-import sys
 from pathlib import Path
-import pytest
-import numpy as np
 
 # Add source code to the top of Python path
 project_root = str(Path(__file__).resolve().parents[3])
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs.plt._PARAMS import *
+from mngs.plt._PARAMS import PARAMS
 
-class TestMainFunctionality:
-    def setup_method(self):
-        # Setup test fixtures
-        pass
 
-    def teardown_method(self):
-        # Clean up after tests
-        pass
+def test_params_keys():
+    expected = {"RGB", "RGBA", "RGBA_NORM", "RGBA_NORM_FOR_CYCLE", "HEX"}
+    assert set(PARAMS.keys()) == expected
 
-    def test_basic_functionality(self):
-        # Basic test case
-        raise NotImplementedError("Test not yet implemented")
 
-    def test_edge_cases(self):
-        # Edge case testing
-        raise NotImplementedError("Test not yet implemented")
+def test_rgb_value_red():
+    rgb_red = PARAMS["RGB"]["red"]
+    assert isinstance(rgb_red, list)
+    assert rgb_red == [255, 70, 50]
 
-    def test_error_handling(self):
-        # Error handling testing
-        raise NotImplementedError("Test not yet implemented")
-
-if __name__ == "__main__":
-    pytest.main([os.path.abspath(__file__)])
+# EOF

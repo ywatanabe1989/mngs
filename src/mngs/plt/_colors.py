@@ -1,9 +1,19 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Timestamp: "2025-04-27 20:06:29 (ywatanabe)"
+# File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/plt/_colors.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./src/mngs/plt/_colors.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
+#!/usr/bin/env python3
 
 import numpy as np
 
 from ._PARAMS import PARAMS
-from matplotlib import colors as _colors
 
 
 def to_rgb(c):
@@ -50,7 +60,16 @@ def cycle_color(i_color):
     return COLORS_10_STR[i_color % n_colors]
 
 
-def gradiate_color(rgb_or_rgba, n=5):
+# def gradiate_color(rgb_or_rgba, n=5):
+def gradiate_color(rgb, n=5, s=1, v=1):
+    import matplotlib.colors as _colors
+    import numpy as np
+
+    # Scale RGB values to 0-1 range if they're in 0-255 range
+    if any(val > 1 for val in rgb):
+        rgb = [val / 255 for val in rgb]
+    rgb_hsv = _colors.rgb_to_hsv(np.asarray(rgb))
+
     has_alpha = len(rgb_or_rgba) == 4
     alpha = None
 
@@ -86,3 +105,5 @@ if __name__ == "__main__":
     print(to_rgba(c))
     print(to_hex(c))
     print(cycle_color(1))
+
+# EOF

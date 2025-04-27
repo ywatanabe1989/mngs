@@ -1,18 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-06 00:09:46 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/plt/ax/_set_ticks.py
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# Time-stamp: "2024-09-06 23:33:56 (ywatanabe)"
+# Timestamp: "2025-04-27 20:04:55 (ywatanabe)"
+# File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_set_ticks.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./src/mngs/plt/ax/_set_ticks.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
 
 import matplotlib.pyplot as plt
 import mngs
 import numpy as np
-from ...types import is_listed_X
+
 from ...dict._to_str import to_str
-# fixme, quite slow
+from ...types import is_listed_X
+
+
 def set_ticks(ax, xvals=None, xticks=None, yvals=None, yticks=None):
     ax = set_x_ticks(ax, x_vals=xvals, x_ticks=xticks)
     ax = set_y_ticks(ax, y_vals=yvals, y_ticks=yticks)
@@ -107,8 +112,9 @@ def set_x_ticks(ax, x_vals=None, x_ticks=None):
         ax.set_xticks(x_ticks)
 
     elif x_vals_passed and x_ticks_passed:
-        if x_vals == "auto":
-            x_vals = np.arange(len(x_ticks))
+        if isinstance(x_vals, str):
+            if x_vals == "auto":
+                x_vals = np.arange(len(x_ticks))
 
         # Replaces the original x axis to 'x_vals' and locates the 'x_ticks' on the new axis
         ax = _set_x_vals(ax, x_vals)
@@ -242,6 +248,5 @@ if __name__ == "__main__":
     )
 
     plt.show()
-
 
 # EOF

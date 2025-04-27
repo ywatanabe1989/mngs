@@ -1,14 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-13 12:54:05 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/pd/_force_df.py
+# Timestamp: "2025-04-27 19:59:11 (ywatanabe)"
+# File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/pd/_force_df.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./src/mngs/pd/_force_df.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
 
 import numpy as np
 import pandas as pd
-import mngs
+
+from ..types import is_listed_X
 
 
-# def force_df(permutable_dict, filler=""):
 def force_df(permutable_dict, filler=np.nan):
 
     if is_listed_X(permutable_dict, pd.Series):
@@ -37,6 +44,5 @@ def force_df(permutable_dict, filler=np.nan):
     out_df = pd.DataFrame(permutable_dict)
 
     return out_df
-
 
 # EOF

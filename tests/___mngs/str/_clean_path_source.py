@@ -1,1 +1,0 @@
-../../../src/mngs/str/_clean_path.py

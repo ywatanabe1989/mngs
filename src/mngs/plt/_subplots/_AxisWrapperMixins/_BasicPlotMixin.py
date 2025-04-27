@@ -1,7 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-17 12:00:05 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_BasicPlotMixin.py
+# Timestamp: "2025-04-27 12:21:40 (ywatanabe)"
+# File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_BasicPlotMixin.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./src/mngs/plt/_subplots/_AxisWrapperMixins/_BasicPlotMixin.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
 
 THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_BasicPlotMixin.py"
 
@@ -11,13 +18,12 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from matplotlib.axes import Axes
-# from numpy.typing import ArrayLike
 from scipy.stats import gaussian_kde
 
 from ....pd import to_xyz
 from ....plt import ax as ax_module
 from ....types import ArrayLike
+
 
 class BasicPlotMixin:
     """Mixin class for basic plotting operations."""
@@ -30,8 +36,9 @@ class BasicPlotMixin:
         out = pd.DataFrame(arr_2d)
         if kwargs.get("xyz", False):
             out = to_xyz(out)
-        self._track(kwargs.get("track"), kwargs.get("id"), method_name, out, None)
-
+        self._track(
+            kwargs.get("track"), kwargs.get("id"), method_name, out, None
+        )
 
     @wraps(ax_module.plot_)
     def plot_(
@@ -58,8 +65,9 @@ class BasicPlotMixin:
                 alpha=alpha,
                 **kwargs,
             )
-        self._track(kwargs.get("track"), kwargs.get("id"), method_name, df, None)
-
+        self._track(
+            kwargs.get("track"), kwargs.get("id"), method_name, df, None
+        )
 
     # @wraps(ax_module.kde)
     def kde(self, data: ArrayLike, **kwargs) -> None:
@@ -84,7 +92,9 @@ class BasicPlotMixin:
         out = pd.DataFrame(
             {"x": xs, "kde": density, "n": [len(data) for _ in range(len(xs))]}
         )
-        self._track(kwargs.get("track"), kwargs.get("id"), method_name, out, None)
+        self._track(
+            kwargs.get("track"), kwargs.get("id"), method_name, out, None
+        )
 
     # @wraps(ax_module.conf_mat)
     def conf_mat(
@@ -174,7 +184,7 @@ class BasicPlotMixin:
         data: ArrayLike,
         track: bool = True,
         id: Optional[str] = None,
-        **kwargs
+        **kwargs,
     ) -> None:
         method_name = "boxplot_"
         _data = data.copy()
@@ -214,7 +224,11 @@ class BasicPlotMixin:
 
         with self._no_tracking():
             for i, (pos, color) in enumerate(zip(positions, colors)):
-                label = labels[i] if labels is not None and i < len(labels) else None
+                label = (
+                    labels[i]
+                    if labels is not None and i < len(labels)
+                    else None
+                )
                 self.axis.eventplot(pos, colors=color, label=label, **kwargs)
 
             if labels is not None:
@@ -233,7 +247,7 @@ class BasicPlotMixin:
         data: ArrayLike,
         track: bool = True,
         id: Optional[str] = None,
-        **kwargs
+        **kwargs,
     ) -> None:
         method_name = "ecdf"
         with self._no_tracking():

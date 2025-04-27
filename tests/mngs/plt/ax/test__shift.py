@@ -1,91 +1,103 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Timestamp: "2025-04-27 19:25:37 (ywatanabe)"
+# File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/tests/mngs/plt/ax/test__shift.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./tests/mngs/plt/ax/test__shift.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
+
 # Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/plt/ax/_shift.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
-# 
-# 
+#
+#
 # def shift(ax, dx=0, dy=0):
 #     """
 #     Adjusts the position of an Axes object within a Figure by specified offsets in centimeters.
-# 
+#
 #     This function modifies the position of a given matplotlib.axes.Axes object by shifting it horizontally and vertically within its parent figure. The shift amounts are specified in centimeters, and the function converts these values into the figure's coordinate system to perform the adjustment.
-# 
+#
 #     Parameters:
 #     - ax (matplotlib.axes.Axes): The Axes object to modify. This must be an instance of a Matplotlib Axes.
 #     - dx (float): The horizontal offset in centimeters. Positive values shift the Axes to the right, while negative values shift it to the left.
 #     - dy (float): The vertical offset in centimeters. Positive values shift the Axes up, while negative values shift it down.
-# 
+#
 #     Returns:
 #     - matplotlib.axes.Axes: The modified Axes object with the adjusted position.
 #     """
-# 
+#
 #     bbox = ax.get_position()
-# 
+#
 #     # Convert centimeters to inches for consistency with matplotlib dimensions
 #     dx_in, dy_in = dx / 2.54, dy / 2.54
-# 
+#
 #     # Calculate delta ratios relative to the figure size
 #     fig = ax.get_figure()
 #     fig_dx_in, fig_dy_in = fig.get_size_inches()
 #     dx_ratio, dy_ratio = dx_in / fig_dx_in, dy_in / fig_dy_in
-# 
+#
 #     # Determine updated bbox position and optionally adjust dimensions
 #     left = bbox.x0 + dx_ratio
 #     bottom = bbox.y0 + dy_ratio
 #     width = bbox.width
 #     height = bbox.height
-# 
+#
 #     # Main
 #     ax.set_position([left, bottom, width, height])
-# 
+#
 #     return ax
-# 
-# 
+#
+#
 # # def adjust_axes_position_and_dimension(
 # #     ax, dx, dy, adjust_width_for_dx=False, adjust_height_for_dy=False
 # # ):
-# 
+#
 # # def set_pos(ax, x_cm, y_cm, extend_x=False, extend_y=False):
 # #     """
 # #     Adjusts the position of an Axes object within a Figure by a specified offset in centimeters.
-# 
+#
 # #     Parameters:
 # #     - ax (matplotlib.axes.Axes): The Axes object to modify.
 # #     - x_cm (float): The horizontal offset in centimeters to adjust the Axes position.
 # #     - y_cm (float): The vertical offset in centimeters to adjust the Axes position.
 # #     - extend_x (bool): If True, reduces the width of the Axes by the horizontal offset.
 # #     - extend_y (bool): If True, reduces the height of the Axes by the vertical offset.
-# 
+#
 # #     Returns:
 # #     - ax (matplotlib.axes.Axes): The modified Axes object with the adjusted position.
 # #     """
-# 
+#
 # #     bbox = ax.get_position()
-# 
+#
 # #     # Inches
 # #     x_in, y_in = x_cm / 2.54, y_cm / 2.54
-# 
+#
 # #     # Calculates delta ratios
 # #     fig = ax.get_figure()
 # #     fig_x_in, fig_y_in = fig.get_size_inches()
 # #     x_ratio, y_ratio = x_in / fig_x_in, y_in / fig_y_in
-# 
+#
 # #     # Determines updated bbox position
 # #     left = bbox.x0 + x_ratio
 # #     bottom = bbox.y0 + y_ratio
 # #     width = bbox.width
 # #     height = bbox.height
-# 
+#
 # #     if extend_x:
 # #         width -= x_ratio
-# 
+#
 # #     if extend_y:
 # #         height -= y_ratio
-# 
+#
 # #     ax.set_position([left, bottom, width, height])
-# 
+#
 # #     return ax
-# 
-# 
+#
+#
 # # def set_pos(
 # #     fig,
 # #     ax,
@@ -94,30 +106,30 @@
 # #     dragh=False,
 # #     dragv=False,
 # # ):
-# 
+#
 # #     bbox = ax.get_position()
-# 
+#
 # #     ## Calculates delta ratios
 # #     fig_x_in, fig_y_in = fig.get_size_inches()
-# 
+#
 # #     x_in = float(x_cm) / 2.54
 # #     y_in = float(y_cm) / 2.54
-# 
+#
 # #     x_ratio = x_in / fig_x_in
 # #     y_ratio = y_in / fig_x_in
-# 
+#
 # #     ## Determines updated bbox position
 # #     left = bbox.x0 + x_ratio
 # #     bottom = bbox.y0 + y_ratio
 # #     width = bbox.x1 - bbox.x0
 # #     height = bbox.y1 - bbox.y0
-# 
+#
 # #     if dragh:
 # #         width -= x_ratio
-# 
+#
 # #     if dragv:
 # #         height -= y_ratio
-# 
+#
 # #     ax.set_pos(
 # #         [
 # #             left,
@@ -126,44 +138,91 @@
 # #             height,
 # #         ]
 # #     )
-# 
+#
 # #     return ax
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import os
 import sys
 from pathlib import Path
-import pytest
+
 import numpy as np
+import pytest
 
 # Add source code to the top of Python path
 project_root = str(Path(__file__).resolve().parents[3])
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+import matplotlib
 
-from mngs.plt.ax._shift import *
+matplotlib.use("Agg")  # Use non-GUI backend for testing
+import matplotlib.pyplot as plt
+from mngs.plt.ax._shift import shift
+
 
 class TestMainFunctionality:
     def setup_method(self):
         # Setup test fixtures
-        pass
+        self.fig = plt.figure(figsize=(6, 4))
+        self.ax = self.fig.add_subplot(111)
 
     def teardown_method(self):
         # Clean up after tests
-        pass
+        plt.close(self.fig)
 
     def test_basic_functionality(self):
         # Basic test case
-        raise NotImplementedError("Test not yet implemented")
+        original_bbox = self.ax.get_position()
+
+        # Shift 1 inch (2.54 cm) right and up
+        shifted_ax = shift(self.ax, dx=2.54, dy=2.54)
+
+        # Get new position
+        new_bbox = shifted_ax.get_position()
+
+        # Calculate expected change in position
+        fig_width_in, fig_height_in = self.fig.get_size_inches()
+        expected_dx_ratio = (2.54 / 2.54) / fig_width_in  # Convert cm to inch
+        expected_dy_ratio = (2.54 / 2.54) / fig_height_in
+
+        # Check that the ax was shifted correctly
+        assert np.isclose(new_bbox.x0, original_bbox.x0 + expected_dx_ratio)
+        assert np.isclose(new_bbox.y0, original_bbox.y0 + expected_dy_ratio)
+
+        # Check that width and height are unchanged
+        assert np.isclose(new_bbox.width, original_bbox.width)
+        assert np.isclose(new_bbox.height, original_bbox.height)
 
     def test_edge_cases(self):
-        # Edge case testing
-        raise NotImplementedError("Test not yet implemented")
+        # Test with zero shift
+        original_bbox = self.ax.get_position()
+        shifted_ax = shift(self.ax, dx=0, dy=0)
+        new_bbox = shifted_ax.get_position()
+
+        assert np.isclose(new_bbox.x0, original_bbox.x0)
+        assert np.isclose(new_bbox.y0, original_bbox.y0)
+
+        # Test with negative shift
+        original_bbox = self.ax.get_position()
+        shifted_ax = shift(self.ax, dx=-1.27, dy=-1.27)  # -0.5 inch
+        new_bbox = shifted_ax.get_position()
+
+        fig_width_in, fig_height_in = self.fig.get_size_inches()
+        expected_dx_ratio = (-1.27 / 2.54) / fig_width_in
+        expected_dy_ratio = (-1.27 / 2.54) / fig_height_in
+
+        assert np.isclose(new_bbox.x0, original_bbox.x0 + expected_dx_ratio)
+        assert np.isclose(new_bbox.y0, original_bbox.y0 + expected_dy_ratio)
 
     def test_error_handling(self):
-        # Error handling testing
-        raise NotImplementedError("Test not yet implemented")
+        # Test with invalid input types
+        with pytest.raises(TypeError):
+            shift(self.ax, dx="invalid", dy=0)
+
 
 if __name__ == "__main__":
     pytest.main([os.path.abspath(__file__)])
+
+# EOF

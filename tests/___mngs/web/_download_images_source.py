@@ -1,1 +1,0 @@
-../../../src/mngs/web/_download_images.py

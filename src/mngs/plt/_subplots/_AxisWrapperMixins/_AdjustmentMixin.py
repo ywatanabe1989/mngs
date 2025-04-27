@@ -1,7 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-25 00:33:37 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_AdjustmentMixin.py
+# Timestamp: "2025-04-27 12:21:02 (ywatanabe)"
+# File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_AdjustmentMixin.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./src/mngs/plt/_subplots/_AxisWrapperMixins/_AdjustmentMixin.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
 
 THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_AdjustmentMixin.py"
 
@@ -17,6 +24,7 @@ Prerequisites:
 """
 
 from typing import List, Optional, Union
+
 from ....plt import ax as ax_module
 
 
@@ -33,7 +41,6 @@ class AdjustmentMixin:
         self.axis = ax_module.rotate_labels(
             self.axis, x=x, y=y, x_ha=x_ha, y_ha=y_ha
         )
-
 
     def legend(self, loc: str = "upper left") -> None:
         """Places legend at specified location, with support for outside positions.

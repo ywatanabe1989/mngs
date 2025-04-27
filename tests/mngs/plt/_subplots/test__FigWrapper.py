@@ -1,52 +1,64 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Timestamp: "2025-04-27 16:39:22 (ywatanabe)"
+# File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/tests/mngs/plt/_subplots/test__FigWrapper.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./tests/mngs/plt/_subplots/test__FigWrapper.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
+
 # Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/plt/_subplots/_FigWrapper.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-04 00:58:53 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/plt/_subplots/_FigWrapper.py
-# 
+#
 # #!./env/bin/python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-10-26 05:27:26 (ywatanabe)"
 # # /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/_FigWrapper.py
-# 
+#
 # from functools import wraps
-# 
+#
 # import numpy as np
 # import pandas as pd
-# 
-# 
+#
+#
 # class FigWrapper:
 #     """
 #     A wrapper class for a Matplotlib axis that collects plotting data.
 #     """
-# 
+#
 #     def __init__(self, fig):
 #         """
 #         Initialize the AxisWrapper with a given axis and history reference.
 #         """
 #         self.fig = fig
 #         self.axes = []
-# 
+#
 #     def __getattr__(self, attr):
 #         """
 #         Wrap the axis attribute access to collect plot calls or return the attribute directly.
 #         """
 #         original_attr = getattr(self.fig, attr)
-# 
+#
 #         if callable(original_attr):
-# 
+#
 #             @wraps(original_attr)
 #             def wrapper(*args, track=None, id=None, **kwargs):
 #                 results = original_attr(*args, **kwargs)
 #                 # self._track(track, id, attr, args, kwargs)
 #                 return results
-# 
+#
 #             return wrapper
-# 
+#
 #         else:
 #             return original_attr
-# 
+#
 #     ################################################################################
 #     # Original methods
 #     ################################################################################
@@ -56,19 +68,19 @@
 #                 ax.legend(loc=loc)
 #             except:
 #                 pass
-# 
+#
 #     # def to_sigma(self):
 #     #     if hasattr(self.axes, "to_sigma"):
 #     #         return self.axes.to_sigma()
 #     def to_sigma(self):
 #         """
 #         Summarizes all data under the figure, including all AxesWrapper objects.
-# 
+#
 #         Returns
 #         -------
 #         pd.DataFrame
 #             Concatenated dataframe of all axes data with spacer columns.
-# 
+#
 #         Example
 #         -------
 #         fig, axes = mngs.plt.subplots(2, 2)
@@ -82,14 +94,14 @@
 #                 if not df.empty:
 #                     df.columns = [f"ax_{i_ax:02d}_{col}" for col in df.columns]
 #                     dfs.append(df)
-# 
+#
 #                     # # Add a spacer column after each non-empty dataframe except the last one
 #                     # if i_ax < len(self.axes) - 1:
 #                     #     spacer = pd.DataFrame({"Spacer": [np.nan] * len(df)})
 #                     #     dfs.append(spacer)
-# 
+#
 #         return pd.concat(dfs, axis=1) if dfs else pd.DataFrame()
-# 
+#
 #     def supxyt(self, x=False, y=False, t=False):
 #         """Sets xlabel, ylabel and title"""
 #         if x is not False:
@@ -99,48 +111,55 @@
 #         if t is not False:
 #             self.fig.suptitle(t)
 #         return self.fig
-# 
+#
 #     def tight_layout(self, rect=[0, 0.03, 1, 0.95]):
 #         self.fig.tight_layout(rect=rect)
-# 
-# 
+#
+#
 # # EOF
+
+import sys
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import os
-import sys
 from pathlib import Path
-import pytest
+
 import numpy as np
+import pandas as pd
 
 # Add source code to the top of Python path
 project_root = str(Path(__file__).resolve().parents[3])
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs.plt._subplots._FigWrapper import *
+# tests/mngs/plt/_subplots/test__FigWrapper.py
 
-class TestMainFunctionality:
-    def setup_method(self):
-        # Setup test fixtures
-        pass
+project_root = Path(__file__).resolve().parents[3]
+src_path = str(project_root / "src")
+if src_path not in sys.path:
+    sys.path.insert(0, src_path)
 
-    def teardown_method(self):
-        # Clean up after tests
-        pass
+from mngs.plt._subplots._FigWrapper import FigWrapper
 
-    def test_basic_functionality(self):
-        # Basic test case
-        raise NotImplementedError("Test not yet implemented")
 
-    def test_edge_cases(self):
-        # Edge case testing
-        raise NotImplementedError("Test not yet implemented")
+class DummyAxis:
+    def __init__(self, df):
+        self._df = df
 
-    def test_error_handling(self):
-        # Error handling testing
-        raise NotImplementedError("Test not yet implemented")
+    def to_sigma(self):
+        return self._df
 
-if __name__ == "__main__":
-    pytest.main([os.path.abspath(__file__)])
+
+def test_figwrapper_to_sigma_concatenates_axes():
+    df1 = pd.DataFrame({"a": [1, 2]})
+    df2 = pd.DataFrame({"b": [3, 4]})
+    wrapper = FigWrapper(None)
+    wrapper.axes = np.array([[DummyAxis(df1), DummyAxis(df2)]])
+    out = wrapper.to_sigma()
+
+    assert isinstance(out, pd.DataFrame)
+    assert list(out.columns) == ["ax_00_a", "ax_01_b"]
+    assert out["ax_00_a"].tolist() == [1, 2]
+    assert out["ax_01_b"].tolist() == [3, 4]
+
+# EOF

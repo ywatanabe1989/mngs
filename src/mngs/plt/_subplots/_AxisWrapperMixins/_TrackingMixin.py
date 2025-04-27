@@ -1,7 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-13 14:43:38 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_TrackingMixin.py
+# Timestamp: "2025-04-27 19:54:30 (ywatanabe)"
+# File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_TrackingMixin.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./src/mngs/plt/_subplots/_AxisWrapperMixins/_TrackingMixin.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
 
 """
 Functionality:
@@ -39,8 +46,13 @@ class TrackingMixin:
     ## Tracking
     ################################################################################
     def _track(self, track, id, method_name, args, kwargs):
+        # Extract id from kwargs and remove it before passing to matplotlib
+        if hasattr(kwargs, "get") and "id" in kwargs:
+            id = kwargs.pop("id")
+
         if track is None:
             track = self.track
+
         if track:
             id = id if id is not None else self.id
             self.id += 1
@@ -117,6 +129,5 @@ class TrackingMixin:
     #     """Converts plotting history to a SigmaPlot-compatible DataFrame."""
     #     df = _to_sigma(self.history)
     #     return df if df is not None else pd.DataFrame()
-
 
 # EOF

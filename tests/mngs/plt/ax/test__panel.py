@@ -1,28 +1,51 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Timestamp: "2025-04-27 19:25:19 (ywatanabe)"
+# File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/tests/mngs/plt/ax/test__panel.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./tests/mngs/plt/ax/test__panel.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
+
+import sys
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+from pathlib import Path
+
+import matplotlib
+import matplotlib.pyplot as plt
+import numpy as np
+import pytest
+
 # Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/plt/ax/_panel.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-02-03 15:34:08 (ywatanabe)"
-# 
+#
 # import matplotlib.pyplot as plt
-# 
-# 
+#
+#
 # def panel(tgt_width_mm=40, tgt_height_mm=None):
 #     """Creates a fixed-size ax figure for panels."""
-# 
+#
 #     H_TO_W_RATIO = 0.7
 #     MM_TO_INCH_FACTOR = 1 / 25.4
-# 
+#
 #     if tgt_height_mm is None:
 #         tgt_height_mm = H_TO_W_RATIO * tgt_width_mm
-# 
+#
 #     # Convert target dimensions from millimeters to inches
 #     tgt_width_in = tgt_width_mm * MM_TO_INCH_FACTOR
 #     tgt_height_in = tgt_height_mm * MM_TO_INCH_FACTOR
-# 
+#
 #     # Create a figure with the specified dimensions
 #     fig = plt.figure(figsize=(tgt_width_in * 2, tgt_height_in * 2))
-# 
+#
 #     # Calculate the position and size of the axes in figure units (0 to 1)
 #     left = (fig.get_figwidth() - tgt_width_in) / 2 / fig.get_figwidth()
 #     bottom = (fig.get_figheight() - tgt_height_in) / 2 / fig.get_figheight()
@@ -34,10 +57,10 @@
 #             tgt_height_in / fig.get_figheight(),
 #         ]
 #     )
-# 
+#
 #     return fig, ax
-# 
-# 
+#
+#
 # if __name__ == "__main__":
 #     # Example usage:
 #     fig, ax = panel(tgt_width_mm=40, tgt_height_mm=40 * 0.7)
@@ -46,20 +69,22 @@
 #     # ... compatible with other ax plotting methods as well
 #     plt.show()
 
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-import os
-import sys
-from pathlib import Path
-import pytest
-import numpy as np
 
 # Add source code to the top of Python path
 project_root = str(Path(__file__).resolve().parents[3])
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs.plt.ax._panel import *
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+matplotlib.use("Agg")  # Use non-GUI backend for testing
+
+# Add source code to the top of Python path
+project_root = str(Path(__file__).resolve().parents[3])
+if project_root not in sys.path:
+    sys.path.insert(0, os.path.join(project_root, "src"))
+from mngs.plt.ax._panel import panel
+
 
 class TestMainFunctionality:
     def setup_method(self):
@@ -68,19 +93,105 @@ class TestMainFunctionality:
 
     def teardown_method(self):
         # Clean up after tests
-        pass
+        plt.close("all")
 
     def test_basic_functionality(self):
-        # Basic test case
-        raise NotImplementedError("Test not yet implemented")
+        # Test with default height parameter (uses H_TO_W_RATIO)
+        fig, ax = panel(tgt_width_mm=40)
 
-    def test_edge_cases(self):
-        # Edge case testing
-        raise NotImplementedError("Test not yet implemented")
+        # Calculate expected dimensions
+        H_TO_W_RATIO = 0.7
+        MM_TO_INCH_FACTOR = 1 / 25.4
+        expected_width_in = 40 * MM_TO_INCH_FACTOR
+        expected_height_in = expected_width_in * H_TO_W_RATIO
 
-    def test_error_handling(self):
-        # Error handling testing
-        raise NotImplementedError("Test not yet implemented")
+        # Get actual dimensions
+        bbox = ax.get_position()
+        fig_width_in, fig_height_in = fig.get_size_inches()
+        actual_width_in = bbox.width * fig_width_in
+        actual_height_in = bbox.height * fig_height_in
+
+        # Check dimensions are correct (with small tolerance)
+        assert np.isclose(actual_width_in, expected_width_in, rtol=1e-4)
+        assert np.isclose(actual_height_in, expected_height_in, rtol=1e-4)
+
+        # Check that the axes is properly centered
+        center_x = bbox.x0 + bbox.width / 2
+        center_y = bbox.y0 + bbox.height / 2
+        assert np.isclose(
+            center_x, 0.5, rtol=1e-4
+        )  # Should be centered horizontally
+        assert np.isclose(
+            center_y, 0.5, rtol=1e-4
+        )  # Should be centered vertically
+
+        # Clean up
+        plt.close(fig)
+
+    def test_custom_dimensions(self):
+        # Test with custom width and height
+        tgt_width_mm = 50
+        tgt_height_mm = 30
+        fig, ax = panel(tgt_width_mm=tgt_width_mm, tgt_height_mm=tgt_height_mm)
+
+        # Calculate expected dimensions
+        MM_TO_INCH_FACTOR = 1 / 25.4
+        expected_width_in = tgt_width_mm * MM_TO_INCH_FACTOR
+        expected_height_in = tgt_height_mm * MM_TO_INCH_FACTOR
+
+        # Get actual dimensions
+        bbox = ax.get_position()
+        fig_width_in, fig_height_in = fig.get_size_inches()
+        actual_width_in = bbox.width * fig_width_in
+        actual_height_in = bbox.height * fig_height_in
+
+        # Check dimensions are correct (with small tolerance)
+        assert np.isclose(actual_width_in, expected_width_in, rtol=1e-4)
+        assert np.isclose(actual_height_in, expected_height_in, rtol=1e-4)
+
+        # Clean up
+        plt.close(fig)
+
+    def test_aspect_ratio(self):
+        # Test different aspect ratios
+        for width_mm, height_mm, expected_ratio in [
+            (40, 20, 0.5),  # 2:1 aspect ratio
+            (30, 30, 1.0),  # 1:1 aspect ratio
+            (20, 40, 2.0),  # 1:2 aspect ratio
+        ]:
+            fig, ax = panel(tgt_width_mm=width_mm, tgt_height_mm=height_mm)
+
+            # Calculate actual aspect ratio
+            bbox = ax.get_position()
+            actual_ratio = (bbox.height / bbox.width) * (
+                fig.get_figwidth() / fig.get_figheight()
+            )
+
+            # Check aspect ratio is correct
+            assert np.isclose(actual_ratio, expected_ratio, rtol=1e-2)
+
+            # Clean up
+            plt.close(fig)
+
+    def test_plotting_compatibility(self):
+        # Test that the returned axis can be used for plotting
+        fig, ax = panel(tgt_width_mm=40)
+
+        # Try different plotting methods
+        ax.plot([1, 2, 3], [4, 5, 6])
+        ax.scatter([1, 2, 3], [4, 5, 6])
+        ax.bar([1, 2, 3], [4, 5, 6])
+
+        # Check that plots were added to the axis
+        assert len(ax.lines) > 0
+        assert len(ax.collections) > 0
+        assert len(ax.patches) > 0
+
+        # Clean up
+        plt.close(fig)
+
 
 if __name__ == "__main__":
     pytest.main([os.path.abspath(__file__)])
+
+# EOF

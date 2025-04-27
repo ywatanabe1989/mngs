@@ -1,1 +1,0 @@
-../../../src/mngs/plt/get_mpl_color.py

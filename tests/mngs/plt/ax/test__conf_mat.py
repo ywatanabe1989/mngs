@@ -1,17 +1,29 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Timestamp: "2025-04-27 19:41:46 (ywatanabe)"
+# File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/tests/mngs/plt/ax/test__conf_mat.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./tests/mngs/plt/ax/test__conf_mat.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
+
 # Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/plt/ax/_conf_mat.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-17 15:07:52 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/plt/ax/_conf_mat.py
-# 
+#
 # __file__ = "./src/mngs/plt/ax/_conf_mat.py"
-# 
+#
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-17 15:06:46 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/plt/ax/_conf_mat.py
-# 
+#
 # """
 # Functionality:
 #     * Creates confusion matrix visualizations with customizable formatting
@@ -24,9 +36,9 @@
 # Prerequisites:
 #     * matplotlib, seaborn, numpy, pandas
 # """
-# 
+#
 # __file__ = "./src/mngs/plt/ax/_conf_mat.py"
-# 
+#
 # import sys
 # import matplotlib
 # import matplotlib.pyplot as plt
@@ -36,7 +48,7 @@
 # from mpl_toolkits.axes_grid1 import make_axes_locatable
 # from ._extend import extend
 # from mngs.gen import suppress_output
-# 
+#
 # def conf_mat(
 #     ax: plt.Axes,
 #     data: Union[np.ndarray, pd.DataFrame],
@@ -53,7 +65,7 @@
 #     **kwargs
 # ) -> Union[plt.Axes, Tuple[plt.Axes, float]]:
 #     """Creates a confusion matrix heatmap with optional balanced accuracy.
-# 
+#
 #     Parameters
 #     ----------
 #     ax : plt.Axes
@@ -80,12 +92,12 @@
 #         Y-axis extension ratio
 #     bacc : bool, optional
 #         Return balanced accuracy
-# 
+#
 #     Returns
 #     -------
 #     Union[plt.Axes, Tuple[plt.Axes, float]]
 #         Axes object and optionally balanced accuracy
-# 
+#
 #     Example
 #     -------
 #     >>> data = np.array([[10, 2, 0], [1, 15, 3], [0, 2, 20]])
@@ -95,15 +107,15 @@
 #     >>> print(f"Balanced Accuracy: {bacc:.3f}")
 #     Balanced Accuracy: 0.889
 #     """
-# 
+#
 #     fig = ax.figure
-# 
+#
 #     if not isinstance(data, pd.DataFrame):
 #         data = pd.DataFrame(data)
-# 
+#
 #     bacc_val = calc_bACC_from_cm(data.values)
 #     title = f"{title} (bACC = {bacc_val:.3f})"
-# 
+#
 #     res = sns.heatmap(
 #         data,
 #         ax=ax,
@@ -114,21 +126,21 @@
 #         vmin=0,
 #         **kwargs
 #     )
-# 
+#
 #     res.invert_yaxis()
-# 
+#
 #     for _, spine in res.spines.items():
 #         spine.set_visible(False)
-# 
+#
 #     ax.set_xlabel("Predicted label")
 #     ax.set_ylabel("True label")
 #     ax.set_title(title)
-# 
+#
 #     if x_labels is not None:
 #         ax.set_xticklabels(x_labels)
 #     if y_labels is not None:
 #         ax.set_yticklabels(y_labels)
-# 
+#
 #     ax = extend(ax, x_extend_ratio, y_extend_ratio)
 #     if data.shape[0] == data.shape[1]:
 #         ax.set_box_aspect(1)
@@ -142,24 +154,24 @@
 #             rotation=label_rotation_xy[1],
 #             fontdict={"horizontalalignment": "right"}
 #         )
-# 
+#
 #     if bacc:
 #         return ax, bacc_val
 #     return ax
-# 
+#
 # def calc_bACC_from_cm(confusion_matrix: np.ndarray) -> float:
 #     """Calculates balanced accuracy from confusion matrix.
-# 
+#
 #     Parameters
 #     ----------
 #     confusion_matrix : np.ndarray
 #         Confusion matrix array
-# 
+#
 #     Returns
 #     -------
 #     float
 #         Balanced accuracy score
-# 
+#
 #     Example
 #     -------
 #     >>> cm = np.array([[10, 2, 0], [1, 15, 3], [0, 2, 20]])
@@ -176,7 +188,7 @@
 #         except:
 #             bacc = np.nan
 #         return round(bacc, 3)
-# 
+#
 # def main() -> None:
 #     import mngs
 #     data = np.array([[10, 2, 0], [1, 15, 3], [0, 2, 20]])
@@ -186,7 +198,7 @@
 #     )
 #     print(bacc)
 #     mngs.io.save(fig, "fig.jpg")
-# 
+#
 # if __name__ == "__main__":
 #     import mngs
 #     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
@@ -194,9 +206,9 @@
 #     )
 #     main()
 #     mngs.gen.close(CONFIG, verbose=False, notify=False)
-# 
+#
 # # EOF
-# 
+#
 # # def conf_mat(
 # #     ax,
 # #     data,
@@ -214,7 +226,7 @@
 # # ):
 # #     """
 # #     Create a confusion matrix heatmap from a numpy array or pandas DataFrame.
-# 
+#
 # #     Parameters
 # #     ----------
 # #     ax : matplotlib.axes.Axes
@@ -243,14 +255,14 @@
 # #         Whether to return the balanced accuracy
 # #     **kwargs : dict
 # #         Additional arguments for sns.heatmap
-# 
+#
 # #     Returns
 # #     -------
 # #     ax : matplotlib.axes.Axes
 # #         The axes object with the confusion matrix plotted
 # #     bacc : float, optional
 # #         The balanced accuracy (if return_bacc is True)
-# 
+#
 # #     Example
 # #     -------
 # #     data = np.array([[10, 2, 0], [1, 15, 3], [0, 2, 20]])
@@ -258,15 +270,15 @@
 # #     ax = conf_mat(ax, data, x_labels=['A', 'B', 'C'], y_labels=['X', 'Y', 'Z'])
 # #     plt.show()
 # #     """
-# 
+#
 # #     fig = ax.fig
-# 
+#
 # #     if not isinstance(data, pd.DataFrame):
 # #         data = pd.DataFrame(data)
-# 
+#
 # #     bacc_val = calc_bACC_from_cm(data.values)
 # #     title = f"{title} (bACC = {bacc_val:.3f})"
-# 
+#
 # #     res = sns.heatmap(
 # #         data,
 # #         ax=ax,
@@ -277,21 +289,21 @@
 # #         vmin=0,
 # #         **kwargs,
 # #     )
-# 
+#
 # #     res.invert_yaxis()
-# 
+#
 # #     for _, spine in res.spines.items():
 # #         spine.set_visible(False)
-# 
+#
 # #     ax.set_xlabel("Predicted label")
 # #     ax.set_ylabel("True label")
 # #     ax.set_title(title)
-# 
+#
 # #     if x_labels is not None:
 # #         ax.set_xticklabels(x_labels)
 # #     if y_labels is not None:
 # #         ax.set_yticklabels(y_labels)
-# 
+#
 # #     ax = extend(ax, x_extend_ratio, y_extend_ratio)
 # #     if data.shape[0] == data.shape[1]:
 # #         ax.set_box_aspect(1)
@@ -305,7 +317,7 @@
 # #             rotation=label_rotation_xy[1],
 # #             fontdict={"horizontalalignment": "right"},
 # #         )
-# 
+#
 # #     # if cbar:
 # #     #     divider = make_axes_locatable(ax)
 # #     #     cax = divider.append_axes("right", size="5%", pad=0.1)
@@ -315,7 +327,7 @@
 # #     #     dx = width_orig - width_tgt
 # #     #     cax = mngs.plt.ax.shift(cax, dx=-dx * 2.54, dy=0)
 # #     #     fig.add_axes(cax)
-# 
+#
 # #     #     vmax = data.values.max().astype(int)
 # #     #     norm = matplotlib.colors.Normalize(vmin=0, vmax=vmax)
 # #     #     cbar = fig.colorbar(
@@ -326,26 +338,26 @@
 # #     #     cbar.locator = matplotlib.ticker.MaxNLocator(nbins=4)
 # #     #     cbar.update_ticks()
 # #     #     cbar.outline.set_edgecolor("white")
-# 
+#
 # #     if bacc:
 # #         return ax, bacc_val
 # #     return ax
-# 
-# 
+#
+#
 # # def calc_bACC_from_cm(confusion_matrix):
 # #     """
 # #     Calculate balanced accuracy from a confusion matrix.
-# 
+#
 # #     Parameters
 # #     ----------
 # #     confusion_matrix : array-like
 # #         The confusion matrix
-# 
+#
 # #     Returns
 # #     -------
 # #     float
 # #         The balanced accuracy
-# 
+#
 # #     Example
 # #     -------
 # #     cm = np.array([[10, 2, 0], [1, 15, 3], [0, 2, 20]])
@@ -361,8 +373,8 @@
 # #         except:
 # #             bacc = np.nan
 # #         return round(bacc, 3)
-# 
-# 
+#
+#
 # # def main():
 # #     data = np.array([[10, 2, 0], [1, 15, 3], [0, 2, 20]])
 # #     fig, ax = mngs.plt.subplots()
@@ -371,56 +383,150 @@
 # #     )
 # #     print(bacc)
 # #     mngs.io.save(fig, "fig.jpg")
-# 
-# 
+#
+#
 # # if __name__ == "__main__":
 # #     import mngs
-# 
+#
 # #     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
 # #         sys, plt, verbose=False, agg=True
 # #     )
 # #     main()
 # #     mngs.gen.close(CONFIG, verbose=False, notify=False)
-# 
+#
 # #
-# 
+#
 # # EOF
 
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-import os
 import sys
 from pathlib import Path
-import pytest
+
+import matplotlib
+import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
+import pytest
 
 # Add source code to the top of Python path
 project_root = str(Path(__file__).resolve().parents[3])
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs.plt.ax._conf_mat import *
+matplotlib.use("Agg")  # Use non-GUI backend for testing
+
+from mngs.plt.ax._conf_mat import calc_bACC_from_cm, conf_mat
+
 
 class TestMainFunctionality:
     def setup_method(self):
         # Setup test fixtures
-        pass
+        self.fig = plt.figure()
+        self.ax = self.fig.add_subplot(111)
+
+        # Create a sample confusion matrix
+        self.cm_data = np.array([[10, 2, 0], [1, 15, 3], [0, 2, 20]])
 
     def teardown_method(self):
         # Clean up after tests
-        pass
+        plt.close(self.fig)
 
     def test_basic_functionality(self):
-        # Basic test case
-        raise NotImplementedError("Test not yet implemented")
+        # Test basic confusion matrix plotting
+        ax = conf_mat(self.ax, self.cm_data)
 
-    def test_edge_cases(self):
-        # Edge case testing
-        raise NotImplementedError("Test not yet implemented")
+        # Should create a heatmap
+        assert len(self.ax.collections) > 0
 
-    def test_error_handling(self):
-        # Error handling testing
-        raise NotImplementedError("Test not yet implemented")
+        # Should set labels
+        assert self.ax.get_xlabel() == "Predicted label"
+        assert self.ax.get_ylabel() == "True label"
+
+        # Should include bACC in title
+        assert "bACC" in self.ax.get_title()
+
+    def test_with_labels(self):
+        # Test with custom x and y labels
+        x_labels = ["A", "B", "C"]
+        y_labels = ["X", "Y", "Z"]
+        ax = conf_mat(
+            self.ax, self.cm_data, x_labels=x_labels, y_labels=y_labels
+        )
+
+        # Force draw to ensure tick labels are updated
+        self.fig.canvas.draw()
+
+        # Check tick labels
+        x_ticklabels = [label.get_text() for label in ax.get_xticklabels()]
+        y_ticklabels = [label.get_text() for label in ax.get_yticklabels()]
+
+        assert x_ticklabels == x_labels
+        assert y_ticklabels == y_labels
+
+    def test_return_bacc(self):
+        # Test returning balanced accuracy
+        ax, bacc = conf_mat(self.ax, self.cm_data, bacc=True)
+
+        # Calculate expected bACC
+        expected_bacc = calc_bACC_from_cm(self.cm_data)
+
+        # Check the returned bACC value
+        assert np.isclose(bacc, expected_bacc)
+
+    def test_custom_cmap(self):
+        # Test with custom colormap
+        custom_cmap = "hot"
+        ax = conf_mat(self.ax, self.cm_data, cmap=custom_cmap)
+
+        # Check that the colormap was applied
+        assert self.ax.collections[0].cmap.name == custom_cmap
+
+    def test_custom_title(self):
+        # Test with custom title
+        custom_title = "My Confusion Matrix"
+        ax = conf_mat(self.ax, self.cm_data, title=custom_title)
+
+        # Title should include custom title and bACC
+        assert custom_title in self.ax.get_title()
+        assert "bACC" in self.ax.get_title()
+
+    def test_calc_bacc_function(self):
+        # Test balanced accuracy calculation
+        bacc = calc_bACC_from_cm(self.cm_data)
+
+        # Calculate expected bACC
+        per_class = np.diag(self.cm_data) / np.sum(self.cm_data, axis=1)
+        expected_bacc = np.mean(per_class)
+        expected_bacc = round(expected_bacc, 3)
+
+        # Check the calculated bACC value
+        assert np.isclose(bacc, expected_bacc)
+
+    def test_with_rotation(self):
+        # Test custom label rotation
+        rotation = (30, 45)
+        ax = conf_mat(self.ax, self.cm_data, label_rotation_xy=rotation)
+
+        # Force draw to ensure tick labels are updated
+        self.fig.canvas.draw()
+
+        # Check rotation of tick labels
+        x_rotations = [label.get_rotation() for label in ax.get_xticklabels()]
+        y_rotations = [label.get_rotation() for label in ax.get_yticklabels()]
+
+        assert all(rot == rotation[0] for rot in x_rotations)
+        assert all(rot == rotation[1] for rot in y_rotations)
+
+    def test_with_dataframe(self):
+        # Test with pandas DataFrame input
+        df = pd.DataFrame(self.cm_data)
+        ax = conf_mat(self.ax, df)
+
+        # Should work with DataFrame same as array
+        assert len(self.ax.collections) > 0
+        assert "bACC" in self.ax.get_title()
+
 
 if __name__ == "__main__":
     pytest.main([os.path.abspath(__file__)])
+
+# EOF

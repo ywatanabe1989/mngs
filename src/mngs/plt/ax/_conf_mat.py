@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-17 15:07:52 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/plt/ax/_conf_mat.py
+# Timestamp: "2025-04-27 19:50:23 (ywatanabe)"
+# File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_conf_mat.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./src/mngs/plt/ax/_conf_mat.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
 
 THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_conf_mat.py"
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-17 15:06:46 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/plt/ax/_conf_mat.py
 
 """
 Functionality:
@@ -23,17 +25,17 @@ Prerequisites:
     * matplotlib, seaborn, numpy, pandas
 """
 
-THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_conf_mat.py"
-
 import sys
-import matplotlib
+from typing import List, Optional, Tuple, Union
+
 import matplotlib.pyplot as plt
-import seaborn as sns
 import numpy as np
 import pandas as pd
-from mpl_toolkits.axes_grid1 import make_axes_locatable
-from ._extend import extend
+import seaborn as sns
 from mngs.gen import suppress_output
+
+from ._extend import extend
+
 
 def conf_mat(
     ax: plt.Axes,
@@ -48,7 +50,7 @@ def conf_mat(
     x_extend_ratio: float = 1.0,
     y_extend_ratio: float = 1.0,
     bacc: bool = False,
-    **kwargs
+    **kwargs,
 ) -> Union[plt.Axes, Tuple[plt.Axes, float]]:
     """Creates a confusion matrix heatmap with optional balanced accuracy.
 
@@ -110,7 +112,7 @@ def conf_mat(
         fmt=",d",
         cbar=False,
         vmin=0,
-        **kwargs
+        **kwargs,
     )
 
     res.invert_yaxis()
@@ -133,17 +135,18 @@ def conf_mat(
         ax.set_xticklabels(
             ax.get_xticklabels(),
             rotation=label_rotation_xy[0],
-            fontdict={"verticalalignment": "top"}
+            fontdict={"verticalalignment": "top"},
         )
         ax.set_yticklabels(
             ax.get_yticklabels(),
             rotation=label_rotation_xy[1],
-            fontdict={"horizontalalignment": "right"}
+            fontdict={"horizontalalignment": "right"},
         )
 
     if bacc:
         return ax, bacc_val
     return ax
+
 
 def calc_bACC_from_cm(confusion_matrix: np.ndarray) -> float:
     """Calculates balanced accuracy from confusion matrix.
@@ -175,8 +178,10 @@ def calc_bACC_from_cm(confusion_matrix: np.ndarray) -> float:
             bacc = np.nan
         return round(bacc, 3)
 
+
 def main() -> None:
     import mngs
+
     data = np.array([[10, 2, 0], [1, 15, 3], [0, 2, 20]])
     fig, ax = mngs.plt.subplots()
     ax, bacc = conf_mat(
@@ -185,15 +190,15 @@ def main() -> None:
     print(bacc)
     mngs.io.save(fig, "fig.jpg")
 
+
 if __name__ == "__main__":
     import mngs
+
     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
         sys, plt, verbose=False, agg=True
     )
     main()
     mngs.gen.close(CONFIG, verbose=False, notify=False)
-
-# EOF
 
 # def conf_mat(
 #     ax,
@@ -329,7 +334,6 @@ if __name__ == "__main__":
 #         return ax, bacc_val
 #     return ax
 
-
 # def calc_bACC_from_cm(confusion_matrix):
 #     """
 #     Calculate balanced accuracy from a confusion matrix.
@@ -360,7 +364,6 @@ if __name__ == "__main__":
 #             bacc = np.nan
 #         return round(bacc, 3)
 
-
 # def main():
 #     data = np.array([[10, 2, 0], [1, 15, 3], [0, 2, 20]])
 #     fig, ax = mngs.plt.subplots()
@@ -369,7 +372,6 @@ if __name__ == "__main__":
 #     )
 #     print(bacc)
 #     mngs.io.save(fig, "fig.jpg")
-
 
 # if __name__ == "__main__":
 #     import mngs

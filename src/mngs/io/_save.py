@@ -1,7 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-02-15 00:04:02 (ywatanabe)"
-# File: ./src/mngs/io/_save.py
+# Timestamp: "2025-04-27 10:51:41 (ywatanabe)"
+# File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/io/_save.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./src/mngs/io/_save.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
 
 THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/io/_save.py"
 
@@ -39,12 +46,11 @@ from ruamel.yaml import YAML
 from .._sh import sh
 from ..path._clean import clean
 from ..path._getsize import getsize
-from ..path._split import split
+from ..str._clean_path import clean_path
 from ..str._color_text import color_text
 from ..str._readable_bytes import readable_bytes
 from ._save_image import _save_image
 from ._save_text import _save_text
-from ..str._clean_path import clean_path
 
 
 def save(
@@ -169,7 +175,9 @@ def save(
             sh(f"rm -f {path}", verbose=False)
 
         if dry_run:
-            print(color_text(f"\n(dry run) Saved to: {spath_final}", c="yellow"))
+            print(
+                color_text(f"\n(dry run) Saved to: {spath_final}", c="yellow")
+            )
             return
 
         # Ensure directory exists
