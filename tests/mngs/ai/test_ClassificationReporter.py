@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/ai/ClassificationReporter.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/ClassificationReporter.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Timestamp: "2025-02-15 01:38:28 (ywatanabe)"
 # # File: ./src/mngs/ai/ClassificationReporter.py
 # 
-# __file__ = "./src/mngs/ai/ClassificationReporter.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/ClassificationReporter.py"
 # 
 # import os as _os
 # import random as _random
@@ -353,7 +353,7 @@
 # # # Time-stamp: "2024-11-20 00:15:08 (ywatanabe)"
 # # # File: ./mngs_repo/src/mngs/ai/ClassificationReporter.py
 # 
-# # __file__ = "./src/mngs/ai/ClassificationReporter.py"
+# # THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/ClassificationReporter.py"
 # 
 # # #!/usr/bin/env python3
 # # # -*- coding: utf-8 -*-
@@ -1132,7 +1132,6 @@
 # 
 # # EOF
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

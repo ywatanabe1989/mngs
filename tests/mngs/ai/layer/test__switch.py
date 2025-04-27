@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/ai/layer/_switch.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/layer/_switch.py
 # --------------------------------------------------------------------------------
 # from ._Pass import Pass
 # 
@@ -9,7 +9,6 @@
 #         return Pass()
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

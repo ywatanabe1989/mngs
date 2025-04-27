@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/str/_mask_api_key.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/str/_mask_api_key.py
 # --------------------------------------------------------------------------------
 # #!./env/bin/python3
 # # -*- coding: utf-8 -*-
@@ -10,7 +10,6 @@
 #     return f"{api_key[:4]}****{api_key[-4:]}"
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

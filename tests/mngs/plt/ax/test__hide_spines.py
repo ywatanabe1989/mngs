@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/plt/ax/_hide_spines.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/ax/_hide_spines.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -70,7 +70,6 @@
 #     return ax
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

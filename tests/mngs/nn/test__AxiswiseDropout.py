@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/nn/_AxiswiseDropout.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/nn/_AxiswiseDropout.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -29,7 +29,6 @@
 #         return x
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

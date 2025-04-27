@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_BaseMixins/_BaseBlobMixin.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/db/_BaseMixins/_BaseBlobMixin.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-25 01:45:48 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/db/_BaseMixins/_BaseBlobMixin.py
 # 
-# __file__ = "./src/mngs/db/_BaseMixins/_BaseBlobMixin.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_BaseMixins/_BaseBlobMixin.py"
 # 
 # from abc import ABC, abstractmethod
 # from typing import Any, Dict, List, Optional, Tuple, Union
@@ -82,7 +82,6 @@
 # # EOF
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

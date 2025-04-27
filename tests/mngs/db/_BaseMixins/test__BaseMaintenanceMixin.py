@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_BaseMixins/_BaseMaintenanceMixin.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/db/_BaseMixins/_BaseMaintenanceMixin.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-24 22:12:07 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/db/_Basemodules/_BaseMaintenanceMixin.py
 # 
-# __file__ = "./src/mngs/db/_Basemodules/_BaseMaintenanceMixin.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_Basemodules/_BaseMaintenanceMixin.py"
 # 
 # from typing import Optional, List, Dict
 # 
@@ -32,7 +32,6 @@
 # # EOF
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

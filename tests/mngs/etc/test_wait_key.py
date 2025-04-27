@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/etc/wait_key.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/etc/wait_key.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -34,7 +34,6 @@
 #     print("aaa")
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

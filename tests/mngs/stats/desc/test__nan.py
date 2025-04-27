@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/stats/desc/_nan.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/stats/desc/_nan.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-25 20:51:05 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/stats/desc/_nan.py
 # 
-# __file__ = "./src/mngs/stats/desc/_nan.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/stats/desc/_nan.py"
 # 
 # from mngs.decorators import torch_fn, batch_fn
 # import torch
@@ -255,7 +255,6 @@
 # # EOF
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

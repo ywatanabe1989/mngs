@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_PostgreSQLMixins/_TableMixin.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/db/_PostgreSQLMixins/_TableMixin.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Timestamp: "2025-02-27 22:15:38 (ywatanabe)"
 # # File: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_PostgreSQLMixins/_TableMixin.py
 # 
-# __file__ = "./src/mngs/db/_PostgreSQLMixins/_TableMixin.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQLMixins/_TableMixin.py"
 # 
 # from typing import Any, Dict, List, Union
 # import psycopg2
@@ -145,7 +145,6 @@
 # 
 # # EOF
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

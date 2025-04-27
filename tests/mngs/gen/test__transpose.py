@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/gen/_transpose.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/gen/_transpose.py
 # --------------------------------------------------------------------------------
 # #!./env/bin/python3
 # # -*- coding: utf-8 -*-
@@ -39,7 +39,6 @@
 #     return arr_like.transpose(*[np.where(src_dims == dim)[0][0] for dim in tgt_dims])
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

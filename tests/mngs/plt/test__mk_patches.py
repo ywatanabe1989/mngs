@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/plt/_mk_patches.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_mk_patches.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # Time-stamp: "2021-11-27 18:45:23 (ylab)"
@@ -18,7 +18,6 @@
 #     return patches
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

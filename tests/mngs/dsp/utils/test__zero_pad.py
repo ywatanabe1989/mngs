@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/dsp/utils/_zero_pad.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/dsp/utils/_zero_pad.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-26 10:30:34 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/dsp/utils/_zero_pad.py
 # 
-# __file__ = "./src/mngs/dsp/utils/_zero_pad.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/dsp/utils/_zero_pad.py"
 # 
 # import torch
 # import torch.nn.functional as F
@@ -27,7 +27,6 @@
 # # EOF
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

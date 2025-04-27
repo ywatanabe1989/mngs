@@ -1,18 +1,18 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/str/_replace.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/str/_replace.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-16 16:34:46 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/str/_replace.py
 # 
-# __file__ = "./src/mngs/str/_replace.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/str/_replace.py"
 # 
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-16 16:30:25 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/str/_replace.py
 # 
-# __file__ = "./src/mngs/str/_replace.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/str/_replace.py"
 # 
 # from typing import Union, Dict, Optional
 # from ..dict import DotDict as _DotDict
@@ -77,7 +77,7 @@
 # # # Time-stamp: "2024-11-16 16:30:25 (ywatanabe)"
 # # # File: ./mngs_repo/src/mngs/str/_replace.py
 # 
-# # __file__ = "./src/mngs/str/_replace.py"
+# # THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/str/_replace.py"
 # 
 # # def replace(string, replacements):
 # #     """Replace placeholders in the string with corresponding values from replacements.
@@ -132,7 +132,6 @@
 # # EOF
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

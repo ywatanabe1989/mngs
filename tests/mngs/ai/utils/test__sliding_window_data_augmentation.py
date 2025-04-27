@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/ai/utils/_sliding_window_data_augmentation.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/utils/_sliding_window_data_augmentation.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -13,7 +13,6 @@
 #     return x[..., start:end]
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

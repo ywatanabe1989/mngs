@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/ai/_gen_ai/_OpenAI.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/_gen_ai/_OpenAI.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Timestamp: "2025-01-22 01:21:11 (ywatanabe)"
 # # File: _OpenAI.py
 # 
-# __file__ = "./src/mngs/ai/_gen_ai/_OpenAI.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_OpenAI.py"
 # 
 # 
 # """Imports"""
@@ -236,7 +236,6 @@
 # # EOF
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

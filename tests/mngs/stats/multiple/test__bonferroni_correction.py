@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/stats/multiple/_bonferroni_correction.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/stats/multiple/_bonferroni_correction.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # Time-stamp: "2021-09-25 15:39:51 (ylab)"
@@ -74,7 +74,6 @@
 #     print(mngs.gen.isclose(arr, tor))
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

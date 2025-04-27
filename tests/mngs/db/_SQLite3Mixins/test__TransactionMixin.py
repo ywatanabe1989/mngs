@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_SQLite3Mixins/_TransactionMixin.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/db/_SQLite3Mixins/_TransactionMixin.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-29 04:32:42 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/db/_SQLite3Mixins/_TransactionMixin.py
 # 
-# __file__ = "./src/mngs/db/_SQLite3Mixins/_TransactionMixin.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_SQLite3Mixins/_TransactionMixin.py"
 # 
 # import sqlite3
 # import contextlib
@@ -69,7 +69,6 @@
 # # EOF
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

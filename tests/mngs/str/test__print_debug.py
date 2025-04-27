@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/str/_print_debug.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/str/_print_debug.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-24 17:17:05 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/str/_print_debug.py
 # 
-# __file__ = "./src/mngs/str/_print_debug.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/str/_print_debug.py"
 # 
 # from ._printc import printc
 # 
@@ -36,7 +36,6 @@
 # # EOF
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

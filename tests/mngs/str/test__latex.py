@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/str/_latex.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/str/_latex.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # 
@@ -25,7 +25,6 @@
 #     return to_latex_style(r"\hat{%s}" % str_or_num)
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

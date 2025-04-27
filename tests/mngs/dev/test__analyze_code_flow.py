@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/dev/_analyze_code_flow.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/dev/_analyze_code_flow.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-20 10:27:28 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/dev/_analyze_code_flow.py
 # 
-# __file__ = "./src/mngs/dev/_analyze_code_flow.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/dev/_analyze_code_flow.py"
 # 
 # import ast
 # 
@@ -291,7 +291,6 @@
 # # EOF
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

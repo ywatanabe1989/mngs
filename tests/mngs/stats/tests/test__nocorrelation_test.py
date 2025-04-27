@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/stats/tests/_nocorrelation_test.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/stats/tests/_nocorrelation_test.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # 
@@ -30,7 +30,6 @@
 #     return r, t, p_value
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

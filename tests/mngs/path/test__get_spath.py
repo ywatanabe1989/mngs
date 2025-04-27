@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/path/_get_spath.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/path/_get_spath.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -14,13 +14,13 @@
 # def get_spath(sfname=".", makedirs=False):
 # 
 #     # if __IPYTHON__:
-#     #     __file__ = f'/tmp/{os.getenv("USER")}.py'
+#     #     THIS_FILE = f'/tmp/{os.getenv("USER")}.py'
 #     # else:
-#     #     __file__ = inspect.stack()[1].filename
+#     #     THIS_FILE = inspect.stack()[1].filename
 # 
-#     __file__ = inspect.stack()[1].filename
+#     THIS_FILE = inspect.stack()[1].filename
 #     if "ipython" in __file__:  # for ipython
-#         __file__ = f'/tmp/{os.getenv("USER")}.py'
+#         THIS_FILE = f'/tmp/{os.getenv("USER")}.py'
 # 
 #     ## spath
 #     fpath = __file__
@@ -37,7 +37,6 @@
 # # EOF
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

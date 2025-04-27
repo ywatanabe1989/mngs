@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/dsp/utils/_differential_bandpass_filters.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/dsp/utils/_differential_bandpass_filters.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-26 22:24:13 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/dsp/utils/_differential_bandpass_filters.py
 # 
-# __file__ = "./src/mngs/dsp/utils/_differential_bandpass_filters.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/dsp/utils/_differential_bandpass_filters.py"
 # 
 # import sys
 # 
@@ -128,7 +128,6 @@
 # # EOF
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

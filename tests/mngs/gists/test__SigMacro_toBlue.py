@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/gists/_SigMacro_toBlue.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/gists/_SigMacro_toBlue.py
 # --------------------------------------------------------------------------------
 # def SigMacro_toBlue():
 #     """Print a macro for SigmaPlot (v12.0) that changes the color and style of the selected object. Please refer to the 'Automating Routine Tasks' section of the official documentation."""
@@ -157,7 +157,6 @@
 #     )
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

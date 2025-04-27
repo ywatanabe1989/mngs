@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/stats/tests/_smirnov_grubbs.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/stats/tests/_smirnov_grubbs.py
 # --------------------------------------------------------------------------------
 # import numpy as np
 # from scipy import stats
@@ -100,7 +100,6 @@
 # #         return np.array(indi_outliers).squeeze()
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

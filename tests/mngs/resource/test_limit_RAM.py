@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/resource/limit_RAM.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/resource/limit_RAM.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -30,7 +30,6 @@
 #     limit_RAM(0.1)
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

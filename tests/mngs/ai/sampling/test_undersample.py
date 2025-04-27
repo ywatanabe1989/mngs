@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/ai/sampling/undersample.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/sampling/undersample.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-24 10:13:17 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/ai/sampling/undersample.py
 # 
-# __file__ = "./src/mngs/ai/sampling/undersample.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/sampling/undersample.py"
 # 
 # from ...types import ArrayLike
 # from imblearn.under_sampling import RandomUnderSampler
@@ -27,7 +27,6 @@
 # # EOF
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

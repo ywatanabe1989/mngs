@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/stats/tests/__corr_test_single.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/stats/tests/__corr_test_single.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -254,7 +254,6 @@
 # #     print("Pearson results:", results_pearson)
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

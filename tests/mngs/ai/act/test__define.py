@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/ai/act/_define.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/act/_define.py
 # --------------------------------------------------------------------------------
 # import torch.nn as nn
 # 
@@ -12,7 +12,6 @@
 #     return acts_dict[act_str]
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

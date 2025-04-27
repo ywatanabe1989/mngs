@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/nn/_ResNet1D.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/nn/_ResNet1D.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -125,7 +125,6 @@
 #     summary(model, Xb)
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

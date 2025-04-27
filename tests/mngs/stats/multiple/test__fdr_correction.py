@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/stats/multiple/_fdr_correction.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/stats/multiple/_fdr_correction.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -398,7 +398,6 @@
 # #     print(mngs.gen.isclose(arr, tor))
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/gen/_print_config.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/gen/_print_config.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -86,7 +86,6 @@
 #     print_config_main()
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

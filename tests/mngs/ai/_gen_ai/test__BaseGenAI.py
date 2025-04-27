@@ -1,10 +1,10 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/ai/_gen_ai/_BaseGenAI.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/_gen_ai/_BaseGenAI.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2025-02-02 04:35:15 (ywatanabe)"
 # # File: ./src/mngs/ai/_gen_ai/_BaseGenAI.py
-# __file__ = "./src/mngs/ai/_gen_ai/_BaseGenAI.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_BaseGenAI.py"
 # 
 # """
 # Functionality:
@@ -364,7 +364,6 @@
 # # EOF
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/nn/_MNet_1000.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/nn/_MNet_1000.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -163,7 +163,6 @@
 #     print(y.shape)
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

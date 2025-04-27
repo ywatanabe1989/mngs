@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_PostgreSQLMixins/_SchemaMixin.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/db/_PostgreSQLMixins/_SchemaMixin.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Timestamp: "2025-02-27 22:14:23 (ywatanabe)"
 # # File: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_PostgreSQLMixins/_SchemaMixin.py
 # 
-# __file__ = "./src/mngs/db/_PostgreSQLMixins/_SchemaMixin.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQLMixins/_SchemaMixin.py"
 # 
 # from typing import List, Dict, Any, Optional
 # from .._BaseMixins._BaseSchemaMixin import _BaseSchemaMixin
@@ -121,7 +121,6 @@
 # 
 # # EOF
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

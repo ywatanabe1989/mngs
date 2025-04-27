@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/decorators/_not_implemented.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/decorators/_not_implemented.py
 # --------------------------------------------------------------------------------
 # #!./env/bin/python3
 # # -*- coding: utf-8 -*-
@@ -32,7 +32,6 @@
 #     return wrapper
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

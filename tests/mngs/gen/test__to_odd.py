@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/gen/_to_odd.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/gen/_to_odd.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-25 23:40:22 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/gen/_to_odd.py
 # 
-# __file__ = "./src/mngs/gen/_to_odd.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/gen/_to_odd.py"
 # 
 # def to_odd(n):
 #     """Convert a number to the nearest odd number less than or equal to itself.
@@ -35,7 +35,6 @@
 # # EOF
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/stats/desc/_describe.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/stats/desc/_describe.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-12-05 09:20:53 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/stats/desc/_describe.py
 # 
-# __file__ = "./src/mngs/stats/desc/_describe.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/stats/desc/_describe.py"
 # 
 # """
 # Functionality:
@@ -191,7 +191,6 @@
 # # EOF
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

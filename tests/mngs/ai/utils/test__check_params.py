@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/ai/utils/_check_params.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/utils/_check_params.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # Time-stamp: "2024-02-17 12:38:40 (ywatanabe)"
@@ -52,7 +52,6 @@
 #     return out_dict
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

@@ -1,17 +1,17 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/ai/_gen_ai/_Anthropic.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/_gen_ai/_Anthropic.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Timestamp: "2025-02-26 09:02:48 (ywatanabe)"
 # # File: ./src/mngs/ai/_gen_ai/_Anthropic.py
 # 
-# __file__ = "./src/mngs/ai/_gen_ai/_Anthropic.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_Anthropic.py"
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2025-02-26 09:02:48 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/ai/_gen_ai/_Anthropic.py
 # 
-# __file__ = "./src/mngs/ai/_gen_ai/_Anthropic.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_Anthropic.py"
 # 
 # """
 # Functionality:
@@ -183,7 +183,6 @@
 # 
 # # EOF
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

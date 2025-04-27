@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/ai/plt/_optuna_study.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/plt/_optuna_study.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -123,7 +123,6 @@
 #     mngs.ml.plt.optuna_study(lpath, "val_loss", sort=True)
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

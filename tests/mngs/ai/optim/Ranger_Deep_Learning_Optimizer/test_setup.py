@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/ai/optim/Ranger_Deep_Learning_Optimizer/setup.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/optim/Ranger_Deep_Learning_Optimizer/setup.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python
 # 
@@ -28,7 +28,6 @@
 # )
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

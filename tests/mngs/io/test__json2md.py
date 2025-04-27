@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/io/_json2md.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/io/_json2md.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-12-19 15:37:46 (ywatanabe)"
 # # File: ./Ninja/workspace/formats/json2md.py
 # 
-# __file__ = "/home/ywatanabe/.emacs.d/lisp/Ninja/workspace/formats/json2md.py"
+# THIS_FILE = "/home/ywatanabe/.emacs.d/lisp/Ninja/workspace/formats/json2md.py"
 # 
 # import json
 # import sys
@@ -66,7 +66,7 @@
 # # # Time-stamp: "2024-12-19 15:29:28 (ywatanabe)"
 # # # File: ./Ninja/workspace/formats/json2md.py
 # 
-# # __file__ = "/home/ywatanabe/.emacs.d/lisp/Ninja/workspace/formats/json2md.py"
+# # THIS_FILE = "/home/ywatanabe/.emacs.d/lisp/Ninja/workspace/formats/json2md.py"
 # 
 # # import json
 # # import sys
@@ -112,7 +112,6 @@
 # # # EOF
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

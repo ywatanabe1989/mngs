@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/ai/_gen_ai/_Google.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/_gen_ai/_Google.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Timestamp: "2025-02-06 13:47:23 (ywatanabe)"
 # # File: _Google.py
 # 
-# __file__ = "./src/mngs/ai/_gen_ai/_Google.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_Google.py"
 # 
 # 
 # 
@@ -206,7 +206,6 @@
 # 
 # # EOF
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

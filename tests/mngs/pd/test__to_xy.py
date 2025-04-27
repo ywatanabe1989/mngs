@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/pd/_to_xy.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/pd/_to_xy.py
 # --------------------------------------------------------------------------------
 # #!/./env/bin/python3
 # # -*- coding: utf-8 -*-
@@ -65,7 +65,6 @@
 #     return pd.concat(formatted_data_frames, ignore_index=True)
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/dsp/_pac.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/dsp/_pac.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-26 22:24:40 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/dsp/_pac.py
 # 
-# __file__ = "./src/mngs/dsp/_pac.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/dsp/_pac.py"
 # 
 # import sys
 # 
@@ -324,7 +324,6 @@
 # # EOF
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

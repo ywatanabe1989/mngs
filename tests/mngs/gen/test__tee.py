@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/gen/_tee.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/gen/_tee.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Timestamp: "2025-02-15 00:02:15 (ywatanabe)"
 # # File: ./src/mngs/gen/_tee.py
 # 
-# __file__ = "./src/mngs/gen/_tee.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/gen/_tee.py"
 # 
 # """
 # Functionality:
@@ -175,9 +175,9 @@
 #     ## DO NOT MODIFY THIS
 #     ####################
 #     if sdir is None:
-#         __file__ = inspect.stack()[1].filename
+#         THIS_FILE = inspect.stack()[1].filename
 #         if "ipython" in __file__:
-#             __file__ = f"/tmp/{_os.getenv('USER')}.py"
+#             THIS_FILE = f"/tmp/{_os.getenv('USER')}.py"
 #         sdir = clean_path(_os.path.splitext(__file__)[0] + "_out")
 # 
 #     sdir = _os.path.join(sdir, "logs/")
@@ -213,7 +213,6 @@
 # 
 # # EOF
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/plt/_subplots/_AxesWrapper.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_AxesWrapper.py
 # --------------------------------------------------------------------------------
 # #!./env/bin/python3
 # # -*- coding: utf-8 -*-
@@ -125,7 +125,6 @@
 #             return self.axes.flat
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

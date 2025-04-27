@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/ai/utils/_format_samples_for_sktime.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/utils/_format_samples_for_sktime.py
 # --------------------------------------------------------------------------------
 # import pandas as pd
 # import torch
@@ -28,7 +28,6 @@
 #         )
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

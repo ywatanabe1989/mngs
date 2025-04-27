@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/plt/ax/_map_ticks.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/ax/_map_ticks.py
 # --------------------------------------------------------------------------------
 # import matplotlib.pyplot as plt
 # import numpy as np
@@ -127,7 +127,6 @@
 #     plt.show()
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

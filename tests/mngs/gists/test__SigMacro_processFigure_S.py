@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/gists/_SigMacro_processFigure_S.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/gists/_SigMacro_processFigure_S.py
 # --------------------------------------------------------------------------------
 # def SigMacro_processFigure_S():
 #     """Print a macro for SigmaPlot (v12.0) to format a panel. Please refer to the 'Automating Routine Tasks' section of the official documentation."""
@@ -114,7 +114,6 @@
 #     )
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

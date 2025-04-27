@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/gen/_ci.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/gen/_ci.py
 # --------------------------------------------------------------------------------
 # #!./env/bin/python3
 # # -*- coding: utf-8 -*-
@@ -14,7 +14,6 @@
 #     return 1.96 * (xx[indi]).std(axis=axis) / np.sqrt(indi.sum())
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

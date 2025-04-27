@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/ai/__Classifiers.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/__Classifiers.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -103,7 +103,6 @@
 #     clf = clf_server("SVC", scaler=StandardScaler())
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

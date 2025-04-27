@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/ai/utils/_DefaultDataset.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/utils/_DefaultDataset.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # 
@@ -46,7 +46,6 @@
 #         return arrs_list_idx
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

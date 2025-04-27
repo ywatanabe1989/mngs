@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/ai/_LearningCurveLogger.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/_LearningCurveLogger.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-20 08:49:50 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/ai/_LearningCurveLogger.py
 # 
-# __file__ = "./src/mngs/ai/_LearningCurveLogger.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_LearningCurveLogger.py"
 # 
 # """
 # Functionality:
@@ -566,7 +566,6 @@
 # # EOF
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

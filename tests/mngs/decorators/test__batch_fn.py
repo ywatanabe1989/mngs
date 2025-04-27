@@ -1,16 +1,16 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/decorators/_batch_fn.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/decorators/_batch_fn.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-26 18:46:28 (ywatanabe)"
-# # File: ./mngs_repo/src/mngs/decorators/_batch_fn.py
-# 
-# __file__ = "./src/mngs/decorators/_batch_fn.py"
-# 
-# #!/usr/bin/env python3
-# # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-04 02:56:44 (ywatanabe)"
-# # File: ./mngs_repo/src/mngs/decorators/_batch_fn.py
+# # Timestamp: "2025-04-24 15:37:59 (ywatanabe)"
+# # File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_batch_fn.py
+# # ----------------------------------------
+# import os
+# __FILE__ = (
+#     "./src/mngs/decorators/_batch_fn.py"
+# )
+# __DIR__ = os.path.dirname(__FILE__)
+# # ----------------------------------------
 # 
 # from functools import wraps
 # from typing import Any as _Any
@@ -18,9 +18,6 @@
 # 
 # import torch
 # from tqdm import tqdm as _tqdm
-# 
-# from ._converters import (_conversion_warning, _try_device, is_torch, to_numpy,
-#                           to_torch)
 # 
 # 
 # def batch_fn(func: Callable) -> Callable:
@@ -34,7 +31,9 @@
 #         for i_batch in _tqdm(range(n_batches)):
 #             start = i_batch * batch_size
 #             end = min((i_batch + 1) * batch_size, len(x))
-#             batch_result = func(x[start:end], *args, **kwargs, batch_size=batch_size)
+#             batch_result = func(
+#                 x[start:end], *args, **kwargs, batch_size=batch_size
+#             )
 #             if isinstance(batch_result, torch.Tensor):
 #                 batch_result = batch_result.cpu()
 #             elif isinstance(batch_result, tuple):
@@ -46,7 +45,8 @@
 #         if isinstance(results[0], tuple):
 #             n_vars = len(results[0])
 #             combined_results = [
-#                 torch.vstack([res[i_var] for res in results]) for i_var in range(n_vars)
+#                 torch.vstack([res[i_var] for res in results])
+#                 for i_var in range(n_vars)
 #             ]
 #             return tuple(combined_results)
 #         elif isinstance(results[0], torch.Tensor):
@@ -56,11 +56,8 @@
 # 
 #     return wrapper
 # 
-# 
 # # EOF
-
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/gen/_close.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/gen/_close.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Timestamp: "2025-02-14 21:12:25 (ywatanabe)"
 # # File: ./src/mngs/gen/_close.py
 # 
-# __file__ = "./src/mngs/gen/_close.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/gen/_close.py"
 # 
 # import os
 # import re
@@ -204,7 +204,6 @@
 # 
 # # EOF
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

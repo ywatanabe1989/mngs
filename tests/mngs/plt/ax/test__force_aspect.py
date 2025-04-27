@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/plt/ax/_force_aspect.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/ax/_force_aspect.py
 # --------------------------------------------------------------------------------
 # #!./env/bin/python3
 # # -*- coding: utf-8 -*-
@@ -32,7 +32,6 @@
 # # IndexError: list index out of range
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

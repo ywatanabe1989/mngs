@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/torch/_nan_funcs.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/torch/_nan_funcs.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -59,7 +59,6 @@
 #     return output
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

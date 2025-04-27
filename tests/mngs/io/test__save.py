@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/io/_save.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/io/_save.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Timestamp: "2025-02-15 00:04:02 (ywatanabe)"
 # # File: ./src/mngs/io/_save.py
 # 
-# __file__ = "./src/mngs/io/_save.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/io/_save.py"
 # 
 # """
 # 1. Functionality:
@@ -386,7 +386,6 @@
 # 
 # # EOF
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

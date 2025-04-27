@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/ai/optim/Ranger_Deep_Learning_Optimizer/ranger/ranger2020.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/optim/Ranger_Deep_Learning_Optimizer/ranger/ranger2020.py
 # --------------------------------------------------------------------------------
 # # Ranger deep learning optimizer - RAdam + Lookahead + Gradient Centralization, combined into one optimizer.
 # 
@@ -210,7 +210,6 @@
 #         return loss
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

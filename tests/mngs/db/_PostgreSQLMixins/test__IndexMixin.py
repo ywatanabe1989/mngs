@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_PostgreSQLMixins/_IndexMixin.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/db/_PostgreSQLMixins/_IndexMixin.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Timestamp: "2025-02-27 22:15:05 (ywatanabe)"
 # # File: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_PostgreSQLMixins/_IndexMixin.py
 # 
-# __file__ = "./src/mngs/db/_PostgreSQLMixins/_IndexMixin.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQLMixins/_IndexMixin.py"
 # 
 # from typing import List
 # import psycopg2
@@ -56,7 +56,6 @@
 # 
 # # EOF
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

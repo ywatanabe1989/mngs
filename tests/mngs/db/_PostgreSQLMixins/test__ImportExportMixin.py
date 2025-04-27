@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_PostgreSQLMixins/_ImportExportMixin.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/db/_PostgreSQLMixins/_ImportExportMixin.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Timestamp: "2025-02-27 22:14:59 (ywatanabe)"
 # # File: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_PostgreSQLMixins/_ImportExportMixin.py
 # 
-# __file__ = "./src/mngs/db/_PostgreSQLMixins/_ImportExportMixin.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQLMixins/_ImportExportMixin.py"
 # 
 # import pandas as pd
 # from typing import List
@@ -44,7 +44,6 @@
 # 
 # # EOF
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

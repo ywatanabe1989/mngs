@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/ai/metrics/_bACC.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/metrics/_bACC.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -36,7 +36,6 @@
 #     return round(bACC_score, 3)  # [REVISED]
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

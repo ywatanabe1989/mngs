@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/io/_glob.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/io/_glob.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-25 00:31:08 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/io/_glob.py
 # 
-# __file__ = "./src/mngs/io/_glob.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/io/_glob.py"
 # 
 # import re as _re
 # from glob import glob as _glob
@@ -101,7 +101,6 @@
 # # EOF
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

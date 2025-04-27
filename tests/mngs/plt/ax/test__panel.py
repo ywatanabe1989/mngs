@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/plt/ax/_panel.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/ax/_panel.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -47,7 +47,6 @@
 #     plt.show()
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

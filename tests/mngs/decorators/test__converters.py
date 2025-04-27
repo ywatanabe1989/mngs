@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/decorators/_converters.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/decorators/_converters.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Timestamp: "2025-01-18 03:46:52 (ywatanabe)"
 # # File: _converters.py
 # 
-# __file__ = "./src/mngs/decorators/_converters.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_converters.py"
 # 
 # 
 # from typing import Callable, Optional
@@ -190,7 +190,6 @@
 # 
 # # EOF
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

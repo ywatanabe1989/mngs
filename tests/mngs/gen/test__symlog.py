@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/gen/_symlog.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/gen/_symlog.py
 # --------------------------------------------------------------------------------
 # #!./env/bin/python3
 # # -*- coding: utf-8 -*-
@@ -29,7 +29,6 @@
 #     return sign_x * (np.log1p(abs_x / linthresh))
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

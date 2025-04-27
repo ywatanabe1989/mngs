@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/plt/_configure_mpl.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_configure_mpl.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-17 13:59:03 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/plt/_configure_mpl.py
 # 
-# __file__ = "./src/mngs/plt/_configure_mpl.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/plt/_configure_mpl.py"
 # 
 # from typing import Union
 # 
@@ -209,7 +209,6 @@
 # # EOF
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/decorators/_pandas_fn.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/decorators/_pandas_fn.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-26 18:46:08 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/decorators/_pandas_fn.py
 # 
-# __file__ = "./src/mngs/decorators/_pandas_fn.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_pandas_fn.py"
 # 
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -76,7 +76,6 @@
 # # EOF
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_SQLite3Mixins/_BatchMixin.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/db/_SQLite3Mixins/_BatchMixin.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-29 04:36:14 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/db/_SQLite3Mixins/_BatchMixin.py
 # 
-# __file__ = "./src/mngs/db/_SQLite3Mixins/_BatchMixin.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_SQLite3Mixins/_BatchMixin.py"
 # 
 # """
 # Functionality:
@@ -242,7 +242,6 @@
 # # EOF
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

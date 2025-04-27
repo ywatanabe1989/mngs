@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/ai/EarlyStopping.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/EarlyStopping.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # Time-stamp: "2024-09-07 01:09:38 (ywatanabe)"
@@ -153,7 +153,6 @@
 #     #         break
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

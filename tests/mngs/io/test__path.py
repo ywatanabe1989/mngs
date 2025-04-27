@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/io/_path.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/io/_path.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -37,9 +37,9 @@
 # #     >>> print(fpath)
 # #     '/path/to/current/script.py'
 # #     """
-# #     __file__ = inspect.stack()[1].filename
+# #     THIS_FILE = inspect.stack()[1].filename
 # #     if "ipython" in __file__:  # for ipython
-# #         __file__ = when_ipython  # "/tmp/fake.py"
+# #         THIS_FILE = when_ipython  # "/tmp/fake.py"
 # #     return __file__
 # 
 # 
@@ -66,9 +66,9 @@
 # #     >>> print(spath)
 # #     '/path/to/current/script/output.txt'
 # #     """
-# #     __file__ = inspect.stack()[1].filename
+# #     THIS_FILE = inspect.stack()[1].filename
 # #     if "ipython" in __file__:  # for ipython
-# #         __file__ = f'/tmp/fake-{os.getenv("USER")}.py'
+# #         THIS_FILE = f'/tmp/fake-{os.getenv("USER")}.py'
 # 
 # #     ## spath
 # #     fpath = __file__
@@ -291,7 +291,6 @@
 # # EOF
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/gen/_xml2dict.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/gen/_xml2dict.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # Time-stamp: "2021-09-07 13:06:33 (ylab)"
@@ -78,7 +78,6 @@
 #                 self.update({element.tag: element.text})
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

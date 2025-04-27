@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/linalg/_misc.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/linalg/_misc.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -75,7 +75,6 @@
 #     return O, A, B
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

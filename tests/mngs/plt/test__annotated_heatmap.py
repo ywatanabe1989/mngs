@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/plt/_annotated_heatmap.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_annotated_heatmap.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # 
@@ -62,7 +62,6 @@
 #     fig.show()
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

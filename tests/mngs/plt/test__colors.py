@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/plt/_colors.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_colors.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # 
@@ -90,7 +90,6 @@
 #     print(cycle_color(1))
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/pd/_melt_cols.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/pd/_melt_cols.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -70,7 +70,6 @@
 #     return formatted_df.drop('global_index', axis=1)
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

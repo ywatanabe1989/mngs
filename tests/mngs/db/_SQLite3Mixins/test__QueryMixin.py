@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_SQLite3Mixins/_QueryMixin.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/db/_SQLite3Mixins/_QueryMixin.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-29 04:31:43 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/db/_SQLite3Mixins/_QueryMixin.py
 # 
-# __file__ = "./src/mngs/db/_SQLite3Mixins/_QueryMixin.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_SQLite3Mixins/_QueryMixin.py"
 # 
 # import sqlite3
 # from typing import List, Tuple
@@ -80,7 +80,6 @@
 # # EOF
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/stats/_p2stars.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/stats/_p2stars.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -112,7 +112,6 @@
 # #     return [col for col in df.columns if re.search(r'p[_.-]?val', col.lower())]
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

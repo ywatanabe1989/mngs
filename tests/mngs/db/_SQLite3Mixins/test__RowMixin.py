@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_SQLite3Mixins/_RowMixin.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/db/_SQLite3Mixins/_RowMixin.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-25 01:38:17 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/db/_SQLite3Mixins/_RowMixin.py
 # 
-# __file__ = "./src/mngs/db/_SQLite3Mixins/_RowMixin.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_SQLite3Mixins/_RowMixin.py"
 # 
 # import sqlite3
 # from typing import List
@@ -78,7 +78,6 @@
 # # EOF
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

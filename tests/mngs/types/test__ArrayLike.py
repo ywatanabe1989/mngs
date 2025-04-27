@@ -1,17 +1,17 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/types/_ArrayLike.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/types/_ArrayLike.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Timestamp: "2025-02-27 11:17:14 (ywatanabe)"
 # # File: ./src/mngs/types/_ArrayLike.py
 # 
-# __file__ = "./src/mngs/types/_ArrayLike.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/types/_ArrayLike.py"
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2025-02-27 11:17:14 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/types/_ArrayLike.py
 # 
-# __file__ = "./src/mngs/types/_ArrayLike.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/types/_ArrayLike.py"
 # 
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -46,7 +46,6 @@
 # 
 # # EOF
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

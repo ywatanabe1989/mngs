@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/ai/optim/Ranger_Deep_Learning_Optimizer/ranger/ranger913A.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/optim/Ranger_Deep_Learning_Optimizer/ranger/ranger913A.py
 # --------------------------------------------------------------------------------
 # # Ranger deep learning optimizer - RAdam + Lookahead + calibrated adaptive LR combined.
 # # https://github.com/lessw2020/Ranger-Deep-Learning-Optimizer
@@ -208,7 +208,6 @@
 #         return loss
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

@@ -1,5 +1,16 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/nn/_Hilbert.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/nn/_Hilbert.py
 # --------------------------------------------------------------------------------
+# #!/usr/bin/env python3
+# # -*- coding: utf-8 -*-
+# # Timestamp: "2025-04-10 12:46:06 (ywatanabe)"
+# # File: /home/ywatanabe/proj/mngs_repo/src/mngs/nn/_Hilbert.py
+# # ----------------------------------------
+# import os
+# __FILE__ = (
+#     "/home/ywatanabe/proj/mngs_repo/src/mngs/nn/_Hilbert.py"
+# )
+# __DIR__ = os.path.dirname(__FILE__)
+# # ----------------------------------------
 # #!/usr/bin/env python
 # 
 # import torch  # 1.7.1
@@ -99,9 +110,9 @@
 #     # Calculation
 #     xx = xx.to(device)
 #     y = m(xx)
-
+# 
+# # EOF
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

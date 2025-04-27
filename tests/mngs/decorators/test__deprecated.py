@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/decorators/_deprecated.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/decorators/_deprecated.py
 # --------------------------------------------------------------------------------
 # import functools
 # import warnings
@@ -28,7 +28,6 @@
 #     return decorator
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

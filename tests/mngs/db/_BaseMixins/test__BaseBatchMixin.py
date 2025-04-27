@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_BaseMixins/_BaseBatchMixin.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/db/_BaseMixins/_BaseBatchMixin.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-25 01:43:41 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/db/_BaseMixins/_BaseBatchMixin.py
 # 
-# __file__ = "./src/mngs/db/_BaseMixins/_BaseBatchMixin.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_BaseMixins/_BaseBatchMixin.py"
 # 
 # from typing import List, Any, Optional, Dict, Union
 # import pandas as pd
@@ -27,7 +27,6 @@
 # # EOF
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

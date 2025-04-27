@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_PostgreSQLMixins/_RowMixin.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/db/_PostgreSQLMixins/_RowMixin.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Timestamp: "2025-02-27 22:15:30 (ywatanabe)"
 # # File: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_PostgreSQLMixins/_RowMixin.py
 # 
-# __file__ = "./src/mngs/db/_PostgreSQLMixins/_RowMixin.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQLMixins/_RowMixin.py"
 # 
 # from typing import List, Optional
 # import pandas as pd
@@ -68,7 +68,6 @@
 # 
 # # EOF
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

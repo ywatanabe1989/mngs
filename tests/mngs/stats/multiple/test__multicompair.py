@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/stats/multiple/_multicompair.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/stats/multiple/_multicompair.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # 
@@ -30,7 +30,6 @@
 # # H_statistic, p_value = scipy.stats.kruskal(*data) # one-way ANOVA on RANKs
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

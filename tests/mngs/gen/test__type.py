@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/gen/_type.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/gen/_type.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-17 12:45:50 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/gen/_type.py
 # 
-# __file__ = "./src/mngs/gen/_type.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/gen/_type.py"
 # 
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -76,7 +76,6 @@
 # # EOF
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

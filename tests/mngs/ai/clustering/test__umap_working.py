@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/ai/clustering/_umap_working.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/clustering/_umap_working.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -118,7 +118,6 @@
 #         return fig, legend_figs, _umap
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

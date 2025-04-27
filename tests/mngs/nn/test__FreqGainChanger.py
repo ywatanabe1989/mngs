@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/nn/_FreqGainChanger.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/nn/_FreqGainChanger.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -111,7 +111,6 @@
 #     
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

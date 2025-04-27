@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/io/_load_modules/_db.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/io/_load_modules/_db.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-25 11:50:05 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/io/_load_modules/_db.py
 # 
-# __file__ = "./src/mngs/io/_load_modules/_db.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/io/_load_modules/_db.py"
 # 
 # from typing import Any
 # 
@@ -26,7 +26,6 @@
 # # EOF
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/resource/_utils/_get_env_info.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/resource/_utils/_get_env_info.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # 
@@ -504,7 +504,6 @@
 #     print(env_info)
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

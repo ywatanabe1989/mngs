@@ -1,17 +1,17 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/str/_clean_path.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/str/_clean_path.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Timestamp: "2025-02-14 22:07:13 (ywatanabe)"
 # # File: ./src/mngs/str/_clean_path.py
 # 
-# __file__ = "./src/mngs/str/_clean_path.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/str/_clean_path.py"
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2025-02-14 22:07:13 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/str/_clean_path.py
 # 
-# __file__ = "./src/mngs/str/_clean_path.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/str/_clean_path.py"
 # 
 # """
 # Functionality:
@@ -73,7 +73,6 @@
 # 
 # # EOF
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

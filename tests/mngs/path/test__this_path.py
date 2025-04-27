@@ -1,4 +1,4 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/path/_this_path.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/path/_this_path.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -9,9 +9,9 @@
 # import inspect
 # 
 # def this_path(ipython_fake_path="/tmp/fake.py"):
-#     __file__ = inspect.stack()[1].filename
+#     THIS_FILE = inspect.stack()[1].filename
 #     if "ipython" in __file__:
-#         __file__ = ipython_fake_path
+#         THIS_FILE = ipython_fake_path
 #     return __file__
 # 
 # get_this_path = this_path
@@ -19,7 +19,6 @@
 # # EOF
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

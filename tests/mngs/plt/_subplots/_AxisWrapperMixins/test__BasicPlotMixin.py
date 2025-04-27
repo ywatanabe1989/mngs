@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/plt/_subplots/_AxisWrapperMixins/_BasicPlotMixin.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_BasicPlotMixin.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-17 12:00:05 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_BasicPlotMixin.py
 # 
-# __file__ = "./src/mngs/plt/_subplots/_AxisWrapperMixins/_BasicPlotMixin.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_BasicPlotMixin.py"
 # 
 # from functools import wraps
 # from typing import Any, Dict, List, Optional, Tuple, Union
@@ -260,7 +260,6 @@
 # # EOF
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/ai/_gen_ai/_Groq.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/_gen_ai/_Groq.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-28 02:47:54 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/ai/_gen_ai/_Groq.py
 # 
-# __file__ = "./src/mngs/ai/_gen_ai/_Groq.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_Groq.py"
 # 
 # """
 # Functionality:
@@ -99,7 +99,6 @@
 # # EOF
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/ai/ClassifierServer.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/ClassifierServer.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-12-12 06:49:15 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/ai/ClassifierServer.py
 # 
-# __file__ = "/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/ClassifierServer.py"
+# THIS_FILE = "/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/ClassifierServer.py"
 # 
 # """
 # Functionality:
@@ -135,7 +135,6 @@
 #     clf = clf_server("SVC", scaler=_StandardScaler())
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

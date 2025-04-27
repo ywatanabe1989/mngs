@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/path/_clean.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/path/_clean.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-17 20:47:30 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/path/_clean.py
 # 
-# __file__ = "./src/mngs/path/_clean.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/path/_clean.py"
 # 
 # def clean(string):
 #     string = string.replace("/./", "/").replace("//", "/").replace(" ", "_")
@@ -15,7 +15,6 @@
 # # EOF
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

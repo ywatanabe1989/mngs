@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_BaseMixins/_BaseConnectionMixin.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/db/_BaseMixins/_BaseConnectionMixin.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-25 06:02:43 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/db/_BaseMixins/_BaseConnectionMixin.py
 # 
-# __file__ = "./src/mngs/db/_BaseMixins/_BaseConnectionMixin.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_BaseMixins/_BaseConnectionMixin.py"
 # 
 # import threading
 # from typing import Optional
@@ -42,7 +42,6 @@
 # # EOF
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path

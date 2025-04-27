@@ -1,11 +1,11 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/ai/feature_extraction/vit.py
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/feature_extraction/vit.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-27 21:36:51 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/ai/feature_extraction/vit.py
 # 
-# __file__ = "./src/mngs/ai/feature_extraction/vit.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/feature_extraction/vit.py"
 # 
 # """
 # Functionality:
@@ -154,7 +154,6 @@
 # # EOF
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path
