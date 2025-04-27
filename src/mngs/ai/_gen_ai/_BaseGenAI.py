@@ -1,7 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2025-02-02 04:35:15 (ywatanabe)"
-# File: ./src/mngs/ai/_gen_ai/_BaseGenAI.py
+# Timestamp: "2025-04-27 15:37:11 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_BaseGenAI.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./src/mngs/ai/_gen_ai/_BaseGenAI.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
+
 THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_BaseGenAI.py"
 
 """
@@ -21,6 +29,7 @@ Prerequisites:
 """
 
 """Imports"""
+import base64
 import sys
 from abc import ABC, abstractmethod
 from typing import Any, Dict, Generator, List, Optional, Union
@@ -28,13 +37,21 @@ from typing import Any, Dict, Generator, List, Optional, Union
 import matplotlib.pyplot as plt
 import numpy as np
 
+from ...io._load import load
 from ._calc_cost import calc_cost
 from ._format_output_func import format_output_func
-from ...io._load import load
 from .PARAMS import MODELS
-import base64
 
 """Functions & Classes"""
+# import re
+
+
+# def _remove_ansi_escape(raw_text: str) -> str:
+#     ansi_pattern = re.compile(r"\x1b\[[0-9;]*[A-Za-z]")
+#     # decode literal “\x1b” sequences into real ESC char
+#     decoded = raw_text.encode("utf-8").decode("unicode_escape")
+#     # strip ANSI sequences
+#     return ansi_pattern.sub("", decoded)
 
 
 def to_stream(string: Union[str, List[str]]) -> Generator[str, None, None]:
@@ -158,7 +175,6 @@ class BaseGenAI(ABC):
             return
         # ----------------------------------------
 
-
         self.update_history("user", prompt or "", images=images)
 
         error_flag, error_obj = self.gen_error(return_stream)
@@ -261,8 +277,9 @@ class BaseGenAI(ABC):
 
     @staticmethod
     def _ensure_base64_encoding(image, max_size=512):
-        from PIL import Image
         import io
+
+        from PIL import Image
 
         def resize_image(img):
             # Calculate new dimensions while maintaining aspect ratio
@@ -300,9 +317,7 @@ class BaseGenAI(ABC):
                 *[
                     {
                         "type": "_image",
-                        "_image": self._ensure_base64_encoding(
-                            image
-                        ),
+                        "_image": self._ensure_base64_encoding(image),
                     }
                     for image in images
                 ],
@@ -349,10 +364,6 @@ if __name__ == "__main__":
     )
     main()
     mngs.gen.close(CONFIG, verbose=False, notify=False)
-
-# EOF
-
-
 
 """
 python src/mngs/ai/_gen_ai/_BaseGenAI.py
