@@ -1,14 +1,16 @@
 #!/bin/bash
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-02-28 00:05:19 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_dev/docs/update_test_structure.sh
+# Timestamp: "2025-04-27 13:17:08 (ywatanabe)"
+# File: ./docs/update_test_structure.sh
 
-THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-LOG_PATH="$0.log"
-touch "$LOG_PATH"
+THIS_DIR="$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)"
+LOG_PATH="$THIS_DIR/.$(basename $0).log"
+touch "$LOG_PATH" >/dev/null 2>&1
+
 
 SRC_DIR=$(realpath "$THIS_DIR/../src/mngs")
 TESTS_DIR=$(realpath "$THIS_DIR/../tests/mngs")
+
 
 # Function definitions
 usage() {
@@ -37,39 +39,110 @@ parse_arguments() {
     done
 }
 
-construct_exclude_patterns() {
-    # Constructs the exclude patterns for 'find' command
-    local EXCLUDE_PATHS=(
-        "*/\.*"
-        "*/deprecated*"
-        "*/archive*"
-        "*/backup*"
-        "*/tmp*"
-        "*/temp*"
-        "*/RUNNING/*"
-        "*/FINISHED/*"
-        "*/__pycache__*"
-        "*/__init__.py*"
-    )
+# construct_exclude_patterns() {
+#     # Constructs the exclude patterns for 'find' command
+#     local EXCLUDE_PATHS=(
+#         "*/\.*"
+#         "*/deprecated*"
+#         "*/archive*"
+#         "*/backup*"
+#         "*/tmp*"
+#         "*/temp*"
+#         "*/RUNNING/*"
+#         "*/FINISHED/*"
+#         "*/FINISHED_SUCCESS/*"
+#         "2025Y"
+#         "2024Y"
+#         "*/__pycache__*"
+#         "*/__init__.py*"
+#     )
 
-    # Build the find parameters for exclusion globally
-    FIND_EXCLUDES=()
-    for path in "${EXCLUDE_PATHS[@]}"; do
-        FIND_EXCLUDES+=(-not -path "$path")
-    done
+#     # Build the find parameters for exclusion globally
+#     FIND_EXCLUDES=()
+#     for path in "${EXCLUDE_PATHS[@]}"; do
+#         FIND_EXCLUDES+=(-not -path "$path")
+#     done
+
+#      # build prune args from EXCLUDE_PATHS
+#      local PRUNE_ARGS=()
+#      for path in "${EXCLUDE_PATHS[@]}"; do
+#          PRUNE_ARGS+=( -path "$path" -o )
+#      done
+#      # drop trailing -o
+#      unset 'PRUNE_ARGS[${#PRUNE_ARGS[@]}-1]'
+# }
+
+construct_exclude_patterns() {
+   local EXCLUDE_PATHS=(
+       "*/\.*"
+       "*/deprecated*"
+       "*/archive*"
+       "*/backup*"
+       "*/tmp*"
+       "*/temp*"
+       "*/RUNNING/*"
+       "*/FINISHED/*"
+       "*/FINISHED_SUCCESS/*"
+       "*/2025Y*/*"
+       "*/2024Y*/*"
+       "*/__pycache__*"
+       "*/__init__.py*"
+   )
+   # build find-excludes (for -not -path)
+   FIND_EXCLUDES=()
+   # build prune args (for -prune)
+   PRUNE_ARGS=()
+   for path in "${EXCLUDE_PATHS[@]}"; do
+       FIND_EXCLUDES+=( -not -path "$path" )
+       PRUNE_ARGS+=( -path "$path" -o )
+   done
+   # drop trailing -o
+   unset 'PRUNE_ARGS[${#PRUNE_ARGS[@]}-1]'
 }
 
+cleanup_unnecessary_test_files() {
+    find ./tests -type d -name "*RUNNING*" | xargs rm -rf
+    find ./tests -type d -name "*FINISHED*" | xargs rm -rf
+    find ./tests -type d -name "*FINISHED_SUCCESS*" | xargs rm -rf
+    find ./tests -type d -name "*2024Y*" | xargs rm -rf
+    find ./tests -type d -name "*2025Y*" | xargs rm -rf
+    find ./tests -type d -name "**.py_out" | xargs rm -rf
+}
+
+
+# find_files() {
+#     # Usage: find_files <search_path> <type> <name_pattern>
+#     # Example: find_files "$SRC_DIR" f "*.py"
+#     local search_path="$1"
+#     local type="$2"
+#     local name_pattern="$3"
+
+#     # Call the function to populate FIND_EXCLUDES
+#     construct_exclude_patterns
+
+#     find "$search_path" -type "$type" -name "$name_pattern" "${FIND_EXCLUDES[@]}"
+# }
+
+# find_files() {
+#      local search_path=$1
+#      local type=$2
+#      local name_pattern=$3
+#      construct_exclude_patterns
+#      # skip all EXCLUDE_PATHS, then match files
+#      find "$search_path" \
+#          \( "${PRUNE_ARGS[@]}" \) -prune \
+#          -o -type "$type" -name "$name_pattern" -print
+# }
+
+
 find_files() {
-    # Usage: find_files <search_path> <type> <name_pattern>
-    # Example: find_files "$SRC_DIR" f "*.py"
-    local search_path="$1"
-    local type="$2"
-    local name_pattern="$3"
-
-    # Call the function to populate FIND_EXCLUDES
-    construct_exclude_patterns
-
-    find "$search_path" -type "$type" -name "$name_pattern" "${FIND_EXCLUDES[@]}"
+   local search_path=$1
+   local type=$2
+   local name_pattern=$3
+   construct_exclude_patterns
+   find "$search_path" \
+       \( "${PRUNE_ARGS[@]}" \) -prune \
+       -o -type "$type" -name "$name_pattern" -print
 }
 
 move_obsolete_files_to_old() {
@@ -120,7 +193,6 @@ upsert_test_header() {
     local test_file=$1
     cat << EOF
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path
@@ -234,6 +306,7 @@ main() {
         move_obsolete_files_to_old
         create_test_directories
         create_update_test_files
+        cleanup_unnecessary_test_files
 
         echo "Test structure generation completed."
 
