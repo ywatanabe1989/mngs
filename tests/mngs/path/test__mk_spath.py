@@ -1,4 +1,5 @@
-# src from here --------------------------------------------------------------------------------
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/path/_mk_spath.py
+# --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-02 20:59:46 (ywatanabe)"
@@ -34,9 +35,9 @@
 #     >>> print(spath)
 #     '/path/to/current/script/output.txt'
 #     """
-#     __file__ = inspect.stack()[1].filename
+#     THIS_FILE = inspect.stack()[1].filename
 #     if "ipython" in __file__:  # for ipython
-#         __file__ = f'/tmp/fake-{os.getenv("USER")}.py'
+#         THIS_FILE = f'/tmp/fake-{os.getenv("USER")}.py'
 # 
 #     ## spath
 #     fpath = __file__
@@ -52,23 +53,21 @@
 # 
 # # EOF
 
-# test from here --------------------------------------------------------------------------------
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path
 import pytest
 import numpy as np
 
-# Add project root to Python path
-project_root = str(Path(__file__).parent.parent.parent.parent)
+# Add source code to the top of Python path
+project_root = str(Path(__file__).resolve().parents[3])
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs..path._mk_spath import *
+from mngs.path._mk_spath import *
 
-class Test_MainFunctionality:
+class TestMainFunctionality:
     def setup_method(self):
         # Setup test fixtures
         pass
@@ -79,12 +78,15 @@ class Test_MainFunctionality:
 
     def test_basic_functionality(self):
         # Basic test case
-        pass
+        raise NotImplementedError("Test not yet implemented")
 
     def test_edge_cases(self):
         # Edge case testing
-        pass
+        raise NotImplementedError("Test not yet implemented")
 
     def test_error_handling(self):
         # Error handling testing
-        pass
+        raise NotImplementedError("Test not yet implemented")
+
+if __name__ == "__main__":
+    pytest.main([os.path.abspath(__file__)])

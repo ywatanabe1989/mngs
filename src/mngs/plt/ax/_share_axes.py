@@ -1,7 +1,7 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
 # Time-stamp: "2024-09-15 18:40:46 (ywatanabe)"
-# /home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_share_axes.py
+# ./src/mngs/plt/ax/_share_axes.py
 
 
 """

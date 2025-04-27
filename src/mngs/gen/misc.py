@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-16 16:26:59 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/gen/misc.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/gen/misc.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/gen/misc.py"
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
@@ -331,7 +331,7 @@ def copy_the_file(sdir):
     -------
     >>> copy_the_file('/path/to/destination/')
     """
-    __file__ = inspect.stack()[1].filename
+    THIS_FILE = inspect.stack()[1].filename
     _, fname, ext = mngs.path.split(__file__)
 
     #     dst = sdir + fname + ext

@@ -1,9 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-02-27 13:02:24 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/src/mngs/__init__.py
+# Timestamp: "2025-04-23 10:39:41 (ywatanabe)"
+# File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/__init__.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./src/mngs/__init__.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
 
-__file__ = "./src/mngs/__init__.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/__init__.py"
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Time-stamp: "2025-02-27 13:02:24 (ywatanabe)"
@@ -14,7 +21,6 @@ __file__ = "./src/mngs/__init__.py"
 # os.getenv("MNGS_RECIPIENT_GMAIL")
 # os.getenv("MNGS_DIR", "/tmp/mngs/")
 
-import os
 import warnings
 import asyncio
 
@@ -55,6 +61,7 @@ from . import db
 from . import pd
 from . import str
 from . import parallel
+from . import dt
 from . import dev
 
 # ########################################

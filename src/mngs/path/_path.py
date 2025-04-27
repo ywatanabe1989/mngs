@@ -7,9 +7,9 @@ import inspect
 
 
 def this_path(when_ipython="/tmp/fake.py"):
-    __file__ = inspect.stack()[1].filename
+    THIS_FILE = inspect.stack()[1].filename
     if "ipython" in __file__:
-        __file__ = when_ipython
+        THIS_FILE = when_ipython
     return __file__
 
 get_this_path = this_path

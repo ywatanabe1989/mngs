@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-20 00:29:47 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/ai/layer/_Pass.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/layer/_Pass.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/layer/_Pass.py"
 
 import torch.nn as nn
 

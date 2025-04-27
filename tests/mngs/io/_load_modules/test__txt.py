@@ -1,64 +1,77 @@
-# src from here --------------------------------------------------------------------------------
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/io/_load_modules/_txt.py
+# --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-12-23 13:11:43 (ywatanabe)"
+# # Timestamp: "2025-04-27 11:10:28 (ywatanabe)"
 # # File: /home/ywatanabe/proj/mngs_repo/src/mngs/io/_load_modules/_txt.py
-# 
-# __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/io/_load_modules/_txt.py"
+# # ----------------------------------------
+# import os
+# __FILE__ = (
+#     "./src/mngs/io/_load_modules/_txt.py"
+# )
+# __DIR__ = os.path.dirname(__FILE__)
+# # ----------------------------------------
 # 
 # import warnings
 # 
-# def _load_txt(lpath, **kwargs):
-#     """Load text file and return non-empty lines."""
-#     try:
-#         if not lpath.endswith((".txt", ".log", ".event", ".py", ".sh", "")):
-#             warnings.warn("File must have .txt, .log or .event extension")
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/io/_load_modules/_txt.py"
 # 
-#         # Try UTF-8 first (most common)
-#         try:
-#             with open(lpath, "r", encoding="utf-8") as f:
-#                 return [line.strip() for line in f.read().splitlines() if line.strip()]
-#         except UnicodeDecodeError:
-#             # Fallback to system default encoding
-#             with open(lpath, "r") as f:
-#                 return [line.strip() for line in f.read().splitlines() if line.strip()]
-# 
-#     except (ValueError, FileNotFoundError) as e:
-#         raise ValueError(f"Error loading file {lpath}: {str(e)}")
-# 
-# # def _load_txt(lpath, **kwargs):
+# # def _load_txt(lpath, strip=False, **kwargs):
 # #     """Load text file and return non-empty lines."""
 # #     try:
 # #         if not lpath.endswith((".txt", ".log", ".event", ".py", ".sh", "")):
 # #             warnings.warn("File must have .txt, .log or .event extension")
 # 
-# #         # with open(lpath, 'r', encoding='utf-8') as f:
-# #         #     return [
-# #         #         line.strip() for line in f.read().splitlines() if line.strip()
-# #         #     ]
+# #         # Try UTF-8 first (most common)
+# #         try:
+# #             with open(lpath, "r", encoding="utf-8") as f:
+# #                 return [line.strip() for line in f.read().splitlines() if line.strip()]
+# #         except UnicodeDecodeError:
+# #             # Fallback to system default encoding
+# #             with open(lpath, "r") as f:
+# #                 return [line.strip() for line in f.read().splitlines() if line.strip()]
 # 
-# #         encoding = _check_encoding(lpath)
-# #         with open(lpath, "r", encoding="utf-8") as f:
-# #             return [
-# #                 line.strip() for line in f.read().splitlines() if line.strip()
-# #             ]
 # #     except (ValueError, FileNotFoundError) as e:
 # #         raise ValueError(f"Error loading file {lpath}: {str(e)}")
 # 
 # 
+# def _load_txt(lpath, strip=False):
+#     """
+#     Load text file and return non-empty lines.
+#     - Warn if extension is unexpected.
+#     - Try UTF-8 first, then default encoding.
+#     - If strip=True, strip each line.
+#     """
+#     if not lpath.endswith((".txt", ".log", ".event", ".py", ".sh")):
+#         warnings.warn(f"Unexpected extension for file: {lpath}")
+# 
+#     try:
+#         with open(lpath, "r", encoding="utf-8") as file:
+#             raw_lines = file.read().splitlines()
+#     except UnicodeDecodeError:
+#         with open(lpath, "r") as file:
+#             raw_lines = file.read().splitlines()
+# 
+#     if strip:
+#         return [line.strip() for line in raw_lines if line.strip()]
+# 
+#     return [line for line in raw_lines if line.strip()]
+# 
+# 
 # def _check_encoding(file_path):
 #     """Check file encoding by trying common encodings."""
-#     encodings = ['utf-8', 'latin1', 'cp1252', 'iso-8859-1', 'ascii']
+#     encodings = ["utf-8", "latin1", "cp1252", "iso-8859-1", "ascii"]
 # 
 #     for encoding in encodings:
 #         try:
-#             with open(file_path, 'r', encoding=encoding) as f:
+#             with open(file_path, "r", encoding=encoding) as f:
 #                 f.read()
 #             return encoding
 #         except UnicodeDecodeError:
 #             continue
 # 
 #     raise ValueError(f"Unable to determine encoding for {file_path}")
+# 
 # 
 # # def _check_encoding(file_path):
 # #     """
@@ -91,24 +104,21 @@
 # #     return result["encoding"]
 # 
 # # EOF
-
-# test from here --------------------------------------------------------------------------------
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path
 import pytest
 import numpy as np
 
-# Add project root to Python path
-project_root = str(Path(__file__).parent.parent.parent.parent)
+# Add source code to the top of Python path
+project_root = str(Path(__file__).resolve().parents[3])
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs..io._load_modules._txt import *
+from mngs.io._load_modules._txt import *
 
-class Test_MainFunctionality:
+class TestMainFunctionality:
     def setup_method(self):
         # Setup test fixtures
         pass
@@ -119,12 +129,15 @@ class Test_MainFunctionality:
 
     def test_basic_functionality(self):
         # Basic test case
-        pass
+        raise NotImplementedError("Test not yet implemented")
 
     def test_edge_cases(self):
         # Edge case testing
-        pass
+        raise NotImplementedError("Test not yet implemented")
 
     def test_error_handling(self):
         # Error handling testing
-        pass
+        raise NotImplementedError("Test not yet implemented")
+
+if __name__ == "__main__":
+    pytest.main([os.path.abspath(__file__)])

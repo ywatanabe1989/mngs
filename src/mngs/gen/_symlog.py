@@ -1,7 +1,7 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
 # Time-stamp: "2024-07-06 07:16:38 (ywatanabe)"
-# /home/ywatanabe/proj/mngs_repo/src/mngs/gen/_symlog.py
+# ./src/mngs/gen/_symlog.py
 
 import numpy as np
 

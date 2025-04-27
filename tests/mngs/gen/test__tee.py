@@ -1,10 +1,11 @@
-# src from here --------------------------------------------------------------------------------
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/gen/_tee.py
+# --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Timestamp: "2025-02-15 00:02:15 (ywatanabe)"
-# # File: /home/ywatanabe/proj/mngs_repo/src/mngs/gen/_tee.py
+# # File: ./src/mngs/gen/_tee.py
 # 
-# __file__ = "./src/mngs/gen/_tee.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/gen/_tee.py"
 # 
 # """
 # Functionality:
@@ -174,9 +175,9 @@
 #     ## DO NOT MODIFY THIS
 #     ####################
 #     if sdir is None:
-#         __file__ = inspect.stack()[1].filename
+#         THIS_FILE = inspect.stack()[1].filename
 #         if "ipython" in __file__:
-#             __file__ = f"/tmp/{_os.getenv('USER')}.py"
+#             THIS_FILE = f"/tmp/{_os.getenv('USER')}.py"
 #         sdir = clean_path(_os.path.splitext(__file__)[0] + "_out")
 # 
 #     sdir = _os.path.join(sdir, "logs/")
@@ -211,24 +212,21 @@
 #     mngs.gen.close(CONFIG, verbose=False, notify=False)
 # 
 # # EOF
-
-# test from here --------------------------------------------------------------------------------
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path
 import pytest
 import numpy as np
 
-# Add project root to Python path
-project_root = str(Path(__file__).parent.parent.parent.parent)
+# Add source code to the top of Python path
+project_root = str(Path(__file__).resolve().parents[3])
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs..gen._tee import *
+from mngs.gen._tee import *
 
-class Test_MainFunctionality:
+class TestMainFunctionality:
     def setup_method(self):
         # Setup test fixtures
         pass
@@ -239,12 +237,15 @@ class Test_MainFunctionality:
 
     def test_basic_functionality(self):
         # Basic test case
-        pass
+        raise NotImplementedError("Test not yet implemented")
 
     def test_edge_cases(self):
         # Edge case testing
-        pass
+        raise NotImplementedError("Test not yet implemented")
 
     def test_error_handling(self):
         # Error handling testing
-        pass
+        raise NotImplementedError("Test not yet implemented")
+
+if __name__ == "__main__":
+    pytest.main([os.path.abspath(__file__)])

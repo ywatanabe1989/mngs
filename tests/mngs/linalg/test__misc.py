@@ -1,4 +1,5 @@
-# src from here --------------------------------------------------------------------------------
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/linalg/_misc.py
+# --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2023-03-17 21:30:11 (ywatanabe)"
@@ -73,23 +74,21 @@
 # 
 #     return O, A, B
 
-# test from here --------------------------------------------------------------------------------
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path
 import pytest
 import numpy as np
 
-# Add project root to Python path
-project_root = str(Path(__file__).parent.parent.parent.parent)
+# Add source code to the top of Python path
+project_root = str(Path(__file__).resolve().parents[3])
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs..linalg._misc import *
+from mngs.linalg._misc import *
 
-class Test_MainFunctionality:
+class TestMainFunctionality:
     def setup_method(self):
         # Setup test fixtures
         pass
@@ -100,12 +99,15 @@ class Test_MainFunctionality:
 
     def test_basic_functionality(self):
         # Basic test case
-        pass
+        raise NotImplementedError("Test not yet implemented")
 
     def test_edge_cases(self):
         # Edge case testing
-        pass
+        raise NotImplementedError("Test not yet implemented")
 
     def test_error_handling(self):
         # Error handling testing
-        pass
+        raise NotImplementedError("Test not yet implemented")
+
+if __name__ == "__main__":
+    pytest.main([os.path.abspath(__file__)])

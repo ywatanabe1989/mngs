@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-24 22:22:16 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/db/_PostgreSQL_modules/_ImportExportMixin.py
+# Timestamp: "2025-02-27 22:14:59 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_PostgreSQLMixins/_ImportExportMixin.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQL_modules/_ImportExportMixin.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQLMixins/_ImportExportMixin.py"
 
 import pandas as pd
 from typing import List
@@ -39,6 +39,5 @@ class _ImportExportMixin:
 
         except (Exception, psycopg2.Error) as err:
             raise ValueError(f"Failed to export to CSV: {err}")
-
 
 # EOF

@@ -1,7 +1,7 @@
 #!/./env/bin/python3
 # -*- coding: utf-8 -*-
 # Time-stamp: "2024-09-28 11:17:22 (ywatanabe)"
-# /home/ywatanabe/proj/mngs_repo/src/mngs/pd/_to_xyz.py
+# ./src/mngs/pd/_to_xyz.py
 
 import mngs
 import numpy as np

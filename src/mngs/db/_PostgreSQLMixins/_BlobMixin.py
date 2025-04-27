@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-25 01:53:41 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/db/_PostgreSQLMixins/_BlobMixin.py
+# Timestamp: "2025-02-27 22:14:45 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_PostgreSQLMixins/_BlobMixin.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQLMixins/_BlobMixin.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQLMixins/_BlobMixin.py"
 
 import psycopg2
 import numpy as np
@@ -233,6 +233,5 @@ class _BlobMixin(_BaseBlobMixin):
                     lambda x: self.binary_to_array(x, dtype=dtype, shape=shape)
                 )
         return df
-
 
 # EOF

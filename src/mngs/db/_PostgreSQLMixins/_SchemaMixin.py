@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-24 22:30:56 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/db/_PostgreSQL_modules/_SchemaMixin.py
+# Timestamp: "2025-02-27 22:14:23 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_PostgreSQLMixins/_SchemaMixin.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQL_modules/_SchemaMixin.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQLMixins/_SchemaMixin.py"
 
 from typing import List, Dict, Any, Optional
 from .._BaseMixins._BaseSchemaMixin import _BaseSchemaMixin
@@ -116,6 +116,5 @@ class _SchemaMixin(_BaseSchemaMixin):
         """Drop an index"""
         self._check_writable()
         self.execute(f"DROP INDEX IF EXISTS {index_name}")
-
 
 # EOF

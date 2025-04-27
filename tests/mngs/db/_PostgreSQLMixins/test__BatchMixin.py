@@ -1,10 +1,11 @@
-# src from here --------------------------------------------------------------------------------
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/db/_PostgreSQLMixins/_BatchMixin.py
+# --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-24 22:11:37 (ywatanabe)"
-# # File: ./mngs_repo/src/mngs/db/_PostgreSQL_modules/_BatchMixin.py
+# # Timestamp: "2025-02-27 22:14:16 (ywatanabe)"
+# # File: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_PostgreSQLMixins/_BatchMixin.py
 # 
-# __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQL_modules/_BatchMixin.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQLMixins/_BatchMixin.py"
 # 
 # from typing import List, Any, Optional, Dict, Union
 # import pandas as pd
@@ -69,26 +70,22 @@
 #         else:
 #             return 'TEXT'
 # 
-# 
 # # EOF
-
-# test from here --------------------------------------------------------------------------------
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path
 import pytest
 import numpy as np
 
-# Add project root to Python path
-project_root = str(Path(__file__).parent.parent.parent.parent)
+# Add source code to the top of Python path
+project_root = str(Path(__file__).resolve().parents[3])
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs..db._PostgreSQLMixins._BatchMixin import *
+from mngs.db._PostgreSQLMixins._BatchMixin import *
 
-class Test_MainFunctionality:
+class TestMainFunctionality:
     def setup_method(self):
         # Setup test fixtures
         pass
@@ -99,12 +96,15 @@ class Test_MainFunctionality:
 
     def test_basic_functionality(self):
         # Basic test case
-        pass
+        raise NotImplementedError("Test not yet implemented")
 
     def test_edge_cases(self):
         # Edge case testing
-        pass
+        raise NotImplementedError("Test not yet implemented")
 
     def test_error_handling(self):
         # Error handling testing
-        pass
+        raise NotImplementedError("Test not yet implemented")
+
+if __name__ == "__main__":
+    pytest.main([os.path.abspath(__file__)])

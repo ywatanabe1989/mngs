@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-27 21:36:51 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/ai/feature_extraction/vit.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/feature_extraction/vit.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/feature_extraction/vit.py"
 
 """
 Functionality:

@@ -6,7 +6,7 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
 # Time-stamp: "2024-07-05 20:06:17 (ywatanabe)"
-# /home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_ecdf.py
+# ./src/mngs/plt/ax/_ecdf.py
 
 import mngs
 import numpy as np

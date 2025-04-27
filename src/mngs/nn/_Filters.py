@@ -1,9 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Timestamp: "2025-04-26 06:08:42 (ywatanabe)"
+# File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/nn/_Filters.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./src/mngs/nn/_Filters.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
+
+import mngs
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 # Time-stamp: "2024-11-26 22:23:40 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/nn/_Filters.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/nn/_Filters.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/nn/_Filters.py"
 
 """
 Implements various neural network filter layers:
@@ -25,12 +39,14 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+
 from ..dsp.utils import build_bandpass_filters, init_bandpass_filters
-from ..gen._to_even import to_even
 from ..dsp.utils._ensure_3d import ensure_3d
-from ..dsp.utils.filter import design_filter
 from ..dsp.utils._ensure_even_len import ensure_even_len
 from ..dsp.utils._zero_pad import zero_pad
+from ..dsp.utils.filter import design_filter
+from ..gen._to_even import to_even
+
 
 class BaseFilter1D(nn.Module):
     def __init__(self, fp16=False, in_place=False):
@@ -440,6 +456,5 @@ if __name__ == "__main__":
 """
 /home/ywatanabe/proj/entrance/mngs/dsp/nn/_Filters.py
 """
-
 
 # EOF

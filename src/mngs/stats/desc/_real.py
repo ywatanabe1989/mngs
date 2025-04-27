@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-17 21:17:13 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/stats/desc/_real.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/stats/desc/_real.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/stats/desc/_real.py"
 
 """
 Functionality:

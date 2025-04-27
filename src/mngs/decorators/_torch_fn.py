@@ -1,9 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Timestamp: "2025-04-24 15:38:15 (ywatanabe)"
+# File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_torch_fn.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./src/mngs/decorators/_torch_fn.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 # Time-stamp: "2024-12-05 09:23:06 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/decorators/_torch_fn.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_torch_fn.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_torch_fn.py"
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
@@ -49,7 +60,7 @@ def torch_fn(func: Callable) -> Callable:
             *args, return_fn=_return_always, **kwargs
         )
         results = func(*converted_args, **converted_kwargs)
-        print(type(results))
+        # print(type(results))
         return (
             to_numpy(results, return_fn=_return_if)[0]
             if not is_torch_input
@@ -100,10 +111,6 @@ if __name__ == "__main__":
     custom_print(torch_softmax(test_df, dim=-1))
     custom_print(torch_softmax(test_tensor, dim=-1))
     custom_print(torch_softmax(test_tensor_cuda, dim=-1))
-
-# EOF
-
-
 
 """
 python ./mngs_repo/src/mngs/decorators/_torch_fn.py

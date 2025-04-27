@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-24 22:15:06 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/db/_Basemodules/_BaseBackupMixin.py
+# Timestamp: "2025-02-27 22:16:38 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_BaseMixins/_BaseBackupMixin.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_Basemodules/_BaseBackupMixin.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_BaseMixins/_BaseBackupMixin.py"
 
 from typing import Optional
 
@@ -22,6 +22,5 @@ class _BaseBackupMixin:
 
     def copy_table(self, source_table: str, target_table: str, where: Optional[str] = None):
         raise NotImplementedError
-
 
 # EOF

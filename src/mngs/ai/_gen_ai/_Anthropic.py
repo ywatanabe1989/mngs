@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Timestamp: "2025-02-26 09:02:48 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_Anthropic.py
+# File: ./src/mngs/ai/_gen_ai/_Anthropic.py
 
-__file__ = "./src/mngs/ai/_gen_ai/_Anthropic.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_Anthropic.py"
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Time-stamp: "2025-02-26 09:02:48 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/ai/_gen_ai/_Anthropic.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_Anthropic.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_Anthropic.py"
 
 """
 Functionality:

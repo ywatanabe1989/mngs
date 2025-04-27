@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-24 23:06:03 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/db/_PostgreSQLMixins/_BackupMixin.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQLMixins/_BackupMixin.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQLMixins/_BackupMixin.py"
 
 import subprocess
 import os

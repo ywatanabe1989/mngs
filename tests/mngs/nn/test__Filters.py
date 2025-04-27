@@ -1,10 +1,25 @@
-# src from here --------------------------------------------------------------------------------
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/nn/_Filters.py
+# --------------------------------------------------------------------------------
+# #!/usr/bin/env python3
+# # -*- coding: utf-8 -*-
+# # Timestamp: "2025-04-26 06:08:42 (ywatanabe)"
+# # File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/nn/_Filters.py
+# # ----------------------------------------
+# import os
+# __FILE__ = (
+#     "./src/mngs/nn/_Filters.py"
+# )
+# __DIR__ = os.path.dirname(__FILE__)
+# # ----------------------------------------
+# 
+# import mngs
+# 
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-26 22:23:40 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/nn/_Filters.py
 # 
-# __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/nn/_Filters.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/nn/_Filters.py"
 # 
 # """
 # Implements various neural network filter layers:
@@ -26,12 +41,14 @@
 # import torch
 # import torch.nn as nn
 # import torch.nn.functional as F
+# 
 # from ..dsp.utils import build_bandpass_filters, init_bandpass_filters
-# from ..gen._to_even import to_even
 # from ..dsp.utils._ensure_3d import ensure_3d
-# from ..dsp.utils.filter import design_filter
 # from ..dsp.utils._ensure_even_len import ensure_even_len
 # from ..dsp.utils._zero_pad import zero_pad
+# from ..dsp.utils.filter import design_filter
+# from ..gen._to_even import to_even
+# 
 # 
 # class BaseFilter1D(nn.Module):
 #     def __init__(self, fp16=False, in_place=False):
@@ -442,26 +459,22 @@
 # /home/ywatanabe/proj/entrance/mngs/dsp/nn/_Filters.py
 # """
 # 
-# 
 # # EOF
-
-# test from here --------------------------------------------------------------------------------
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path
 import pytest
 import numpy as np
 
-# Add project root to Python path
-project_root = str(Path(__file__).parent.parent.parent.parent)
+# Add source code to the top of Python path
+project_root = str(Path(__file__).resolve().parents[3])
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs..nn._Filters import *
+from mngs.nn._Filters import *
 
-class Test_MainFunctionality:
+class TestMainFunctionality:
     def setup_method(self):
         # Setup test fixtures
         pass
@@ -472,12 +485,15 @@ class Test_MainFunctionality:
 
     def test_basic_functionality(self):
         # Basic test case
-        pass
+        raise NotImplementedError("Test not yet implemented")
 
     def test_edge_cases(self):
         # Edge case testing
-        pass
+        raise NotImplementedError("Test not yet implemented")
 
     def test_error_handling(self):
         # Error handling testing
-        pass
+        raise NotImplementedError("Test not yet implemented")
+
+if __name__ == "__main__":
+    pytest.main([os.path.abspath(__file__)])

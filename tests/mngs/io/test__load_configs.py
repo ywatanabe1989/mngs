@@ -1,16 +1,23 @@
-# src from here --------------------------------------------------------------------------------
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/io/_load_configs.py
+# --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Timestamp: "2025-02-27 11:09:00 (ywatanabe)"
-# # File: /home/ywatanabe/proj/mngs_repo/src/mngs/io/_load_configs.py
+# # Timestamp: "2025-04-22 07:19:03 (ywatanabe)"
+# # File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/io/_load_configs.py
+# # ----------------------------------------
+# import os
+# __FILE__ = (
+#     "/ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/io/_load_configs.py"
+# )
+# __DIR__ = os.path.dirname(__FILE__)
+# # ----------------------------------------
 # 
-# __file__ = "./src/mngs/io/_load_configs.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/io/_load_configs.py"
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2025-02-27 11:09:00 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/io/_load_configs.py
 # 
-# import os
 # from ..dict import DotDict
 # from ._load import load
 # from ._glob import glob
@@ -65,6 +72,7 @@
 #     except Exception as e:
 #         print(f"Error loading configs: {e}")
 #         return DotDict({})
+# 
 # # def load_configs(IS_DEBUG=None, show=False, verbose=False):
 # #     """
 # #     Load configuration files from the ./config directory.
@@ -132,24 +140,21 @@
 # #
 # 
 # # EOF
-
-# test from here --------------------------------------------------------------------------------
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path
 import pytest
 import numpy as np
 
-# Add project root to Python path
-project_root = str(Path(__file__).parent.parent.parent.parent)
+# Add source code to the top of Python path
+project_root = str(Path(__file__).resolve().parents[3])
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs..io._load_configs import *
+from mngs.io._load_configs import *
 
-class Test_MainFunctionality:
+class TestMainFunctionality:
     def setup_method(self):
         # Setup test fixtures
         pass
@@ -160,12 +165,15 @@ class Test_MainFunctionality:
 
     def test_basic_functionality(self):
         # Basic test case
-        pass
+        raise NotImplementedError("Test not yet implemented")
 
     def test_edge_cases(self):
         # Edge case testing
-        pass
+        raise NotImplementedError("Test not yet implemented")
 
     def test_error_handling(self):
         # Error handling testing
-        pass
+        raise NotImplementedError("Test not yet implemented")
+
+if __name__ == "__main__":
+    pytest.main([os.path.abspath(__file__)])

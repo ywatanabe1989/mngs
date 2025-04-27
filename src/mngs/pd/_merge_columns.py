@@ -6,7 +6,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Time-stamp: "2024-10-07 12:03:29 (ywatanabe)"
-# /home/ywatanabe/proj/mngs_repo/src/mngs/pd/_merge_cols.py
+# ./src/mngs/pd/_merge_cols.py
 
 from typing import Union, List, Tuple
 import pandas as pd
@@ -79,7 +79,7 @@ merge_cols = merge_columns
 # #!./env/bin/python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-10-07 12:03:29 (ywatanabe)"
-# # /home/ywatanabe/proj/mngs_repo/src/mngs/pd/_merge_cols.py
+# # ./src/mngs/pd/_merge_cols.py
 
 
 

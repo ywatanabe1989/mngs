@@ -1,21 +1,29 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-12-15 15:16:28 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/ai/_gen_ai/_genai_factory.py
+# Timestamp: "2025-04-27 15:30:27 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_genai_factory.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./src/mngs/ai/_gen_ai/_genai_factory.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_genai_factory.py"
+THIS_FILE = (
+    "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_genai_factory.py"
+)
 
 """Imports"""
-import os
 import random
 
 from ._Anthropic import Anthropic
+from ._DeepSeek import DeepSeek
 from ._Google import Google
+from ._Groq import Groq
 from ._Llama import Llama
 from ._OpenAI import OpenAI
 from ._Perplexity import Perplexity
-from ._DeepSeek import DeepSeek
-from ._Groq import Groq
 from .PARAMS import MODELS
 
 """Functions & Classes""" """Parameters"""
@@ -68,38 +76,6 @@ def genai_factory(
     )
 
 
-# def main(
-#     model="gpt-3.5-turbo",
-#     stream=False,
-#     prompt="Hi, please tell me about the hippocampus",
-#     seed=None,
-#     temperature=1.0,
-# ):
-#     m = genai_factory(model, stream=stream, seed=seed, temperature=temperature)
-#     out = m(prompt)
-#     return out
-
-
-# def main(
-#     model="gemini-1.5-pro-latest",
-#     stream=False,
-#     prompt="Hi, please tell me about the hippocampus",
-#     seed=None,
-#     temperature=1.0,
-# ):
-
-#     m = mngs.ai.GenAI(
-#         model=model,
-#         api_key=os.getenv("GOOGLE_API_KEY"),
-#         stream=stream,
-#         seed=seed,
-#         temperature=temperature,
-#     )
-#     out = m(prompt)
-
-#     return out
-
-
 def main(
     model="deepseek-coder",
     api_key=os.getenv("DEEPSEEK_API_KEY"),
@@ -111,6 +87,7 @@ def main(
 ):
 
     import mngs
+
     m = mngs.ai.GenAI(
         model=model,
         api_key=api_key,
@@ -138,10 +115,6 @@ if __name__ == "__main__":
     main(model="llama-3.1-70b-versatile", api_key=os.getenv("GROQ_API_KEY"))
 
     mngs.gen.close(CONFIG, verbose=False, notify=False)
-
-# EOF
-
-
 
 """
 python src/mngs/ai/_gen_ai/_genai_factory.py

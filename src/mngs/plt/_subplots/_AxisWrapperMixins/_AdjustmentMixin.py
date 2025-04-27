@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-25 00:33:37 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_AdjustmentMixin.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_AdjustmentMixin.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_AdjustmentMixin.py"
 
 """
 Functionality:

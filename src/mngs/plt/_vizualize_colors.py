@@ -1,7 +1,7 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
 # Time-stamp: "2024-07-10 10:33:54 (ywatanabe)"
-# /home/ywatanabe/proj/mngs_repo/src/mngs/plt/_check_colors.py
+# ./src/mngs/plt/_check_colors.py
 
 
 """

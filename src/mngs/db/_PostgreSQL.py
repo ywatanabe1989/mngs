@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-25 02:00:06 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/db/_PostgreSQL.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQL.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQL.py"
 
 from typing import List, Optional
 

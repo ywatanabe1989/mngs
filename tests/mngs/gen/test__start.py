@@ -1,10 +1,11 @@
-# src from here --------------------------------------------------------------------------------
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/gen/_start.py
+# --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Timestamp: "2025-02-15 00:02:10 (ywatanabe)"
-# # File: /home/ywatanabe/proj/mngs_repo/src/mngs/gen/_start.py
+# # Timestamp: "2025-02-27 13:01:04 (ywatanabe)"
+# # File: ./src/mngs/gen/_start.py
 # 
-# __file__ = "./src/mngs/gen/_start.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/gen/_start.py"
 # 
 # import inspect
 # import os as _os
@@ -49,6 +50,12 @@
 #     * matplotlib
 #     * mngs package
 # """
+# 
+# 
+# 
+# 
+# 
+# 
 # 
 # def _print_header(
 #         ID: str, PID: int, file: str, args: Any, configs: Dict[str, Any], verbose: bool = True
@@ -246,7 +253,7 @@
 #     Returns
 #     -------
 #     tuple
-#         (CONFIGS, stdout, stderr, plt, CC)
+#         (CONFIGS, stdout, stderr, plt: Any = None, CC)
 #         - CONFIGS: Configuration dictionary
 #         - stdout, stderr: Redirected output streams
 #         - plt: Configured matplotlib.pyplot module
@@ -261,11 +268,11 @@
 #     if sdir is None:
 #         # Define __file__
 #         if file:
-#             __file__ = file
+#             THIS_FILE = file
 #         else:
-#             __file__ = inspect.stack()[1].filename
+#             THIS_FILE = inspect.stack()[1].filename
 #             if "ipython" in __file__:
-#                 __file__ = f"/tmp/{_os.getenv('USER')}.py"
+#                 THIS_FILE = f"/tmp/{_os.getenv('USER')}.py"
 # 
 #         # Define sdir
 #         sdir = clean_path(_os.path.splitext(__file__)[0] + f"_out/RUNNING/{ID}/")
@@ -419,24 +426,21 @@
 # """
 # 
 # # EOF
-
-# test from here --------------------------------------------------------------------------------
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path
 import pytest
 import numpy as np
 
-# Add project root to Python path
-project_root = str(Path(__file__).parent.parent.parent.parent)
+# Add source code to the top of Python path
+project_root = str(Path(__file__).resolve().parents[3])
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs..gen._start import *
+from mngs.gen._start import *
 
-class Test_MainFunctionality:
+class TestMainFunctionality:
     def setup_method(self):
         # Setup test fixtures
         pass
@@ -447,12 +451,15 @@ class Test_MainFunctionality:
 
     def test_basic_functionality(self):
         # Basic test case
-        pass
+        raise NotImplementedError("Test not yet implemented")
 
     def test_edge_cases(self):
         # Edge case testing
-        pass
+        raise NotImplementedError("Test not yet implemented")
 
     def test_error_handling(self):
         # Error handling testing
-        pass
+        raise NotImplementedError("Test not yet implemented")
+
+if __name__ == "__main__":
+    pytest.main([os.path.abspath(__file__)])

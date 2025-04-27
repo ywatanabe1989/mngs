@@ -3,7 +3,7 @@
 # Timestamp: "2025-01-18 03:46:52 (ywatanabe)"
 # File: _converters.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_converters.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_converters.py"
 
 
 from typing import Callable, Optional

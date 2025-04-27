@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-25 20:51:05 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/stats/desc/_nan.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/stats/desc/_nan.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/stats/desc/_nan.py"
 
 from mngs.decorators import torch_fn, batch_fn
 import torch

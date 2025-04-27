@@ -9,15 +9,20 @@ aiohttp
 ansi-escapes
 anthropic
 attrdict
+attrdict
+bitsandbytes
 bitsandbytes
 black
 bs4
 bs4
 chardet
+docutils
 docutils<0.18
 einops
 epc
 fairscale
+fairscale
+fastapi
 fastapi
 flake8
 flask
@@ -25,6 +30,7 @@ geom_median
 google-genai
 google-search-results
 googlesearch-python
+groq
 groq
 h5py
 html2text
@@ -37,6 +43,7 @@ joblib
 joypy
 julius
 llama-stack
+llama-stack
 lxml
 lxml_html_clean
 markdown
@@ -45,21 +52,23 @@ matplotlib
 mne
 more-itertools
 natsort
-numpy>2.0.0
+numpy
 obspy
 openai
 openpyxl
 optuna
-packaging<21.0
+packaging
 pandas
 pebble 
-platformdirs<3.0
+pebble 
+platformdirs
 plotly
 plyer
 psutil
 psycopg2-binary
 pybids
 pyedflib
+pygments
 pygments
 pyls
 pymatreader
@@ -90,13 +99,15 @@ setuptools
 six
 sktime
 sounddevice
-sphinx<4.5.0
+sphinx
+sphinx # <4.5.0
 sqlalchemy
-# statsmodels # Please ignore this package due to incompatibility with recent versions of numpy*
+statsmodels # Please ignore this package due to incompatibility with recent versions of numpy*
 sympy
 tabulate
 tensorpac
 termplotlib
+timeout-decorator 
 timeout-decorator 
 tk
 tldr
@@ -109,6 +120,6 @@ twine
 umap-learn
 webdriver-manager
 wheel
-# xarray # Please ignore this package due to incompatibility with recent versions of numpy*
+xarray # Please ignore this package due to incompatibility with recent versions of numpy*
 xlrd
 xmltodict

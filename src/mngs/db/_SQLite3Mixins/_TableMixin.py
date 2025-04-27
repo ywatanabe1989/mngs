@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-25 01:38:47 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/db/_SQLite3Mixins/_TableMixin.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_SQLite3Mixins/_TableMixin.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_SQLite3Mixins/_TableMixin.py"
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-

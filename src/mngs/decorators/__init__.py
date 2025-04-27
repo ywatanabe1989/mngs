@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Timestamp: "2025-02-27 11:16:30 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/src/mngs/decorators/__init__.py
+# File: ./src/mngs/decorators/__init__.py
 
-__file__ = "./src/mngs/decorators/__init__.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/__init__.py"
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Time-stamp: "2025-02-27 11:16:30 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/decorators/__init__.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/__init__.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/__init__.py"
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-

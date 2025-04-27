@@ -1,0 +1,1 @@
+../../../src/mngs/nn/_ResNet1D.py

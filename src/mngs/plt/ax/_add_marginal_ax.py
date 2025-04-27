@@ -1,7 +1,7 @@
 #!./env/bin/python3
 # -*- coding: utf-8 -*-
 # Time-stamp: "2024-07-11 06:06:21 (ywatanabe)"
-# /home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_add_marginal_ax.py
+# ./src/mngs/plt/ax/_add_marginal_ax.py
 
 
 """

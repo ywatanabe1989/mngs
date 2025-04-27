@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Timestamp: "2025-03-11 08:55:41 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/setup.py
+
+__THIS_FILE__ = "/home/ywatanabe/proj/mngs_repo/setup.py"
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 # Time-stamp: "2024-12-09 21:38:59 (ywatanabe)"
 
 import re
@@ -70,3 +76,5 @@ setup(
     classifiers=CLASSIFIERS,
     python_requires=">=3.0",
 )
+
+# EOF

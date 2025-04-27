@@ -1,12 +1,16 @@
-# src from here --------------------------------------------------------------------------------
+# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/io/_load.py
+# --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-12-12 06:50:46 (ywatanabe)"
-# # File: ./mngs_repo/src/mngs/io/_load.py
-# 
-# __file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/io/_load.py"
-# 
+# # Timestamp: "2025-04-10 08:05:53 (ywatanabe)"
+# # File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/io/_load.py
+# # ----------------------------------------
 # import os
+# __FILE__ = (
+#     "/ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/io/_load.py"
+# )
+# __DIR__ = os.path.dirname(__FILE__)
+# # ----------------------------------------
 # 
 # from typing import Any
 # from ..decorators import preserve_doc
@@ -22,6 +26,7 @@
 # from ._load_modules._json import _load_json
 # from ._load_modules._markdown import _load_markdown
 # from ._load_modules._numpy import _load_npy
+# from ._load_modules._matlab import _load_matlab
 # from ._load_modules._pandas import _load_csv, _load_excel, _load_tsv
 # from ._load_modules._pdf import _load_pdf
 # from ._load_modules._pickle import _load_pickle
@@ -29,7 +34,7 @@
 # from ._load_modules._txt import _load_txt
 # from ._load_modules._xml import _load_xml
 # from ._load_modules._yaml import _load_yaml
-# 
+# from ._load_modules._matlab import _load_matlab
 # 
 # def load(
 #     lpath: str, show: bool = False, verbose: bool = False, **kwargs
@@ -65,7 +70,7 @@
 #     Supported Extensions
 #     -------------------
 #     - Data formats: .csv, .tsv, .xls, .xlsx, .xlsm, .xlsb, .json, .yaml, .yml
-#     - Scientific: .npy, .npz, .hdf5, .con
+#     - Scientific: .npy, .npz, .mat, .hdf5, .con
 #     - ML/DL: .pth, .pt, .cbm, .joblib, .pkl
 #     - Documents: .txt, .log, .event, .md, .docx, .pdf, .xml
 #     - Images: .jpg, .png, .tiff, .tif
@@ -108,7 +113,9 @@
 #         # Scientific Data
 #         "npy": _load_npy,
 #         "npz": _load_npy,
+#         "mat": _load_matlab,
 #         "hdf5": _load_hdf5,
+#         "mat": _load_matlab,
 #         "con": _load_con,
 #         # Documents
 #         "txt": _load_txt,
@@ -145,26 +152,22 @@
 #     except (ValueError, FileNotFoundError) as e:
 #         raise ValueError(f"Error loading file {lpath}: {str(e)}")
 # 
-# 
 # # EOF
-
-# test from here --------------------------------------------------------------------------------
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 from pathlib import Path
 import pytest
 import numpy as np
 
-# Add project root to Python path
-project_root = str(Path(__file__).parent.parent.parent.parent)
+# Add source code to the top of Python path
+project_root = str(Path(__file__).resolve().parents[3])
 if project_root not in sys.path:
     sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs..io._load import *
+from mngs.io._load import *
 
-class Test_MainFunctionality:
+class TestMainFunctionality:
     def setup_method(self):
         # Setup test fixtures
         pass
@@ -175,12 +178,15 @@ class Test_MainFunctionality:
 
     def test_basic_functionality(self):
         # Basic test case
-        pass
+        raise NotImplementedError("Test not yet implemented")
 
     def test_edge_cases(self):
         # Edge case testing
-        pass
+        raise NotImplementedError("Test not yet implemented")
 
     def test_error_handling(self):
         # Error handling testing
-        pass
+        raise NotImplementedError("Test not yet implemented")
+
+if __name__ == "__main__":
+    pytest.main([os.path.abspath(__file__)])

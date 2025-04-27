@@ -3,7 +3,7 @@
 # Time-stamp: "2024-11-24 17:17:05 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/str/_print_debug.py
 
-__file__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/str/_print_debug.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/str/_print_debug.py"
 
 from ._printc import printc
 

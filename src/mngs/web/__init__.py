@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Timestamp: "2025-02-27 13:08:27 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/src/mngs/web/__init__.py
+# File: ./src/mngs/web/__init__.py
 
-__file__ = "./src/mngs/web/__init__.py"
+THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/web/__init__.py"
 
 import os
 import importlib
