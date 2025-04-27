@@ -1,6 +1,6 @@
 #!/bin/bash
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-27 23:45:07 (ywatanabe)"
+# Timestamp: "2025-04-27 23:59:10 (ywatanabe)"
 # File: ./docs/update_test_structure.sh
 
 THIS_DIR="$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)"
@@ -33,16 +33,16 @@ get_source_code_start_tag() {
     local src_file=$1
     printf "%s\n" \
         "# --------------------------------------------------------------------------------" \
-        "# Start of Source code from: $src_file" \
+        "# Start of Source Code from: $src_file" \
         "# --------------------------------------------------------------------------------"
 }
 
 get_source_code_end_tag() {
     local src_file=$1
     printf "%s\n" \
-        "#" \
+        "" \
         "# --------------------------------------------------------------------------------" \
-        "# End of Source code from: $src_file" \
+        "# End of Source Code from: $src_file" \
         "# --------------------------------------------------------------------------------"
 }
 
@@ -58,14 +58,14 @@ find_source_code_comment() {
     local test_file=$1
 
     local start_line_tag
-    start_line_tag=$(grep -n '^# Start of Source code from:' "$test_file" \
+    start_line_tag=$(grep -n '^# Start of Source Code from:' "$test_file" \
                      | cut -d: -f1)
 
     local start_line
     start_line=$((start_line_tag - 1))
 
     local end_line_tag
-    end_line_tag=$(grep -n '^# End of Source code from:' "$test_file" \
+    end_line_tag=$(grep -n '^# End of Source Code from:' "$test_file" \
                    | cut -d: -f1)
 
     local end_line
@@ -161,7 +161,7 @@ construct_blacklist_patterns() {
        "*/FINISHED_SUCCESS/*"
        "*/2025Y*"
        "*/2024Y*"
-       "*/__pycache__*"
+       "*/__pycache__/*"
    )
    FIND_EXCLUDES=()
    PRUNE_ARGS=()
