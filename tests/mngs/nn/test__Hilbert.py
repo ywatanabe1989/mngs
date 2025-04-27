@@ -1,5 +1,17 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/nn/_Hilbert.py
 # --------------------------------------------------------------------------------
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/nn/_Hilbert.py
+# --------------------------------------------------------------------------------
+# #!/usr/bin/env python3
+# # -*- coding: utf-8 -*-
+# # Timestamp: "2025-04-10 12:46:06 (ywatanabe)"
+# # File: /home/ywatanabe/proj/mngs_repo/src/mngs/nn/_Hilbert.py
+# # ----------------------------------------
+# import os
+# __FILE__ = (
+#     "/home/ywatanabe/proj/mngs_repo/src/mngs/nn/_Hilbert.py"
+# )
+# __DIR__ = os.path.dirname(__FILE__)
+# # ----------------------------------------
 # #!/usr/bin/env python
 # 
 # import torch  # 1.7.1
@@ -99,42 +111,13 @@
 #     # Calculation
 #     xx = xx.to(device)
 #     y = m(xx)
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-import os
-import sys
-from pathlib import Path
-import pytest
-import numpy as np
-
-# Add source code to the top of Python path
-project_root = str(Path(__file__).resolve().parents[3])
-if project_root not in sys.path:
-    sys.path.insert(0, os.path.join(project_root, "src"))
-
-from mngs.nn._Hilbert import *
-
-class TestMainFunctionality:
-    def setup_method(self):
-        # Setup test fixtures
-        pass
-
-    def teardown_method(self):
-        # Clean up after tests
-        pass
-
-    def test_basic_functionality(self):
-        # Basic test case
-        raise NotImplementedError("Test not yet implemented")
-
-    def test_edge_cases(self):
-        # Edge case testing
-        raise NotImplementedError("Test not yet implemented")
-
-    def test_error_handling(self):
-        # Error handling testing
-        raise NotImplementedError("Test not yet implemented")
+# 
+# # EOF
+# --------------------------------------------------------------------------------
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/nn/_Hilbert.py
+# --------------------------------------------------------------------------------
 
 if __name__ == "__main__":
+    import os
+    import pytest
     pytest.main([os.path.abspath(__file__)])

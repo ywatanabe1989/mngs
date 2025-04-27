@@ -1,4 +1,5 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/stats/tests/_brunner_munzel_test.py
+# --------------------------------------------------------------------------------
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/stats/tests/_brunner_munzel_test.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -192,41 +193,11 @@
 # #         H0="The probability that a randomly selected value from one population is greater than a randomly selected value from the other population is equal to 0.5",
 # #     )
 
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-import os
-import sys
-from pathlib import Path
-import pytest
-import numpy as np
-
-# Add source code to the top of Python path
-project_root = str(Path(__file__).resolve().parents[3])
-if project_root not in sys.path:
-    sys.path.insert(0, os.path.join(project_root, "src"))
-
-from mngs.stats.tests._brunner_munzel_test import *
-
-class TestMainFunctionality:
-    def setup_method(self):
-        # Setup test fixtures
-        pass
-
-    def teardown_method(self):
-        # Clean up after tests
-        pass
-
-    def test_basic_functionality(self):
-        # Basic test case
-        raise NotImplementedError("Test not yet implemented")
-
-    def test_edge_cases(self):
-        # Edge case testing
-        raise NotImplementedError("Test not yet implemented")
-
-    def test_error_handling(self):
-        # Error handling testing
-        raise NotImplementedError("Test not yet implemented")
+# --------------------------------------------------------------------------------
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/stats/tests/_brunner_munzel_test.py
+# --------------------------------------------------------------------------------
 
 if __name__ == "__main__":
+    import os
+    import pytest
     pytest.main([os.path.abspath(__file__)])

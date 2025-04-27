@@ -1,11 +1,23 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/decorators/_torch_fn.py
 # --------------------------------------------------------------------------------
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/decorators/_torch_fn.py
+# --------------------------------------------------------------------------------
+# #!/usr/bin/env python3
+# # -*- coding: utf-8 -*-
+# # Timestamp: "2025-04-24 15:38:15 (ywatanabe)"
+# # File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_torch_fn.py
+# # ----------------------------------------
+# import os
+# __FILE__ = (
+#     "./src/mngs/decorators/_torch_fn.py"
+# )
+# __DIR__ = os.path.dirname(__FILE__)
+# # ----------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-12-05 09:23:06 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/decorators/_torch_fn.py
 # 
-# __file__ = "./src/mngs/decorators/_torch_fn.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_torch_fn.py"
 # 
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -51,7 +63,7 @@
 #             *args, return_fn=_return_always, **kwargs
 #         )
 #         results = func(*converted_args, **converted_kwargs)
-#         print(type(results))
+#         # print(type(results))
 #         return (
 #             to_numpy(results, return_fn=_return_if)[0]
 #             if not is_torch_input
@@ -103,52 +115,17 @@
 #     custom_print(torch_softmax(test_tensor, dim=-1))
 #     custom_print(torch_softmax(test_tensor_cuda, dim=-1))
 # 
-# # EOF
-# 
-# 
-# 
 # """
 # python ./mngs_repo/src/mngs/decorators/_torch_fn.py
 # python -m src.mngs.decorators._torch_fn
 # """
 # 
 # # EOF
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-import os
-import sys
-from pathlib import Path
-import pytest
-import numpy as np
-
-# Add source code to the top of Python path
-project_root = str(Path(__file__).resolve().parents[3])
-if project_root not in sys.path:
-    sys.path.insert(0, os.path.join(project_root, "src"))
-
-from mngs.decorators._torch_fn import *
-
-class TestMainFunctionality:
-    def setup_method(self):
-        # Setup test fixtures
-        pass
-
-    def teardown_method(self):
-        # Clean up after tests
-        pass
-
-    def test_basic_functionality(self):
-        # Basic test case
-        raise NotImplementedError("Test not yet implemented")
-
-    def test_edge_cases(self):
-        # Edge case testing
-        raise NotImplementedError("Test not yet implemented")
-
-    def test_error_handling(self):
-        # Error handling testing
-        raise NotImplementedError("Test not yet implemented")
+# --------------------------------------------------------------------------------
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/decorators/_torch_fn.py
+# --------------------------------------------------------------------------------
 
 if __name__ == "__main__":
+    import os
+    import pytest
     pytest.main([os.path.abspath(__file__)])

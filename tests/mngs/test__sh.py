@@ -1,4 +1,17 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/_sh.py
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Timestamp: "2025-04-28 00:30:12 (ywatanabe)"
+# File: /ssh:ywatanabe@sp:/home/ywatanabe/proj/mngs_repo/tests/mngs/test__sh.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./tests/mngs/test__sh.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
+
+# --------------------------------------------------------------------------------
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/_sh.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -51,41 +64,27 @@
 # 
 # # EOF
 
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-import os
-import sys
-from pathlib import Path
-import pytest
-import numpy as np
+# --------------------------------------------------------------------------------
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/_sh.py
+# --------------------------------------------------------------------------------
 
-# Add source code to the top of Python path
-project_root = str(Path(__file__).resolve().parents[3])
-if project_root not in sys.path:
-    sys.path.insert(0, os.path.join(project_root, "src"))
 
-from mngs._sh import *
+def test_sh():
+    import mngs
 
-class TestMainFunctionality:
-    def setup_method(self):
-        # Setup test fixtures
-        pass
+    try:
+        mngs.sh("ls")
+        assert True
+    except Exception as e:
+        print(e)
+        assert False
 
-    def teardown_method(self):
-        # Clean up after tests
-        pass
-
-    def test_basic_functionality(self):
-        # Basic test case
-        raise NotImplementedError("Test not yet implemented")
-
-    def test_edge_cases(self):
-        # Edge case testing
-        raise NotImplementedError("Test not yet implemented")
-
-    def test_error_handling(self):
-        # Error handling testing
-        raise NotImplementedError("Test not yet implemented")
 
 if __name__ == "__main__":
+    import os
+
+    import pytest
+
     pytest.main([os.path.abspath(__file__)])
+
+# EOF

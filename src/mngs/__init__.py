@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-27 20:55:12 (ywatanabe)"
-# File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/__init__.py
+# Timestamp: "2025-04-27 23:47:58 (ywatanabe)"
+# File: /ssh:ywatanabe@sp:/home/ywatanabe/proj/mngs_repo/src/mngs/__init__.py
 # ----------------------------------------
 import os
 __FILE__ = (
@@ -18,13 +18,6 @@ THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/__init__.py"
 # os.getenv("MNGS_DIR", "/tmp/mngs/")
 
 import warnings
-
-# Configure event loop before any async operations
-# try:
-#     loop = asyncio.new_event_loop()
-#     asyncio.set_event_loop(loop)
-# except Exception:
-#     pass
 
 # Configure warnings
 warnings.filterwarnings('ignore', category=DeprecationWarning)

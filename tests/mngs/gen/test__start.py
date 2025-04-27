@@ -1,11 +1,12 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/gen/_start.py
+# --------------------------------------------------------------------------------
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/gen/_start.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Timestamp: "2025-02-27 13:01:04 (ywatanabe)"
 # # File: ./src/mngs/gen/_start.py
 # 
-# __file__ = "./src/mngs/gen/_start.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/gen/_start.py"
 # 
 # import inspect
 # import os as _os
@@ -268,11 +269,11 @@
 #     if sdir is None:
 #         # Define __file__
 #         if file:
-#             __file__ = file
+#             THIS_FILE = file
 #         else:
-#             __file__ = inspect.stack()[1].filename
+#             THIS_FILE = inspect.stack()[1].filename
 #             if "ipython" in __file__:
-#                 __file__ = f"/tmp/{_os.getenv('USER')}.py"
+#                 THIS_FILE = f"/tmp/{_os.getenv('USER')}.py"
 # 
 #         # Define sdir
 #         sdir = clean_path(_os.path.splitext(__file__)[0] + f"_out/RUNNING/{ID}/")
@@ -426,41 +427,11 @@
 # """
 # 
 # # EOF
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-import os
-import sys
-from pathlib import Path
-import pytest
-import numpy as np
-
-# Add source code to the top of Python path
-project_root = str(Path(__file__).resolve().parents[3])
-if project_root not in sys.path:
-    sys.path.insert(0, os.path.join(project_root, "src"))
-
-from mngs.gen._start import *
-
-class TestMainFunctionality:
-    def setup_method(self):
-        # Setup test fixtures
-        pass
-
-    def teardown_method(self):
-        # Clean up after tests
-        pass
-
-    def test_basic_functionality(self):
-        # Basic test case
-        raise NotImplementedError("Test not yet implemented")
-
-    def test_edge_cases(self):
-        # Edge case testing
-        raise NotImplementedError("Test not yet implemented")
-
-    def test_error_handling(self):
-        # Error handling testing
-        raise NotImplementedError("Test not yet implemented")
+# --------------------------------------------------------------------------------
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/gen/_start.py
+# --------------------------------------------------------------------------------
 
 if __name__ == "__main__":
+    import os
+    import pytest
     pytest.main([os.path.abspath(__file__)])

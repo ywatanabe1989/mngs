@@ -1,11 +1,12 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/ai/feature_extraction/vit.py
+# --------------------------------------------------------------------------------
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/feature_extraction/vit.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-27 21:36:51 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/ai/feature_extraction/vit.py
 # 
-# __file__ = "./src/mngs/ai/feature_extraction/vit.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/feature_extraction/vit.py"
 # 
 # """
 # Functionality:
@@ -153,41 +154,11 @@
 # 
 # # EOF
 
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-import os
-import sys
-from pathlib import Path
-import pytest
-import numpy as np
-
-# Add source code to the top of Python path
-project_root = str(Path(__file__).resolve().parents[3])
-if project_root not in sys.path:
-    sys.path.insert(0, os.path.join(project_root, "src"))
-
-from mngs.ai.feature_extraction.vit import *
-
-class TestMainFunctionality:
-    def setup_method(self):
-        # Setup test fixtures
-        pass
-
-    def teardown_method(self):
-        # Clean up after tests
-        pass
-
-    def test_basic_functionality(self):
-        # Basic test case
-        raise NotImplementedError("Test not yet implemented")
-
-    def test_edge_cases(self):
-        # Edge case testing
-        raise NotImplementedError("Test not yet implemented")
-
-    def test_error_handling(self):
-        # Error handling testing
-        raise NotImplementedError("Test not yet implemented")
+# --------------------------------------------------------------------------------
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/feature_extraction/vit.py
+# --------------------------------------------------------------------------------
 
 if __name__ == "__main__":
+    import os
+    import pytest
     pytest.main([os.path.abspath(__file__)])

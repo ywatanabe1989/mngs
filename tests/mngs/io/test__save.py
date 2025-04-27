@@ -1,11 +1,19 @@
-# Source code from: /home/ywatanabe/proj/mngs_dev/src/mngs/io/_save.py
+# --------------------------------------------------------------------------------
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/io/_save.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Timestamp: "2025-02-15 00:04:02 (ywatanabe)"
-# # File: ./src/mngs/io/_save.py
+# # Timestamp: "2025-04-27 10:51:41 (ywatanabe)"
+# # File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/io/_save.py
+# # ----------------------------------------
+# import os
+# __FILE__ = (
+#     "./src/mngs/io/_save.py"
+# )
+# __DIR__ = os.path.dirname(__FILE__)
+# # ----------------------------------------
 # 
-# __file__ = "./src/mngs/io/_save.py"
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/io/_save.py"
 # 
 # """
 # 1. Functionality:
@@ -41,12 +49,11 @@
 # from .._sh import sh
 # from ..path._clean import clean
 # from ..path._getsize import getsize
-# from ..path._split import split
+# from ..str._clean_path import clean_path
 # from ..str._color_text import color_text
 # from ..str._readable_bytes import readable_bytes
 # from ._save_image import _save_image
 # from ._save_text import _save_text
-# from ..str._clean_path import clean_path
 # 
 # 
 # def save(
@@ -171,7 +178,9 @@
 #             sh(f"rm -f {path}", verbose=False)
 # 
 #         if dry_run:
-#             print(color_text(f"\n(dry run) Saved to: {spath_final}", c="yellow"))
+#             print(
+#                 color_text(f"\n(dry run) Saved to: {spath_final}", c="yellow")
+#             )
 #             return
 # 
 #         # Ensure directory exists
@@ -385,41 +394,11 @@
 #             raise ValueError(f"Unable to save type {type(obj)} as CSV")
 # 
 # # EOF
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-import os
-import sys
-from pathlib import Path
-import pytest
-import numpy as np
-
-# Add source code to the top of Python path
-project_root = str(Path(__file__).resolve().parents[3])
-if project_root not in sys.path:
-    sys.path.insert(0, os.path.join(project_root, "src"))
-
-from mngs.io._save import *
-
-class TestMainFunctionality:
-    def setup_method(self):
-        # Setup test fixtures
-        pass
-
-    def teardown_method(self):
-        # Clean up after tests
-        pass
-
-    def test_basic_functionality(self):
-        # Basic test case
-        raise NotImplementedError("Test not yet implemented")
-
-    def test_edge_cases(self):
-        # Edge case testing
-        raise NotImplementedError("Test not yet implemented")
-
-    def test_error_handling(self):
-        # Error handling testing
-        raise NotImplementedError("Test not yet implemented")
+# --------------------------------------------------------------------------------
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/io/_save.py
+# --------------------------------------------------------------------------------
 
 if __name__ == "__main__":
+    import os
+    import pytest
     pytest.main([os.path.abspath(__file__)])
