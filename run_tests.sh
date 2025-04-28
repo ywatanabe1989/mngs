@@ -1,6 +1,6 @@
 #!/bin/bash
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-28 07:20:39 (ywatanabe)"
+# Timestamp: "2025-04-28 16:11:58 (ywatanabe)"
 # File: ./run_tests.sh
 
 THIS_DIR="$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)"
@@ -8,17 +8,22 @@ LOG_PATH="$THIS_DIR/.$(basename $0).log"
 touch "$LOG_PATH" >/dev/null 2>&1
 
 
-# Default settings
+# PATH Configurations
+LOG_PATH_TMP="$THIS_DIR/.$(basename $0).log-tmp"
+PYTEST_INI_PATH="$THIS_DIR/tests/pytest.ini"
+
+# Default Values
 DELETE_CACHE=false
-UPDATE_TEST_STRUCTURE=false
+SYNC_TESTS_WITH_SOURCE=false
 VERBOSE=false
 SPECIFIC_TEST=""
-PYTEST_INI_PATH=$THIS_DIR/tests/pytest.ini
+ROOT_DIR=$THIS_DIR
 N_WORKERS=$(nproc)
 if [ $? -ne 0 ]; then
     N_WORKERS=$(sysctl -n hw.ncpu 2>/dev/null || echo 1)
 fi
 N_WORKERS=$((N_WORKERS * 3 / 4))  # Use 75% of cores
+N_RUNS=1
 
 
 usage() {
@@ -26,8 +31,9 @@ usage() {
     echo
     echo "Options:"
     echo "  -c, --cache        Delete Python cache files (default: $DELETE_CACHE)"
-    echo "  -u, --update       Update test structure (default: $UPDATE_TEST_STRUCTURE)"
-    echo "  -n, --n_workers    Number of workers (default: $N_WORKERS, auto-parallel if >1)"
+    echo "  -s, --sync         Sync tests directory with source (default: $SYNC_TESTS_WITH_SOURCE)"
+    echo "  -n, --n_runs       Number of test executions (default: $N_RUNS)"
+    echo "  -j, --n_workers    Number of workers (default: $N_WORKERS, auto-parallel if >1)"
     echo "  -v, --verbose      Run tests in verbose mode (default: $VERBOSE)"
     echo "  -h, --help         Display this help message"
     echo
@@ -35,8 +41,9 @@ usage() {
     echo "  test_path          Optional path to specific test file or directory"
     echo
     echo "Example:"
-    echo "  $0 -c -u           Clean cache and update test structure"
-    echo "  $0 -n 4            Run tests in parallel with 4 workers"
+    echo "  $0 -c              Clean cache before running tests"
+    echo "  $0 -n 10           Run tests 10 times in sequence"
+    echo "  $0 -j 4            Run tests in parallel with 4 workers"
     echo "  $0 tests/mngs/core Run only tests in core module"
     exit 1
 }
@@ -48,11 +55,15 @@ parse_args() {
                 DELETE_CACHE=true
                 shift
                 ;;
-            -u|--update)
-                UPDATE_TEST_STRUCTURE=true
+            -s|--sync)
+                SYNC_TESTS_WITH_SOURCE=true
                 shift
                 ;;
             -n|--n_workers)
+                N_RUNS="$2"
+                shift 2
+                ;;
+            -j|--n_workers)
                 N_WORKERS="$2"
                 shift 2
                 ;;
@@ -76,55 +87,80 @@ parse_args() {
     done
 }
 
-clean_cache() {
+clear_cache() {
     echo "Cleaning Python cache..."
-    find . -name "__pycache__" -type d -exec rm -rf {} \; 2>/dev/null || true
-    find . -name "*.pyc" -delete
+    find . -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
+    find . -name "*.pyc*" -type f -exec rm -f {} + 2>/dev/null || true
 }
 
-update_test_structure() {
+sync_tests_with_source() {
     echo "Updating test structure..."
-    "$THIS_DIR/tests/update_test_structure.sh"
+    "$THIS_DIR/tests/sync_tests_with_source.sh"
 }
 
 run_tests() {
     PYTEST_ARGS="-c $PYTEST_INI_PATH"
 
+    # Timestamp
+    date | tee -a "$LOG_PATH_TMP" 2>&1
+
+    # ROOT DIR
+    if [[ -n $ROOT_DIR ]]; then
+        echo "ROOT_DIR: $ROOT_DIR"
+        PYTEST_ARGS="$PYTEST_ARGS --rootdir $ROOT_DIR"
+    fi
+
+    # N_WORKERS
     if [[ $N_WORKERS -gt 1 ]]; then
         echo "Running in parallel mode with $N_WORKERS workers"
         PYTEST_ARGS="$PYTEST_ARGS -n $N_WORKERS"
     fi
 
+    # VERBOSE
     if [[ $VERBOSE == true ]]; then
         PYTEST_ARGS="$PYTEST_ARGS -v"
     fi
 
+    # SPECIFIC TEST
     if [[ -n "$SPECIFIC_TEST" ]]; then
         echo "Running specific test: $SPECIFIC_TEST"
         PYTEST_ARGS="$PYTEST_ARGS $SPECIFIC_TEST"
     fi
 
+    # Main
     echo "Running pytest..."
-    pytest $PYTEST_ARGS | tee "$LOG_PATH"
-
-    local exit_code=${PIPESTATUS[0]}
-    echo "Test execution completed with exit code $exit_code. Log saved to $LOG_PATH"
-    return $exit_code
+    pytest $PYTEST_ARGS | tee -a "$LOG_PATH_TMP" 2>&1
 }
 
 main() {
     parse_args "$@"
 
-    if [[ $DELETE_CACHE == true ]]; then
-        clean_cache
-    fi
+    local last_exit_code=0
 
-    if [[ $UPDATE_TEST_STRUCTURE == true ]]; then
-        update_test_structure
-    fi
+    for i_run in `seq 1 $N_RUNS`; do
+        clear
 
-    run_tests
-    return $?
+        # Clear the temporary log file
+        > "$LOG_PATH_TMP"
+
+        echo "LOG_PATH: $LOG_PATH" | tee -a "$LOG_PATH_TMP"
+        echo "LOG_PATH_TMP: $LOG_PATH_TMP" | tee -a "$LOG_PATH_TMP"
+        echo "Test run $i_run of $N_RUNS" | tee -a "$LOG_PATH_TMP"
+
+        # Clear cache
+        if [[ $DELETE_CACHE == true ]]; then clear_cache; fi
+
+        # Clear cache
+        if [[ $SYNC_TESTS_WITH_SOURCE == true ]]; then sync_tests_with_source; fi
+
+        # Main
+        run_tests
+
+        # Update the latest log symlink
+        cat "$LOG_PATH_TMP" > "$LOG_PATH"
+        sleep 1
+
+    done
 }
 
 # Execute main function with all arguments
