@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-28 16:15:59 (ywatanabe)"
+# Timestamp: "2025-04-28 16:59:13 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/test__interp_colors.py
 # ----------------------------------------
 import os

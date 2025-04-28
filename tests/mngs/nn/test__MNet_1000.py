@@ -1,5 +1,12 @@
+# Add your tests here
+
+if __name__ == "__main__":
+    import os
+    import pytest
+    pytest.main([os.path.abspath(__file__)])
+
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/nn/_MNet_1000.py
+# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/nn/_MNet_1000.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -164,10 +171,5 @@
 #     print(y.shape)
 
 # --------------------------------------------------------------------------------
-# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/nn/_MNet_1000.py
+# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/nn/_MNet_1000.py
 # --------------------------------------------------------------------------------
-
-if __name__ == "__main__":
-    import os
-    import pytest
-    pytest.main([os.path.abspath(__file__)])

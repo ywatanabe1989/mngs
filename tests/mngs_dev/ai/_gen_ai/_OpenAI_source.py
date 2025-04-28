@@ -1,1 +1,0 @@
-../../../../src/mngs/ai/_gen_ai/_OpenAI.py

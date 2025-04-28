@@ -1,5 +1,12 @@
+# Add your tests here
+
+if __name__ == "__main__":
+    import os
+    import pytest
+    pytest.main([os.path.abspath(__file__)])
+
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/_gen_ai/__init__.py
+# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/_gen_ai/__init__.py
 # --------------------------------------------------------------------------------
 # #!./env/bin/python3
 # # -*- coding: utf-8 -*-
@@ -9,10 +16,5 @@
 # from .PARAMS import MODELS
 
 # --------------------------------------------------------------------------------
-# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/_gen_ai/__init__.py
+# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/_gen_ai/__init__.py
 # --------------------------------------------------------------------------------
-
-if __name__ == "__main__":
-    import os
-    import pytest
-    pytest.main([os.path.abspath(__file__)])

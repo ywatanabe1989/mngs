@@ -1,5 +1,12 @@
+# Add your tests here
+
+if __name__ == "__main__":
+    import os
+    import pytest
+    pytest.main([os.path.abspath(__file__)])
+
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/optim/Ranger_Deep_Learning_Optimizer/ranger/ranger.py
+# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/optim/Ranger_Deep_Learning_Optimizer/ranger/ranger.py
 # --------------------------------------------------------------------------------
 # # Ranger deep learning optimizer - RAdam + Lookahead + Gradient Centralization, combined into one optimizer.
 # 
@@ -187,10 +194,5 @@
 #         return loss
 
 # --------------------------------------------------------------------------------
-# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/optim/Ranger_Deep_Learning_Optimizer/ranger/ranger.py
+# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/optim/Ranger_Deep_Learning_Optimizer/ranger/ranger.py
 # --------------------------------------------------------------------------------
-
-if __name__ == "__main__":
-    import os
-    import pytest
-    pytest.main([os.path.abspath(__file__)])

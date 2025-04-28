@@ -1,5 +1,12 @@
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/stats/tests/_smirnov_grubbs.py
+
+if __name__ == "__main__":
+    import os
+    import pytest
+    pytest.main([os.path.abspath(__file__)])
+
+# --------------------------------------------------------------------------------
+# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/stats/tests/_smirnov_grubbs.py
 # --------------------------------------------------------------------------------
 # import numpy as np
 # from scipy import stats
@@ -101,10 +108,5 @@
 # #         return np.array(indi_outliers).squeeze()
 
 # --------------------------------------------------------------------------------
-# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/stats/tests/_smirnov_grubbs.py
+# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/stats/tests/_smirnov_grubbs.py
 # --------------------------------------------------------------------------------
-
-if __name__ == "__main__":
-    import os
-    import pytest
-    pytest.main([os.path.abspath(__file__)])

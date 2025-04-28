@@ -1,5 +1,12 @@
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/stats/multiple/_bonferroni_correction.py
+
+if __name__ == "__main__":
+    import os
+    import pytest
+    pytest.main([os.path.abspath(__file__)])
+
+# --------------------------------------------------------------------------------
+# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/stats/multiple/_bonferroni_correction.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # Time-stamp: "2021-09-25 15:39:51 (ylab)"
@@ -75,10 +82,5 @@
 #     print(mngs.gen.isclose(arr, tor))
 
 # --------------------------------------------------------------------------------
-# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/stats/multiple/_bonferroni_correction.py
+# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/stats/multiple/_bonferroni_correction.py
 # --------------------------------------------------------------------------------
-
-if __name__ == "__main__":
-    import os
-    import pytest
-    pytest.main([os.path.abspath(__file__)])

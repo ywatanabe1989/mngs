@@ -1,5 +1,12 @@
+# Add your tests here
+
+if __name__ == "__main__":
+    import os
+    import pytest
+    pytest.main([os.path.abspath(__file__)])
+
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/stats/tests/__corr_test_single.py
+# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/stats/tests/__corr_test_single.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -255,10 +262,5 @@
 # #     print("Pearson results:", results_pearson)
 
 # --------------------------------------------------------------------------------
-# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/stats/tests/__corr_test_single.py
+# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/stats/tests/__corr_test_single.py
 # --------------------------------------------------------------------------------
-
-if __name__ == "__main__":
-    import os
-    import pytest
-    pytest.main([os.path.abspath(__file__)])

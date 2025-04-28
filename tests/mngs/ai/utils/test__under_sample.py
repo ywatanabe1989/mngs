@@ -1,5 +1,12 @@
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/utils/_under_sample.py
+
+if __name__ == "__main__":
+    import os
+    import pytest
+    pytest.main([os.path.abspath(__file__)])
+
+# --------------------------------------------------------------------------------
+# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/utils/_under_sample.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # 
@@ -54,10 +61,5 @@
 #     print(under_sample(t))
 
 # --------------------------------------------------------------------------------
-# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/utils/_under_sample.py
+# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/utils/_under_sample.py
 # --------------------------------------------------------------------------------
-
-if __name__ == "__main__":
-    import os
-    import pytest
-    pytest.main([os.path.abspath(__file__)])

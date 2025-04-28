@@ -1,5 +1,12 @@
+# Add your tests here
+
+if __name__ == "__main__":
+    import os
+    import pytest
+    pytest.main([os.path.abspath(__file__)])
+
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/plt/_conf_mat.py
+# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/plt/_conf_mat.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # import matplotlib
@@ -569,10 +576,5 @@
 # #     ## EOF
 
 # --------------------------------------------------------------------------------
-# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/plt/_conf_mat.py
+# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/plt/_conf_mat.py
 # --------------------------------------------------------------------------------
-
-if __name__ == "__main__":
-    import os
-    import pytest
-    pytest.main([os.path.abspath(__file__)])

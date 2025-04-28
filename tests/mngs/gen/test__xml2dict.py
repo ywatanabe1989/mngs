@@ -1,5 +1,12 @@
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/gen/_xml2dict.py
+
+if __name__ == "__main__":
+    import os
+    import pytest
+    pytest.main([os.path.abspath(__file__)])
+
+# --------------------------------------------------------------------------------
+# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/gen/_xml2dict.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # Time-stamp: "2021-09-07 13:06:33 (ylab)"
@@ -79,10 +86,5 @@
 #                 self.update({element.tag: element.text})
 
 # --------------------------------------------------------------------------------
-# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/gen/_xml2dict.py
+# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/gen/_xml2dict.py
 # --------------------------------------------------------------------------------
-
-if __name__ == "__main__":
-    import os
-    import pytest
-    pytest.main([os.path.abspath(__file__)])

@@ -1,17 +1,12 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# Timestamp: "2025-04-28 07:12:50 (ywatanabe)"
-# File: /ssh:ywatanabe@sp:/home/ywatanabe/proj/mngs_repo/tests/mngs/test___main__.py
-# ----------------------------------------
-import os
-__FILE__ = (
-    "./tests/mngs/test___main__.py"
-)
-__DIR__ = os.path.dirname(__FILE__)
-# ----------------------------------------
+# Add your tests here
+
+if __name__ == "__main__":
+    import os
+    import pytest
+    pytest.main([os.path.abspath(__file__)])
 
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/__main__.py
+# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/__main__.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -76,25 +71,5 @@ __DIR__ = os.path.dirname(__FILE__)
 #     main()
 
 # --------------------------------------------------------------------------------
-# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/__main__.py
+# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/__main__.py
 # --------------------------------------------------------------------------------
-
-
-# def test_mngs_main():
-#     try:
-#         import mngs.__main__ as main_module
-
-#         main_module.main(["print_config"])
-#     except Exception as e:
-#         print(e)
-#         assert False
-
-
-if __name__ == "__main__":
-    import os
-
-    import pytest
-
-    pytest.main([os.path.abspath(__file__)])
-
-# EOF

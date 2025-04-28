@@ -1,5 +1,12 @@
+# Add your tests here
+
+if __name__ == "__main__":
+    import os
+    import pytest
+    pytest.main([os.path.abspath(__file__)])
+
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/dsp/utils/_ensure_even_len.py
+# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/dsp/utils/_ensure_even_len.py
 # --------------------------------------------------------------------------------
 # #!./env/bin/python3
 # # -*- coding: utf-8 -*-
@@ -13,10 +20,5 @@
 #         return x[..., :-1]
 
 # --------------------------------------------------------------------------------
-# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/dsp/utils/_ensure_even_len.py
+# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/dsp/utils/_ensure_even_len.py
 # --------------------------------------------------------------------------------
-
-if __name__ == "__main__":
-    import os
-    import pytest
-    pytest.main([os.path.abspath(__file__)])

@@ -1,5 +1,12 @@
+# Add your tests here
+
+if __name__ == "__main__":
+    import os
+    import pytest
+    pytest.main([os.path.abspath(__file__)])
+
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/nn/_FreqGainChanger.py
+# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/nn/_FreqGainChanger.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -112,10 +119,5 @@
 #     
 
 # --------------------------------------------------------------------------------
-# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/nn/_FreqGainChanger.py
+# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/nn/_FreqGainChanger.py
 # --------------------------------------------------------------------------------
-
-if __name__ == "__main__":
-    import os
-    import pytest
-    pytest.main([os.path.abspath(__file__)])

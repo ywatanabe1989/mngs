@@ -1,1 +1,0 @@
-../../../src/mngs/decorators/_preserve_docstring.py

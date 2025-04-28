@@ -1,5 +1,12 @@
+# Add your tests here
+
+if __name__ == "__main__":
+    import os
+    import pytest
+    pytest.main([os.path.abspath(__file__)])
+
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/nn/_ChannelGainChanger.py
+# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/nn/_ChannelGainChanger.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -47,10 +54,5 @@
 #     # summary(sb, x, s)
 
 # --------------------------------------------------------------------------------
-# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/nn/_ChannelGainChanger.py
+# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/nn/_ChannelGainChanger.py
 # --------------------------------------------------------------------------------
-
-if __name__ == "__main__":
-    import os
-    import pytest
-    pytest.main([os.path.abspath(__file__)])

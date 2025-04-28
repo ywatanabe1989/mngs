@@ -1,5 +1,12 @@
+# Add your tests here
+
+if __name__ == "__main__":
+    import os
+    import pytest
+    pytest.main([os.path.abspath(__file__)])
+
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/gists/_SigMacro_toBlue.py
+# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/gists/_SigMacro_toBlue.py
 # --------------------------------------------------------------------------------
 # def SigMacro_toBlue():
 #     """Print a macro for SigmaPlot (v12.0) that changes the color and style of the selected object. Please refer to the 'Automating Routine Tasks' section of the official documentation."""
@@ -158,10 +165,5 @@
 #     )
 
 # --------------------------------------------------------------------------------
-# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/gists/_SigMacro_toBlue.py
+# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/gists/_SigMacro_toBlue.py
 # --------------------------------------------------------------------------------
-
-if __name__ == "__main__":
-    import os
-    import pytest
-    pytest.main([os.path.abspath(__file__)])

@@ -1,5 +1,12 @@
+# Add your tests here
+
+if __name__ == "__main__":
+    import os
+    import pytest
+    pytest.main([os.path.abspath(__file__)])
+
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/act/_define.py
+# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/act/_define.py
 # --------------------------------------------------------------------------------
 # import torch.nn as nn
 # 
@@ -13,10 +20,5 @@
 #     return acts_dict[act_str]
 
 # --------------------------------------------------------------------------------
-# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/act/_define.py
+# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/act/_define.py
 # --------------------------------------------------------------------------------
-
-if __name__ == "__main__":
-    import os
-    import pytest
-    pytest.main([os.path.abspath(__file__)])

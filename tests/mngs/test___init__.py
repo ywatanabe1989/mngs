@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-28 06:48:03 (ywatanabe)"
-# File: /ssh:ywatanabe@sp:/home/ywatanabe/proj/mngs_repo/tests/mngs/test___init__.py
+# Timestamp: "2025-04-28 16:09:24 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/tests/mngs/test___init__.py
 # ----------------------------------------
 import os
 __FILE__ = (
@@ -9,8 +9,22 @@ __FILE__ = (
 )
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
+
+def test_import_mngs():
+    try:
+        import mngs
+        assert True
+    except Exception as e:
+        print(e)
+        assert False
+
+if __name__ == "__main__":
+    import os
+    import pytest
+    pytest.main([os.path.abspath(__file__)])
+
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/__init__.py
+# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/__init__.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -81,20 +95,5 @@ __DIR__ = os.path.dirname(__FILE__)
 # 
 # # EOF
 # --------------------------------------------------------------------------------
-# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/__init__.py
+# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/__init__.py
 # --------------------------------------------------------------------------------
-
-def test_import_mngs():
-    try:
-        import mngs
-        assert True
-    except Exception as e:
-        print(e)
-        assert False
-
-if __name__ == "__main__":
-    import os
-    import pytest
-    pytest.main([os.path.abspath(__file__)])
-
-# EOF

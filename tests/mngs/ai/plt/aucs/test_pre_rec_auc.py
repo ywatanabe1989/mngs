@@ -1,5 +1,12 @@
+# Add your tests here
+
+if __name__ == "__main__":
+    import os
+    import pytest
+    pytest.main([os.path.abspath(__file__)])
+
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/plt/aucs/pre_rec_auc.py
+# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/plt/aucs/pre_rec_auc.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # 
@@ -226,10 +233,5 @@
 #     # dict_keys(['pre_rec_auc', 'precision', 'recall', 'threshold'])
 
 # --------------------------------------------------------------------------------
-# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/plt/aucs/pre_rec_auc.py
+# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/plt/aucs/pre_rec_auc.py
 # --------------------------------------------------------------------------------
-
-if __name__ == "__main__":
-    import os
-    import pytest
-    pytest.main([os.path.abspath(__file__)])

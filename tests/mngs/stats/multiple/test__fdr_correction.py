@@ -1,5 +1,12 @@
+# Add your tests here
+
+if __name__ == "__main__":
+    import os
+    import pytest
+    pytest.main([os.path.abspath(__file__)])
+
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/stats/multiple/_fdr_correction.py
+# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/stats/multiple/_fdr_correction.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -399,10 +406,5 @@
 # #     print(mngs.gen.isclose(arr, tor))
 
 # --------------------------------------------------------------------------------
-# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/stats/multiple/_fdr_correction.py
+# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/stats/multiple/_fdr_correction.py
 # --------------------------------------------------------------------------------
-
-if __name__ == "__main__":
-    import os
-    import pytest
-    pytest.main([os.path.abspath(__file__)])
