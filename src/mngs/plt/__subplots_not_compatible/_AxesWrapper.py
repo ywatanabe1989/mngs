@@ -1,17 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-27 19:52:56 (ywatanabe)"
-# File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxesWrapper.py
+# Timestamp: "2025-04-29 13:12:34 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/__subplots_not_compatible/_AxesWrapper.py
 # ----------------------------------------
 import os
 __FILE__ = (
-    "./src/mngs/plt/_subplots/_AxesWrapper.py"
+    "./src/mngs/plt/__subplots_not_compatible/_AxesWrapper.py"
 )
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 # Time-stamp: "2024-11-13 14:53:28 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/plt/_subplots/_AxisWrapper.py
 
@@ -83,10 +81,10 @@ class AxesWrapper:
     def shape(self):
         return self.axes.shape
 
-    def to_sigma(self):
+    def export_as_csv(self):
         dfs = []
         for ii, ax in enumerate(self.axes.flat):
-            df = ax.to_sigma()
+            df = ax.export_as_csv()
             df.columns = [f"ax_{ii:02d}_{col}" for col in df.columns]
             dfs.append(df)
         return pd.concat(dfs, axis=1) if dfs else pd.DataFrame()

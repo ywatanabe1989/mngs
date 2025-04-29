@@ -1,20 +1,28 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Timestamp: "2025-04-28 13:57:20 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_raster_plot_working.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./src/mngs/plt/ax/_raster_plot_working.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 # Time-stamp: "2024-09-12 09:53:15 (ywatanabe)"
 # /home/ywatanabe/proj/mngs/src/mngs/plt/ax/_raster_plot.py
 
 """This script provides a functionality of raster plotting"""
 
 import sys
-from bisect import bisect_left
 
 import matplotlib.pyplot as plt
 import mngs
-import numpy as np
-import pandas as pd
 
 
-def raster_plot(ax, positions, time=None, **kwargs):
+import numpy as npimport pandas as pddef raster_plot(ax, positions, time=None, **kwargs):
     """
     Create a raster plot using eventplot and return the plot along with a DataFrame.
 
@@ -73,6 +81,9 @@ def raster_plot(ax, positions, time=None, **kwargs):
 
     ax.eventplot(positions, orientation="horizontal", **kwargs)
     return ax, df
+
+
+
 
 
 def test():

@@ -50,11 +50,11 @@ class FigWrapper:
             except:
                 pass
 
-    def to_sigma(self):
+    def export_as_csv(self):
         dfs = []
         for ii, ax in enumerate(self.axes.flat):
-            if hasattr(ax, "to_sigma"):
-                df = ax.to_sigma()
+            if hasattr(ax, "export_as_csv"):
+                df = ax.export_as_csv()
                 if not df.empty:
                     df.columns = [f"ax_{ii:02d}_{col}" for col in df.columns]
                     dfs.append(df)

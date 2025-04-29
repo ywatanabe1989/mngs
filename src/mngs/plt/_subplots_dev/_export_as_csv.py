@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "ywatanabe (2024-11-02 23:55:19)"
-# File: ./mngs_repo/src/mngs/plt/_subplots/_to_sigma.py
-#!./env/bin/python3
-# -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-27 00:34:10 (ywatanabe)"
-# /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/_to_sigma.py
+# Timestamp: "2025-04-29 13:17:58 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_export_as_csv.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./src/mngs/plt/_subplots/_export_as_csv.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
 
+import matplotlib.pyplot as plt
 
 """
 This script does XYZ.
 """
-
 
 """
 Imports
@@ -30,21 +33,18 @@ Warnings
 """
 # warnings.simplefilter("ignore", UserWarning)
 
-
 """
 Config
 """
 # CONFIG = mngs.gen.load_configs()
 
-
 """
 Functions & Classes
 """
 import mngs
-import pandas as pd
 
 
-def to_sigma(history):
+def export_as_csv(history):
     if len(history) > 0:
         values_list = list(history.values())
         data_frames = [format_plotting_args(record) for record in values_list]
@@ -191,7 +191,9 @@ def format_plotting_args(record):
         df = args
 
         # When xyhue, without errorbar
-        df = pd.DataFrame(pd.Series(np.array(df).diagonal(), index=df.columns)).T
+        df = pd.DataFrame(
+            pd.Series(np.array(df).diagonal(), index=df.columns)
+        ).T
         return df
 
     elif method == "sns_boxplot":
@@ -237,7 +239,7 @@ def format_plotting_args(record):
         pass
         # if not method.startswith("set_"):
         #     logging.warn(
-        #         f"{method} is not implemented in _to_sigma method of the mngs.plt module."
+        #         f"{method} is not implemented in _export_as_csv method of the mngs.plt module."
         #     )
 
 
@@ -247,48 +249,48 @@ def main():
     ax.plot([1, 2, 3], [4, 5, 6], id="plot1")
     ax.plot([4, 5, 6], [1, 2, 3], id="plot2")
     mngs.io.save(fig, "./plots.png")
-    mngs.io.save(ax.to_sigma(), "./plots.csv")
+    mngs.io.save(ax.export_as_csv(), "./plots.csv")
 
     # No tracking
     fig, ax = mngs.plt.subplots(track=False)
     ax.plot([1, 2, 3], [4, 5, 6], id="plot3")
     ax.plot([4, 5, 6], [1, 2, 3], id="plot4")
     mngs.io.save(fig, "./plots_wo_tracking.png")
-    mngs.io.save(ax.to_sigma(), "./plots_wo_tracking.csv")
+    mngs.io.save(ax.export_as_csv(), "./plots_wo_tracking.csv")
 
     # Scatter
     fig, ax = mngs.plt.subplots()
     ax.scatter([1, 2, 3], [4, 5, 6], id="scatter1")
     ax.scatter([4, 5, 6], [1, 2, 3], id="scatter2")
     mngs.io.save(fig, "./scatters.png")
-    mngs.io.save(ax.to_sigma(), "./scatters.csv")
+    mngs.io.save(ax.export_as_csv(), "./scatters.csv")
 
     # Box
     fig, ax = mngs.plt.subplots()
     ax.boxplot([1, 2, 3], id="boxplot1")
     mngs.io.save(fig, "./boxplot1.png")
-    mngs.io.save(ax.to_sigma(), "./boxplot1.csv")
+    mngs.io.save(ax.export_as_csv(), "./boxplot1.csv")
 
     # Bar
     fig, ax = mngs.plt.subplots()
     ax.bar(["A", "B", "C"], [4, 5, 6], id="bar1")
     mngs.io.save(fig, "./bar1.png")
-    mngs.io.save(ax.to_sigma(), "./bar1.csv")
+    mngs.io.save(ax.export_as_csv(), "./bar1.csv")
 
     # # Bar
     # # fig, ax = mngs.plt.subplots()
     # fig, ax = plt.subplots()
     # ax.bar(["A", "B", "C"], [4, 5, 6], id="bar2")
     # mngs.io.save(fig, "./bar2.png")
-    # mngs.io.save(ax.to_sigma(), "./bar2.csv")
+    # mngs.io.save(ax.export_as_csv(), "./bar2.csv")
 
-    # print(ax.to_sigma())
+    # print(ax.export_as_csv())
     # #    plot1_plot_x  plot1_plot_y  plot2_plot_x  ...  boxplot1_boxplot_x  bar1_bar_x  bar1_bar_y
     # # 0           1.0           4.0           4.0  ...                 1.0           A         4.0
     # # 1           2.0           5.0           5.0  ...                 2.0           B         5.0
     # # 2           3.0           6.0           6.0  ...                 3.0           C         6.0
 
-    # print(ax.to_sigma().keys())  # plot3 and plot 4 are not tracked
+    # print(ax.export_as_csv().keys())  # plot3 and plot 4 are not tracked
     # # [3 rows x 11 columns]
     # # Index(['plot1_plot_x', 'plot1_plot_y', 'plot2_plot_x', 'plot2_plot_y',
     # #        'scatter1_scatter_x', 'scatter1_scatter_y', 'scatter2_scatter_x',
@@ -296,7 +298,7 @@ def main():
     # #       dtype='object')
 
     # # If a path is passed, the sigmaplot-friendly dataframe is saved as a csv file.
-    # ax.to_sigma("../for_sigmaplot.csv")
+    # ax.export_as_csv("../for_sigmaplot.csv")
     # # Saved to: ../for_sigmaplot.csv
 
 

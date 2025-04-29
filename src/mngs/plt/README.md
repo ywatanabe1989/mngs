@@ -95,7 +95,7 @@ ax.sns_violinplot(data=df, x='day', y='total_bill', hue='sex', split=True)
 ax.set_xyt(x='Day of Week', y='Total Bill', t='Total Bill Distribution by Day and Gender')
 
 # Extract plotting data for SigmaPlot compatibility
-plot_data = ax.to_sigma()
+plot_data = ax.export_as_csv()
 print(plot_data)  # Display the extracted data
 
 # Save the extracted data to a CSV file for use with SigmaPlot

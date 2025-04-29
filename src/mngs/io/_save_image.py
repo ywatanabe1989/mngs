@@ -1,13 +1,29 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-02 16:55:13 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/io/_save_image.py
+# Timestamp: "2025-04-29 19:42:31 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/src/mngs/io/_save_image.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./src/mngs/io/_save_image.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
 
 import io as _io
-from PIL import Image
+
 import plotly
+from PIL import Image
+
 
 def _save_image(obj, spath, **kwargs):
+    # try:
+    #     import mngs
+
+    #     type(obj) == mngs.plt._subplots._FigWrapper.FigWrapper
+    #     obj._called_from_mng_io_save = True
+    # except:
+    #     pass
 
     # png
     if spath.endswith(".png"):
@@ -45,9 +61,7 @@ def _save_image(obj, spath, **kwargs):
 
         # plotly
         if isinstance(obj, plotly.graph_objs.Figure):
-            obj.write_image(
-                buf, format="png"
-            )
+            obj.write_image(buf, format="png")
             buf.seek(0)
             img = Image.open(buf)
             img.convert("RGB").save(spath, "JPEG")
@@ -82,6 +96,5 @@ def _save_image(obj, spath, **kwargs):
             except AttributeError:
                 obj.figure.savefig(spath, format="svg")
         del obj
-
 
 # EOF

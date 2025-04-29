@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-27 19:54:30 (ywatanabe)"
-# File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_TrackingMixin.py
+# Timestamp: "2025-04-29 16:37:35 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_TrackingMixin.py
 # ----------------------------------------
 import os
 __FILE__ = (
@@ -25,7 +25,7 @@ from contextlib import contextmanager
 
 import pandas as pd
 
-from .._to_sigma import to_sigma as _to_sigma
+from .._export_as_csv import export_as_csv as _export_as_csv
 
 
 class TrackingMixin:
@@ -74,19 +74,19 @@ class TrackingMixin:
 
     @property
     def flat(self):
-        if isinstance(self.axis, list):
-            return self.axis
+        if isinstance(self._axis_mpl, list):
+            return self._axis_mpl
         else:
-            return [self.axis]
+            return [self._axis_mpl]
 
     def reset_history(self):
         self._ax_history = {}
 
-    def to_sigma(self):
+    def export_as_csv(self):
         """
         Export tracked plotting data to a DataFrame in SigmaPlot format.
         """
-        df = _to_sigma(self.history)
+        df = _export_as_csv(self.history)
 
         return df if df is not None else pd.DataFrame()
 
@@ -125,9 +125,9 @@ class TrackingMixin:
     #     """Clears the plotting history."""
     #     self._ax_history = OrderedDict()
 
-    # def to_sigma(self) -> pd.DataFrame:
+    # def export_as_csv(self) -> pd.DataFrame:
     #     """Converts plotting history to a SigmaPlot-compatible DataFrame."""
-    #     df = _to_sigma(self.history)
+    #     df = _export_as_csv(self.history)
     #     return df if df is not None else pd.DataFrame()
 
 # EOF

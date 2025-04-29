@@ -1,5 +1,14 @@
-#!/usr/bin/env python
-
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Timestamp: "2025-04-29 12:02:14 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_set_n_ticks.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./src/mngs/plt/ax/_set_n_ticks.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
 
 import matplotlib
 
@@ -24,3 +33,5 @@ def set_n_ticks(
     ax.figure.canvas.draw()
 
     return ax
+
+# EOF
