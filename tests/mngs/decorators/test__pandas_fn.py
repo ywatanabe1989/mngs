@@ -991,7 +991,9 @@ def test_pandas_fn_with_torch_input(mock_is_torch, mock_is_cuda, test_data):
 
 if __name__ == "__main__":
     import os
+
     import pytest
+
     pytest.main([os.path.abspath(__file__)])
 
 # --------------------------------------------------------------------------------

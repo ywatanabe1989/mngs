@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-28 16:53:40 (ywatanabe)"
+# Timestamp: "2025-04-29 21:12:44 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin.py
 # ----------------------------------------
 import os
@@ -9,159 +9,312 @@ __FILE__ = (
 )
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
-from unittest.mock import patch
 
-import matplotlib.pyplot as plt
+import matplotlib
+
+import mngs
 import numpy as np
 import pandas as pd
-import pytest
+
+matplotlib.use("agg")
 
 
-# Test data for seaborn mixin functionality
-@pytest.fixture
-def sample_data():
-    """Fixture that creates sample data for testing."""
-    np.random.seed(42)
+def test_sns_barplot():
+    """Test sns_barplot function"""
+    # Figure
+    fig, ax = mngs.plt.subplots()
+    # Data
+    data = pd.DataFrame(
+        {"category": ["A", "B", "C", "D", "E"], "values": [25, 40, 30, 55, 15]}
+    )
+    # Plot
+    ax.sns_barplot(data=data, x="category", y="values", palette="viridis")
+    # Visualization
+    ax.set_xyt("Categories", "Values", "Seaborn Barplot Test")
+    # Saving
+    spath = f"./sns_barplot_test.png"
+    mngs.io.save(fig, spath, symlink_from_cwd=True)
+    # Closing
+    mngs.plt.close(fig)
+    # Assertion
+    assert os.path.exists(spath), f"Failed to save figure to {spath}"
+
+
+def test_sns_boxplot():
+    """Test sns_boxplot function"""
+    # Figure
+    fig, ax = mngs.plt.subplots()
+    # Data
     data = pd.DataFrame(
         {
-            "category": ["A", "B", "C", "A", "B", "C"] * 5,
-            "value": np.random.normal(0, 1, 30),
-            "group": ["X", "Y"] * 15,
+            "group": np.repeat(["A", "B", "C"], 30),
+            "value": np.concatenate(
+                [
+                    np.random.normal(0, 1, 30),
+                    np.random.normal(3, 1, 30),
+                    np.random.normal(6, 1, 30),
+                ]
+            ),
         }
     )
-    return data
+    # Plot
+    ax.sns_boxplot(data=data, x="group", y="value", notch=True, strip=True)
+    # Visualization
+    ax.set_xyt("Groups", "Values", "Seaborn Boxplot with Strip Test")
+    # Saving
+    spath = f"./sns_boxplot_test.png"
+    mngs.io.save(fig, spath, symlink_from_cwd=True)
+    # Closing
+    mngs.plt.close(fig)
+    # Assertion
+    assert os.path.exists(spath), f"Failed to save figure to {spath}"
 
 
-def test_sns_copy_doc_decorator():
-    """Test that sns_copy_doc decorator properly copies docstrings."""
-    # Import the decorator and seaborn
-    import seaborn as sns
-    from mngs.plt._subplots._AxisWrapperMixins._SeabornMixin import (
-        sns_copy_doc,
+def test_sns_heatmap():
+    """Test sns_heatmap function"""
+    # Figure
+    fig, ax = mngs.plt.subplots()
+    # Data
+    data = np.random.rand(10, 10)
+    correlation_matrix = np.corrcoef(data)
+    # Plot
+    ax.sns_heatmap(
+        correlation_matrix, annot=True, cmap="coolwarm", vmin=-1, vmax=1
     )
+    # Visualization
+    ax.set_xyt("Features", "Features", "Seaborn Heatmap Test")
+    # Saving
+    spath = f"./sns_heatmap_test.png"
+    mngs.io.save(fig, spath, symlink_from_cwd=True)
+    # Closing
+    mngs.plt.close(fig)
+    # Assertion
+    assert os.path.exists(spath), f"Failed to save figure to {spath}"
 
-    # Create a test function with the decorator
-    @sns_copy_doc
-    def sns_boxplot(self, *args, **kwargs):
-        """This docstring should be replaced."""
-        pass
 
-    # Check if the docstring was copied from seaborn
-    assert sns_boxplot.__doc__ == sns.boxplot.__doc__
-    assert "This docstring should be replaced" not in sns_boxplot.__doc__
+def test_sns_heatmap_xyz():
+    """Test sns_heatmap with xyz=True"""
+    # Figure
+    fig, ax = mngs.plt.subplots()
+    # Data
+    data = pd.DataFrame(np.random.rand(10, 10))
+    # Plot
+    ax.sns_heatmap(data, xyz=True, cmap="viridis")
+    # Visualization
+    ax.set_xyt("X", "Y", "Seaborn Heatmap with XYZ Test")
+    # Saving
+    spath = f"./sns_heatmap_xyz_test.png"
+    mngs.io.save(fig, spath, symlink_from_cwd=True)
+    # Closing
+    mngs.plt.close(fig)
+    # Assertion
+    assert os.path.exists(spath), f"Failed to save figure to {spath}"
 
 
-def test_sns_barplot(sample_data):
-    """Test that sns_barplot method correctly wraps seaborn's barplot."""
-    # Create a mock figure and axis
-    fig, ax = plt.subplots()
-
-    # Import SeabornMixin
-    from mngs.plt._subplots._AxisWrapperMixins._SeabornMixin import (
-        SeabornMixin,
+def test_sns_histplot():
+    """Test sns_histplot function"""
+    # Figure
+    fig, ax = mngs.plt.subplots()
+    # Data
+    data = pd.DataFrame(
+        {
+            "value": np.concatenate(
+                [np.random.normal(0, 1, 1000), np.random.normal(4, 1, 500)]
+            ),
+            "group": np.concatenate(
+                [np.repeat("A", 1000), np.repeat("B", 500)]
+            ),
+        }
     )
-
-    # Create a minimal class that inherits from SeabornMixin
-    class TestWrapper(SeabornMixin):
-        def __init__(self, axis):
-            self.axis = axis
-            self.tracked_data = {}
-
-        def _track(self, track, id, method, obj, kwargs):
-            if track:
-                self.tracked_data[id or method] = {
-                    "obj": obj,
-                    "kwargs": kwargs,
-                }
-
-        def _no_tracking(self):
-            class NoTrackingContextManager:
-                def __enter__(self_cm):
-                    return None
-
-                def __exit__(self_cm, *args):
-                    return False
-
-            return NoTrackingContextManager()
-
-    # Create an instance of the test wrapper
-    wrapper = TestWrapper(ax)
-
-    # Test sns_barplot with basic parameters
-    with patch("seaborn.barplot") as mock_barplot:
-        mock_barplot.return_value = ax
-        wrapper.sns_barplot(
-            data=sample_data, x="category", y="value", id="test_plot"
-        )
-
-        # Verify seaborn.barplot was called with correct parameters
-        mock_barplot.assert_called_once()
-        call_kwargs = mock_barplot.call_args[1]
-        assert call_kwargs["data"] is sample_data
-        assert call_kwargs["x"] == "category"
-        assert call_kwargs["y"] == "value"
-        assert call_kwargs["ax"] == ax
-
-        # Verify tracking was called
-        assert "test_plot" in wrapper.tracked_data
-        # The track_obj should be a DataFrame with pivoted data
-        assert isinstance(
-            wrapper.tracked_data["test_plot"]["obj"], pd.DataFrame
-        )
+    # Plot
+    ax.sns_histplot(data=data, x="value", hue="group", element="step", bins=30)
+    # Visualization
+    ax.set_xyt("Values", "Count", "Seaborn Histplot Test")
+    # Saving
+    spath = f"./sns_histplot_test.png"
+    mngs.io.save(fig, spath, symlink_from_cwd=True)
+    # Closing
+    mngs.plt.close(fig)
+    # Assertion
+    assert os.path.exists(spath), f"Failed to save figure to {spath}"
 
 
-def test_sns_prepare_xyhue(sample_data):
-    """Test the _sns_prepare_xyhue method handles different data structures correctly."""
-    # Import SeabornMixin
-    from mngs.plt._subplots._AxisWrapperMixins._SeabornMixin import (
-        SeabornMixin,
+def test_sns_kdeplot():
+    """Test sns_kdeplot function"""
+    # Figure
+    fig, ax = mngs.plt.subplots()
+    # Data
+    data = pd.DataFrame(
+        {
+            "value": np.concatenate(
+                [np.random.normal(0, 1, 500), np.random.normal(3, 1, 500)]
+            ),
+            "group": np.concatenate(
+                [np.repeat("A", 500), np.repeat("B", 500)]
+            ),
+        }
     )
+    # Plot
+    ax.sns_kdeplot(data=data, x="value", hue="group", fill=True)
+    # Visualization
+    ax.set_xyt("Values", "Density", "Seaborn KDE Plot Test")
+    # Saving
+    spath = f"./sns_kdeplot_test.png"
+    mngs.io.save(fig, spath, symlink_from_cwd=True)
+    # Closing
+    mngs.plt.close(fig)
+    # Assertion
+    assert os.path.exists(spath), f"Failed to save figure to {spath}"
 
-    # Create a minimal class that inherits from SeabornMixin
-    class TestWrapper(SeabornMixin):
-        def __init__(self):
-            self.tracked_data = {}
 
-        def _track(self, track, id, method, obj, kwargs):
-            pass
-
-        def _no_tracking(self):
-            class NoTrackingContextManager:
-                def __enter__(self_cm):
-                    return None
-
-                def __exit__(self_cm, *args):
-                    return False
-
-            return NoTrackingContextManager()
-
-    # Create an instance of the test wrapper
-    wrapper = TestWrapper()
-
-    # Test with x, y, and no hue
-    result = wrapper._sns_prepare_xyhue(sample_data, "category", "value")
-    assert isinstance(result, pd.DataFrame)
-    assert result.shape[1] == len(sample_data["category"].unique())
-
-    # Test with x, y, and hue
-    result = wrapper._sns_prepare_xyhue(
-        sample_data, "category", "value", "group"
+def test_sns_scatterplot():
+    """Test sns_scatterplot function"""
+    # Figure
+    fig, ax = mngs.plt.subplots()
+    # Data
+    data = pd.DataFrame(
+        {
+            "x": np.random.rand(100),
+            "y": np.random.rand(100),
+            "size": np.random.rand(100) * 100,
+            "category": np.random.choice(["A", "B", "C"], 100),
+        }
     )
-    assert isinstance(result, pd.DataFrame)
+    # Plot
+    ax.sns_scatterplot(data=data, x="x", y="y", size="size", hue="category")
+    # Visualization
+    ax.set_xyt("X Values", "Y Values", "Seaborn Scatterplot Test")
+    # Saving
+    spath = f"./sns_scatterplot_test.png"
+    mngs.io.save(fig, spath, symlink_from_cwd=True)
+    # Closing
+    mngs.plt.close(fig)
+    # Assertion
+    assert os.path.exists(spath), f"Failed to save figure to {spath}"
 
-    # Test with only x
-    result = wrapper._sns_prepare_xyhue(sample_data, x="category")
-    assert isinstance(result, pd.DataFrame)
-    assert "category" in result.columns
 
-    # Test with only y
-    result = wrapper._sns_prepare_xyhue(sample_data, y="value")
-    assert isinstance(result, pd.DataFrame)
-    assert "value" in result.columns
+def test_sns_swarmplot():
+    """Test sns_swarmplot function"""
+    # Figure
+    fig, ax = mngs.plt.subplots()
+    # Data
+    data = pd.DataFrame(
+        {
+            "group": np.repeat(["A", "B", "C", "D"], 25),
+            "value": np.concatenate(
+                [
+                    np.random.normal(0, 1, 25),
+                    np.random.normal(2, 1, 25),
+                    np.random.normal(4, 1, 25),
+                    np.random.normal(6, 1, 25),
+                ]
+            ),
+        }
+    )
+    # Plot
+    ax.sns_swarmplot(data=data, x="group", y="value", palette="Set2")
+    # Visualization
+    ax.set_xyt("Groups", "Values", "Seaborn Swarmplot Test")
+    # Saving
+    spath = f"./sns_swarmplot_test.png"
+    mngs.io.save(fig, spath, symlink_from_cwd=True)
+    # Closing
+    mngs.plt.close(fig)
+    # Assertion
+    assert os.path.exists(spath), f"Failed to save figure to {spath}"
 
-    # Test with no x, y but with hue
-    result = wrapper._sns_prepare_xyhue(sample_data, hue="group")
-    assert result is sample_data.reset_index()
+
+def test_sns_stripplot():
+    """Test sns_stripplot function"""
+    # Figure
+    fig, ax = mngs.plt.subplots()
+    # Data
+    data = pd.DataFrame(
+        {
+            "group": np.repeat(["A", "B", "C"], 30),
+            "value": np.concatenate(
+                [
+                    np.random.normal(0, 1, 30),
+                    np.random.normal(3, 1, 30),
+                    np.random.normal(6, 1, 30),
+                ]
+            ),
+        }
+    )
+    # Plot
+    ax.sns_stripplot(
+        data=data, x="group", y="value", jitter=True, palette="Set3"
+    )
+    # Visualization
+    ax.set_xyt("Groups", "Values", "Seaborn Stripplot Test")
+    # Saving
+    spath = f"./sns_stripplot_test.png"
+    mngs.io.save(fig, spath, symlink_from_cwd=True)
+    # Closing
+    mngs.plt.close(fig)
+    # Assertion
+    assert os.path.exists(spath), f"Failed to save figure to {spath}"
+
+
+def test_sns_violinplot():
+    """Test sns_violinplot function"""
+    # Figure
+    fig, ax = mngs.plt.subplots()
+    # Data
+    data = pd.DataFrame(
+        {
+            "group": np.repeat(["A", "B", "C", "D"], 30),
+            "value": np.concatenate(
+                [
+                    np.random.normal(0, 1, 30),
+                    np.random.normal(3, 1, 30),
+                    np.random.normal(6, 1, 30),
+                    np.random.normal(9, 1, 30),
+                ]
+            ),
+        }
+    )
+    # Plot
+    ax.sns_violinplot(data=data, x="group", y="value", inner="stick")
+    # Visualization
+    ax.set_xyt("Groups", "Values", "Seaborn Violinplot Test")
+    # Saving
+    spath = f"./sns_violinplot_test.png"
+    mngs.io.save(fig, spath, symlink_from_cwd=True)
+    # Closing
+    mngs.plt.close(fig)
+    # Assertion
+    assert os.path.exists(spath), f"Failed to save figure to {spath}"
+
+
+def test_sns_violinplot_half():
+    """Test sns_violinplot with half=True"""
+    # Figure
+    fig, ax = mngs.plt.subplots()
+    # Data
+    data = pd.DataFrame(
+        {
+            "group": np.repeat(["A", "B", "C"], 30),
+            "value": np.concatenate(
+                [
+                    np.random.normal(0, 1, 30),
+                    np.random.normal(3, 1, 30),
+                    np.random.normal(6, 1, 30),
+                ]
+            ),
+        }
+    )
+    # Plot
+    ax.sns_violinplot(data=data, x="group", y="value", half=True)
+    # Visualization
+    ax.set_xyt("Groups", "Values", "Seaborn Half Violinplot Test")
+    # Saving
+    spath = f"./sns_violinplot_half_test.png"
+    mngs.io.save(fig, spath, symlink_from_cwd=True)
+    # Closing
+    mngs.plt.close(fig)
+    # Assertion
+    assert os.path.exists(spath), f"Failed to save figure to {spath}"
 
 
 if __name__ == "__main__":
@@ -170,5 +323,306 @@ if __name__ == "__main__":
     import pytest
 
     pytest.main([os.path.abspath(__file__)])
+
+# --------------------------------------------------------------------------------
+# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_SeabornMixin.py
+# --------------------------------------------------------------------------------
+# #!/usr/bin/env python3
+# # -*- coding: utf-8 -*-
+# # Timestamp: "2025-04-27 12:21:48 (ywatanabe)"
+# # File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_SeabornMixin.py
+# # ----------------------------------------
+# import os
+# __FILE__ = (
+#     "./src/mngs/plt/_subplots/_AxisWrapperMixins/_SeabornMixin.py"
+# )
+# __DIR__ = os.path.dirname(__FILE__)
+# # ----------------------------------------
+#
+# from functools import wraps
+#
+# import mngs
+# import numpy as np
+# import pandas as pd
+# import seaborn as sns
+#
+# from ....plt import ax as ax_module
+#
+#
+# def sns_copy_doc(func):
+#     @wraps(func)
+#     def wrapper(self, *args, **kwargs):
+#         return func(self, *args, **kwargs)
+#
+#     wrapper.__doc__ = getattr(sns, func.__name__.split("sns_")[-1]).__doc__
+#     return wrapper
+#
+#
+# class SeabornMixin:
+#     ################################################################################
+#     ## Seaborn-wrappers
+#     ################################################################################
+#     def _sns_base(
+#         self, method_name, *args, track=True, track_obj=None, id=None, **kwargs
+#     ):
+#         sns_method_name = method_name.split("sns_")[-1]
+#
+#         with self._no_tracking():
+#             sns_plot_fn = getattr(sns, sns_method_name)
+#
+#             if kwargs.get("hue_colors"):
+#                 kwargs = mngs.gen.alternate_kwarg(
+#                     kwargs, primary_key="palette", alternate_key="hue_colors"
+#                 )
+#
+#             self.axis = sns_plot_fn(ax=self.axis, *args, **kwargs)
+#
+#         # Track the plot if required
+#         track_obj = track_obj if track_obj is not None else args
+#         self._track(track, id, method_name, track_obj, kwargs)
+#
+#     def _sns_base_xyhue(
+#         self, method_name, *args, track=True, id=None, **kwargs
+#     ):
+#         """Formats data passed to sns functions with (data=data, x=x, y=y) keyword arguments"""
+#         df = kwargs.get("data")
+#         x, y, hue = kwargs.get("x"), kwargs.get("y"), kwargs.get("hue")
+#
+#         track_obj = (
+#             self._sns_prepare_xyhue(df, x, y, hue) if df is not None else None
+#         )
+#         self._sns_base(
+#             method_name,
+#             *args,
+#             track=track,
+#             track_obj=track_obj,
+#             id=id,
+#             **kwargs,
+#         )
+#
+#     def _sns_prepare_xyhue(
+#         self, data=None, x=None, y=None, hue=None, **kwargs
+#     ):
+#         """Returns obj to track"""
+#         data = data.reset_index()
+#
+#         if hue is not None:
+#             if x is None and y is None:
+#
+#                 return data
+#             elif x is None:
+#
+#                 agg_dict = {}
+#                 for hh in data[hue].unique():
+#                     agg_dict[hh] = data.loc[data[hue] == hh, y]
+#                 df = mngs.pd.force_df(agg_dict)
+#                 return df
+#
+#             elif y is None:
+#
+#                 df = pd.concat(
+#                     [
+#                         data.loc[data[hue] == hh, x]
+#                         for hh in data[hue].unique()
+#                     ],
+#                     axis=1,
+#                 )
+#                 return df
+#             else:
+#                 pivoted_data = data.pivot_table(
+#                     values=y,
+#                     index=data.index,
+#                     columns=[x, hue],
+#                     aggfunc="first",
+#                 )
+#                 pivoted_data.columns = [
+#                     f"{col[0]}-{col[1]}" for col in pivoted_data.columns
+#                 ]
+#                 return pivoted_data
+#         else:
+#             if x is None and y is None:
+#                 return data
+#
+#             elif x is None:
+#                 return data[[y]]
+#
+#             elif y is None:
+#                 return data[[x]]
+#
+#             else:
+#                 return data.pivot_table(
+#                     values=y, index=data.index, columns=x, aggfunc="first"
+#                 )
+#
+#     @sns_copy_doc
+#     def sns_barplot(
+#         self, data=None, x=None, y=None, track=True, id=None, **kwargs
+#     ):
+#         self._sns_base_xyhue(
+#             "sns_barplot", data=data, x=x, y=y, track=track, id=id, **kwargs
+#         )
+#
+#     @sns_copy_doc
+#     def sns_boxplot(
+#         self,
+#         data=None,
+#         x=None,
+#         y=None,
+#         strip=False,
+#         track=True,
+#         id=None,
+#         **kwargs,
+#     ):
+#         self._sns_base_xyhue(
+#             "sns_boxplot", data=data, x=x, y=y, track=track, id=id, **kwargs
+#         )
+#         if strip:
+#             strip_kwargs = kwargs.copy()
+#             strip_kwargs.pop("notch", None)  # Remove boxplot-specific kwargs
+#             strip_kwargs.pop("whis", None)
+#             self.sns_stripplot(
+#                 data=data,
+#                 x=x,
+#                 y=y,
+#                 track=False,
+#                 id=f"{id}_strip",
+#                 **strip_kwargs,
+#             )
+#
+#     @sns_copy_doc
+#     def sns_heatmap(self, *args, xyz=False, track=True, id=None, **kwargs):
+#         method_name = "sns_heatmap"
+#         df = args[0]
+#         if xyz:
+#             df = mngs.pd.to_xyz(df)
+#         self._sns_base(
+#             method_name, *args, track=track, track_obj=df, id=id, **kwargs
+#         )
+#
+#     @sns_copy_doc
+#     def sns_histplot(
+#         self, data=None, x=None, y=None, track=True, id=None, **kwargs
+#     ):
+#         self._sns_base_xyhue(
+#             "sns_histplot", data=data, x=x, y=y, track=track, id=id, **kwargs
+#         )
+#
+#     @sns_copy_doc
+#     def sns_kdeplot(
+#         self,
+#         data=None,
+#         x=None,
+#         y=None,
+#         xlim=None,
+#         ylim=None,
+#         track=True,
+#         id=None,
+#         **kwargs,
+#     ):
+#         if kwargs.get("hue"):
+#             hue_col = kwargs["hue"]
+#             hues = data[hue_col]
+#             if x is not None:
+#                 lim = xlim
+#                 for hh in np.unique(hues):
+#                     _data = data.loc[data[hue_col] == hh, x]
+#                     self.kde(_data, xlim=lim, label=hh, id=hh, **kwargs)
+#
+#             if y is not None:
+#                 lim = xlim
+#                 for hh in np.unique(hues):
+#                     _data = data.loc[data[hue] == hh, y]
+#                     self.kde(_data, xlim=lim, label=hh, id=hh, **kwargs)
+#
+#         else:
+#             if x is not None:
+#                 _data, lim = data[x], xlim
+#             if y is not None:
+#                 _data, lim = data[y], ylim
+#             self.kde(_data, xlim=lim, **kwargs)
+#
+#     @sns_copy_doc
+#     def sns_pairplot(self, *args, track=True, id=None, **kwargs):
+#         self._sns_base("sns_pairplot", *args, track=track, id=id, **kwargs)
+#
+#     @sns_copy_doc
+#     def sns_scatterplot(
+#         self, data=None, x=None, y=None, track=True, id=None, **kwargs
+#     ):
+#         self._sns_base_xyhue(
+#             "sns_scatterplot",
+#             data=data,
+#             x=x,
+#             y=y,
+#             track=track,
+#             id=id,
+#             **kwargs,
+#         )
+#
+#     @sns_copy_doc
+#     def sns_swarmplot(
+#         self, data=None, x=None, y=None, track=True, id=None, **kwargs
+#     ):
+#         self._sns_base_xyhue(
+#             "sns_swarmplot", data=data, x=x, y=y, track=track, id=id, **kwargs
+#         )
+#
+#     @sns_copy_doc
+#     def sns_stripplot(
+#         self, data=None, x=None, y=None, track=True, id=None, **kwargs
+#     ):
+#         self._sns_base_xyhue(
+#             "sns_stripplot", data=data, x=x, y=y, track=track, id=id, **kwargs
+#         )
+#
+#     # @sns_copy_doc
+#     # def sns_violinplot(
+#     #     self, data=None, x=None, y=None, track=True, id=None, **kwargs
+#     # ):
+#     #     self._sns_base_xyhue(
+#     #         "sns_violinplot", data=data, x=x, y=y, track=track, id=id, **kwargs
+#     #     )
+#
+#     @sns_copy_doc
+#     def sns_violinplot(
+#         self,
+#         data=None,
+#         x=None,
+#         y=None,
+#         track=True,
+#         id=None,
+#         half=False,
+#         **kwargs,
+#     ):
+#         if half:
+#             with self._no_tracking():
+#                 self.axis = ax_module.half_violin(
+#                     self.axis, data=data, x=x, y=y, **kwargs
+#                 )
+#         else:
+#             self._sns_base_xyhue(
+#                 "sns_violinplot",
+#                 data=data,
+#                 x=x,
+#                 y=y,
+#                 track=track,
+#                 id=id,
+#                 **kwargs,
+#             )
+#
+#         # Tracking
+#         track_obj = self._sns_prepare_xyhue(data, x, y, kwargs.get("hue"))
+#         self._track(track, id, "sns_violinplot", track_obj, kwargs)
+#
+#         return self.axis
+#
+#     @sns_copy_doc
+#     def sns_jointplot(self, *args, track=True, id=None, **kwargs):
+#         self._sns_base("sns_jointplot", *args, track=track, id=id, **kwargs)
+#
+# # EOF
+# --------------------------------------------------------------------------------
+# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_SeabornMixin.py
+# --------------------------------------------------------------------------------
 
 # EOF

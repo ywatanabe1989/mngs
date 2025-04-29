@@ -403,7 +403,9 @@ def test_not_implemented_with_arguments():
 
 if __name__ == "__main__":
     import os
+
     import pytest
+
     pytest.main([os.path.abspath(__file__)])
 
 # --------------------------------------------------------------------------------

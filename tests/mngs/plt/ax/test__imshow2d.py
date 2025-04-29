@@ -100,7 +100,6 @@ class TestMainFunctionality:
             # Should fail with 3D array
             imshow2d(self.ax, np.random.rand(10, 20, 3))
 
-
 if __name__ == "__main__":
     import os
 
@@ -115,16 +114,16 @@ if __name__ == "__main__":
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-09-28 10:19:09 (ywatanabe)"
 # # Author: Yusuke Watanabe (ywata1989@gmail.com)
-#
+# 
 # """This script does XYZ."""
-#
+# 
 # import sys
-#
+# 
 # import matplotlib.pyplot as plt
 # import mngs
 # import numpy as np
-#
-#
+# 
+# 
 # # Functions
 # def imshow2d(
 #     ax,
@@ -145,17 +144,17 @@ if __name__ == "__main__":
 #     1) The first dimension represents the x dim, from left to right.
 #     2) The second dimension represents the y dim, from bottom to top
 #     """
-#
+# 
 #     assert arr_2d.ndim == 2
-#
+# 
 #     # Transposes arr_2d for correct orientation
 #     arr_2d = arr_2d.T
-#
+# 
 #     # Cals the original ax.imshow() method on the transposed array
 #     im = ax.imshow(
 #         arr_2d, cmap=cmap, vmin=vmin, vmax=vmax, aspect=aspect, **kwargs
 #     )
-#
+# 
 #     # Color bar
 #     if cbar:
 #         fig = ax.get_figure()
@@ -164,28 +163,28 @@ if __name__ == "__main__":
 #         )
 #         if cbar_label:
 #             _cbar.set_label(cbar_label)
-#
+# 
 #     # Invert y-axis to match typical image orientation
 #     ax.invert_yaxis()
-#
+# 
 #     return ax
-#
-#
+# 
+# 
 # if __name__ == "__main__":
 #     # Start
 #     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt)
-#
+# 
 #     # Example usage
 #     fig, ax = plt.subplots()
 #     data = np.random.rand(10, 20)  # Random data
 #     imshow2d(ax, data)
 #     plt.show()
-#
+# 
 #     # Close
 #     mngs.gen.close(CONFIG)
-#
+# 
 # # EOF
-#
+# 
 # """
 # /ssh:ywatanabe@444:/home/ywatanabe/proj/entrance/mngs/plt/ax/_imshow2d.py
 # """
@@ -193,5 +192,3 @@ if __name__ == "__main__":
 # --------------------------------------------------------------------------------
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/ax/_imshow2d.py
 # --------------------------------------------------------------------------------
-
-# EOF

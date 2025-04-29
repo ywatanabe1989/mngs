@@ -73,7 +73,9 @@ def test_params_rgba_norm():
 
 if __name__ == "__main__":
     import os
+
     import pytest
+
     pytest.main([os.path.abspath(__file__)])
 
 # --------------------------------------------------------------------------------

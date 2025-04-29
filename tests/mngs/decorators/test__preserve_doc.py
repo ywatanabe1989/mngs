@@ -274,7 +274,9 @@ def test_preserve_doc_with_empty_docstring():
 
 if __name__ == "__main__":
     import os
+
     import pytest
+
     pytest.main([os.path.abspath(__file__)])
 
 # --------------------------------------------------------------------------------

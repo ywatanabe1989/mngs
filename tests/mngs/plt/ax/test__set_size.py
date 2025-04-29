@@ -101,7 +101,6 @@ class TestMainFunctionality:
 
         assert np.isclose(aspect_ratio, expected_aspect_ratio, rtol=0.1)
 
-
 if __name__ == "__main__":
     import os
 
@@ -115,8 +114,8 @@ if __name__ == "__main__":
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2022-12-09 13:38:11 (ywatanabe)"
-#
-#
+# 
+# 
 # def set_size(ax, w, h):
 #     """w, h: width, height in inches"""
 #     # if not ax: ax=plt.gca()
@@ -132,5 +131,3 @@ if __name__ == "__main__":
 # --------------------------------------------------------------------------------
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/ax/_set_size.py
 # --------------------------------------------------------------------------------
-
-# EOF

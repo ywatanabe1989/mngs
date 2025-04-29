@@ -134,7 +134,9 @@ def test_joyplot_with_custom_parameters(mock_joyplot):
 
 if __name__ == "__main__":
     import os
+
     import pytest
+
     pytest.main([os.path.abspath(__file__)])
 
 # --------------------------------------------------------------------------------

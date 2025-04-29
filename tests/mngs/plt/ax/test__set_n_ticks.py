@@ -102,7 +102,6 @@ class TestMainFunctionality:
         with pytest.raises(Exception):
             set_n_ticks(self.ax, n_xticks="invalid")
 
-
 if __name__ == "__main__":
     import os
 
@@ -114,11 +113,11 @@ if __name__ == "__main__":
 # Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/ax/_set_n_ticks.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python
-#
-#
+# 
+# 
 # import matplotlib
-#
-#
+# 
+# 
 # def set_n_ticks(
 #     ax,
 #     n_xticks=4,
@@ -128,20 +127,18 @@ if __name__ == "__main__":
 #     Example:
 #         ax = set_n_ticks(ax)
 #     """
-#
+# 
 #     if n_xticks is not None:
 #         ax.xaxis.set_major_locator(matplotlib.ticker.MaxNLocator(n_xticks))
-#
+# 
 #     if n_yticks is not None:
 #         ax.yaxis.set_major_locator(matplotlib.ticker.MaxNLocator(n_yticks))
-#
+# 
 #     # Force the figure to redraw to reflect changes
 #     ax.figure.canvas.draw()
-#
+# 
 #     return ax
 
 # --------------------------------------------------------------------------------
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/ax/_set_n_ticks.py
 # --------------------------------------------------------------------------------
-
-# EOF

@@ -592,7 +592,9 @@ def test_timeout_with_keyword_arguments():
 
 if __name__ == "__main__":
     import os
+
     import pytest
+
     pytest.main([os.path.abspath(__file__)])
 
 # --------------------------------------------------------------------------------

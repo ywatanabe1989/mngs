@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-28 16:09:24 (ywatanabe)"
+# Timestamp: "2025-04-29 09:38:56 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_repo/tests/mngs/test___init__.py
 # ----------------------------------------
 import os
@@ -20,7 +20,9 @@ def test_import_mngs():
 
 if __name__ == "__main__":
     import os
+
     import pytest
+
     pytest.main([os.path.abspath(__file__)])
 
 # --------------------------------------------------------------------------------
@@ -37,23 +39,23 @@ if __name__ == "__main__":
 # )
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
-# 
+#
 # THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/__init__.py"
-# 
+#
 # # os.getenv("MNGS_SENDER_GMAIL")
 # # os.getenv("MNGS_SENDER_GMAIL_PASSWORD")
 # # os.getenv("MNGS_RECIPIENT_GMAIL")
 # # os.getenv("MNGS_DIR", "/tmp/mngs/")
-# 
+#
 # import warnings
-# 
+#
 # # Configure warnings
 # warnings.filterwarnings('ignore', category=DeprecationWarning)
-# 
+#
 # ########################################
 # # Warnings
 # ########################################
-# 
+#
 # from ._sh import sh
 # from . import io
 # from . import path
@@ -79,21 +81,23 @@ if __name__ == "__main__":
 # from . import parallel
 # from . import dt
 # from . import dev
-# 
+#
 # # ########################################
 # # # Modules (python -m mngs print_config)
 # # ########################################
 # # from .gen._print_config import print_config
 # # # Usage: python -m mngs print_config
-# 
+#
 # __copyright__ = "Copyright (C) 2024 Yusuke Watanabe"
 # __version__ = "1.10.1"
 # __license__ = "MIT"
 # __author__ = "ywatanabe1989"
 # __author_email__ = "ywatanabe@alumni.u-tokyo.ac.jp"
 # __url__ = "https://github.com/ywatanabe1989/mngs"
-# 
+#
 # # EOF
 # --------------------------------------------------------------------------------
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/__init__.py
 # --------------------------------------------------------------------------------
+
+# EOF

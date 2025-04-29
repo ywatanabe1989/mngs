@@ -57,7 +57,6 @@ class TestAxisWrapper:
         # And the result should be what the original method returned
         assert result == "plot_result"
 
-
 if __name__ == "__main__":
     import os
 
@@ -79,17 +78,17 @@ if __name__ == "__main__":
 # )
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
-#
+# 
 # import warnings
-#
+# 
 # from ._AxisWrapperMixins import (
 #     AdjustmentMixin,
 #     BasicPlotMixin,
 #     SeabornMixin,
 #     TrackingMixin,
 # )
-#
-#
+# 
+# 
 # class AxisWrapper(
 #     BasicPlotMixin, SeabornMixin, AdjustmentMixin, TrackingMixin
 # ):
@@ -99,15 +98,15 @@ if __name__ == "__main__":
 #         self._ax_history = {}
 #         self.track = track
 #         self.id = 0
-#
+# 
 #     def get_figure(self):
 #         return self.fig
-#
+# 
 #     def __getattr__(self, attr):
 #         if hasattr(self.axis, attr):
 #             original = getattr(self.axis, attr)
 #             if callable(original):
-#
+# 
 #                 # @wraps(original)
 #                 # def wrapper(*args, **kwargs):
 #                 #     result = original(*args, **kwargs)
@@ -119,7 +118,7 @@ if __name__ == "__main__":
 #                 #         kwargs,
 #                 #     )
 #                 #     return result
-#
+# 
 #                 # src/mngs/plt/_subplots/_AxisWrapper.py
 #                 # Fix for the indentation error on lines 57-59
 #                 def wrapper(*args, **kwargs):
@@ -134,22 +133,20 @@ if __name__ == "__main__":
 #                         # Add tracking code here
 #                         pass  # Add a pass statement if there's no implementation yet
 #                     return result
-#
+# 
 #             return original
-#
+# 
 #         warnings.warn(
 #             f"MNGS AxisWrapper: '{attr}' not implemented, ignored.",
 #             UserWarning,
 #         )
-#
+# 
 #         def dummy(*args, **kwargs):
 #             return None
-#
+# 
 #         return dummy
-#
+# 
 # # EOF
 # --------------------------------------------------------------------------------
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_AxisWrapper.py
 # --------------------------------------------------------------------------------
-
-# EOF

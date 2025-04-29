@@ -23,7 +23,6 @@ def test_draw_a_cube_creates_12_edges():
     # a cube has 12 edges
     assert len(ax.lines) == 12
 
-
 if __name__ == "__main__":
     import os
 
@@ -45,13 +44,13 @@ if __name__ == "__main__":
 # )
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
-#
+# 
 # import numpy as np
-#
-#
+# 
+# 
 # def draw_a_cube(ax, r1, r2, r3, c="blue", alpha=1.0):
 #     from itertools import combinations, product
-#
+# 
 #     for s, e in combinations(np.array(list(product(r1, r2, r3))), 2):
 #         if np.sum(np.abs(s - e)) == r1[1] - r1[0]:
 #             ax.plot3D(*zip(s, e), c=c, linewidth=3, alpha=alpha)
@@ -60,10 +59,8 @@ if __name__ == "__main__":
 #         if np.sum(np.abs(s - e)) == r3[1] - r3[0]:
 #             ax.plot3D(*zip(s, e), c=c, linewidth=3, alpha=alpha)
 #     return ax
-#
+# 
 # # EOF
 # --------------------------------------------------------------------------------
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_draw_a_cube.py
 # --------------------------------------------------------------------------------
-
-# EOF

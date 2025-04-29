@@ -139,7 +139,6 @@ def test_configure_mpl_verbose_output(capsys):
         # Restore original settings
         plt.rcParams.update(original_rcparams)
 
-
 if __name__ == "__main__":
     import os
 
@@ -154,32 +153,32 @@ if __name__ == "__main__":
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-17 13:59:03 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/plt/_configure_mpl.py
-#
+# 
 # THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/plt/_configure_mpl.py"
-#
+# 
 # from typing import Union
-#
+# 
 # import matplotlib.pyplot as plt
 # import mngs
 # import numpy as np
-#
-#
+# 
+# 
 # def _convert_font_size(size: Union[str, int, float]) -> float:
 #     """Converts various font size specifications to numerical values.
-#
+# 
 #     Parameters
 #     ----------
 #     size : Union[str, int, float]
 #         Font size specification. Can be:
 #         - String: 'xx-small', 'x-small', 'small', 'medium', 'large', 'x-large', 'xx-large'
 #         - Numeric: direct point size value
-#
+# 
 #     Returns
 #     -------
 #     float
 #         Font size in points
 #     """
-#
+# 
 #     if isinstance(size, str):
 #         size_map = {
 #             "xx-small": 6,
@@ -195,8 +194,8 @@ if __name__ == "__main__":
 #         return float(size)
 #     else:
 #         raise ValueError(f"Unsupported font size type: {type(size)}")
-#
-#
+# 
+# 
 # def configure_mpl(
 #     plt,
 #     fig_size_mm=(160, 100),
@@ -212,7 +211,7 @@ if __name__ == "__main__":
 #     **kwargs,
 # ):
 #     """Configures Matplotlib settings for publication-quality plots.
-#
+# 
 #     Parameters
 #     ----------
 #     plt : matplotlib.pyplot
@@ -241,16 +240,16 @@ if __name__ == "__main__":
 #         Color transparency, by default 0.9
 #     verbose : bool, optional
 #         Whether to print configuration details, by default False
-#
+# 
 #     Returns
 #     -------
 #     tuple
 #         (plt, dict of RGBA colors)
 #     """
-#
+# 
 #     # Convert base font size
 #     base_size = _convert_font_size(fontsize)
-#
+# 
 #     # Colors
 #     RGBA = {
 #         k: mngs.plt.update_alpha(v, alpha)
@@ -264,10 +263,10 @@ if __name__ == "__main__":
 #         k: tuple(mngs.plt.update_alpha(v, alpha))
 #         for k, v in mngs.plt.PARAMS["RGBA_NORM_FOR_CYCLE"].items()
 #     }
-#
+# 
 #     # Normalize figure size from mm to inches
 #     figsize_inch = (fig_size_mm[0] / 25.4, fig_size_mm[1] / 25.4)
-#
+# 
 #     # Update Matplotlib configuration
 #     plt.rcParams.update(
 #         {
@@ -294,8 +293,8 @@ if __name__ == "__main__":
 #             "lines.linewidth": line_width,
 #         }
 #     )
-#
-#
+# 
+# 
 #     if verbose:
 #         print("\n" + "-" * 40)
 #         print("Matplotlib has been configured as follows:\n")
@@ -318,7 +317,7 @@ if __name__ == "__main__":
 #         for color_str, rgba in RGBA.items():
 #             print(f"  {color_str}: {rgba}")
 #         print("-" * 40)
-#
+# 
 #     # if verbose:
 #     #     print("\n" + "-" * 40)
 #     #     print("Matplotlib has been configured as follows:\n")
@@ -338,13 +337,13 @@ if __name__ == "__main__":
 #     #     for color_str, rgba in RGBA.items():
 #     #         print(f"  {color_str}: {rgba}")
 #     #     print("-" * 40)
-#
+# 
 #     return plt, RGBA_NORM
-#
-#
+# 
+# 
 # if __name__ == "__main__":
 #     plt, CC = configure_mpl(plt)
-#
+# 
 #     fig, axes = plt.subplots(nrows=2, sharex=True, sharey=True)
 #     x = np.linspace(0, 10, 100)
 #     for i_cc, cc_str in enumerate(CC):
@@ -355,11 +354,9 @@ if __name__ == "__main__":
 #     axes[0].legend()
 #     axes[1].legend()
 #     plt.show()
-#
+# 
 # # EOF
 
 # --------------------------------------------------------------------------------
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_configure_mpl.py
 # --------------------------------------------------------------------------------
-
-# EOF

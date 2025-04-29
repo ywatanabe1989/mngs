@@ -24,11 +24,9 @@ def test_mk_colorbar():
 
     plt.close("all")
 
-
 if __name__ == "__main__":
     import os
 
-    import matplotlib.pyplot as plt
     import pytest
 
     pytest.main([os.path.abspath(__file__)])
@@ -41,29 +39,27 @@ if __name__ == "__main__":
 # import matplotlib
 # # matplotlib.use("TkAgg")
 # import matplotlib.pyplot as plt
-#
-#
+# 
+# 
 # def mk_colorbar(start="white", end="blue"):
 #     xx = np.linspace(0, 1, 256)
-#
+# 
 #     start = np.array(mngs.plt.colors.RGB_d[start])
 #     end = np.array(mngs.plt.colors.RGB_d[end])
 #     colors = (end-start)[:, np.newaxis]*xx
-#
+# 
 #     colors -= colors.min()
 #     colors /= colors.max()
-#
+# 
 #     fig, ax = plt.subplots()
 #     [ax.axvline(_xx, color=colors[:,i_xx]) for i_xx, _xx in enumerate(xx)]
 #     ax.xaxis.set_ticks_position("none")
 #     ax.yaxis.set_ticks_position("none")
 #     ax.set_aspect(0.2)
 #     return fig
-#
-#
+# 
+# 
 
 # --------------------------------------------------------------------------------
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_mk_colorbar.py
 # --------------------------------------------------------------------------------
-
-# EOF

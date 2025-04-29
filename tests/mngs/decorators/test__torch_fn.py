@@ -198,7 +198,9 @@ def test_torch_fn_complex_operation(test_data):
 
 if __name__ == "__main__":
     import os
+
     import pytest
+
     pytest.main([os.path.abspath(__file__)])
 
 # --------------------------------------------------------------------------------
