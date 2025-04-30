@@ -1,44 +1,58 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-30 11:26:39 (ywatanabe)"
-# File: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots_dev/_export_as_csv.py
+# Timestamp: "2025-04-30 21:02:38 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_export_as_csv.py
 # ----------------------------------------
 import os
 __FILE__ = (
-    "./src/mngs/plt/_subplots_dev/_export_as_csv.py"
+    "./src/mngs/plt/_subplots/_export_as_csv.py"
 )
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
-import mngs
-
 import sys
+import warnings
 
 import matplotlib.pyplot as plt
+import mngs
 import numpy as np
 import pandas as pd
 import xarray as xr
 
 
-def export_as_csv(history):
-    if len(history) > 0:
-        values_list = list(history.values())
-        data_frames = [format_plotting_args(record) for record in values_list]
-        try:
-            combined_data = pd.concat(data_frames, axis=1)
-            return combined_data
-        except Exception as e:
-            print(e)
-            return pd.DataFrame()
+def export_as_csv(history_records):
+    if len(history_records) <= 0:
+        warnings.warn("Plotting records not found. Empty dataframe returned.")
+        return pd.DataFrame()
     else:
-        return
+        dfs = [
+            format_record(record) for record in list(history_records.values())
+        ]
+        try:
+            df = pd.concat(dfs, axis=1)
+            return df
+        except Exception as e:
+            warnings.warn(
+                f"Plotting records not combined. Empty dataframe returned {e}"
+            )
+            return pd.DataFrame()
 
 
-def format_plotting_args(record):
+def _format_imshow2d(record):
+    id, method, args, kwargs = record
+    df = args
+    # df.columns = [f"{id}_{method}_{col}" for col in df.columns]
+    # df.index = [f"{id}_{method}_{idx}" for idx in df.index]
+    return df
+
+
+def format_record(record):
     id, method, args, kwargs = record
 
-    # Matplotlib
-    if method in ["plot"]:
+    if method == "imshow2d":
+        return _format_imshow2d(record)
+
+    elif method in ["plot"]:
         if len(args) == 1:
             args = args[0]
             if args.ndim == 2:
@@ -134,12 +148,12 @@ def format_plotting_args(record):
 
     #     return df
 
-    elif method == "plot_":
-        df = args
-        df.columns = [f"{id}_{method}_{col}" for col in df.columns]
-        return df
+    # elif method == "plot_":
+    #     df = args
+    #     df.columns = [f"{id}_{method}_{col}" for col in df.columns]
+    #     return df
 
-    elif method == "fillv":
+    elif method == "plot_fillv":
         starts, ends = args
         df = pd.DataFrame(
             {
@@ -149,22 +163,18 @@ def format_plotting_args(record):
         )
         return df
 
-    elif method == "raster":
+    elif method == "plot_raster":
         df = args
         return df
 
-    elif method == "ecdf":
+    elif method == "plot_ecdf":
         df = args
         return df
 
-    elif method == "kde":
+    elif method == "plot_kde":
         df = args
         if id is not None:
             df.columns = [f"{id}_{method}_{col}" for col in df.columns]
-        return df
-
-    elif method == "imshow2d":
-        df = args
         return df
 
     elif method == "sns_barplot":

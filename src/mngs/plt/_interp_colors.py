@@ -1,30 +1,31 @@
-#!./env/bin/python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-06-06 10:01:32 (ywatanabe)"
-# /home/ywatanabe/proj/mngs/src/mngs/plt/_interp_colors.py
-
+# Timestamp: "2025-04-30 21:18:12 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/_interp_colors.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./src/mngs/plt/_interp_colors.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
 
 import matplotlib.colors as mcolors
 import numpy as np
+from mngs.decorators import deprecated
 
 
-def interp_colors(color_start, color_end, num_points, round=3):
-    # Convert colors to RGBA if they are not already in that format
+def gen_interp_colors(color_start, color_end, num_points, round=3):
     color_start_rgba = np.array(mcolors.to_rgba(color_start))
     color_end_rgba = np.array(mcolors.to_rgba(color_end))
-
-    # Generate a sequence of RGBA values
-    # np.linspace works on a per-component basis when the inputs are arrays
     rgba_values = np.linspace(
         color_start_rgba, color_end_rgba, num_points
     ).round(round)
-
-    # Return the list of RGBA tuples
     return [list(color) for color in rgba_values]
 
-    # # Generate a linear interpolation
-    # return [for color in np.linspace(color_start_rgba, color_end_rgba, num_points)]
-    # # return [
-    # #     mcolors.to_hex(color)
-    # #     for color in np.linspace(color_start_rgba, color_end_rgba, num_points)
-    # # ]
+
+@deprecated("Use gen_interp_colors instead")
+def interp_colors(color_start, color_end, num_points, round=3):
+    return gen_interp_colors(color_start, color_end, num_points, round=round)
+
+# EOF

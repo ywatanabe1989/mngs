@@ -1,5 +1,14 @@
 #!/usr/bin/env python3
-
+# -*- coding: utf-8 -*-
+# Timestamp: "2025-04-30 21:15:18 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/_get_RGBA_from_colormap.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./src/mngs/plt/_get_RGBA_from_colormap.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
@@ -18,6 +27,10 @@ class ColorGetter:
         return self.scalarMap.to_rgba(val)
 
 
-def get_RGBA_from_colormap(val, cmap="Blues", cmap_start_val=0, cmap_stop_val=1):
+def get_RGBA_from_colormap(
+    val, cmap="Blues", cmap_start_val=0, cmap_stop_val=1
+):
     ColGetter = ColorGetter(cmap, cmap_start_val, cmap_stop_val)
     return ColGetter.get_rgb(val)
+
+# EOF

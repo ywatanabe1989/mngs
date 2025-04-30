@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-29 16:35:32 (ywatanabe)"
+# Timestamp: "2025-05-01 08:50:58 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_AdjustmentMixin.py
 # ----------------------------------------
 import os
@@ -9,19 +9,6 @@ __FILE__ = (
 )
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
-
-THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_AdjustmentMixin.py"
-
-"""
-Functionality:
-    * Provides methods for adjusting matplotlib plot aesthetics
-Input:
-    * Label rotations, axis labels, tick values, spines, and plot extent
-Output:
-    * Modified matplotlib axis object
-Prerequisites:
-    * matplotlib, mngs.plt.ax
-"""
 
 from typing import List, Optional, Union
 

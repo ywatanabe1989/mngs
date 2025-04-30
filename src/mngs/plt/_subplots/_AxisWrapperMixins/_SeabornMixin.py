@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-29 16:37:19 (ywatanabe)"
+# Timestamp: "2025-04-30 18:27:40 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_SeabornMixin.py
 # ----------------------------------------
 import os
@@ -30,9 +30,7 @@ def sns_copy_doc(func):
 
 
 class SeabornMixin:
-    ################################################################################
-    ## Seaborn-wrappers
-    ################################################################################
+
     def _sns_base(
         self, method_name, *args, track=True, track_obj=None, id=None, **kwargs
     ):

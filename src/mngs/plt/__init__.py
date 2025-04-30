@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-29 20:41:53 (ywatanabe)"
+# Timestamp: "2025-04-30 21:16:29 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/__init__.py
 # ----------------------------------------
 import os
@@ -10,37 +10,50 @@ __FILE__ = (
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
-import importlib
-import inspect
-
-# Get the current directory
-current_dir = os.path.dirname(__file__)
-
-# Iterate through all Python files in the current directory
-for filename in os.listdir(current_dir):
-    if filename.endswith(".py") and not filename.startswith("__"):
-        module_name = filename[:-3]  # Remove .py extension
-        module = importlib.import_module(f".{module_name}", package=__name__)
-
-        # Import only functions and classes from the module
-        for name, obj in inspect.getmembers(module):
-            if inspect.isfunction(obj) or inspect.isclass(obj):
-                if not name.startswith("_"):
-                    globals()[name] = obj
-
-# Clean up temporary variables
-del os, importlib, inspect, current_dir, filename, module_name, module, name, obj
-
 from ._subplots._SubplotsWrapper import subplots
 from ._PARAMS import PARAMS
 from . import ax
 from ._close import close
+from ._colors import (
+    # RGB
+    str2rgb,
+    str2rgba,
+    rgb2rgba,
+    rgba2rgb,
+    rgba2hex,
+    cycle_color_rgb,
+    gradiate_color_rgb,
+    gradiate_color_rgba,
+    # BGR
+    str2bgr,
+    str2bgra,
+    bgr2bgra,
+    bgra2bgr,
+    bgra2hex,
+    cycle_color_bgr,
+    gradiate_color_bgr,
+    gradiate_color_bgra,
+    # COMMON
+    rgb2bgr,
+    bgr2rgb,
+    str2hex,
+    update_alpha,
+    cycle_color,
+    gradiate_color,
+    to_rgb, to_rgba, to_hex, gradiate_color
+)
+from ._configure_mpl import configure_mpl
+from ._im2grid import im2grid
+
+
 
 ################################################################################
 # For Matplotlib Compatibility
 ################################################################################
 import matplotlib.pyplot as _counter_part
+
 _local_module_attributes = list(globals().keys())
+
 
 def __getattr__(name):
     """
@@ -56,6 +69,7 @@ def __getattr__(name):
             f"module '{__name__}' nor matplotlib.pyplot has attribute '{name}'"
         ) from None
 
+
 def __dir__():
     """
     Provide combined directory for tab completion, including
@@ -67,6 +81,7 @@ def __dir__():
     pyplot_attrs = set(dir(_counter_part))
     # Return the sorted union
     return sorted(local_attrs.union(pyplot_attrs))
+
 
 """
 import matplotlib.pyplot as _counter_part

@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-29 20:30:32 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots_dev/_AxisWrapper.py
+# Timestamp: "2025-05-01 08:54:16 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxisWrapper.py
 # ----------------------------------------
 import os
 __FILE__ = (
-    "./src/mngs/plt/_subplots_dev/_AxisWrapper.py"
+    "./src/mngs/plt/_subplots/_AxisWrapper.py"
 )
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
@@ -15,16 +15,12 @@ from functools import wraps
 
 import matplotlib
 
-from ._AxisWrapperMixins import (
-    AdjustmentMixin,
-    BasicPlotMixin,
-    SeabornMixin,
-    TrackingMixin,
-)
+from ._AxisWrapperMixins import (AdjustmentMixin, MatplotlibPlotMixin,
+                                 SeabornMixin, TrackingMixin)
 
 
 class AxisWrapper(
-    BasicPlotMixin, SeabornMixin, AdjustmentMixin, TrackingMixin
+    MatplotlibPlotMixin, SeabornMixin, AdjustmentMixin, TrackingMixin
 ):
     def __init__(self, fig_mngs, axis_mpl, track):
 
@@ -50,7 +46,7 @@ class AxisWrapper(
         return self._fig_mpl
 
     def __getattr__(self, name):
-        # 0. Check if the attribute is explicitly defined in Axis_MplWrapper or its Mixins
+        # 0. Check if the attribute is explicitly defined in AxisWrapper or its Mixins
         #    This check happens implicitly before __getattr__ is called.
         #    If a method like `plot` is defined in BasicPlotMixin, it will be found first.
 
@@ -59,16 +55,13 @@ class AxisWrapper(
         # 1. Try to get the attribute from the wrapped axes instance
         if hasattr(self._axes_mpl, name):
             orig_attr = getattr(self._axes_mpl, name)
-            # If it's callable (a method), wrap it for potential tracking/ID handling
+
             if callable(orig_attr):
 
                 @wraps(orig_attr)
                 def wrapper(*args, **kwargs):
-                    # Pop 'id' and 'track' if they exist, as they are mngs-specific
                     id_value = kwargs.pop("id", None)
-                    track_override = kwargs.pop(
-                        "track", None
-                    )  # Allow overriding track per-call
+                    track_override = kwargs.pop("track", None)
 
                     # Call the original matplotlib method
                     result = orig_attr(*args, **kwargs)
@@ -95,7 +88,7 @@ class AxisWrapper(
                             )
                         except AttributeError:
                             warnings.warn(
-                                f"Tracking setup incomplete for Axis_MplWrapper ({name}).",
+                                f"Tracking setup incomplete for AxisWrapper ({name}).",
                                 UserWarning,
                                 stacklevel=2,
                             )

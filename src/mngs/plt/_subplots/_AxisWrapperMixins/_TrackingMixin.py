@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-29 16:37:35 (ywatanabe)"
+# Timestamp: "2025-04-30 18:40:59 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_TrackingMixin.py
 # ----------------------------------------
 import os
@@ -42,9 +42,6 @@ class TrackingMixin:
     {'plot1': ('plot1', 'plot', ([1, 2, 3], [4, 5, 6]), {})}
     """
 
-    ################################################################################
-    ## Tracking
-    ################################################################################
     def _track(self, track, id, method_name, args, kwargs):
         # Extract id from kwargs and remove it before passing to matplotlib
         if hasattr(kwargs, "get") and "id" in kwargs:

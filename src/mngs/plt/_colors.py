@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-29 13:39:01 (ywatanabe)"
+# Timestamp: "2025-05-01 09:03:51 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/_colors.py
 # ----------------------------------------
 import os
@@ -12,8 +12,8 @@ __DIR__ = os.path.dirname(__FILE__)
 
 import matplotlib.colors as _colors
 import numpy as np
-from mngs.decorators._deprecated import deprecated
 
+from ..decorators._deprecated import deprecated
 from ._PARAMS import PARAMS
 
 # RGB
@@ -95,6 +95,52 @@ def gradiate_color_rgba(rgb_or_rgba, n=5):
 
 # BGRA
 # ------------------------------
+def str2bgr(c):
+    return rgb2bgr(str2rgb(c))
+
+
+def str2bgra(c, alpha=0.5):
+    return rgba2bgra(str2rgba(c))
+
+
+def bgr2bgra(bgra, alpha=0, round=2):
+    return rgb2rgba(bgra, alpha=alpha, round=round)
+
+
+def bgra2bgr(bgra):
+    return rgba2rgb(bgra)
+
+
+def bgra2hex(bgra):
+    """Convert BGRA color format to hex format."""
+    rgba = bgra2rgba(bgra)
+    return rgba2hex(rgba)
+
+
+def cycle_color_bgr(i_color):
+    rgb_color = str2rgb(cycle_color(i_color))
+    return rgb2bgr(rgb_color)
+
+
+def gradiate_color_bgr(bgr_or_bgra, n=5):
+    rgb_or_rgba = (
+        bgr2rgb(bgr_or_bgra)
+        if len(bgr_or_bgra) == 3
+        else bgra2rgba(bgr_or_bgra)
+    )
+    rgb_gradient = gradiate_color_rgb(rgb_or_rgba, n)
+    return [
+        rgb2bgr(color) if len(color) == 3 else rgba2bgra(color)
+        for color in rgb_gradient
+    ]
+
+
+def gradiate_color_bgra(bgra, n=5):
+    return gradiate_color_bgr(bgra, n)
+
+
+# Common
+# ------------------------------
 def bgr2rgb(bgr):
     """Convert BGR color format to RGB format."""
     return [bgr[2], bgr[1], bgr[0]]
@@ -115,19 +161,6 @@ def rgba2bgra(rgba):
     return [rgba[2], rgba[1], rgba[0], rgba[3]]
 
 
-def bgra2hex(bgra):
-    """Convert BGRA color format to hex format."""
-    rgba = bgra2rgba(bgra)
-    return rgba2hex(rgba)
-
-
-def cycle_color_bgr(i_color):
-    rgb_color = str2rgb(cycle_color(i_color))
-    return rgb2bgr(rgb_color)
-
-
-# Common
-# ------------------------------
 def str2hex(c):
     return PARAMS["HEX"][c]
 
@@ -142,23 +175,6 @@ def cycle_color(i_color):
     COLORS_10_STR = list(PARAMS["RGB"].keys())
     n_colors = len(COLORS_10_STR)
     return COLORS_10_STR[i_color % n_colors]
-
-
-def gradiate_color_bgr(bgr_or_bgra, n=5):
-    rgb_or_rgba = (
-        bgr2rgb(bgr_or_bgra)
-        if len(bgr_or_bgra) == 3
-        else bgra2rgba(bgr_or_bgra)
-    )
-    rgb_gradient = gradiate_color_rgb(rgb_or_rgba, n)
-    return [
-        rgb2bgr(color) if len(color) == 3 else rgba2bgra(color)
-        for color in rgb_gradient
-    ]
-
-
-def gradiate_color_bgra(bgra, n=5):
-    return gradiate_color_bgr(bgra, n)
 
 
 # Deprecated
