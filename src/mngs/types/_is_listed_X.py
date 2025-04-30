@@ -1,7 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-02 12:37:58 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/utils/_is_listed_X.py
+# Timestamp: "2025-05-01 09:09:59 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/src/mngs/types/_is_listed_X.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./src/mngs/types/_is_listed_X.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
 
 def is_listed_X(obj, types):
     """
@@ -30,6 +37,5 @@ def is_listed_X(obj, types):
 
     except:
         return False
-
 
 # EOF

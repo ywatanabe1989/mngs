@@ -1,37 +1,32 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-02-27 11:17:14 (ywatanabe)"
-# File: ./src/mngs/types/_ArrayLike.py
+# Timestamp: "2025-05-01 09:21:23 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/src/mngs/types/_ArrayLike.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./src/mngs/types/_ArrayLike.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
 
-THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/types/_ArrayLike.py"
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# Time-stamp: "2025-02-27 11:17:14 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/types/_ArrayLike.py
-
-THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/types/_ArrayLike.py"
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-03 02:55:10 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/types/_ArrayLike.py
-
-from typing import List, Tuple, Union
+from typing import List as _List
+from typing import Tuple as _Tuple
+from typing import Union as _Union
 
 import numpy as _np
 import pandas as _pd
 import torch as _torch
 import xarray as _xr
 
-ArrayLike = Union[
-    List,
-    Tuple,
+ArrayLike = _Union[
+    _List,
+    _Tuple,
     _np.ndarray,
     _pd.Series,
     _pd.DataFrame,
     _xr.DataArray,
     _torch.tensor,
-    # _torch.Tensor,
 ]
 
 
@@ -39,7 +34,7 @@ def is_array_like(obj) -> bool:
     """Check if object is array-like."""
     return isinstance(
         obj,
-        (List, Tuple, _np.ndarray, _pd.Series, _pd.DataFrame, _xr.DataArray),
+        (_List, _Tuple, _np.ndarray, _pd.Series, _pd.DataFrame, _xr.DataArray),
     ) or _torch.is_tensor(obj)
 
 # EOF
