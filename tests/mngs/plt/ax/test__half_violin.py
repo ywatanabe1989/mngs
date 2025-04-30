@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-28 16:33:45 (ywatanabe)"
+# Timestamp: "2025-04-30 14:14:44 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/ax/test__half_violin.py
 # ----------------------------------------
 import os
@@ -9,15 +9,17 @@ __FILE__ = (
 )
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
-import matplotlib
-import numpy as np
-import matplotlib.pyplot as plt
 
+import matplotlib
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 from mngs.plt.ax._half_violin import half_violin
 
-class TestMainFunctionality:
- import pandas as pd
-   def setup_method(self):
+
+class TestHalfViolin:
+
+    def setup_method(self):
         # Setup test fixtures
         self.fig = plt.figure()
         self.ax = self.fig.add_subplot(111)
