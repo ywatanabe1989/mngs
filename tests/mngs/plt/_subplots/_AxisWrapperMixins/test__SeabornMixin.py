@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-29 21:12:44 (ywatanabe)"
+# Timestamp: "2025-04-30 11:49:34 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin.py
 # ----------------------------------------
 import os
@@ -11,7 +11,6 @@ __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
 import matplotlib
-
 import mngs
 import numpy as np
 import pandas as pd
@@ -32,8 +31,8 @@ def test_sns_barplot():
     # Visualization
     ax.set_xyt("Categories", "Values", "Seaborn Barplot Test")
     # Saving
-    spath = f"./sns_barplot_test.png"
-    mngs.io.save(fig, spath, symlink_from_cwd=True)
+    spath = f"./{__DIR__}/sns_barplot_test.png"
+    mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
     # Assertion
@@ -62,8 +61,8 @@ def test_sns_boxplot():
     # Visualization
     ax.set_xyt("Groups", "Values", "Seaborn Boxplot with Strip Test")
     # Saving
-    spath = f"./sns_boxplot_test.png"
-    mngs.io.save(fig, spath, symlink_from_cwd=True)
+    spath = f"./{__DIR__}/sns_boxplot_test.png"
+    mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
     # Assertion
@@ -84,8 +83,8 @@ def test_sns_heatmap():
     # Visualization
     ax.set_xyt("Features", "Features", "Seaborn Heatmap Test")
     # Saving
-    spath = f"./sns_heatmap_test.png"
-    mngs.io.save(fig, spath, symlink_from_cwd=True)
+    spath = f"./{__DIR__}/sns_heatmap_test.png"
+    mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
     # Assertion
@@ -103,8 +102,8 @@ def test_sns_heatmap_xyz():
     # Visualization
     ax.set_xyt("X", "Y", "Seaborn Heatmap with XYZ Test")
     # Saving
-    spath = f"./sns_heatmap_xyz_test.png"
-    mngs.io.save(fig, spath, symlink_from_cwd=True)
+    spath = f"./{__DIR__}/sns_heatmap_xyz_test.png"
+    mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
     # Assertion
@@ -131,8 +130,8 @@ def test_sns_histplot():
     # Visualization
     ax.set_xyt("Values", "Count", "Seaborn Histplot Test")
     # Saving
-    spath = f"./sns_histplot_test.png"
-    mngs.io.save(fig, spath, symlink_from_cwd=True)
+    spath = f"./{__DIR__}/sns_histplot_test.png"
+    mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
     # Assertion
@@ -159,8 +158,8 @@ def test_sns_kdeplot():
     # Visualization
     ax.set_xyt("Values", "Density", "Seaborn KDE Plot Test")
     # Saving
-    spath = f"./sns_kdeplot_test.png"
-    mngs.io.save(fig, spath, symlink_from_cwd=True)
+    spath = f"./{__DIR__}/sns_kdeplot_test.png"
+    mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
     # Assertion
@@ -185,8 +184,8 @@ def test_sns_scatterplot():
     # Visualization
     ax.set_xyt("X Values", "Y Values", "Seaborn Scatterplot Test")
     # Saving
-    spath = f"./sns_scatterplot_test.png"
-    mngs.io.save(fig, spath, symlink_from_cwd=True)
+    spath = f"./{__DIR__}/sns_scatterplot_test.png"
+    mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
     # Assertion
@@ -216,8 +215,8 @@ def test_sns_swarmplot():
     # Visualization
     ax.set_xyt("Groups", "Values", "Seaborn Swarmplot Test")
     # Saving
-    spath = f"./sns_swarmplot_test.png"
-    mngs.io.save(fig, spath, symlink_from_cwd=True)
+    spath = f"./{__DIR__}/sns_swarmplot_test.png"
+    mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
     # Assertion
@@ -248,8 +247,8 @@ def test_sns_stripplot():
     # Visualization
     ax.set_xyt("Groups", "Values", "Seaborn Stripplot Test")
     # Saving
-    spath = f"./sns_stripplot_test.png"
-    mngs.io.save(fig, spath, symlink_from_cwd=True)
+    spath = f"./{__DIR__}/sns_stripplot_test.png"
+    mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
     # Assertion
@@ -279,8 +278,8 @@ def test_sns_violinplot():
     # Visualization
     ax.set_xyt("Groups", "Values", "Seaborn Violinplot Test")
     # Saving
-    spath = f"./sns_violinplot_test.png"
-    mngs.io.save(fig, spath, symlink_from_cwd=True)
+    spath = f"./{__DIR__}/sns_violinplot_test.png"
+    mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
     # Assertion
@@ -309,8 +308,8 @@ def test_sns_violinplot_half():
     # Visualization
     ax.set_xyt("Groups", "Values", "Seaborn Half Violinplot Test")
     # Saving
-    spath = f"./sns_violinplot_half_test.png"
-    mngs.io.save(fig, spath, symlink_from_cwd=True)
+    spath = f"./{__DIR__}/sns_violinplot_half_test.png"
+    mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
     # Assertion
