@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-30 11:49:22 (ywatanabe)"
+# Timestamp: "2025-04-30 19:52:45 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__BasicPlotMixin.py
 # ----------------------------------------
 import os
@@ -15,6 +15,8 @@ import mngs
 import numpy as np
 
 matplotlib.use("agg")
+
+ACTUAL_SAVE_DIR = __FILE__.replace(".py", "_out")
 
 
 def test_imshow2d():
@@ -33,7 +35,8 @@ def test_imshow2d():
     # Closing
     mngs.plt.close(fig)
     # Assertion
-    assert os.path.exists(spath), f"Failed to save figure to {spath}"
+    actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
+    assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
 
 
 def test_imshow2d_xyz():
@@ -52,51 +55,53 @@ def test_imshow2d_xyz():
     # Closing
     mngs.plt.close(fig)
     # Assertion
-    assert os.path.exists(spath), f"Failed to save figure to {spath}"
+    actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
+    assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
 
 
-def test_plot_():
-    """Test plot_ function"""
-    # Figure
-    fig, ax = mngs.plt.subplots()
-    # Data
-    x = np.linspace(0, 10, 100)
-    y = np.sin(x)
-    # Plot
-    ax.plot_(data=x, yy=y, line="-", label="Sine Function")
-    # Visualization
-    ax.set_xyt("X axis", "Y axis", "Plot_ Test")
-    ax.legend()
-    # Saving
-    spath = f"./plot_test.png"
-    mngs.io.save(fig, spath, symlink_from_cwd=False)
-    # Closing
-    mngs.plt.close(fig)
-    # Assertion
-    assert os.path.exists(spath), f"Failed to save figure to {spath}"
-
-
-# def test_plot_with_fill():
-#     """Test plot_ function with fill"""
+# def test_plot_():
+#     """Test plot_ function"""
 #     # Figure
 #     fig, ax = mngs.plt.subplots()
 #     # Data
 #     x = np.linspace(0, 10, 100)
 #     y = np.sin(x)
 #     # Plot
-#     ax.plot_(
-#         xx=x, yy=y, line="-", fill="below", label="Sine Function with Fill"
-#     )
+#     ax.plot_(data=x, yy=y, line="-", label="Sine Function")
 #     # Visualization
-#     ax.set_xyt("X axis", "Y axis", "Plot_ with Fill Test")
+#     ax.set_xyt("X axis", "Y axis", "Plot_ Test")
 #     ax.legend()
 #     # Saving
-#     spath = f"./plot_with_fill_test.png"
+#     spath = f"./plot_test.png"
 #     mngs.io.save(fig, spath, symlink_from_cwd=False)
 #     # Closing
 #     mngs.plt.close(fig)
 #     # Assertion
-#     assert os.path.exists(spath), f"Failed to save figure to {spath}"
+#     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
+#     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+
+#     # def test_plot_with_fill():
+#     #     """Test plot_ function with fill"""
+#     #     # Figure
+#     #     fig, ax = mngs.plt.subplots()
+#     #     # Data
+#     #     x = np.linspace(0, 10, 100)
+#     #     y = np.sin(x)
+#     #     # Plot
+#     #     ax.plot_(
+#     #         xx=x, yy=y, line="-", fill="below", label="Sine Function with Fill"
+#     #     )
+#     #     # Visualization
+#     #     ax.set_xyt("X axis", "Y axis", "Plot_ with Fill Test")
+#     #     ax.legend()
+#     #     # Saving
+#     #     spath = f"./plot_with_fill_test.png"
+#     #     mngs.io.save(fig, spath, symlink_from_cwd=False)
+#     #     # Closing
+#     #     mngs.plt.close(fig)
+#     #     # Assertion
+#     #     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
+#     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
 
 
 def test_kde():
@@ -118,7 +123,8 @@ def test_kde():
     # Closing
     mngs.plt.close(fig)
     # Assertion
-    assert os.path.exists(spath), f"Failed to save figure to {spath}"
+    actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
+    assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
 
 
 def test_kde_cumulative():
@@ -138,7 +144,8 @@ def test_kde_cumulative():
     # Closing
     mngs.plt.close(fig)
     # Assertion
-    assert os.path.exists(spath), f"Failed to save figure to {spath}"
+    actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
+    assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
 
 
 def test_conf_mat():
@@ -162,7 +169,8 @@ def test_conf_mat():
     # Closing
     mngs.plt.close(fig)
     # Assertion
-    assert os.path.exists(spath), f"Failed to save figure to {spath}"
+    actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
+    assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
 
 
 def test_rectangle():
@@ -189,7 +197,8 @@ def test_rectangle():
     # Closing
     mngs.plt.close(fig)
     # Assertion
-    assert os.path.exists(spath), f"Failed to save figure to {spath}"
+    actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
+    assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
 
 
 def test_fillv():
@@ -209,7 +218,8 @@ def test_fillv():
     # Closing
     mngs.plt.close(fig)
     # Assertion
-    assert os.path.exists(spath), f"Failed to save figure to {spath}"
+    actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
+    assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
 
 
 def test_boxplot_():
@@ -232,7 +242,8 @@ def test_boxplot_():
     # Closing
     mngs.plt.close(fig)
     # Assertion
-    assert os.path.exists(spath), f"Failed to save figure to {spath}"
+    actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
+    assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
 
 
 def test_raster():
@@ -258,7 +269,8 @@ def test_raster():
     # Closing
     mngs.plt.close(fig)
     # Assertion
-    assert os.path.exists(spath), f"Failed to save figure to {spath}"
+    actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
+    assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
 
 
 def test_ecdf():
@@ -278,7 +290,8 @@ def test_ecdf():
     # Closing
     mngs.plt.close(fig)
     # Assertion
-    assert os.path.exists(spath), f"Failed to save figure to {spath}"
+    actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
+    assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
 
 
 def test_joyplot():
@@ -302,7 +315,9 @@ def test_joyplot():
     # Closing
     mngs.plt.close(fig)
     # Assertion
-    assert os.path.exists(spath), f"Failed to save figure to {spath}"
+    actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
+    assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+
 
 if __name__ == "__main__":
     import os
@@ -325,25 +340,25 @@ if __name__ == "__main__":
 # )
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
-# 
+#
 # THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_BasicPlotMixin.py"
-# 
+#
 # from functools import wraps
 # from typing import Any, Dict, List, Optional, Tuple, Union
-# 
+#
 # import matplotlib.pyplot as plt
 # import numpy as np
 # import pandas as pd
 # from scipy.stats import gaussian_kde
-# 
+#
 # from ....pd import to_xyz
 # from ....plt import ax as ax_module
 # from ....types import ArrayLike
-# 
-# 
+#
+#
 # class BasicPlotMixin:
 #     """Mixin class for basic plotting operations."""
-# 
+#
 #     @wraps(ax_module.imshow2d)
 #     def imshow2d(self, arr_2d: ArrayLike, **kwargs) -> None:
 #         method_name = "imshow2d"
@@ -357,7 +372,7 @@ if __name__ == "__main__":
 #         self._track(
 #             kwargs.get("track"), kwargs.get("id"), method_name, out, None
 #         )
-# 
+#
 #     @wraps(ax_module.plot_)
 #     def plot_(
 #         self,
@@ -386,7 +401,7 @@ if __name__ == "__main__":
 #         self._track(
 #             kwargs.get("track"), kwargs.get("id"), method_name, df, None
 #         )
-# 
+#
 #     # @wraps(ax_module.kde)
 #     def kde(self, data: ArrayLike, **kwargs) -> None:
 #         method_name = "kde"
@@ -399,21 +414,21 @@ if __name__ == "__main__":
 #         density /= density.sum()
 #         if kwargs.get("cumulative"):
 #             density = np.cumsum(density)
-# 
+#
 #         with self._no_tracking():
 #             if kwargs.get("fill"):
 #                 self._axis_mpl.fill_between(xs, density, **kwargs)
 #                 # self._axis_mpl.plot_(xs, density, **kwargs)
 #             else:
 #                 self.plot_(xx=xs, yy=density, label=kwargs.get("label"))
-# 
+#
 #         out = pd.DataFrame(
 #             {"x": xs, "kde": density, "n": [len(data) for _ in range(len(xs))]}
 #         )
 #         self._track(
 #             kwargs.get("track"), kwargs.get("id"), method_name, out, None
 #         )
-# 
+#
 #     # @wraps(ax_module.conf_mat)
 #     def conf_mat(
 #         self,
@@ -458,7 +473,7 @@ if __name__ == "__main__":
 #                 self._axis_mpl = out
 #         out = data, bacc_val
 #         self._track(track, id, method_name, out, None)
-# 
+#
 #     @wraps(ax_module.rectangle)
 #     def rectangle(
 #         self,
@@ -476,7 +491,7 @@ if __name__ == "__main__":
 #                 self._axis_mpl, xx, yy, width, height, **kwargs
 #             )
 #         self._track(track, id, method_name, None, None)
-# 
+#
 #     @wraps(ax_module.fillv)
 #     def fillv(
 #         self,
@@ -488,14 +503,14 @@ if __name__ == "__main__":
 #         id: Optional[str] = None,
 #         **kwargs,
 #     ) -> None:
-# 
+#
 #         method_name = "fillv"
 #         self._axis_mpl = ax_module.fillv(
 #             self._axis_mpl, starts, ends, color=color, alpha=alpha
 #         )
 #         out = (starts, ends)
 #         self._track(track, id, method_name, out, None)
-# 
+#
 #     # @wraps(ax_module.boxplot_)
 #     def boxplot_(
 #         self,
@@ -507,13 +522,13 @@ if __name__ == "__main__":
 #         method_name = "boxplot_"
 #         _data = data.copy()
 #         n = len(data)
-# 
+#
 #         if kwargs.get("label"):
 #             kwargs["label"] = kwargs["label"] + f" (n={n})"
-# 
+#
 #         with self._no_tracking():
 #             self._axis_mpl.boxplot(data, **kwargs)
-# 
+#
 #         out = pd.DataFrame(
 #             {
 #                 "data": _data,
@@ -521,7 +536,7 @@ if __name__ == "__main__":
 #             }
 #         )
 #         self._track(track, id, method_name, out, None)
-# 
+#
 #     # @wraps(ax_module.raster)
 #     def raster(
 #         self,
@@ -533,13 +548,13 @@ if __name__ == "__main__":
 #         id: Optional[str] = None,
 #         **kwargs,
 #     ) -> None:
-# 
+#
 #         method_name = "raster"
 #         if colors is None:
 #             colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
 #         if len(colors) < len(positions):
 #             colors = colors * (len(positions) // len(colors) + 1)
-# 
+#
 #         with self._no_tracking():
 #             for i, (pos, color) in enumerate(zip(positions, colors)):
 #                 label = (
@@ -550,17 +565,17 @@ if __name__ == "__main__":
 #                 self._axis_mpl.eventplot(
 #                     pos, colors=color, label=label, **kwargs
 #                 )
-# 
+#
 #             if labels is not None:
 #                 self._axis_mpl.legend()
-# 
+#
 #             df = ax_module.raster_plot(self._axis_mpl, positions, time=time)[1]
-# 
+#
 #         if id is not None:
 #             df.columns = [f"{id}_{method_name}_{col}" for col in df.columns]
 #         out = df
 #         self._track(track, id, method_name, out, None)
-# 
+#
 #     @wraps(ax_module.ecdf)
 #     def ecdf(
 #         self,
@@ -574,7 +589,7 @@ if __name__ == "__main__":
 #             self._axis_mpl, df = ax_module.ecdf(self._axis_mpl, data, **kwargs)
 #         out = df
 #         self._track(track, id, method_name, out, None)
-# 
+#
 #     @wraps(ax_module.joyplot)
 #     def joyplot(
 #         self,
@@ -588,8 +603,10 @@ if __name__ == "__main__":
 #             self._axis_mpl = ax_module.joyplot(self._axis_mpl, data, **kwargs)
 #         out = data
 #         self._track(track, id, method_name, out, None)
-# 
+#
 # # EOF
 # --------------------------------------------------------------------------------
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_BasicPlotMixin.py
 # --------------------------------------------------------------------------------
+
+# EOF
