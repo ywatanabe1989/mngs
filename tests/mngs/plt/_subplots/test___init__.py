@@ -58,20 +58,16 @@ if __name__ == "__main__":
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-04 00:55:34 (ywatanabe)"
-# # File: ./mngs_repo/src/mngs/plt/_subplots/__init__.py
-# 
-# #!./env/bin/python3
-# # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-06-10 23:24:25 (ywatanabe)"
-# # /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/__init__.py
-# 
-# #!/usr/bin/env python3
-# # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-10-22 19:51:47 (ywatanabe)"
-# # File: __init__.py
-# 
+# # Timestamp: "2025-04-29 12:10:34 (ywatanabe)"
+# # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/__init__.py
+# # ----------------------------------------
 # import os
+# __FILE__ = (
+#     "./src/mngs/plt/_subplots/__init__.py"
+# )
+# __DIR__ = os.path.dirname(__FILE__)
+# # ----------------------------------------
+# 
 # import importlib
 # import inspect
 # 
@@ -91,13 +87,63 @@ if __name__ == "__main__":
 #                     globals()[name] = obj
 # 
 # # Clean up temporary variables
-# del os, importlib, inspect, current_dir, filename, module_name, module, name, obj
+# del (
+#     os,
+#     importlib,
+#     inspect,
+#     current_dir,
+#     filename,
+#     module_name,
+#     module,
+#     name,
+#     obj,
+# )
 # 
-# # from ._Subplot_manager import subplots
+# # ################################################################################
+# # # For Matplotlib Compatibility
+# # ################################################################################
+# # import matplotlib.pyplot.subplots as counter_part
 # 
+# # _local_module_attributes = list(globals().keys())
+# # print(_local_module_attributes)
+# 
+# 
+# # def __getattr__(name):
+# #     """
+# #     Fallback to fetch attributes from matplotlib.pyplot
+# #     if they are not defined directly in this module.
+# #     """
+# #     try:
+# #         # Get the attribute from matplotlib.pyplot
+# #         return getattr(counter_part, name)
+# #     except AttributeError:
+# #         # Raise the standard error if not found in pyplot either
+# #         raise AttributeError(
+# #             f"module '{__name__}' nor matplotlib.pyplot has attribute '{name}'"
+# #         ) from None
+# 
+# 
+# # def __dir__():
+# #     """
+# #     Provide combined directory for tab completion, including
+# #     attributes from this module and matplotlib.pyplot.
+# #     """
+# #     # Get attributes defined explicitly in this module
+# #     local_attrs = set(_local_module_attributes)
+# #     # Get attributes from matplotlib.pyplot
+# #     pyplot_attrs = set(dir(counter_part))
+# #     # Return the sorted union
+# #     return sorted(local_attrs.union(pyplot_attrs))
+# 
+# 
+# """
+# import matplotlib.pyplot as plt
+# import mngs.plt as mplt
+# 
+# print(set(dir(mplt.subplots)) - set(dir(plt.subplots)))
+# """
 # 
 # # EOF
-
 # --------------------------------------------------------------------------------
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/__init__.py
 # --------------------------------------------------------------------------------
