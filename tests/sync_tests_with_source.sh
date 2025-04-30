@@ -1,6 +1,6 @@
 #!/bin/bash
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-28 16:17:45 (ywatanabe)"
+# Timestamp: "2025-04-29 21:21:42 (ywatanabe)"
 # File: ./tests/sync_tests_with_source.sh
 
 THIS_DIR="$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)"
@@ -198,6 +198,8 @@ cleanup_unnecessary_test_files() {
     find "$TESTS_DIR" -type d -name "*2024Y*" -exec rm -rf {} \; 2>/dev/null
     find "$TESTS_DIR" -type d -name "*2025Y*" -exec rm -rf {} \; 2>/dev/null
     find "$TESTS_DIR" -type d -name "*.py_out" -exec rm -rf {} \; 2>/dev/null
+    find "$TESTS_DIR" -type d -name "*__pycache__*" -exec rm -rf {} \; 2>/dev/null
+    find "$TESTS_DIR" -type d -name "*.pyc" -exec rm -rf {} \; 2>/dev/null
 }
 
 ########################################
@@ -218,6 +220,7 @@ main() {
     remove_hidden_test_files_and_dirs
     prepare_tests_structure_as_source
     chmod_python_source_scripts_as_executable
+    cleanup_unnecessary_test_files
 
     # Update tests with preferred order: test code -> pytest guard -> source comment
     find_files "$SRC_DIR" f "*.py" | while read -r src_file; do
