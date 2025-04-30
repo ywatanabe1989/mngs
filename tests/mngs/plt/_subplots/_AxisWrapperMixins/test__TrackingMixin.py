@@ -137,8 +137,8 @@ def test_reset_history(tracking_mixin_instance):
     assert instance._ax_history == {}
 
 
-def test_to_sigma_method(tracking_mixin_instance):
-    """Tests that to_sigma method correctly converts history to DataFrame."""
+def test_export_as_csv_method(tracking_mixin_instance):
+    """Tests that export_as_csv method correctly converts history to DataFrame."""
     # Setup
     instance = tracking_mixin_instance
     history_data = {
@@ -146,18 +146,18 @@ def test_to_sigma_method(tracking_mixin_instance):
     }
     instance._ax_history = history_data
 
-    # Mock the _to_sigma function
+    # Mock the _export_as_csv function
     expected_df = pd.DataFrame({"x": [1, 2, 3], "y": [4, 5, 6]})
 
     with patch(
-        "mngs.plt._subplots._AxisWrapperMixins._to_sigma.to_sigma",
+        "mngs.plt._subplots._AxisWrapperMixins._export_as_csv.export_as_csv",
         return_value=expected_df,
-    ) as mock_to_sigma:
+    ) as mock_export_as_csv:
         # Execute
-        result = instance.to_sigma()
+        result = instance.export_as_csv()
 
         # Verify
-        mock_to_sigma.assert_called_once_with(history_data)
+        mock_export_as_csv.assert_called_once_with(history_data)
         pd.testing.assert_frame_equal(result, expected_df)
 
 
@@ -190,17 +190,17 @@ def test_flat_property_with_multiple_axes(tracking_mixin_instance):
     assert flat_result is axis_list
 
 
-def test_to_sigma_with_none_result(tracking_mixin_instance):
-    """Tests that to_sigma returns empty DataFrame when _to_sigma returns None."""
+def test_export_as_csv_with_none_result(tracking_mixin_instance):
+    """Tests that export_as_csv returns empty DataFrame when _export_as_csv returns None."""
     # Setup
     instance = tracking_mixin_instance
 
     with patch(
-        "mngs.plt._subplots._AxisWrapperMixins._to_sigma.to_sigma",
+        "mngs.plt._subplots._AxisWrapperMixins._export_as_csv.export_as_csv",
         return_value=None,
-    ) as mock_to_sigma:
+    ) as mock_export_as_csv:
         # Execute
-        result = instance.to_sigma()
+        result = instance.export_as_csv()
 
         # Verify
         assert isinstance(result, pd.DataFrame)
@@ -218,8 +218,8 @@ if __name__ == "__main__":
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Timestamp: "2025-04-27 19:54:30 (ywatanabe)"
-# # File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_TrackingMixin.py
+# # Timestamp: "2025-04-29 16:37:35 (ywatanabe)"
+# # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_TrackingMixin.py
 # # ----------------------------------------
 # import os
 # __FILE__ = (
@@ -243,7 +243,7 @@ if __name__ == "__main__":
 # 
 # import pandas as pd
 # 
-# from .._to_sigma import to_sigma as _to_sigma
+# from .._export_as_csv import export_as_csv as _export_as_csv
 # 
 # 
 # class TrackingMixin:
@@ -292,19 +292,19 @@ if __name__ == "__main__":
 # 
 #     @property
 #     def flat(self):
-#         if isinstance(self.axis, list):
-#             return self.axis
+#         if isinstance(self._axis_mpl, list):
+#             return self._axis_mpl
 #         else:
-#             return [self.axis]
+#             return [self._axis_mpl]
 # 
 #     def reset_history(self):
 #         self._ax_history = {}
 # 
-#     def to_sigma(self):
+#     def export_as_csv(self):
 #         """
 #         Export tracked plotting data to a DataFrame in SigmaPlot format.
 #         """
-#         df = _to_sigma(self.history)
+#         df = _export_as_csv(self.history)
 # 
 #         return df if df is not None else pd.DataFrame()
 # 
@@ -343,9 +343,9 @@ if __name__ == "__main__":
 #     #     """Clears the plotting history."""
 #     #     self._ax_history = OrderedDict()
 # 
-#     # def to_sigma(self) -> pd.DataFrame:
+#     # def export_as_csv(self) -> pd.DataFrame:
 #     #     """Converts plotting history to a SigmaPlot-compatible DataFrame."""
-#     #     df = _to_sigma(self.history)
+#     #     df = _export_as_csv(self.history)
 #     #     return df if df is not None else pd.DataFrame()
 # 
 # # EOF
