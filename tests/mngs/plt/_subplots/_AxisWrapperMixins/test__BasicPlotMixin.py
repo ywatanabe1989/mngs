@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-29 21:12:37 (ywatanabe)"
+# Timestamp: "2025-04-30 11:49:22 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__BasicPlotMixin.py
 # ----------------------------------------
 import os
@@ -29,7 +29,7 @@ def test_imshow2d():
     ax.set_xyt("X", "Y", "Imshow2D Test")
     # Saving
     spath = f"./imshow2d_test.png"
-    mngs.io.save(fig, spath, symlink_from_cwd=True)
+    mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
     # Assertion
@@ -48,7 +48,7 @@ def test_imshow2d_xyz():
     ax.set_xyt("X", "Y", "Imshow2D with XYZ Test")
     # Saving
     spath = f"./imshow2d_xyz_test.png"
-    mngs.io.save(fig, spath, symlink_from_cwd=True)
+    mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
     # Assertion
@@ -69,7 +69,7 @@ def test_plot_():
     ax.legend()
     # Saving
     spath = f"./plot_test.png"
-    mngs.io.save(fig, spath, symlink_from_cwd=True)
+    mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
     # Assertion
@@ -92,7 +92,7 @@ def test_plot_():
 #     ax.legend()
 #     # Saving
 #     spath = f"./plot_with_fill_test.png"
-#     mngs.io.save(fig, spath, symlink_from_cwd=True)
+#     mngs.io.save(fig, spath, symlink_from_cwd=False)
 #     # Closing
 #     mngs.plt.close(fig)
 #     # Assertion
@@ -114,7 +114,7 @@ def test_kde():
     ax.legend()
     # Saving
     spath = f"./kde_test.png"
-    mngs.io.save(fig, spath, symlink_from_cwd=True)
+    mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
     # Assertion
@@ -134,7 +134,7 @@ def test_kde_cumulative():
     ax.legend()
     # Saving
     spath = f"./kde_cumulative_test.png"
-    mngs.io.save(fig, spath, symlink_from_cwd=True)
+    mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
     # Assertion
@@ -158,7 +158,7 @@ def test_conf_mat():
     )
     # Saving
     spath = f"./conf_mat_test.png"
-    mngs.io.save(fig, spath, symlink_from_cwd=True)
+    mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
     # Assertion
@@ -185,7 +185,7 @@ def test_rectangle():
     ax.legend()
     # Saving
     spath = f"./rectangle_test.png"
-    mngs.io.save(fig, spath, symlink_from_cwd=True)
+    mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
     # Assertion
@@ -205,7 +205,7 @@ def test_fillv():
     ax.set_xyt("X axis", "Y axis", "FillV Test")
     # Saving
     spath = f"./fillv_test.png"
-    mngs.io.save(fig, spath, symlink_from_cwd=True)
+    mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
     # Assertion
@@ -228,7 +228,7 @@ def test_boxplot_():
     ax.set_xyt("Groups", "Values", "Boxplot_ Test")
     # Saving
     spath = f"./boxplot_test.png"
-    mngs.io.save(fig, spath, symlink_from_cwd=True)
+    mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
     # Assertion
@@ -254,7 +254,7 @@ def test_raster():
     ax.set_xyt("Time (ms)", "Neuron", "Raster Plot Test")
     # Saving
     spath = f"./raster_test.png"
-    mngs.io.save(fig, spath, symlink_from_cwd=True)
+    mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
     # Assertion
@@ -274,7 +274,7 @@ def test_ecdf():
     ax.legend()
     # Saving
     spath = f"./ecdf_test.png"
-    mngs.io.save(fig, spath, symlink_from_cwd=True)
+    mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
     # Assertion
@@ -298,7 +298,7 @@ def test_joyplot():
     ax.set_xyt("Value", "", "Joyplot Test")
     # Saving
     spath = f"./joyplot_test.png"
-    mngs.io.save(fig, spath, symlink_from_cwd=True)
+    mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
     # Assertion
