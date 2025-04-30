@@ -1,47 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-29 13:17:58 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_export_as_csv.py
+# Timestamp: "2025-04-30 11:26:39 (ywatanabe)"
+# File: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots_dev/_export_as_csv.py
 # ----------------------------------------
 import os
 __FILE__ = (
-    "./src/mngs/plt/_subplots/_export_as_csv.py"
+    "./src/mngs/plt/_subplots_dev/_export_as_csv.py"
 )
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
-import matplotlib.pyplot as plt
+import mngs
 
-"""
-This script does XYZ.
-"""
-
-"""
-Imports
-"""
 import sys
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import xarray as xr
-
-# sys.path = ["."] + sys.path
-# from scripts import utils, load
-
-"""
-Warnings
-"""
-# warnings.simplefilter("ignore", UserWarning)
-
-"""
-Config
-"""
-# CONFIG = mngs.gen.load_configs()
-
-"""
-Functions & Classes
-"""
-import mngs
 
 
 def export_as_csv(history):
@@ -136,11 +112,15 @@ def format_plotting_args(record):
         x = args[0]
 
         # One box plot
-        if isinstance(x, np.ndarray) or mngs.gen.is_listed_X(x, [float, int]):
+        import mngs.gen.is_listed_X as mngs_gen_is_listed_X
+
+        if isinstance(x, np.ndarray) or mngs_gen_is_listed_X(x, [float, int]):
             df = pd.DataFrame(x)
 
         else:
             # Multiple boxes
+            import mngs.pd.force_df as mngs_pd_force_df
+
             df = mngs.pd.force_df({i_x: _x for i_x, _x in enumerate(x)})
         df.columns = [f"{id}_{method}_{col}_x" for col in df.columns]
         df = df.apply(lambda col: col.dropna().reset_index(drop=True))
