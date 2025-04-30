@@ -55,26 +55,26 @@ class TestFigWrapper:
         ax1.legend.assert_called_once_with(loc="upper right")
         ax2.legend.assert_called_once_with(loc="upper right")
 
-    def test_to_sigma_with_empty_axes(self):
+    def test_export_as_csv_with_empty_axes(self):
         # Test with no axes
         self.wrapper.axes = MagicMock()
         self.wrapper.axes.flat = []
 
-        result = self.wrapper.to_sigma()
+        result = self.wrapper.export_as_csv()
         assert isinstance(result, pd.DataFrame)
         assert result.empty
 
-    def test_to_sigma_with_data(self):
+    def test_export_as_csv_with_data(self):
         # Create mock axes with sigma data
         ax1 = MagicMock()
-        ax1.to_sigma.return_value = pd.DataFrame(
+        ax1.export_as_csv.return_value = pd.DataFrame(
             {"x": [1, 2, 3], "y": [4, 5, 6]}
         )
 
         self.wrapper.axes = MagicMock()
         self.wrapper.axes.flat = [ax1]
 
-        result = self.wrapper.to_sigma()
+        result = self.wrapper.export_as_csv()
         assert isinstance(result, pd.DataFrame)
         assert not result.empty
         assert "ax_00_x" in result.columns
@@ -131,77 +131,100 @@ if __name__ == "__main__":
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Timestamp: "2025-04-27 12:19:10 (ywatanabe)"
-# # File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_FigWrapper_v03.py
+# # Timestamp: "2025-04-29 20:33:58 (ywatanabe)"
+# # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots_dev/_FigWrapper.py
 # # ----------------------------------------
 # import os
 # __FILE__ = (
-#     "./src/mngs/plt/_subplots/_FigWrapper_v03.py"
+#     "./src/mngs/plt/_subplots_dev/_FigWrapper.py"
 # )
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
 # 
-# import warnings
 # from functools import wraps
 # 
 # import pandas as pd
 # 
 # 
 # class FigWrapper:
-#     def __init__(self, fig):
-#         self.fig = fig
-#         self.axes = []
+#     def __init__(self, fig_mpl):
+#         self._fig_mpl = fig_mpl
+#         self._last_saved_info = None
+#         self._not_saved_yet_flag = True
+#         self._called_from_mng_io_save = False
 # 
-#     def __getattr__(self, name):
-#         if hasattr(self.fig, name):
-#             orig = getattr(self.fig, name)
-#             if callable(orig):
+#     @property
+#     def figure(
+#         self,
+#     ):
+#         return self._fig_mpl
 # 
-#                 @wraps(orig)
-#                 def wrapper(*args, **kwargs):
-#                     return orig(*args, **kwargs)
+#     def __getattr__(self, attr):
+#         print(f"Attribute of FigWrapper: {attr}")
+#         attr_mpl = getattr(self._fig_mpl, attr)
 # 
-#                 return wrapper
-#             return orig
+#         if callable(attr_mpl):
 # 
-#         warnings.warn(
-#             f"MNGS FigWrapper: '{name}' not implemented, ignored.",
-#             UserWarning,
-#         )
+#             @wraps(attr_mpl)
+#             def wrapper(*args, track=None, id=None, **kwargs):
+#                 results = attr_mpl(*args, **kwargs)
+#                 # self._track(track, id, attr, args, kwargs)
+#                 return results
 # 
-#         def dummy(*args, **kwargs):
-#             return None
+#             return wrapper
 # 
-#         return dummy
+#         else:
+#             return attr_mpl
 # 
-#     def legend(self, loc="upper left"):
-#         for ax in self.axes:
-#             try:
-#                 ax.legend(loc=loc)
-#             except:
-#                 pass
+#     # def __dir__(self):
+#     #     # Combine attributes from both self and the wrapped matplotlib figure
+#     #     attrs = set(dir(self.__class__))
+#     #     attrs.update(object.__dir__(self))
+#     #     attrs.update(dir(self._fig_mpl))
+#     #     return sorted(attrs)
 # 
-#     def to_sigma(self):
+#     # def savefig(self, fname, *args, **kwargs):
+#     #     if not self._called_from_mng_io_save:
+#     #         warnings.warn(
+#     #             f"Instead of `FigWrapper.savefig({fname})`, use `mngs.io.save(fig, {fname}, symlink_from_cwd=True)` to handle symlink and export as csv.",
+#     #             UserWarning,
+#     #         )
+#     #         self._called_from_mng_io_save = False
+#     #     self._fig_mpl.savefig(fname, *args, **kwargs)
+# 
+#     def export_as_csv(self):
+#         """Export plotted data from all axes."""
 #         dfs = []
 #         for ii, ax in enumerate(self.axes.flat):
-#             if hasattr(ax, "to_sigma"):
-#                 df = ax.to_sigma()
+#             if hasattr(ax, "export_as_csv"):
+#                 df = ax.export_as_csv()
 #                 if not df.empty:
 #                     df.columns = [f"ax_{ii:02d}_{col}" for col in df.columns]
 #                     dfs.append(df)
+# 
 #         return pd.concat(dfs, axis=1) if dfs else pd.DataFrame()
 # 
-#     def supxyt(self, x=False, y=False, t=False):
-#         if x is not False:
-#             self.fig.supxlabel(x)
-#         if y is not False:
-#             self.fig.supylabel(y)
-#         if t is not False:
-#             self.fig.suptitle(t)
-#         return self.fig
+#     def legend(self, *args, loc="upper left", **kwargs):
+#         """Legend with upper left by default."""
+#         for ax in self.axes:
+#             try:
+#                 ax.legend(*args, loc=loc, **kwargs)
+#             except:
+#                 pass
 # 
-#     def tight_layout(self, rect=[0, 0.03, 1, 0.95]):
-#         self.fig.tight_layout(rect=rect)
+#     def supxyt(self, x=False, y=False, t=False):
+#         """Wrapper for supxlabel, supylabel, and suptitle"""
+#         if x is not False:
+#             self._fig_mpl.supxlabel(x)
+#         if y is not False:
+#             self._fig_mpl.supylabel(y)
+#         if t is not False:
+#             self._fig_mpl.suptitle(t)
+#         return self._fig_mpl
+# 
+#     def tight_layout(self, *, rect=[0, 0.03, 1, 0.95], **kwargs):
+#         """Wrapper for tight_layout with rect=[0, 0.03, 1, 0.95] by default"""
+#         self._fig_mpl.tight_layout(rect=rect, **kwargs)
 # 
 # # EOF
 # --------------------------------------------------------------------------------
