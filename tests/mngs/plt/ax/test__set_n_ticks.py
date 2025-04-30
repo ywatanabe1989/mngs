@@ -112,8 +112,17 @@ if __name__ == "__main__":
 # --------------------------------------------------------------------------------
 # Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/ax/_set_n_ticks.py
 # --------------------------------------------------------------------------------
-# #!/usr/bin/env python
-# 
+# #!/usr/bin/env python3
+# # -*- coding: utf-8 -*-
+# # Timestamp: "2025-04-29 12:02:14 (ywatanabe)"
+# # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_set_n_ticks.py
+# # ----------------------------------------
+# import os
+# __FILE__ = (
+#     "./src/mngs/plt/ax/_set_n_ticks.py"
+# )
+# __DIR__ = os.path.dirname(__FILE__)
+# # ----------------------------------------
 # 
 # import matplotlib
 # 
@@ -138,7 +147,8 @@ if __name__ == "__main__":
 #     ax.figure.canvas.draw()
 # 
 #     return ax
-
+# 
+# # EOF
 # --------------------------------------------------------------------------------
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/ax/_set_n_ticks.py
 # --------------------------------------------------------------------------------
