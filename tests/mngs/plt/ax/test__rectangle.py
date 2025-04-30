@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-28 16:38:57 (ywatanabe)"
+# Timestamp: "2025-05-01 08:44:17 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/ax/test__rectangle.py
 # ----------------------------------------
 import os
@@ -9,6 +9,7 @@ __FILE__ = (
 )
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
+
 import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
@@ -110,6 +111,7 @@ class TestMainFunctionality:
         assert patch.get_width() == -1
         assert patch.get_height() == -1
 
+
 if __name__ == "__main__":
     import os
 
@@ -124,39 +126,39 @@ if __name__ == "__main__":
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-04-15 18:55:49"
 # # Author: Yusuke Watanabe (ywata1989@gmail.com)
-# 
+#
 # """
 # This script does XYZ.
 # """
-# 
+#
 # import sys
-# 
+#
 # import matplotlib.pyplot as plt
-# 
+#
 # # Imports
 # import mngs
 # from matplotlib.patches import Rectangle
-# 
-# 
+#
+#
 # # Functions
 # def rectangle(ax, xx, yy, ww, hh, **kwargs):
 #     ax.add_patch(Rectangle((xx, yy), ww, hh, **kwargs))
 #     return ax
-# 
-# 
+#
+#
 # # (YOUR AWESOME CODE)
-# 
+#
 # if __name__ == "__main__":
 #     # Start
 #     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt)
-# 
+#
 #     # (YOUR AWESOME CODE)
-# 
+#
 #     # Close
 #     mngs.gen.close(CONFIG)
-# 
+#
 # # EOF
-# 
+#
 # """
 # /ssh:ywatanabe@444:/home/ywatanabe/proj/entrance/mngs/plt/ax/_rectangle.py
 # """
@@ -164,3 +166,5 @@ if __name__ == "__main__":
 # --------------------------------------------------------------------------------
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/ax/_rectangle.py
 # --------------------------------------------------------------------------------
+
+# EOF
