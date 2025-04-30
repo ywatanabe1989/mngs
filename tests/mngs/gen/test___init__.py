@@ -12,14 +12,21 @@ if __name__ == "__main__":
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
+# # Timestamp: "2025-04-29 12:39:49 (ywatanabe)"
+# # File: /home/ywatanabe/proj/mngs_repo/src/mngs/gen/__init__.py
+# # ----------------------------------------
+# import os
+# __FILE__ = (
+#     "./src/mngs/gen/__init__.py"
+# )
+# __DIR__ = os.path.dirname(__FILE__)
+# # ----------------------------------------
 # # Time-stamp: "ywatanabe (2024-11-08 01:12:16)"
 # # File: ./mngs/src/mngs/gen/__init__.py
 # 
-# #!/usr/bin/env python3
 # 
 # """Gen utility functions and classes for the MNGS project."""
 # 
-# import os
 # import importlib
 # import inspect
 # 
@@ -42,7 +49,6 @@ if __name__ == "__main__":
 # del os, importlib, inspect, current_dir, filename, module_name, module, name, obj
 # 
 # # EOF
-
 # --------------------------------------------------------------------------------
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/gen/__init__.py
 # --------------------------------------------------------------------------------
