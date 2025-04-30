@@ -12,8 +12,8 @@ if __name__ == "__main__":
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Timestamp: "2025-04-27 10:51:41 (ywatanabe)"
-# # File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/io/_save.py
+# # Timestamp: "2025-04-29 14:38:43 (ywatanabe)"
+# # File: /home/ywatanabe/proj/mngs_repo/src/mngs/io/_save.py
 # # ----------------------------------------
 # import os
 # __FILE__ = (
@@ -238,20 +238,10 @@ if __name__ == "__main__":
 #     no_csv=False,
 #     **kwargs,
 # ):
+# 
 #     # csv
 #     if spath.endswith(".csv"):
 #         _save_csv(obj, spath, **kwargs)
-#         # if isinstance(obj, (pd.Series, pd.DataFrame)):
-#         #     obj.to_csv(spath, **kwargs)
-# 
-#         # if is_listed_X(obj, [int, float]):
-#         #     _save_listed_scalars_as_csv(
-#         #         obj,
-#         #         spath,
-#         #         **kwargs,
-#         #     )
-#         # if is_listed_X(obj, pd.DataFrame):
-#         #     _save_listed_dfs_as_csv(obj, spath, **kwargs)
 # 
 #     # numpy
 #     elif spath.endswith(".npy"):
@@ -311,14 +301,15 @@ if __name__ == "__main__":
 #             if not no_csv:
 #                 ext_wo_dot = ext.replace(".", "")
 #                 save(
-#                     obj.to_sigma(),
+#                     obj.export_as_csv(),
 #                     spath.replace(ext_wo_dot, "csv"),
 #                     symlink_from_cwd=symlink_from_cwd,
 #                     dry_run=dry_run,
 #                     **kwargs,
 #                 )
 #         except Exception as e:
-#             print(e)
+#             pass
+#             # print(e)
 # 
 #     # mp4
 #     elif spath.endswith(".mp4"):
@@ -379,8 +370,65 @@ if __name__ == "__main__":
 #             print(color_text(f"\nSaved to: {spath} ({file_size})", c="yellow"))
 # 
 # 
+# # def _save_csv(obj, spath: str, **kwargs) -> None:
+# #     """Handle various input types for CSV saving."""
+# #     if isinstance(obj, (pd.Series, pd.DataFrame)):
+# #         obj.to_csv(spath, **kwargs)
+# #     elif isinstance(obj, np.ndarray):
+# #         pd.DataFrame(obj).to_csv(spath, **kwargs)
+# #     elif isinstance(obj, (int, float)):
+# #         pd.DataFrame([obj]).to_csv(spath, index=False, **kwargs)
+# #     elif isinstance(obj, (list, tuple)):
+# #         if all(isinstance(x, (int, float)) for x in obj):
+# #             pd.DataFrame(obj).to_csv(spath, index=False, **kwargs)
+# #         elif all(isinstance(x, pd.DataFrame) for x in obj):
+# #             pd.concat(obj).to_csv(spath, **kwargs)
+# #         else:
+# #             pd.DataFrame({"data": obj}).to_csv(spath, index=False, **kwargs)
+# #     elif isinstance(obj, dict):
+# #         pd.DataFrame.from_dict(obj).to_csv(spath, **kwargs)
+# #     else:
+# #         try:
+# #             pd.DataFrame({"data": [obj]}).to_csv(spath, index=False, **kwargs)
+# #         except:
+# #             raise ValueError(f"Unable to save type {type(obj)} as CSV")
+# 
+# 
 # def _save_csv(obj, spath: str, **kwargs) -> None:
 #     """Handle various input types for CSV saving."""
+#     # Check if path already exists
+#     if os.path.exists(spath):
+#         # Calculate hash of new data
+#         data_hash = None
+# 
+#         # Process based on type
+#         if isinstance(obj, (pd.Series, pd.DataFrame)):
+#             data_hash = hash(obj.to_string())
+#         elif isinstance(obj, np.ndarray):
+#             data_hash = hash(pd.DataFrame(obj).to_string())
+#         else:
+#             # For other types, create a string representation and hash it
+#             try:
+#                 data_str = str(obj)
+#                 data_hash = hash(data_str)
+#             except:
+#                 # If we can't hash it, proceed with saving
+#                 pass
+# 
+#         # Compare with existing file if hash calculation was successful
+#         if data_hash is not None:
+#             try:
+#                 existing_df = pd.read_csv(spath)
+#                 existing_hash = hash(existing_df.to_string())
+# 
+#                 # Skip if hashes match
+#                 if existing_hash == data_hash:
+#                     return
+#             except:
+#                 # If reading fails, proceed with saving
+#                 pass
+# 
+#     # Save the file based on type
 #     if isinstance(obj, (pd.Series, pd.DataFrame)):
 #         obj.to_csv(spath, **kwargs)
 #     elif isinstance(obj, np.ndarray):
