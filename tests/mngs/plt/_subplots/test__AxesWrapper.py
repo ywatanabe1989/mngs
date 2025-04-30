@@ -103,17 +103,17 @@ class TestAxesWrapper:
         # Test shape property
         assert self.wrapper.shape == (1, 2)
 
-    def test_to_sigma(self):
-        # Set up to_sigma on both axes
-        self.ax1.to_sigma = MagicMock(
+    def test_export_as_csv(self):
+        # Set up export_as_csv on both axes
+        self.ax1.export_as_csv = MagicMock(
             return_value=pd.DataFrame({"x1": [1, 2, 3], "y1": [4, 5, 6]})
         )
-        self.ax2.to_sigma = MagicMock(
+        self.ax2.export_as_csv = MagicMock(
             return_value=pd.DataFrame({"x2": [7, 8, 9], "y2": [10, 11, 12]})
         )
 
-        # Call to_sigma on wrapper
-        result = self.wrapper.to_sigma()
+        # Call export_as_csv on wrapper
+        result = self.wrapper.export_as_csv()
 
         # Check the result
         assert isinstance(result, pd.DataFrame)
@@ -136,8 +136,8 @@ if __name__ == "__main__":
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Timestamp: "2025-04-27 19:52:56 (ywatanabe)"
-# # File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxesWrapper.py
+# # Timestamp: "2025-04-29 19:56:30 (ywatanabe)"
+# # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxesWrapper.py
 # # ----------------------------------------
 # import os
 # __FILE__ = (
@@ -146,83 +146,77 @@ if __name__ == "__main__":
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
 # 
-# #!/usr/bin/env python3
-# # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-13 14:53:28 (ywatanabe)"
-# # File: ./mngs_repo/src/mngs/plt/_subplots/_AxisWrapper.py
-# 
-# import warnings
-# from functools import wraps
-# 
 # import pandas as pd
 # 
 # 
 # class AxesWrapper:
-#     def __init__(self, fig, axes):
-#         self.fig = fig
-#         self.axes = axes
+#     def __init__(self, fig_mngs, axes_mngs):
+#         self._fig_mngs = fig_mngs
+#         self._axes_mngs = axes_mngs
 # 
 #     def get_figure(self):
-#         return self.fig
+#         return self._fig_mngs
 # 
-#     def __getattr__(self, name):
-#         methods = []
-#         try:
-#             for axis in self.axes.flat:
-#                 methods.append(getattr(axis, name))
-#         except Exception:
-#             methods = []
+#     # def __getattr__(self, name):
+#     #     print(f"Attribute of AxesWrapper: {name}")
+#     #     methods = []
+#     #     try:
+#     #         for axis in self._axes_mngs.flat:
+#     #             methods.append(getattr(axis, name))
+#     #     except Exception:
+#     #         methods = []
 # 
-#         if methods and all(callable(m) for m in methods):
+#     #     if methods and all(callable(m) for m in methods):
 # 
-#             @wraps(methods[0])
-#             def wrapper(*args, **kwargs):
-#                 return [
-#                     getattr(ax, name)(*args, **kwargs) for ax in self.axes.flat
-#                 ]
+#     #         @wraps(methods[0])
+#     #         def wrapper(*args, **kwargs):
+#     #             return [
+#     #                 getattr(ax, name)(*args, **kwargs)
+#     #                 for ax in self._axes_mngs.flat
+#     #             ]
 # 
-#             return wrapper
+#     #         return wrapper
 # 
-#         if methods and not callable(methods[0]):
-#             return methods
+#     #     if methods and not callable(methods[0]):
+#     #         return methods
 # 
-#         warnings.warn(
-#             f"MNGS AxesWrapper: '{name}' not implemented, ignored.",
-#             UserWarning,
-#         )
+#     #     warnings.warn(
+#     #         f"MNGS AxesWrapper: '{name}' not implemented, ignored.",
+#     #         UserWarning,
+#     #     )
 # 
-#         def dummy(*args, **kwargs):
-#             return None
+#     #     def dummy(*args, **kwargs):
+#     #         return None
 # 
-#         return dummy
+#     #     return dummy
 # 
 #     def __getitem__(self, index):
-#         subset = self.axes[index]
+#         subset = self._axes_mngs[index]
 #         if isinstance(index, slice):
-#             return AxesWrapper(self.fig, subset)
+#             return AxesWrapper(self._fig_mngs, subset)
 #         return subset
 # 
 #     def __iter__(self):
-#         return iter(self.axes.flat)
+#         return iter(self._axes_mngs.flat)
 # 
 #     def __len__(self):
-#         return self.axes.size
+#         return self._axes_mngs.size
 # 
 #     def legend(self, loc="upper left"):
-#         return [ax.legend(loc=loc) for ax in self.axes.flat]
+#         return [ax.legend(loc=loc) for ax in self._axes_mngs.flat]
 # 
 #     @property
 #     def history(self):
-#         return [ax.history for ax in self.axes.flat]
+#         return [ax.history for ax in self._axes_mngs.flat]
 # 
 #     @property
 #     def shape(self):
-#         return self.axes.shape
+#         return self._axes_mngs.shape
 # 
-#     def to_sigma(self):
+#     def export_as_csv(self):
 #         dfs = []
-#         for ii, ax in enumerate(self.axes.flat):
-#             df = ax.to_sigma()
+#         for ii, ax in enumerate(self._axes_mngs.flat):
+#             df = ax.export_as_csv()
 #             df.columns = [f"ax_{ii:02d}_{col}" for col in df.columns]
 #             dfs.append(df)
 #         return pd.concat(dfs, axis=1) if dfs else pd.DataFrame()
