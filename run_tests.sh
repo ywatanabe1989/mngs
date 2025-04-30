@@ -1,6 +1,6 @@
 #!/bin/bash
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-30 14:10:59 (ywatanabe)"
+# Timestamp: "2025-04-30 14:34:43 (ywatanabe)"
 # File: ./run_tests.sh
 
 THIS_DIR="$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)"
@@ -22,7 +22,8 @@ N_WORKERS=$(nproc)
 if [ $? -ne 0 ]; then
     N_WORKERS=$(sysctl -n hw.ncpu 2>/dev/null || echo 1)
 fi
-N_WORKERS=$((N_WORKERS * 3 / 4))  # Use 75% of cores
+# N_WORKERS=$((N_WORKERS * 2 / 4))  # Use 50% of cores
+N_WORKERS=1
 N_RUNS=1
 
 
