@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-30 14:56:14 (ywatanabe)"
+# Timestamp: "2025-05-01 09:18:26 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_batch_fn.py
 # ----------------------------------------
 import os
@@ -9,9 +9,9 @@ __FILE__ = (
 )
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
+from typing import Any as _Any
 
 from functools import wraps
-from typing import Any as _Any
 from typing import Callable
 
 import torch
