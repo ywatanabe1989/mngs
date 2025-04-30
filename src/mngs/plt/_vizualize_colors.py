@@ -1,67 +1,19 @@
-#!./env/bin/python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-07-10 10:33:54 (ywatanabe)"
-# ./src/mngs/plt/_check_colors.py
-
-
-"""
-This script does XYZ.
-"""
-
-
-"""
-Imports
-"""
+# Timestamp: "2025-04-30 21:20:46 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/_vizualize_colors.py
+# ----------------------------------------
 import os
-import re
+__FILE__ = (
+    "./src/mngs/plt/_vizualize_colors.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
+
 import sys
 
-import matplotlib
 import matplotlib.pyplot as plt
-import seaborn as sns
-import importlib
-
-import mngs
-
-importlib.reload(mngs)
-
 import numpy as np
-import pandas as pd
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-from icecream import ic
-from natsort import natsorted
-from glob import glob
-from pprint import pprint
-import warnings
-import logging
-from tqdm import tqdm
-import xarray as xr
-
-# sys.path = ["."] + sys.path
-# from scripts import utils, load
-
-"""
-Warnings
-"""
-# warnings.simplefilter("ignore", UserWarning)
-
-
-"""
-Config
-"""
-# CONFIG = mngs.gen.load_configs()
-
-
-"""
-Functions & Classes
-"""
-
-
-def main():
-    vizualize_colors(CC)
-    pass
 
 
 def vizualize_colors(colors):
@@ -72,7 +24,9 @@ def vizualize_colors(colors):
         s = np.random.randn(size)
         return x, y, s
 
-    fig, axes = mngs.plt.subplots(ncols=4)
+    from . import subplots as mngs_plt_subplots
+
+    fig, axes = mngs_plt_subplots(ncols=4)
 
     for ii, (color_str, rgba) in enumerate(colors.items()):
         xx, yy, ss = gen_rand_sample()
@@ -98,13 +52,14 @@ def vizualize_colors(colors):
 
 
 if __name__ == "__main__":
+    import mngs
+
     # # Argument Parser
     # import argparse
     # parser = argparse.ArgumentParser(description='')
     # parser.add_argument('--var', '-v', type=int, default=1, help='')
     # parser.add_argument('--flag', '-f', action='store_true', default=False, help='')
     # args = parser.parse_args()
-
     # Main
     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
         sys, plt, verbose=False
