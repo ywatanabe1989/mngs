@@ -12,15 +12,16 @@ if __name__ == "__main__":
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-06 00:01:06 (ywatanabe)"
-# # File: ./mngs_repo/src/mngs/plt/__init__.py
-# 
-# #!/usr/bin/env python3
-# # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-10-22 19:51:47 (ywatanabe)"
-# # File: __init__.py
-# 
+# # Timestamp: "2025-04-29 20:41:53 (ywatanabe)"
+# # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/__init__.py
+# # ----------------------------------------
 # import os
+# __FILE__ = (
+#     "./src/mngs/plt/__init__.py"
+# )
+# __DIR__ = os.path.dirname(__FILE__)
+# # ----------------------------------------
+# 
 # import importlib
 # import inspect
 # 
@@ -42,126 +43,60 @@ if __name__ == "__main__":
 # # Clean up temporary variables
 # del os, importlib, inspect, current_dir, filename, module_name, module, name, obj
 # 
-# from ._subplots._SubplotsManager import subplots
+# from ._subplots._SubplotsWrapper import subplots
 # from ._PARAMS import PARAMS
 # from . import ax
-# # EOF
+# from ._close import close
 # 
-# # #!/usr/bin/env python3
+# ################################################################################
+# # For Matplotlib Compatibility
+# ################################################################################
+# import matplotlib.pyplot as _counter_part
+# _local_module_attributes = list(globals().keys())
 # 
-# # try:
-# #     from ._PARAMS import PARAMS
-# # except ImportError as e:
-# #     warnings.warn(f"Warning: Failed to import PARAMS from ._PARAMS.")
+# def __getattr__(name):
+#     """
+#     Fallback to fetch attributes from matplotlib.pyplot
+#     if they are not defined directly in this module.
+#     """
+#     try:
+#         # Get the attribute from matplotlib.pyplot
+#         return getattr(_counter_part, name)
+#     except AttributeError:
+#         # Raise the standard error if not found in pyplot either
+#         raise AttributeError(
+#             f"module '{__name__}' nor matplotlib.pyplot has attribute '{name}'"
+#         ) from None
 # 
-# # _ = None
+# def __dir__():
+#     """
+#     Provide combined directory for tab completion, including
+#     attributes from this module and matplotlib.pyplot.
+#     """
+#     # Get attributes defined explicitly in this module
+#     local_attrs = set(_local_module_attributes)
+#     # Get attributes from matplotlib.pyplot
+#     pyplot_attrs = set(dir(_counter_part))
+#     # Return the sorted union
+#     return sorted(local_attrs.union(pyplot_attrs))
 # 
-# # try:
-# #     from . import ax
-# # except ImportError as e:
-# #     warnings.warn(f"Warning: Failed to import ax.")
+# """
+# import matplotlib.pyplot as _counter_part
+# import mngs.plt as mplt
 # 
-# # try:
-# #     from ._add_hue import add_hue
-# # except ImportError as e:
-# #     warnings.warn(f"Warning: Failed to import add_hue from ._add_hue.")
+# set(dir(mplt)) - set(dir(_counter_part))
+# set(dir(_counter_part))
 # 
-# # try:
-# #     from ._annotated_heatmap import annotated_heatmap
-# # except ImportError as e:
-# #     warnings.warn(f"Warning: Failed to import annotated_heatmap from ._annotated_heatmap.")
+# mplt.yticks
 # 
-# # try:
-# #     from ._colors import (
-# #         cycle_color,
-# #         rgb2rgba,
-# #         rgba2hex,
-# #         to_hex,
-# #         to_rgb,
-# #         to_rgba,
-# #         update_alpha,
-# #         gradiate_color,
-# #     )
-# # except ImportError as e:
-# #     warnings.warn(f"Warning: Failed to import from ._colors.")
-# 
-# # try:
-# #     from ._configure_mpl import configure_mpl
-# # except ImportError as e:
-# #     warnings.warn(f"Warning: Failed to import configure_mpl from ._configure_mpl.")
-# 
-# # try:
-# #     from ._draw_a_cube import draw_a_cube
-# # except ImportError as e:
-# #     warnings.warn(f"Warning: Failed to import draw_a_cube from ._draw_a_cube.")
-# 
-# # try:
-# #     from ._get_RGBA_from_colormap import get_RGBA_from_colormap
-# # except ImportError as e:
-# #     warnings.warn(f"Warning: Failed to import get_RGBA_from_colormap from ._get_RGBA_from_colormap.")
-# 
-# # try:
-# #     from ._grid_image import grid_image
-# # except ImportError as e:
-# #     warnings.warn(f"Warning: Failed to import grid_image from ._grid_image.")
-# 
-# # try:
-# #     from ._interp_colors import interp_colors
-# # except ImportError as e:
-# #     warnings.warn(f"Warning: Failed to import interp_colors from ._interp_colors.")
-# 
-# # try:
-# #     from ._mk_colorbar import mk_colorbar
-# # except ImportError as e:
-# #     warnings.warn(f"Warning: Failed to import mk_colorbar from ._mk_colorbar.")
-# 
-# # try:
-# #     from ._mk_patches import mk_patches
-# # except ImportError as e:
-# #     warnings.warn(f"Warning: Failed to import mk_patches from ._mk_patches.")
-# 
-# # try:
-# #     from ._subplots._SubplotsManager import subplots
-# # except ImportError as e:
-# #     warnings.warn(f"Warning: Failed to import subplots from ._subplots._SubplotsManager.")
-# 
-# # try:
-# #     from ._tpl import termplot
-# # except ImportError as e:
-# #     warnings.warn(f"Warning: Failed to import termplot from ._tpl.")
-# 
-# # # #!/usr/bin/env python3
-# 
-# # # # from . import colors
-# # # from ._PARAMS import PARAMS
-# 
-# # # _ = None
-# # # from . import ax
-# # # from ._add_hue import add_hue
-# # # from ._annotated_heatmap import annotated_heatmap
-# # # from ._colors import (
-# # #     cycle_color,
-# # #     rgb2rgba,
-# # #     rgba2hex,
-# # #     to_hex,
-# # #     to_rgb,
-# # #     to_rgba,
-# # #     update_alpha,
-# # #     gradiate_color,
-# # # )
-# # # from ._configure_mpl import configure_mpl
-# # # from ._draw_a_cube import draw_a_cube
-# # # from ._get_RGBA_from_colormap import get_RGBA_from_colormap
-# # # from ._grid_image import grid_image
-# # # from ._interp_colors import interp_colors
-# # # from ._mk_colorbar import mk_colorbar
-# # # from ._mk_patches import mk_patches
-# # # from ._subplots._SubplotsManager import subplots
-# # # from ._tpl import termplot
-# 
+# is_compatible = np.all([kk in set(dir(mplt)) for kk in set(dir(_counter_part))])
+# if is_compatible:
+#     print(f"{mplt.__name__} is compatible with {_counter_part.__name__}")
+# else:
+#     print(f"{mplt.__name__} is incompatible with {_counter_part.__name__}")
+# """
 # 
 # # EOF
-
 # --------------------------------------------------------------------------------
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/__init__.py
 # --------------------------------------------------------------------------------
