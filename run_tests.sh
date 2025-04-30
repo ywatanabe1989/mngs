@@ -1,6 +1,6 @@
 #!/bin/bash
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-28 16:11:58 (ywatanabe)"
+# Timestamp: "2025-04-30 14:10:59 (ywatanabe)"
 # File: ./run_tests.sh
 
 THIS_DIR="$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)"
@@ -87,6 +87,27 @@ parse_args() {
     done
 }
 
+
+
+check_existing_runtests_processes() {
+    # Get only processes that contain run_tests.sh in the command, excluding grep itself and the current process
+    existing_processes=$(ps aux | grep "run_tests.sh" | grep -v "grep" | grep -v $$ | awk '{print $2}')
+
+    if [ -n "$existing_processes" ]; then
+        echo "Found existing run_tests.sh processes:"
+        for pid in $existing_processes; do
+            # Double check if process actually exists
+            if ps -p $pid > /dev/null; then
+                echo "PID: $pid"
+                return 1
+            fi
+        done
+    fi
+
+    # No legitimate processes found
+    return 0
+}
+
 clear_cache() {
     echo "Cleaning Python cache..."
     find . -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
@@ -100,6 +121,18 @@ sync_tests_with_source() {
 
 run_tests() {
     PYTEST_ARGS="-c $PYTEST_INI_PATH"
+
+    cat "$PYTEST_INI_PATH" | tee -a "$LOG_PATH_TMP"
+
+    # PYTEST_ARGS="$PYTEST_ARGS --no-header --no-summary -q"
+    # # Add these options for simpler output
+    # PYTEST_ARGS="$PYTEST_ARGS --no-header --no-summary -q"
+
+    # # Only show failures
+    # PYTEST_ARGS="$PYTEST_ARGS -xvs"
+
+    # # For even more concise output, add this
+    # PYTEST_ARGS="$PYTEST_ARGS --tb=short"
 
     # Timestamp
     date | tee -a "$LOG_PATH_TMP" 2>&1
@@ -116,10 +149,10 @@ run_tests() {
         PYTEST_ARGS="$PYTEST_ARGS -n $N_WORKERS"
     fi
 
-    # VERBOSE
-    if [[ $VERBOSE == true ]]; then
-        PYTEST_ARGS="$PYTEST_ARGS -v"
-    fi
+    # # VERBOSE
+    # if [[ $VERBOSE == true ]]; then
+    #     PYTEST_ARGS="$PYTEST_ARGS -v"
+    # fi
 
     # SPECIFIC TEST
     if [[ -n "$SPECIFIC_TEST" ]]; then
@@ -133,34 +166,41 @@ run_tests() {
 }
 
 main() {
-    parse_args "$@"
 
-    local last_exit_code=0
+    if check_existing_runtests_processes; then
+        echo "No existing processes found. Continuing execution."
+        parse_args "$@"
 
-    for i_run in `seq 1 $N_RUNS`; do
-        clear
+        for i_run in `seq 1 $N_RUNS`; do
+            clear
 
-        # Clear the temporary log file
-        > "$LOG_PATH_TMP"
+            # Clear the temporary log file
+            > "$LOG_PATH_TMP"
 
-        echo "LOG_PATH: $LOG_PATH" | tee -a "$LOG_PATH_TMP"
-        echo "LOG_PATH_TMP: $LOG_PATH_TMP" | tee -a "$LOG_PATH_TMP"
-        echo "Test run $i_run of $N_RUNS" | tee -a "$LOG_PATH_TMP"
+            echo "LOG_PATH: $LOG_PATH" | tee -a "$LOG_PATH_TMP"
+            echo "LOG_PATH_TMP: $LOG_PATH_TMP" | tee -a "$LOG_PATH_TMP"
+            echo "Test run $i_run of $N_RUNS" | tee -a "$LOG_PATH_TMP"
 
-        # Clear cache
-        if [[ $DELETE_CACHE == true ]]; then clear_cache; fi
+            # Clear cache
+            if [[ $DELETE_CACHE == true ]]; then clear_cache; fi
 
-        # Clear cache
-        if [[ $SYNC_TESTS_WITH_SOURCE == true ]]; then sync_tests_with_source; fi
+            # Synchronize test code with source
+            if [[ $SYNC_TESTS_WITH_SOURCE == true ]]; then sync_tests_with_source; fi
 
-        # Main
-        run_tests
+            # Main
+            run_tests
 
-        # Update the latest log symlink
-        cat "$LOG_PATH_TMP" > "$LOG_PATH"
-        sleep 1
+            # Update the latest log symlink
+            cat "$LOG_PATH_TMP" > "$LOG_PATH"
+            sleep 1
 
-    done
+        done
+
+    else
+        echo "Exiting to avoid multiple instances."
+        exit 1
+    fi
+
 }
 
 # Execute main function with all arguments
