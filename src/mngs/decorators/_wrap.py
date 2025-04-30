@@ -1,32 +1,41 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Timestamp: "2025-04-30 14:57:11 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_wrap.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./src/mngs/decorators/_wrap.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
 # Time-stamp: "2024-11-07 05:57:34 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/decorators/_wrap.py
-
 import functools
 
 
 def wrap(func):
     """Basic function wrapper that preserves function metadata.
-
     Usage:
-        @wrap
-        def my_function(x):
-            return x + 1
-
-        # Or manually:
-        def my_function(x):
-            return x + 1
-        wrapped_func = wrap(my_function)
-
+    @wrap
+    def my_function(x):
+        return x + 1
+    # Or manually:
+    def my_function(x):
+        return x + 1
+    wrapped_func = wrap(my_function)
     This wrapper is useful as a template for creating more complex decorators
     or when you want to ensure function metadata is preserved.
     """
+
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         return func(*args, **kwargs)
 
+    # Store reference to original function
+    wrapper._original_func = func
+    # Mark as a wrapper for detection
+    wrapper._is_wrapper = True
     return wrapper
-
 
 # EOF
