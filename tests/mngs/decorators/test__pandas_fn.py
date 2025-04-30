@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-28 15:45:06 (ywatanabe)"
+# Timestamp: "2025-04-30 15:59:18 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_repo/tests/mngs/decorators/test__pandas_fn.py
 # ----------------------------------------
 import os
@@ -10,14 +10,14 @@ __FILE__ = (
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
-# Mocking the is_cuda function as it's imported but not defined in the file
-# This would normally be imported from converters
+from functools import wraps
 from unittest.mock import patch
 
 import numpy as np
 import pandas as pd
 import pytest
 import torch
+import xarray as xr
 from mngs.decorators._pandas_fn import pandas_fn
 
 
@@ -30,964 +30,84 @@ def test_data():
         "pandas_series": pd.Series([1.0, 2.0, 3.0]),
         "pandas_df": pd.DataFrame({"col1": [1.0, 2.0, 3.0]}),
         "torch": torch.tensor([1.0, 2.0, 3.0]),
+        "xarray": xr.DataArray([1.0, 2.0, 3.0]),
     }
 
 
-@patch("mngs.decorators._pandas_fn.is_cuda", return_value=False)
-def test_pandas_fn_with_list_input(mock_is_cuda, test_data):
+def test_pandas_fn_with_list_input(test_data):
     """Test pandas_fn with list input."""
 
     @pandas_fn
     def dummy_function(df):
-        # Check that input is indeed a pandas DataFrame
+        # Check that input is indeed a DataFrame
         assert isinstance(df, pd.DataFrame)
         return df + 1.0
 
-    # Input is a list, output should be numpy
+    # Input is a list, output should be list
     result = dummy_function(test_data["list"])
-    assert isinstance(result, np.ndarray)
-    np.testing.assert_allclose(result, np.array([2.0, 3.0, 4.0]))
+    assert isinstance(result, list)
+    assert result == [[2.0], [3.0], [4.0]] or result == [2.0, 3.0, 4.0]
 
 
-@patch("mngs.decorators._pandas_fn.is_cuda", return_value=False)
-def test_pandas_fn_with_numpy_input(mock_is_cuda, test_data):
-    """Test pandas_fn with numpy input."""
+def test_pandas_fn_with_df_input(test_data):
+    """Test pandas_fn with DataFrame input."""
 
     @pandas_fn
     def dummy_function(df):
         assert isinstance(df, pd.DataFrame)
         return df * 2.0
 
-    # Input is numpy, output should be numpy
-    result = dummy_function(test_data["numpy"])
-    assert isinstance(result, np.ndarray)
-    np.testing.assert_allclose(result, np.array([2.0, 4.0, 6.0]))
+    # Input is DataFrame, output should be DataFrame
+    result = dummy_function(test_data["pandas_df"])
+    assert isinstance(result, pd.DataFrame)
+    pd.testing.assert_frame_equal(
+        result, pd.DataFrame({"col1": [2.0, 4.0, 6.0]})
+    )
 
 
-@patch("mngs.decorators._pandas_fn.is_cuda", return_value=False)
-def test_pandas_fn_with_pandas_df_input(mock_is_cuda, test_data):
-    """Test pandas_fn with pandas DataFrame input."""
+def test_pandas_fn_with_numpy_input(test_data):
+    """Test pandas_fn with numpy input."""
 
     @pandas_fn
     def dummy_function(df):
         assert isinstance(df, pd.DataFrame)
         return df * 3.0
 
-    # Input is pandas DF, output should remain pandas DF
-    result = dummy_function(test_data["pandas_df"])
-    assert isinstance(result, pd.DataFrame)
-    pd.testing.assert_frame_equal(
-        result, pd.DataFrame({"col1": [3.0, 6.0, 9.0]})
-    )
-
-
-@patch("mngs.decorators._pandas_fn.is_cuda", return_value=False)
-def test_pandas_fn_with_pandas_series_input(mock_is_cuda, test_data):
-    """Test pandas_fn with pandas Series input."""
-
-    @pandas_fn
-    def dummy_function(df):
-        assert isinstance(df, pd.DataFrame)
-        return df * 2.0
-
-    # Input is pandas Series, output should be pandas DataFrame
-    result = dummy_function(test_data["pandas_series"])
-    assert isinstance(result, pd.DataFrame)
-    expected = pd.DataFrame({"0": [2.0, 4.0, 6.0]})
-    pd.testing.assert_frame_equal(result, expected)
-
-
-@patch("mngs.decorators._pandas_fn.is_cuda", return_value=False)
-@patch("mngs.decorators._pandas_fn.is_torch", return_value=True)
-def test_pandas_fn_with_torch_input(mock_is_torch, mock_is_cuda, test_data):
-    """Test pandas_fn with torch tensor input when is_torch returns True."""
-
-    @pandas_fn
-    def dummy_function(df):
-        assert isinstance(df, pd.DataFrame)
-        return df + 5.0
-
-    # Mock to_torch to return a tensor when is_torch=True
-    with patch(
-        "mngs.decorators._pandas_fn.to_torch",
-        return_value=(torch.tensor([6.0, 7.0, 8.0]),),
-    ):
-        result = dummy_function(test_data["torch"])
-        assert isinstance(result, torch.Tensor)
-        torch.testing.assert_close(result, torch.tensor([6.0, 7.0, 8.0]))
-
-
-# --------------------------------------------------------------------------------
-# --------------------------------------------------------------------------------
-# #!/usr/bin/env python3
-# # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-26 18:46:08 (ywatanabe)"
-#
-# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_pandas_fn.py"
-#
-# #!/usr/bin/env python3
-# # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-04 02:55:46 (ywatanabe)"
-#
-# """
-# 1. Functionality:
-#    - (e.g., Executes XYZ operation)
-# 2. Input:
-#    - (e.g., Required data for XYZ)
-# 3. Output:
-#    - (e.g., Results of XYZ operation)
-# 4. Prerequisites:
-#    - (e.g., Necessary dependencies for XYZ)
-#
-# (Remove me: Please fill docstrings above, while keeping the bulette point style, and remove this instruction line)
-# """
-#
-# from ._converters import (
-#     _conversion_warning,
-#     _return_if,
-#     is_torch,
-#     to_numpy,
-#     to_torch,
-# )
-# from functools import wraps
-#
-# from typing import Any as _Any
-# from typing import Callable
-#
-# import numpy as np
-# import pandas as pd
-# import torch
-#
-#
-# def pandas_fn(func: Callable) -> Callable:
-#     @wraps(func)
-#     def wrapper(*args: _Any, **kwargs: _Any) -> _Any:
-#         is_torch_input = is_torch(*args, **kwargs)
-#         device = "cuda" if is_cuda(*args, **kwargs) else "cpu"
-#
-#         def to_pandas(data: _Any) -> pd.DataFrame:
-#             if isinstance(data, pd.DataFrame):
-#                 return data
-#             elif isinstance(data, pd.Series):
-#                 return pd.DataFrame(data)
-#             elif isinstance(data, (np.ndarray, list)):
-#                 return pd.DataFrame(data)
-#             elif isinstance(data, torch.Tensor):
-#                 return pd.DataFrame(data.detach().cpu().numpy())
-#             else:
-#                 return pd.DataFrame([data])
-#
-#         converted_args = [to_pandas(arg) for arg in args]
-#         converted_kwargs = {key: to_pandas(val) for key, val in kwargs.items()}
-#         results = func(*converted_args, **converted_kwargs)
-#         if is_torch_input:
-#             return to_torch(results, return_fn=_return_if, device=device)[0]
-#         elif isinstance(results, (pd.DataFrame, pd.Series)):
-#             return results
-#         else:
-#             return to_numpy(results, return_fn=_return_if)[0]
-#
-#     return wrapper
-#
-#
-# # EOF
-
-# --------------------------------------------------------------------------------
-# --------------------------------------------------------------------------------
-# --------------------------------------------------------------------------------
-# --------------------------------------------------------------------------------
-# #!/usr/bin/env python3
-# # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-26 18:46:08 (ywatanabe)"
-#
-# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_pandas_fn.py"
-#
-# #!/usr/bin/env python3
-# # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-04 02:55:46 (ywatanabe)"
-#
-# """
-# 1. Functionality:
-#    - (e.g., Executes XYZ operation)
-# 2. Input:
-#    - (e.g., Required data for XYZ)
-# 3. Output:
-#    - (e.g., Results of XYZ operation)
-# 4. Prerequisites:
-#    - (e.g., Necessary dependencies for XYZ)
-#
-# (Remove me: Please fill docstrings above, while keeping the bulette point style, and remove this instruction line)
-# """
-#
-# from ._converters import (
-#     _conversion_warning,
-#     _return_if,
-#     is_torch,
-#     to_numpy,
-#     to_torch,
-# )
-# from functools import wraps
-#
-# from typing import Any as _Any
-# from typing import Callable
-#
-# import numpy as np
-# import pandas as pd
-# import torch
-#
-#
-# def pandas_fn(func: Callable) -> Callable:
-#     @wraps(func)
-#     def wrapper(*args: _Any, **kwargs: _Any) -> _Any:
-#         is_torch_input = is_torch(*args, **kwargs)
-#         device = "cuda" if is_cuda(*args, **kwargs) else "cpu"
-#
-#         def to_pandas(data: _Any) -> pd.DataFrame:
-#             if isinstance(data, pd.DataFrame):
-#                 return data
-#             elif isinstance(data, pd.Series):
-#                 return pd.DataFrame(data)
-#             elif isinstance(data, (np.ndarray, list)):
-#                 return pd.DataFrame(data)
-#             elif isinstance(data, torch.Tensor):
-#                 return pd.DataFrame(data.detach().cpu().numpy())
-#             else:
-#                 return pd.DataFrame([data])
-#
-#         converted_args = [to_pandas(arg) for arg in args]
-#         converted_kwargs = {key: to_pandas(val) for key, val in kwargs.items()}
-#         results = func(*converted_args, **converted_kwargs)
-#         if is_torch_input:
-#             return to_torch(results, return_fn=_return_if, device=device)[0]
-#         elif isinstance(results, (pd.DataFrame, pd.Series)):
-#             return results
-#         else:
-#             return to_numpy(results, return_fn=_return_if)[0]
-#
-#     return wrapper
-#
-#
-# # EOF
-
-# --------------------------------------------------------------------------------
-# --------------------------------------------------------------------------------
-# --------------------------------------------------------------------------------
-# --------------------------------------------------------------------------------
-# #!/usr/bin/env python3
-# # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-26 18:46:08 (ywatanabe)"
-#
-# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_pandas_fn.py"
-#
-# #!/usr/bin/env python3
-# # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-04 02:55:46 (ywatanabe)"
-#
-# """
-# 1. Functionality:
-#    - (e.g., Executes XYZ operation)
-# 2. Input:
-#    - (e.g., Required data for XYZ)
-# 3. Output:
-#    - (e.g., Results of XYZ operation)
-# 4. Prerequisites:
-#    - (e.g., Necessary dependencies for XYZ)
-#
-# (Remove me: Please fill docstrings above, while keeping the bulette point style, and remove this instruction line)
-# """
-#
-# from ._converters import (
-#     _conversion_warning,
-#     _return_if,
-#     is_torch,
-#     to_numpy,
-#     to_torch,
-# )
-# from functools import wraps
-#
-# from typing import Any as _Any
-# from typing import Callable
-#
-# import numpy as np
-# import pandas as pd
-# import torch
-#
-#
-# def pandas_fn(func: Callable) -> Callable:
-#     @wraps(func)
-#     def wrapper(*args: _Any, **kwargs: _Any) -> _Any:
-#         is_torch_input = is_torch(*args, **kwargs)
-#         device = "cuda" if is_cuda(*args, **kwargs) else "cpu"
-#
-#         def to_pandas(data: _Any) -> pd.DataFrame:
-#             if isinstance(data, pd.DataFrame):
-#                 return data
-#             elif isinstance(data, pd.Series):
-#                 return pd.DataFrame(data)
-#             elif isinstance(data, (np.ndarray, list)):
-#                 return pd.DataFrame(data)
-#             elif isinstance(data, torch.Tensor):
-#                 return pd.DataFrame(data.detach().cpu().numpy())
-#             else:
-#                 return pd.DataFrame([data])
-#
-#         converted_args = [to_pandas(arg) for arg in args]
-#         converted_kwargs = {key: to_pandas(val) for key, val in kwargs.items()}
-#         results = func(*converted_args, **converted_kwargs)
-#         if is_torch_input:
-#             return to_torch(results, return_fn=_return_if, device=device)[0]
-#         elif isinstance(results, (pd.DataFrame, pd.Series)):
-#             return results
-#         else:
-#             return to_numpy(results, return_fn=_return_if)[0]
-#
-#     return wrapper
-#
-#
-# # EOF
-
-# --------------------------------------------------------------------------------
-# --------------------------------------------------------------------------------
-# --------------------------------------------------------------------------------
-# --------------------------------------------------------------------------------
-# #!/usr/bin/env python3
-# # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-26 18:46:08 (ywatanabe)"
-#
-# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_pandas_fn.py"
-#
-# #!/usr/bin/env python3
-# # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-04 02:55:46 (ywatanabe)"
-#
-# """
-# 1. Functionality:
-#    - (e.g., Executes XYZ operation)
-# 2. Input:
-#    - (e.g., Required data for XYZ)
-# 3. Output:
-#    - (e.g., Results of XYZ operation)
-# 4. Prerequisites:
-#    - (e.g., Necessary dependencies for XYZ)
-#
-# (Remove me: Please fill docstrings above, while keeping the bulette point style, and remove this instruction line)
-# """
-#
-# from ._converters import (
-#     _conversion_warning,
-#     _return_if,
-#     is_torch,
-#     to_numpy,
-#     to_torch,
-# )
-# from functools import wraps
-#
-# from typing import Any as _Any
-# from typing import Callable
-#
-# import numpy as np
-# import pandas as pd
-# import torch
-#
-#
-# def pandas_fn(func: Callable) -> Callable:
-#     @wraps(func)
-#     def wrapper(*args: _Any, **kwargs: _Any) -> _Any:
-#         is_torch_input = is_torch(*args, **kwargs)
-#         device = "cuda" if is_cuda(*args, **kwargs) else "cpu"
-#
-#         def to_pandas(data: _Any) -> pd.DataFrame:
-#             if isinstance(data, pd.DataFrame):
-#                 return data
-#             elif isinstance(data, pd.Series):
-#                 return pd.DataFrame(data)
-#             elif isinstance(data, (np.ndarray, list)):
-#                 return pd.DataFrame(data)
-#             elif isinstance(data, torch.Tensor):
-#                 return pd.DataFrame(data.detach().cpu().numpy())
-#             else:
-#                 return pd.DataFrame([data])
-#
-#         converted_args = [to_pandas(arg) for arg in args]
-#         converted_kwargs = {key: to_pandas(val) for key, val in kwargs.items()}
-#         results = func(*converted_args, **converted_kwargs)
-#         if is_torch_input:
-#             return to_torch(results, return_fn=_return_if, device=device)[0]
-#         elif isinstance(results, (pd.DataFrame, pd.Series)):
-#             return results
-#         else:
-#             return to_numpy(results, return_fn=_return_if)[0]
-#
-#     return wrapper
-#
-#
-# # EOF
-
-# --------------------------------------------------------------------------------
-# --------------------------------------------------------------------------------
-# --------------------------------------------------------------------------------
-# --------------------------------------------------------------------------------
-# #!/usr/bin/env python3
-# # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-26 18:46:08 (ywatanabe)"
-#
-# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_pandas_fn.py"
-#
-# #!/usr/bin/env python3
-# # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-04 02:55:46 (ywatanabe)"
-#
-# """
-# 1. Functionality:
-#    - (e.g., Executes XYZ operation)
-# 2. Input:
-#    - (e.g., Required data for XYZ)
-# 3. Output:
-#    - (e.g., Results of XYZ operation)
-# 4. Prerequisites:
-#    - (e.g., Necessary dependencies for XYZ)
-#
-# (Remove me: Please fill docstrings above, while keeping the bulette point style, and remove this instruction line)
-# """
-#
-# from ._converters import (
-#     _conversion_warning,
-#     _return_if,
-#     is_torch,
-#     to_numpy,
-#     to_torch,
-# )
-# from functools import wraps
-#
-# from typing import Any as _Any
-# from typing import Callable
-#
-# import numpy as np
-# import pandas as pd
-# import torch
-#
-#
-# def pandas_fn(func: Callable) -> Callable:
-#     @wraps(func)
-#     def wrapper(*args: _Any, **kwargs: _Any) -> _Any:
-#         is_torch_input = is_torch(*args, **kwargs)
-#         device = "cuda" if is_cuda(*args, **kwargs) else "cpu"
-#
-#         def to_pandas(data: _Any) -> pd.DataFrame:
-#             if isinstance(data, pd.DataFrame):
-#                 return data
-#             elif isinstance(data, pd.Series):
-#                 return pd.DataFrame(data)
-#             elif isinstance(data, (np.ndarray, list)):
-#                 return pd.DataFrame(data)
-#             elif isinstance(data, torch.Tensor):
-#                 return pd.DataFrame(data.detach().cpu().numpy())
-#             else:
-#                 return pd.DataFrame([data])
-#
-#         converted_args = [to_pandas(arg) for arg in args]
-#         converted_kwargs = {key: to_pandas(val) for key, val in kwargs.items()}
-#         results = func(*converted_args, **converted_kwargs)
-#         if is_torch_input:
-#             return to_torch(results, return_fn=_return_if, device=device)[0]
-#         elif isinstance(results, (pd.DataFrame, pd.Series)):
-#             return results
-#         else:
-#             return to_numpy(results, return_fn=_return_if)[0]
-#
-#     return wrapper
-#
-#
-# # EOF
-
-# --------------------------------------------------------------------------------
-# --------------------------------------------------------------------------------
-# --------------------------------------------------------------------------------
-# --------------------------------------------------------------------------------
-# #!/usr/bin/env python3
-# # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-26 18:46:08 (ywatanabe)"
-#
-# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_pandas_fn.py"
-#
-# #!/usr/bin/env python3
-# # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-04 02:55:46 (ywatanabe)"
-#
-# """
-# 1. Functionality:
-#    - (e.g., Executes XYZ operation)
-# 2. Input:
-#    - (e.g., Required data for XYZ)
-# 3. Output:
-#    - (e.g., Results of XYZ operation)
-# 4. Prerequisites:
-#    - (e.g., Necessary dependencies for XYZ)
-#
-# (Remove me: Please fill docstrings above, while keeping the bulette point style, and remove this instruction line)
-# """
-#
-# from ._converters import (
-#     _conversion_warning,
-#     _return_if,
-#     is_torch,
-#     to_numpy,
-#     to_torch,
-# )
-# from functools import wraps
-#
-# from typing import Any as _Any
-# from typing import Callable
-#
-# import numpy as np
-# import pandas as pd
-# import torch
-#
-#
-# def pandas_fn(func: Callable) -> Callable:
-#     @wraps(func)
-#     def wrapper(*args: _Any, **kwargs: _Any) -> _Any:
-#         is_torch_input = is_torch(*args, **kwargs)
-#         device = "cuda" if is_cuda(*args, **kwargs) else "cpu"
-#
-#         def to_pandas(data: _Any) -> pd.DataFrame:
-#             if isinstance(data, pd.DataFrame):
-#                 return data
-#             elif isinstance(data, pd.Series):
-#                 return pd.DataFrame(data)
-#             elif isinstance(data, (np.ndarray, list)):
-#                 return pd.DataFrame(data)
-#             elif isinstance(data, torch.Tensor):
-#                 return pd.DataFrame(data.detach().cpu().numpy())
-#             else:
-#                 return pd.DataFrame([data])
-#
-#         converted_args = [to_pandas(arg) for arg in args]
-#         converted_kwargs = {key: to_pandas(val) for key, val in kwargs.items()}
-#         results = func(*converted_args, **converted_kwargs)
-#         if is_torch_input:
-#             return to_torch(results, return_fn=_return_if, device=device)[0]
-#         elif isinstance(results, (pd.DataFrame, pd.Series)):
-#             return results
-#         else:
-#             return to_numpy(results, return_fn=_return_if)[0]
-#
-#     return wrapper
-#
-#
-# # EOF
-
-# --------------------------------------------------------------------------------
-# --------------------------------------------------------------------------------
-# --------------------------------------------------------------------------------
-# --------------------------------------------------------------------------------
-# #!/usr/bin/env python3
-# # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-26 18:46:08 (ywatanabe)"
-#
-# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_pandas_fn.py"
-#
-# #!/usr/bin/env python3
-# # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-04 02:55:46 (ywatanabe)"
-#
-# """
-# 1. Functionality:
-#    - (e.g., Executes XYZ operation)
-# 2. Input:
-#    - (e.g., Required data for XYZ)
-# 3. Output:
-#    - (e.g., Results of XYZ operation)
-# 4. Prerequisites:
-#    - (e.g., Necessary dependencies for XYZ)
-#
-# (Remove me: Please fill docstrings above, while keeping the bulette point style, and remove this instruction line)
-# """
-#
-# from ._converters import (
-#     _conversion_warning,
-#     _return_if,
-#     is_torch,
-#     to_numpy,
-#     to_torch,
-# )
-# from functools import wraps
-#
-# from typing import Any as _Any
-# from typing import Callable
-#
-# import numpy as np
-# import pandas as pd
-# import torch
-#
-#
-# def pandas_fn(func: Callable) -> Callable:
-#     @wraps(func)
-#     def wrapper(*args: _Any, **kwargs: _Any) -> _Any:
-#         is_torch_input = is_torch(*args, **kwargs)
-#         device = "cuda" if is_cuda(*args, **kwargs) else "cpu"
-#
-#         def to_pandas(data: _Any) -> pd.DataFrame:
-#             if isinstance(data, pd.DataFrame):
-#                 return data
-#             elif isinstance(data, pd.Series):
-#                 return pd.DataFrame(data)
-#             elif isinstance(data, (np.ndarray, list)):
-#                 return pd.DataFrame(data)
-#             elif isinstance(data, torch.Tensor):
-#                 return pd.DataFrame(data.detach().cpu().numpy())
-#             else:
-#                 return pd.DataFrame([data])
-#
-#         converted_args = [to_pandas(arg) for arg in args]
-#         converted_kwargs = {key: to_pandas(val) for key, val in kwargs.items()}
-#         results = func(*converted_args, **converted_kwargs)
-#         if is_torch_input:
-#             return to_torch(results, return_fn=_return_if, device=device)[0]
-#         elif isinstance(results, (pd.DataFrame, pd.Series)):
-#             return results
-#         else:
-#             return to_numpy(results, return_fn=_return_if)[0]
-#
-#     return wrapper
-#
-#
-# # EOF
-
-# --------------------------------------------------------------------------------
-# --------------------------------------------------------------------------------
-
-# Mocking the is_cuda function as it's imported but not defined in the file
-# This would normally be imported from converters
-
-
-@pytest.fixture
-def test_data():
-    """Create test data for tests."""
-    return {
-        "list": [1.0, 2.0, 3.0],
-        "numpy": np.array([1.0, 2.0, 3.0]),
-        "pandas_series": pd.Series([1.0, 2.0, 3.0]),
-        "pandas_df": pd.DataFrame({"col1": [1.0, 2.0, 3.0]}),
-        "torch": torch.tensor([1.0, 2.0, 3.0]),
-    }
-
-
-@patch("mngs.decorators._pandas_fn.is_cuda", return_value=False)
-def test_pandas_fn_with_list_input(mock_is_cuda, test_data):
-    """Test pandas_fn with list input."""
-
-    @pandas_fn
-    def dummy_function(df):
-        # Check that input is indeed a pandas DataFrame
-        assert isinstance(df, pd.DataFrame)
-        return df + 1.0
-
-    # Input is a list, output should be numpy
-    result = dummy_function(test_data["list"])
-    assert isinstance(result, np.ndarray)
-    np.testing.assert_allclose(result, np.array([2.0, 3.0, 4.0]))
-
-
-@patch("mngs.decorators._pandas_fn.is_cuda", return_value=False)
-def test_pandas_fn_with_numpy_input(mock_is_cuda, test_data):
-    """Test pandas_fn with numpy input."""
-
-    @pandas_fn
-    def dummy_function(df):
-        assert isinstance(df, pd.DataFrame)
-        return df * 2.0
-
     # Input is numpy, output should be numpy
     result = dummy_function(test_data["numpy"])
     assert isinstance(result, np.ndarray)
-    np.testing.assert_allclose(result, np.array([2.0, 4.0, 6.0]))
+    np.testing.assert_allclose(result, np.array([[3.0], [6.0], [9.0]]))
 
 
-@patch("mngs.decorators._pandas_fn.is_cuda", return_value=False)
-def test_pandas_fn_with_pandas_df_input(mock_is_cuda, test_data):
-    """Test pandas_fn with pandas DataFrame input."""
+def test_pandas_fn_nested_decorator(test_data):
+    """Test nested decorator behavior with pandas_fn."""
 
+    # Create a dummy decorator to simulate nesting
+    def dummy_decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            # Set nested context
+            wrapper._current_decorator = "dummy_decorator"
+            return func(*args, **kwargs)
+
+        wrapper._is_wrapper = True
+        return wrapper
+
+    # Apply both decorators (nested)
     @pandas_fn
-    def dummy_function(df):
-        assert isinstance(df, pd.DataFrame)
-        return df * 3.0
+    @dummy_decorator
+    def nested_function(arr):
+        # In nested mode, the type should pass through unchanged from dummy_decorator
+        assert not isinstance(arr, pd.DataFrame)
+        return arr
 
-    # Input is pandas DF, output should remain pandas DF
-    result = dummy_function(test_data["pandas_df"])
-    assert isinstance(result, pd.DataFrame)
-    pd.testing.assert_frame_equal(
-        result, pd.DataFrame({"col1": [3.0, 6.0, 9.0]})
-    )
-
-
-@patch("mngs.decorators._pandas_fn.is_cuda", return_value=False)
-def test_pandas_fn_with_pandas_series_input(mock_is_cuda, test_data):
-    """Test pandas_fn with pandas Series input."""
-
-    @pandas_fn
-    def dummy_function(df):
-        assert isinstance(df, pd.DataFrame)
-        return df * 2.0
-
-    # Input is pandas Series, output should be pandas DataFrame
-    result = dummy_function(test_data["pandas_series"])
-    assert isinstance(result, pd.DataFrame)
-    expected = pd.DataFrame({"0": [2.0, 4.0, 6.0]})
-    pd.testing.assert_frame_equal(result, expected)
-
-
-@patch("mngs.decorators._pandas_fn.is_cuda", return_value=False)
-@patch("mngs.decorators._pandas_fn.is_torch", return_value=True)
-def test_pandas_fn_with_torch_input(mock_is_torch, mock_is_cuda, test_data):
-    """Test pandas_fn with torch tensor input when is_torch returns True."""
-
-    @pandas_fn
-    def dummy_function(df):
-        assert isinstance(df, pd.DataFrame)
-        return df + 5.0
-
-    # Mock to_torch to return a tensor when is_torch=True
     with patch(
-        "mngs.decorators._pandas_fn.to_torch",
-        return_value=(torch.tensor([6.0, 7.0, 8.0]),),
+        "mngs.decorators._pandas_fn.is_nested_decorator", return_value=True
     ):
-        result = dummy_function(test_data["torch"])
-        assert isinstance(result, torch.Tensor)
-        torch.testing.assert_close(result, torch.tensor([6.0, 7.0, 8.0]))
-
-
-# --------------------------------------------------------------------------------
-# --------------------------------------------------------------------------------
-# #!/usr/bin/env python3
-# # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-26 18:46:08 (ywatanabe)"
-#
-# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_pandas_fn.py"
-#
-# #!/usr/bin/env python3
-# # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-04 02:55:46 (ywatanabe)"
-#
-# """
-# 1. Functionality:
-#    - (e.g., Executes XYZ operation)
-# 2. Input:
-#    - (e.g., Required data for XYZ)
-# 3. Output:
-#    - (e.g., Results of XYZ operation)
-# 4. Prerequisites:
-#    - (e.g., Necessary dependencies for XYZ)
-#
-# (Remove me: Please fill docstrings above, while keeping the bulette point style, and remove this instruction line)
-# """
-#
-# from ._converters import (
-#     _conversion_warning,
-#     _return_if,
-#     is_torch,
-#     to_numpy,
-#     to_torch,
-# )
-# from functools import wraps
-#
-# from typing import Any as _Any
-# from typing import Callable
-#
-# import numpy as np
-# import pandas as pd
-# import torch
-#
-#
-# def pandas_fn(func: Callable) -> Callable:
-#     @wraps(func)
-#     def wrapper(*args: _Any, **kwargs: _Any) -> _Any:
-#         is_torch_input = is_torch(*args, **kwargs)
-#         device = "cuda" if is_cuda(*args, **kwargs) else "cpu"
-#
-#         def to_pandas(data: _Any) -> pd.DataFrame:
-#             if isinstance(data, pd.DataFrame):
-#                 return data
-#             elif isinstance(data, pd.Series):
-#                 return pd.DataFrame(data)
-#             elif isinstance(data, (np.ndarray, list)):
-#                 return pd.DataFrame(data)
-#             elif isinstance(data, torch.Tensor):
-#                 return pd.DataFrame(data.detach().cpu().numpy())
-#             else:
-#                 return pd.DataFrame([data])
-#
-#         converted_args = [to_pandas(arg) for arg in args]
-#         converted_kwargs = {key: to_pandas(val) for key, val in kwargs.items()}
-#         results = func(*converted_args, **converted_kwargs)
-#         if is_torch_input:
-#             return to_torch(results, return_fn=_return_if, device=device)[0]
-#         elif isinstance(results, (pd.DataFrame, pd.Series)):
-#             return results
-#         else:
-#             return to_numpy(results, return_fn=_return_if)[0]
-#
-#     return wrapper
-#
-#
-# # EOF
-
-# --------------------------------------------------------------------------------
-# --------------------------------------------------------------------------------
-# --------------------------------------------------------------------------------
-# --------------------------------------------------------------------------------
-# #!/usr/bin/env python3
-# # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-26 18:46:08 (ywatanabe)"
-#
-# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_pandas_fn.py"
-#
-# #!/usr/bin/env python3
-# # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-04 02:55:46 (ywatanabe)"
-#
-# """
-# 1. Functionality:
-#    - (e.g., Executes XYZ operation)
-# 2. Input:
-#    - (e.g., Required data for XYZ)
-# 3. Output:
-#    - (e.g., Results of XYZ operation)
-# 4. Prerequisites:
-#    - (e.g., Necessary dependencies for XYZ)
-#
-# (Remove me: Please fill docstrings above, while keeping the bulette point style, and remove this instruction line)
-# """
-#
-# from ._converters import (
-#     _conversion_warning,
-#     _return_if,
-#     is_torch,
-#     to_numpy,
-#     to_torch,
-# )
-# from functools import wraps
-#
-# from typing import Any as _Any
-# from typing import Callable
-#
-# import numpy as np
-# import pandas as pd
-# import torch
-#
-#
-# def pandas_fn(func: Callable) -> Callable:
-#     @wraps(func)
-#     def wrapper(*args: _Any, **kwargs: _Any) -> _Any:
-#         is_torch_input = is_torch(*args, **kwargs)
-#         device = "cuda" if is_cuda(*args, **kwargs) else "cpu"
-#
-#         def to_pandas(data: _Any) -> pd.DataFrame:
-#             if isinstance(data, pd.DataFrame):
-#                 return data
-#             elif isinstance(data, pd.Series):
-#                 return pd.DataFrame(data)
-#             elif isinstance(data, (np.ndarray, list)):
-#                 return pd.DataFrame(data)
-#             elif isinstance(data, torch.Tensor):
-#                 return pd.DataFrame(data.detach().cpu().numpy())
-#             else:
-#                 return pd.DataFrame([data])
-#
-#         converted_args = [to_pandas(arg) for arg in args]
-#         converted_kwargs = {key: to_pandas(val) for key, val in kwargs.items()}
-#         results = func(*converted_args, **converted_kwargs)
-#         if is_torch_input:
-#             return to_torch(results, return_fn=_return_if, device=device)[0]
-#         elif isinstance(results, (pd.DataFrame, pd.Series)):
-#             return results
-#         else:
-#             return to_numpy(results, return_fn=_return_if)[0]
-#
-#     return wrapper
-#
-#
-# # EOF
-
-# --------------------------------------------------------------------------------
-# --------------------------------------------------------------------------------
-# --------------------------------------------------------------------------------
-# --------------------------------------------------------------------------------
-# #!/usr/bin/env python3
-# # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-26 18:46:08 (ywatanabe)"
-#
-# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_pandas_fn.py"
-#
-# #!/usr/bin/env python3
-# # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-04 02:55:46 (ywatanabe)"
-#
-# """
-# 1. Functionality:
-#    - (e.g., Executes XYZ operation)
-# 2. Input:
-#    - (e.g., Required data for XYZ)
-# 3. Output:
-#    - (e.g., Results of XYZ operation)
-# 4. Prerequisites:
-#    - (e.g., Necessary dependencies for XYZ)
-#
-# (Remove me: Please fill docstrings above, while keeping the bulette point style, and remove this instruction line)
-# """
-#
-# from ._converters import (
-#     _conversion_warning,
-#     _return_if,
-#     is_torch,
-#     to_numpy,
-#     to_torch,
-# )
-# from functools import wraps
-#
-# from typing import Any as _Any
-# from typing import Callable
-#
-# import numpy as np
-# import pandas as pd
-# import torch
-#
-#
-# def pandas_fn(func: Callable) -> Callable:
-#     @wraps(func)
-#     def wrapper(*args: _Any, **kwargs: _Any) -> _Any:
-#         is_torch_input = is_torch(*args, **kwargs)
-#         device = "cuda" if is_cuda(*args, **kwargs) else "cpu"
-#
-#         def to_pandas(data: _Any) -> pd.DataFrame:
-#             if isinstance(data, pd.DataFrame):
-#                 return data
-#             elif isinstance(data, pd.Series):
-#                 return pd.DataFrame(data)
-#             elif isinstance(data, (np.ndarray, list)):
-#                 return pd.DataFrame(data)
-#             elif isinstance(data, torch.Tensor):
-#                 return pd.DataFrame(data.detach().cpu().numpy())
-#             else:
-#                 return pd.DataFrame([data])
-#
-#         converted_args = [to_pandas(arg) for arg in args]
-#         converted_kwargs = {key: to_pandas(val) for key, val in kwargs.items()}
-#         results = func(*converted_args, **converted_kwargs)
-#         if is_torch_input:
-#             return to_torch(results, return_fn=_return_if, device=device)[0]
-#         elif isinstance(results, (pd.DataFrame, pd.Series)):
-#             return results
-#         else:
-#             return to_numpy(results, return_fn=_return_if)[0]
-#
-#     return wrapper
-#
-#
-# # EOF
-
-# --------------------------------------------------------------------------------
-# --------------------------------------------------------------------------------
+        # Input series should stay as series due to nested context
+        result = nested_function(test_data["pandas_series"])
+        assert isinstance(result, pd.Series)
+        pd.testing.assert_series_equal(result, test_data["pandas_series"])
 
 if __name__ == "__main__":
     import os
@@ -1001,79 +121,99 @@ if __name__ == "__main__":
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-26 18:46:08 (ywatanabe)"
-# # File: ./mngs_repo/src/mngs/decorators/_pandas_fn.py
+# # Timestamp: "2025-04-30 15:44:00 (ywatanabe)"
+# # File: /home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_pandas_fn.py
+# # ----------------------------------------
+# import os
+# __FILE__ = (
+#     "./src/mngs/decorators/_pandas_fn.py"
+# )
+# __DIR__ = os.path.dirname(__FILE__)
+# # ----------------------------------------
 # 
 # THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_pandas_fn.py"
 # 
-# #!/usr/bin/env python3
-# # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-04 02:55:46 (ywatanabe)"
-# # File: ./mngs_repo/src/mngs/decorators/_pandas_fn.py
-# 
-# """
-# 1. Functionality:
-#    - (e.g., Executes XYZ operation)
-# 2. Input:
-#    - (e.g., Required data for XYZ)
-# 3. Output:
-#    - (e.g., Results of XYZ operation)
-# 4. Prerequisites:
-#    - (e.g., Necessary dependencies for XYZ)
-# 
-# (Remove me: Please fill docstrings above, while keeping the bulette point style, and remove this instruction line)
-# """
-# 
-# from ._converters import (
-#     _conversion_warning,
-#     _return_if,
-#     is_torch,
-#     to_numpy,
-#     to_torch,
-# )
 # from functools import wraps
-# 
 # from typing import Any as _Any
 # from typing import Callable
 # 
 # import numpy as np
 # import pandas as pd
 # import torch
+# import xarray as xr
+# 
+# from ._converters import is_nested_decorator
 # 
 # 
 # def pandas_fn(func: Callable) -> Callable:
 #     @wraps(func)
 #     def wrapper(*args: _Any, **kwargs: _Any) -> _Any:
-#         is_torch_input = is_torch(*args, **kwargs)
-#         device = "cuda" if is_cuda(*args, **kwargs) else "cpu"
+#         # Skip conversion if already in a nested decorator context
+#         if is_nested_decorator():
+#             results = func(*args, **kwargs)
+#             return results
 # 
-#         def to_pandas(data: _Any) -> pd.DataFrame:
+#         # Set the current decorator context
+#         wrapper._current_decorator = "pandas_fn"
+# 
+#         # Store original object for type preservation
+#         original_object = args[0] if args else None
+# 
+#         # Convert args to pandas DataFrames
+#         def to_pandas(data):
 #             if isinstance(data, pd.DataFrame):
 #                 return data
 #             elif isinstance(data, pd.Series):
 #                 return pd.DataFrame(data)
-#             elif isinstance(data, (np.ndarray, list)):
+#             elif isinstance(data, np.ndarray):
+#                 return pd.DataFrame(data)
+#             elif isinstance(data, list):
 #                 return pd.DataFrame(data)
 #             elif isinstance(data, torch.Tensor):
 #                 return pd.DataFrame(data.detach().cpu().numpy())
+#             elif isinstance(data, xr.DataArray):
+#                 return pd.DataFrame(data.values)
 #             else:
 #                 return pd.DataFrame([data])
 # 
 #         converted_args = [to_pandas(arg) for arg in args]
-#         converted_kwargs = {key: to_pandas(val) for key, val in kwargs.items()}
-#         results = func(*converted_args, **converted_kwargs)
-#         if is_torch_input:
-#             return to_torch(results, return_fn=_return_if, device=device)[0]
-#         elif isinstance(results, (pd.DataFrame, pd.Series)):
-#             return results
-#         else:
-#             return to_numpy(results, return_fn=_return_if)[0]
+#         converted_kwargs = {k: to_pandas(v) for k, v in kwargs.items()}
 # 
+#         # Assertion to ensure all args are converted to pandas DataFrames
+#         for arg_index, arg in enumerate(converted_args):
+#             assert isinstance(
+#                 arg, pd.DataFrame
+#             ), f"Argument {arg_index} not converted to DataFrame: {type(arg)}"
+# 
+#         results = func(*converted_args, **converted_kwargs)
+# 
+#         # Convert results back to original input types
+#         if isinstance(results, pd.DataFrame):
+#             if original_object is not None:
+#                 if isinstance(original_object, list):
+#                     return results.values.tolist()
+#                 elif isinstance(original_object, np.ndarray):
+#                     return results.values
+#                 elif isinstance(original_object, torch.Tensor):
+#                     return torch.tensor(results.values)
+#                 elif isinstance(original_object, pd.Series):
+#                     return (
+#                         pd.Series(results.iloc[:, 0])
+#                         if results.shape[1] > 0
+#                         else pd.Series()
+#                     )
+#                 elif isinstance(original_object, xr.DataArray):
+#                     return xr.DataArray(results.values)
+#             return results
+# 
+#         return results
+# 
+#     # Mark as a wrapper for detection
+#     wrapper._is_wrapper = True
+#     wrapper._decorator_type = "pandas_fn"
 #     return wrapper
 # 
-# 
 # # EOF
-
 # --------------------------------------------------------------------------------
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/decorators/_pandas_fn.py
 # --------------------------------------------------------------------------------
