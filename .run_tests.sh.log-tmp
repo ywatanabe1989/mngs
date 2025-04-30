@@ -1,0 +1,238 @@
+LOG_PATH: /home/ywatanabe/proj/mngs_repo/.run_tests.sh.log
+LOG_PATH_TMP: /home/ywatanabe/proj/mngs_repo/.run_tests.sh.log-tmp
+Test run 1 of 1
+[pytest]
+pythonpath = .
+testpaths =
+    ./tests/mngs/plt
+norecursedirs =
+    *.egg
+    .eggs
+    dist
+    build
+    docs
+    .tox
+    .git
+    __pycache__
+    .old
+python_files =
+    test_*.py
+    *_test.py
+addopts =
+    --import-mode=importlib
+    -q
+    --no-header
+    --tb=short
+    --exitfirst
+    --verbose
+    --color=yes
+    # -n auto
+    # --no-summary
+env =
+    PYTHONPATH=.
+    TESTING=True
+Wed Apr 30 02:20:43 PM AEST 2025
+[1m============================= test session starts ==============================[0m
+created: 12/12 workers
+12 workers [274 items]
+
+[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[31mF[0m[31mF[0m[31mF[0m[31mF[0m[32m.[0m[31mF[0m[32m.[0m[32m.[0m[31mF[0m[32m.[0m[31mF[0m[31mF[0m[31mF[0m[32m.[0m[31mF[0m[31mF[0m[32m.[0m[32m.[0m[32m.[0m
+=================================== FAILURES ===================================
+[31m[1m__________________________ TestAxesWrapper.test_init ___________________________[0m
+[gw11] linux -- Python 3.11.0 /home/ywatanabe/.env-3.11/bin/python
+[1m[31mtests/mngs/plt/_subplots/test__AxesWrapper.py[0m:29: in test_init
+    [0m[94massert[39;49;00m [96mself[39;49;00m.wrapper.fig [95mis[39;49;00m [96mself[39;49;00m.fig_mock[90m[39;49;00m
+[1m[31mE   AttributeError: 'AxesWrapper' object has no attribute 'fig'[0m
+[31m[1m________________________ test_pandas_fn_with_list_input ________________________[0m
+[gw2] linux -- Python 3.11.0 /home/ywatanabe/.env-3.11/bin/python
+[1m[31m/usr/lib/python3.11/unittest/mock.py[0m:1356: in patched
+    [0m[94mwith[39;49;00m [96mself[39;49;00m.decoration_helper(patched,[90m[39;49;00m
+[1m[31m/usr/lib/python3.11/contextlib.py[0m:137: in __enter__
+    [0m[94mreturn[39;49;00m [96mnext[39;49;00m([96mself[39;49;00m.gen)[90m[39;49;00m
+[1m[31m/usr/lib/python3.11/unittest/mock.py[0m:1338: in decoration_helper
+    [0marg = exit_stack.enter_context(patching)[90m[39;49;00m
+[1m[31m/usr/lib/python3.11/contextlib.py[0m:502: in enter_context
+    [0mresult = _enter(cm)[90m[39;49;00m
+[1m[31m/usr/lib/python3.11/unittest/mock.py[0m:1427: in __enter__
+    [0moriginal, local = [96mself[39;49;00m.get_original()[90m[39;49;00m
+[1m[31m/usr/lib/python3.11/unittest/mock.py[0m:1400: in get_original
+    [0m[94mraise[39;49;00m [96mAttributeError[39;49;00m([90m[39;49;00m
+[1m[31mE   AttributeError: <module 'mngs.decorators._pandas_fn' from '/home/ywatanabe/proj/_mngs_repo/src/mngs/decorators/_pandas_fn.py'> does not have the attribute 'is_cuda'[0m
+[31m[1m________________________ test_numpy_fn_with_torch_input ________________________[0m
+[gw1] linux -- Python 3.11.0 /home/ywatanabe/.env-3.11/bin/python
+[1m[31mtests/mngs/decorators/test__numpy_fn.py[0m:531: in test_numpy_fn_with_torch_input
+    [0m[94massert[39;49;00m [96misinstance[39;49;00m(result, torch.Tensor)[90m[39;49;00m
+[1m[31mE   AssertionError: assert False[0m
+[1m[31mE    +  where False = isinstance([tensor([3., 6., 9.])], <class 'torch.Tensor'>)[0m
+[1m[31mE    +    where <class 'torch.Tensor'> = torch.Tensor[0m
+[31m[1m____________________ TestAxesWrapper.test_history_property _____________________[0m
+[gw6] linux -- Python 3.11.0 /home/ywatanabe/.env-3.11/bin/python
+[1m[31mtests/mngs/plt/_subplots/test__AxesWrapper.py[0m:100: in test_history_property
+    [0m[94massert[39;49;00m result == [{[33m"[39;49;00m[33mplot1[39;49;00m[33m"[39;49;00m: [33m"[39;49;00m[33mdata1[39;49;00m[33m"[39;49;00m}, {[33m"[39;49;00m[33mplot2[39;49;00m[33m"[39;49;00m: [33m"[39;49;00m[33mdata2[39;49;00m[33m"[39;49;00m}][90m[39;49;00m
+[1m[31mE   AssertionError: assert [] == [{'plot1': 'd...t2': 'data2'}][0m
+[1m[31mE     [0m
+[1m[31mE     Right contains 2 more items, first extra item: [0m{[33m'[39;49;00m[33mplot1[39;49;00m[33m'[39;49;00m: [33m'[39;49;00m[33mdata1[39;49;00m[33m'[39;49;00m}[90m[39;49;00m[0m
+[1m[31mE     Use -v to get more diff[0m
+[31m[1m_____________________________ test_kde_cumulative ______________________________[0m
+[gw7] linux -- Python 3.11.0 /home/ywatanabe/.env-3.11/bin/python
+[1m[31mtests/mngs/plt/_subplots/_AxisWrapperMixins/test__BasicPlotMixin.py[0m:131: in test_kde_cumulative
+    [0max.kde(data, label=[33m"[39;49;00m[33mNormal Distribution[39;49;00m[33m"[39;49;00m, cumulative=[94mTrue[39;49;00m)[90m[39;49;00m
+[1m[31msrc/mngs/plt/_subplots/_AxisWrapperMixins/_BasicPlotMixin.py[0m:92: in kde
+    [0m[96mself[39;49;00m.plot_(xx=xs, yy=density, label=kwargs.get([33m"[39;49;00m[33mlabel[39;49;00m[33m"[39;49;00m))[90m[39;49;00m
+[1m[31mE   TypeError: plot_() missing 1 required positional argument: 'data'[0m
+----------------------------- Captured stdout call -----------------------------
+Attribute of AxisWrapper: __array_struct__
+Attribute of AxisWrapper: __array_interface__
+Attribute of AxisWrapper: __array__
+[31m[1m_____________________ TestAxesWrapper.test_getattr_warning _____________________[0m
+[gw3] linux -- Python 3.11.0 /home/ywatanabe/.env-3.11/bin/python
+[1m[31mtests/mngs/plt/_subplots/test__AxesWrapper.py[0m:61: in test_getattr_warning
+    [0mresult = [96mself[39;49;00m.wrapper.nonexistent_method()[90m[39;49;00m
+[1m[31mE   AttributeError: 'AxesWrapper' object has no attribute 'nonexistent_method'[0m
+
+[33mDuring handling of the above exception, another exception occurred:[0m
+[1m[31mtests/mngs/plt/_subplots/test__AxesWrapper.py[0m:60: in test_getattr_warning
+    [0m[94mwith[39;49;00m pytest.warns([96mUserWarning[39;49;00m, match=[33m"[39;49;00m[33mnot implemented, ignored[39;49;00m[33m"[39;49;00m):[90m[39;49;00m
+[1m[31mE   Failed: DID NOT WARN. No warnings of type (<class 'UserWarning'>,) were emitted.[0m
+[1m[31mE    Emitted warnings: [].[0m
+[31m[1m_________________________________ test_raster __________________________________[0m
+[gw8] linux -- Python 3.11.0 /home/ywatanabe/.env-3.11/bin/python
+[1m[31mtests/mngs/plt/_subplots/_AxisWrapperMixins/test__BasicPlotMixin.py[0m:261: in test_raster
+    [0m[94massert[39;49;00m os.path.exists(spath), [33mf[39;49;00m[33m"[39;49;00m[33mFailed to save figure to [39;49;00m[33m{[39;49;00mspath[33m}[39;49;00m[33m"[39;49;00m[90m[39;49;00m
+[1m[31mE   AssertionError: Failed to save figure to ./raster_test.png[0m
+[1m[31mE   assert False[0m
+[1m[31mE    +  where False = <function exists at 0x7f06f6433420>('./raster_test.png')[0m
+[1m[31mE    +    where <function exists at 0x7f06f6433420> = <module 'posixpath' (frozen)>.exists[0m
+[1m[31mE    +      where <module 'posixpath' (frozen)> = os.path[0m
+----------------------------- Captured stdout call -----------------------------
+Attribute of AxisWrapper: __array_struct__
+Attribute of AxisWrapper: __array_interface__
+Attribute of AxisWrapper: __array__
+Attribute of FigWrapper: savefig
+[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__BasicPlotMixin_out/raster_test.csv (23.2 KiB)[0m
+[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__BasicPlotMixin_out/raster_test.png (22.8 KiB)[0m
+[31m[1m________________________________ test_imshow2d _________________________________[0m
+[gw4] linux -- Python 3.11.0 /home/ywatanabe/.env-3.11/bin/python
+[1m[31mtests/mngs/plt/_subplots/_AxisWrapperMixins/test__BasicPlotMixin.py[0m:36: in test_imshow2d
+    [0m[94massert[39;49;00m os.path.exists(spath), [33mf[39;49;00m[33m"[39;49;00m[33mFailed to save figure to [39;49;00m[33m{[39;49;00mspath[33m}[39;49;00m[33m"[39;49;00m[90m[39;49;00m
+[1m[31mE   AssertionError: Failed to save figure to ./imshow2d_test.png[0m
+[1m[31mE   assert False[0m
+[1m[31mE    +  where False = <function exists at 0x7f5ade023420>('./imshow2d_test.png')[0m
+[1m[31mE    +    where <function exists at 0x7f5ade023420> = <module 'posixpath' (frozen)>.exists[0m
+[1m[31mE    +      where <module 'posixpath' (frozen)> = os.path[0m
+----------------------------- Captured stdout call -----------------------------
+Attribute of AxisWrapper: __array_struct__
+Attribute of AxisWrapper: __array_interface__
+Attribute of AxisWrapper: __array__
+Attribute of FigWrapper: savefig
+[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__BasicPlotMixin_out/imshow2d_test.csv (7.9 KiB)[0m
+[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__BasicPlotMixin_out/imshow2d_test.png (18.0 KiB)[0m
+[31m[1m______________________________ test_sns_swarmplot ______________________________[0m
+[gw10] linux -- Python 3.11.0 /home/ywatanabe/.env-3.11/bin/python
+[1m[31mtests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin.py[0m:223: in test_sns_swarmplot
+    [0m[94massert[39;49;00m os.path.exists(spath), [33mf[39;49;00m[33m"[39;49;00m[33mFailed to save figure to [39;49;00m[33m{[39;49;00mspath[33m}[39;49;00m[33m"[39;49;00m[90m[39;49;00m
+[1m[31mE   AssertionError: Failed to save figure to ././tests/mngs/plt/_subplots/_AxisWrapperMixins/sns_swarmplot_test.png[0m
+[1m[31mE   assert False[0m
+[1m[31mE    +  where False = <function exists at 0x7fdb5018f420>('././tests/mngs/plt/_subplots/_AxisWrapperMixins/sns_swarmplot_test.png')[0m
+[1m[31mE    +    where <function exists at 0x7fdb5018f420> = <module 'posixpath' (frozen)>.exists[0m
+[1m[31mE    +      where <module 'posixpath' (frozen)> = os.path[0m
+----------------------------- Captured stdout call -----------------------------
+Attribute of AxisWrapper: __array_struct__
+Attribute of AxisWrapper: __array_interface__
+Attribute of AxisWrapper: __array__
+Attribute of FigWrapper: savefig
+All objects passed were None
+[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin_out/tests/mngs/plt/_subplots/_AxisWrapperMixins/sns_swarmplot_test.csv (3.0 B)[0m
+[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin_out/./tests/mngs/plt/_subplots/_AxisWrapperMixins/sns_swarmplot_test.png (25.3 KiB)[0m
+[31m[1m_______________________________ test_sns_heatmap _______________________________[0m
+[gw9] linux -- Python 3.11.0 /home/ywatanabe/.env-3.11/bin/python
+[1m[31mtests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin.py[0m:91: in test_sns_heatmap
+    [0m[94massert[39;49;00m os.path.exists(spath), [33mf[39;49;00m[33m"[39;49;00m[33mFailed to save figure to [39;49;00m[33m{[39;49;00mspath[33m}[39;49;00m[33m"[39;49;00m[90m[39;49;00m
+[1m[31mE   AssertionError: Failed to save figure to ././tests/mngs/plt/_subplots/_AxisWrapperMixins/sns_heatmap_test.png[0m
+[1m[31mE   assert False[0m
+[1m[31mE    +  where False = <function exists at 0x7f01b6b87420>('././tests/mngs/plt/_subplots/_AxisWrapperMixins/sns_heatmap_test.png')[0m
+[1m[31mE    +    where <function exists at 0x7f01b6b87420> = <module 'posixpath' (frozen)>.exists[0m
+[1m[31mE    +      where <module 'posixpath' (frozen)> = os.path[0m
+----------------------------- Captured stdout call -----------------------------
+Attribute of AxisWrapper: __array_struct__
+Attribute of AxisWrapper: __array_interface__
+Attribute of AxisWrapper: __array__
+Attribute of FigWrapper: savefig
+cannot concatenate object of type '<class 'numpy.ndarray'>'; only Series and DataFrame objs are valid
+[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin_out/tests/mngs/plt/_subplots/_AxisWrapperMixins/sns_heatmap_test.csv (3.0 B)[0m
+[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin_out/./tests/mngs/plt/_subplots/_AxisWrapperMixins/sns_heatmap_test.png (83.3 KiB)[0m
+[31m[1m________________________ test_torch_fn_with_list_input _________________________[0m
+[gw5] linux -- Python 3.11.0 /home/ywatanabe/.env-3.11/bin/python
+[1m[31mtests/mngs/decorators/test__torch_fn.py[0m:42: in test_torch_fn_with_list_input
+    [0mresult = dummy_function(test_data[[33m"[39;49;00m[33mlist[39;49;00m[33m"[39;49;00m])[90m[39;49;00m
+[1m[31msrc/mngs/decorators/_torch_fn.py[0m:62: in wrapper
+    [0mresults = func(*converted_args, **converted_kwargs)[90m[39;49;00m
+[1m[31mtests/mngs/decorators/test__torch_fn.py[0m:38: in dummy_function
+    [0m[94massert[39;49;00m [96misinstance[39;49;00m(xx, torch.Tensor)[90m[39;49;00m
+[1m[31mE   AssertionError: assert False[0m
+[1m[31mE    +  where False = isinstance([1.0, 2.0, 3.0], <class 'torch.Tensor'>)[0m
+[1m[31mE    +    where <class 'torch.Tensor'> = torch.Tensor[0m
+[33m=============================== warnings summary ===============================[0m
+tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin.py::test_sns_swarmplot
+  /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_SeabornMixin.py:49: FutureWarning: 
+  
+  Passing `palette` without assigning `hue` is deprecated and will be removed in v0.14.0. Assign the `x` variable to `hue` and set `legend=False` for the same effect.
+  
+    self._axis_mpl = sns_plot_fn(ax=self._axis_mpl, *args, **kwargs)
+
+tests/custom/test_matplotlib_compatibility.py: 106 warnings
+  /home/ywatanabe/proj/_mngs_repo/tests/custom/test_matplotlib_compatibility.py:44: MatplotlibDeprecationWarning: The INVALID attribute was deprecated in Matplotlib 3.8 and will be removed in 3.10.
+    mpl_attr = getattr(mpl_module, attr_name)
+
+tests/custom/test_matplotlib_compatibility.py: 106 warnings
+  /home/ywatanabe/proj/_mngs_repo/tests/custom/test_matplotlib_compatibility.py:45: MatplotlibDeprecationWarning: The INVALID attribute was deprecated in Matplotlib 3.8 and will be removed in 3.10.
+    mngs_attr = getattr(mngs_module, attr_name)
+
+tests/custom/test_matplotlib_compatibility.py: 106 warnings
+  /home/ywatanabe/proj/_mngs_repo/tests/custom/test_matplotlib_compatibility.py:44: MatplotlibDeprecationWarning: The INVALID_AFFINE attribute was deprecated in Matplotlib 3.8 and will be removed in 3.10.
+    mpl_attr = getattr(mpl_module, attr_name)
+
+tests/custom/test_matplotlib_compatibility.py: 106 warnings
+  /home/ywatanabe/proj/_mngs_repo/tests/custom/test_matplotlib_compatibility.py:45: MatplotlibDeprecationWarning: The INVALID_AFFINE attribute was deprecated in Matplotlib 3.8 and will be removed in 3.10.
+    mngs_attr = getattr(mngs_module, attr_name)
+
+tests/custom/test_matplotlib_compatibility.py: 106 warnings
+  /home/ywatanabe/proj/_mngs_repo/tests/custom/test_matplotlib_compatibility.py:44: MatplotlibDeprecationWarning: The INVALID_NON_AFFINE attribute was deprecated in Matplotlib 3.8 and will be removed in 3.10.
+    mpl_attr = getattr(mpl_module, attr_name)
+
+tests/custom/test_matplotlib_compatibility.py: 106 warnings
+  /home/ywatanabe/proj/_mngs_repo/tests/custom/test_matplotlib_compatibility.py:45: MatplotlibDeprecationWarning: The INVALID_NON_AFFINE attribute was deprecated in Matplotlib 3.8 and will be removed in 3.10.
+    mngs_attr = getattr(mngs_module, attr_name)
+
+tests/custom/test_matplotlib_compatibility.py: 106 warnings
+  /home/ywatanabe/proj/_mngs_repo/tests/custom/test_matplotlib_compatibility.py:44: MatplotlibDeprecationWarning: The is_bbox attribute was deprecated in Matplotlib 3.9 and will be removed in 3.11.
+    mpl_attr = getattr(mpl_module, attr_name)
+
+tests/custom/test_matplotlib_compatibility.py: 106 warnings
+  /home/ywatanabe/proj/_mngs_repo/tests/custom/test_matplotlib_compatibility.py:45: MatplotlibDeprecationWarning: The is_bbox attribute was deprecated in Matplotlib 3.9 and will be removed in 3.11.
+    mngs_attr = getattr(mngs_module, attr_name)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+[36m[1m=========================== short test summary info ============================[0m
+[31mFAILED[0m ../mngs_repo/tests/mngs/plt/_subplots/test__AxesWrapper.py::[1mTestAxesWrapper::test_init[0m - AttributeError: 'AxesWrapper' object has no attribute 'fig'
+[31mFAILED[0m ../mngs_repo/tests/mngs/decorators/test__pandas_fn.py::[1mtest_pandas_fn_with_list_input[0m - AttributeError: <module 'mngs.decorators._pandas_fn' from '/home/ywatanabe/...
+[31mFAILED[0m ../mngs_repo/tests/mngs/decorators/test__numpy_fn.py::[1mtest_numpy_fn_with_torch_input[0m - AssertionError: assert False
+[31mFAILED[0m ../mngs_repo/tests/mngs/plt/_subplots/test__AxesWrapper.py::[1mTestAxesWrapper::test_history_property[0m - AssertionError: assert [] == [{'plot1': 'd...t2': 'data2'}]
+[31mFAILED[0m ../mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__BasicPlotMixin.py::[1mtest_kde_cumulative[0m - TypeError: plot_() missing 1 required positional argument: 'data'
+[31mFAILED[0m ../mngs_repo/tests/mngs/plt/_subplots/test__AxesWrapper.py::[1mTestAxesWrapper::test_getattr_warning[0m - Failed: DID NOT WARN. No warnings of type (<class 'UserWarning'>,) were emi...
+[31mFAILED[0m ../mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__BasicPlotMixin.py::[1mtest_raster[0m - AssertionError: Failed to save figure to ./raster_test.png
+[31mFAILED[0m ../mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__BasicPlotMixin.py::[1mtest_imshow2d[0m - AssertionError: Failed to save figure to ./imshow2d_test.png
+[31mFAILED[0m ../mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin.py::[1mtest_sns_swarmplot[0m - AssertionError: Failed to save figure to ././tests/mngs/plt/_subplots/_Axis...
+[31mFAILED[0m ../mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin.py::[1mtest_sns_heatmap[0m - AssertionError: Failed to save figure to ././tests/mngs/plt/_subplots/_Axis...
+[31mFAILED[0m ../mngs_repo/tests/mngs/decorators/test__torch_fn.py::[1mtest_torch_fn_with_list_input[0m - AssertionError: assert False
+[31m!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 11 failures !!!!!!!!!!!!!!!!!!!!!!!!!![0m
+!!!!!!!!!!!! xdist.dsession.Interrupted: stopping after 1 failures !!!!!!!!!!!!!
+[31m================= [31m[1m11 failed[0m, [32m29 passed[0m, [33m849 warnings[0m[31m in 48.80s[0m[31m =================[0m
