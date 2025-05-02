@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-01 08:54:16 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxisWrapper.py
+# Timestamp: "2025-05-01 17:11:28 (ywatanabe)"
+# File: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_AxisWrapper.py
 # ----------------------------------------
 import os
 __FILE__ = (
@@ -50,7 +50,7 @@ class AxisWrapper(
         #    This check happens implicitly before __getattr__ is called.
         #    If a method like `plot` is defined in BasicPlotMixin, it will be found first.
 
-        print(f"Attribute of AxisWrapper: {name}")
+        # print(f"Attribute of AxisWrapper: {name}")
 
         # 1. Try to get the attribute from the wrapped axes instance
         if hasattr(self._axes_mpl, name):
