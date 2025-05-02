@@ -1,6 +1,6 @@
 #!/bin/bash
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-30 14:34:43 (ywatanabe)"
+# Timestamp: "2025-05-02 17:58:10 (ywatanabe)"
 # File: ./run_tests.sh
 
 THIS_DIR="$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)"
@@ -18,10 +18,10 @@ SYNC_TESTS_WITH_SOURCE=false
 VERBOSE=false
 SPECIFIC_TEST=""
 ROOT_DIR=$THIS_DIR
-N_WORKERS=$(nproc)
-if [ $? -ne 0 ]; then
-    N_WORKERS=$(sysctl -n hw.ncpu 2>/dev/null || echo 1)
-fi
+# N_WORKERS=$(nproc)
+# if [ $? -ne 0 ]; then
+#     N_WORKERS=$(sysctl -n hw.ncpu 2>/dev/null || echo 1)
+# fi
 # N_WORKERS=$((N_WORKERS * 2 / 4))  # Use 50% of cores
 N_WORKERS=1
 N_RUNS=1
@@ -88,8 +88,6 @@ parse_args() {
     done
 }
 
-
-
 check_existing_runtests_processes() {
     # Get only processes that contain run_tests.sh in the command, excluding grep itself and the current process
     existing_processes=$(ps aux | grep "run_tests.sh" | grep -v "grep" | grep -v $$ | awk '{print $2}')
@@ -109,10 +107,23 @@ check_existing_runtests_processes() {
     return 0
 }
 
+kill_existing_runtests_processes() {
+    existing_pids=$(ps aux | grep "run_tests.sh" | grep -v "grep" | grep -v $$ | awk '{print $2}')
+    if [ -n "$existing_pids" ]; then
+        echo "Killing existing run_tests.sh processes: $existing_pids"
+        kill -9 $existing_pids 2>/dev/null
+    fi
+}
+
 clear_cache() {
     echo "Cleaning Python cache..."
     find . -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
     find . -name "*.pyc*" -type f -exec rm -f {} + 2>/dev/null || true
+}
+
+remove_python_output_directories() {
+    echo "Delete Python output directories..."
+    find "./tests/" -name "test_*_out" -type d -exec rm -rf {} + 2>/dev/null || true
 }
 
 sync_tests_with_source() {
@@ -136,7 +147,7 @@ run_tests() {
     # PYTEST_ARGS="$PYTEST_ARGS --tb=short"
 
     # Timestamp
-    date | tee -a "$LOG_PATH_TMP" 2>&1
+    date >> "$LOG_PATH_TMP" 2>&1
 
     # ROOT DIR
     if [[ -n $ROOT_DIR ]]; then
@@ -167,7 +178,8 @@ run_tests() {
 }
 
 main() {
-
+    kill_existing_runtests_processes
+    remove_python_output_directories
     if check_existing_runtests_processes; then
         echo "No existing processes found. Continuing execution."
         parse_args "$@"
@@ -181,6 +193,7 @@ main() {
             echo "LOG_PATH: $LOG_PATH" | tee -a "$LOG_PATH_TMP"
             echo "LOG_PATH_TMP: $LOG_PATH_TMP" | tee -a "$LOG_PATH_TMP"
             echo "Test run $i_run of $N_RUNS" | tee -a "$LOG_PATH_TMP"
+
 
             # Clear cache
             if [[ $DELETE_CACHE == true ]]; then clear_cache; fi
