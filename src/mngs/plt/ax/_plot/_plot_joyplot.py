@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-01 08:51:52 (ywatanabe)"
+# Timestamp: "2025-05-02 09:03:23 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_plot/_plot_joyplot.py
 # ----------------------------------------
 import os
@@ -14,10 +14,10 @@ import warnings
 
 import joypy
 
-from .._adjust._set_xyt import set_xyt as mngs_plt_set_xyt
+from .._style._set_xyt import set_xyt as mngs_plt_set_xyt
 
 
-def _plot_joyplot(ax, data, orientation, **kwargs):
+def plot_joyplot(ax, data, orientation="vertical", **kwargs):
     # FIXME; orientation should be handled
     fig, axes = joypy.joyplot(
         data=data,
@@ -36,11 +36,11 @@ def _plot_joyplot(ax, data, orientation, **kwargs):
     return ax
 
 
-def plot_vertical_joyplot(ax, data, **kwargs):
-    return _plot_joyplot(ax, data, "vertical", **kwargs)
+# def plot_vertical_joyplot(ax, data, **kwargs):
+#     return _plot_joyplot(ax, data, "vertical", **kwargs)
 
 
-def plot_horizontal_joyplot(ax, data, **kwargs):
-    return _plot_joyplot(ax, data, "horizontal", **kwargs)
+# def plot_horizontal_joyplot(ax, data, **kwargs):
+#     return _plot_joyplot(ax, data, "horizontal", **kwargs)
 
 # EOF
