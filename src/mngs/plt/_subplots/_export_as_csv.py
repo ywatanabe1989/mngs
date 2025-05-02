@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-30 21:02:38 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_export_as_csv.py
+# Timestamp: "2025-05-01 17:01:32 (ywatanabe)"
+# File: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_export_as_csv.py
 # ----------------------------------------
 import os
 __FILE__ = (
@@ -126,9 +126,11 @@ def format_record(record):
         x = args[0]
 
         # One box plot
-        import mngs.gen.is_listed_X as mngs_gen_is_listed_X
+        from mngs.types import is_listed_X as mngs_types_is_listed_X
 
-        if isinstance(x, np.ndarray) or mngs_gen_is_listed_X(x, [float, int]):
+        if isinstance(x, np.ndarray) or mngs_types_is_listed_X(
+            x, [float, int]
+        ):
             df = pd.DataFrame(x)
 
         else:
