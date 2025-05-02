@@ -17,66 +17,151 @@ norecursedirs =
     .old
 python_files =
     test_*.py
-    *_test.py
 addopts =
     --import-mode=importlib
     -q
     --no-header
     --tb=short
+    --last-failed    
     --exitfirst
-    --verbose
+    # --verbose
     --color=yes
     -s
     --pdb
     --pdbcls=IPython.terminal.debugger:TerminalPdb
+
     # -n auto
     # --no-summary
 env =
     PYTHONPATH=.
     TESTING=True
-Thu May  1 08:20:08 AM AEST 2025
-[1m============================= test session starts ==============================[0m
-
+Fri May  2 07:59:13 PM AEST 2025
+/home/ywatanabe/proj/_mngs_repo/tests/custom/test_matplotlib_compatibility.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/test___init__.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/decorators/test___init__.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/decorators/test__not_implemented.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/decorators/test__numpy_fn.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/decorators/test__pandas_fn.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/decorators/test__preserve_doc.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/decorators/test__timeout.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/decorators/test__torch_fn.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/decorators/test__wrap.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/decorators/test__xarray_fn.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/test__tpl.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/test__AxesWrapper.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/test__AxisWrapper.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/test__FigWrapper.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/test__SubplotsManager.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/test__export_as_csv.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__TrackingMixin.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test___init__.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__add_marginal_ax.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__add_panel.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__extend.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__force_aspect.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__format_label.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__hide_spines.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__map_ticks.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__rotate_labels.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__sci_note.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__set_n_ticks.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__set_size.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__set_supxyt.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__set_ticks.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__set_xyt.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__share_axes.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__shift.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_circular_hist.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_conf_mat.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_cube.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_ecdf.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_fillv.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_half_violin.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_heatmap.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_image.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_joyplot.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_raster.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_rectangle.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_shaded_line.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_statistical_shaded_line.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/color/test__PARAMS.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/color/test__add_hue_col.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/color/test__colors.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/color/test__get_colors_from_cmap.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/color/test__interp_colors.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/color/test__vizualize_colors.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/utils/test__configure_mpl.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/utils/test__im2grid.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/utils/test__mk_colorbar.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/utils/test__mk_patches.py
+[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_image_test.csv (3.0 B)[0m
+[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_image_test.png (18.2 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_image_xyz_test.csv (3.0 B)[0m
+[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_image_xyz_test.png (19.8 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_kde_test.png (22.0 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_kde_cumulative_test.png (22.9 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_conf_mat_test.csv (3.0 B)[0m
+[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_conf_mat_test.png (22.3 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_rectangle_test.csv (3.0 B)[0m
+[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_rectangle_test.png (16.9 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_fillv_test.png (11.5 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_boxtest.csv (3.0 B)[0m
+[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_boxtest.png (12.6 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_raster_test.csv (3.0 B)[0m
+[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_raster_test.png (17.0 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_ecdf_test.csv (3.0 B)[0m
+[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_ecdf_test.png (22.1 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_joyplot_test.csv (3.0 B)[0m
+[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_joyplot_test.png (11.0 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_line_test.csv (3.0 B)[0m
+[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_line_test.png (30.2 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_scatter_hist_test.csv (3.0 B)[0m
+[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_scatter_hist_test.png (46.5 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_heatmap_test.csv (3.0 B)[0m
+[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_heatmap_test.png (36.2 KiB)[0m
+[32m.[0m[31mF[0m
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> traceback >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-[31mImportError while importing test module '/home/ywatanabe/proj/_mngs_repo/src/mngs/stats/tests/__corr_test.py'.
-Hint: make sure your test modules/packages have valid Python names.
-Traceback:
-src/mngs/__init__.py:33: in <module>
-    from . import gen
-src/mngs/gen/__init__.py:28: in <module>
-    module = importlib.import_module(f".{module_name}", package=__name__)
-/usr/lib/python3.11/importlib/__init__.py:126: in import_module
-    return _bootstrap._gcd_import(name[level:], package, level)
-src/mngs/gen/_start.py:25: in <module>
-    from ..plt._configure_mpl import configure_mpl
-src/mngs/plt/__init__.py:13: in <module>
-    from ._subplots._SubplotsWrapper import subplots
-src/mngs/plt/_subplots/__init__.py:23: in <module>
-    module = importlib.import_module(f".{module_name}", package=__name__)
-/usr/lib/python3.11/importlib/__init__.py:126: in import_module
-    return _bootstrap._gcd_import(name[level:], package, level)
-src/mngs/plt/_subplots/_AxisWrapper.py:18: in <module>
-    from ._AxisWrapperMixins import (AdjustmentMixin, BasicPlotMixin, SeabornMixin,
-src/mngs/plt/_subplots/_AxisWrapperMixins/__init__.py:17: in <module>
-    module = __importlib.import_module(f".{module_name}", package=__name__)
-/usr/lib/python3.11/importlib/__init__.py:126: in import_module
-    return _bootstrap._gcd_import(name[level:], package, level)
-src/mngs/plt/_subplots/_AxisWrapperMixins/_MatplotlibPlotMixin_.py:24: in <module>
-    from ....plt import ax as ax_module
-src/mngs/plt/ax/__init__.py:23: in <module>
-    from ._adjust._set_ticks import set_ticks
-src/mngs/plt/ax/_adjust/_set_ticks.py:17: in <module>
-    from ...dict._to_str import to_str
-E   ModuleNotFoundError: No module named 'mngs.plt.dict'[0m
+[1m[31mtests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py[0m:383: in test_plot_violin
+    [0max.plot_violin(data, labels=labels, showmedians=[94mTrue[39;49;00m)[90m[39;49;00m
+[1m[31msrc/mngs/plt/_subplots/_AxisWrapperMixins/_MatplotlibPlotMixin.py[0m:522: in plot_violin
+    [0m[96mself[39;49;00m._axis_mpl = ax_module.plot_violin([90m[39;49;00m
+[1m[31mE   AttributeError: module 'mngs.plt.ax' has no attribute 'plot_violin'[0m
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> entering PDB >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> PDB post_mortem >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-> [0;32m/home/ywatanabe/.env-3.11/lib/python3.11/site-packages/_pytest/python.py[0m(523)[0;36mimporttestmodule[0;34m()[0m
-[0;32m    521 [0;31m        )
-[0m[0;32m    522 [0;31m        [0mformatted_tb[0m [0;34m=[0m [0mstr[0m[0;34m([0m[0mexc_repr[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
-[0m[0;32m--> 523 [0;31m        raise nodes.Collector.CollectError(
-[0m[0;32m    524 [0;31m            [0;34mf"ImportError while importing test module '{path}'.\n"[0m[0;34m[0m[0;34m[0m[0m
-[0m[0;32m    525 [0;31m            [0;34m"Hint: make sure your test modules/packages have valid Python names.\n"[0m[0;34m[0m[0;34m[0m[0m
+> [0;32m/home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_MatplotlibPlotMixin.py[0m(522)[0;36mplot_violin[0;34m()[0m
+[0;32m    520 [0;31m        [0;31m# Plotting with pure matplotlib methods under non-tracking context[0m[0;34m[0m[0;34m[0m[0m
+[0m[0;32m    521 [0;31m        [0;32mwith[0m [0mself[0m[0;34m.[0m[0m_no_tracking[0m[0;34m([0m[0;34m)[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[0m[0;32m--> 522 [0;31m            self._axis_mpl = ax_module.plot_violin(
+[0m[0;32m    523 [0;31m                [0mself[0m[0;34m.[0m[0m_axis_mpl[0m[0;34m,[0m[0;34m[0m[0;34m[0m[0m
+[0m[0;32m    524 [0;31m                [0m_data[0m[0;34m,[0m[0;34m[0m[0;34m[0m[0m
 [0m
 ipdb>
 
@@ -85,16 +170,79 @@ ipdb>
 
 
 
-       ipdb>
-
-
-
-
-
-
        ipdb>                                                                                                                                                          
 
-collected 0 items
 
+[33m=============================== warnings summary ===============================[0m
+../../../../usr/lib/python3/dist-packages/pyparsing.py:108
+  /usr/lib/python3/dist-packages/pyparsing.py:108: DeprecationWarning: module 'sre_constants' is deprecated
+    import sre_constants
+
+tests/custom/test_matplotlib_compatibility.py: 106 warnings
+  /home/ywatanabe/proj/_mngs_repo/tests/custom/test_matplotlib_compatibility.py:44: MatplotlibDeprecationWarning: The INVALID attribute was deprecated in Matplotlib 3.8 and will be removed in 3.10.
+    mpl_attr = getattr(mpl_module, attr_name)
+
+tests/custom/test_matplotlib_compatibility.py: 106 warnings
+  /home/ywatanabe/proj/_mngs_repo/tests/custom/test_matplotlib_compatibility.py:45: MatplotlibDeprecationWarning: The INVALID attribute was deprecated in Matplotlib 3.8 and will be removed in 3.10.
+    mngs_attr = getattr(mngs_module, attr_name)
+
+tests/custom/test_matplotlib_compatibility.py: 106 warnings
+  /home/ywatanabe/proj/_mngs_repo/tests/custom/test_matplotlib_compatibility.py:44: MatplotlibDeprecationWarning: The INVALID_AFFINE attribute was deprecated in Matplotlib 3.8 and will be removed in 3.10.
+    mpl_attr = getattr(mpl_module, attr_name)
+
+tests/custom/test_matplotlib_compatibility.py: 106 warnings
+  /home/ywatanabe/proj/_mngs_repo/tests/custom/test_matplotlib_compatibility.py:45: MatplotlibDeprecationWarning: The INVALID_AFFINE attribute was deprecated in Matplotlib 3.8 and will be removed in 3.10.
+    mngs_attr = getattr(mngs_module, attr_name)
+
+tests/custom/test_matplotlib_compatibility.py: 106 warnings
+  /home/ywatanabe/proj/_mngs_repo/tests/custom/test_matplotlib_compatibility.py:44: MatplotlibDeprecationWarning: The INVALID_NON_AFFINE attribute was deprecated in Matplotlib 3.8 and will be removed in 3.10.
+    mpl_attr = getattr(mpl_module, attr_name)
+
+tests/custom/test_matplotlib_compatibility.py: 106 warnings
+  /home/ywatanabe/proj/_mngs_repo/tests/custom/test_matplotlib_compatibility.py:45: MatplotlibDeprecationWarning: The INVALID_NON_AFFINE attribute was deprecated in Matplotlib 3.8 and will be removed in 3.10.
+    mngs_attr = getattr(mngs_module, attr_name)
+
+tests/custom/test_matplotlib_compatibility.py: 106 warnings
+  /home/ywatanabe/proj/_mngs_repo/tests/custom/test_matplotlib_compatibility.py:44: MatplotlibDeprecationWarning: The is_bbox attribute was deprecated in Matplotlib 3.9 and will be removed in 3.11.
+    mpl_attr = getattr(mpl_module, attr_name)
+
+tests/custom/test_matplotlib_compatibility.py: 106 warnings
+  /home/ywatanabe/proj/_mngs_repo/tests/custom/test_matplotlib_compatibility.py:45: MatplotlibDeprecationWarning: The is_bbox attribute was deprecated in Matplotlib 3.9 and will be removed in 3.11.
+    mngs_attr = getattr(mngs_module, attr_name)
+
+tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py::test_plot_image
+tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py::test_plot_image_xyz
+tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py::test_plot_conf_mat
+tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py::test_plot_rectangle
+tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py::test_plot_box
+tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py::test_plot_joyplot
+tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py::test_plot_line
+tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py::test_plot_scatter_hist
+tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py::test_plot_heatmap
+  /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_export_as_csv.py:35: UserWarning: Plotting records not combined. Empty dataframe returned All objects passed were None
+    warnings.warn(
+
+tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py::test_plot_kde
+tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py::test_plot_kde_cumulative
+  /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_AdjustmentMixin.py:77: UserWarning: No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.
+    return self._axis_mpl.legend(loc=loc)
+
+tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py::test_plot_box
+  /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_MatplotlibPlotMixin.py:237: MatplotlibDeprecationWarning: The 'labels' parameter of boxplot() has been renamed 'tick_labels' since Matplotlib 3.9; support for the old name will be dropped in 3.11.
+    self._axis_mpl.boxplot(data, **kwargs)
+
+tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py::test_plot_raster
+tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py::test_plot_ecdf
+  /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_export_as_csv.py:35: UserWarning: Plotting records not combined. Empty dataframe returned cannot concatenate object of type '<class 'dict'>'; only Series and DataFrame objs are valid
+    warnings.warn(
+
+tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py::test_plot_heatmap
+  /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/ax/_plot/_plot_heatmap.py:91: MatplotlibDeprecationWarning: The get_cmap function was deprecated in Matplotlib 3.7 and will be removed in 3.11. Use ``matplotlib.colormaps[name]`` or ``matplotlib.colormaps.get_cmap()`` or ``pyplot.get_cmap()`` instead.
+    cmap_obj = plt.cm.get_cmap(cmap)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+[36m[1m=========================== short test summary info ============================[0m
+[31mFAILED[0m ../mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py::[1mtest_plot_violin[0m - AttributeError: module 'mngs.plt.ax' has no attribute 'plot_violin'
+[31m!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!![0m
 !!!!!!!!!!!!!!!!!!! _pytest.outcomes.Exit: Quitting debugger !!!!!!!!!!!!!!!!!!!
-[33m====================== [33mno tests ran[0m[33m in 105.61s (0:01:45)[0m[33m =======================[0m
+[31m[31m[1m1 failed[0m, [32m48 passed[0m, [33m864 warnings[0m[31m in 86.19s (0:01:26)[0m[0m
