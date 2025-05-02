@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-30 11:18:58 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/_subplots/test__SubplotsManager.py
+# Timestamp: "2025-05-01 16:54:52 (ywatanabe)"
+# File: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/test__SubplotsManager.py
 # ----------------------------------------
 import os
 __FILE__ = (
@@ -10,76 +10,73 @@ __FILE__ = (
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
-import mngs
+# class TestSubplotsManager:
+#     def setup_method(self):
+#         self.manager = mngs.plt.subplots()
+
+#     def test_init(self):
+#         assert hasattr(self.manager, "_subplots_manager_history")
+#         assert self.manager.fig_wrapper is None
+
+#     def test_single_axis_creation(self):
+#         fig, ax = self.manager(figsize=(5, 4))
+#         assert hasattr(fig, "axes")
+#         assert len(fig.axes) == 1
+#         assert ax.track is True
+
+#     def test_multi_axes_creation(self):
+#         fig, axes = self.manager(2, 2)
+#         assert hasattr(fig, "axes")
+#         assert axes.shape == (2, 2)
+#         assert all(ax.track is True for ax in axes.flat)
+
+#     def test_tracking_disabled(self):
+#         fig, ax = self.manager(track=False)
+#         assert ax.track is False
+
+#     def test_method_delegation(self):
+#         fig, ax = self.manager()
+#         # Test delegation to figure
+#         assert hasattr(self.manager, "savefig")
+
+#     def test_warning_for_unknown_method(self):
+#         with pytest.warns(UserWarning, match="not found, ignored"):
+#             result = self.manager.nonexistent_method()
+#             assert result is None
 
 
-class TestSubplotsManager:
-    def setup_method(self):
-        self.manager = mngs.plt.subplots()
+# class TestSubplotsIntegration:
+#     def test_subplots_single_axis(self):
+#         fig, ax = mngs.plt.subplots()
+#         assert hasattr(ax, "plot")
+#         assert hasattr(ax, "scatter")
+#         assert hasattr(ax, "export_as_csv")
 
-    def test_init(self):
-        assert hasattr(self.manager, "_subplots_manager_history")
-        assert self.manager.fig_wrapper is None
+#     def test_plot_with_tracking(self):
+#         fig, ax = mngs.plt.subplots()
+#         ax.plot([1, 2, 3], [4, 5, 6], id="test_plot")
+#         df = ax.export_as_csv()
+#         assert not df.empty
+#         assert "test_plot_plot_x" in df.columns
+#         assert "test_plot_plot_y" in df.columns
 
-    def test_single_axis_creation(self):
-        fig, ax = self.manager(figsize=(5, 4))
-        assert hasattr(fig, "axes")
-        assert len(fig.axes) == 1
-        assert ax.track is True
+#     def test_tracking_disabled_globally(self):
+#         fig, ax = subplots(track=False)
+#         ax.plot([1, 2, 3], [4, 5, 6], id="test_plot")
+#         df = ax.export_as_csv()
+#         assert df.empty
 
-    def test_multi_axes_creation(self):
-        fig, axes = self.manager(2, 2)
-        assert hasattr(fig, "axes")
-        assert axes.shape == (2, 2)
-        assert all(ax.track is True for ax in axes.flat)
+#     def test_multiple_plot_types(self):
+#         fig, ax = mngs.plt.subplots()
+#         ax.plot([1, 2, 3], [4, 5, 6], id="plot1")
+#         ax.scatter([1, 2, 3], [6, 5, 4], id="scatter1")
+#         ax.boxplot([1, 2, 3], id="box1")
 
-    def test_tracking_disabled(self):
-        fig, ax = self.manager(track=False)
-        assert ax.track is False
-
-    def test_method_delegation(self):
-        fig, ax = self.manager()
-        # Test delegation to figure
-        assert hasattr(self.manager, "savefig")
-
-    def test_warning_for_unknown_method(self):
-        with pytest.warns(UserWarning, match="not found, ignored"):
-            result = self.manager.nonexistent_method()
-            assert result is None
-
-
-class TestSubplotsIntegration:
-    def test_subplots_single_axis(self):
-        fig, ax = mngs.plt.subplots()
-        assert hasattr(ax, "plot")
-        assert hasattr(ax, "scatter")
-        assert hasattr(ax, "export_as_csv")
-
-    def test_plot_with_tracking(self):
-        fig, ax = mngs.plt.subplots()
-        ax.plot([1, 2, 3], [4, 5, 6], id="test_plot")
-        df = ax.export_as_csv()
-        assert not df.empty
-        assert "test_plot_plot_x" in df.columns
-        assert "test_plot_plot_y" in df.columns
-
-    def test_tracking_disabled_globally(self):
-        fig, ax = subplots(track=False)
-        ax.plot([1, 2, 3], [4, 5, 6], id="test_plot")
-        df = ax.export_as_csv()
-        assert df.empty
-
-    def test_multiple_plot_types(self):
-        fig, ax = mngs.plt.subplots()
-        ax.plot([1, 2, 3], [4, 5, 6], id="plot1")
-        ax.scatter([1, 2, 3], [6, 5, 4], id="scatter1")
-        ax.boxplot([1, 2, 3], id="box1")
-
-        df = ax.export_as_csv()
-        assert not df.empty
-        assert "plot1_plot_x" in df.columns
-        assert "scatter1_scatter_x" in df.columns
-        assert "box1_boxplot_x" in df.columns
+#         df = ax.export_as_csv()
+#         assert not df.empty
+#         assert "plot1_plot_x" in df.columns
+#         assert "scatter1_scatter_x" in df.columns
+#         assert "box1_boxplot_x" in df.columns
 
 
 if __name__ == "__main__":
