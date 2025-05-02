@@ -430,7 +430,7 @@ if __name__ == "__main__":
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Timestamp: "2025-04-30 14:57:11 (ywatanabe)"
+# # Timestamp: "2025-05-01 09:16:13 (ywatanabe)"
 # # File: /home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_wrap.py
 # # ----------------------------------------
 # import os
@@ -439,10 +439,6 @@ if __name__ == "__main__":
 # )
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
-# # Time-stamp: "2024-11-07 05:57:34 (ywatanabe)"
-# # File: ./mngs_repo/src/mngs/decorators/_wrap.py
-# import functools
-# 
 # 
 # def wrap(func):
 #     """Basic function wrapper that preserves function metadata.
@@ -457,6 +453,7 @@ if __name__ == "__main__":
 #     This wrapper is useful as a template for creating more complex decorators
 #     or when you want to ensure function metadata is preserved.
 #     """
+#     import functools
 # 
 #     @functools.wraps(func)
 #     def wrapper(*args, **kwargs):
