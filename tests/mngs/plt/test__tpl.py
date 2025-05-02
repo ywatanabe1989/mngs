@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-28 16:27:52 (ywatanabe)"
+# Timestamp: "2025-05-02 10:58:06 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/test__tpl.py
 # ----------------------------------------
 import os
@@ -9,17 +9,13 @@ __FILE__ = (
 )
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
-import sys
-from pathlib import Path
 
 import matplotlib
+import numpy as np
 import pytest
+import termplotlib as tpl
 
 matplotlib.use("Agg")  # Use non-interactive backend for testing
-
-project_root = str(Path(__file__).resolve().parents[3])
-if project_root not in sys.path:
-    sys.path.insert(0, os.path.join(project_root, "src"))
 
 from mngs.plt._tpl import termplot
 
@@ -53,34 +49,6 @@ def test_termplot_two_args(monkeypatch):
     y_values = np.array([1, 2, 3])
     termplot(x_values, y_values)
     assert dummy.plots[0] == (list(x_values), list(y_values))
-
-
-class DummyFig:
-    def __init__(self):
-        self.plots = []
-
-    def plot(self, x, y):
-        self.plots.append((list(x), list(y)))
-
-    def show(self):
-        pass
-
-
-def test_termplot_one_arg(monkeypatch):
-    dummy = DummyFig()
-    monkeypatch.setattr(tpl, "figure", lambda *args, **kwargs: dummy)
-    y = np.array([0, 1, 2])
-    termplot(y)
-    assert dummy.plots == [(list(np.arange(3)), list(y))]
-
-
-def test_termplot_two_args(monkeypatch):
-    dummy = DummyFig()
-    monkeypatch.setattr(tpl, "figure", lambda *args, **kwargs: dummy)
-    x = np.array([1, 2, 3])
-    y = np.array([4, 5, 6])
-    termplot(x, y)
-    assert dummy.plots == [(list(x), list(y))]
 
 if __name__ == "__main__":
     import os
