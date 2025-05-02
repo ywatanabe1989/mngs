@@ -1,4 +1,4 @@
-# --------------------------------------------------------------------------------
+# Add your tests here
 
 if __name__ == "__main__":
     import os
@@ -12,7 +12,7 @@ if __name__ == "__main__":
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Timestamp: "2025-04-29 20:41:53 (ywatanabe)"
+# # Timestamp: "2025-05-02 17:40:55 (ywatanabe)"
 # # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/__init__.py
 # # ----------------------------------------
 # import os
@@ -22,37 +22,20 @@ if __name__ == "__main__":
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
 # 
-# import importlib
-# import inspect
-# 
-# # Get the current directory
-# current_dir = os.path.dirname(__file__)
-# 
-# # Iterate through all Python files in the current directory
-# for filename in os.listdir(current_dir):
-#     if filename.endswith(".py") and not filename.startswith("__"):
-#         module_name = filename[:-3]  # Remove .py extension
-#         module = importlib.import_module(f".{module_name}", package=__name__)
-# 
-#         # Import only functions and classes from the module
-#         for name, obj in inspect.getmembers(module):
-#             if inspect.isfunction(obj) or inspect.isclass(obj):
-#                 if not name.startswith("_"):
-#                     globals()[name] = obj
-# 
-# # Clean up temporary variables
-# del os, importlib, inspect, current_dir, filename, module_name, module, name, obj
-# 
 # from ._subplots._SubplotsWrapper import subplots
-# from ._PARAMS import PARAMS
 # from . import ax
-# from ._close import close
+# from . import color
+# from .utils._close import close
+# from ._tpl import tpl
+# 
 # 
 # ################################################################################
 # # For Matplotlib Compatibility
 # ################################################################################
 # import matplotlib.pyplot as _counter_part
+# 
 # _local_module_attributes = list(globals().keys())
+# 
 # 
 # def __getattr__(name):
 #     """
@@ -68,6 +51,7 @@ if __name__ == "__main__":
 #             f"module '{__name__}' nor matplotlib.pyplot has attribute '{name}'"
 #         ) from None
 # 
+# 
 # def __dir__():
 #     """
 #     Provide combined directory for tab completion, including
@@ -79,6 +63,7 @@ if __name__ == "__main__":
 #     pyplot_attrs = set(dir(_counter_part))
 #     # Return the sorted union
 #     return sorted(local_attrs.union(pyplot_attrs))
+# 
 # 
 # """
 # import matplotlib.pyplot as _counter_part
