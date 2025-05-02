@@ -28,7 +28,7 @@ if __name__ == "__main__":
 # from ._Perplexity import Perplexity
 # from ._DeepSeek import DeepSeek
 # from ._Groq import Groq
-# from .PARAMS import MODELS
+# from ._PARAMS import MODELS
 # 
 # """Functions & Classes""" """Parameters"""
 # 

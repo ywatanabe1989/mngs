@@ -43,7 +43,7 @@ if __name__ == "__main__":
 # from ._calc_cost import calc_cost
 # from ._format_output_func import format_output_func
 # from ...io._load import load
-# from .PARAMS import MODELS
+# from ._PARAMS import MODELS
 # import base64
 # 
 # """Functions & Classes"""
