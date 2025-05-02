@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-29 19:56:30 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxesWrapper.py
+# Timestamp: "2025-05-02 23:06:28 (ywatanabe)"
+# File: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_AxesWrapper.py
 # ----------------------------------------
 import os
 __FILE__ = (
@@ -9,6 +9,8 @@ __FILE__ = (
 )
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
+
+from functools import wraps
 
 import pandas as pd
 
@@ -20,6 +22,23 @@ class AxesWrapper:
 
     def get_figure(self):
         return self._fig_mngs
+
+    def __getattr__(self, attr):
+        # print(f"Attribute of FigWrapper: {attr}")
+        attr_mpl = getattr(self._axes_mngs, attr)
+
+        if callable(attr_mpl):
+
+            @wraps(attr_mpl)
+            def wrapper(*args, track=None, id=None, **kwargs):
+                results = attr_mpl(*args, **kwargs)
+                # self._track(track, id, attr, args, kwargs)
+                return results
+
+            return wrapper
+
+        else:
+            return attr_mpl
 
     # def __getattr__(self, name):
     #     print(f"Attribute of AxesWrapper: {name}")
