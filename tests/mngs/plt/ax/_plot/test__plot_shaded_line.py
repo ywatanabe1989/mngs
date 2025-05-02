@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-01 22:53:38 (ywatanabe)"
+# Timestamp: "2025-05-02 23:28:53 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/ax/_plot/test__plot_shaded_line.py
 # ----------------------------------------
 import os
@@ -12,32 +12,100 @@ __DIR__ = os.path.dirname(__FILE__)
 
 import matplotlib.pyplot as plt
 import numpy as np
+import pytest
 from mngs.plt.ax._plot._plot_shaded_line import plot_shaded_line
 
 
-def test_plot_shaded_line_savefig():
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
+class TestPlotShadedLine:
+    def setup_method(self):
+        # Setup test fixtures
+        self.fig = plt.figure()
+        self.ax = self.fig.add_subplot(111)
 
-    x = np.linspace(0, 10, 100)
-    y_middle = np.sin(x)
-    y_lower = y_middle - 0.2
-    y_upper = y_middle + 0.2
+        # Create sample data
+        self.x = np.linspace(0, 10, 100)
+        self.y_middle = np.sin(self.x)
+        self.y_lower = self.y_middle - 0.2
+        self.y_upper = self.y_middle + 0.2
 
-    ax, df = plot_shaded_line(
-        ax, x, y_lower, y_middle, y_upper, label="Test Shade"
-    )
+        # Create output directory if it doesn't exist
+        self.out_dir = __file__.replace(".py", "_out")
+        os.makedirs(self.out_dir, exist_ok=True)
 
-    # Saving
-    from mngs.io import save
+    def teardown_method(self):
+        # Clean up after tests
+        plt.close(self.fig)
 
-    spath = f"./{os.path.basename(__file__)}.jpg"
-    save(fig, spath)
+    def save_test_figure(self, method_name):
+        """Helper method to save figure using method name"""
+        from mngs.io import save
 
-    # Check saved file
-    ACTUAL_SAVE_DIR = __file__.replace(".py", "_out")
-    actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
-    assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+        spath = f"./{os.path.basename(__file__).replace('.py', '')}_{method_name}.jpg"
+        save(self.fig, spath)
+        # Check saved file
+        actual_spath = os.path.join(self.out_dir, spath)
+        assert os.path.exists(
+            actual_spath
+        ), f"Failed to save figure to {spath}"
+
+    def test_plot_single_shaded_line(self):
+        # Test with single shaded line
+        ax, df = plot_shaded_line(
+            self.ax,
+            self.x,
+            self.y_lower,
+            self.y_middle,
+            self.y_upper,
+            label="Test Shade",
+        )
+
+        self.ax.set_title("Single Shaded Line")
+        # Save figure
+        self.save_test_figure("test_plot_single_shaded_line")
+
+        # Check results
+        assert len(self.ax.lines) > 0, "No lines were plotted"
+        assert len(self.ax.collections) > 0, "No shaded area was created"
+
+    def test_plot_multiple_shaded_line(self):
+        # Test with first shaded line
+        ax, df1 = plot_shaded_line(
+            self.ax,
+            self.x,
+            self.y_lower,
+            self.y_middle,
+            self.y_upper,
+            label="Test Shade 1",
+            color="blue",
+        )
+
+        # Add second shaded line with different parameters
+        y_middle2 = np.cos(self.x)
+        y_lower2 = y_middle2 - 0.3
+        y_upper2 = y_middle2 + 0.3
+
+        ax, df2 = plot_shaded_line(
+            self.ax,
+            self.x,
+            y_lower2,
+            y_middle2,
+            y_upper2,
+            label="Test Shade 2",
+            color="red",
+        )
+
+        self.ax.set_title("Multiple Shaded Lines")
+        self.ax.legend()
+
+        # Save figure
+        self.save_test_figure("test_plot_multiple_shaded_line")
+
+        # Check results
+        assert len(self.ax.lines) >= 2, "Expected at least 2 lines"
+        assert (
+            len(self.ax.collections) >= 2
+        ), "Expected at least 2 shaded areas"
+
 
 if __name__ == "__main__":
     import os
@@ -51,7 +119,7 @@ if __name__ == "__main__":
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Timestamp: "2025-05-02 17:30:31 (ywatanabe)"
+# # Timestamp: "2025-05-02 21:37:10 (ywatanabe)"
 # # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_plot/_plot_shaded_line.py
 # # ----------------------------------------
 # import os
@@ -60,17 +128,17 @@ if __name__ == "__main__":
 # )
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
-# 
+#
 # from typing import List, Optional, Tuple, Union
-# 
+#
 # import matplotlib
 # import numpy as np
 # import pandas as pd
 # from matplotlib.axes._axes import Axes
-# 
+#
 # from ....types import ColorLike
-# 
-# 
+#
+#
 # def _plot_single_shaded_line(
 #     axis: Axes,
 #     xx: np.ndarray,
@@ -88,17 +156,15 @@ if __name__ == "__main__":
 #     assert (
 #         len(xx) == len(y_middle) == len(y_lower) == len(y_upper)
 #     ), "All arrays must have the same length"
-# 
-#     print(kwargs)
-#     __import__("ipdb").set_trace()
+#
 #     axis.plot(xx, y_middle, color=color, alpha=alpha, **kwargs)
 #     axis.fill_between(xx, y_lower, y_upper, alpha=alpha, color=color, **kwargs)
-# 
+#
 #     return axis, pd.DataFrame(
 #         {"x": xx, "y_lower": y_lower, "y_middle": y_middle, "y_upper": y_upper}
 #     )
-# 
-# 
+#
+#
 # def _plot_shaded_lines(
 #     axis: Axes,
 #     xs: List[np.ndarray],
@@ -115,10 +181,10 @@ if __name__ == "__main__":
 #     assert (
 #         len(xs) == len(ys_lower) == len(ys_middle) == len(ys_upper)
 #     ), "All input lists must have the same length"
-# 
+#
 #     results = []
 #     color_list = colors
-# 
+#
 #     if colors is not None:
 #         if not isinstance(colors, list):
 #             color_list = [colors] * len(xs)
@@ -127,7 +193,7 @@ if __name__ == "__main__":
 #                 xs
 #             ), "Number of colors must match number of lines"
 #             color_list = colors
-# 
+#
 #         for idx, (xx, y_lower, y_middle, y_upper) in enumerate(
 #             zip(xs, ys_lower, ys_middle, ys_upper)
 #         ):
@@ -147,10 +213,10 @@ if __name__ == "__main__":
 #                 axis, xx, y_lower, y_middle, y_upper, **kwargs
 #             )
 #             results.append(result_df)
-# 
+#
 #     return axis, results
-# 
-# 
+#
+#
 # def plot_shaded_line(
 #     axis: Axes,
 #     xs: Union[np.ndarray, List[np.ndarray]],
@@ -162,7 +228,7 @@ if __name__ == "__main__":
 # ) -> Tuple[Axes, Union[pd.DataFrame, List[pd.DataFrame]]]:
 #     """
 #     Plot a line with shaded area, automatically switching between single and multiple line versions.
-# 
+#
 #     Args:
 #         axis: matplotlib axis
 #         xs: x values (single array or list of arrays)
@@ -171,7 +237,7 @@ if __name__ == "__main__":
 #         ys_upper: upper bound y values (single array or list of arrays)
 #         color: color or list of colors for the lines
 #         **kwargs: additional plotting parameters
-# 
+#
 #     Returns:
 #         tuple: (axis, DataFrame or list of DataFrames with plot data)
 #     """
@@ -181,12 +247,12 @@ if __name__ == "__main__":
 #         and isinstance(ys_middle, list)
 #         and isinstance(ys_upper, list)
 #     )
-# 
+#
 #     if is_single:
 #         assert (
 #             len(xs) == len(ys_lower) == len(ys_middle) == len(ys_upper)
 #         ), "All arrays must have the same length for single line plot"
-# 
+#
 #         return _plot_single_shaded_line(
 #             axis, xs, ys_lower, ys_middle, ys_upper, color=color, **kwargs
 #         )
@@ -194,8 +260,10 @@ if __name__ == "__main__":
 #         return _plot_shaded_lines(
 #             axis, xs, ys_lower, ys_middle, ys_upper, colors=color, **kwargs
 #         )
-# 
+#
 # # EOF
 # --------------------------------------------------------------------------------
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/ax/_plot/_plot_shaded_line.py
 # --------------------------------------------------------------------------------
+
+# EOF
