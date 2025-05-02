@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-01 17:11:51 (ywatanabe)"
+# Timestamp: "2025-05-02 23:04:10 (ywatanabe)"
 # File: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_FigWrapper.py
 # ----------------------------------------
 import os
