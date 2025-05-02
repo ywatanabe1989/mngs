@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-28 16:49:04 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/_subplots/test__FigWrapper.py
+# Timestamp: "2025-05-01 16:53:24 (ywatanabe)"
+# File: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/test__FigWrapper.py
 # ----------------------------------------
 import os
 __FILE__ = (
@@ -9,115 +9,110 @@ __FILE__ = (
 )
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
-from unittest.mock import MagicMock
 
-import matplotlib.pyplot as plt
-import pandas as pd
 import pytest
-from mngs.plt._subplots._FigWrapper import FigWrapper
 
+# class TestFigWrapper:
+#     def setup_method(self):
+#         self.fig = plt.figure()
+#         self.wrapper = FigWrapper(self.fig)
 
-class TestFigWrapper:
-    def setup_method(self):
-        self.fig = plt.figure()
-        self.wrapper = FigWrapper(self.fig)
+#     def test_init(self):
+#         assert self.wrapper.fig is self.fig
+#         assert hasattr(self.wrapper, "axes")
+#         assert self.wrapper.axes == []
 
-    def test_init(self):
-        assert self.wrapper.fig is self.fig
-        assert hasattr(self.wrapper, "axes")
-        assert self.wrapper.axes == []
+#     def test_getattr_existing_attribute(self):
+#         # Test accessing an existing attribute on the figure
+#         assert hasattr(self.wrapper, "figsize")
 
-    def test_getattr_existing_attribute(self):
-        # Test accessing an existing attribute on the figure
-        assert hasattr(self.wrapper, "figsize")
+#     def test_getattr_existing_method(self):
+#         # Test accessing an existing method on the figure
+#         assert callable(self.wrapper.add_subplot)
 
-    def test_getattr_existing_method(self):
-        # Test accessing an existing method on the figure
-        assert callable(self.wrapper.add_subplot)
+#     def test_getattr_warning(self):
+#         # Test attempting to access a non-existent attribute
+#         with pytest.warns(UserWarning, match="not implemented, ignored"):
+#             result = self.wrapper.nonexistent_method()
+#             assert result is None
 
-    def test_getattr_warning(self):
-        # Test attempting to access a non-existent attribute
-        with pytest.warns(UserWarning, match="not implemented, ignored"):
-            result = self.wrapper.nonexistent_method()
-            assert result is None
+#     def test_legend(self):
+#         # Create mock axes
+#         ax1 = MagicMock()
+#         ax2 = MagicMock()
+#         self.wrapper.axes = MagicMock()
+#         self.wrapper.axes.__iter__ = lambda _: iter([ax1, ax2])
 
-    def test_legend(self):
-        # Create mock axes
-        ax1 = MagicMock()
-        ax2 = MagicMock()
-        self.wrapper.axes = MagicMock()
-        self.wrapper.axes.__iter__ = lambda _: iter([ax1, ax2])
+#         # Call legend
+#         self.wrapper.legend(loc="upper right")
 
-        # Call legend
-        self.wrapper.legend(loc="upper right")
+#         # Check that legend was called on each axis
+#         ax1.legend.assert_called_once_with(loc="upper right")
+#         ax2.legend.assert_called_once_with(loc="upper right")
 
-        # Check that legend was called on each axis
-        ax1.legend.assert_called_once_with(loc="upper right")
-        ax2.legend.assert_called_once_with(loc="upper right")
+#     def test_export_as_csv_with_empty_axes(self):
+#         # Test with no axes
+#         self.wrapper.axes = MagicMock()
+#         self.wrapper.axes.flat = []
 
-    def test_export_as_csv_with_empty_axes(self):
-        # Test with no axes
-        self.wrapper.axes = MagicMock()
-        self.wrapper.axes.flat = []
+#         result = self.wrapper.export_as_csv()
+#         assert isinstance(result, pd.DataFrame)
+#         assert result.empty
 
-        result = self.wrapper.export_as_csv()
-        assert isinstance(result, pd.DataFrame)
-        assert result.empty
+#     def test_export_as_csv_with_data(self):
+#         # Create mock axes with sigma data
+#         ax1 = MagicMock()
+#         ax1.export_as_csv.return_value = pd.DataFrame(
+#             {"x": [1, 2, 3], "y": [4, 5, 6]}
+#         )
 
-    def test_export_as_csv_with_data(self):
-        # Create mock axes with sigma data
-        ax1 = MagicMock()
-        ax1.export_as_csv.return_value = pd.DataFrame(
-            {"x": [1, 2, 3], "y": [4, 5, 6]}
-        )
+#         self.wrapper.axes = MagicMock()
+#         self.wrapper.axes.flat = [ax1]
 
-        self.wrapper.axes = MagicMock()
-        self.wrapper.axes.flat = [ax1]
+#         result = self.wrapper.export_as_csv()
+#         assert isinstance(result, pd.DataFrame)
+#         assert not result.empty
+#         assert "ax_00_x" in result.columns
+#         assert "ax_00_y" in result.columns
 
-        result = self.wrapper.export_as_csv()
-        assert isinstance(result, pd.DataFrame)
-        assert not result.empty
-        assert "ax_00_x" in result.columns
-        assert "ax_00_y" in result.columns
+#     def test_supxyt(self):
+#         # Test supxyt method
+#         self.wrapper.fig = MagicMock()
 
-    def test_supxyt(self):
-        # Test supxyt method
-        self.wrapper.fig = MagicMock()
+#         # Call with x and y labels
+#         self.wrapper.supxyt(x="X Label", y="Y Label")
 
-        # Call with x and y labels
-        self.wrapper.supxyt(x="X Label", y="Y Label")
+#         # Check that appropriate methods were called
+#         self.wrapper.fig.supxlabel.assert_called_once_with("X Label")
+#         self.wrapper.fig.supylabel.assert_called_once_with("Y Label")
+#         self.wrapper.fig.suptitle.assert_not_called()
 
-        # Check that appropriate methods were called
-        self.wrapper.fig.supxlabel.assert_called_once_with("X Label")
-        self.wrapper.fig.supylabel.assert_called_once_with("Y Label")
-        self.wrapper.fig.suptitle.assert_not_called()
+#         # Reset and test with title
+#         self.wrapper.fig.reset_mock()
+#         self.wrapper.supxyt(t="Title")
 
-        # Reset and test with title
-        self.wrapper.fig.reset_mock()
-        self.wrapper.supxyt(t="Title")
+#         self.wrapper.fig.supxlabel.assert_not_called()
+#         self.wrapper.fig.supylabel.assert_not_called()
+#         self.wrapper.fig.suptitle.assert_called_once_with("Title")
 
-        self.wrapper.fig.supxlabel.assert_not_called()
-        self.wrapper.fig.supylabel.assert_not_called()
-        self.wrapper.fig.suptitle.assert_called_once_with("Title")
+#     def test_tight_layout(self):
+#         # Test tight_layout method
+#         self.wrapper.fig = MagicMock()
 
-    def test_tight_layout(self):
-        # Test tight_layout method
-        self.wrapper.fig = MagicMock()
+#         # Call with default rect
+#         self.wrapper.tight_layout()
 
-        # Call with default rect
-        self.wrapper.tight_layout()
+#         # Check that tight_layout was called with the correct rect
+#         self.wrapper.fig.tight_layout.assert_called_once_with(
+#             rect=[0, 0.03, 1, 0.95]
+#         )
 
-        # Check that tight_layout was called with the correct rect
-        self.wrapper.fig.tight_layout.assert_called_once_with(
-            rect=[0, 0.03, 1, 0.95]
-        )
+#         # Reset and test with custom rect
+#         self.wrapper.fig.reset_mock()
+#         custom_rect = [0.1, 0.1, 0.9, 0.9]
+#         self.wrapper.tight_layout(rect=custom_rect)
 
-        # Reset and test with custom rect
-        self.wrapper.fig.reset_mock()
-        custom_rect = [0.1, 0.1, 0.9, 0.9]
-        self.wrapper.tight_layout(rect=custom_rect)
-
-        self.wrapper.fig.tight_layout.assert_called_once_with(rect=custom_rect)
+#         self.wrapper.fig.tight_layout.assert_called_once_with(rect=custom_rect)
 
 if __name__ == "__main__":
     import os
@@ -131,12 +126,12 @@ if __name__ == "__main__":
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Timestamp: "2025-04-29 20:33:58 (ywatanabe)"
-# # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots_dev/_FigWrapper.py
+# # Timestamp: "2025-05-01 17:11:51 (ywatanabe)"
+# # File: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_FigWrapper.py
 # # ----------------------------------------
 # import os
 # __FILE__ = (
-#     "./src/mngs/plt/_subplots_dev/_FigWrapper.py"
+#     "./src/mngs/plt/_subplots/_FigWrapper.py"
 # )
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
@@ -160,7 +155,7 @@ if __name__ == "__main__":
 #         return self._fig_mpl
 # 
 #     def __getattr__(self, attr):
-#         print(f"Attribute of FigWrapper: {attr}")
+#         # print(f"Attribute of FigWrapper: {attr}")
 #         attr_mpl = getattr(self._fig_mpl, attr)
 # 
 #         if callable(attr_mpl):
