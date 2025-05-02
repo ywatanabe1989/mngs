@@ -12,8 +12,15 @@ if __name__ == "__main__":
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Timestamp: "2025-02-27 13:01:04 (ywatanabe)"
-# # File: ./src/mngs/gen/_start.py
+# # Timestamp: "2025-05-01 23:44:56 (ywatanabe)"
+# # File: /home/ywatanabe/proj/_mngs_repo/src/mngs/gen/_start.py
+# # ----------------------------------------
+# import os
+# __FILE__ = (
+#     "./src/mngs/gen/_start.py"
+# )
+# __DIR__ = os.path.dirname(__FILE__)
+# # ----------------------------------------
 # 
 # THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/gen/_start.py"
 # 
@@ -29,16 +36,15 @@ if __name__ == "__main__":
 # import matplotlib
 # import matplotlib.pyplot as plt_module
 # 
+# from ..dev._analyze_code_flow import analyze_code_flow
 # from ..dict import DotDict
 # from ..gen._tee import tee
+# from ..io import flush
 # from ..io._load import load
 # from ..io._load_configs import load_configs
-# from ..path import split
-# from ..plt._configure_mpl import configure_mpl
+# from ..plt.utils._configure_mpl import configure_mpl
 # from ..reproduce._fix_seeds import fix_seeds
 # from ..reproduce._gen_ID import gen_ID
-# from ..io import flush
-# from ..dev._analyze_code_flow import analyze_code_flow
 # from ..str._clean_path import clean_path
 # from ..str._printc import printc as _printc
 # 
@@ -62,13 +68,13 @@ if __name__ == "__main__":
 # """
 # 
 # 
-# 
-# 
-# 
-# 
-# 
 # def _print_header(
-#         ID: str, PID: int, file: str, args: Any, configs: Dict[str, Any], verbose: bool = True
+#     ID: str,
+#     PID: int,
+#     file: str,
+#     args: Any,
+#     configs: Dict[str, Any],
+#     verbose: bool = True,
 # ) -> None:
 #     """Prints formatted header with mngs version, ID, and PID information.
 # 
@@ -84,27 +90,17 @@ if __name__ == "__main__":
 #         Whether to print detailed information, by default True
 #     """
 #     _printc(
-#         (
-#         f"## mngs v{_get_mngs_version()}\n"
-#         f"## {ID} (PID: {PID})"
-#         ),
-#         char="#"
+#         (f"## mngs v{_get_mngs_version()}\n" f"## {ID} (PID: {PID})"), char="#"
 #     )
 # 
-#     _printc(
-#         (
-#         f"{file}\n"
-#         f"{args}"
-#             ),
-#         c="yellow",
-#         char="="
-#     )
+#     _printc((f"{file}\n" f"{args}"), c="yellow", char="=")
 #     sleep(1)
 #     if verbose:
 #         print(f"\n{'-'*40}\n")
 #         pprint(configs)
 #         print(f"\n{'-'*40}\n")
 #     sleep(1)
+# 
 # 
 # def _initialize_env(IS_DEBUG: bool) -> Tuple[str, int]:
 #     """Initialize environment with ID and PID.
@@ -123,8 +119,15 @@ if __name__ == "__main__":
 #     PID = _os.getpid()
 #     return ID, PID
 # 
+# 
 # def _setup_configs(
-#         IS_DEBUG: bool, ID: str, PID: int, file: str, sdir: str, relative_sdir: str, verbose: bool
+#     IS_DEBUG: bool,
+#     ID: str,
+#     PID: int,
+#     file: str,
+#     sdir: str,
+#     relative_sdir: str,
+#     verbose: bool,
 # ) -> Dict[str, Any]:
 #     """Setup configuration dictionary with basic parameters.
 # 
@@ -162,6 +165,7 @@ if __name__ == "__main__":
 #     )
 #     return CONFIGS
 # 
+# 
 # def _setup_matplotlib(
 #     plt: plt_module = None, agg: bool = False, **mpl_kwargs: Any
 # ) -> Tuple[Any, Optional[Dict[str, Any]]]:
@@ -189,6 +193,7 @@ if __name__ == "__main__":
 #             matplotlib.use("Agg")
 #         return plt, CC
 #     return plt, None
+# 
 # 
 # def start(
 #     sys: sys_module = None,
@@ -285,7 +290,9 @@ if __name__ == "__main__":
 #                 THIS_FILE = f"/tmp/{_os.getenv('USER')}.py"
 # 
 #         # Define sdir
-#         sdir = clean_path(_os.path.splitext(__file__)[0] + f"_out/RUNNING/{ID}/")
+#         sdir = clean_path(
+#             _os.path.splitext(__file__)[0] + f"_out/RUNNING/{ID}/"
+#         )
 # 
 #         # Optional
 #         if sdir_suffix:
@@ -298,7 +305,9 @@ if __name__ == "__main__":
 #     ########################################
 # 
 #     # Setup configs after having all necessary parameters
-#     CONFIGS = _setup_configs(IS_DEBUG, ID, PID, file, sdir, relative_sdir, verbose)
+#     CONFIGS = _setup_configs(
+#         IS_DEBUG, ID, PID, file, sdir, relative_sdir, verbose
+#     )
 # 
 #     # Logging
 #     if sys is not None:
@@ -307,7 +316,9 @@ if __name__ == "__main__":
 #         CONFIGS["sys"] = sys
 # 
 #     # Random Seeds
-#     fix_seeds(os=os, random=random, np=np, torch=torch, seed=seed, verbose=verbose)
+#     fix_seeds(
+#         os=os, random=random, np=np, torch=torch, seed=seed, verbose=verbose
+#     )
 # 
 #     # Matplotlib configurations
 #     plt, CC = _setup_matplotlib(
@@ -344,6 +355,7 @@ if __name__ == "__main__":
 # 
 #     return CONFIGS, sys.stdout, sys.stderr, plt, CC
 # 
+# 
 # def _simplify_relative_path(sdir: str) -> str:
 #     """
 #     Simplify the relative path by removing specific patterns.
@@ -367,12 +379,15 @@ if __name__ == "__main__":
 #     """
 #     base_path = _os.getcwd()
 #     relative_sdir = _os.path.relpath(sdir, base_path) if base_path else sdir
-#     simplified_path = relative_sdir.replace("scripts/", "./").replace("RUNNING/", "")
+#     simplified_path = relative_sdir.replace("scripts/", "./").replace(
+#         "RUNNING/", ""
+#     )
 #     # Remove date-time pattern and random string
 #     simplified_path = re.sub(
 #         r"\d{4}Y-\d{2}M-\d{2}D-\d{2}h\d{2}m\d{2}s_\w+/?$", "", simplified_path
 #     )
 #     return simplified_path
+# 
 # 
 # def _get_debug_mode() -> bool:
 #     # Debug mode check
@@ -390,12 +405,14 @@ if __name__ == "__main__":
 #         IS_DEBUG = False
 #     return IS_DEBUG
 # 
+# 
 # def _clear_python_log_dir(log_dir: str) -> None:
 #     try:
 #         if _os.path.exists(log_dir):
 #             _os.system(f"rm -rf {log_dir}")
 #     except Exception as e:
 #         print(f"Failed to clear directory {log_dir}: {e}")
+# 
 # 
 # def _get_mngs_version() -> str:
 #     """Gets mngs version"""
@@ -406,6 +423,7 @@ if __name__ == "__main__":
 #     except Exception as e:
 #         print(e)
 #         return "(not found)"
+# 
 # 
 # if __name__ == "__main__":
 #     import os
@@ -428,7 +446,6 @@ if __name__ == "__main__":
 # 
 #         # Close
 #         mngs.gen.close(CONFIG)
-# 
 # 
 # 
 # """
