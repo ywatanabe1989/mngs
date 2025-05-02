@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-01 09:09:59 (ywatanabe)"
+# Timestamp: "2025-05-02 17:10:53 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/types/_is_listed_X.py
 # ----------------------------------------
 import os
@@ -12,9 +12,20 @@ __DIR__ = os.path.dirname(__FILE__)
 
 def is_listed_X(obj, types):
     """
+    Check if obj is a list where all elements are of one of the specified types.
+
+    Args:
+        obj: Object to check
+        types: Type or list of types to check against
+
     Example:
         obj = [3, 2, 1, 5]
-        _is_listed_X(obj,
+        is_listed_X(obj, int)  # Returns True
+        is_listed_X(obj, (int, float))  # Returns True
+        is_listed_X(obj, str)  # Returns False
+
+    Returns:
+        bool: True if obj is a list and all elements are of one of the specified types
     """
     import numpy as np
 
