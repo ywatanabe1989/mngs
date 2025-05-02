@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-29 20:33:58 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots_dev/_FigWrapper.py
+# Timestamp: "2025-05-01 17:11:51 (ywatanabe)"
+# File: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_FigWrapper.py
 # ----------------------------------------
 import os
 __FILE__ = (
-    "./src/mngs/plt/_subplots_dev/_FigWrapper.py"
+    "./src/mngs/plt/_subplots/_FigWrapper.py"
 )
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
@@ -29,7 +29,7 @@ class FigWrapper:
         return self._fig_mpl
 
     def __getattr__(self, attr):
-        print(f"Attribute of FigWrapper: {attr}")
+        # print(f"Attribute of FigWrapper: {attr}")
         attr_mpl = getattr(self._fig_mpl, attr)
 
         if callable(attr_mpl):
