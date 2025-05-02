@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-30 21:01:53 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_ecdf.py
+# Timestamp: "2025-05-01 20:17:59 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_plot/_plot_ecdf.py
 # ----------------------------------------
 import os
 __FILE__ = (
-    "./src/mngs/plt/ax/_ecdf.py"
+    "./src/mngs/plt/ax/_plot/_plot_ecdf.py"
 )
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
+
+import warnings
 
 import matplotlib
 import numpy as np
@@ -17,9 +19,9 @@ from ....pd._force_df import force_df as mngs_pd_force_df
 
 
 def plot_ecdf(axis, data, **kwargs):
-    """Plot Empirical Cumulative Distribution Function (PLOT_ECDF).
+    """Plot Empirical Cumulative Distribution Function (ECDF).
 
-    The PLOT_ECDF shows the proportion of data points less than or equal to each value,
+    The ECDF shows the proportion of data points less than or equal to each value,
     representing the empirical estimate of the cumulative distribution function.
 
     Parameters
@@ -27,7 +29,7 @@ def plot_ecdf(axis, data, **kwargs):
     axis : matplotlib.axes.Axes
         Matplotlib axis to plot on
     data : array-like
-        Data to compute and plot PLOT_ECDF for
+        Data to compute and plot ECDF for. NaN values are ignored.
     **kwargs : dict
         Additional arguments to pass to plot function
 
@@ -42,34 +44,36 @@ def plot_ecdf(axis, data, **kwargs):
 
     # Flatten and remove NaN values
     data = np.hstack(data)
+
+    # Warnings
+    if np.isnan(data).any():
+        warnings.warn("NaN value are ignored for ECDF plot.")
     data = data[~np.isnan(data)]
     nn = len(data)
 
-    # Sort the data and compute the PLOT_ECDF values
+    # Sort the data and compute the ECDF values
     data_sorted = np.sort(data)
-    plot_ecdf_perc = (
-        100 * np.arange(1, len(data_sorted) + 1) / len(data_sorted)
-    )
+    ecdf_perc = 100 * np.arange(1, len(data_sorted) + 1) / len(data_sorted)
 
     # Create the pseudo x-axis for step plotting
     x_step = np.repeat(data_sorted, 2)[1:]
-    y_step = np.repeat(plot_ecdf_perc, 2)[:-1]
+    y_step = np.repeat(ecdf_perc, 2)[:-1]
 
-    # Plot the PLOT_ECDF using steps
+    # Plot the ECDF using steps
     axis.plot(x_step, y_step, drawstyle="steps-post", **kwargs)
 
     # Scatter the original data points
-    axis.plot(data_sorted, plot_ecdf_perc, marker=".", linestyle="none")
+    axis.plot(data_sorted, ecdf_perc, marker=".", linestyle="none")
 
     # Set ylim, xlim, and aspect ratio
     axis.set_ylim(0, 100)
     axis.set_xlim(0, 1.0)
 
-    # Create a DataFrame to hold the PLOT_ECDF data
+    # Create a DataFrame to hold the ECDF data
     df = mngs_pd_force_df(
         {
             "x": data_sorted,
-            "y": plot_ecdf_perc,
+            "y": ecdf_perc,
             "n": nn,
             "x_step": x_step,
             "y_step": y_step,
