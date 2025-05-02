@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-02 10:51:43 (ywatanabe)"
+# Timestamp: "2025-05-03 01:07:46 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/utils/test__configure_mpl.py
 # ----------------------------------------
 import os
@@ -17,17 +17,21 @@ from mngs.plt.utils._configure_mpl import _convert_font_size, configure_mpl
 
 def test_convert_font_size_string():
     """Tests font size conversion from string values."""
-    assert _convert_font_size("small") == 10
-    assert _convert_font_size("medium") == 12
-    assert _convert_font_size("large") == 14
-    assert _convert_font_size("xx-large") == 18
-    assert _convert_font_size("unknown") == 12  # Default for unknown strings
+    assert _convert_font_size("xx-small") == 9
+    assert _convert_font_size("x-small") == 11
+    assert _convert_font_size("small") == 13
+    assert _convert_font_size("medium") == 15
+    assert _convert_font_size("large") == 18
+    assert _convert_font_size("x-large") == 22
+    assert _convert_font_size("xx-large") == 26
+    assert _convert_font_size("unknown") == 15  # Default for unknown strings
 
 
 def test_convert_font_size_numeric():
     """Tests font size conversion from numeric values."""
     assert _convert_font_size(10) == 10.0
     assert _convert_font_size(14.5) == 14.5
+    assert _convert_font_size(8) == 9.0  # Minimum size enforced
     assert isinstance(_convert_font_size(10), float)
 
 
@@ -58,7 +62,7 @@ def test_configure_mpl_basic():
         # Check that rcParams were updated
         assert plt.rcParams["figure.dpi"] == 100
         assert plt.rcParams["savefig.dpi"] == 300
-        assert plt.rcParams["font.size"] == 12.0  # Default 'medium'
+        assert plt.rcParams["font.size"] == 15.0  # Default 'medium'
     finally:
         # Restore original settings
         plt.rcParams.update(original_rcparams)
@@ -84,7 +88,7 @@ def test_configure_mpl_custom_params():
         # Check that custom parameters were applied
         assert plt.rcParams["figure.dpi"] == 150
         assert plt.rcParams["savefig.dpi"] == 600
-        assert plt.rcParams["font.size"] == 14.0  # 'large'
+        assert plt.rcParams["font.size"] == 18.0  # 'large'
         assert plt.rcParams["lines.linewidth"] == 1.0
         assert plt.rcParams["axes.spines.top"] == True  # Not hidden
         assert plt.rcParams["axes.spines.right"] == True  # Not hidden
@@ -100,18 +104,23 @@ def test_configure_mpl_custom_params():
 def test_configure_mpl_font_scaling():
     """Tests correct scaling of font sizes relative to base size."""
     original_rcparams = plt.rcParams.copy()
-
     try:
         # Use a specific base size
-        plt_result, colors = configure_mpl(plt, fontsize=10)
+        plt_result, colors = configure_mpl(plt, fontsize=12)
 
         # Check that derived font sizes are correctly scaled
-        assert plt.rcParams["font.size"] == 10.0  # Base size
-        assert plt.rcParams["axes.titlesize"] == 12.0  # 120% of base
-        assert plt.rcParams["axes.labelsize"] == 10.0  # 100% of base
-        assert plt.rcParams["xtick.labelsize"] == 8.0  # 80% of base
-        assert plt.rcParams["ytick.labelsize"] == 8.0  # 80% of base
-        assert plt.rcParams["legend.fontsize"] == 8.0  # 80% of base
+        assert plt.rcParams["font.size"] == 12.0  # Base size
+        assert plt.rcParams["axes.titlesize"] == 15.0  # 125% of base
+        assert plt.rcParams["axes.labelsize"] == 12.0  # 100% of base
+        assert plt.rcParams["xtick.labelsize"] == max(
+            12.0 * 0.85, 8.0
+        )  # 85% of base, min 8.0
+        assert plt.rcParams["ytick.labelsize"] == max(
+            12.0 * 0.85, 8.0
+        )  # 85% of base, min 8.0
+        assert plt.rcParams["legend.fontsize"] == max(
+            12.0 * 0.85, 8.0
+        )  # 85% of base, min 8.0
     finally:
         # Restore original settings
         plt.rcParams.update(original_rcparams)
@@ -132,12 +141,13 @@ def test_configure_mpl_verbose_output(capsys):
         assert "Matplotlib has been configured as follows" in captured.out
         assert "Figure DPI (Display): 100 DPI" in captured.out
         assert "Figure DPI (Save): 300 DPI" in captured.out
-        assert "Base Size: 12.0pt" in captured.out
+        assert "Base Size: 15.0pt" in captured.out
         assert "Hide Top and Right Axes: True" in captured.out
         assert "Custom Colors (RGBA)" in captured.out
     finally:
         # Restore original settings
         plt.rcParams.update(original_rcparams)
+
 
 if __name__ == "__main__":
     import os
@@ -160,14 +170,14 @@ if __name__ == "__main__":
 # )
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
-# 
+#
 # from typing import Any, Dict, Tuple, Union
-# 
+#
 # import matplotlib.pyplot as plt
 # import mngs
 # import numpy as np
-# 
-# 
+#
+#
 # def configure_mpl(
 #     plt,
 #     fig_size_mm=(160, 100),
@@ -183,7 +193,7 @@ if __name__ == "__main__":
 #     **kwargs,
 # ) -> Tuple[Any, Dict]:
 #     """Configures Matplotlib settings for publication-quality plots.
-# 
+#
 #     Parameters
 #     ----------
 #     plt : matplotlib.pyplot
@@ -212,7 +222,7 @@ if __name__ == "__main__":
 #         Color transparency, by default 0.85
 #     verbose : bool, optional
 #         Whether to print configuration details, by default False
-# 
+#
 #     Returns
 #     -------
 #     tuple
@@ -220,36 +230,36 @@ if __name__ == "__main__":
 #     """
 #     # Convert base font size
 #     base_size = _convert_font_size(fontsize)
-# 
+#
 #     # Ensure minimum sizes for different elements with better proportions
 #     title_size = max(base_size * 1.25, 10.0)  # Increased for better hierarchy
 #     label_size = max(base_size * 1.0, 9.0)  # Minimum 9pt for good readability
 #     small_size = max(
 #         base_size * 0.85, 8.0
 #     )  # Increased ratio for better legibility
-# 
+#
 #     # Colors
 #     RGBA = {
 #         k: mngs.plt.color.update_alpha(v, alpha)
 #         for k, v in mngs.plt.color.PARAMS["RGBA"].items()
 #     }
-# 
+#
 #     RGBA_NORM = {
 #         k: tuple(mngs.plt.color.update_alpha(v, alpha))
 #         for k, v in mngs.plt.color.PARAMS["RGBA_NORM"].items()
 #     }
-# 
+#
 #     RGBA_NORM_FOR_CYCLE = {
 #         k: tuple(mngs.plt.color.update_alpha(v, alpha))
 #         for k, v in mngs.plt.color.PARAMS["RGBA_NORM_FOR_CYCLE"].items()
 #     }
-# 
+#
 #     # Normalize figure size from mm to inches
 #     figsize_inch = (
 #         fig_size_mm[0] / 25.4 * fig_scale,
 #         fig_size_mm[1] / 25.4 * fig_scale,
 #     )
-# 
+#
 #     # Update Matplotlib configuration
 #     plt.rcParams.update(
 #         {
@@ -284,7 +294,7 @@ if __name__ == "__main__":
 #             "grid.alpha": 0.3,
 #         }
 #     )
-# 
+#
 #     if verbose:
 #         print("\n" + "-" * 40)
 #         print("Matplotlib has been configured as follows:\n")
@@ -307,20 +317,20 @@ if __name__ == "__main__":
 #         for color_str, rgba in RGBA.items():
 #             print(f"  {color_str}: {rgba}")
 #         print("-" * 40)
-# 
+#
 #     return plt, RGBA_NORM
-# 
-# 
+#
+#
 # def _convert_font_size(size: Union[str, int, float]) -> float:
 #     """Converts various font size specifications to numerical values.
-# 
+#
 #     Parameters
 #     ----------
 #     size : Union[str, int, float]
 #         Font size specification. Can be:
 #         - String: 'xx-small', 'x-small', 'small', 'medium', 'large', 'x-large', 'xx-large'
 #         - Numeric: direct point size value
-# 
+#
 #     Returns
 #     -------
 #     float
@@ -341,8 +351,8 @@ if __name__ == "__main__":
 #         return max(float(size), 9.0)  # Ensure minimum size of 9
 #     else:
 #         raise ValueError(f"Unsupported font size type: {type(size)}")
-# 
-# 
+#
+#
 # if __name__ == "__main__":
 #     plt, CC = configure_mpl(plt)
 #     fig, axes = plt.subplots(nrows=2, sharex=True, sharey=True)
@@ -355,8 +365,10 @@ if __name__ == "__main__":
 #     axes[0].legend()
 #     axes[1].legend()
 #     plt.show()
-# 
+#
 # # EOF
 # --------------------------------------------------------------------------------
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/utils/_configure_mpl.py
 # --------------------------------------------------------------------------------
+
+# EOF

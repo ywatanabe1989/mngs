@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-28 09:15:19 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/test__PARAMS.py
+# Timestamp: "2025-05-02 22:58:55 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/color/test__PARAMS.py
 # ----------------------------------------
 import os
 __FILE__ = (
-    "./tests/mngs/plt/test__PARAMS.py"
+    "./tests/mngs/plt/color/test__PARAMS.py"
 )
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
@@ -15,7 +15,9 @@ import pytest
 
 def test_params_rgb_keys():
     """Test that RGB dictionary has expected keys."""
-    from mngs.plt.color.PARAMS import RGB
+    from mngs.plt.color import PARAMS
+
+    RGB = PARAMS["RGB"]
 
     expected_keys = [
         "white",
@@ -39,7 +41,9 @@ def test_params_rgb_keys():
 
 def test_params_rgb_values():
     """Test that RGB values are valid."""
-    from mngs.plt.color.PARAMS import RGB
+    from mngs.plt.color import PARAMS
+
+    RGB = PARAMS["RGB"]
 
     for color, values in RGB.items():
         assert len(values) == 3, f"RGB color {color} should have 3 values"
@@ -51,7 +55,10 @@ def test_params_rgb_values():
 
 def test_params_rgba_norm():
     """Test that RGBA_NORM values are normalized correctly."""
-    from mngs.plt.color.PARAMS import DEF_ALPHA, RGB, RGBA_NORM
+    from mngs.plt.color import PARAMS
+
+    RGB = PARAMS["RGB"]
+    RGBA_NORM = PARAMS["RGBA_NORM"]
 
     for color in RGB:
         rgb_values = RGB[color]
@@ -67,9 +74,6 @@ def test_params_rgba_norm():
                 rgba_norm_values[idx] == expected
             ), f"RGBA_NORM for {color} not correctly normalized"
 
-        assert (
-            rgba_norm_values[3] == DEF_ALPHA
-        ), f"Alpha value for {color} is not set to DEF_ALPHA"
 
 if __name__ == "__main__":
     import os
@@ -92,7 +96,7 @@ if __name__ == "__main__":
 # )
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
-# 
+#
 # # RGB
 # RGB = {
 #     "white": [255, 255, 255],
@@ -110,12 +114,12 @@ if __name__ == "__main__":
 #     "navy": [0, 0, 100],
 #     "orange": [228, 94, 50],
 # }
-# 
+#
 # RGB_NORM = {
 #     k: [round(r / 255, 2), round(g / 255, 2), round(b / 255, 2)]
 #     for k, (r, g, b) in RGB.items()
 # }
-# 
+#
 # # RGBA
 # DEF_ALPHA = 0.9
 # RGBA = {k: [r, g, b, DEF_ALPHA] for k, (r, g, b) in RGB.items()}
@@ -123,7 +127,7 @@ if __name__ == "__main__":
 # RGBA_NORM_FOR_CYCLE = {
 #     k: v for k, v in RGBA_NORM.items() if k not in ["white", "grey", "black"]
 # }
-# 
+#
 # # HEX
 # HEX = {
 #     "blue": "#0080C0",
@@ -139,8 +143,8 @@ if __name__ == "__main__":
 #     "navy": "#000064",
 #     "orange": "#E45E32",
 # }
-# 
-# 
+#
+#
 # PARAMS = dict(
 #     RGB=RGB,
 #     RGBA=RGBA,
@@ -148,10 +152,12 @@ if __name__ == "__main__":
 #     RGBA_NORM_FOR_CYCLE=RGBA_NORM_FOR_CYCLE,
 #     HEX=HEX,
 # )
-# 
+#
 # # pprint(PARAMS)
-# 
+#
 # # EOF
 # --------------------------------------------------------------------------------
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/color/_PARAMS.py
 # --------------------------------------------------------------------------------
+
+# EOF

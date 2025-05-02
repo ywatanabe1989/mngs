@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-02 18:29:52 (ywatanabe)"
+# Timestamp: "2025-05-02 20:12:46 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/__init__.py
 # ----------------------------------------
 import os
@@ -43,7 +43,7 @@ from ._plot._plot_conf_mat import plot_conf_mat
 from ._plot._plot_cube import plot_cube
 from ._plot._plot_ecdf import plot_ecdf
 from ._plot._plot_fillv import plot_fillv
-from ._plot._plot_half_violin import plot_half_violin
+from ._plot._plot_violin import plot_violin
 from ._plot._plot_image import plot_image
 from ._plot._plot_joyplot import plot_joyplot
 from ._plot._plot_raster import plot_raster

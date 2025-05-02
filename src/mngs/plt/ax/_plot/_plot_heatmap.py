@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-02 19:53:12 (ywatanabe)"
+# Timestamp: "2025-05-02 22:21:41 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_plot/_plot_heatmap.py
 # ----------------------------------------
 import os
@@ -83,7 +83,7 @@ def plot_heatmap(
             textcolors=textcolors,
         )
 
-    return im, cbar
+    return ax, im, cbar
 
 
 def _switch_annot_colors(cmap, annot_color_lighter, annot_color_darker):
@@ -159,9 +159,9 @@ def _mpl_heatmap(
     ax.set_xticks(
         range(data.shape[1]),
         labels=col_labels,
-        rotation=45,
-        ha="right",
-        rotation_mode="anchor",
+        # rotation=45,
+        # ha="right",
+        # rotation_mode="anchor",
     )
     ax.set_yticks(range(data.shape[0]), labels=row_labels)
 

@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-01 23:37:12 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/_mk_colorbar.py
+# Timestamp: "2025-05-03 01:09:23 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/utils/_mk_colorbar.py
 # ----------------------------------------
 import os
 __FILE__ = (
-    "./src/mngs/plt/_mk_colorbar.py"
+    "./src/mngs/plt/utils/_mk_colorbar.py"
 )
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
@@ -42,7 +42,7 @@ def mk_colorbar(start="white", end="blue"):
     import matplotlib.pyplot as plt
     import numpy as np
     # import mngs
-    from mngs.plt._PARAMS import RGB
+    from mngs.plt.color._PARAMS import RGB
 
     # Get RGB values for start and end colors
     start_rgb = RGB[start]

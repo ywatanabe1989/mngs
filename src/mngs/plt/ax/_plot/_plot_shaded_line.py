@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-02 17:30:31 (ywatanabe)"
+# Timestamp: "2025-05-02 23:28:32 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_plot/_plot_shaded_line.py
 # ----------------------------------------
 import os
@@ -38,9 +38,12 @@ def _plot_single_shaded_line(
         len(xx) == len(y_middle) == len(y_lower) == len(y_upper)
     ), "All arrays must have the same length"
 
-    print(kwargs)
-    __import__("ipdb").set_trace()
-    axis.plot(xx, y_middle, color=color, alpha=alpha, **kwargs)
+    label = kwargs.get("label")
+    if kwargs.get("label"):
+        del kwargs["label"]
+    axis.plot(xx, y_middle, color=color, alpha=alpha, label=label, **kwargs)
+    kwargs["linewidth"] = 0
+    kwargs["edgecolor"] = "none"  # Remove edge line
     axis.fill_between(xx, y_lower, y_upper, alpha=alpha, color=color, **kwargs)
 
     return axis, pd.DataFrame(
@@ -48,13 +51,13 @@ def _plot_single_shaded_line(
     )
 
 
-def _plot_shaded_lines(
+def _plot_shaded_line(
     axis: Axes,
     xs: List[np.ndarray],
     ys_lower: List[np.ndarray],
     ys_middle: List[np.ndarray],
     ys_upper: List[np.ndarray],
-    colors: Optional[Union[List[ColorLike], ColorLike]] = None,
+    color: Optional[Union[List[ColorLike], ColorLike]] = None,
     **kwargs
 ) -> Tuple[Axes, List[pd.DataFrame]]:
     """Plot multiple lines with shaded areas between ys_lower and ys_upper bounds."""
@@ -66,6 +69,7 @@ def _plot_shaded_lines(
     ), "All input lists must have the same length"
 
     results = []
+    colors = color
     color_list = colors
 
     if colors is not None:

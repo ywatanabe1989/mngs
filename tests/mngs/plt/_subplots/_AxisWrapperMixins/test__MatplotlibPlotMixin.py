@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-02 20:00:30 (ywatanabe)"
+# Timestamp: "2025-05-02 21:43:16 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py
 # ----------------------------------------
 import os
@@ -13,7 +13,6 @@ __DIR__ = os.path.dirname(__FILE__)
 import matplotlib
 import mngs
 import numpy as np
-import pandas as pd
 
 matplotlib.use("agg")
 
@@ -371,22 +370,24 @@ def test_plot_violin():
     # Figure
     fig, ax = mngs.plt.subplots()
 
-    # Data
-    data = [
+    # Test with list data
+    data_list = [
         np.random.normal(0, 1, 100),
         np.random.normal(2, 1.5, 100),
         np.random.normal(5, 0.8, 100),
     ]
     labels = ["Group A", "Group B", "Group C"]
 
-    # Plot
-    ax.plot_violin(data, labels=labels, showmedians=True)
+    # Plot traditional violin
+    ax.plot_violin(
+        data_list, labels=labels, colors=["red", "blue", "green"], half=True
+    )
 
     # Visualization
-    ax.set_xyt("Groups", "Values", "Plot_Violin Test")
+    ax.set_xyt("Groups", "Values", "Plot_Violin Test (Traditional)")
 
     # Saving
-    spath = f"./plot_violin_test.png"
+    spath = "./plot_violin_test_traditional.png"
     mngs.io.save(fig, spath, symlink_from_cwd=False)
 
     # Closing
@@ -511,169 +512,168 @@ def test_plot_shaded_line():
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
 
 
-def test_plot_area():
-    """Test plot_area function"""
-    # Figure
-    fig, ax = mngs.plt.subplots()
+# def test_plot_area():
+#     """Test plot_area function"""
+#     # Figure
+#     fig, ax = mngs.plt.subplots()
 
-    # Data
-    x = np.linspace(0, 10, 100)
-    y = np.array([np.sin(x), np.cos(x), np.sin(x + np.pi / 4)]).T
+#     # Data
+#     x = np.linspace(0, 10, 100)
+#     y = np.array([np.sin(x), np.cos(x), np.sin(x + np.pi / 4)]).T
 
-    # Plot
-    ax.plot_area(x, y, stacked=True, alpha=0.7)
+#     # Plot
+#     ax.plot_area(x, y, stacked=True, alpha=0.7)
 
-    # Visualization
-    ax.set_xyt("X Values", "Y Values", "Plot_Area Test")
+#     # Visualization
+#     ax.set_xyt("X Values", "Y Values", "Plot_Area Test")
 
-    # Saving
-    spath = f"./plot_area_test.png"
-    mngs.io.save(fig, spath, symlink_from_cwd=False)
+#     # Saving
+#     spath = f"./plot_area_test.png"
+#     mngs.io.save(fig, spath, symlink_from_cwd=False)
 
-    # Closing
-    mngs.plt.close(fig)
+#     # Closing
+#     mngs.plt.close(fig)
 
-    # Assertion
-    actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
-    assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
-
-
-def test_plot_radar():
-    """Test plot_radar function"""
-    # Figure
-    fig, ax = mngs.plt.subplots(figsize=(8, 8))
-
-    # Data
-    categories = ["Speed", "Power", "Agility", "Endurance", "Technique"]
-    data = np.array(
-        [
-            [4.5, 3.5, 4.8, 5.0, 3.8],  # Player 1
-            [4.0, 5.0, 3.5, 3.0, 4.5],  # Player 2
-            [3.5, 4.0, 4.0, 4.5, 5.0],  # Player 3
-        ]
-    )
-    groups = ["Player 1", "Player 2", "Player 3"]
-
-    # Plot
-    ax.plot_radar(
-        data, categories=categories, groups=groups, fill=True, alpha=0.3
-    )
-
-    # Visualization
-    ax.set_title("Plot_Radar Test")
-
-    # Saving
-    spath = f"./plot_radar_test.png"
-    mngs.io.save(fig, spath, symlink_from_cwd=False)
-
-    # Closing
-    mngs.plt.close(fig)
-
-    # Assertion
-    actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
-    assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+#     # Assertion
+#     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
+#     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
 
 
-def test_plot_bubble():
-    """Test plot_bubble function"""
-    # Figure
-    fig, ax = mngs.plt.subplots()
+# def test_plot_radar():
+#     """Test plot_radar function"""
+#     # Figure
+#     fig, ax = mngs.plt.subplots(figsize=(8, 8))
 
-    # Data
-    x = np.random.rand(30)
-    y = np.random.rand(30)
-    size = np.random.rand(30) * 100 + 10
-    color = np.random.rand(30)
+#     # Data
+#     categories = ["Speed", "Power", "Agility", "Endurance", "Technique"]
+#     data = np.array(
+#         [
+#             [4.5, 3.5, 4.8, 5.0, 3.8],  # Player 1
+#             [4.0, 5.0, 3.5, 3.0, 4.5],  # Player 2
+#             [3.5, 4.0, 4.0, 4.5, 5.0],  # Player 3
+#         ]
+#     )
+#     groups = ["Player 1", "Player 2", "Player 3"]
 
-    # Plot
-    ax.plot_bubble(x, y, size, color=color, alpha=0.7, colormap="viridis")
+#     # Plot
+#     ax.plot_radar(
+#         data, categories=categories, groups=groups, fill=True, alpha=0.3
+#     )
 
-    # Visualization
-    ax.set_xyt("X Values", "Y Values", "Plot_Bubble Test")
+#     # Visualization
+#     ax.set_title("Plot_Radar Test")
 
-    # Saving
-    spath = f"./plot_bubble_test.png"
-    mngs.io.save(fig, spath, symlink_from_cwd=False)
+#     # Saving
+#     spath = f"./plot_radar_test.png"
+#     mngs.io.save(fig, spath, symlink_from_cwd=False)
 
-    # Closing
-    mngs.plt.close(fig)
+#     # Closing
+#     mngs.plt.close(fig)
 
-    # Assertion
-    actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
-    assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
-
-
-def test_plot_ridgeline():
-    """Test plot_ridgeline function"""
-    # Figure
-    fig, ax = mngs.plt.subplots(figsize=(8, 8))
-
-    # Data
-    data = [
-        np.random.normal(0, 1, 500),
-        np.random.normal(2, 1.5, 500),
-        np.random.normal(5, 0.8, 500),
-        np.random.normal(8, 2, 500),
-    ]
-    labels = [
-        "Distribution A",
-        "Distribution B",
-        "Distribution C",
-        "Distribution D",
-    ]
-
-    # Plot
-    ax.plot_ridgeline(data, labels=labels, fill=True, alpha=0.7)
-
-    # Visualization
-    ax.set_xyt("Value", "", "Plot_Ridgeline Test")
-
-    # Saving
-    spath = f"./plot_ridgeline_test.png"
-    mngs.io.save(fig, spath, symlink_from_cwd=False)
-
-    # Closing
-    mngs.plt.close(fig)
-
-    # Assertion
-    actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
-    assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+#     # Assertion
+#     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
+#     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
 
 
-def test_plot_parallel_coordinates():
-    """Test plot_parallel_coordinates function"""
-    # Figure
-    fig, ax = mngs.plt.subplots(figsize=(10, 6))
+# def test_plot_bubble():
+#     """Test plot_bubble function"""
+#     # Figure
+#     fig, ax = mngs.plt.subplots()
 
-    # Data
-    np.random.seed(42)
-    df = pd.DataFrame(
-        {
-            "feature1": np.random.rand(30),
-            "feature2": np.random.rand(30),
-            "feature3": np.random.rand(30),
-            "feature4": np.random.rand(30),
-            "class": np.random.randint(0, 3, 30),
-        }
-    )
+#     # Data
+#     x = np.random.rand(30)
+#     y = np.random.rand(30)
+#     size = np.random.rand(30) * 100 + 10
+#     color = np.random.rand(30)
 
-    # Plot
-    ax.plot_parallel_coordinates(df, class_column="class")
+#     # Plot
+#     ax.plot_bubble(x, y, size, color=color, alpha=0.7, colormap="viridis")
 
-    # Visualization
-    ax.set_title("Plot_Parallel_Coordinates Test")
+#     # Visualization
+#     ax.set_xyt("X Values", "Y Values", "Plot_Bubble Test")
 
-    # Saving
-    spath = f"./plot_parallel_coordinates_test.png"
-    mngs.io.save(fig, spath, symlink_from_cwd=False)
+#     # Saving
+#     spath = f"./plot_bubble_test.png"
+#     mngs.io.save(fig, spath, symlink_from_cwd=False)
 
-    # Closing
-    mngs.plt.close(fig)
+#     # Closing
+#     mngs.plt.close(fig)
 
-    # Assertion
-    actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
-    assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+#     # Assertion
+#     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
+#     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
 
+
+# def test_plot_ridgeline():
+#     """Test plot_ridgeline function"""
+#     # Figure
+#     fig, ax = mngs.plt.subplots(figsize=(8, 8))
+
+#     # Data
+#     data = [
+#         np.random.normal(0, 1, 500),
+#         np.random.normal(2, 1.5, 500),
+#         np.random.normal(5, 0.8, 500),
+#         np.random.normal(8, 2, 500),
+#     ]
+#     labels = [
+#         "Distribution A",
+#         "Distribution B",
+#         "Distribution C",
+#         "Distribution D",
+#     ]
+
+#     # Plot
+#     ax.plot_ridgeline(data, labels=labels, fill=True, alpha=0.7)
+
+#     # Visualization
+#     ax.set_xyt("Value", "", "Plot_Ridgeline Test")
+
+#     # Saving
+#     spath = f"./plot_ridgeline_test.png"
+#     mngs.io.save(fig, spath, symlink_from_cwd=False)
+
+#     # Closing
+#     mngs.plt.close(fig)
+
+#     # Assertion
+#     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
+#     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+
+
+# def test_plot_parallel_coordinates():
+#     """Test plot_parallel_coordinates function"""
+#     # Figure
+#     fig, ax = mngs.plt.subplots(figsize=(10, 6))
+
+#     # Data
+#     np.random.seed(42)
+#     df = pd.DataFrame(
+#         {
+#             "feature1": np.random.rand(30),
+#             "feature2": np.random.rand(30),
+#             "feature3": np.random.rand(30),
+#             "feature4": np.random.rand(30),
+#             "class": np.random.randint(0, 3, 30),
+#         }
+#     )
+
+#     # Plot
+#     ax.plot_parallel_coordinates(df, class_column="class")
+
+#     # Visualization
+#     ax.set_title("Plot_Parallel_Coordinates Test")
+
+#     # Saving
+#     spath = f"./plot_parallel_coordinates_test.png"
+#     mngs.io.save(fig, spath, symlink_from_cwd=False)
+
+#     # Closing
+#     mngs.plt.close(fig)
+
+#     # Assertion
+#     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
+#     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
 
 if __name__ == "__main__":
     import os
@@ -687,7 +687,7 @@ if __name__ == "__main__":
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Timestamp: "2025-05-02 18:31:47 (ywatanabe)"
+# # Timestamp: "2025-05-02 22:24:27 (ywatanabe)"
 # # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_MatplotlibPlotMixin.py
 # # ----------------------------------------
 # import os
@@ -696,22 +696,23 @@ if __name__ == "__main__":
 # )
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
-#
+# 
 # from functools import wraps
 # from typing import Any, Dict, List, Optional, Tuple, Union
-#
+# 
+# import matplotlib
 # import numpy as np
 # import pandas as pd
 # from scipy.stats import gaussian_kde
-#
+# 
 # from ....pd import to_xyz
 # from ....plt import ax as ax_module
 # from ....types import ArrayLike
-#
-#
+# 
+# 
 # class MatplotlibPlotMixin:
 #     """Mixin class for basic plotting operations."""
-#
+# 
 #     @wraps(ax_module.plot_image)
 #     def plot_image(
 #         self,
@@ -722,13 +723,13 @@ if __name__ == "__main__":
 #     ) -> None:
 #         # Method Name for downstream csv exporting
 #         method_name = "plot_image"
-#
+# 
 #         # Plotting with pure matplotlib methods under non-tracking context
 #         with self._no_tracking():
 #             self._axis_mpl = ax_module.plot_image(
 #                 self._axis_mpl, arr_2d, **kwargs
 #             )
-#
+# 
 #         # Tracking
 #         tracked_dict = {"image_df": pd.DataFrame(arr_2d)}
 #         if kwargs.get("xyz", False):
@@ -740,7 +741,9 @@ if __name__ == "__main__":
 #             tracked_dict,
 #             None,
 #         )
-#
+# 
+#         return self._axis_mpl
+# 
 #     def plot_kde(
 #         self,
 #         data: ArrayLike,
@@ -752,28 +755,28 @@ if __name__ == "__main__":
 #     ) -> None:
 #         # Method Name for downstream csv exporting
 #         method_name = "plot_kde"
-#
+# 
 #         # Sample count as label
 #         n_samples = (~np.isnan(data)).sum()
 #         if kwargs.get("label"):
 #             kwargs["label"] = f"{kwargs['label']} (n={n_samples})"
-#
+# 
 #         # Xlim (kwargs["xlim"] is not accepted in downstream plotters)
 #         xlim = kwargs.get("xlim")
 #         if not xlim:
 #             xlim = (np.nanmin(data), np.nanmax(data))
-#
+# 
 #         # X
 #         xx = np.linspace(xlim[0], xlim[1], int(1e3))
-#
+# 
 #         # Y
 #         density = gaussian_kde(data)(xx)
 #         density /= density.sum()
-#
+# 
 #         # Cumulative
 #         if cumulative:
 #             density = np.cumsum(density)
-#
+# 
 #         # Plotting with pure matplotlib methods under non-tracking context
 #         with self._no_tracking():
 #             # Filled Line
@@ -785,7 +788,7 @@ if __name__ == "__main__":
 #             # Simple Line
 #             else:
 #                 self._axis_mpl.plot(xx, density)
-#
+# 
 #         # Tracking
 #         tracked_dict = {
 #             "x": xx,
@@ -799,7 +802,9 @@ if __name__ == "__main__":
 #             tracked_dict,
 #             None,
 #         )
-#
+# 
+#         return self._axis_mpl
+# 
 #     def plot_conf_mat(
 #         self,
 #         data: ArrayLike,
@@ -819,7 +824,7 @@ if __name__ == "__main__":
 #     ) -> None:
 #         # Method Name for downstream csv exporting
 #         method_name = "plot_conf_mat"
-#
+# 
 #         # Plotting with pure matplotlib methods under non-tracking context
 #         with self._no_tracking():
 #             self._axis_mpl, bacc_val = ax_module.plot_conf_mat(
@@ -837,11 +842,13 @@ if __name__ == "__main__":
 #                 calc_bacc=calc_bacc,
 #                 **kwargs,
 #             )
-#
+# 
 #         tracked_dict = {"balanced_accuracy": bacc_val}
 #         # Tracking
 #         self._track(track, id, method_name, tracked_dict, None)
-#
+# 
+#         return self._axis_mpl, bacc_val
+# 
 #     @wraps(ax_module.plot_rectangle)
 #     def plot_rectangle(
 #         self,
@@ -855,17 +862,19 @@ if __name__ == "__main__":
 #     ) -> None:
 #         # Method Name for downstream csv exporting
 #         method_name = "plot_rectangle"
-#
+# 
 #         # Plotting with pure matplotlib methods under non-tracking context
 #         with self._no_tracking():
 #             self._axis_mpl = ax_module.plot_rectangle(
 #                 self._axis_mpl, xx, yy, width, height, **kwargs
 #             )
-#
+# 
 #         # Tracking
 #         tracked_dict = {"xx": xx, "yy": yy, "width": width, "height": height}
 #         self._track(track, id, method_name, tracked_dict, None)
-#
+# 
+#         return self._axis_mpl
+# 
 #     @wraps(ax_module.plot_fillv)
 #     def plot_fillv(
 #         self,
@@ -879,17 +888,19 @@ if __name__ == "__main__":
 #     ) -> None:
 #         # Method Name for downstream csv exporting
 #         method_name = "plot_fillv"
-#
+# 
 #         # Plotting with pure matplotlib methods under non-tracking context
 #         with self._no_tracking():
 #             self._axis_mpl = ax_module.plot_fillv(
 #                 self._axis_mpl, starts, ends, color=color, alpha=alpha
 #             )
-#
+# 
 #         # Tracking
 #         tracked_dict = {"starts": starts, "ends": ends}
 #         self._track(track, id, method_name, tracked_dict, None)
-#
+# 
+#         return self._axis_mpl
+# 
 #     def plot_box(
 #         self,
 #         data: ArrayLike,
@@ -899,26 +910,28 @@ if __name__ == "__main__":
 #     ) -> None:
 #         # Method Name for downstream csv exporting
 #         method_name = "plot_box"
-#
+# 
 #         # Copy data
 #         _data = data.copy()
-#
+# 
 #         # Sample count as label
 #         n = len(data)
 #         if kwargs.get("label"):
 #             kwargs["label"] = kwargs["label"] + f" (n={n})"
-#
+# 
 #         # Plotting with pure matplotlib methods under non-tracking context
 #         with self._no_tracking():
 #             self._axis_mpl.boxplot(data, **kwargs)
-#
+# 
 #         # Tracking
 #         tracked_dict = {
 #             "data": _data,
 #             "n": [n for ii in range(len(data))],
 #         }
 #         self._track(track, id, method_name, tracked_dict, None)
-#
+# 
+#         return self._axis_mpl
+# 
 #     @wraps(ax_module.plot_raster)
 #     def plot_raster(
 #         self,
@@ -932,17 +945,19 @@ if __name__ == "__main__":
 #     ) -> None:
 #         # Method Name for downstream csv exporting
 #         method_name = "plot_raster"
-#
+# 
 #         # Plotting with pure matplotlib methods under non-tracking context
 #         with self._no_tracking():
 #             self._axis_mpl, raster_digit_df = ax_module.plot_raster(
 #                 self._axis_mpl, positions, time=time
 #             )
-#
+# 
 #         # Tracking
 #         tracked_dict = {"raster_digit_df": raster_digit_df}
 #         self._track(track, id, method_name, tracked_dict, None)
-#
+# 
+#         return self._axis_mpl, raster_digit_df
+# 
 #     @wraps(ax_module.plot_ecdf)
 #     def plot_ecdf(
 #         self,
@@ -953,17 +968,19 @@ if __name__ == "__main__":
 #     ) -> None:
 #         # Method Name for downstream csv exporting
 #         method_name = "plot_ecdf"
-#
+# 
 #         # Plotting with pure matplotlib methods under non-tracking context
 #         with self._no_tracking():
 #             self._axis_mpl, ecdf_df = ax_module.plot_ecdf(
 #                 self._axis_mpl, data, **kwargs
 #             )
-#
+# 
 #         # Tracking
 #         tracked_dict = {"ecdf_df": ecdf_df}
 #         self._track(track, id, method_name, tracked_dict, None)
-#
+# 
+#         return self._axis_mpl, ecdf_df
+# 
 #     @wraps(ax_module.plot_joyplot)
 #     def plot_joyplot(
 #         self,
@@ -975,17 +992,19 @@ if __name__ == "__main__":
 #     ) -> None:
 #         # Method Name for downstream csv exporting
 #         method_name = "plot_joyplot"
-#
+# 
 #         # Plotting with pure matplotlib methods under non-tracking context
 #         with self._no_tracking():
 #             self._axis_mpl = ax_module.plot_joyplot(
 #                 self._axis_mpl, data, orientation=orientation, **kwargs
 #             )
-#
+# 
 #         # Tracking
 #         tracked_dict = {"joyplot_data": data}
 #         self._track(track, id, method_name, tracked_dict, None)
-#
+# 
+#         return self._axis_mpl
+# 
 #     @wraps(ax_module.plot_joyplot)
 #     def plot_joyplot(
 #         self,
@@ -996,17 +1015,19 @@ if __name__ == "__main__":
 #     ) -> None:
 #         # Method Name for downstream csv exporting
 #         method_name = "plot_joyplot"
-#
+# 
 #         # Plotting with pure matplotlib methods under non-tracking context
 #         with self._no_tracking():
 #             self._axis_mpl = ax_module.plot_joyplot(
 #                 self._axis_mpl, data, **kwargs
 #             )
-#
+# 
 #         # Tracking
 #         tracked_dict = {"joyplot_data": data}
 #         self._track(track, id, method_name, tracked_dict, None)
-#
+# 
+#         return self._axis_mpl
+# 
 #     @wraps(ax_module.plot_scatter_hist)
 #     def plot_scatter_hist(
 #         self,
@@ -1027,7 +1048,7 @@ if __name__ == "__main__":
 #         """Plot a scatter plot with marginal histograms."""
 #         # Method Name for downstream csv exporting
 #         method_name = "plot_scatter_hist"
-#
+# 
 #         # Plotting with pure matplotlib methods under non-tracking context
 #         with self._no_tracking():
 #             self._axis_mpl, ax_histx, ax_histy, hist_data = (
@@ -1046,7 +1067,7 @@ if __name__ == "__main__":
 #                     **kwargs,
 #                 )
 #             )
-#
+# 
 #         # Tracking
 #         tracked_dict = {
 #             "x": x,
@@ -1057,59 +1078,65 @@ if __name__ == "__main__":
 #             "bin_edges_y": hist_data["bin_edges_y"],
 #         }
 #         self._track(track, id, method_name, tracked_dict, None)
-#
+# 
+#         return self._axis_mpl, ax_histx, ax_histy, hist_data
+# 
+#     @wraps(ax_module.plot_heatmap)
 #     def plot_heatmap(
 #         self,
 #         data: ArrayLike,
 #         x_labels: Optional[List[str]] = None,
 #         y_labels: Optional[List[str]] = None,
 #         cmap: str = "viridis",
-#         show_values: bool = True,
-#         value_format: str = ".2f",
-#         colorbar: bool = True,
-#         colorbar_label: str = "",
-#         annot=True,
+#         cbar_label: str = "ColorBar Label",
+#         value_format: str = "{x:.1f}",
+#         show_annot: bool = True,
+#         annot_color_lighter: str = "white",
+#         annot_color_darker: str = "black",
 #         track: bool = True,
 #         id: Optional[str] = None,
 #         **kwargs,
-#     ) -> None:
-#         """Plot a heatmap."""
+#     ) -> Tuple[matplotlib.image.AxesImage, matplotlib.colorbar.Colorbar]:
+#         """Plot a heatmap on the axes."""
 #         # Method Name for downstream csv exporting
 #         method_name = "plot_heatmap"
-#
+# 
 #         # Plotting with pure matplotlib methods under non-tracking context
 #         with self._no_tracking():
-#             self._axis_mpl = ax_module.plot_heatmap(
+#             ax, im, cbar = ax_module.plot_heatmap(
 #                 self._axis_mpl,
 #                 data,
 #                 x_labels=x_labels,
 #                 y_labels=y_labels,
 #                 cmap=cmap,
-#                 show_values=show_values,
+#                 cbar_label=cbar_label,
 #                 value_format=value_format,
-#                 colorbar=colorbar,
-#                 colorbar_label=colorbar_label,
-#                 annot=annot,
+#                 show_annot=show_annot,
+#                 annot_color_lighter=annot_color_lighter,
+#                 annot_color_darker=annot_color_darker,
 #                 **kwargs,
 #             )
-#
+# 
 #         # Tracking
-#         tracked_dict = {"heatmap_data": pd.DataFrame(data)}
-#         if x_labels is not None and y_labels is not None:
-#             tracked_dict["heatmap_data"].columns = x_labels
-#             tracked_dict["heatmap_data"].index = y_labels
-#
+#         tracked_dict = {
+#             "data": data,
+#             "x_labels": x_labels,
+#             "y_labels": y_labels,
+#         }
 #         self._track(track, id, method_name, tracked_dict, None)
-#
+# 
+#         return ax, im, cbar
+# 
+#     @wraps(ax_module.plot_violin)
 #     def plot_violin(
 #         self,
-#         data: ArrayLike,
-#         positions: Optional[ArrayLike] = None,
-#         widths: float = 0.8,
-#         showmeans: bool = False,
-#         showmedians: bool = True,
-#         showextrema: bool = True,
-#         points: int = 100,
+#         data: Union[pd.DataFrame, List, ArrayLike],
+#         x=None,
+#         y=None,
+#         hue=None,
+#         labels=None,
+#         colors=None,
+#         half=False,
 #         track: bool = True,
 #         id: Optional[str] = None,
 #         **kwargs,
@@ -1117,238 +1144,248 @@ if __name__ == "__main__":
 #         """Plot a violin plot."""
 #         # Method Name for downstream csv exporting
 #         method_name = "plot_violin"
-#
-#         # Ensure data is in correct format
-#         if isinstance(data, pd.DataFrame):
-#             _data = [data[col].dropna().values for col in data.columns]
-#             labels = list(data.columns)
-#             kwargs.setdefault("labels", labels)
-#         elif isinstance(data, list):
-#             _data = data
-#         else:
-#             _data = [data]
-#
-#         # Add sample counts to labels if provided
-#         if "labels" in kwargs:
-#             kwargs["labels"] = [
-#                 f"{label} (n={len(d)})"
-#                 for label, d in zip(kwargs["labels"], _data)
-#             ]
-#
+# 
 #         # Plotting with pure matplotlib methods under non-tracking context
 #         with self._no_tracking():
-#             self._axis_mpl = ax_module.plot_violin(
-#                 self._axis_mpl,
-#                 _data,
-#                 positions=positions,
-#                 widths=widths,
-#                 showmeans=showmeans,
-#                 showmedians=showmedians,
-#                 showextrema=showextrema,
-#                 points=points,
-#                 **kwargs,
-#             )
-#
-#         # Tracking
-#         tracked_dict = {"violin_data": _data}
-#         if positions is not None:
-#             tracked_dict["positions"] = positions
-#
-#         self._track(track, id, method_name, tracked_dict, None)
-#
-#     def plot_area(
-#         self,
-#         x: ArrayLike,
-#         y: ArrayLike,
-#         stacked: bool = False,
-#         fill: bool = True,
-#         alpha: float = 0.5,
-#         track: bool = True,
-#         id: Optional[str] = None,
-#         **kwargs,
-#     ) -> None:
-#         """Plot an area plot."""
-#         # Method Name for downstream csv exporting
-#         method_name = "plot_area"
-#
-#         # Plotting with pure matplotlib methods under non-tracking context
-#         with self._no_tracking():
-#             self._axis_mpl = ax_module.plot_area(
-#                 self._axis_mpl,
-#                 x,
-#                 y,
-#                 stacked=stacked,
-#                 fill=fill,
-#                 alpha=alpha,
-#                 **kwargs,
-#             )
-#
-#         # Tracking
-#         tracked_dict = {"x": x, "y": y}
-#         self._track(track, id, method_name, tracked_dict, None)
-#
-#     def plot_radar(
-#         self,
-#         data: ArrayLike,
-#         categories: List[str],
-#         groups: Optional[List[str]] = None,
-#         fill: bool = True,
-#         alpha: float = 0.2,
-#         grid_step: int = 5,
-#         track: bool = True,
-#         id: Optional[str] = None,
-#         **kwargs,
-#     ) -> None:
-#         """Plot a radar/spider chart."""
-#         # Method Name for downstream csv exporting
-#         method_name = "plot_radar"
-#
-#         # Convert data to DataFrame if not already
-#         if not isinstance(data, pd.DataFrame):
-#             if groups is not None:
-#                 data = pd.DataFrame(data, columns=categories, index=groups)
+#             # Handle the list-style input case
+#             if isinstance(data, list) and all(
+#                 isinstance(item, (list, np.ndarray)) for item in data
+#             ):
+#                 self._axis_mpl = ax_module.plot_violin(
+#                     self._axis_mpl,
+#                     data_list=data,
+#                     labels=labels,
+#                     colors=colors,
+#                     half=half,
+#                     **kwargs,
+#                 )
+#             # Handle DataFrame or other inputs
 #             else:
-#                 data = pd.DataFrame(data, columns=categories)
-#
-#         # Plotting with pure matplotlib methods under non-tracking context
-#         with self._no_tracking():
-#             self._axis_mpl = ax_module.plot_radar(
-#                 self._axis_mpl,
-#                 data,
-#                 categories=categories,
-#                 fill=fill,
-#                 alpha=alpha,
-#                 grid_step=grid_step,
-#                 **kwargs,
-#             )
-#
-#         # Tracking
-#         tracked_dict = {"radar_data": data}
-#         self._track(track, id, method_name, tracked_dict, None)
-#
-#     def plot_bubble(
-#         self,
-#         x: ArrayLike,
-#         y: ArrayLike,
-#         size: ArrayLike,
-#         color: Optional[ArrayLike] = None,
-#         size_scale: float = 1000.0,
-#         alpha: float = 0.6,
-#         colormap: str = "viridis",
-#         show_colorbar: bool = True,
-#         colorbar_label: str = "",
-#         track: bool = True,
-#         id: Optional[str] = None,
-#         **kwargs,
-#     ) -> None:
-#         """Plot a bubble chart."""
-#         # Method Name for downstream csv exporting
-#         method_name = "plot_bubble"
-#
-#         # Plotting with pure matplotlib methods under non-tracking context
-#         with self._no_tracking():
-#             self._axis_mpl = ax_module.plot_bubble(
-#                 self._axis_mpl,
-#                 x,
-#                 y,
-#                 size,
-#                 color=color,
-#                 size_scale=size_scale,
-#                 alpha=alpha,
-#                 colormap=colormap,
-#                 show_colorbar=show_colorbar,
-#                 colorbar_label=colorbar_label,
-#                 **kwargs,
-#             )
-#
-#         # Tracking
-#         tracked_dict = {"x": x, "y": y, "size": size}
-#         if color is not None:
-#             tracked_dict["color"] = color
-#
-#         self._track(track, id, method_name, tracked_dict, None)
-#
-#     def plot_ridgeline(
-#         self,
-#         data: ArrayLike,
-#         labels: Optional[List[str]] = None,
-#         overlap: float = 0.8,
-#         fill: bool = True,
-#         alpha: float = 0.6,
-#         colormap: str = "viridis",
-#         bandwidth: Optional[float] = None,
-#         track: bool = True,
-#         id: Optional[str] = None,
-#         **kwargs,
-#     ) -> None:
-#         """Plot a ridgeline plot (similar to joyplot but with KDE)."""
-#         # Method Name for downstream csv exporting
-#         method_name = "plot_ridgeline"
-#
-#         # Ensure data is in correct format
-#         if isinstance(data, pd.DataFrame):
-#             _data = [data[col].dropna().values for col in data.columns]
-#             if labels is None:
-#                 labels = list(data.columns)
-#         elif isinstance(data, list):
-#             _data = data
-#         else:
-#             _data = [data]
-#
-#         # Plotting with pure matplotlib methods under non-tracking context
-#         with self._no_tracking():
-#             self._axis_mpl, ridge_data = ax_module.plot_ridgeline(
-#                 self._axis_mpl,
-#                 _data,
-#                 labels=labels,
-#                 overlap=overlap,
-#                 fill=fill,
-#                 alpha=alpha,
-#                 colormap=colormap,
-#                 bandwidth=bandwidth,
-#                 **kwargs,
-#             )
-#
+#                 self._axis_mpl = ax_module.plot_violin(
+#                     self._axis_mpl,
+#                     data=data,
+#                     x=x,
+#                     y=y,
+#                     hue=hue,
+#                     half=half,
+#                     **kwargs,
+#                 )
+# 
 #         # Tracking
 #         tracked_dict = {
-#             "ridgeline_data": _data,
-#             "kde_x": ridge_data["kde_x"],
-#             "kde_y": ridge_data["kde_y"],
+#             "data": data,
+#             "x": x,
+#             "y": y,
+#             "hue": hue,
+#             "half": half,
+#             "labels": labels,
+#             "colors": colors,
 #         }
-#         if labels is not None:
-#             tracked_dict["labels"] = labels
-#
 #         self._track(track, id, method_name, tracked_dict, None)
-#
-#     def plot_parallel_coordinates(
-#         self,
-#         data: pd.DataFrame,
-#         class_column: Optional[str] = None,
-#         colormap: str = "viridis",
-#         alpha: float = 0.5,
-#         track: bool = True,
-#         id: Optional[str] = None,
-#         **kwargs,
-#     ) -> None:
-#         """Plot parallel coordinates."""
-#         # Method Name for downstream csv exporting
-#         method_name = "plot_parallel_coordinates"
-#
-#         # Plotting with pure matplotlib methods under non-tracking context
-#         with self._no_tracking():
-#             self._axis_mpl = ax_module.plot_parallel_coordinates(
-#                 self._axis_mpl,
-#                 data,
-#                 class_column=class_column,
-#                 colormap=colormap,
-#                 alpha=alpha,
-#                 **kwargs,
-#             )
-#
-#         # Tracking
-#         tracked_dict = {"parallel_data": data}
-#         self._track(track, id, method_name, tracked_dict, None)
-#
+#         return self._axis_mpl
+# 
+#     # def plot_area(
+#     #     self,
+#     #     x: ArrayLike,
+#     #     y: ArrayLike,
+#     #     stacked: bool = False,
+#     #     fill: bool = True,
+#     #     alpha: float = 0.5,
+#     #     track: bool = True,
+#     #     id: Optional[str] = None,
+#     #     **kwargs,
+#     # ) -> None:
+#     #     """Plot an area plot."""
+#     #     # Method Name for downstream csv exporting
+#     #     method_name = "plot_area"
+# 
+#     #     # Plotting with pure matplotlib methods under non-tracking context
+#     #     with self._no_tracking():
+#     #         self._axis_mpl = ax_module.plot_area(
+#     #             self._axis_mpl,
+#     #             x,
+#     #             y,
+#     #             stacked=stacked,
+#     #             fill=fill,
+#     #             alpha=alpha,
+#     #             **kwargs,
+#     #         )
+# 
+#     #     # Tracking
+#     #     tracked_dict = {"x": x, "y": y}
+#     #     self._track(track, id, method_name, tracked_dict, None)
+# 
+#     #     return self._axis_mpl
+# 
+#     # def plot_radar(
+#     #     self,
+#     #     data: ArrayLike,
+#     #     categories: List[str],
+#     #     groups: Optional[List[str]] = None,
+#     #     fill: bool = True,
+#     #     alpha: float = 0.2,
+#     #     grid_step: int = 5,
+#     #     track: bool = True,
+#     #     id: Optional[str] = None,
+#     #     **kwargs,
+#     # ) -> None:
+#     #     """Plot a radar/spider chart."""
+#     #     # Method Name for downstream csv exporting
+#     #     method_name = "plot_radar"
+# 
+#     #     # Convert data to DataFrame if not already
+#     #     if not isinstance(data, pd.DataFrame):
+#     #         if groups is not None:
+#     #             data = pd.DataFrame(data, columns=categories, index=groups)
+#     #         else:
+#     #             data = pd.DataFrame(data, columns=categories)
+# 
+#     #     # Plotting with pure matplotlib methods under non-tracking context
+#     #     with self._no_tracking():
+#     #         self._axis_mpl = ax_module.plot_radar(
+#     #             self._axis_mpl,
+#     #             data,
+#     #             categories=categories,
+#     #             fill=fill,
+#     #             alpha=alpha,
+#     #             grid_step=grid_step,
+#     #             **kwargs,
+#     #         )
+# 
+#     #     # Tracking
+#     #     tracked_dict = {"radar_data": data}
+#     #     self._track(track, id, method_name, tracked_dict, None)
+# 
+#     #     return self._axis_mpl
+# 
+#     # def plot_bubble(
+#     #     self,
+#     #     x: ArrayLike,
+#     #     y: ArrayLike,
+#     #     size: ArrayLike,
+#     #     color: Optional[ArrayLike] = None,
+#     #     size_scale: float = 1000.0,
+#     #     alpha: float = 0.6,
+#     #     colormap: str = "viridis",
+#     #     show_colorbar: bool = True,
+#     #     colorbar_label: str = "",
+#     #     track: bool = True,
+#     #     id: Optional[str] = None,
+#     #     **kwargs,
+#     # ) -> None:
+#     #     """Plot a bubble chart."""
+#     #     # Method Name for downstream csv exporting
+#     #     method_name = "plot_bubble"
+# 
+#     #     # Plotting with pure matplotlib methods under non-tracking context
+#     #     with self._no_tracking():
+#     #         self._axis_mpl = ax_module.plot_bubble(
+#     #             self._axis_mpl,
+#     #             x,
+#     #             y,
+#     #             size,
+#     #             color=color,
+#     #             size_scale=size_scale,
+#     #             alpha=alpha,
+#     #             colormap=colormap,
+#     #             show_colorbar=show_colorbar,
+#     #             colorbar_label=colorbar_label,
+#     #             **kwargs,
+#     #         )
+# 
+#     #     # Tracking
+#     #     tracked_dict = {"x": x, "y": y, "size": size}
+#     #     if color is not None:
+#     #         tracked_dict["color"] = color
+# 
+#     #     self._track(track, id, method_name, tracked_dict, None)
+# 
+#     #     return self._axis_mpl
+# 
+#     # def plot_ridgeline(
+#     #     self,
+#     #     data: ArrayLike,
+#     #     labels: Optional[List[str]] = None,
+#     #     overlap: float = 0.8,
+#     #     fill: bool = True,
+#     #     alpha: float = 0.6,
+#     #     colormap: str = "viridis",
+#     #     bandwidth: Optional[float] = None,
+#     #     track: bool = True,
+#     #     id: Optional[str] = None,
+#     #     **kwargs,
+#     # ) -> None:
+#     #     """Plot a ridgeline plot (similar to joyplot but with KDE)."""
+#     #     # Method Name for downstream csv exporting
+#     #     method_name = "plot_ridgeline"
+# 
+#     #     # Ensure data is in correct format
+#     #     if isinstance(data, pd.DataFrame):
+#     #         _data = [data[col].dropna().values for col in data.columns]
+#     #         if labels is None:
+#     #             labels = list(data.columns)
+#     #     elif isinstance(data, list):
+#     #         _data = data
+#     #     else:
+#     #         _data = [data]
+# 
+#     #     # Plotting with pure matplotlib methods under non-tracking context
+#     #     with self._no_tracking():
+#     #         self._axis_mpl, ridge_data = ax_module.plot_ridgeline(
+#     #             self._axis_mpl,
+#     #             _data,
+#     #             labels=labels,
+#     #             overlap=overlap,
+#     #             fill=fill,
+#     #             alpha=alpha,
+#     #             colormap=colormap,
+#     #             bandwidth=bandwidth,
+#     #             **kwargs,
+#     #         )
+# 
+#     #     # Tracking
+#     #     tracked_dict = {
+#     #         "ridgeline_data": _data,
+#     #         "kde_x": ridge_data["kde_x"],
+#     #         "kde_y": ridge_data["kde_y"],
+#     #     }
+#     #     if labels is not None:
+#     #         tracked_dict["labels"] = labels
+#     #     self._track(track, id, method_name, tracked_dict, None)
+# 
+#     #     return self._axis_mpl, ridge_data
+# 
+#     # def plot_parallel_coordinates(
+#     #     self,
+#     #     data: pd.DataFrame,
+#     #     class_column: Optional[str] = None,
+#     #     colormap: str = "viridis",
+#     #     alpha: float = 0.5,
+#     #     track: bool = True,
+#     #     id: Optional[str] = None,
+#     #     **kwargs,
+#     # ) -> None:
+#     #     """Plot parallel coordinates."""
+#     #     # Method Name for downstream csv exporting
+#     #     method_name = "plot_parallel_coordinates"
+# 
+#     #     # Plotting with pure matplotlib methods under non-tracking context
+#     #     with self._no_tracking():
+#     #         self._axis_mpl = ax_module.plot_parallel_coordinates(
+#     #             self._axis_mpl,
+#     #             data,
+#     #             class_column=class_column,
+#     #             colormap=colormap,
+#     #             alpha=alpha,
+#     #             **kwargs,
+#     #         )
+# 
+#     #     # Tracking
+#     #     tracked_dict = {"parallel_data": data}
+#     #     self._track(track, id, method_name, tracked_dict, None)
+# 
+#     #     return self._axis_mpl
+# 
 #     @wraps(ax_module.plot_line)
 #     def plot_line(
 #         self,
@@ -1361,17 +1398,19 @@ if __name__ == "__main__":
 #         """Plot a simple line."""
 #         # Method Name for downstream csv exporting
 #         method_name = "plot_line"
-#
+# 
 #         # Plotting with pure matplotlib methods under non-tracking context
 #         with self._no_tracking():
 #             self._axis_mpl, plot_df = ax_module.plot_line(
 #                 self._axis_mpl, data, xx=xx, **kwargs
 #             )
-#
+# 
 #         # Tracking
 #         tracked_dict = {"plot_df": plot_df}
 #         self._track(track, id, method_name, tracked_dict, None)
-#
+# 
+#         return self._axis_mpl, plot_df
+# 
 #     @wraps(ax_module.plot_mean_std)
 #     def plot_mean_std(
 #         self,
@@ -1385,17 +1424,19 @@ if __name__ == "__main__":
 #         """Plot mean line with standard deviation shading."""
 #         # Method Name for downstream csv exporting
 #         method_name = "plot_mean_std"
-#
+# 
 #         # Plotting with pure matplotlib methods under non-tracking context
 #         with self._no_tracking():
 #             self._axis_mpl, plot_df = ax_module.plot_mean_std(
 #                 self._axis_mpl, data, xx=xx, sd=sd, **kwargs
 #             )
-#
+# 
 #         # Tracking
 #         tracked_dict = {"plot_df": plot_df}
 #         self._track(track, id, method_name, tracked_dict, None)
-#
+# 
+#         return self._axis_mpl, plot_df
+# 
 #     @wraps(ax_module.plot_mean_ci)
 #     def plot_mean_ci(
 #         self,
@@ -1409,17 +1450,19 @@ if __name__ == "__main__":
 #         """Plot mean line with confidence interval shading."""
 #         # Method Name for downstream csv exporting
 #         method_name = "plot_mean_ci"
-#
+# 
 #         # Plotting with pure matplotlib methods under non-tracking context
 #         with self._no_tracking():
 #             self._axis_mpl, plot_df = ax_module.plot_mean_ci(
 #                 self._axis_mpl, data, xx=xx, perc=perc, **kwargs
 #             )
-#
+# 
 #         # Tracking
 #         tracked_dict = {"plot_df": plot_df}
 #         self._track(track, id, method_name, tracked_dict, None)
-#
+# 
+#         return self._axis_mpl, plot_df
+# 
 #     @wraps(ax_module.plot_median_iqr)
 #     def plot_median_iqr(
 #         self,
@@ -1432,17 +1475,19 @@ if __name__ == "__main__":
 #         """Plot median line with interquartile range shading."""
 #         # Method Name for downstream csv exporting
 #         method_name = "plot_median_iqr"
-#
+# 
 #         # Plotting with pure matplotlib methods under non-tracking context
 #         with self._no_tracking():
 #             self._axis_mpl, plot_df = ax_module.plot_median_iqr(
 #                 self._axis_mpl, data, xx=xx, **kwargs
 #             )
-#
+# 
 #         # Tracking
 #         tracked_dict = {"plot_df": plot_df}
 #         self._track(track, id, method_name, tracked_dict, None)
-#
+# 
+#         return self._axis_mpl, plot_df
+# 
 #     @wraps(ax_module.plot_shaded_line)
 #     def plot_shaded_line(
 #         self,
@@ -1459,7 +1504,7 @@ if __name__ == "__main__":
 #         """Plot a line with shaded area between lower and upper bounds."""
 #         # Method Name for downstream csv exporting
 #         method_name = "plot_shaded_line"
-#
+# 
 #         # Plotting with pure matplotlib methods under non-tracking context
 #         with self._no_tracking():
 #             self._axis_mpl, plot_df = ax_module.plot_shaded_line(
@@ -1472,14 +1517,14 @@ if __name__ == "__main__":
 #                 label=label,
 #                 **kwargs,
 #             )
-#
+# 
 #         # Tracking
 #         tracked_dict = {"plot_df": plot_df}
 #         self._track(track, id, method_name, tracked_dict, None)
-#
+# 
+#         return self._axis_mpl, plot_df
+# 
 # # EOF
 # --------------------------------------------------------------------------------
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_MatplotlibPlotMixin.py
 # --------------------------------------------------------------------------------
-
-# EOF
