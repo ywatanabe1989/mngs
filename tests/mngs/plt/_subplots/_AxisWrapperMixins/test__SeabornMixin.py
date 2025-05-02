@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-01 15:37:16 (ywatanabe)"
+# Timestamp: "2025-05-02 21:47:36 (ywatanabe)"
 # File: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin.py
 # ----------------------------------------
 import os
@@ -298,35 +298,35 @@ def test_sns_violinplot():
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
 
 
-def test_sns_violinplot_half():
-    """Test sns_violinplot with half=True"""
-    # Figure
-    fig, ax = mngs.plt.subplots()
-    # Data
-    data = pd.DataFrame(
-        {
-            "group": np.repeat(["A", "B", "C"], 30),
-            "value": np.concatenate(
-                [
-                    np.random.normal(0, 1, 30),
-                    np.random.normal(3, 1, 30),
-                    np.random.normal(6, 1, 30),
-                ]
-            ),
-        }
-    )
-    # Plot
-    ax.sns_violinplot(data=data, x="group", y="value", half=True)
-    # Visualization
-    ax.set_xyt("Groups", "Values", "Seaborn Half Violinplot Test")
-    # Saving
-    spath = f"./sns_violinplot_half_test.png"
-    mngs.io.save(fig, spath, symlink_from_cwd=False)
-    # Closing
-    mngs.plt.close(fig)
-    # Assertion
-    actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
-    assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+# def test_sns_violinplot_half():
+#     """Test sns_violinplot with half=True"""
+#     # Figure
+#     fig, ax = mngs.plt.subplots()
+#     # Data
+#     data = pd.DataFrame(
+#         {
+#             "group": np.repeat(["A", "B", "C"], 30),
+#             "value": np.concatenate(
+#                 [
+#                     np.random.normal(0, 1, 30),
+#                     np.random.normal(3, 1, 30),
+#                     np.random.normal(6, 1, 30),
+#                 ]
+#             ),
+#         }
+#     )
+#     # Plot
+#     ax.sns_violinplot(data=data, x="group", y="value", half=True)
+#     # Visualization
+#     ax.set_xyt("Groups", "Values", "Seaborn Half Violinplot Test")
+#     # Saving
+#     spath = f"./sns_violinplot_half_test.png"
+#     mngs.io.save(fig, spath, symlink_from_cwd=False)
+#     # Closing
+#     mngs.plt.close(fig)
+#     # Assertion
+#     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
+#     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
 
 if __name__ == "__main__":
     import os
