@@ -1,6 +1,6 @@
 #!/bin/bash
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-29 21:21:42 (ywatanabe)"
+# Timestamp: "2025-05-02 17:57:21 (ywatanabe)"
 # File: ./tests/sync_tests_with_source.sh
 
 THIS_DIR="$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)"
@@ -245,7 +245,8 @@ main() {
     # cleanup_unnecessary_test_files
     # move_stale_test_files_to_old
 
-    tree "$TESTS_DIR" 2>&1 | tee -a "$LOG_PATH"
+    # tree "$TESTS_DIR" 2>&1 | tee -a "$LOG_PATH"
+    tree "$TESTS_DIR" 2>&1 >> "$LOG_PATH"
 }
 
 main "$@"
