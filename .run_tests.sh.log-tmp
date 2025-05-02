@@ -22,7 +22,7 @@ addopts =
     -q
     --no-header
     --tb=short
-    --last-failed    
+    # --last-failed
     --exitfirst
     # --verbose
     --color=yes
@@ -35,7 +35,7 @@ addopts =
 env =
     PYTHONPATH=.
     TESTING=True
-Fri May  2 07:59:13 PM AEST 2025
+Sat May  3 01:09:37 AM AEST 2025
 /home/ywatanabe/proj/_mngs_repo/tests/custom/test_matplotlib_compatibility.py
 /home/ywatanabe/proj/_mngs_repo/tests/mngs/test___init__.py
 /home/ywatanabe/proj/_mngs_repo/tests/mngs/decorators/test___init__.py
@@ -78,7 +78,6 @@ Fri May  2 07:59:13 PM AEST 2025
 /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_cube.py
 /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_ecdf.py
 /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_fillv.py
-/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_half_violin.py
 /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_heatmap.py
 /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_image.py
 /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_joyplot.py
@@ -86,11 +85,12 @@ Fri May  2 07:59:13 PM AEST 2025
 /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_rectangle.py
 /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_shaded_line.py
 /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_statistical_shaded_line.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_violin.py
 /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/color/test__PARAMS.py
 /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/color/test__add_hue_col.py
 /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/color/test__colors.py
 /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/color/test__get_colors_from_cmap.py
-/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/color/test__interp_colors.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/color/test__interpolate.py
 /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/color/test__vizualize_colors.py
 /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/utils/test__configure_mpl.py
 /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/utils/test__im2grid.py
@@ -99,15 +99,15 @@ Fri May  2 07:59:13 PM AEST 2025
 [32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
 Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_image_test.csv (3.0 B)[0m
 [93m
-Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_image_test.png (18.2 KiB)[0m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_image_test.png (18.0 KiB)[0m
 [32m.[0m[93m
 Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_image_xyz_test.csv (3.0 B)[0m
 [93m
-Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_image_xyz_test.png (19.8 KiB)[0m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_image_xyz_test.png (19.9 KiB)[0m
 [32m.[0m[93m
-Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_kde_test.png (22.0 KiB)[0m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_kde_test.png (21.8 KiB)[0m
 [32m.[0m[93m
-Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_kde_cumulative_test.png (22.9 KiB)[0m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_kde_cumulative_test.png (23.0 KiB)[0m
 [32m.[0m[93m
 Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_conf_mat_test.csv (3.0 B)[0m
 [93m
@@ -121,7 +121,7 @@ Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperM
 [32m.[0m[93m
 Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_boxtest.csv (3.0 B)[0m
 [93m
-Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_boxtest.png (12.6 KiB)[0m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_boxtest.png (11.8 KiB)[0m
 [32m.[0m[93m
 Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_raster_test.csv (3.0 B)[0m
 [93m
@@ -145,34 +145,192 @@ Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperM
 [32m.[0m[93m
 Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_heatmap_test.csv (3.0 B)[0m
 [93m
-Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_heatmap_test.png (36.2 KiB)[0m
-[32m.[0m[31mF[0m
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> traceback >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-[1m[31mtests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py[0m:383: in test_plot_violin
-    [0max.plot_violin(data, labels=labels, showmedians=[94mTrue[39;49;00m)[90m[39;49;00m
-[1m[31msrc/mngs/plt/_subplots/_AxisWrapperMixins/_MatplotlibPlotMixin.py[0m:522: in plot_violin
-    [0m[96mself[39;49;00m._axis_mpl = ax_module.plot_violin([90m[39;49;00m
-[1m[31mE   AttributeError: module 'mngs.plt.ax' has no attribute 'plot_violin'[0m
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> entering PDB >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> PDB post_mortem >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-> [0;32m/home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_MatplotlibPlotMixin.py[0m(522)[0;36mplot_violin[0;34m()[0m
-[0;32m    520 [0;31m        [0;31m# Plotting with pure matplotlib methods under non-tracking context[0m[0;34m[0m[0;34m[0m[0m
-[0m[0;32m    521 [0;31m        [0;32mwith[0m [0mself[0m[0;34m.[0m[0m_no_tracking[0m[0;34m([0m[0;34m)[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
-[0m[0;32m--> 522 [0;31m            self._axis_mpl = ax_module.plot_violin(
-[0m[0;32m    523 [0;31m                [0mself[0m[0;34m.[0m[0m_axis_mpl[0m[0;34m,[0m[0;34m[0m[0;34m[0m[0m
-[0m[0;32m    524 [0;31m                [0m_data[0m[0;34m,[0m[0;34m[0m[0;34m[0m[0m
-[0m
-ipdb>
-
-
-
-
-
-
-       ipdb>                                                                                                                                                          
-
-
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_heatmap_test.png (36.4 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_violin_test_traditional.csv (3.0 B)[0m
+[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_violin_test_traditional.png (24.4 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_mean_std_test.csv (3.0 B)[0m
+[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_mean_std_test.png (50.3 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_mean_ci_test.csv (3.0 B)[0m
+[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_mean_ci_test.png (44.6 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_median_iqr_test.csv (3.0 B)[0m
+[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_median_iqr_test.png (56.5 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_shaded_line_test.csv (3.0 B)[0m
+[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_shaded_line_test.png (32.6 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin_out/sns_barplot_test.csv (68.0 B)[0m
+[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin_out/sns_barplot_test.png (13.0 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin_out/sns_boxplot_test.csv (2.1 KiB)[0m
+[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin_out/sns_boxplot_test.png (24.5 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin_out/sns_heatmap_test.csv (3.0 B)[0m
+[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin_out/sns_heatmap_test.png (78.0 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin_out/sns_heatmap_xyz_test.csv (2.6 KiB)[0m
+[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin_out/sns_heatmap_xyz_test.png (17.1 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin_out/sns_histplot_test.csv (35.8 KiB)[0m
+[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin_out/sns_histplot_test.png (16.7 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin_out/sns_kdeplot_test.png (25.4 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin_out/sns_scatterplot_test.png (41.5 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin_out/sns_swarmplot_test.csv (3.0 B)[0m
+[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin_out/sns_swarmplot_test.png (25.1 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin_out/sns_stripplot_test.csv (3.0 B)[0m
+[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin_out/sns_stripplot_test.png (20.8 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin_out/sns_violinplot_test.csv (5.5 KiB)[0m
+[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin_out/sns_violinplot_test.png (29.6 KiB)[0m
+[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__add_marginal_ax_out/test__add_marginal_ax.py.jpg (29.1 KiB)[0m
+[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__add_panel_out/test__add_panel.py.jpg (5.4 KiB)[0m
+[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__extend_out/test__extend.py.jpg (12.8 KiB)[0m
+[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__force_aspect_out/test__force_aspect.py.jpg (29.6 KiB)[0m
+[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__format_label_out/test__format_label.py.jpg (17.6 KiB)[0m
+[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__hide_spines_out/test__hide_spines.py.jpg (14.2 KiB)[0m
+[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__map_ticks_out/test__map_ticks.py.jpg (16.9 KiB)[0m
+[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__rotate_labels_out/test__rotate_labels.py.jpg (17.3 KiB)[0m
+[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__sci_note_out/test__sci_note.py.jpg (21.6 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__set_n_ticks_out/test__set_n_ticks.py.jpg (16.3 KiB)[0m
+[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__set_size_out/test__set_size.py.jpg (14.3 KiB)[0m
+[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__set_supxyt_out/test__set_supxyt.py.jpg (19.7 KiB)[0m
+[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__set_ticks_out/test__set_ticks.py.jpg (15.2 KiB)[0m
+[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__set_xyt_out/test__set_xyt.py.jpg (18.5 KiB)[0m
+[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__share_axes_out/test__share_axes.py.jpg (31.7 KiB)[0m
+[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__shift_out/test__shift.py.jpg (9.0 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_circular_hist_out/.test_basic_functionality.jpg (27.2 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_circular_hist_out/.test_with_custom_bins.jpg (32.1 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_circular_hist_out/.test_with_no_gaps.jpg (27.7 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_circular_hist_out/.test_with_custom_color.jpg (29.5 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_circular_hist_out/.test_with_non_density.jpg (35.7 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_circular_hist_out/.test_with_offset.jpg (28.0 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_circular_hist_out/.test_with_range_bias.jpg (30.5 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_circular_hist_out/test__plot_circular_hist.py.jpg (27.5 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_conf_mat_out/test__plot_conf_mat_test_basic_functionality.jpg (14.8 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_conf_mat_out/test__plot_conf_mat_test_return_bacc.jpg (14.8 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_conf_mat_out/test__plot_conf_mat_test_custom_cmap.jpg (16.4 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_conf_mat_out/test__plot_conf_mat_test_custom_title.jpg (15.2 KiB)[0m
+[32m.[0m[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_conf_mat_out/test__plot_conf_mat_test_with_dataframe.jpg (14.8 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_conf_mat_out/test__plot_conf_mat_test_with_labels.jpg (15.0 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_conf_mat_out/test__plot_conf_mat.py.jpg (15.0 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_cube_out/test__plot_cube_test_plot_cube_creates_12_edges.jpg (31.8 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_cube_out/test__plot_cube_test_plot_cube_with_custom_color.jpg (31.8 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_cube_out/test__plot_cube_test_plot_cube_with_custom_alpha.jpg (31.2 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_cube_out/test__plot_cube.py.jpg (30.5 KiB)[0m
+[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_ecdf_out/test__plot_ecdf.py.jpg (17.1 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_fillv_out/test__plot_fillv_test_single_axis.jpg (22.4 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_fillv_out/test__plot_fillv_test_multiple_axes.jpg (38.2 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_fillv_out/test__plot_fillv_test_custom_color.jpg (22.9 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_fillv_out/test__plot_fillv.py.jpg (26.5 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_heatmap_out/basic.jpg (16.6 KiB)[0m
+[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_image_out/test__plot_image.py.jpg (33.0 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_joyplot_out/basic.jpg (12.8 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_raster_out/test__plot_raster_test_basic_functionality.jpg (20.7 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_raster_out/test__plot_raster_test_with_time_parameter.jpg (21.6 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_raster_out/test__plot_raster_test_with_labels.jpg (24.2 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_raster_out/test__plot_raster_test_with_colors.jpg (22.0 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_raster_out/test__plot_raster_test_with_mixed_types.jpg (18.8 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_raster_out/test__plot_raster_test_with_kwargs.jpg (22.5 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_raster_out/test__plot_raster_test_data_processing.jpg (21.8 KiB)[0m
+[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_rectangle_out/test__plot_rectangle.py.jpg (13.2 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/ax/_plot/test__plot_shaded_line_out/test__plot_shaded_line_test_plot_single_shaded_line.jpg (18.6 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/ax/_plot/test__plot_shaded_line_out/test__plot_shaded_line_test_plot_multiple_shaded_line.jpg (27.6 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_statistical_shaded_line_out/test__plot_statistical_shaded_line.py.jpg (18.7 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_statistical_shaded_line_out/test__plot_statistical_shaded_line.py.jpg (23.3 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_statistical_shaded_line_out/test__plot_statistical_shaded_line.py.jpg (20.6 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_statistical_shaded_line_out/test__plot_statistical_shaded_line.py.jpg (24.2 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_violin_out/test__plot_violin_test_with_labels.jpg (18.5 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_violin_out/test__plot_violin_test_with_labels.jpg (17.8 KiB)[0m
+[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/color/test__vizualize_colors_out/test__vizualize_colors_test_vizualize_colors.csv (3.0 B)[0m
+[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/color/test__vizualize_colors_out/test__vizualize_colors_test_vizualize_colors.jpg (28.0 KiB)[0m
+[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/utils/test__im2grid_out/test__im2grid_test_grid_image.jpg (679.0 B)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/utils/test__im2grid_out/test__im2grid_test_single_image.jpg (631.0 B)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/utils/test__im2grid_out/test__im2grid_test_custom_default_color.jpg (686.0 B)[0m
+[32m.[0m[32m.[0m[32m.[0m[32m.[0m
 [33m=============================== warnings summary ===============================[0m
 ../../../../usr/lib/python3/dist-packages/pyparsing.py:108
   /usr/lib/python3/dist-packages/pyparsing.py:108: DeprecationWarning: module 'sre_constants' is deprecated
@@ -210,15 +368,9 @@ tests/custom/test_matplotlib_compatibility.py: 106 warnings
   /home/ywatanabe/proj/_mngs_repo/tests/custom/test_matplotlib_compatibility.py:45: MatplotlibDeprecationWarning: The is_bbox attribute was deprecated in Matplotlib 3.9 and will be removed in 3.11.
     mngs_attr = getattr(mngs_module, attr_name)
 
-tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py::test_plot_image
-tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py::test_plot_image_xyz
-tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py::test_plot_conf_mat
-tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py::test_plot_rectangle
-tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py::test_plot_box
-tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py::test_plot_joyplot
-tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py::test_plot_line
-tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py::test_plot_scatter_hist
-tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py::test_plot_heatmap
+tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py: 14 warnings
+tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin.py: 2 warnings
+tests/mngs/plt/color/test__vizualize_colors.py: 1 warning
   /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_export_as_csv.py:35: UserWarning: Plotting records not combined. Empty dataframe returned All objects passed were None
     warnings.warn(
 
@@ -237,12 +389,42 @@ tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py::test_p
     warnings.warn(
 
 tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py::test_plot_heatmap
+tests/mngs/plt/ax/_plot/test__plot_heatmap.py::test_plot__heatmap_basic
   /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/ax/_plot/_plot_heatmap.py:91: MatplotlibDeprecationWarning: The get_cmap function was deprecated in Matplotlib 3.7 and will be removed in 3.11. Use ``matplotlib.colormaps[name]`` or ``matplotlib.colormaps.get_cmap()`` or ``pyplot.get_cmap()`` instead.
     cmap_obj = plt.cm.get_cmap(cmap)
 
+tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin.py::test_sns_barplot
+tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin.py::test_sns_swarmplot
+tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin.py::test_sns_stripplot
+  /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_SeabornMixin.py:47: FutureWarning: 
+  
+  Passing `palette` without assigning `hue` is deprecated and will be removed in v0.14.0. Assign the `x` variable to `hue` and set `legend=False` for the same effect.
+  
+    self._axis_mpl = sns_plot_fn(ax=self._axis_mpl, *args, **kwargs)
+
+tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin.py::test_sns_heatmap
+  /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_export_as_csv.py:35: UserWarning: Plotting records not combined. Empty dataframe returned cannot concatenate object of type '<class 'numpy.ndarray'>'; only Series and DataFrame objs are valid
+    warnings.warn(
+
+tests/mngs/plt/_subplots/test__export_as_csv.py::TestExportAsCSV::test_empty_history
+  /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_export_as_csv.py:25: UserWarning: Plotting records not found. Empty dataframe returned.
+    warnings.warn("Plotting records not found. Empty dataframe returned.")
+
+tests/mngs/plt/ax/_plot/test__plot_ecdf.py::TestPlotECDF::test_with_nan_values
+  /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/ax/_plot/_plot_ecdf.py:50: UserWarning: NaN value are ignored for ECDF plot.
+    warnings.warn("NaN value are ignored for ECDF plot.")
+
+tests/mngs/plt/color/test__get_colors_from_cmap.py: 25 warnings
+  /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/color/_get_colors_from_cmap.py:55: MatplotlibDeprecationWarning: The get_cmap function was deprecated in Matplotlib 3.7 and will be removed in 3.11. Use ``matplotlib.colormaps[name]`` or ``matplotlib.colormaps.get_cmap()`` or ``pyplot.get_cmap()`` instead.
+    cmap = matplotlib.cm.get_cmap(cmap_name)
+
+tests/mngs/plt/color/test__get_colors_from_cmap.py::test_get_colors_from_cmap
+  /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/color/test__get_colors_from_cmap.py:58: MatplotlibDeprecationWarning: The get_cmap function was deprecated in Matplotlib 3.7 and will be removed in 3.11. Use ``matplotlib.colormaps[name]`` or ``matplotlib.colormaps.get_cmap()`` or ``pyplot.get_cmap()`` instead.
+    cmap = matplotlib.cm.get_cmap("viridis")
+
+tests/mngs/plt/color/test__interpolate.py::test_interpolate
+  /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/color/test__interpolate.py:25: DeprecationWarning: interpolate is deprecated: Use gen_interpolate instead
+    colors = interpolate(color_start, color_end, num_points)
+
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-[36m[1m=========================== short test summary info ============================[0m
-[31mFAILED[0m ../mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py::[1mtest_plot_violin[0m - AttributeError: module 'mngs.plt.ax' has no attribute 'plot_violin'
-[31m!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!![0m
-!!!!!!!!!!!!!!!!!!! _pytest.outcomes.Exit: Quitting debugger !!!!!!!!!!!!!!!!!!!
-[31m[31m[1m1 failed[0m, [32m48 passed[0m, [33m864 warnings[0m[31m in 86.19s (0:01:26)[0m[0m
+[33m[32m265 passed[0m, [33m[1m906 warnings[0m[33m in 45.41s[0m[0m
