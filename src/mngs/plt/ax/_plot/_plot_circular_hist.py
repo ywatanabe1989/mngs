@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-30 21:00:42 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_circular_hist.py
+# Timestamp: "2025-05-01 15:21:48 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_plot/_plot_circular_hist.py
 # ----------------------------------------
 import os
 __FILE__ = (
-    "./src/mngs/plt/ax/_circular_hist.py"
+    "./src/mngs/plt/ax/_plot/_plot_circular_hist.py"
 )
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
