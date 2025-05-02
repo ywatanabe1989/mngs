@@ -1,92 +1,33 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-30 20:58:49 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_raster_plot.py
+# Timestamp: "2025-05-01 15:23:01 (ywatanabe)"
+# File: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/ax/_plot/_plot_raster.py
 # ----------------------------------------
 import os
 __FILE__ = (
-    "./src/mngs/plt/ax/_raster_plot.py"
+    "./src/mngs/plt/ax/_plot/_plot_raster.py"
 )
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
-# Time-stamp: "2024-11-13 12:57:26 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/plt/ax/_plot_raster.py
 
-# Time-stamp: "2024-09-12 09:53:15 (ywatanabe)"
-# /home/ywatanabe/proj/mngs/src/mngs/plt/ax/_plot_raster.py
+import matplotlib
 
-"""This script provides a functionality of raster plotting"""
-
-import sys
 from bisect import bisect_left
 
 import matplotlib.pyplot as plt
-import mngs
 import numpy as np
 import pandas as pd
 
-# def plot_raster(ax, positions, time=None, **kwargs):
-#     """
-#     Create a raster plot using eventplot and return the plot along with a DataFrame.
 
-#     Parameters
-#     ----------
-#     ax : matplotlib.axes.Axes
-#         The axes on which to draw the raster plot.
-#     positions : list of lists or array-like
-#         Position of events for each channel. Each list corresponds to events of one channel.
-#     time : array-like, optional
-#         The time indices for the events. If None, time will be generated based on event positions.
-#     **kwargs : dict
-#         Additional keyword arguments to be passed to the eventplot function.
-
-#     Returns
-#     -------
-#     ax : matplotlib.axes.Axes
-#         The axes with the raster plot.
-#     df : pandas.DataFrame
-#         A DataFrame where rows correspond to time indices and columns correspond to channels.
-#         Each cell contains the channel index for events at specific time indices.
-
-#     Example
-#     -------
-#     positions = [[10, 50, 90], [20, 60, 100], [30, 70, 110]]
-#     fig, ax = plt.subplots()
-#     ax, df = plot_raster(ax, positions)
-#     plt.show()
-#     """
-
-#     def ensure_list(positions):
-#         return [
-#             [pos] if isinstance(pos, (int, float)) else pos
-#             for pos in positions
-#         ]
-
-#     def positions_to_df(positions, time):
-#         if time is None:
-#             time = np.linspace(
-#                 0, np.max([np.max(pos) for pos in positions]), 1000
-#             )
-
-#         digi = np.full((len(positions), len(time)), np.nan, dtype=float)
-
-#         for channel_index, channel_positions in enumerate(positions):
-#             for position in channel_positions:
-#                 insert_index = bisect_left(time, position)
-#                 if insert_index == len(time):
-#                     insert_index -= 1
-#                 digi[channel_index, insert_index] = channel_index
-
-#         return pd.DataFrame(digi.T, index=time)
-
-#     positions = ensure_list(positions)
-#     df = positions_to_df(positions, time)
-
-#     ax.eventplot(positions, orientation="horizontal", **kwargs)
-#     return ax, df
-
-
-def plot_raster(ax, positions, time=None, labels=None, colors=None, **kwargs):
+def plot_raster(
+    ax,
+    event_times,
+    time=None,
+    labels=None,
+    colors=None,
+    orientation="horizontal",
+    **kwargs
+):
     """
     Create a raster plot using eventplot with custom labels and colors.
 
@@ -94,14 +35,16 @@ def plot_raster(ax, positions, time=None, labels=None, colors=None, **kwargs):
     ----------
     ax : matplotlib.axes.Axes
         The axes on which to draw the raster plot.
-    positions : list of lists or array-like
-        Position of events for each channel.
+    event_times : Array-like or list of lists
+        Time points of events by channels
     time : array-like, optional
-        The time indices for the events.
+        The time indices for the events (default: np.linspace(0, max(event_times))).
     labels : list, optional
         Labels for each channel.
     colors : list, optional
         Colors for each channel.
+    orientation: str, optional
+        Orientation of raster plot (default: horizontal).
     **kwargs : dict
         Additional keyword arguments for eventplot.
 
@@ -112,68 +55,69 @@ def plot_raster(ax, positions, time=None, labels=None, colors=None, **kwargs):
     df : pandas.DataFrame
         DataFrame with time indices and channel events.
     """
+    assert isinstance(
+        ax, matplotlib.axes._axes.Axes
+    ), "First argument must be a matplotlib axis"
 
-    def ensure_list(positions):
-        return [
-            [pos] if isinstance(pos, (int, float)) else pos
-            for pos in positions
-        ]
-
-    def positions_to_df(positions, time):
-        if time is None:
-            time = np.linspace(
-                0, np.max([np.max(pos) for pos in positions]), 1000
-            )
-
-        digi = np.full((len(positions), len(time)), np.nan, dtype=float)
-
-        for channel_index, channel_positions in enumerate(positions):
-            for position in channel_positions:
-                insert_index = bisect_left(time, position)
-                if insert_index == len(time):
-                    insert_index -= 1
-                digi[channel_index, insert_index] = channel_index
-
-        return pd.DataFrame(digi.T, index=time)
-
-    positions = ensure_list(positions)
-    df = positions_to_df(positions, time)
+    # Format event_times data
+    event_times_list = _ensure_list(event_times)
 
     # Handle colors and labels
-    if colors is None:
-        colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
-    if len(colors) < len(positions):
-        colors = colors * (len(positions) // len(colors) + 1)
+    colors = _handle_colors(colors, event_times_list)
 
-    # Create event collection with colors
-    for i, (pos, color) in enumerate(zip(positions, colors)):
-        label = labels[i] if labels is not None and i < len(labels) else None
+    # Plotting as eventplot using event_times_list
+    for ii, (pos, color) in enumerate(zip(event_times_list, colors)):
+        label = _define_label(labels, ii)
         ax.eventplot(
-            pos, orientation="horizontal", colors=color, label=label, **kwargs
+            pos, orientation=orientation, colors=color, label=label, **kwargs
         )
 
+    # Legend
     if labels is not None:
         ax.legend()
 
-    return ax, df
+    # Return event_times in a useful format
+    event_times_digital_df = _event_times_to_digital_df(event_times_list, time)
+
+    return ax, event_times_digital_df
 
 
-def test():
-    positions = [
-        [10, 50, 90],
-        [20, 60, 100],
-        [30, 70, 110],
-        [40, 80, 120],
+def _ensure_list(event_times):
+    return [
+        [pos] if isinstance(pos, (int, float)) else pos for pos in event_times
     ]
-    fig, ax = mngs.plt.subplots()
-    ax, df = plot_raster(ax, positions)
 
 
-if __name__ == "__main__":
-    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
-        sys, plt, verbose=False
-    )
-    test()
-    mngs.gen.close(CONFIG, verbose=False, notify=False)
+def _define_label(labels, ii):
+    if (labels is not None) and (ii < len(labels)):
+        return labels[ii]
+    else:
+        return None
+
+
+def _handle_colors(colors, event_times_list):
+    if colors is None:
+        colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
+    if len(colors) < len(event_times_list):
+        colors = colors * (len(event_times_list) // len(colors) + 1)
+    return colors
+
+
+def _event_times_to_digital_df(event_times_list, time):
+    if time is None:
+        time = np.linspace(
+            0, np.max([np.max(pos) for pos in event_times_list]), 1000
+        )
+
+    digi = np.full((len(event_times_list), len(time)), np.nan, dtype=float)
+
+    for i_ch, posis_ch in enumerate(event_times_list):
+        for posi_ch in posis_ch:
+            i_insert = bisect_left(time, posi_ch)
+            if i_insert == len(time):
+                i_insert -= 1
+            digi[i_ch, i_insert] = i_ch
+
+    return pd.DataFrame(digi.T, index=time)
 
 # EOF
