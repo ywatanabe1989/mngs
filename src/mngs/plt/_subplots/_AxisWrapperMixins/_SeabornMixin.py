@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-30 18:27:40 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_SeabornMixin.py
+# Timestamp: "2025-05-01 16:27:16 (ywatanabe)"
+# File: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_SeabornMixin.py
 # ----------------------------------------
 import os
 __FILE__ = (
@@ -189,26 +189,26 @@ class SeabornMixin:
         **kwargs,
     ):
         if kwargs.get("hue"):
-            hue_col = kwargs["hue"]
-            hues = data[hue_col]
+            hues = data[kwargs["hue"]]
+
             if x is not None:
                 lim = xlim
-                for hh in np.unique(hues):
-                    _data = data.loc[data[hue_col] == hh, x]
-                    self.kde(_data, xlim=lim, label=hh, id=hh, **kwargs)
+                for hue in np.unique(hues):
+                    _data = data.loc[hues == hue, x]
+                    self.plot_kde(_data, xlim=lim, label=hue, id=hue, **kwargs)
 
             if y is not None:
-                lim = xlim
-                for hh in np.unique(hues):
-                    _data = data.loc[data[hue] == hh, y]
-                    self.kde(_data, xlim=lim, label=hh, id=hh, **kwargs)
+                lim = ylim
+                for hue in np.unique(hues):
+                    _data = data.loc[hues == hue, y]
+                    self.plot_kde(_data, xlim=lim, label=hue, id=hue, **kwargs)
 
         else:
             if x is not None:
                 _data, lim = data[x], xlim
             if y is not None:
                 _data, lim = data[y], ylim
-            self.kde(_data, xlim=lim, **kwargs)
+            self.plot_kde(_data, xlim=lim, **kwargs)
 
     @sns_copy_doc
     def sns_pairplot(self, *args, track=True, id=None, **kwargs):
@@ -265,7 +265,7 @@ class SeabornMixin:
     ):
         if half:
             with self._no_tracking():
-                self._axis_mpl = ax_module.half_violin(
+                self._axis_mpl = ax_module.plot_half_violin(
                     self._axis_mpl, data=data, x=x, y=y, **kwargs
                 )
         else:
