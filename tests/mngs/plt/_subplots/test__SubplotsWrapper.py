@@ -12,12 +12,12 @@ if __name__ == "__main__":
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Timestamp: "2025-04-29 20:13:41 (ywatanabe)"
-# # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots_dev/_SubplotsWrapper.py
+# # Timestamp: "2025-05-02 12:34:31 (ywatanabe)"
+# # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_SubplotsWrapper.py
 # # ----------------------------------------
 # import os
 # __FILE__ = (
-#     "./src/mngs/plt/_subplots_dev/_SubplotsWrapper.py"
+#     "./src/mngs/plt/_subplots/_SubplotsWrapper.py"
 # )
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
@@ -81,7 +81,6 @@ if __name__ == "__main__":
 #         # Wrap the array of axes
 #         self._axes_mngs = AxesWrapper(self._fig_mngs, axes_array_mngs)
 #         self._fig_mngs.axes = self._axes_mngs
-#         __import__("ipdb").set_trace()
 #         return self._fig_mngs, self._axes_mngs
 # 
 #     # def __getattr__(self, name):
