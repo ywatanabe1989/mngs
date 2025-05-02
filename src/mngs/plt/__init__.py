@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-30 21:16:29 (ywatanabe)"
+# Timestamp: "2025-05-02 17:40:55 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/__init__.py
 # ----------------------------------------
 import os
@@ -11,40 +11,10 @@ __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
 from ._subplots._SubplotsWrapper import subplots
-from ._PARAMS import PARAMS
 from . import ax
-from ._close import close
-from ._colors import (
-    # RGB
-    str2rgb,
-    str2rgba,
-    rgb2rgba,
-    rgba2rgb,
-    rgba2hex,
-    cycle_color_rgb,
-    gradiate_color_rgb,
-    gradiate_color_rgba,
-    # BGR
-    str2bgr,
-    str2bgra,
-    bgr2bgra,
-    bgra2bgr,
-    bgra2hex,
-    cycle_color_bgr,
-    gradiate_color_bgr,
-    gradiate_color_bgra,
-    # COMMON
-    rgb2bgr,
-    bgr2rgb,
-    str2hex,
-    update_alpha,
-    cycle_color,
-    gradiate_color,
-    to_rgb, to_rgba, to_hex, gradiate_color
-)
-from ._configure_mpl import configure_mpl
-from ._im2grid import im2grid
-
+from . import color
+from .utils._close import close
+from ._tpl import tpl
 
 
 ################################################################################
