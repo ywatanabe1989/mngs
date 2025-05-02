@@ -58,7 +58,7 @@ if __name__ == "__main__":
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Timestamp: "2025-04-30 14:51:57 (ywatanabe)"
+# # Timestamp: "2025-05-01 09:18:37 (ywatanabe)"
 # # File: /home/ywatanabe/proj/mngs_repo/src/mngs/decorators/__init__.py
 # # ----------------------------------------
 # import os
@@ -79,8 +79,8 @@ if __name__ == "__main__":
 # from ._preserve_doc import *
 # from ._timeout import *
 # from ._torch_fn import *
-# from ._wrap import *
-# from ._batch_fn import *
+# from ._wrap import wrap
+# from ._batch_fn import batch_fn
 # 
 # # EOF
 # --------------------------------------------------------------------------------
