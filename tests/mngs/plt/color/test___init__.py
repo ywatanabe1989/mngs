@@ -12,7 +12,7 @@ if __name__ == "__main__":
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Timestamp: "2025-05-02 17:56:28 (ywatanabe)"
+# # Timestamp: "2025-05-03 00:51:04 (ywatanabe)"
 # # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/color/__init__.py
 # # ----------------------------------------
 # import os
@@ -27,7 +27,7 @@ if __name__ == "__main__":
 #     get_colors_from_cmap,
 #     get_categorical_colors_from_cmap,
 # )
-# from ._interp_colors import interp_colors
+# from ._interpolate import interpolate
 # from ._PARAMS import PARAMS
 # from ._vizualize_colors import vizualize_colors
 # from ._colors import (
