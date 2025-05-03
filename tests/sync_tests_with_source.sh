@@ -1,6 +1,6 @@
 #!/bin/bash
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-02 17:57:21 (ywatanabe)"
+# Timestamp: "2025-05-03 13:22:23 (ywatanabe)"
 # File: ./tests/sync_tests_with_source.sh
 
 THIS_DIR="$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)"
@@ -163,10 +163,11 @@ find_files() {
 # Clean-upper
 ########################################
 move_stale_test_files_to_old() {
-    OLD_DIR="$TESTS_DIR/.old/$(date +%Y%m%d_%H%M%S)"
-    [ -d "$TESTS_DIR" ] && mkdir -p "$OLD_DIR"
+    timestamp="$(date +%Y%m%d_%H%M%S)"
+    # OLD_DIR="$TESTS_DIR/.old/$(date +%Y%m%d_%H%M%S)"
+    # [ -d "$TESTS_DIR" ] && mkdir -p "$OLD_DIR"
 
-    find "$TESTS_DIR" -name "test_*.py" | while read -r test_file; do
+    find "$TESTS_DIR" -name "test_*.py" -not -path "*.old*" | while read -r test_file; do
         # Skip if test_file is empty
         [ -z "$test_file" ] && continue
 
@@ -179,9 +180,16 @@ move_stale_test_files_to_old() {
         src_file="$SRC_DIR/$src_relative_path"
 
         if [ ! -f "$src_file" ]; then
-            target_dir="$OLD_DIR/$(dirname "$relative_path")"
-            mkdir -p "$target_dir"
-            mv "$test_file" "$target_dir/"
+            stale_test_file=$test_file
+            stale_test_file_name="$(basename $stale_test_file)"
+            stale_test_file_dir="$(dirname $stale_test_file)"
+            old_dir_with_timestamp="$stale_test_file_dir/.old-$timestamp"
+            tgt_path="$old_dir_with_timestamp/$stale_test_file_name"
+
+            # Ensure target dir
+            mkdir -p $old_dir_with_timestamp >/dev/null 2>&1
+
+            echo "$stale_test_file" "$tgt_path"
         fi
     done
 }
@@ -217,36 +225,38 @@ main() {
     echo "Using SRC_DIR: $SRC_DIR"
     echo "Using TESTS_DIR: $TESTS_DIR"
 
-    remove_hidden_test_files_and_dirs
-    prepare_tests_structure_as_source
-    chmod_python_source_scripts_as_executable
-    cleanup_unnecessary_test_files
+    move_stale_test_files_to_old
 
-    # Update tests with preferred order: test code -> pytest guard -> source comment
-    find_files "$SRC_DIR" f "*.py" | while read -r src_file; do
-        # derive relative path and parts
-        rel="${src_file#$SRC_DIR/}"
-        rel_dir=$(dirname "$rel")
-        src_base=$(basename "$rel")
-
-        # ensure test subdir exists
-        tests_dir="$TESTS_DIR/$rel_dir"
-        mkdir -p "$tests_dir"
-
-        # build correct test file path
-        test_file="$tests_dir/test_$src_base"
-
-        # Process each file
-        update_test_file "$test_file" "$src_file"
-    done
-
-    remove_hidden_test_files_and_dirs
-    # Uncomment if needed:
+    # remove_hidden_test_files_and_dirs
+    # prepare_tests_structure_as_source
+    # chmod_python_source_scripts_as_executable
     # cleanup_unnecessary_test_files
-    # move_stale_test_files_to_old
 
-    # tree "$TESTS_DIR" 2>&1 | tee -a "$LOG_PATH"
-    tree "$TESTS_DIR" 2>&1 >> "$LOG_PATH"
+    # # Update tests with preferred order: test code -> pytest guard -> source comment
+    # find_files "$SRC_DIR" f "*.py" | while read -r src_file; do
+    #     # derive relative path and parts
+    #     rel="${src_file#$SRC_DIR/}"
+    #     rel_dir=$(dirname "$rel")
+    #     src_base=$(basename "$rel")
+
+    #     # ensure test subdir exists
+    #     tests_dir="$TESTS_DIR/$rel_dir"
+    #     mkdir -p "$tests_dir"
+
+    #     # build correct test file path
+    #     test_file="$tests_dir/test_$src_base"
+
+    #     # Process each file
+    #     update_test_file "$test_file" "$src_file"
+    # done
+
+    # remove_hidden_test_files_and_dirs
+    # # Uncomment if needed:
+    # # cleanup_unnecessary_test_files
+    # # move_stale_test_files_to_old
+
+    # # tree "$TESTS_DIR" 2>&1 | tee -a "$LOG_PATH"
+    # tree "$TESTS_DIR" 2>&1 >> "$LOG_PATH"
 }
 
 main "$@"
