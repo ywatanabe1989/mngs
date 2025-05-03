@@ -23,7 +23,7 @@ if __name__ == "__main__":
 # Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/act/_define.py
 # --------------------------------------------------------------------------------
 # import torch.nn as nn
-#
+# 
 # def define(act_str):
 #     acts_dict = {
 #         "relu": nn.ReLU(),
@@ -36,5 +36,3 @@ if __name__ == "__main__":
 # --------------------------------------------------------------------------------
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/act/_define.py
 # --------------------------------------------------------------------------------
-
-# EOF
