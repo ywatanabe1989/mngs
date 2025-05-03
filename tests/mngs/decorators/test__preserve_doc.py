@@ -1,4 +1,286 @@
-# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/decorators/_preserve_doc.py
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Timestamp: "2025-04-28 15:45:18 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/tests/mngs/decorators/test__preserve_doc.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./tests/mngs/decorators/test__preserve_doc.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
+
+import pytest
+from mngs.decorators._preserve_doc import preserve_doc
+
+
+def test_preserve_doc_preserves_name():
+    """Test that preserve_doc preserves the original function's name."""
+
+    @preserve_doc
+    def test_function():
+        """Test docstring."""
+        return True
+
+    assert test_function.__name__ == "test_function"
+
+
+def test_preserve_doc_preserves_docstring():
+    """Test that preserve_doc preserves the original function's docstring."""
+
+    @preserve_doc
+    def test_function():
+        """This docstring should be preserved."""
+        return True
+
+    assert test_function.__doc__ == "This docstring should be preserved."
+
+
+def test_preserve_doc_preserves_functionality():
+    """Test that preserve_doc doesn't alter the function's behavior."""
+
+    @preserve_doc
+    def add(xx, yy):
+        """Add two numbers."""
+        return xx + yy
+
+    assert add(2, 3) == 5
+    assert add(-1, 1) == 0
+
+
+def test_preserve_doc_with_empty_docstring():
+    """Test preserve_doc with a function that has no docstring."""
+
+    @preserve_doc
+    def no_docstring_function():
+        pass
+
+    assert no_docstring_function.__doc__ is None
+
+
+# --------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------
+# #!/usr/bin/env python3
+# # -*- coding: utf-8 -*-
+# # Time-stamp: "2024-11-14 07:44:00 (ywatanabe)"
+#
+# from functools import wraps
+#
+# def preserve_doc(loader_func):
+#     """Wrap the loader functions to preserve their docstrings"""
+#     @wraps(loader_func)
+#     def wrapper(*args, **kwargs):
+#         return loader_func(*args, **kwargs)
+#
+#     return wrapper
+#
+#
+# # EOF
+
+# --------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------
+# #!/usr/bin/env python3
+# # -*- coding: utf-8 -*-
+# # Time-stamp: "2024-11-14 07:44:00 (ywatanabe)"
+#
+# from functools import wraps
+#
+# def preserve_doc(loader_func):
+#     """Wrap the loader functions to preserve their docstrings"""
+#     @wraps(loader_func)
+#     def wrapper(*args, **kwargs):
+#         return loader_func(*args, **kwargs)
+#
+#     return wrapper
+#
+#
+# # EOF
+
+# --------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------
+# #!/usr/bin/env python3
+# # -*- coding: utf-8 -*-
+# # Time-stamp: "2024-11-14 07:44:00 (ywatanabe)"
+#
+# from functools import wraps
+#
+# def preserve_doc(loader_func):
+#     """Wrap the loader functions to preserve their docstrings"""
+#     @wraps(loader_func)
+#     def wrapper(*args, **kwargs):
+#         return loader_func(*args, **kwargs)
+#
+#     return wrapper
+#
+#
+# # EOF
+
+# --------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------
+# #!/usr/bin/env python3
+# # -*- coding: utf-8 -*-
+# # Time-stamp: "2024-11-14 07:44:00 (ywatanabe)"
+#
+# from functools import wraps
+#
+# def preserve_doc(loader_func):
+#     """Wrap the loader functions to preserve their docstrings"""
+#     @wraps(loader_func)
+#     def wrapper(*args, **kwargs):
+#         return loader_func(*args, **kwargs)
+#
+#     return wrapper
+#
+#
+# # EOF
+
+# --------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------
+# #!/usr/bin/env python3
+# # -*- coding: utf-8 -*-
+# # Time-stamp: "2024-11-14 07:44:00 (ywatanabe)"
+#
+# from functools import wraps
+#
+# def preserve_doc(loader_func):
+#     """Wrap the loader functions to preserve their docstrings"""
+#     @wraps(loader_func)
+#     def wrapper(*args, **kwargs):
+#         return loader_func(*args, **kwargs)
+#
+#     return wrapper
+#
+#
+# # EOF
+
+# --------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------
+# #!/usr/bin/env python3
+# # -*- coding: utf-8 -*-
+# # Time-stamp: "2024-11-14 07:44:00 (ywatanabe)"
+#
+# from functools import wraps
+#
+# def preserve_doc(loader_func):
+#     """Wrap the loader functions to preserve their docstrings"""
+#     @wraps(loader_func)
+#     def wrapper(*args, **kwargs):
+#         return loader_func(*args, **kwargs)
+#
+#     return wrapper
+#
+#
+# # EOF
+
+# --------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------
+# #!/usr/bin/env python3
+# # -*- coding: utf-8 -*-
+# # Time-stamp: "2024-11-14 07:44:00 (ywatanabe)"
+#
+# from functools import wraps
+#
+# def preserve_doc(loader_func):
+#     """Wrap the loader functions to preserve their docstrings"""
+#     @wraps(loader_func)
+#     def wrapper(*args, **kwargs):
+#         return loader_func(*args, **kwargs)
+#
+#     return wrapper
+#
+#
+# # EOF
+
+# --------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------
+
+def test_preserve_doc_preserves_name():
+    """Test that preserve_doc preserves the original function's name."""
+
+    @preserve_doc
+    def test_function():
+        """Test docstring."""
+        return True
+
+    assert test_function.__name__ == "test_function"
+
+
+def test_preserve_doc_preserves_docstring():
+    """Test that preserve_doc preserves the original function's docstring."""
+
+    @preserve_doc
+    def test_function():
+        """This docstring should be preserved."""
+        return True
+
+    assert test_function.__doc__ == "This docstring should be preserved."
+
+
+def test_preserve_doc_preserves_functionality():
+    """Test that preserve_doc doesn't alter the function's behavior."""
+
+    @preserve_doc
+    def add(xx, yy):
+        """Add two numbers."""
+        return xx + yy
+
+    assert add(2, 3) == 5
+    assert add(-1, 1) == 0
+
+
+def test_preserve_doc_with_empty_docstring():
+    """Test preserve_doc with a function that has no docstring."""
+
+    @preserve_doc
+    def no_docstring_function():
+        pass
+
+    assert no_docstring_function.__doc__ is None
+
+
+# --------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------
+# #!/usr/bin/env python3
+# # -*- coding: utf-8 -*-
+# # Time-stamp: "2024-11-14 07:44:00 (ywatanabe)"
+#
+# from functools import wraps
+#
+# def preserve_doc(loader_func):
+#     """Wrap the loader functions to preserve their docstrings"""
+#     @wraps(loader_func)
+#     def wrapper(*args, **kwargs):
+#         return loader_func(*args, **kwargs)
+#
+#     return wrapper
+#
+#
+# # EOF
+
+# --------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------
+
+if __name__ == "__main__":
+    import os
+
+    import pytest
+
+    pytest.main([os.path.abspath(__file__)])
+
+# --------------------------------------------------------------------------------
+# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/decorators/_preserve_doc.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -18,40 +300,6 @@
 # 
 # # EOF
 
-#!/usr/bin/env python3
-import os
-import sys
-from pathlib import Path
-import pytest
-import numpy as np
-
-# Add source code to the top of Python path
-project_root = str(Path(__file__).resolve().parents[3])
-if project_root not in sys.path:
-    sys.path.insert(0, os.path.join(project_root, "src"))
-
-from mngs.decorators._preserve_doc import *
-
-class TestMainFunctionality:
-    def setup_method(self):
-        # Setup test fixtures
-        pass
-
-    def teardown_method(self):
-        # Clean up after tests
-        pass
-
-    def test_basic_functionality(self):
-        # Basic test case
-        raise NotImplementedError("Test not yet implemented")
-
-    def test_edge_cases(self):
-        # Edge case testing
-        raise NotImplementedError("Test not yet implemented")
-
-    def test_error_handling(self):
-        # Error handling testing
-        raise NotImplementedError("Test not yet implemented")
-
-if __name__ == "__main__":
-    pytest.main([os.path.abspath(__file__)])
+# --------------------------------------------------------------------------------
+# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/decorators/_preserve_doc.py
+# --------------------------------------------------------------------------------

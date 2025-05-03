@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-27 15:30:27 (ywatanabe)"
+# Timestamp: "2025-05-03 11:57:10 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_genai_factory.py
 # ----------------------------------------
 import os
@@ -10,11 +10,6 @@ __FILE__ = (
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
-THIS_FILE = (
-    "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_genai_factory.py"
-)
-
-"""Imports"""
 import random
 
 from ._Anthropic import Anthropic
@@ -23,10 +18,8 @@ from ._Google import Google
 from ._Groq import Groq
 from ._Llama import Llama
 from ._OpenAI import OpenAI
+from ._PARAMS import MODELS
 from ._Perplexity import Perplexity
-from .PARAMS import MODELS
-
-"""Functions & Classes""" """Parameters"""
 
 
 def genai_factory(
@@ -74,51 +67,5 @@ def genai_factory(
         chat_history=chat_history,
         max_tokens=max_tokens,
     )
-
-
-def main(
-    model="deepseek-coder",
-    api_key=os.getenv("DEEPSEEK_API_KEY"),
-    # provider="",
-    stream=False,
-    prompt="Hi, please tell me about the hippocampus",
-    seed=None,
-    temperature=1.0,
-):
-
-    import mngs
-
-    m = mngs.ai.GenAI(
-        model=model,
-        api_key=api_key,
-        # provider=provider,
-        stream=stream,
-        seed=seed,
-        temperature=temperature,
-    )
-    out = m(prompt)
-
-    print(out)
-
-    return out
-
-
-if __name__ == "__main__":
-    import sys
-
-    import matplotlib.pyplot as plt
-    import mngs
-
-    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
-        sys, plt, verbose=False
-    )
-    main(model="llama-3.1-70b-versatile", api_key=os.getenv("GROQ_API_KEY"))
-
-    mngs.gen.close(CONFIG, verbose=False, notify=False)
-
-"""
-python src/mngs/ai/_gen_ai/_genai_factory.py
-python -m src.mngs.ai._gen_ai._genai_factory
-"""
 
 # EOF

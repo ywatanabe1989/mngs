@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-27 15:37:11 (ywatanabe)"
+# Timestamp: "2025-05-03 11:55:54 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_BaseGenAI.py
 # ----------------------------------------
 import os
@@ -10,25 +10,6 @@ __FILE__ = (
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
-THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_BaseGenAI.py"
-
-"""
-Functionality:
-    - Provides base class for generative AI model implementations
-    - Handles chat history, error handling, and token tracking
-    - Manages API calls in both streaming and static modes
-Input:
-    - Model configurations (API key, model name, system settings)
-    - User prompts and chat history
-Output:
-    - Generated text responses (streaming or static)
-    - Cost calculations and token usage statistics
-Prerequisites:
-    - API keys for respective AI providers
-    - Model-specific implementation in child classes
-"""
-
-"""Imports"""
 import base64
 import sys
 from abc import ABC, abstractmethod
@@ -40,26 +21,7 @@ import numpy as np
 from ...io._load import load
 from ._calc_cost import calc_cost
 from ._format_output_func import format_output_func
-from .PARAMS import MODELS
-
-"""Functions & Classes"""
-# import re
-
-
-# def _remove_ansi_escape(raw_text: str) -> str:
-#     ansi_pattern = re.compile(r"\x1b\[[0-9;]*[A-Za-z]")
-#     # decode literal “\x1b” sequences into real ESC char
-#     decoded = raw_text.encode("utf-8").decode("unicode_escape")
-#     # strip ANSI sequences
-#     return ansi_pattern.sub("", decoded)
-
-
-def to_stream(string: Union[str, List[str]]) -> Generator[str, None, None]:
-    """Converts string or list of strings to generator for streaming."""
-    chunks = string if isinstance(string, list) else [string]
-    for chunk in chunks:
-        if chunk:
-            yield chunk
+from ._PARAMS import MODELS
 
 
 class BaseGenAI(ABC):
@@ -133,7 +95,7 @@ class BaseGenAI(ABC):
         if not self.stream:
             return True, "".join(error_msgs)
 
-        stream_obj = to_stream(error_msgs)
+        stream_obj = self._to_stream(error_msgs)
         return True, (
             self._yield_stream(stream_obj) if not return_stream else stream_obj
         )
@@ -350,6 +312,16 @@ class BaseGenAI(ABC):
     @property
     def cost(self) -> float:
         return calc_cost(self.model, self.input_tokens, self.output_tokens)
+
+    @staticmethod
+    def _to_stream(
+        string: Union[str, List[str]]
+    ) -> Generator[str, None, None]:
+        """Converts string or list of strings to generator for streaming."""
+        chunks = string if isinstance(string, list) else [string]
+        for chunk in chunks:
+            if chunk:
+                yield chunk
 
 
 def main() -> None:

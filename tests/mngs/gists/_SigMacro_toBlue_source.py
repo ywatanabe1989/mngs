@@ -1,1 +1,0 @@
-../../../src/mngs/gists/_SigMacro_toBlue.py

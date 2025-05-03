@@ -1,5 +1,5 @@
-# Timestamp: "2025-02-27 22:06:46 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_dev/.github/workflows/install-pypi-latest.yml
+# Timestamp: "2025-05-03 16:07:25 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/.github/workflows/install-pypi-latest.yml
 
 name: install-pypi-latest
 

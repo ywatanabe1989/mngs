@@ -49,6 +49,7 @@ lxml_html_clean
 markdown
 markdown2
 matplotlib
+matplotlib-venn
 mne
 more-itertools
 natsort

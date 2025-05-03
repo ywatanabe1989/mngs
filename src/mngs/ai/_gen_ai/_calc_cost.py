@@ -20,7 +20,7 @@ Prerequisites:
 from typing import Union, Any
 import pandas as pd
 
-from .PARAMS import MODELS
+from ._PARAMS import MODELS
 
 
 def calc_cost(

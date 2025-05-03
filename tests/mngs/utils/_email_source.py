@@ -1,1 +1,0 @@
-../../../src/mngs/utils/_email.py

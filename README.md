@@ -1,7 +1,7 @@
 <!-- ---
-!-- Timestamp: 2025-02-27 21:40:17
+!-- Timestamp: 2025-05-03 16:22:29
 !-- Author: ywatanabe
-!-- File: /home/ywatanabe/proj/mngs_dev/README.md
+!-- File: /home/ywatanabe/proj/mngs_repo/README.md
 !-- --- -->
 
 
@@ -13,7 +13,7 @@ A Python utility package for simplifying common research and development tasks.
 ![CI](https://github.com/ywatanabe1989/mngs/actions/workflows/install-pypi-latest.yml/badge.svg)
 ![CI](https://github.com/ywatanabe1989/mngs/actions/workflows/install-latest-release.yml/badge.svg)
 ![CI](https://github.com/ywatanabe1989/mngs/actions/workflows/install-develop-branch.yml/badge.svg)
-![CI](https://github.com/ywatanabe1989/mngs/actions/workflows/pytest.yml/badge.svg)
+![CI](https://github.com/ywatanabe1989/mngs/actions/workflows/custom-run-pytest.yml/badge.svg)
 
 <!-- $ sudo apt-get install libportaudio2 -->
 ## Installation

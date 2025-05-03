@@ -1,7 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-13 13:13:47 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_SeabornMixin.py
+# Timestamp: "2025-05-01 16:27:16 (ywatanabe)"
+# File: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_SeabornMixin.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./src/mngs/plt/_subplots/_AxisWrapperMixins/_SeabornMixin.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
 
 from functools import wraps
 
@@ -23,9 +30,7 @@ def sns_copy_doc(func):
 
 
 class SeabornMixin:
-    ################################################################################
-    ## Seaborn-wrappers
-    ################################################################################
+
     def _sns_base(
         self, method_name, *args, track=True, track_obj=None, id=None, **kwargs
     ):
@@ -39,7 +44,7 @@ class SeabornMixin:
                     kwargs, primary_key="palette", alternate_key="hue_colors"
                 )
 
-            self.axis = sns_plot_fn(ax=self.axis, *args, **kwargs)
+            self._axis_mpl = sns_plot_fn(ax=self._axis_mpl, *args, **kwargs)
 
         # Track the plot if required
         track_obj = track_obj if track_obj is not None else args
@@ -184,26 +189,26 @@ class SeabornMixin:
         **kwargs,
     ):
         if kwargs.get("hue"):
-            hue_col = kwargs["hue"]
-            hues = data[hue_col]
+            hues = data[kwargs["hue"]]
+
             if x is not None:
                 lim = xlim
-                for hh in np.unique(hues):
-                    _data = data.loc[data[hue_col] == hh, x]
-                    self.kde(_data, xlim=lim, label=hh, id=hh, **kwargs)
+                for hue in np.unique(hues):
+                    _data = data.loc[hues == hue, x]
+                    self.plot_kde(_data, xlim=lim, label=hue, id=hue, **kwargs)
 
             if y is not None:
-                lim = xlim
-                for hh in np.unique(hues):
-                    _data = data.loc[data[hue] == hh, y]
-                    self.kde(_data, xlim=lim, label=hh, id=hh, **kwargs)
+                lim = ylim
+                for hue in np.unique(hues):
+                    _data = data.loc[hues == hue, y]
+                    self.plot_kde(_data, xlim=lim, label=hue, id=hue, **kwargs)
 
         else:
             if x is not None:
                 _data, lim = data[x], xlim
             if y is not None:
                 _data, lim = data[y], ylim
-            self.kde(_data, xlim=lim, **kwargs)
+            self.plot_kde(_data, xlim=lim, **kwargs)
 
     @sns_copy_doc
     def sns_pairplot(self, *args, track=True, id=None, **kwargs):
@@ -260,8 +265,8 @@ class SeabornMixin:
     ):
         if half:
             with self._no_tracking():
-                self.axis = ax_module.half_violin(
-                    self.axis, data=data, x=x, y=y, **kwargs
+                self._axis_mpl = ax_module.plot_half_violin(
+                    self._axis_mpl, data=data, x=x, y=y, **kwargs
                 )
         else:
             self._sns_base_xyhue(
@@ -278,11 +283,10 @@ class SeabornMixin:
         track_obj = self._sns_prepare_xyhue(data, x, y, kwargs.get("hue"))
         self._track(track, id, "sns_violinplot", track_obj, kwargs)
 
-        return self.axis
+        return self._axis_mpl
 
     @sns_copy_doc
     def sns_jointplot(self, *args, track=True, id=None, **kwargs):
         self._sns_base("sns_jointplot", *args, track=track, id=id, **kwargs)
-
 
 # EOF

@@ -1,24 +1,44 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-07 19:18:35 (ywatanabe)"
-# File: ./mngs_repo/tests/custom/test_mngs_run.py
-
-import mngs
+# Timestamp: "2025-05-03 15:34:26 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/tests/custom/test_mngs_run.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./tests/custom/test_mngs_run.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
 
 """
-1. Functionality:
-   - (e.g., Executes XYZ operation)
-2. Input:
-   - (e.g., Required data for XYZ)
-3. Output:
-   - (e.g., Results of XYZ operation)
-4. Prerequisites:
-   - (e.g., Necessary dependencies for XYZ)
+Functionalities:
+  - Does XYZ
+  - Does XYZ
+  - Does XYZ
+  - Saves XYZ
+
+Dependencies:
+  - scripts:
+    - /path/to/script1
+    - /path/to/script2
+  - packages:
+    - package1
+    - package2
+IO:
+  - input-files:
+    - /path/to/input/file.xxx
+    - /path/to/input/file.xxx
+
+  - output-files:
+    - /path/to/input/file.xxx
+    - /path/to/input/file.xxx
 
 (Remove me: Please fill docstrings above, while keeping the bulette point style, and remove this instruction line)
 """
 
 """Imports"""
+import argparse
+
 """Warnings"""
 # mngs.pd.ignore_SettingWithCopyWarning()
 # warnings.simplefilter("ignore", UserWarning)
@@ -30,43 +50,59 @@ import mngs
 # CONFIG = load_configs()
 
 """Functions & Classes"""
-def main():
+def main(args):
     return 0
 
-def test_main():
-    # -----------------------------------
-    # Initiatialization of mngs format
-    # -----------------------------------
+
+def parse_args() -> argparse.Namespace:
+    """Parse command line arguments."""
+    import mngs
+
+    script_mode = mngs.gen.is_script()
+    parser = argparse.ArgumentParser(description="")
+    # parser.add_argument(
+    #     "--var",
+    #     "-v",
+    #     type=int,
+    #     choices=None,
+    #     default=1,
+    #     help="(default: %(default)s)",
+    # )
+    # parser.add_argument(
+    #     "--flag",
+    #     "-f",
+    #     action="store_true",
+    #     default=False,
+    #     help="(default: %%(default)s)",
+    # )
+    args = parser.parse_args()
+    mngs.str.printc(args, c="yellow")
+    return args
+
+
+def run_main() -> None:
+    """Initialize mngs framework, run main function, and cleanup."""
+    global CONFIG, CC, sys, plt
+
     import sys
 
     import matplotlib.pyplot as plt
+    import mngs
 
-    # Configurations
+    args = parse_args()
+
     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
         sys,
         plt,
+        args=args,
+        file=__FILE__,
+        sdir_suffix=None,
         verbose=False,
         agg=True,
-        # sdir_suffix="",
     )
 
-    # # Argument parser
-    # script_mode = mngs.gen.is_script()
-    # import argparse
-    # parser = argparse.ArgumentParser(description='')
-    # parser.add_argument('--var', '-v', type=int, choices=None, default=1, help='(default: %%(default)s)')
-    # parser.add_argument('--flag', '-f', action='store_true', default=False, help='(default: %%(default)s)')
-    # args = parser.parse_args()
-    # mngs.gen.print_block(args, c='yellow')
+    exit_status = main(args)
 
-    # -----------------------------------
-    # Main
-    # -----------------------------------
-    exit_status = main()
-
-    # -----------------------------------
-    # Cleanup mngs format
-    # -----------------------------------
     mngs.gen.close(
         CONFIG,
         verbose=False,
@@ -75,10 +111,8 @@ def test_main():
         exit_status=exit_status,
     )
 
-    assert True
 
-if __name__ == '__main__':
-    test_main()
-
+if __name__ == "__main__":
+    run_main()
 
 # EOF

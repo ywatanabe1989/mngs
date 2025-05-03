@@ -1,1 +1,0 @@
-../../../../src/mngs/resource/_utils/_get_env_info.py

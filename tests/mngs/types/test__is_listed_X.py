@@ -1,15 +1,43 @@
-# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/types/_is_listed_X.py
+# --------------------------------------------------------------------------------
+
+if __name__ == "__main__":
+    import os
+
+    import pytest
+
+    pytest.main([os.path.abspath(__file__)])
+
+# --------------------------------------------------------------------------------
+# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/types/_is_listed_X.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-02 12:37:58 (ywatanabe)"
-# # File: ./mngs_repo/src/mngs/utils/_is_listed_X.py
+# # Timestamp: "2025-05-02 17:10:53 (ywatanabe)"
+# # File: /home/ywatanabe/proj/mngs_repo/src/mngs/types/_is_listed_X.py
+# # ----------------------------------------
+# import os
+# __FILE__ = (
+#     "./src/mngs/types/_is_listed_X.py"
+# )
+# __DIR__ = os.path.dirname(__FILE__)
+# # ----------------------------------------
 # 
 # def is_listed_X(obj, types):
 #     """
+#     Check if obj is a list where all elements are of one of the specified types.
+# 
+#     Args:
+#         obj: Object to check
+#         types: Type or list of types to check against
+# 
 #     Example:
 #         obj = [3, 2, 1, 5]
-#         _is_listed_X(obj,
+#         is_listed_X(obj, int)  # Returns True
+#         is_listed_X(obj, (int, float))  # Returns True
+#         is_listed_X(obj, str)  # Returns False
+# 
+#     Returns:
+#         bool: True if obj is a list and all elements are of one of the specified types
 #     """
 #     import numpy as np
 # 
@@ -33,43 +61,7 @@
 #     except:
 #         return False
 # 
-# 
 # # EOF
-
-#!/usr/bin/env python3
-import os
-import sys
-from pathlib import Path
-import pytest
-import numpy as np
-
-# Add source code to the top of Python path
-project_root = str(Path(__file__).resolve().parents[3])
-if project_root not in sys.path:
-    sys.path.insert(0, os.path.join(project_root, "src"))
-
-from mngs.types._is_listed_X import *
-
-class TestMainFunctionality:
-    def setup_method(self):
-        # Setup test fixtures
-        pass
-
-    def teardown_method(self):
-        # Clean up after tests
-        pass
-
-    def test_basic_functionality(self):
-        # Basic test case
-        raise NotImplementedError("Test not yet implemented")
-
-    def test_edge_cases(self):
-        # Edge case testing
-        raise NotImplementedError("Test not yet implemented")
-
-    def test_error_handling(self):
-        # Error handling testing
-        raise NotImplementedError("Test not yet implemented")
-
-if __name__ == "__main__":
-    pytest.main([os.path.abspath(__file__)])
+# --------------------------------------------------------------------------------
+# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/types/_is_listed_X.py
+# --------------------------------------------------------------------------------

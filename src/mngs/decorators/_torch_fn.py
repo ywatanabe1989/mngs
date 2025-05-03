@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-24 15:38:15 (ywatanabe)"
-# File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_torch_fn.py
+# Timestamp: "2025-04-30 15:40:43 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_torch_fn.py
 # ----------------------------------------
 import os
 __FILE__ = (
@@ -9,30 +9,6 @@ __FILE__ = (
 )
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# Time-stamp: "2024-12-05 09:23:06 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/decorators/_torch_fn.py
-
-THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_torch_fn.py"
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-06 15:45:12 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/decorators/_torch_fn.py
-
-"""
-Functionality:
-    - Implements PyTorch-specific conversion and utility functions
-    - Provides decorators for PyTorch operations
-Input:
-    - Various data types to be converted to PyTorch tensors
-Output:
-    - PyTorch tensors and processing results
-Prerequisites:
-    - PyTorch package
-    - Core converter utilities
-"""
 
 from functools import wraps
 from typing import Any as _Any
@@ -41,80 +17,57 @@ from typing import Callable
 import numpy as np
 import pandas as pd
 import torch
+import xarray as xr
 
-from ._converters import (
-    _conversion_warning,
-    _return_always,
-    _return_if,
-    is_torch,
-    to_numpy,
-    to_torch,
-)
+from ._converters import _return_always, is_nested_decorator, to_torch
 
 
 def torch_fn(func: Callable) -> Callable:
     @wraps(func)
     def wrapper(*args: _Any, **kwargs: _Any) -> _Any:
-        is_torch_input = is_torch(*args, **kwargs)
+        # Skip conversion if already in a nested decorator context
+        if is_nested_decorator():
+            results = func(*args, **kwargs)
+            return results
+
+        # Set the current decorator context
+        wrapper._current_decorator = "torch_fn"
+
+        # Store original object for type preservation
+        original_object = args[0] if args else None
+
         converted_args, converted_kwargs = to_torch(
             *args, return_fn=_return_always, **kwargs
         )
+
+        # Assertion to ensure all args are converted to torch tensors
+        for arg_index, arg in enumerate(converted_args):
+            assert isinstance(
+                arg, torch.Tensor
+            ), f"Argument {arg_index} not converted to torch.Tensor: {type(arg)}"
+
         results = func(*converted_args, **converted_kwargs)
-        # print(type(results))
-        return (
-            to_numpy(results, return_fn=_return_if)[0]
-            if not is_torch_input
-            else results
-        )
 
+        # Convert results back to original input types
+        if isinstance(results, torch.Tensor):
+            if original_object is not None:
+                if isinstance(original_object, list):
+                    return results.detach().cpu().numpy().tolist()
+                elif isinstance(original_object, np.ndarray):
+                    return results.detach().cpu().numpy()
+                elif isinstance(original_object, pd.DataFrame):
+                    return pd.DataFrame(results.detach().cpu().numpy())
+                elif isinstance(original_object, pd.Series):
+                    return pd.Series(results.detach().cpu().numpy().flatten())
+                elif isinstance(original_object, xr.DataArray):
+                    return xr.DataArray(results.detach().cpu().numpy())
+            return results
+
+        return results
+
+    # Mark as a wrapper for detection
+    wrapper._is_wrapper = True
+    wrapper._decorator_type = "torch_fn"
     return wrapper
-
-# def torch_fn(func: Callable) -> Callable:
-#     @wraps(func)
-#     def wrapper(*args: _Any, **kwargs: _Any) -> _Any:
-#         is_torch_input = is_torch(*args, **kwargs)
-#         # Skip conversion if inputs are already torch tensors
-#         if is_torch_input:
-#             results = func(*args, **kwargs)
-#         else:
-#             converted_args, converted_kwargs = to_torch(
-#                 *args, return_fn=_return_always, **kwargs
-#             )
-#             results = func(*converted_args, **converted_kwargs)
-#             results = to_numpy(results, return_fn=_return_if)[0]
-#         return results
-
-#     return wrapper
-
-
-if __name__ == "__main__":
-    import scipy
-    import torch.nn.functional as F
-
-    @torch_fn
-    def torch_softmax(*args: _Any, **kwargs: _Any) -> torch.Tensor:
-        return F.softmax(*args, **kwargs)
-
-    def custom_print(data: _Any) -> None:
-        print(type(data), data)
-
-    test_data = [1, 2, 3]
-    test_list = test_data
-    test_tensor = torch.tensor(test_data).float()
-    test_tensor_cuda = torch.tensor(test_data).float().cuda()
-    test_array = np.array(test_data)
-    test_df = pd.DataFrame({"col1": test_data})
-
-    print("Testing torch_fn:")
-    custom_print(torch_softmax(test_list, dim=-1))
-    custom_print(torch_softmax(test_array, dim=-1))
-    custom_print(torch_softmax(test_df, dim=-1))
-    custom_print(torch_softmax(test_tensor, dim=-1))
-    custom_print(torch_softmax(test_tensor_cuda, dim=-1))
-
-"""
-python ./mngs_repo/src/mngs/decorators/_torch_fn.py
-python -m src.mngs.decorators._torch_fn
-"""
 
 # EOF
