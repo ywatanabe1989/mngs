@@ -32,15 +32,15 @@ if __name__ == "__main__":
 # )
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
-#
+# 
 # from typing import List, Optional, Union
-#
+# 
 # from ....plt import ax as ax_module
-#
-#
+# 
+# 
 # class AdjustmentMixin:
 #     """Mixin class for matplotlib axis adjustments."""
-#
+# 
 #     def rotate_labels(
 #         self,
 #         x: float = 30,
@@ -51,10 +51,10 @@ if __name__ == "__main__":
 #         self._axis_mpl = ax_module.rotate_labels(
 #             self._axis_mpl, x=x, y=y, x_ha=x_ha, y_ha=y_ha
 #         )
-#
+# 
 #     def legend(self, loc: str = "upper left") -> None:
 #         """Places legend at specified location, with support for outside positions.
-#
+# 
 #         Parameters
 #         ----------
 #         loc : str
@@ -64,7 +64,7 @@ if __name__ == "__main__":
 #             - center variants: "center right out", "center left out"
 #             - alternative formats: "right upper out", "left lower out" etc.
 #         """
-#
+# 
 #         outside_positions = {
 #             # Upper right variants
 #             "upper right out": ("center left", (1.15, 0.85)),
@@ -93,12 +93,12 @@ if __name__ == "__main__":
 #             "lower center out": ("upper center", (0.5, -0.25)),
 #             "lower out": ("upper center", (0.5, -0.25)),
 #         }
-#
+# 
 #         if loc in outside_positions:
 #             location, bbox = outside_positions[loc]
 #             return self._axis_mpl.legend(loc=location, bbox_to_anchor=bbox)
 #         return self._axis_mpl.legend(loc=loc)
-#
+# 
 #     def set_xyt(
 #         self,
 #         x: Optional[str] = None,
@@ -113,7 +113,7 @@ if __name__ == "__main__":
 #             t=tt,
 #             format_labels=format_labels,
 #         )
-#
+# 
 #     def set_supxyt(
 #         self,
 #         xlabel: Optional[str] = None,
@@ -128,7 +128,7 @@ if __name__ == "__main__":
 #             title=title,
 #             format_labels=format_labels,
 #         )
-#
+# 
 #     def set_ticks(
 #         self,
 #         xvals: Optional[List[Union[int, float]]] = None,
@@ -143,12 +143,12 @@ if __name__ == "__main__":
 #             yvals=yvals,
 #             yticks=yticks,
 #         )
-#
+# 
 #     def set_n_ticks(self, n_xticks: int = 4, n_yticks: int = 4) -> None:
 #         self._axis_mpl = ax_module.set_n_ticks(
 #             self._axis_mpl, n_xticks=n_xticks, n_yticks=n_yticks
 #         )
-#
+# 
 #     def hide_spines(
 #         self,
 #         top: bool = True,
@@ -167,18 +167,16 @@ if __name__ == "__main__":
 #             ticks=ticks,
 #             labels=labels,
 #         )
-#
+# 
 #     def extend(self, x_ratio: float = 1.0, y_ratio: float = 1.0) -> None:
 #         self._axis_mpl = ax_module.extend(
 #             self._axis_mpl, x_ratio=x_ratio, y_ratio=y_ratio
 #         )
-#
+# 
 #     def shift(self, dx: float = 0, dy: float = 0) -> None:
 #         self._axis_mpl = ax_module.shift(self._axis_mpl, dx=dx, dy=dy)
-#
+# 
 # # EOF
 # --------------------------------------------------------------------------------
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_AdjustmentMixin.py
 # --------------------------------------------------------------------------------
-
-# EOF
