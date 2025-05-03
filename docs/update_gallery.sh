@@ -1,6 +1,6 @@
 #!/bin/bash
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-03 17:21:42 (ywatanabe)"
+# Timestamp: "2025-05-03 17:25:13 (ywatanabe)"
 # File: ./docs/update_gallery.sh
 
 THIS_DIR="$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)"
@@ -71,10 +71,20 @@ echo > $GALLERY_PATH
 # Start gallery with header
 echo "# mngs.plt Gallery" > $GALLERY_PATH
 echo "" >> $GALLERY_PATH
-echo "<div style='display: flex; flex-wrap: wrap;'>" >> $GALLERY_PATH
 
+# Create a table with 4 columns
+echo "<table>" >> $GALLERY_PATH
+echo "<tr>" >> $GALLERY_PATH
+
+col_count=0
 # Find all test image files and process them
 for test_file_path in $(find tests/mngs -type f -name "test*.jpg"); do
+    # Start a new row after every 4 columns
+    if [ $col_count -eq 4 ]; then
+        echo "</tr><tr>" >> $GALLERY_PATH
+        col_count=0
+    fi
+
     # Extract filename without path for display purposes
     test_filename="$(basename $test_file_path)"
 
@@ -83,15 +93,24 @@ for test_file_path in $(find tests/mngs -type f -name "test*.jpg"); do
     abs_test_path="$(cd "$(dirname "$test_file_path")" && pwd)/$(basename "$test_file_path")"
     test_file_path_relative=$(python3 -c "import os.path; print(os.path.relpath('$abs_test_path', '$abs_gallery_dir'))")
 
-    # Add entry to the gallery with HTML for tiling and fixed width
-    echo "<div style='margin: 10px; text-align: center;'>" >> $GALLERY_PATH
-    echo "<img src='$test_file_path_relative' width='200' alt='$test_filename'>" >> $GALLERY_PATH
-    echo "<p style='font-size: 0.8em;'>$test_filename</p>" >> $GALLERY_PATH
-    echo "</div>" >> $GALLERY_PATH
+    # Add entry to the gallery as a table cell
+    echo "<td style='text-align: center; padding: 10px;'>" >> $GALLERY_PATH
+    echo "<img src='$test_file_path_relative' width='200' alt='$test_filename'><br>" >> $GALLERY_PATH
+    echo "<span style='font-size: 0.8em;'>$test_filename</span>" >> $GALLERY_PATH
+    echo "</td>" >> $GALLERY_PATH
+
+    col_count=$((col_count + 1))
 done
 
-# Close the flex container
-echo "</div>" >> $GALLERY_PATH
+# Complete any partial row with empty cells
+while [ $col_count -lt 4 ] && [ $col_count -ne 0 ]; do
+    echo "<td></td>" >> $GALLERY_PATH
+    col_count=$((col_count + 1))
+done
+
+# Close the table
+echo "</tr>" >> $GALLERY_PATH
+echo "</table>" >> $GALLERY_PATH
 
 cat "$GALLERY_PATH"
 echo "Gallery generation complete. Results saved to $GALLERY_PATH" | tee -a "$LOG_PATH"
