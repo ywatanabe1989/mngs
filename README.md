@@ -1,5 +1,5 @@
 <!-- ---
-!-- Timestamp: 2025-05-03 16:22:29
+!-- Timestamp: 2025-05-03 16:58:07
 !-- Author: ywatanabe
 !-- File: /home/ywatanabe/proj/mngs_repo/README.md
 !-- --- -->
@@ -29,39 +29,66 @@ $ git clone git clone git@github.com:ywatanabe1989/mngs.git mngs_dev cd mngs_dev
 $ python3.11 -m venv .env && source .env/bin/activate && python -m pip install -e .
 ```
 
+
 ## Submodules
-#### Fundamentals
-- [`mngs.gen`](./src/mngs/gen#readme): General utilities
-- [`mngs.io`](./src/mngs/io#readme): Input/Output operations
-- [`mngs.utils`](./src/mngs/utils#readme): General utilities
-- [`mngs.dict`](./src/mngs/dict#readme): Dictionary utilities
-- [`mngs.str`](./src/mngs/str#readme): String manipulation
-- [`mngs.torch`](./src/mngs/torch#readme): PyTorch utilities
 
-#### Data Science
-- [`mngs.plt`](./src/mngs/plt#readme): Plotting with automatic tracking
-- [`mngs.stats`](./src/mngs/stats#readme): Statistical analysis
-- [`mngs.pd`](./src/mngs/pd#readme): Pandas utilities- 
-- [`mngs.tex`](./src/mngs/tex#readme): LaTeX utilities
+| Category              | Submodule                                         | Description                      |
+|-----------------------|---------------------------------------------------|----------------------------------|
+| **Fundamentals**      | [`mngs.gen`](./src/mngs/gen#readme)               | General utilities                |
+|                       | [`mngs.io`](./src/mngs/io#readme)                 | Input/Output operations          |
+|                       | [`mngs.utils`](./src/mngs/utils#readme)           | General utilities                |
+|                       | [`mngs.dict`](./src/mngs/dict#readme)             | Dictionary utilities             |
+|                       | [`mngs.str`](./src/mngs/str#readme)               | String manipulation              |
+|                       | [`mngs.torch`](./src/mngs/torch#readme)           | PyTorch utilities                |
+| **Data Science**      | [`mngs.plt`](./src/mngs/plt#readme)               | Plotting with automatic tracking |
+|                       | [`mngs.stats`](./src/mngs/stats#readme)           | Statistical analysis             |
+|                       | [`mngs.pd`](./src/mngs/pd#readme)                 | Pandas utilities                 |
+|                       | [`mngs.tex`](./src/mngs/tex#readme)               | LaTeX utilities                  |
+| **AI: ML/PR**         | [`mngs.ai`](./src/mngs/ai#readme)                 | AI and Machine Learning          |
+|                       | [`mngs.nn`](./src/mngs/nn#readme)                 | Neural Networks                  |
+|                       | [`mngs.torch`](./src/mngs/torch#readme)           | PyTorch utilities                |
+|                       | [`mngs.db`](./src/mngs/db#readme)                 | Database operations              |
+|                       | [`mngs.linalg`](./src/mngs/linalg#readme)         | Linear algebra                   |
+| **Signal Processing** | [`mngs.dsp`](./src/mngs/dsp#readme)               | Digital Signal Processing        |
+| **Statistics**        | [`mngs.stats`](./src/mngs/stats#readme)           | Statistical analysis tools       |
+| **ETC**               | [`mngs.decorators`](./src/mngs/decorators#readme) | Function decorators              |
+|                       | [`mngs.gists`](./src/mngs/gists#readme)           | Code snippets                    |
+|                       | [`mngs.resource`](./src/mngs/resource#readme)     | Resource management              |
+|                       | [`mngs.web`](./src/mngs/web#readme)               | Web-related functions            |
 
-#### AI: Machine Learning and Pattern Recognition
-- [`mngs.ai`](./src/mngs/ai#readme): AI and Machine Learning
-- [`mngs.nn`](./src/mngs/nn#readme): Neural Networks
-- [`mngs.torch`](./src/mngs/torch#readme): PyTorch utilities
-- [`mngs.db`](./src/mngs/db#readme): Database operations
-- [`mngs.linalg`](./src/mngs/linalg#readme): Linear algebra
-
-#### Signal Processing
-- [`mngs.dsp`](./src/mngs/dsp#readme): Digital Signal Processing
-
-#### Statistics
-- [`mngs.stats`](./src/mngs/stats#readme): Statistical analysis tools
-
-#### ETC
-- [`mngs.decorators`](./src/mngs/decorators#readme): Function decorators
-- [`mngs.gists`](./src/mngs/gists#readme): Code snippets
-- [`mngs.resource`](./src/mngs/resource#readme): Resource management
-- [`mngs.web`](./src/mngs/web#readme): Web-related functions
+<!-- ## Submodules
+ !-- #### Fundamentals
+ !-- - [`mngs.gen`](./src/mngs/gen#readme): General utilities
+ !-- - [`mngs.io`](./src/mngs/io#readme): Input/Output operations
+ !-- - [`mngs.utils`](./src/mngs/utils#readme): General utilities
+ !-- - [`mngs.dict`](./src/mngs/dict#readme): Dictionary utilities
+ !-- - [`mngs.str`](./src/mngs/str#readme): String manipulation
+ !-- - [`mngs.torch`](./src/mngs/torch#readme): PyTorch utilities
+ !-- 
+ !-- #### Data Science
+ !-- - [`mngs.plt`](./src/mngs/plt#readme): Plotting with automatic tracking
+ !-- - [`mngs.stats`](./src/mngs/stats#readme): Statistical analysis
+ !-- - [`mngs.pd`](./src/mngs/pd#readme): Pandas utilities- 
+ !-- - [`mngs.tex`](./src/mngs/tex#readme): LaTeX utilities
+ !-- 
+ !-- #### AI: Machine Learning and Pattern Recognition
+ !-- - [`mngs.ai`](./src/mngs/ai#readme): AI and Machine Learning
+ !-- - [`mngs.nn`](./src/mngs/nn#readme): Neural Networks
+ !-- - [`mngs.torch`](./src/mngs/torch#readme): PyTorch utilities
+ !-- - [`mngs.db`](./src/mngs/db#readme): Database operations
+ !-- - [`mngs.linalg`](./src/mngs/linalg#readme): Linear algebra
+ !-- 
+ !-- #### Signal Processing
+ !-- - [`mngs.dsp`](./src/mngs/dsp#readme): Digital Signal Processing
+ !-- 
+ !-- #### Statistics
+ !-- - [`mngs.stats`](./src/mngs/stats#readme): Statistical analysis tools
+ !-- 
+ !-- #### ETC
+ !-- - [`mngs.decorators`](./src/mngs/decorators#readme): Function decorators
+ !-- - [`mngs.gists`](./src/mngs/gists#readme): Code snippets
+ !-- - [`mngs.resource`](./src/mngs/resource#readme): Resource management
+ !-- - [`mngs.web`](./src/mngs/web#readme): Web-related functions -->
 
 ## Modules and functions list
 [`./docs/mngs_modules.csv`](./docs/mngs_modules.csv)
