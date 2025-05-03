@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-28 15:44:39 (ywatanabe)"
+# Timestamp: "2025-05-03 15:58:23 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_repo/tests/mngs/decorators/test__not_implemented.py
 # ----------------------------------------
 import os
@@ -415,21 +415,21 @@ if __name__ == "__main__":
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-06-07 22:16:25 (ywatanabe)"
 # # /home/ywatanabe/proj/mngs/src/mngs/gen/_not_implemented.py
-# 
+#
 # import warnings
-# 
-# 
+#
+#
 # def not_implemented(func):
 #     """
 #     Decorator to mark methods as not implemented, issue a warning, and prevent their execution.
-# 
+#
 #     Arguments:
 #         func (callable): The function or method to decorate.
-# 
+#
 #     Returns:
 #         callable: A wrapper function that issues a warning and raises NotImplementedError when called.
 #     """
-# 
+#
 #     def wrapper(*args, **kwargs):
 #         # Issue a warning before raising the error
 #         warnings.warn(
@@ -439,9 +439,11 @@ if __name__ == "__main__":
 #         )
 #         # # Raise the NotImplementedError
 #         # raise NotImplementedError(f"The method '{func.__name__}' is not implemented yet.")
-# 
+#
 #     return wrapper
 
 # --------------------------------------------------------------------------------
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/decorators/_not_implemented.py
 # --------------------------------------------------------------------------------
+
+# EOF
