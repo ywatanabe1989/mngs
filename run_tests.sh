@@ -1,6 +1,6 @@
 #!/bin/bash
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-02 17:58:10 (ywatanabe)"
+# Timestamp: "2025-05-03 15:10:18 (ywatanabe)"
 # File: ./run_tests.sh
 
 THIS_DIR="$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)"
@@ -185,7 +185,7 @@ main() {
         parse_args "$@"
 
         for i_run in `seq 1 $N_RUNS`; do
-            clear
+            # clear
 
             # Clear the temporary log file
             > "$LOG_PATH_TMP"
