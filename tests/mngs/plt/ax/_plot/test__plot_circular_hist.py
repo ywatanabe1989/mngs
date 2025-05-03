@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-01 21:53:46 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/ax/_plot/test__plot_circular_hist.py
+# Timestamp: "2025-05-03 15:13:17 (ywatanabe)"
+# File: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_circular_hist.py
 # ----------------------------------------
 import os
 __FILE__ = (
@@ -148,7 +148,7 @@ class TestPlotCircularHist:
         n, bins, patches = plot_circular_hist(
             self.ax, self.rads, color="green"
         )
-        self.ax.set_title("Circular Histogram for Save Test")
+        self.ax.set_title("Circular Histogram Test")
 
         # Saving
         from mngs.io import save
