@@ -1,105 +1,98 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-04 00:58:53 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/plt/_subplots/_FigWrapper.py
-
-#!./env/bin/python3
-# -*- coding: utf-8 -*-
-# Time-stamp: "2024-10-26 05:27:26 (ywatanabe)"
-# /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/_FigWrapper.py
+# Timestamp: "2025-05-03 14:56:48 (ywatanabe)"
+# File: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_FigWrapper.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./src/mngs/plt/_subplots/_FigWrapper.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
 
 from functools import wraps
 
-import numpy as np
 import pandas as pd
 
 
 class FigWrapper:
-    """
-    A wrapper class for a Matplotlib axis that collects plotting data.
-    """
+    def __init__(self, fig_mpl):
+        self._fig_mpl = fig_mpl
+        self._last_saved_info = None
+        self._not_saved_yet_flag = True
+        self._called_from_mng_io_save = False
 
-    def __init__(self, fig):
-        """
-        Initialize the AxisWrapper with a given axis and history reference.
-        """
-        self.fig = fig
-        self.axes = []
+    @property
+    def figure(
+        self,
+    ):
+        return self._fig_mpl
 
     def __getattr__(self, attr):
-        """
-        Wrap the axis attribute access to collect plot calls or return the attribute directly.
-        """
-        original_attr = getattr(self.fig, attr)
+        # print(f"Attribute of FigWrapper: {attr}")
+        attr_mpl = getattr(self._fig_mpl, attr)
 
-        if callable(original_attr):
+        if callable(attr_mpl):
 
-            @wraps(original_attr)
+            @wraps(attr_mpl)
             def wrapper(*args, track=None, id=None, **kwargs):
-                results = original_attr(*args, **kwargs)
+                results = attr_mpl(*args, **kwargs)
                 # self._track(track, id, attr, args, kwargs)
                 return results
 
             return wrapper
 
         else:
-            return original_attr
+            return attr_mpl
 
-    ################################################################################
-    # Original methods
-    ################################################################################
-    def legend(self, loc="upper left"):
-        for ax in self.axes:
-            try:
-                ax.legend(loc=loc)
-            except:
-                pass
+    def __dir__(self):
+        # Combine attributes from both self and the wrapped matplotlib figure
+        attrs = set(dir(self.__class__))
+        attrs.update(object.__dir__(self))
+        attrs.update(dir(self._fig_mpl))
+        return sorted(attrs)
 
-    # def to_sigma(self):
-    #     if hasattr(self.axes, "to_sigma"):
-    #         return self.axes.to_sigma()
-    def to_sigma(self):
-        """
-        Summarizes all data under the figure, including all AxesWrapper objects.
+    # def savefig(self, fname, *args, **kwargs):
+    #     if not self._called_from_mng_io_save:
+    #         warnings.warn(
+    #             f"Instead of `FigWrapper.savefig({fname})`, use `mngs.io.save(fig, {fname}, symlink_from_cwd=True)` to handle symlink and export as csv.",
+    #             UserWarning,
+    #         )
+    #         self._called_from_mng_io_save = False
+    #     self._fig_mpl.savefig(fname, *args, **kwargs)
 
-        Returns
-        -------
-        pd.DataFrame
-            Concatenated dataframe of all axes data with spacer columns.
-
-        Example
-        -------
-        fig, axes = mngs.plt.subplots(2, 2)
-        df_summary = fig.to_sigma()
-        print(df_summary)
-        """
+    def export_as_csv(self):
+        """Export plotted data from all axes."""
         dfs = []
-        for i_ax, ax in enumerate(self.axes.flat):
-            if hasattr(ax, "to_sigma"):
-                df = ax.to_sigma()
+        for ii, ax in enumerate(self.axes.flat):
+            if hasattr(ax, "export_as_csv"):
+                df = ax.export_as_csv()
                 if not df.empty:
-                    df.columns = [f"ax_{i_ax:02d}_{col}" for col in df.columns]
+                    df.columns = [f"ax_{ii:02d}_{col}" for col in df.columns]
                     dfs.append(df)
-
-                    # # Add a spacer column after each non-empty dataframe except the last one
-                    # if i_ax < len(self.axes) - 1:
-                    #     spacer = pd.DataFrame({"Spacer": [np.nan] * len(df)})
-                    #     dfs.append(spacer)
 
         return pd.concat(dfs, axis=1) if dfs else pd.DataFrame()
 
+    def legend(self, *args, loc="upper left", **kwargs):
+        """Legend with upper left by default."""
+        for ax in self.axes:
+            try:
+                ax.legend(*args, loc=loc, **kwargs)
+            except:
+                pass
+
     def supxyt(self, x=False, y=False, t=False):
-        """Sets xlabel, ylabel and title"""
+        """Wrapper for supxlabel, supylabel, and suptitle"""
         if x is not False:
-            self.fig.supxlabel(x)
+            self._fig_mpl.supxlabel(x)
         if y is not False:
-            self.fig.supylabel(y)
+            self._fig_mpl.supylabel(y)
         if t is not False:
-            self.fig.suptitle(t)
-        return self.fig
+            self._fig_mpl.suptitle(t)
+        return self._fig_mpl
 
-    def tight_layout(self, rect=[0, 0.03, 1, 0.95]):
-        self.fig.tight_layout(rect=rect)
-
+    def tight_layout(self, *, rect=[0, 0.03, 1, 0.95], **kwargs):
+        """Wrapper for tight_layout with rect=[0, 0.03, 1, 0.95] by default"""
+        self._fig_mpl.tight_layout(rect=rect, **kwargs)
 
 # EOF

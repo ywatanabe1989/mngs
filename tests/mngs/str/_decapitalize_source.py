@@ -1,1 +1,0 @@
-../../../src/mngs/str/_decapitalize.py

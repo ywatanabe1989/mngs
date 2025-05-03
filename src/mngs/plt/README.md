@@ -95,7 +95,7 @@ ax.sns_violinplot(data=df, x='day', y='total_bill', hue='sex', split=True)
 ax.set_xyt(x='Day of Week', y='Total Bill', t='Total Bill Distribution by Day and Gender')
 
 # Extract plotting data for SigmaPlot compatibility
-plot_data = ax.to_sigma()
+plot_data = ax.export_as_csv()
 print(plot_data)  # Display the extracted data
 
 # Save the extracted data to a CSV file for use with SigmaPlot
@@ -122,7 +122,7 @@ ax_raster.raster(spike_times)
 # Customize the raster plot
 ax_raster.set_xyt(x='Time (s)', y='Neuron Index', t='Raster Plot of Neuron Spiking Activity')
 
-# Plot a confusion matrix using mngs.plt's conf_mat function
+# Plot a confusion matrix using mngs.plt's plot_conf_mat function
 # Sample confusion matrix data
 confusion_matrix = np.array([[35, 5], [3, 57]])
 class_names = ['Negative', 'Positive']
@@ -131,7 +131,7 @@ class_names = ['Negative', 'Positive']
 fig_conf, ax_conf = mngs.plt.subplots()
 
 # Plot the confusion matrix
-ax_conf.conf_mat(
+ax_conf.plot_conf_mat(
     confusion_matrix,
     x_labels=class_names,
     y_labels=class_names,

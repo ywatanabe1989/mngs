@@ -1,22 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-25 00:33:37 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_AdjustmentMixin.py
-
-THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_AdjustmentMixin.py"
-
-"""
-Functionality:
-    * Provides methods for adjusting matplotlib plot aesthetics
-Input:
-    * Label rotations, axis labels, tick values, spines, and plot extent
-Output:
-    * Modified matplotlib axis object
-Prerequisites:
-    * matplotlib, mngs.plt.ax
-"""
+# Timestamp: "2025-05-01 08:50:58 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_AdjustmentMixin.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./src/mngs/plt/_subplots/_AxisWrapperMixins/_AdjustmentMixin.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
 
 from typing import List, Optional, Union
+
 from ....plt import ax as ax_module
 
 
@@ -30,10 +25,9 @@ class AdjustmentMixin:
         x_ha: str = "right",
         y_ha: str = "center",
     ) -> None:
-        self.axis = ax_module.rotate_labels(
-            self.axis, x=x, y=y, x_ha=x_ha, y_ha=y_ha
+        self._axis_mpl = ax_module.rotate_labels(
+            self._axis_mpl, x=x, y=y, x_ha=x_ha, y_ha=y_ha
         )
-
 
     def legend(self, loc: str = "upper left") -> None:
         """Places legend at specified location, with support for outside positions.
@@ -79,8 +73,8 @@ class AdjustmentMixin:
 
         if loc in outside_positions:
             location, bbox = outside_positions[loc]
-            return self.axis.legend(loc=location, bbox_to_anchor=bbox)
-        return self.axis.legend(loc=loc)
+            return self._axis_mpl.legend(loc=location, bbox_to_anchor=bbox)
+        return self._axis_mpl.legend(loc=loc)
 
     def set_xyt(
         self,
@@ -89,8 +83,8 @@ class AdjustmentMixin:
         tt: Optional[str] = None,
         format_labels: bool = True,
     ) -> None:
-        self.axis = ax_module.set_xyt(
-            self.axis,
+        self._axis_mpl = ax_module.set_xyt(
+            self._axis_mpl,
             x=x,
             y=y,
             t=tt,
@@ -104,8 +98,8 @@ class AdjustmentMixin:
         title: Optional[str] = None,
         format_labels: bool = True,
     ) -> None:
-        self.axis = ax_module.set_supxyt(
-            self.axis,
+        self._axis_mpl = ax_module.set_supxyt(
+            self._axis_mpl,
             xlabel=xlabel,
             ylabel=ylabel,
             title=title,
@@ -119,8 +113,8 @@ class AdjustmentMixin:
         yvals: Optional[List[Union[int, float]]] = None,
         yticks: Optional[List[str]] = None,
     ) -> None:
-        self.axis = ax_module.set_ticks(
-            self.axis,
+        self._axis_mpl = ax_module.set_ticks(
+            self._axis_mpl,
             xvals=xvals,
             xticks=xticks,
             yvals=yvals,
@@ -128,8 +122,8 @@ class AdjustmentMixin:
         )
 
     def set_n_ticks(self, n_xticks: int = 4, n_yticks: int = 4) -> None:
-        self.axis = ax_module.set_n_ticks(
-            self.axis, n_xticks=n_xticks, n_yticks=n_yticks
+        self._axis_mpl = ax_module.set_n_ticks(
+            self._axis_mpl, n_xticks=n_xticks, n_yticks=n_yticks
         )
 
     def hide_spines(
@@ -141,8 +135,8 @@ class AdjustmentMixin:
         ticks: bool = True,
         labels: bool = True,
     ) -> None:
-        self.axis = ax_module.hide_spines(
-            self.axis,
+        self._axis_mpl = ax_module.hide_spines(
+            self._axis_mpl,
             top=top,
             bottom=bottom,
             left=left,
@@ -152,11 +146,11 @@ class AdjustmentMixin:
         )
 
     def extend(self, x_ratio: float = 1.0, y_ratio: float = 1.0) -> None:
-        self.axis = ax_module.extend(
-            self.axis, x_ratio=x_ratio, y_ratio=y_ratio
+        self._axis_mpl = ax_module.extend(
+            self._axis_mpl, x_ratio=x_ratio, y_ratio=y_ratio
         )
 
     def shift(self, dx: float = 0, dy: float = 0) -> None:
-        self.axis = ax_module.shift(self.axis, dx=dx, dy=dy)
+        self._axis_mpl = ax_module.shift(self._axis_mpl, dx=dx, dy=dy)
 
 # EOF

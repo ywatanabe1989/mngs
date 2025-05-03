@@ -1,16 +1,33 @@
-# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/pd/_force_df.py
+# --------------------------------------------------------------------------------
+
+if __name__ == "__main__":
+    import os
+
+    import pytest
+
+    pytest.main([os.path.abspath(__file__)])
+
+# --------------------------------------------------------------------------------
+# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/pd/_force_df.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-13 12:54:05 (ywatanabe)"
-# # File: ./mngs_repo/src/mngs/pd/_force_df.py
+# # Timestamp: "2025-04-27 19:59:11 (ywatanabe)"
+# # File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/pd/_force_df.py
+# # ----------------------------------------
+# import os
+# __FILE__ = (
+#     "./src/mngs/pd/_force_df.py"
+# )
+# __DIR__ = os.path.dirname(__FILE__)
+# # ----------------------------------------
 # 
 # import numpy as np
 # import pandas as pd
-# import mngs
+# 
+# from ..types import is_listed_X
 # 
 # 
-# # def force_df(permutable_dict, filler=""):
 # def force_df(permutable_dict, filler=np.nan):
 # 
 #     if is_listed_X(permutable_dict, pd.Series):
@@ -40,43 +57,7 @@
 # 
 #     return out_df
 # 
-# 
 # # EOF
-
-#!/usr/bin/env python3
-import os
-import sys
-from pathlib import Path
-import pytest
-import numpy as np
-
-# Add source code to the top of Python path
-project_root = str(Path(__file__).resolve().parents[3])
-if project_root not in sys.path:
-    sys.path.insert(0, os.path.join(project_root, "src"))
-
-from mngs.pd._force_df import *
-
-class TestMainFunctionality:
-    def setup_method(self):
-        # Setup test fixtures
-        pass
-
-    def teardown_method(self):
-        # Clean up after tests
-        pass
-
-    def test_basic_functionality(self):
-        # Basic test case
-        raise NotImplementedError("Test not yet implemented")
-
-    def test_edge_cases(self):
-        # Edge case testing
-        raise NotImplementedError("Test not yet implemented")
-
-    def test_error_handling(self):
-        # Error handling testing
-        raise NotImplementedError("Test not yet implemented")
-
-if __name__ == "__main__":
-    pytest.main([os.path.abspath(__file__)])
+# --------------------------------------------------------------------------------
+# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/pd/_force_df.py
+# --------------------------------------------------------------------------------

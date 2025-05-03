@@ -1,7 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-13 14:43:38 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_TrackingMixin.py
+# Timestamp: "2025-04-30 18:40:59 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_TrackingMixin.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./src/mngs/plt/_subplots/_AxisWrapperMixins/_TrackingMixin.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
 
 """
 Functionality:
@@ -18,7 +25,7 @@ from contextlib import contextmanager
 
 import pandas as pd
 
-from .._to_sigma import to_sigma as _to_sigma
+from .._export_as_csv import export_as_csv as _export_as_csv
 
 
 class TrackingMixin:
@@ -35,12 +42,14 @@ class TrackingMixin:
     {'plot1': ('plot1', 'plot', ([1, 2, 3], [4, 5, 6]), {})}
     """
 
-    ################################################################################
-    ## Tracking
-    ################################################################################
     def _track(self, track, id, method_name, args, kwargs):
+        # Extract id from kwargs and remove it before passing to matplotlib
+        if hasattr(kwargs, "get") and "id" in kwargs:
+            id = kwargs.pop("id")
+
         if track is None:
             track = self.track
+
         if track:
             id = id if id is not None else self.id
             self.id += 1
@@ -62,19 +71,19 @@ class TrackingMixin:
 
     @property
     def flat(self):
-        if isinstance(self.axis, list):
-            return self.axis
+        if isinstance(self._axis_mpl, list):
+            return self._axis_mpl
         else:
-            return [self.axis]
+            return [self._axis_mpl]
 
     def reset_history(self):
         self._ax_history = {}
 
-    def to_sigma(self):
+    def export_as_csv(self):
         """
         Export tracked plotting data to a DataFrame in SigmaPlot format.
         """
-        df = _to_sigma(self.history)
+        df = _export_as_csv(self.history)
 
         return df if df is not None else pd.DataFrame()
 
@@ -113,10 +122,9 @@ class TrackingMixin:
     #     """Clears the plotting history."""
     #     self._ax_history = OrderedDict()
 
-    # def to_sigma(self) -> pd.DataFrame:
+    # def export_as_csv(self) -> pd.DataFrame:
     #     """Converts plotting history to a SigmaPlot-compatible DataFrame."""
-    #     df = _to_sigma(self.history)
+    #     df = _export_as_csv(self.history)
     #     return df if df is not None else pd.DataFrame()
-
 
 # EOF

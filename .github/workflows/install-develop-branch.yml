@@ -1,8 +1,5 @@
-# Timestamp: "2025-02-27 22:06:31 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_dev/.github/workflows/install-develop-branch.yml
-
-# Time-stamp: "2025-02-27 22:06:31 (ywatanabe)"
-# File: ./mngs/.github/workflows/install-develop-branch.yml
+# Timestamp: "2025-05-03 15:26:27 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/.github/workflows/install-develop-branch.yml
 
 name: install-develop-branch
 

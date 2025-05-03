@@ -1,9 +1,26 @@
-# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/io/_save.py
+# --------------------------------------------------------------------------------
+
+if __name__ == "__main__":
+    import os
+
+    import pytest
+
+    pytest.main([os.path.abspath(__file__)])
+
+# --------------------------------------------------------------------------------
+# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/io/_save.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Timestamp: "2025-02-15 00:04:02 (ywatanabe)"
-# # File: ./src/mngs/io/_save.py
+# # Timestamp: "2025-04-29 14:38:43 (ywatanabe)"
+# # File: /home/ywatanabe/proj/mngs_repo/src/mngs/io/_save.py
+# # ----------------------------------------
+# import os
+# __FILE__ = (
+#     "./src/mngs/io/_save.py"
+# )
+# __DIR__ = os.path.dirname(__FILE__)
+# # ----------------------------------------
 # 
 # THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/io/_save.py"
 # 
@@ -41,12 +58,11 @@
 # from .._sh import sh
 # from ..path._clean import clean
 # from ..path._getsize import getsize
-# from ..path._split import split
+# from ..str._clean_path import clean_path
 # from ..str._color_text import color_text
 # from ..str._readable_bytes import readable_bytes
 # from ._save_image import _save_image
 # from ._save_text import _save_text
-# from ..str._clean_path import clean_path
 # 
 # 
 # def save(
@@ -171,7 +187,9 @@
 #             sh(f"rm -f {path}", verbose=False)
 # 
 #         if dry_run:
-#             print(color_text(f"\n(dry run) Saved to: {spath_final}", c="yellow"))
+#             print(
+#                 color_text(f"\n(dry run) Saved to: {spath_final}", c="yellow")
+#             )
 #             return
 # 
 #         # Ensure directory exists
@@ -220,20 +238,10 @@
 #     no_csv=False,
 #     **kwargs,
 # ):
+# 
 #     # csv
 #     if spath.endswith(".csv"):
 #         _save_csv(obj, spath, **kwargs)
-#         # if isinstance(obj, (pd.Series, pd.DataFrame)):
-#         #     obj.to_csv(spath, **kwargs)
-# 
-#         # if is_listed_X(obj, [int, float]):
-#         #     _save_listed_scalars_as_csv(
-#         #         obj,
-#         #         spath,
-#         #         **kwargs,
-#         #     )
-#         # if is_listed_X(obj, pd.DataFrame):
-#         #     _save_listed_dfs_as_csv(obj, spath, **kwargs)
 # 
 #     # numpy
 #     elif spath.endswith(".npy"):
@@ -293,14 +301,15 @@
 #             if not no_csv:
 #                 ext_wo_dot = ext.replace(".", "")
 #                 save(
-#                     obj.to_sigma(),
+#                     obj.export_as_csv(),
 #                     spath.replace(ext_wo_dot, "csv"),
 #                     symlink_from_cwd=symlink_from_cwd,
 #                     dry_run=dry_run,
 #                     **kwargs,
 #                 )
 #         except Exception as e:
-#             print(e)
+#             pass
+#             # print(e)
 # 
 #     # mp4
 #     elif spath.endswith(".mp4"):
@@ -361,8 +370,65 @@
 #             print(color_text(f"\nSaved to: {spath} ({file_size})", c="yellow"))
 # 
 # 
+# # def _save_csv(obj, spath: str, **kwargs) -> None:
+# #     """Handle various input types for CSV saving."""
+# #     if isinstance(obj, (pd.Series, pd.DataFrame)):
+# #         obj.to_csv(spath, **kwargs)
+# #     elif isinstance(obj, np.ndarray):
+# #         pd.DataFrame(obj).to_csv(spath, **kwargs)
+# #     elif isinstance(obj, (int, float)):
+# #         pd.DataFrame([obj]).to_csv(spath, index=False, **kwargs)
+# #     elif isinstance(obj, (list, tuple)):
+# #         if all(isinstance(x, (int, float)) for x in obj):
+# #             pd.DataFrame(obj).to_csv(spath, index=False, **kwargs)
+# #         elif all(isinstance(x, pd.DataFrame) for x in obj):
+# #             pd.concat(obj).to_csv(spath, **kwargs)
+# #         else:
+# #             pd.DataFrame({"data": obj}).to_csv(spath, index=False, **kwargs)
+# #     elif isinstance(obj, dict):
+# #         pd.DataFrame.from_dict(obj).to_csv(spath, **kwargs)
+# #     else:
+# #         try:
+# #             pd.DataFrame({"data": [obj]}).to_csv(spath, index=False, **kwargs)
+# #         except:
+# #             raise ValueError(f"Unable to save type {type(obj)} as CSV")
+# 
+# 
 # def _save_csv(obj, spath: str, **kwargs) -> None:
 #     """Handle various input types for CSV saving."""
+#     # Check if path already exists
+#     if os.path.exists(spath):
+#         # Calculate hash of new data
+#         data_hash = None
+# 
+#         # Process based on type
+#         if isinstance(obj, (pd.Series, pd.DataFrame)):
+#             data_hash = hash(obj.to_string())
+#         elif isinstance(obj, np.ndarray):
+#             data_hash = hash(pd.DataFrame(obj).to_string())
+#         else:
+#             # For other types, create a string representation and hash it
+#             try:
+#                 data_str = str(obj)
+#                 data_hash = hash(data_str)
+#             except:
+#                 # If we can't hash it, proceed with saving
+#                 pass
+# 
+#         # Compare with existing file if hash calculation was successful
+#         if data_hash is not None:
+#             try:
+#                 existing_df = pd.read_csv(spath)
+#                 existing_hash = hash(existing_df.to_string())
+# 
+#                 # Skip if hashes match
+#                 if existing_hash == data_hash:
+#                     return
+#             except:
+#                 # If reading fails, proceed with saving
+#                 pass
+# 
+#     # Save the file based on type
 #     if isinstance(obj, (pd.Series, pd.DataFrame)):
 #         obj.to_csv(spath, **kwargs)
 #     elif isinstance(obj, np.ndarray):
@@ -385,40 +451,6 @@
 #             raise ValueError(f"Unable to save type {type(obj)} as CSV")
 # 
 # # EOF
-#!/usr/bin/env python3
-import os
-import sys
-from pathlib import Path
-import pytest
-import numpy as np
-
-# Add source code to the top of Python path
-project_root = str(Path(__file__).resolve().parents[3])
-if project_root not in sys.path:
-    sys.path.insert(0, os.path.join(project_root, "src"))
-
-from mngs.io._save import *
-
-class TestMainFunctionality:
-    def setup_method(self):
-        # Setup test fixtures
-        pass
-
-    def teardown_method(self):
-        # Clean up after tests
-        pass
-
-    def test_basic_functionality(self):
-        # Basic test case
-        raise NotImplementedError("Test not yet implemented")
-
-    def test_edge_cases(self):
-        # Edge case testing
-        raise NotImplementedError("Test not yet implemented")
-
-    def test_error_handling(self):
-        # Error handling testing
-        raise NotImplementedError("Test not yet implemented")
-
-if __name__ == "__main__":
-    pytest.main([os.path.abspath(__file__)])
+# --------------------------------------------------------------------------------
+# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/io/_save.py
+# --------------------------------------------------------------------------------

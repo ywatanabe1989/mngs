@@ -1,1 +1,0 @@
-../../../src/mngs/str/_color_text.py

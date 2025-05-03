@@ -1,1 +1,0 @@
-../../../../src/mngs/stats/multiple/_multicompair.py

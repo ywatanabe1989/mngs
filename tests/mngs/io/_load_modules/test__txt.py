@@ -1,8 +1,18 @@
-# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/io/_load_modules/_txt.py
+# --------------------------------------------------------------------------------
+
+if __name__ == "__main__":
+    import os
+
+    import pytest
+
+    pytest.main([os.path.abspath(__file__)])
+
+# --------------------------------------------------------------------------------
+# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/io/_load_modules/_txt.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Timestamp: "2025-04-27 11:10:28 (ywatanabe)"
+# # Timestamp: "2025-05-03 11:58:11 (ywatanabe)"
 # # File: /home/ywatanabe/proj/mngs_repo/src/mngs/io/_load_modules/_txt.py
 # # ----------------------------------------
 # import os
@@ -14,25 +24,59 @@
 # 
 # import warnings
 # 
-# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/io/_load_modules/_txt.py"
-# 
-# # def _load_txt(lpath, strip=False, **kwargs):
+# # # UnicodeDecodeError: 'utf-8' codec can't decode byte 0x8a in position 30173: invalid start byte
+# # def _load_txt(lpath, **kwargs):
 # #     """Load text file and return non-empty lines."""
+# #     SUPPORTED_EXTENSIONS = (".txt", ".log", ".event", ".py", ".sh", "")
 # #     try:
-# #         if not lpath.endswith((".txt", ".log", ".event", ".py", ".sh", "")):
-# #             warnings.warn("File must have .txt, .log or .event extension")
+# #         if not lpath.endswith(SUPPORTED_EXTENSIONS):
+# #             warnings.warn(
+# #                 f"File must have supported extensions: {SUPPORTED_EXTENSIONS}"
+# #             )
 # 
 # #         # Try UTF-8 first (most common)
 # #         try:
 # #             with open(lpath, "r", encoding="utf-8") as f:
-# #                 return [line.strip() for line in f.read().splitlines() if line.strip()]
+# #                 return [
+# #                     line.strip()
+# #                     for line in f.read().splitlines()
+# #                     if line.strip()
+# #                 ]
 # #         except UnicodeDecodeError:
 # #             # Fallback to system default encoding
 # #             with open(lpath, "r") as f:
-# #                 return [line.strip() for line in f.read().splitlines() if line.strip()]
+# #                 return [
+# #                     line.strip()
+# #                     for line in f.read().splitlines()
+# #                     if line.strip()
+# #                 ]
+# 
 # 
 # #     except (ValueError, FileNotFoundError) as e:
 # #         raise ValueError(f"Error loading file {lpath}: {str(e)}")
+# def _load_txt(lpath, **kwargs):
+#     """Load text file and return non-empty lines."""
+#     try:
+#         if not lpath.endswith((".txt", ".log", ".event", ".py", ".sh", "")):
+#             warnings.warn("File must have .txt, .log or .event extension")
+#         try:
+#             with open(lpath, "r", encoding="utf-8") as f:
+#                 return [
+#                     line.strip()
+#                     for line in f.read().splitlines()
+#                     if line.strip()
+#                 ]
+#         except UnicodeDecodeError:
+#             # fallback: detect correct encoding
+#             encoding = _check_encoding(lpath)
+#             with open(lpath, "r", encoding=encoding) as f:
+#                 return [
+#                     line.strip()
+#                     for line in f.read().splitlines()
+#                     if line.strip()
+#                 ]
+#     except (ValueError, FileNotFoundError) as e:
+#         raise ValueError(f"Error loading file {lpath}: {str(e)}")
 # 
 # 
 # def _load_txt(lpath, strip=False):
@@ -104,40 +148,6 @@
 # #     return result["encoding"]
 # 
 # # EOF
-#!/usr/bin/env python3
-import os
-import sys
-from pathlib import Path
-import pytest
-import numpy as np
-
-# Add source code to the top of Python path
-project_root = str(Path(__file__).resolve().parents[3])
-if project_root not in sys.path:
-    sys.path.insert(0, os.path.join(project_root, "src"))
-
-from mngs.io._load_modules._txt import *
-
-class TestMainFunctionality:
-    def setup_method(self):
-        # Setup test fixtures
-        pass
-
-    def teardown_method(self):
-        # Clean up after tests
-        pass
-
-    def test_basic_functionality(self):
-        # Basic test case
-        raise NotImplementedError("Test not yet implemented")
-
-    def test_edge_cases(self):
-        # Edge case testing
-        raise NotImplementedError("Test not yet implemented")
-
-    def test_error_handling(self):
-        # Error handling testing
-        raise NotImplementedError("Test not yet implemented")
-
-if __name__ == "__main__":
-    pytest.main([os.path.abspath(__file__)])
+# --------------------------------------------------------------------------------
+# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/io/_load_modules/_txt.py
+# --------------------------------------------------------------------------------

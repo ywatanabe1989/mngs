@@ -1,145 +1,227 @@
-# Source code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_FigWrapper.py
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Timestamp: "2025-05-03 12:35:50 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/_subplots/test__FigWrapper.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./tests/mngs/plt/_subplots/test__FigWrapper.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
+
+import pytest
+
+# class TestFigWrapper:
+#     def setup_method(self):
+#         self.fig = plt.figure()
+#         self.wrapper = FigWrapper(self.fig)
+
+#     def test_init(self):
+#         assert self.wrapper.fig is self.fig
+#         assert hasattr(self.wrapper, "axes")
+#         assert self.wrapper.axes == []
+
+#     def test_getattr_existing_attribute(self):
+#         # Test accessing an existing attribute on the figure
+#         assert hasattr(self.wrapper, "figsize")
+
+#     def test_getattr_existing_method(self):
+#         # Test accessing an existing method on the figure
+#         assert callable(self.wrapper.add_subplot)
+
+#     def test_getattr_warning(self):
+#         # Test attempting to access a non-existent attribute
+#         with pytest.warns(UserWarning, match="not implemented, ignored"):
+#             result = self.wrapper.nonexistent_method()
+#             assert result is None
+
+#     def test_legend(self):
+#         # Create mock axes
+#         ax1 = MagicMock()
+#         ax2 = MagicMock()
+#         self.wrapper.axes = MagicMock()
+#         self.wrapper.axes.__iter__ = lambda _: iter([ax1, ax2])
+
+#         # Call legend
+#         self.wrapper.legend(loc="upper right")
+
+#         # Check that legend was called on each axis
+#         ax1.legend.assert_called_once_with(loc="upper right")
+#         ax2.legend.assert_called_once_with(loc="upper right")
+
+#     def test_export_as_csv_with_empty_axes(self):
+#         # Test with no axes
+#         self.wrapper.axes = MagicMock()
+#         self.wrapper.axes.flat = []
+
+#         result = self.wrapper.export_as_csv()
+#         assert isinstance(result, pd.DataFrame)
+#         assert result.empty
+
+#     def test_export_as_csv_with_data(self):
+#         # Create mock axes with sigma data
+#         ax1 = MagicMock()
+#         ax1.export_as_csv.return_value = pd.DataFrame(
+#             {"x": [1, 2, 3], "y": [4, 5, 6]}
+#         )
+
+#         self.wrapper.axes = MagicMock()
+#         self.wrapper.axes.flat = [ax1]
+
+#         result = self.wrapper.export_as_csv()
+#         assert isinstance(result, pd.DataFrame)
+#         assert not result.empty
+#         assert "ax_00_x" in result.columns
+#         assert "ax_00_y" in result.columns
+
+#     def test_supxyt(self):
+#         # Test supxyt method
+#         self.wrapper.fig = MagicMock()
+
+#         # Call with x and y labels
+#         self.wrapper.supxyt(x="X Label", y="Y Label")
+
+#         # Check that appropriate methods were called
+#         self.wrapper.fig.supxlabel.assert_called_once_with("X Label")
+#         self.wrapper.fig.supylabel.assert_called_once_with("Y Label")
+#         self.wrapper.fig.suptitle.assert_not_called()
+
+#         # Reset and test with title
+#         self.wrapper.fig.reset_mock()
+#         self.wrapper.supxyt(t="Title")
+
+#         self.wrapper.fig.supxlabel.assert_not_called()
+#         self.wrapper.fig.supylabel.assert_not_called()
+#         self.wrapper.fig.suptitle.assert_called_once_with("Title")
+
+#     def test_tight_layout(self):
+#         # Test tight_layout method
+#         self.wrapper.fig = MagicMock()
+
+#         # Call with default rect
+#         self.wrapper.tight_layout()
+
+#         # Check that tight_layout was called with the correct rect
+#         self.wrapper.fig.tight_layout.assert_called_once_with(
+#             rect=[0, 0.03, 1, 0.95]
+#         )
+
+#         # Reset and test with custom rect
+#         self.wrapper.fig.reset_mock()
+#         custom_rect = [0.1, 0.1, 0.9, 0.9]
+#         self.wrapper.tight_layout(rect=custom_rect)
+
+#         self.wrapper.fig.tight_layout.assert_called_once_with(rect=custom_rect)
+
+if __name__ == "__main__":
+    import os
+
+    import pytest
+
+    pytest.main([os.path.abspath(__file__)])
+
+# --------------------------------------------------------------------------------
+# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_FigWrapper.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-11-04 00:58:53 (ywatanabe)"
-# # File: ./mngs_repo/src/mngs/plt/_subplots/_FigWrapper.py
-# 
-# #!./env/bin/python3
-# # -*- coding: utf-8 -*-
-# # Time-stamp: "2024-10-26 05:27:26 (ywatanabe)"
-# # /home/ywatanabe/proj/mngs/src/mngs/plt/_subplots/_FigWrapper.py
+# # Timestamp: "2025-05-03 14:56:48 (ywatanabe)"
+# # File: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_FigWrapper.py
+# # ----------------------------------------
+# import os
+# __FILE__ = (
+#     "./src/mngs/plt/_subplots/_FigWrapper.py"
+# )
+# __DIR__ = os.path.dirname(__FILE__)
+# # ----------------------------------------
 # 
 # from functools import wraps
 # 
-# import numpy as np
 # import pandas as pd
 # 
 # 
 # class FigWrapper:
-#     """
-#     A wrapper class for a Matplotlib axis that collects plotting data.
-#     """
+#     def __init__(self, fig_mpl):
+#         self._fig_mpl = fig_mpl
+#         self._last_saved_info = None
+#         self._not_saved_yet_flag = True
+#         self._called_from_mng_io_save = False
 # 
-#     def __init__(self, fig):
-#         """
-#         Initialize the AxisWrapper with a given axis and history reference.
-#         """
-#         self.fig = fig
-#         self.axes = []
+#     @property
+#     def figure(
+#         self,
+#     ):
+#         return self._fig_mpl
 # 
 #     def __getattr__(self, attr):
-#         """
-#         Wrap the axis attribute access to collect plot calls or return the attribute directly.
-#         """
-#         original_attr = getattr(self.fig, attr)
+#         # print(f"Attribute of FigWrapper: {attr}")
+#         attr_mpl = getattr(self._fig_mpl, attr)
 # 
-#         if callable(original_attr):
+#         if callable(attr_mpl):
 # 
-#             @wraps(original_attr)
+#             @wraps(attr_mpl)
 #             def wrapper(*args, track=None, id=None, **kwargs):
-#                 results = original_attr(*args, **kwargs)
+#                 results = attr_mpl(*args, **kwargs)
 #                 # self._track(track, id, attr, args, kwargs)
 #                 return results
 # 
 #             return wrapper
 # 
 #         else:
-#             return original_attr
+#             return attr_mpl
 # 
-#     ################################################################################
-#     # Original methods
-#     ################################################################################
-#     def legend(self, loc="upper left"):
-#         for ax in self.axes:
-#             try:
-#                 ax.legend(loc=loc)
-#             except:
-#                 pass
+#     def __dir__(self):
+#         # Combine attributes from both self and the wrapped matplotlib figure
+#         attrs = set(dir(self.__class__))
+#         attrs.update(object.__dir__(self))
+#         attrs.update(dir(self._fig_mpl))
+#         return sorted(attrs)
 # 
-#     # def to_sigma(self):
-#     #     if hasattr(self.axes, "to_sigma"):
-#     #         return self.axes.to_sigma()
-#     def to_sigma(self):
-#         """
-#         Summarizes all data under the figure, including all AxesWrapper objects.
+#     # def savefig(self, fname, *args, **kwargs):
+#     #     if not self._called_from_mng_io_save:
+#     #         warnings.warn(
+#     #             f"Instead of `FigWrapper.savefig({fname})`, use `mngs.io.save(fig, {fname}, symlink_from_cwd=True)` to handle symlink and export as csv.",
+#     #             UserWarning,
+#     #         )
+#     #         self._called_from_mng_io_save = False
+#     #     self._fig_mpl.savefig(fname, *args, **kwargs)
 # 
-#         Returns
-#         -------
-#         pd.DataFrame
-#             Concatenated dataframe of all axes data with spacer columns.
-# 
-#         Example
-#         -------
-#         fig, axes = mngs.plt.subplots(2, 2)
-#         df_summary = fig.to_sigma()
-#         print(df_summary)
-#         """
+#     def export_as_csv(self):
+#         """Export plotted data from all axes."""
 #         dfs = []
-#         for i_ax, ax in enumerate(self.axes.flat):
-#             if hasattr(ax, "to_sigma"):
-#                 df = ax.to_sigma()
+#         for ii, ax in enumerate(self.axes.flat):
+#             if hasattr(ax, "export_as_csv"):
+#                 df = ax.export_as_csv()
 #                 if not df.empty:
-#                     df.columns = [f"ax_{i_ax:02d}_{col}" for col in df.columns]
+#                     df.columns = [f"ax_{ii:02d}_{col}" for col in df.columns]
 #                     dfs.append(df)
-# 
-#                     # # Add a spacer column after each non-empty dataframe except the last one
-#                     # if i_ax < len(self.axes) - 1:
-#                     #     spacer = pd.DataFrame({"Spacer": [np.nan] * len(df)})
-#                     #     dfs.append(spacer)
 # 
 #         return pd.concat(dfs, axis=1) if dfs else pd.DataFrame()
 # 
+#     def legend(self, *args, loc="upper left", **kwargs):
+#         """Legend with upper left by default."""
+#         for ax in self.axes:
+#             try:
+#                 ax.legend(*args, loc=loc, **kwargs)
+#             except:
+#                 pass
+# 
 #     def supxyt(self, x=False, y=False, t=False):
-#         """Sets xlabel, ylabel and title"""
+#         """Wrapper for supxlabel, supylabel, and suptitle"""
 #         if x is not False:
-#             self.fig.supxlabel(x)
+#             self._fig_mpl.supxlabel(x)
 #         if y is not False:
-#             self.fig.supylabel(y)
+#             self._fig_mpl.supylabel(y)
 #         if t is not False:
-#             self.fig.suptitle(t)
-#         return self.fig
+#             self._fig_mpl.suptitle(t)
+#         return self._fig_mpl
 # 
-#     def tight_layout(self, rect=[0, 0.03, 1, 0.95]):
-#         self.fig.tight_layout(rect=rect)
-# 
+#     def tight_layout(self, *, rect=[0, 0.03, 1, 0.95], **kwargs):
+#         """Wrapper for tight_layout with rect=[0, 0.03, 1, 0.95] by default"""
+#         self._fig_mpl.tight_layout(rect=rect, **kwargs)
 # 
 # # EOF
-
-#!/usr/bin/env python3
-import os
-import sys
-from pathlib import Path
-import pytest
-import numpy as np
-
-# Add source code to the top of Python path
-project_root = str(Path(__file__).resolve().parents[3])
-if project_root not in sys.path:
-    sys.path.insert(0, os.path.join(project_root, "src"))
-
-from mngs.plt._subplots._FigWrapper import *
-
-class TestMainFunctionality:
-    def setup_method(self):
-        # Setup test fixtures
-        pass
-
-    def teardown_method(self):
-        # Clean up after tests
-        pass
-
-    def test_basic_functionality(self):
-        # Basic test case
-        raise NotImplementedError("Test not yet implemented")
-
-    def test_edge_cases(self):
-        # Edge case testing
-        raise NotImplementedError("Test not yet implemented")
-
-    def test_error_handling(self):
-        # Error handling testing
-        raise NotImplementedError("Test not yet implemented")
-
-if __name__ == "__main__":
-    pytest.main([os.path.abspath(__file__)])
+# --------------------------------------------------------------------------------
+# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_FigWrapper.py
+# --------------------------------------------------------------------------------

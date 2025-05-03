@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-23 10:39:41 (ywatanabe)"
-# File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/__init__.py
+# Timestamp: "2025-05-03 16:31:08 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/src/mngs/__init__.py
 # ----------------------------------------
 import os
 __FILE__ = (
@@ -11,10 +11,6 @@ __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
 THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/__init__.py"
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# Time-stamp: "2025-02-27 13:02:24 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/__init__.py
 
 # os.getenv("MNGS_SENDER_GMAIL")
 # os.getenv("MNGS_SENDER_GMAIL_PASSWORD")
@@ -22,14 +18,6 @@ THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/__init__.py"
 # os.getenv("MNGS_DIR", "/tmp/mngs/")
 
 import warnings
-import asyncio
-
-# Configure event loop before any async operations
-# try:
-#     loop = asyncio.new_event_loop()
-#     asyncio.set_event_loop(loop)
-# except Exception:
-#     pass
 
 # Configure warnings
 warnings.filterwarnings('ignore', category=DeprecationWarning)
@@ -38,6 +26,7 @@ warnings.filterwarnings('ignore', category=DeprecationWarning)
 # Warnings
 ########################################
 
+from . import types
 from ._sh import sh
 from . import io
 from . import path
@@ -54,7 +43,6 @@ from . import plt
 from . import stats
 from . import torch
 from . import tex
-from . import types
 from . import resource
 from . import web
 from . import db
@@ -63,6 +51,7 @@ from . import str
 from . import parallel
 from . import dt
 from . import dev
+# from . import context
 
 # ########################################
 # # Modules (python -m mngs print_config)
@@ -71,7 +60,7 @@ from . import dev
 # # Usage: python -m mngs print_config
 
 __copyright__ = "Copyright (C) 2024 Yusuke Watanabe"
-__version__ = "1.10.1"
+__version__ = "1.11.0"
 __license__ = "MIT"
 __author__ = "ywatanabe1989"
 __author_email__ = "ywatanabe@alumni.u-tokyo.ac.jp"

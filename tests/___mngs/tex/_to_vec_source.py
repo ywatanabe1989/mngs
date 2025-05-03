@@ -1,1 +1,0 @@
-../../../src/mngs/tex/_to_vec.py

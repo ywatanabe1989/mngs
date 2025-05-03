@@ -1,1 +1,0 @@
-../../../src/mngs/str/_remove_ansi.py
