@@ -1,6 +1,6 @@
 #!/bin/bash
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-03 15:09:37 (ywatanabe)"
+# Timestamp: "2025-05-03 17:10:43 (ywatanabe)"
 # File: ./tests/sync_tests_with_source.sh
 
 THIS_DIR="$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)"
