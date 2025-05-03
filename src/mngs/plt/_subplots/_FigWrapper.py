@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-02 23:04:10 (ywatanabe)"
+# Timestamp: "2025-05-03 14:56:48 (ywatanabe)"
 # File: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_FigWrapper.py
 # ----------------------------------------
 import os
@@ -45,12 +45,12 @@ class FigWrapper:
         else:
             return attr_mpl
 
-    # def __dir__(self):
-    #     # Combine attributes from both self and the wrapped matplotlib figure
-    #     attrs = set(dir(self.__class__))
-    #     attrs.update(object.__dir__(self))
-    #     attrs.update(dir(self._fig_mpl))
-    #     return sorted(attrs)
+    def __dir__(self):
+        # Combine attributes from both self and the wrapped matplotlib figure
+        attrs = set(dir(self.__class__))
+        attrs.update(object.__dir__(self))
+        attrs.update(dir(self._fig_mpl))
+        return sorted(attrs)
 
     # def savefig(self, fname, *args, **kwargs):
     #     if not self._called_from_mng_io_save:

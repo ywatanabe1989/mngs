@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-02 23:06:28 (ywatanabe)"
+# Timestamp: "2025-05-03 15:04:11 (ywatanabe)"
 # File: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_AxesWrapper.py
 # ----------------------------------------
 import os
@@ -23,55 +23,77 @@ class AxesWrapper:
     def get_figure(self):
         return self._fig_mngs
 
-    def __getattr__(self, attr):
-        # print(f"Attribute of FigWrapper: {attr}")
-        attr_mpl = getattr(self._axes_mngs, attr)
+    def __dir__(self):
+        # Combine attributes from both self and the wrapped matplotlib axes
+        attrs = set(dir(self.__class__))
+        attrs.update(object.__dir__(self))
 
-        if callable(attr_mpl):
+        # Add attributes from the axes objects if available
+        if hasattr(self, "_axes_mngs") and self._axes_mngs is not None:
+            # Get attributes from the first axis if there are any
+            if self._axes_mngs.size > 0:
+                first_ax = self._axes_mngs.flat[0]
+                attrs.update(dir(first_ax))
 
-            @wraps(attr_mpl)
-            def wrapper(*args, track=None, id=None, **kwargs):
-                results = attr_mpl(*args, **kwargs)
-                # self._track(track, id, attr, args, kwargs)
-                return results
+        return sorted(attrs)
 
-            return wrapper
+    # def __dir__(self):
+    #     # Combine attributes from both self and the wrapped matplotlib axes
+    #     attrs = set(dir(self.__class__))
+    #     attrs.update(object.__dir__(self))
+    #     attrs.update(dir(self._axes_mpl))
+    #     return sorted(attrs)
 
-        else:
-            return attr_mpl
+    # def __getattr__(self, attr):
+    #     # print(f"Attribute of FigWrapper: {attr}")
+    #     attr_mpl = getattr(self._axes_mngs, attr)
 
-    # def __getattr__(self, name):
-    #     print(f"Attribute of AxesWrapper: {name}")
-    #     methods = []
-    #     try:
-    #         for axis in self._axes_mngs.flat:
-    #             methods.append(getattr(axis, name))
-    #     except Exception:
-    #         methods = []
+    #     if callable(attr_mpl):
 
-    #     if methods and all(callable(m) for m in methods):
-
-    #         @wraps(methods[0])
-    #         def wrapper(*args, **kwargs):
-    #             return [
-    #                 getattr(ax, name)(*args, **kwargs)
-    #                 for ax in self._axes_mngs.flat
-    #             ]
+    #         @wraps(attr_mpl)
+    #         def wrapper(*args, track=None, id=None, **kwargs):
+    #             results = attr_mpl(*args, **kwargs)
+    #             # self._track(track, id, attr, args, kwargs)
+    #             return results
 
     #         return wrapper
 
-    #     if methods and not callable(methods[0]):
-    #         return methods
+    #     else:
+    #         return attr_mpl
 
-    #     warnings.warn(
-    #         f"MNGS AxesWrapper: '{name}' not implemented, ignored.",
-    #         UserWarning,
-    #     )
+    def __getattr__(self, name):
+        # Note that self._axes_mngs is "numpy.ndarray"
+        # print(f"Attribute of AxesWrapper: {name}")
+        methods = []
+        try:
+            for axis in self._axes_mngs.flat:
+                methods.append(getattr(axis, name))
+        except Exception:
+            methods = []
 
-    #     def dummy(*args, **kwargs):
-    #         return None
+        if methods and all(callable(m) for m in methods):
 
-    #     return dummy
+            @wraps(methods[0])
+            def wrapper(*args, **kwargs):
+                return [
+                    getattr(ax, name)(*args, **kwargs)
+                    for ax in self._axes_mngs.flat
+                ]
+
+            return wrapper
+
+        if methods and not callable(methods[0]):
+            return methods
+
+        # warnings.warn(
+        #     f"MNGS AxesWrapper: '{name}' not implemented, ignored.",
+        #     UserWarning,
+        # )
+
+        def dummy(*args, **kwargs):
+            return None
+
+        return dummy
 
     def __getitem__(self, index):
         subset = self._axes_mngs[index]
