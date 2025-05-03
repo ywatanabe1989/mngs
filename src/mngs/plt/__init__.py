@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-02 17:40:55 (ywatanabe)"
+# Timestamp: "2025-05-03 11:53:18 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/__init__.py
 # ----------------------------------------
 import os

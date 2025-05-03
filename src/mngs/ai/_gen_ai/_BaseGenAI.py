@@ -1,26 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2025-02-02 04:35:15 (ywatanabe)"
-# File: ./src/mngs/ai/_gen_ai/_BaseGenAI.py
-THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_BaseGenAI.py"
+# Timestamp: "2025-05-03 11:55:54 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_BaseGenAI.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./src/mngs/ai/_gen_ai/_BaseGenAI.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
 
-"""
-Functionality:
-    - Provides base class for generative AI model implementations
-    - Handles chat history, error handling, and token tracking
-    - Manages API calls in both streaming and static modes
-Input:
-    - Model configurations (API key, model name, system settings)
-    - User prompts and chat history
-Output:
-    - Generated text responses (streaming or static)
-    - Cost calculations and token usage statistics
-Prerequisites:
-    - API keys for respective AI providers
-    - Model-specific implementation in child classes
-"""
-
-"""Imports"""
+import base64
 import sys
 from abc import ABC, abstractmethod
 from typing import Any, Dict, Generator, List, Optional, Union
@@ -28,21 +18,10 @@ from typing import Any, Dict, Generator, List, Optional, Union
 import matplotlib.pyplot as plt
 import numpy as np
 
+from ...io._load import load
 from ._calc_cost import calc_cost
 from ._format_output_func import format_output_func
-from ...io._load import load
 from ._PARAMS import MODELS
-import base64
-
-"""Functions & Classes"""
-
-
-def to_stream(string: Union[str, List[str]]) -> Generator[str, None, None]:
-    """Converts string or list of strings to generator for streaming."""
-    chunks = string if isinstance(string, list) else [string]
-    for chunk in chunks:
-        if chunk:
-            yield chunk
 
 
 class BaseGenAI(ABC):
@@ -116,7 +95,7 @@ class BaseGenAI(ABC):
         if not self.stream:
             return True, "".join(error_msgs)
 
-        stream_obj = to_stream(error_msgs)
+        stream_obj = self._to_stream(error_msgs)
         return True, (
             self._yield_stream(stream_obj) if not return_stream else stream_obj
         )
@@ -157,7 +136,6 @@ class BaseGenAI(ABC):
             print("Please input prompt\n")
             return
         # ----------------------------------------
-
 
         self.update_history("user", prompt or "", images=images)
 
@@ -261,8 +239,9 @@ class BaseGenAI(ABC):
 
     @staticmethod
     def _ensure_base64_encoding(image, max_size=512):
-        from PIL import Image
         import io
+
+        from PIL import Image
 
         def resize_image(img):
             # Calculate new dimensions while maintaining aspect ratio
@@ -300,9 +279,7 @@ class BaseGenAI(ABC):
                 *[
                     {
                         "type": "_image",
-                        "_image": self._ensure_base64_encoding(
-                            image
-                        ),
+                        "_image": self._ensure_base64_encoding(image),
                     }
                     for image in images
                 ],
@@ -336,6 +313,16 @@ class BaseGenAI(ABC):
     def cost(self) -> float:
         return calc_cost(self.model, self.input_tokens, self.output_tokens)
 
+    @staticmethod
+    def _to_stream(
+        string: Union[str, List[str]]
+    ) -> Generator[str, None, None]:
+        """Converts string or list of strings to generator for streaming."""
+        chunks = string if isinstance(string, list) else [string]
+        for chunk in chunks:
+            if chunk:
+                yield chunk
+
 
 def main() -> None:
     pass
@@ -349,10 +336,6 @@ if __name__ == "__main__":
     )
     main()
     mngs.gen.close(CONFIG, verbose=False, notify=False)
-
-# EOF
-
-
 
 """
 python src/mngs/ai/_gen_ai/_BaseGenAI.py

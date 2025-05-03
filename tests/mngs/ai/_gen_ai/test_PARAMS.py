@@ -1,3 +1,14 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Timestamp: "2025-05-03 11:59:27 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/tests/mngs/ai/_gen_ai/test_PARAMS.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./tests/mngs/ai/_gen_ai/test_PARAMS.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
 # --------------------------------------------------------------------------------
 
 if __name__ == "__main__":
@@ -21,11 +32,11 @@ if __name__ == "__main__":
 # )
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
-# 
+#
 # THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/PARAMS.py"
-# 
+#
 # import pandas as pd
-# 
+#
 # # https://api-docs.deepseek.com/quick_start/pricing
 # DEEPSEEK_MODELS = [
 #     {
@@ -50,7 +61,7 @@ if __name__ == "__main__":
 #         "provider": "DeepSeek",
 #     },
 # ]
-# 
+#
 # # https://openai.com/api/pricing/
 # OPENAI_MODELS = [
 #     # o3
@@ -209,7 +220,7 @@ if __name__ == "__main__":
 #         "provider": "OpenAI",
 #     },
 # ]
-# 
+#
 # # https://docs.anthropic.com/en/docs/about-claude/models/all-models
 # # https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching#pricing
 # # https://docs.anthropic.com/en/docs/about-claude/models#model-comparison-table
@@ -257,8 +268,8 @@ if __name__ == "__main__":
 #         "provider": "Anthropic",
 #     },
 # ]
-# 
-# 
+#
+#
 # # https://ai.google.dev/gemini-api/docs/pricing
 # GOOGLE_MODELS = [
 #     {
@@ -346,7 +357,7 @@ if __name__ == "__main__":
 #         "provider": "Google",
 #     },
 # ]
-# 
+#
 # PERPLEXITY_MODELS = [
 #     {
 #         "name": "llama-3.1-sonar-small-128k-online",
@@ -433,7 +444,7 @@ if __name__ == "__main__":
 #         "provider": "Perplexity",
 #     },
 # ]
-# 
+#
 # LLAMA_MODELS = [
 #     {
 #         "name": "llama-3-70b",
@@ -457,7 +468,7 @@ if __name__ == "__main__":
 #         "provider": "Llama",
 #     },
 # ]
-# 
+#
 # # https://console.groq.com/docs/models
 # GROQ_MODELS = [
 #     {
@@ -559,7 +570,7 @@ if __name__ == "__main__":
 #         "provider": "Groq",
 #     },
 # ]
-# 
+#
 # MODELS = pd.DataFrame(
 #     OPENAI_MODELS
 #     + ANTHROPIC_MODELS
@@ -569,13 +580,15 @@ if __name__ == "__main__":
 #     + DEEPSEEK_MODELS
 #     + GROQ_MODELS
 # )
-# 
-# 
+#
+#
 # # curl -L -X GET 'https://api.deepseek.com/models' \
 # # -H 'Accept: application/json' \
 # # -H 'Authorization: Bearer sk-43412ea536ff482e87a38010231ce7c3'
-# 
+#
 # # EOF
 # --------------------------------------------------------------------------------
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/_gen_ai/PARAMS.py
 # --------------------------------------------------------------------------------
+
+# EOF

@@ -1,3 +1,14 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Timestamp: "2025-05-03 02:46:17 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/tests/mngs/ai/test_ClassificationReporter.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./tests/mngs/ai/test_ClassificationReporter.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
 # Add your tests here
 
 if __name__ == "__main__":
@@ -14,16 +25,16 @@ if __name__ == "__main__":
 # # -*- coding: utf-8 -*-
 # # Timestamp: "2025-02-15 01:38:28 (ywatanabe)"
 # # File: ./src/mngs/ai/ClassificationReporter.py
-# 
+#
 # THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/ClassificationReporter.py"
-# 
+#
 # import os as _os
 # import random as _random
 # import sys as _sys
 # from collections import defaultdict as _defaultdict
 # from glob import glob as _glob
 # from pprint import pprint as _pprint
-# 
+#
 # import matplotlib as _matplotlib
 # import matplotlib.pyplot as _plt
 # import mngs as _mngs
@@ -36,10 +47,10 @@ if __name__ == "__main__":
 #     confusion_matrix as _confusion_matrix,
 #     matthews_corrcoef as _matthews_corrcoef,
 # )
-# 
+#
 # from ..reproduce import fix_seeds as _fix_seeds
-# 
-# 
+#
+#
 # class MultiClassificationReporter(object):
 #     def __init__(self, sdir, tgts=None):
 #         if tgts is None:
@@ -47,13 +58,13 @@ if __name__ == "__main__":
 #         else:
 #             sdirs = [_os.path.join(sdir, tgt, "/") for tgt in tgts]
 #         sdirs = [sdir + tgt + "/" for tgt in tgts]
-# 
+#
 #         self.tgt2id = {tgt: i_tgt for i_tgt, tgt in enumerate(tgts)}
 #         self.reporters = [ClassificationReporter(sdir) for sdir in sdirs]
 #     def add(self, obj_name, obj, tgt=None):
 #         i_tgt = self.tgt2id[tgt]
 #         self.reporters[i_tgt].add(obj_name, obj)
-# 
+#
 #     def calc_metrics(
 #         self,
 #         true_class,
@@ -82,7 +93,7 @@ if __name__ == "__main__":
 #             show=show,
 #             auc_plt_config=auc_plt_config,
 #         )
-# 
+#
 #     def summarize(
 #         self,
 #         n_round=3,
@@ -94,7 +105,7 @@ if __name__ == "__main__":
 #             n_round=n_round,
 #             show=show,
 #         )
-# 
+#
 #     def save(
 #         self,
 #         files_to_reproduce=None,
@@ -106,7 +117,7 @@ if __name__ == "__main__":
 #             files_to_reproduce=files_to_reproduce,
 #             meta_dict=meta_dict,
 #         )
-# 
+#
 #     def plot_and_save_conf_mats(
 #         self,
 #         plt,
@@ -124,8 +135,8 @@ if __name__ == "__main__":
 #             confmat_plt_config=confmat_plt_config,
 #             sci_notation_kwargs=sci_notation_kwargs,
 #         )
-# 
-# 
+#
+#
 # class ClassificationReporter(object):
 #     """Saves the following metrics under sdir.
 #        - Balanced Accuracy
@@ -134,15 +145,15 @@ if __name__ == "__main__":
 #        - Classification Report
 #        - ROC AUC score / curve
 #        - PRE-REC AUC score / curve
-# 
+#
 #     Example is described in this file.
 #     """
-# 
+#
 #     def __init__(self, sdir):
 #         self.sdir = sdir
 #         self.folds_dict = _defaultdict(list)
 #         _fix_seeds(os=_os, random=_random, np=_np, torch=_torch, show=False)
-# 
+#
 #     def add(
 #         self,
 #         obj_name,
@@ -153,18 +164,18 @@ if __name__ == "__main__":
 #         fig, ax = plt.subplots()
 #         ax.plot(np.random.rand(10))
 #         reporter.add("manu_figs", fig)
-# 
+#
 #         ## DataFrame
 #         df = pd.DataFrame(np.random.rand(5, 3))
 #         reporter.add("manu_dfs", df)
-# 
+#
 #         ## scalar
 #         scalar = random.random()
 #         reporter.add("manu_scalers", scalar)
 #         """
 #         assert isinstance(obj_name, str)
 #         self.folds_dict[obj_name].append(obj)
-# 
+#
 #     @staticmethod
 #     def calc_bACC(true_class, pred_class, i_fold, show=False):
 #         """Balanced ACC"""
@@ -172,7 +183,7 @@ if __name__ == "__main__":
 #         if show:
 #             print(f"\nBalanced ACC in fold#{i_fold} was {balanced_acc:.3f}\n")
 #         return balanced_acc
-# 
+#
 #     @staticmethod
 #     def calc_mcc(true_class, pred_class, i_fold, show=False):
 #         """MCC"""
@@ -180,7 +191,7 @@ if __name__ == "__main__":
 #         if show:
 #             print(f"\nMCC in fold#{i_fold} was {mcc:.3f}\n")
 #         return mcc
-# 
+#
 #     @staticmethod
 #     def calc_conf_mat(true_class, pred_class, labels, i_fold, show=False):
 #         """
@@ -193,14 +204,14 @@ if __name__ == "__main__":
 #             ),
 #             columns=labels,
 #         ).set_index(_pd.Series(list(labels)))
-# 
+#
 #         if show:
 #             print(f"\nConfusion Matrix in fold#{i_fold}: \n")
 #             _pprint(conf_mat)
 #             print()
-# 
+#
 #         return conf_mat
-# 
+#
 #     @staticmethod
 #     def calc_clf_report(
 #         true_class, pred_class, labels, balanced_acc, i_fold, show=False
@@ -215,7 +226,7 @@ if __name__ == "__main__":
 #                 output_dict=True,
 #             )
 #         )
-# 
+#
 #         clf_report["accuracy"] = balanced_acc
 #         clf_report = _pd.concat(
 #             [
@@ -237,7 +248,7 @@ if __name__ == "__main__":
 #             _pprint(clf_report)
 #             print()
 #         return clf_report
-# 
+#
 #     def calc_AUCs(
 #         self,
 #         true_class,
@@ -275,7 +286,7 @@ if __name__ == "__main__":
 #                 auc_plt_config=auc_plt_config,
 #             )
 #         return roc_auc
-# 
+#
 #     def _calc_AUCs_binary(
 #         self,
 #         true_class,
@@ -299,22 +310,22 @@ if __name__ == "__main__":
 #             precision_recall_curve,
 #             roc_curve,
 #         )
-# 
+#
 #         unique_classes = sorted(list(_np.unique(true_class)))
 #         n_classes = len(unique_classes)
 #         assert n_classes == 2, "This method is only for binary classification"
-# 
+#
 #         # ROC curve
 #         fpr, tpr, _ = roc_curve(true_class, pred_proba)
 #         roc_auc = auc(fpr, tpr)
-# 
+#
 #         fig_size = auc_plt_config["figsize"]
 #         fontsize = auc_plt_config["fontsize"]
 #         labelsize = auc_plt_config["labelsize"]
 #         legendfontsize = auc_plt_config["legendfontsize"]
 #         tick_size = auc_plt_config["tick_size"]
 #         tick_width = auc_plt_config["tick_width"]
-# 
+#
 #         fig_roc, ax_roc = _plt.subplots(figsize=fig_size)
 #         RocCurveDisplay(
 #             fpr=fpr,
@@ -335,7 +346,7 @@ if __name__ == "__main__":
 #         self.folds_dict["ROC_fig"].append(fig_roc)
 #         if show:
 #             print(f"\nROC AUC in fold#{i_fold} is {roc_auc:.3f}\n")
-# 
+#
 #         # PRE-REC curve
 #         fig_prerec, ax_prerec = _plt.subplots(figsize=fig_size)
 #         PrecisionRecallDisplay.from_predictions(
@@ -354,29 +365,29 @@ if __name__ == "__main__":
 #             width=tick_width,
 #         )
 #         self.folds_dict["PRE_REC_fig"].append(fig_prerec)
-# 
+#
 #         return roc_auc
-# 
-# 
+#
+#
 # # #!/usr/bin/env python3
 # # # -*- coding: utf-8 -*-
 # # # Time-stamp: "2024-11-20 00:15:08 (ywatanabe)"
 # # # File: ./mngs_repo/src/mngs/ai/ClassificationReporter.py
-# 
+#
 # # THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/ClassificationReporter.py"
-# 
+#
 # # #!/usr/bin/env python3
 # # # -*- coding: utf-8 -*-
 # # # Time-stamp: "2024-11-13 12:54:17 (ywatanabe)"
 # # # File: ./mngs_repo/src/mngs/ai/ClassificationReporter.py
-# 
+#
 # # import os
 # # import random
 # # import sys
 # # from collections import defaultdict as _defaultdict
 # # from glob import glob as _glob
 # # from pprint import pprint as _pprint
-# 
+#
 # # import matplotlib
 # # import matplotlib.pyplot as plt
 # # import mngs
@@ -389,10 +400,10 @@ if __name__ == "__main__":
 # #     confusion_matrix,
 # #     matthews_corrcoef,
 # # )
-# 
+#
 # # from ..reproduce import fix_seeds
-# 
-# 
+#
+#
 # # class MultiClassificationReporter(object):
 # #     def __init__(self, sdir, tgts=None):
 # #         if tgts is None:
@@ -400,14 +411,14 @@ if __name__ == "__main__":
 # #         else:
 # #             sdirs = [os.path.join(sdir, tgt, "/") for tgt in tgts]
 # #         sdirs = [sdir + tgt + "/" for tgt in tgts]
-# 
+#
 # #         self.tgt2id = {tgt: i_tgt for i_tgt, tgt in enumerate(tgts)}
 # #         self.reporters = [ClassificationReporter(sdir) for sdir in sdirs]
-# 
+#
 # #     def add(self, obj_name, obj, tgt=None):
 # #         i_tgt = self.tgt2id[tgt]
 # #         self.reporters[i_tgt].add(obj_name, obj)
-# 
+#
 # #     def calc_metrics(
 # #         self,
 # #         true_class,
@@ -436,7 +447,7 @@ if __name__ == "__main__":
 # #             show=show,
 # #             auc_plt_config=auc_plt_config,
 # #         )
-# 
+#
 # #     def summarize(
 # #         self,
 # #         n_round=3,
@@ -448,7 +459,7 @@ if __name__ == "__main__":
 # #             n_round=n_round,
 # #             show=show,
 # #         )
-# 
+#
 # #     def save(
 # #         self,
 # #         files_to_reproduce=None,
@@ -460,7 +471,7 @@ if __name__ == "__main__":
 # #             files_to_reproduce=files_to_reproduce,
 # #             meta_dict=meta_dict,
 # #         )
-# 
+#
 # #     def plot_and_save_conf_mats(
 # #         self,
 # #         plt,
@@ -478,8 +489,8 @@ if __name__ == "__main__":
 # #             confmat_plt_config=confmat_plt_config,
 # #             sci_notation_kwargs=sci_notation_kwargs,
 # #         )
-# 
-# 
+#
+#
 # # class ClassificationReporter(object):
 # #     """Saves the following metrics under sdir.
 # #        - Balanced Accuracy
@@ -488,15 +499,15 @@ if __name__ == "__main__":
 # #        - Classification Report
 # #        - ROC AUC score / curve
 # #        - PRE-REC AUC score / curve
-# 
+#
 # #     Example is described in this file.
 # #     """
-# 
+#
 # #     def __init__(self, sdir):
 # #         self.sdir = sdir
 # #         self.folds_dict = _defaultdict(list)
 # #         fix_seeds(os=os, random=random, np=np, torch=torch, show=False)
-# 
+#
 # #     def add(
 # #         self,
 # #         obj_name,
@@ -507,18 +518,18 @@ if __name__ == "__main__":
 # #         fig, ax = plt.subplots()
 # #         ax.plot(np.random.rand(10))
 # #         reporter.add("manu_figs", fig)
-# 
+#
 # #         ## DataFrame
 # #         df = pd.DataFrame(np.random.rand(5, 3))
 # #         reporter.add("manu_dfs", df)
-# 
+#
 # #         ## scalar
 # #         scalar = random.random()
 # #         reporter.add("manu_scalers", scalar)
 # #         """
 # #         assert isinstance(obj_name, str)
 # #         self.folds_dict[obj_name].append(obj)
-# 
+#
 # #     @staticmethod
 # #     def calc_bACC(true_class, pred_class, i_fold, show=False):
 # #         """Balanced ACC"""
@@ -526,7 +537,7 @@ if __name__ == "__main__":
 # #         if show:
 # #             print(f"\nBalanced ACC in fold#{i_fold} was {balanced_acc:.3f}\n")
 # #         return balanced_acc
-# 
+#
 # #     @staticmethod
 # #     def calc_mcc(true_class, pred_class, i_fold, show=False):
 # #         """MCC"""
@@ -534,7 +545,7 @@ if __name__ == "__main__":
 # #         if show:
 # #             print(f"\nMCC in fold#{i_fold} was {mcc:.3f}\n")
 # #         return mcc
-# 
+#
 # #     @staticmethod
 # #     def calc_conf_mat(true_class, pred_class, labels, i_fold, show=False):
 # #         """
@@ -546,21 +557,21 @@ if __name__ == "__main__":
 # #         #     columns=pred_labels,
 # #         #     index=true_labels,
 # #         # )
-# 
+#
 # #         conf_mat = pd.DataFrame(
 # #             data=confusion_matrix(
 # #                 true_class, pred_class, labels=np.arange(len(labels))
 # #             ),
 # #             columns=labels,
 # #         ).set_index(pd.Series(list(labels)))
-# 
+#
 # #         if show:
 # #             print(f"\nConfusion Matrix in fold#{i_fold}: \n")
 # #             _pprint(conf_mat)
 # #             print()
-# 
+#
 # #         return conf_mat
-# 
+#
 # #     @staticmethod
 # #     def calc_clf_report(
 # #         true_class, pred_class, labels, balanced_acc, i_fold, show=False
@@ -575,7 +586,7 @@ if __name__ == "__main__":
 # #                 output_dict=True,
 # #             )
 # #         )
-# 
+#
 # #         # ACC to bACC
 # #         clf_report["accuracy"] = balanced_acc
 # #         clf_report = pd.concat(
@@ -599,7 +610,7 @@ if __name__ == "__main__":
 # #             _pprint(clf_report)
 # #             print()
 # #         return clf_report
-# 
+#
 # #     @staticmethod
 # #     def calc_and_plot_roc_curve(
 # #         true_class, pred_proba, labels, sdir_for_csv=None
@@ -614,7 +625,7 @@ if __name__ == "__main__":
 # #         )
 # #         plt.close()
 # #         return fig_roc, metrics_roc_auc_dict
-# 
+#
 # #     @staticmethod
 # #     def calc_and_plot_pre_rec_curve(true_class, pred_proba, labels):
 # #         # PRE-REC AUC
@@ -623,7 +634,7 @@ if __name__ == "__main__":
 # #         )
 # #         plt.close()
 # #         return fig_pre_rec, metrics_pre_rec_auc_dict
-# 
+#
 # #     def calc_metrics(
 # #         self,
 # #         true_class,
@@ -645,7 +656,7 @@ if __name__ == "__main__":
 # #         Calculates ACC, Confusion Matrix, Classification Report, and ROC-AUC score on a fold.
 # #         Metrics and curves will be kept in self.folds_dict.
 # #         """
-# 
+#
 # #         ## Preparation
 # #         # for convenience
 # #         true_class = mngs.gen.torch_to_arr(true_class).astype(int).reshape(-1)
@@ -653,23 +664,23 @@ if __name__ == "__main__":
 # #             mngs.gen.torch_to_arr(pred_class).astype(np.float64).reshape(-1)
 # #         )
 # #         pred_proba = mngs.gen.torch_to_arr(pred_proba).astype(np.float64)
-# 
+#
 # #         # for curves
 # #         mngs.plt.configure_mpl(
 # #             plt,
 # #             **auc_plt_config,
 # #         )
-# 
+#
 # #         ## Calc metrics
 # #         # Balanced ACC
 # #         bacc = self.calc_bACC(true_class, pred_class, i_fold, show=show)
 # #         self.folds_dict["balanced_acc"].append(bacc)
-# 
+#
 # #         # MCC
 # #         self.folds_dict["mcc"].append(
 # #             self.calc_mcc(true_class, pred_class, i_fold, show=show)
 # #         )
-# 
+#
 # #         # Confusion Matrix
 # #         self.folds_dict["conf_mat/conf_mat"].append(
 # #             self.calc_conf_mat(
@@ -680,14 +691,14 @@ if __name__ == "__main__":
 # #                 show=show,
 # #             )
 # #         )
-# 
+#
 # #         # Classification Report
 # #         self.folds_dict["clf_report"].append(
 # #             self.calc_clf_report(
 # #                 true_class, pred_class, labels, bacc, i_fold, show=show
 # #             )
 # #         )
-# 
+#
 # #         ## Curves
 # #         # ROC curve
 # #         self.sdir_for_roc_csv = f"{self.sdir}roc/csv/"
@@ -704,7 +715,7 @@ if __name__ == "__main__":
 # #             metrics_roc_auc_dict["roc_auc"]["macro"]
 # #         )
 # #         self.folds_dict["roc/figs"].append(fig_roc)
-# 
+#
 # #         # PRE-REC curve
 # #         fig_pre_rec, metrics_pre_rec_auc_dict = (
 # #             self.calc_and_plot_pre_rec_curve(true_class, pred_proba, labels)
@@ -716,36 +727,36 @@ if __name__ == "__main__":
 # #             metrics_pre_rec_auc_dict["pre_rec_auc"]["macro"]
 # #         )
 # #         self.folds_dict["pre_rec/figs"].append(fig_pre_rec)
-# 
+#
 # #     @staticmethod
 # #     def _mk_cv_index(n_folds):
 # #         return [
 # #             f"{n_folds}-folds_CV_mean",
 # #             f"{n_folds}-fold_CV_std",
 # #         ] + [f"fold#{i_fold}" for i_fold in range(n_folds)]
-# 
+#
 # #     def summarize_roc(
 # #         self,
 # #     ):
-# 
+#
 # #         folds_dirs = _glob(self.sdir_for_roc_csv + "fold#*")
 # #         n_folds = len(folds_dirs)
-# 
+#
 # #         # get class names
 # #         _csv_files = _glob(os.path.join(folds_dirs[0], "*"))
 # #         classes_str = [
 # #             csv_file.split("/")[-1].split(".csv")[0] for csv_file in _csv_files
 # #         ]
-# 
+#
 # #         # dfs_classes = []
 # #         # take mean and std by each class
 # #         for cls_str in classes_str:
-# 
+#
 # #             fpaths_cls = [
 # #                 os.path.join(fold_dir, f"{cls_str}.csv")
 # #                 for fold_dir in folds_dirs
 # #             ]
-# 
+#
 # #             ys = []
 # #             roc_aucs = []
 # #             for fpath_cls in fpaths_cls:
@@ -754,19 +765,19 @@ if __name__ == "__main__":
 # #                 roc_aucs.append(loaded_df["roc_auc"])
 # #             ys = pd.concat(ys, axis=1)
 # #             roc_aucs = pd.concat(roc_aucs, axis=1)
-# 
+#
 # #             df_cls = loaded_df[["x"]].copy()
 # #             df_cls["y_mean"] = ys.mean(axis=1)
 # #             df_cls["y_std"] = ys.std(axis=1)
 # #             df_cls["roc_auc_mean"] = roc_aucs.mean(axis=1)
 # #             df_cls["roc_auc_std"] = roc_aucs.std(axis=1)
-# 
+#
 # #             spath_cls = os.path.join(
 # #                 self.sdir_for_roc_csv, f"k-fold_mean_std/{cls_str}.csv"
 # #             )
 # #             mngs.io.save(df_cls, spath_cls)
 # #             # dfs_classes.append(df_cls)
-# 
+#
 # #     def summarize(
 # #         self,
 # #         n_round=3,
@@ -777,15 +788,15 @@ if __name__ == "__main__":
 # #         2) Replace self.folds_dict with the summarized DataFrames.
 # #         """
 # #         self.summarize_roc()
-# 
+#
 # #         _n_folds_all = [
 # #             len(self.folds_dict[k]) for k in self.folds_dict.keys()
 # #         ]  # sometimes includes 0 because AUC curves are not always defined.
 # #         self.n_folds_intended = max(_n_folds_all)
-# 
+#
 # #         for i_k, k in enumerate(self.folds_dict.keys()):
 # #             n_folds = _n_folds_all[i_k]
-# 
+#
 # #             if n_folds != 0:
 # #                 ## listed scalars
 # #                 if is_listed_X(self.folds_dict[k], [float, int]):
@@ -797,27 +808,27 @@ if __name__ == "__main__":
 # #                         columns=[k],
 # #                     )
 # #                     self.folds_dict[k] = sr.round(n_round)
-# 
+#
 # #                 ## listed pd.DataFrames
 # #                 elif is_listed_X(self.folds_dict[k], pd.DataFrame):
 # #                     zero_df_for_mm = 0 * self.folds_dict[k][0].copy()
 # #                     zero_df_for_ss = 0 * self.folds_dict[k][0].copy()
-# 
+#
 # #                     mm = (
 # #                         zero_df_for_mm
 # #                         + np.stack(self.folds_dict[k]).mean(axis=0)
 # #                     ).round(n_round)
-# 
+#
 # #                     ss = (
 # #                         zero_df_for_ss
 # #                         + np.stack(self.folds_dict[k]).std(axis=0, ddof=1)
 # #                     ).round(n_round)
-# 
+#
 # #                     self.folds_dict[k] = [mm, ss] + [
 # #                         df_fold.round(n_round)
 # #                         for df_fold in self.folds_dict[k]
 # #                     ]
-# 
+#
 # #                     if show:
 # #                         print(
 # #                             "\n----------------------------------------\n"
@@ -828,15 +839,15 @@ if __name__ == "__main__":
 # #                         print(f"\n\n{n_folds}-fold-CV std.:\n")
 # #                         _pprint(self.folds_dict[k][1])
 # #                         print("\n\n----------------------------------------\n")
-# 
+#
 # #                 ## listed figures
 # #                 elif is_listed_X(self.folds_dict[k], matplotlib.figure.Figure):
 # #                     pass
-# 
+#
 # #                 else:
 # #                     print(f"{k} was not summarized")
 # #                     print(type(self.folds_dict[k][0]))
-# 
+#
 # #     def save(
 # #         self,
 # #         files_to_reproduce=None,
@@ -846,7 +857,7 @@ if __name__ == "__main__":
 # #         1) Saves the content of self.folds_dict.
 # #         2) Plots the colormap of confusion matrices and saves them.
 # #         3) Saves passed meta_dict under self.sdir
-# 
+#
 # #         Example:
 # #             meta_df_1 = pd.DataFrame(data=np.random.rand(3,3))
 # #             meta_dict_1 = {"a": 0}
@@ -855,20 +866,20 @@ if __name__ == "__main__":
 # #                          "meta_1.yaml": meta_dict_1,
 # #                          "meta_2.yaml": meta_dict_1,
 # #             }
-# 
+#
 # #         """
 # #         if meta_dict is not None:
 # #             for k, v in meta_dict.items():
 # #                 mngs.io.save(v, self.sdir + k)
-# 
+#
 # #         for k in self.folds_dict.keys():
-# 
+#
 # #             ## pd.Series / pd.DataFrame
 # #             if isinstance(self.folds_dict[k], pd.Series) or isinstance(
 # #                 self.folds_dict[k], pd.DataFrame
 # #             ):
 # #                 mngs.io.save(self.folds_dict[k], self.sdir + f"{k}.csv")
-# 
+#
 # #             ## listed pd.DataFrame
 # #             elif is_listed_X(self.folds_dict[k], pd.DataFrame):
 # #                 mngs.io.save(
@@ -877,7 +888,7 @@ if __name__ == "__main__":
 # #                     # indi_suffix=self.cv_index,
 # #                     indi_suffix=self._mk_cv_index(len(self.folds_dict[k])),
 # #                 )
-# 
+#
 # #             ## listed figures
 # #             elif is_listed_X(self.folds_dict[k], matplotlib.figure.Figure):
 # #                 for i_fold, fig in enumerate(self.folds_dict[k]):
@@ -885,17 +896,17 @@ if __name__ == "__main__":
 # #                         self.folds_dict[k][i_fold],
 # #                         self.sdir + f"{k}/fold#{i_fold}.png",
 # #                     )
-# 
+#
 # #             else:
 # #                 print(f"{k} was not saved")
 # #                 print(type(self.folds_dict[k]))
-# 
+#
 # #         if files_to_reproduce is not None:
 # #             if isinstance(files_to_reproduce, list):
 # #                 files_to_reproduce = [files_to_reproduce]
 # #             for f in files_to_reproduce:
 # #                 mngs.io.save(f, self.sdir)
-# 
+#
 # #     def plot_and_save_conf_mats(
 # #         self,
 # #         plt,
@@ -922,19 +933,19 @@ if __name__ == "__main__":
 # #                 y_extend_ratio=extend_ratio,
 # #                 colorbar=colorbar,
 # #             )
-# 
+#
 # #             if sci_notation_kwargs is not None:
 # #                 fig_conf_mat.axes[-1] = mngs.plt.ax_scientific_notation(
 # #                     fig_conf_mat.axes[-1], **sci_notation_kwargs
 # #                 )
 # #             return fig_conf_mat
-# 
+#
 # #         ## Configures mpl
 # #         mngs.plt.configure_mpl(
 # #             plt,
 # #             **confmat_plt_config,
 # #         )
-# 
+#
 # #         ########################################
 # #         ## Prepares confmats dfs
 # #         ########################################
@@ -943,15 +954,15 @@ if __name__ == "__main__":
 # #             conf_mats = self.folds_dict["conf_mat/conf_mat"][
 # #                 -self.n_folds_intended :
 # #             ]
-# 
+#
 # #         except Exception as e:
 # #             print(e)
 # #             conf_mats = self.folds_dict["conf_mat/conf_mat"]
-# 
+#
 # #         ## Prepaires conf_mat_overall_sum
 # #         conf_mat_zero = 0 * conf_mats[0].copy()  # get the table format
 # #         conf_mat_overall_sum = conf_mat_zero + np.stack(conf_mats).sum(axis=0)
-# 
+#
 # #         ########################################
 # #         ## Plots & Saves
 # #         ########################################
@@ -971,7 +982,7 @@ if __name__ == "__main__":
 # #                 self.sdir + f"conf_mat/figs/fold#{i_fold}.png",
 # #             )
 # #             plt.close()
-# 
+#
 # #         ## overall_sum conf_mat
 # #         title = f"{self.n_folds_intended}-CV overall sum"
 # #         fig_conf_mat_overall_sum = _inner_plot_conf_mat(
@@ -988,18 +999,18 @@ if __name__ == "__main__":
 # #             + f"conf_mat/figs/{self.n_folds_intended}-fold_cv_overall-sum.png",
 # #         )
 # #         plt.close()
-# 
-# 
+#
+#
 # # if __name__ == "__main__":
 # #     import random
 # #     import sys
-# 
+#
 # #     import mngs
 # #     import numpy as np
 # #     from catboost import CatBoostClassifier, Pool
 # #     from sklearn.datasets import load_digits
 # #     from sklearn.model_selection import StratifiedKFold
-# 
+#
 # #     ################################################################################
 # #     ## Sets tee
 # #     ################################################################################
@@ -1007,17 +1018,17 @@ if __name__ == "__main__":
 # #         "./tmp/sdir-ClassificationReporter/"
 # #     )  # "/tmp/sdir/"
 # #     sys.stdout, sys.stderr = mngs.gen.tee(sys, sdir)
-# 
+#
 # #     ################################################################################
 # #     ## Fixes seeds
 # #     ################################################################################
 # #     fix_seeds(np=np)
-# 
+#
 # #     ## Loads
 # #     mnist = load_digits()
 # #     X, T = mnist.data, mnist.target
 # #     labels = mnist.target_names.astype(str)
-# 
+#
 # #     ## Main
 # #     skf = StratifiedKFold(n_splits=5, shuffle=True)
 # #     # reporter = ClassificationReporter(sdir)
@@ -1025,17 +1036,17 @@ if __name__ == "__main__":
 # #     for i_fold, (indi_tra, indi_tes) in enumerate(skf.split(X, T)):
 # #         X_tra, T_tra = X[indi_tra], T[indi_tra]
 # #         X_tes, T_tes = X[indi_tes], T[indi_tes]
-# 
+#
 # #         clf = CatBoostClassifier(verbose=False)
-# 
+#
 # #         clf.fit(X_tra, T_tra, verbose=False)
-# 
+#
 # #         ## Prediction
 # #         pred_proba_tes = clf.predict_proba(X_tes)
 # #         pred_cls_tes = np.argmax(pred_proba_tes, axis=1)
-# 
+#
 # #         pred_cls_tes[pred_cls_tes == 9] = 8  # overide 9 as 8 # fixme
-# 
+#
 # #         ##############################
 # #         ## Manually adds objects to reporter to save
 # #         ##############################
@@ -1045,13 +1056,13 @@ if __name__ == "__main__":
 # #         # reporter.add("manu_figs", fig)
 # #         mreporter.add("manu_figs", fig, tgt="Test1")
 # #         mreporter.add("manu_figs", fig, tgt="Test2")
-# 
+#
 # #         ## DataFrame
 # #         df = pd.DataFrame(np.random.rand(5, 3))
 # #         # reporter.add("manu_dfs", df)
 # #         mreporter.add("manu_dfs", df, tgt="Test1")
 # #         mreporter.add("manu_dfs", df, tgt="Test2")
-# 
+#
 # #         ## Scalar
 # #         scalar = random.random()
 # #         # reporter.add(
@@ -1060,7 +1071,7 @@ if __name__ == "__main__":
 # #         # )
 # #         mreporter.add("manu_scalars", scalar, tgt="Test1")
 # #         mreporter.add("manu_scalars", scalar, tgt="Test2")
-# 
+#
 # #         ########################################
 # #         ## Metrics
 # #         ########################################
@@ -1080,15 +1091,15 @@ if __name__ == "__main__":
 # #             i_fold=i_fold,
 # #             tgt="Test2",
 # #         )
-# 
+#
 # #     # reporter.summarize(show=True)
 # #     mreporter.summarize(show=True, tgt="Test1")
 # #     mreporter.summarize(show=True, tgt="Test2")
-# 
+#
 # #     fake_fpaths = ["fake_file_1.txt", "fake_file_2.txt"]
 # #     for ff in fake_fpaths:
 # #         mngs.io.touch(ff)
-# 
+#
 # #     files_to_reproduce = [
 # #         mngs.gen.get_this_fpath(when_ipython="/dev/null"),
 # #         *fake_fpaths,
@@ -1096,7 +1107,7 @@ if __name__ == "__main__":
 # #     # reporter.save(files_to_reproduce=files_to_reproduce)
 # #     mreporter.save(files_to_reproduce=files_to_reproduce, tgt="Test1")
 # #     mreporter.save(files_to_reproduce=files_to_reproduce, tgt="Test2")
-# 
+#
 # #     confmat_plt_config = dict(
 # #         figsize=(8, 8),
 # #         # labelsize=8,
@@ -1106,7 +1117,7 @@ if __name__ == "__main__":
 # #         tick_size=0.8,
 # #         tick_width=0.2,
 # #     )
-# 
+#
 # #     sci_notation_kwargs = dict(
 # #         order=1,
 # #         fformat="%1.0d",
@@ -1114,7 +1125,7 @@ if __name__ == "__main__":
 # #         x=False,
 # #         y=True,
 # #     )  # "%3.1f"
-# 
+#
 # #     # sci_notation_kwargs = None
 # #     # reporter.plot_and_save_conf_mats(
 # #     #     plt,
@@ -1122,7 +1133,7 @@ if __name__ == "__main__":
 # #     #     confmat_plt_config=confmat_plt_config,
 # #     #     sci_notation_kwargs=sci_notation_kwargs,
 # #     # )
-# 
+#
 # #     mreporter.plot_and_save_conf_mats(
 # #         plt,
 # #         extend_ratio=1.0,
@@ -1137,10 +1148,12 @@ if __name__ == "__main__":
 # #         sci_notation_kwargs=sci_notation_kwargs,
 # #         tgt="Test2",
 # #     )
-# 
+#
 # # python -m mngs.ai.ClassificationReporter
-# 
+#
 # # EOF
 # --------------------------------------------------------------------------------
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/ClassificationReporter.py
 # --------------------------------------------------------------------------------
+
+# EOF

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-02 09:19:08 (ywatanabe)"
+# Timestamp: "2025-05-03 12:36:43 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/ax/test__extend.py
 # ----------------------------------------
 import os
@@ -9,6 +9,7 @@ __FILE__ = (
 )
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
+
 # Time-stamp: "2024-11-03 10:33:13 (ywatanabe)"
 # File: placeholder.py
 

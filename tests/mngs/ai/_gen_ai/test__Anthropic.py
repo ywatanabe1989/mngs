@@ -1,3 +1,14 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Timestamp: "2025-05-03 11:59:32 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/tests/mngs/ai/_gen_ai/test__Anthropic.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./tests/mngs/ai/_gen_ai/test__Anthropic.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
 # Add your tests here
 
 if __name__ == "__main__":
@@ -14,15 +25,15 @@ if __name__ == "__main__":
 # # -*- coding: utf-8 -*-
 # # Timestamp: "2025-02-26 09:02:48 (ywatanabe)"
 # # File: ./src/mngs/ai/_gen_ai/_Anthropic.py
-# 
+#
 # THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_Anthropic.py"
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2025-02-26 09:02:48 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/ai/_gen_ai/_Anthropic.py
-# 
+#
 # THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_Anthropic.py"
-# 
+#
 # """
 # Functionality:
 #     - Implements Anthropic AI (Claude) interface
@@ -37,22 +48,22 @@ if __name__ == "__main__":
 #     - Anthropic API key (ANTHROPIC_API_KEY environment variable)
 #     - anthropic package
 # """
-# 
+#
 # """Imports"""
 # import os
 # import sys
 # from typing import Any, Dict, Generator, List, Optional, Union
-# 
+#
 # import anthropic
 # import matplotlib.pyplot as plt
-# 
+#
 # from ._BaseGenAI import BaseGenAI
 # import re
-# 
-# 
+#
+#
 # """Functions & Classes"""
-# 
-# 
+#
+#
 # class Anthropic(BaseGenAI):
 #     def __init__(
 #         self,
@@ -66,15 +77,15 @@ if __name__ == "__main__":
 #         chat_history: Optional[List[Dict[str, str]]] = None,
 #         max_tokens: int = 100_000,
 #     ) -> None:
-# 
+#
 #         if model == "claude-3-7-sonnet-2025-0219":
 #             max_tokens=128_000
-# 
+#
 #         api_key = api_key or os.getenv("ANTHROPIC_API_KEY")
-# 
+#
 #         if not api_key:
 #             raise ValueError("ANTHROPIC_API_KEY environment variable not set")
-# 
+#
 #         super().__init__(
 #             system_setting=system_setting,
 #             model=model,
@@ -86,10 +97,10 @@ if __name__ == "__main__":
 #             chat_history=chat_history,
 #             max_tokens=max_tokens,
 #         )
-# 
+#
 #     def _init_client(self) -> anthropic.Anthropic:
 #         return anthropic.Anthropic(api_key=self.api_key)
-# 
+#
 #     def _api_format_history(self, history):
 #         formatted_history = []
 #         for msg in history:
@@ -117,7 +128,7 @@ if __name__ == "__main__":
 #                 }
 #             formatted_history.append(formatted_msg)
 #         return formatted_history
-# 
+#
 #     def _api_call_static(self) -> str:
 #         output = self.client.messages.create(
 #             model=self.model,
@@ -126,12 +137,12 @@ if __name__ == "__main__":
 #             temperature=self.temperature,
 #         )
 #         out_text = output.content[0].text
-# 
+#
 #         self.input_tokens += output.usage.input_tokens
 #         self.output_tokens += output.usage.output_tokens
-# 
+#
 #         return out_text
-# 
+#
 #     def _api_call_stream(self) -> Generator[str, None, None]:
 #         with self.client.messages.stream(
 #             model=self.model,
@@ -145,14 +156,14 @@ if __name__ == "__main__":
 #                     self.output_tokens += chunk.message.usage.output_tokens
 #                 except AttributeError:
 #                     pass
-# 
+#
 #                 if chunk.type == "content_block_delta":
 #                     yield chunk.delta.text
-# 
-# 
+#
+#
 # def main() -> None:
 #     import mngs
-# 
+#
 #     ai = mngs.ai.GenAI(
 #         model="claude-3-5-sonnet-20241022",
 #         api_key=os.getenv("ANTHROPIC_API_KEY"),
@@ -161,7 +172,7 @@ if __name__ == "__main__":
 #     print(ai("hi"))
 #     print(ai("My name is Yusuke"))
 #     print(ai("do you remember my name?"))
-# 
+#
 #     print(
 #         ai(
 #             "hi, could you tell me what is in the pic?",
@@ -171,27 +182,29 @@ if __name__ == "__main__":
 #         )
 #     )
 #     pass
-# 
-# 
+#
+#
 # if __name__ == "__main__":
 #     import mngs
-# 
+#
 #     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
 #         sys, plt, verbose=False
 #     )
 #     main()
 #     mngs.gen.close(CONFIG, verbose=False, notify=False)
-# 
-# 
-# 
-# 
-# 
+#
+#
+#
+#
+#
 # """
 # python src/mngs/ai/_gen_ai/_Anthropic.py
 # python -m src.mngs.ai._gen_ai._Anthropic
 # """
-# 
+#
 # # EOF
 # --------------------------------------------------------------------------------
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/_gen_ai/_Anthropic.py
 # --------------------------------------------------------------------------------
+
+# EOF

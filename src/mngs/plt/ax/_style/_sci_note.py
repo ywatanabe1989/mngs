@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-02 09:01:01 (ywatanabe)"
+# Timestamp: "2025-05-03 11:58:58 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_style/_sci_note.py
 # ----------------------------------------
 import os

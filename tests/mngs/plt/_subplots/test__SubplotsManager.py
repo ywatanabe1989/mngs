@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-01 16:54:52 (ywatanabe)"
-# File: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/test__SubplotsManager.py
+# Timestamp: "2025-05-03 12:35:55 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/_subplots/test__SubplotsManager.py
 # ----------------------------------------
 import os
 __FILE__ = (
