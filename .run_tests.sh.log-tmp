@@ -22,7 +22,7 @@ addopts =
     -q
     --no-header
     --tb=short
-    # --last-failed
+    --last-failed    
     --exitfirst
     # --verbose
     --color=yes
@@ -35,7 +35,7 @@ addopts =
 env =
     PYTHONPATH=.
     TESTING=True
-Sat May  3 01:09:37 AM AEST 2025
+Sat May  3 03:15:44 PM AEST 2025
 /home/ywatanabe/proj/_mngs_repo/tests/custom/test_matplotlib_compatibility.py
 /home/ywatanabe/proj/_mngs_repo/tests/mngs/test___init__.py
 /home/ywatanabe/proj/_mngs_repo/tests/mngs/decorators/test___init__.py
@@ -51,28 +51,11 @@ Sat May  3 01:09:37 AM AEST 2025
 /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/test__AxesWrapper.py
 /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/test__AxisWrapper.py
 /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/test__FigWrapper.py
-/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/test__SubplotsManager.py
 /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/test__export_as_csv.py
 /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py
 /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin.py
 /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__TrackingMixin.py
 /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test___init__.py
-/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__add_marginal_ax.py
-/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__add_panel.py
-/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__extend.py
-/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__force_aspect.py
-/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__format_label.py
-/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__hide_spines.py
-/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__map_ticks.py
-/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__rotate_labels.py
-/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__sci_note.py
-/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__set_n_ticks.py
-/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__set_size.py
-/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__set_supxyt.py
-/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__set_ticks.py
-/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__set_xyt.py
-/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__share_axes.py
-/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__shift.py
 /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_circular_hist.py
 /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_conf_mat.py
 /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_cube.py
@@ -86,6 +69,22 @@ Sat May  3 01:09:37 AM AEST 2025
 /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_shaded_line.py
 /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_statistical_shaded_line.py
 /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_violin.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_style/test__add_marginal_ax.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_style/test__add_panel.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_style/test__extend.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_style/test__force_aspect.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_style/test__format_label.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_style/test__hide_spines.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_style/test__map_ticks.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_style/test__rotate_labels.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_style/test__sci_note.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_style/test__set_n_ticks.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_style/test__set_size.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_style/test__set_supxyt.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_style/test__set_ticks.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_style/test__set_xyt.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_style/test__share_axes.py
+/home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_style/test__shift.py
 /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/color/test__PARAMS.py
 /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/color/test__add_hue_col.py
 /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/color/test__colors.py
@@ -99,15 +98,15 @@ Sat May  3 01:09:37 AM AEST 2025
 [32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
 Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_image_test.csv (3.0 B)[0m
 [93m
-Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_image_test.png (18.0 KiB)[0m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_image_test.png (17.8 KiB)[0m
 [32m.[0m[93m
 Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_image_xyz_test.csv (3.0 B)[0m
 [93m
-Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_image_xyz_test.png (19.9 KiB)[0m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_image_xyz_test.png (19.8 KiB)[0m
 [32m.[0m[93m
-Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_kde_test.png (21.8 KiB)[0m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_kde_test.png (23.2 KiB)[0m
 [32m.[0m[93m
-Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_kde_cumulative_test.png (23.0 KiB)[0m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_kde_cumulative_test.png (22.6 KiB)[0m
 [32m.[0m[93m
 Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_conf_mat_test.csv (3.0 B)[0m
 [93m
@@ -121,7 +120,7 @@ Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperM
 [32m.[0m[93m
 Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_boxtest.csv (3.0 B)[0m
 [93m
-Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_boxtest.png (11.8 KiB)[0m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_boxtest.png (13.2 KiB)[0m
 [32m.[0m[93m
 Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin_out/plot_raster_test.csv (3.0 B)[0m
 [93m
@@ -202,54 +201,22 @@ Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperM
 Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin_out/sns_violinplot_test.csv (5.5 KiB)[0m
 [93m
 Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin_out/sns_violinplot_test.png (29.6 KiB)[0m
-[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
-Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__add_marginal_ax_out/test__add_marginal_ax.py.jpg (29.1 KiB)[0m
-[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
-Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__add_panel_out/test__add_panel.py.jpg (5.4 KiB)[0m
-[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
-Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__extend_out/test__extend.py.jpg (12.8 KiB)[0m
-[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
-Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__force_aspect_out/test__force_aspect.py.jpg (29.6 KiB)[0m
-[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
-Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__format_label_out/test__format_label.py.jpg (17.6 KiB)[0m
-[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
-Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__hide_spines_out/test__hide_spines.py.jpg (14.2 KiB)[0m
-[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
-Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__map_ticks_out/test__map_ticks.py.jpg (16.9 KiB)[0m
-[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
-Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__rotate_labels_out/test__rotate_labels.py.jpg (17.3 KiB)[0m
-[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
-Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__sci_note_out/test__sci_note.py.jpg (21.6 KiB)[0m
-[32m.[0m[93m
-Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__set_n_ticks_out/test__set_n_ticks.py.jpg (16.3 KiB)[0m
-[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
-Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__set_size_out/test__set_size.py.jpg (14.3 KiB)[0m
-[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
-Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__set_supxyt_out/test__set_supxyt.py.jpg (19.7 KiB)[0m
-[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
-Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__set_ticks_out/test__set_ticks.py.jpg (15.2 KiB)[0m
-[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
-Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__set_xyt_out/test__set_xyt.py.jpg (18.5 KiB)[0m
-[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
-Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__share_axes_out/test__share_axes.py.jpg (31.7 KiB)[0m
-[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
-Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_adjust/test__shift_out/test__shift.py.jpg (9.0 KiB)[0m
-[32m.[0m[93m
+[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
 Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_circular_hist_out/.test_basic_functionality.jpg (27.2 KiB)[0m
 [32m.[0m[93m
-Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_circular_hist_out/.test_with_custom_bins.jpg (32.1 KiB)[0m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_circular_hist_out/.test_with_custom_bins.jpg (31.9 KiB)[0m
 [32m.[0m[93m
-Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_circular_hist_out/.test_with_no_gaps.jpg (27.7 KiB)[0m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_circular_hist_out/.test_with_no_gaps.jpg (27.3 KiB)[0m
 [32m.[0m[93m
-Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_circular_hist_out/.test_with_custom_color.jpg (29.5 KiB)[0m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_circular_hist_out/.test_with_custom_color.jpg (29.7 KiB)[0m
 [32m.[0m[93m
-Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_circular_hist_out/.test_with_non_density.jpg (35.7 KiB)[0m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_circular_hist_out/.test_with_non_density.jpg (34.7 KiB)[0m
 [32m.[0m[93m
-Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_circular_hist_out/.test_with_offset.jpg (28.0 KiB)[0m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_circular_hist_out/.test_with_offset.jpg (27.7 KiB)[0m
 [32m.[0m[93m
-Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_circular_hist_out/.test_with_range_bias.jpg (30.5 KiB)[0m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_circular_hist_out/.test_with_range_bias.jpg (30.2 KiB)[0m
 [32m.[0m[93m
-Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_circular_hist_out/test__plot_circular_hist.py.jpg (27.5 KiB)[0m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_circular_hist_out/test__plot_circular_hist.py.jpg (27.4 KiB)[0m
 [32m.[0m[93m
 Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_conf_mat_out/test__plot_conf_mat_test_basic_functionality.jpg (14.8 KiB)[0m
 [32m.[0m[93m
@@ -277,7 +244,7 @@ Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_ecd
 [32m.[0m[93m
 Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_fillv_out/test__plot_fillv_test_single_axis.jpg (22.4 KiB)[0m
 [32m.[0m[93m
-Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_fillv_out/test__plot_fillv_test_multiple_axes.jpg (38.2 KiB)[0m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_fillv_out/test__plot_fillv_test_multiple_axes.jpg (35.2 KiB)[0m
 [32m.[0m[93m
 Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_fillv_out/test__plot_fillv_test_custom_color.jpg (22.9 KiB)[0m
 [32m.[0m[93m
@@ -305,9 +272,9 @@ Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_ras
 [32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
 Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_rectangle_out/test__plot_rectangle.py.jpg (13.2 KiB)[0m
 [32m.[0m[93m
-Saved to: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/ax/_plot/test__plot_shaded_line_out/test__plot_shaded_line_test_plot_single_shaded_line.jpg (18.6 KiB)[0m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_shaded_line_out/test__plot_shaded_line_test_plot_single_shaded_line.jpg (18.6 KiB)[0m
 [32m.[0m[93m
-Saved to: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/ax/_plot/test__plot_shaded_line_out/test__plot_shaded_line_test_plot_multiple_shaded_line.jpg (27.6 KiB)[0m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_shaded_line_out/test__plot_shaded_line_test_plot_multiple_shaded_line.jpg (27.6 KiB)[0m
 [32m.[0m[93m
 Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_statistical_shaded_line_out/test__plot_statistical_shaded_line.py.jpg (18.7 KiB)[0m
 [32m.[0m[93m
@@ -320,10 +287,42 @@ Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_sta
 Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_violin_out/test__plot_violin_test_with_labels.jpg (18.5 KiB)[0m
 [32m.[0m[93m
 Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_violin_out/test__plot_violin_test_with_labels.jpg (17.8 KiB)[0m
+[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_style/test__add_marginal_ax_out/test__add_marginal_ax.py.jpg (29.1 KiB)[0m
+[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_style/test__add_panel_out/test__add_panel.py.jpg (5.4 KiB)[0m
+[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_style/test__extend_out/test__extend.py.jpg (12.8 KiB)[0m
+[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_style/test__force_aspect_out/test__force_aspect.py.jpg (30.1 KiB)[0m
+[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_style/test__format_label_out/test__format_label.py.jpg (17.6 KiB)[0m
+[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_style/test__hide_spines_out/test__hide_spines.py.jpg (14.2 KiB)[0m
+[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_style/test__map_ticks_out/test__map_ticks.py.jpg (16.9 KiB)[0m
+[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_style/test__rotate_labels_out/test__rotate_labels.py.jpg (17.3 KiB)[0m
+[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_style/test__sci_note_out/test__sci_note.py.jpg (21.6 KiB)[0m
+[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_style/test__set_n_ticks_out/test__set_n_ticks.py.jpg (16.3 KiB)[0m
+[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_style/test__set_size_out/test__set_size.py.jpg (14.3 KiB)[0m
+[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_style/test__set_supxyt_out/test__set_supxyt.py.jpg (19.7 KiB)[0m
+[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_style/test__set_ticks_out/test__set_ticks.py.jpg (15.2 KiB)[0m
+[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_style/test__set_xyt_out/test__set_xyt.py.jpg (18.5 KiB)[0m
+[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_style/test__share_axes_out/test__share_axes.py.jpg (31.7 KiB)[0m
+[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_style/test__shift_out/test__shift.py.jpg (9.0 KiB)[0m
 [32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
 Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/color/test__vizualize_colors_out/test__vizualize_colors_test_vizualize_colors.csv (3.0 B)[0m
 [93m
-Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/color/test__vizualize_colors_out/test__vizualize_colors_test_vizualize_colors.jpg (28.0 KiB)[0m
+Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/color/test__vizualize_colors_out/test__vizualize_colors_test_vizualize_colors.jpg (28.1 KiB)[0m
 [32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[32m.[0m[93m
 Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/utils/test__im2grid_out/test__im2grid_test_grid_image.jpg (679.0 B)[0m
 [32m.[0m[93m
@@ -336,35 +335,35 @@ Saved to: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/utils/test__im2grid_out
   /usr/lib/python3/dist-packages/pyparsing.py:108: DeprecationWarning: module 'sre_constants' is deprecated
     import sre_constants
 
-tests/custom/test_matplotlib_compatibility.py: 106 warnings
+tests/custom/test_matplotlib_compatibility.py: 124 warnings
   /home/ywatanabe/proj/_mngs_repo/tests/custom/test_matplotlib_compatibility.py:44: MatplotlibDeprecationWarning: The INVALID attribute was deprecated in Matplotlib 3.8 and will be removed in 3.10.
     mpl_attr = getattr(mpl_module, attr_name)
 
-tests/custom/test_matplotlib_compatibility.py: 106 warnings
+tests/custom/test_matplotlib_compatibility.py: 124 warnings
   /home/ywatanabe/proj/_mngs_repo/tests/custom/test_matplotlib_compatibility.py:45: MatplotlibDeprecationWarning: The INVALID attribute was deprecated in Matplotlib 3.8 and will be removed in 3.10.
     mngs_attr = getattr(mngs_module, attr_name)
 
-tests/custom/test_matplotlib_compatibility.py: 106 warnings
+tests/custom/test_matplotlib_compatibility.py: 124 warnings
   /home/ywatanabe/proj/_mngs_repo/tests/custom/test_matplotlib_compatibility.py:44: MatplotlibDeprecationWarning: The INVALID_AFFINE attribute was deprecated in Matplotlib 3.8 and will be removed in 3.10.
     mpl_attr = getattr(mpl_module, attr_name)
 
-tests/custom/test_matplotlib_compatibility.py: 106 warnings
+tests/custom/test_matplotlib_compatibility.py: 124 warnings
   /home/ywatanabe/proj/_mngs_repo/tests/custom/test_matplotlib_compatibility.py:45: MatplotlibDeprecationWarning: The INVALID_AFFINE attribute was deprecated in Matplotlib 3.8 and will be removed in 3.10.
     mngs_attr = getattr(mngs_module, attr_name)
 
-tests/custom/test_matplotlib_compatibility.py: 106 warnings
+tests/custom/test_matplotlib_compatibility.py: 124 warnings
   /home/ywatanabe/proj/_mngs_repo/tests/custom/test_matplotlib_compatibility.py:44: MatplotlibDeprecationWarning: The INVALID_NON_AFFINE attribute was deprecated in Matplotlib 3.8 and will be removed in 3.10.
     mpl_attr = getattr(mpl_module, attr_name)
 
-tests/custom/test_matplotlib_compatibility.py: 106 warnings
+tests/custom/test_matplotlib_compatibility.py: 124 warnings
   /home/ywatanabe/proj/_mngs_repo/tests/custom/test_matplotlib_compatibility.py:45: MatplotlibDeprecationWarning: The INVALID_NON_AFFINE attribute was deprecated in Matplotlib 3.8 and will be removed in 3.10.
     mngs_attr = getattr(mngs_module, attr_name)
 
-tests/custom/test_matplotlib_compatibility.py: 106 warnings
+tests/custom/test_matplotlib_compatibility.py: 124 warnings
   /home/ywatanabe/proj/_mngs_repo/tests/custom/test_matplotlib_compatibility.py:44: MatplotlibDeprecationWarning: The is_bbox attribute was deprecated in Matplotlib 3.9 and will be removed in 3.11.
     mpl_attr = getattr(mpl_module, attr_name)
 
-tests/custom/test_matplotlib_compatibility.py: 106 warnings
+tests/custom/test_matplotlib_compatibility.py: 124 warnings
   /home/ywatanabe/proj/_mngs_repo/tests/custom/test_matplotlib_compatibility.py:45: MatplotlibDeprecationWarning: The is_bbox attribute was deprecated in Matplotlib 3.9 and will be removed in 3.11.
     mngs_attr = getattr(mngs_module, attr_name)
 
@@ -419,12 +418,12 @@ tests/mngs/plt/color/test__get_colors_from_cmap.py: 25 warnings
     cmap = matplotlib.cm.get_cmap(cmap_name)
 
 tests/mngs/plt/color/test__get_colors_from_cmap.py::test_get_colors_from_cmap
-  /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/color/test__get_colors_from_cmap.py:58: MatplotlibDeprecationWarning: The get_cmap function was deprecated in Matplotlib 3.7 and will be removed in 3.11. Use ``matplotlib.colormaps[name]`` or ``matplotlib.colormaps.get_cmap()`` or ``pyplot.get_cmap()`` instead.
+  /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/color/test__get_colors_from_cmap.py:58: MatplotlibDeprecationWarning: The get_cmap function was deprecated in Matplotlib 3.7 and will be removed in 3.11. Use ``matplotlib.colormaps[name]`` or ``matplotlib.colormaps.get_cmap()`` or ``pyplot.get_cmap()`` instead.
     cmap = matplotlib.cm.get_cmap("viridis")
 
 tests/mngs/plt/color/test__interpolate.py::test_interpolate
-  /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/color/test__interpolate.py:25: DeprecationWarning: interpolate is deprecated: Use gen_interpolate instead
+  /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/color/test__interpolate.py:25: DeprecationWarning: interpolate is deprecated: Use gen_interpolate instead
     colors = interpolate(color_start, color_end, num_points)
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-[33m[32m265 passed[0m, [33m[1m906 warnings[0m[33m in 45.41s[0m[0m
+[33m[32m265 passed[0m, [33m[1m1050 warnings[0m[33m in 39.56s[0m[0m
