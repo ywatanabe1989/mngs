@@ -93,7 +93,6 @@ class TestPlotViolin:
     #         actual_spath
     #     ), f"Failed to save figure to {spath}"
 
-
 if __name__ == "__main__":
     import os
 
@@ -115,14 +114,14 @@ if __name__ == "__main__":
 # )
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
-#
+# 
 # import matplotlib
 # import matplotlib.pyplot as plt
 # import numpy as np
 # import pandas as pd
 # import seaborn as sns
-#
-#
+# 
+# 
 # def plot_violin(
 #     ax,
 #     data_list,
@@ -133,7 +132,7 @@ if __name__ == "__main__":
 # ):
 #     """
 #     Plot a violin plot using seaborn.
-#
+# 
 #     Parameters
 #     ----------
 #     ax : matplotlib.axes.Axes
@@ -148,7 +147,7 @@ if __name__ == "__main__":
 #         If True, plots only the left half of the violins, default False
 #     **kwargs
 #         Additional keyword arguments passed to seaborn.violinplot
-#
+# 
 #     Returns
 #     -------
 #     ax : matplotlib.axes.Axes
@@ -157,17 +156,17 @@ if __name__ == "__main__":
 #     # Convert list-style data to DataFrame
 #     all_values = []
 #     all_groups = []
-#
+# 
 #     for idx, values in enumerate(data_list):
 #         all_values.extend(values)
 #         group_label = (
 #             labels[idx] if labels and idx < len(labels) else f"x {idx}"
 #         )
 #         all_groups.extend([group_label] * len(values))
-#
+# 
 #     # Create DataFrame
 #     df = pd.DataFrame({"x": all_groups, "y": all_values})
-#
+# 
 #     # Setup colors if provided
 #     if colors:
 #         if isinstance(colors, list):
@@ -179,13 +178,13 @@ if __name__ == "__main__":
 #             }
 #         else:
 #             kwargs["palette"] = colors
-#
+# 
 #     # Call seaborn-based function
 #     return sns_plot_violin(
 #         ax, data=df, x="x", y="y", hue="x", half=half, **kwargs
 #     )
-#
-#
+# 
+# 
 # def sns_plot_violin(
 #     ax, data=None, x=None, y=None, hue=None, half=False, **kwargs
 # ):
@@ -215,22 +214,22 @@ if __name__ == "__main__":
 #     assert isinstance(
 #         ax, matplotlib.axes._axes.Axes
 #     ), "First argument must be a matplotlib axis"
-#
+# 
 #     if not half:
 #         # Standard violin plot
 #         return sns.violinplot(data=data, x=x, y=y, hue=hue, ax=ax, **kwargs)
-#
+# 
 #     # Create a copy of the dataframe to avoid modifying the original
 #     df = data.copy()
-#
+# 
 #     # If no hue provided, create default hue
 #     if hue is None:
 #         df["_hue"] = "default"
 #         hue = "_hue"
-#
+# 
 #     # Add fake hue for the right side
 #     df["_fake_hue"] = df[hue] + "_right"
-#
+# 
 #     # Adjust hue_order and palette if provided
 #     if "hue_order" in kwargs:
 #         kwargs["hue_order"] = kwargs["hue_order"] + [
@@ -241,7 +240,7 @@ if __name__ == "__main__":
 #         for group in df[x].unique().tolist():
 #             kwargs["hue_order"].append(group)
 #             kwargs["hue_order"].append(group + "_right")
-#
+# 
 #     if "palette" in kwargs:
 #         palette = kwargs["palette"]
 #         if isinstance(palette, dict):
@@ -251,53 +250,53 @@ if __name__ == "__main__":
 #             }
 #         elif isinstance(palette, list):
 #             kwargs["palette"] = palette + palette
-#
+# 
 #     # Conc left and right
 #     df_left = df[[x, y]]
 #     df_right = df[["_fake_hue", y]].rename(columns={"_fake_hue": x})
 #     df_right[y] = [np.nan for _ in range(len(df_right))]
 #     df_conc = pd.concat([df_left, df_right], axis=0, ignore_index=True)
 #     df_conc = df_conc.sort_values(x)
-#
+# 
 #     # Plot
 #     sns.violinplot(
 #         data=df_conc, x=x, y=y, hue="x", split=True, ax=ax, **kwargs
 #     )
-#
+# 
 #     # Remove right half of violins
 #     for collection in ax.collections:
 #         if isinstance(collection, plt.matplotlib.collections.PolyCollection):
 #             collection.set_clip_path(None)
-#
+# 
 #     # Adjust legend
 #     if ax.legend_ is not None:
 #         handles, labels = ax.get_legend_handles_labels()
 #         ax.legend(handles[: len(handles) // 2], labels[: len(labels) // 2])
-#
+# 
 #     return ax
-#
-#
+# 
+# 
 # # def _plot_half_violin(ax, data=None, x=None, y=None, hue=None, **kwargs):
-#
+# 
 # #     assert isinstance(
 # #         ax, matplotlib.axes._axes.Axes
 # #     ), "First argument must be a matplotlib axis"
-#
+# 
 # #     # Prepare data
 # #     df = data.copy()
 # #     if hue is None:
 # #         df["_hue"] = "default"
 # #         hue = "_hue"
-#
+# 
 # #     # Add fake hue for the right side
 # #     df["_fake_hue"] = df[hue] + "_right"
-#
+# 
 # #     # Adjust hue_order and palette if provided
 # #     if "hue_order" in kwargs:
 # #         kwargs["hue_order"] = kwargs["hue_order"] + [
 # #             h + "_right" for h in kwargs["hue_order"]
 # #         ]
-#
+# 
 # #     if "palette" in kwargs:
 # #         palette = kwargs["palette"]
 # #         if isinstance(palette, dict):
@@ -307,32 +306,32 @@ if __name__ == "__main__":
 # #             }
 # #         elif isinstance(palette, list):
 # #             kwargs["palette"] = palette + palette
-#
+# 
 # #     # Plot
 # #     sns.violinplot(
 # #         data=df, x=x, y=y, hue="_fake_hue", split=True, ax=ax, **kwargs
 # #     )
-#
+# 
 # #     # Remove right half of violins
 # #     for collection in ax.collections:
 # #         if isinstance(collection, plt.matplotlib.collections.PolyCollection):
 # #             collection.set_clip_path(None)
-#
+# 
 # #     # Adjust legend
 # #     if ax.legend_ is not None:
 # #         handles, labels = ax.get_legend_handles_labels()
 # #         ax.legend(handles[: len(handles) // 2], labels[: len(labels) // 2])
-#
+# 
 # #     return ax
-#
+# 
 # # import matplotlib
 # # import matplotlib.pyplot as plt
 # # import seaborn as sns
-#
+# 
 # # def plot_violin_half(ax, data=None, x=None, y=None, hue=None, **kwargs):
 # #     """
 # #     Plot a half violin plot (showing only the left side of violins).
-#
+# 
 # #     Parameters
 # #     ----------
 # #     ax : matplotlib.axes.Axes
@@ -347,7 +346,7 @@ if __name__ == "__main__":
 # #         Column name for hue variable
 # #     **kwargs
 # #         Additional keyword arguments passed to seaborn.violinplot
-#
+# 
 # #     Returns
 # #     -------
 # #     ax : matplotlib.axes.Axes
@@ -356,16 +355,16 @@ if __name__ == "__main__":
 # #     assert isinstance(
 # #         ax, matplotlib.axes._axes.Axes
 # #     ), "First argument must be a matplotlib axis"
-#
+# 
 # #     # Prepare data
 # #     df = data.copy()
 # #     if hue is None:
 # #         df["_hue"] = "default"
 # #         hue = "_hue"
-#
+# 
 # #     # Add fake hue for the right side
 # #     df["_fake_hue"] = df[hue] + "_right"
-#
+# 
 # #     # Adjust hue_order and palette if provided
 # #     if "hue_order" in kwargs:
 # #         kwargs["hue_order"] = kwargs["hue_order"] + [
@@ -380,25 +379,25 @@ if __name__ == "__main__":
 # #             }
 # #         elif isinstance(palette, list):
 # #             kwargs["palette"] = palette + palette
-#
+# 
 # #     # Plot
 # #     sns.violinplot(
 # #         data=df, x=x, y=y, hue="_fake_hue", split=True, ax=ax, **kwargs
 # #     )
-#
+# 
 # #     # Remove right half of violins
 # #     for collection in ax.collections:
 # #         if isinstance(collection, matplotlib.collections.PolyCollection):
 # #             collection.set_clip_path(None)
-#
+# 
 # #     # Adjust legend
 # #     if ax.legend_ is not None:
 # #         handles, labels = ax.get_legend_handles_labels()
 # #         ax.legend(handles[: len(handles) // 2], labels[: len(labels) // 2])
-#
+# 
 # #     return ax
-#
-#
+# 
+# 
 # ## Probably working
 # def half_violin(ax, data=None, x=None, y=None, hue=None, **kwargs):
 #     # Prepare data
@@ -406,16 +405,16 @@ if __name__ == "__main__":
 #     if hue is None:
 #         df["_hue"] = "default"
 #         hue = "_hue"
-#
+# 
 #     # Add fake hue for the right side
 #     df["_fake_hue"] = df[hue] + "_right"
-#
+# 
 #     # Adjust hue_order and palette if provided
 #     if "hue_order" in kwargs:
 #         kwargs["hue_order"] = kwargs["hue_order"] + [
 #             h + "_right" for h in kwargs["hue_order"]
 #         ]
-#
+# 
 #     if "palette" in kwargs:
 #         palette = kwargs["palette"]
 #         if isinstance(palette, dict):
@@ -425,25 +424,25 @@ if __name__ == "__main__":
 #             }
 #         elif isinstance(palette, list):
 #             kwargs["palette"] = palette + palette
-#
+# 
 #     # Plot
 #     sns.violinplot(
 #         data=df, x=x, y=y, hue="_fake_hue", split=True, ax=ax, **kwargs
 #     )
-#
+# 
 #     # Remove right half of violins
 #     for collection in ax.collections:
 #         if isinstance(collection, plt.matplotlib.collections.PolyCollection):
 #             collection.set_clip_path(None)
-#
+# 
 #     # Adjust legend
 #     if ax.legend_ is not None:
 #         handles, labels = ax.get_legend_handles_labels()
 #         ax.legend(handles[: len(handles) // 2], labels[: len(labels) // 2])
-#
+# 
 #     return ax
-#
-#
+# 
+# 
 # # import mngs
 # # import numpy as np
 # # fig, ax = mngs.plt.subplots()
@@ -459,10 +458,8 @@ if __name__ == "__main__":
 # # ax = half_violin(
 # #     ax, data_list, x=""
 # # )
-#
+# 
 # # EOF
 # --------------------------------------------------------------------------------
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/ax/_plot/_plot_violin.py
 # --------------------------------------------------------------------------------
-
-# EOF
