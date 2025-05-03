@@ -1,6 +1,6 @@
 #!/bin/bash
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-03 17:25:13 (ywatanabe)"
+# Timestamp: "2025-05-03 17:27:26 (ywatanabe)"
 # File: ./docs/update_gallery.sh
 
 THIS_DIR="$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)"
@@ -96,7 +96,7 @@ for test_file_path in $(find tests/mngs -type f -name "test*.jpg"); do
     # Add entry to the gallery as a table cell
     echo "<td style='text-align: center; padding: 10px;'>" >> $GALLERY_PATH
     echo "<img src='$test_file_path_relative' width='200' alt='$test_filename'><br>" >> $GALLERY_PATH
-    echo "<span style='font-size: 0.8em;'>$test_filename</span>" >> $GALLERY_PATH
+    # echo "<span style='font-size: 0.8em;'>$test_filename</span>" >> $GALLERY_PATH
     echo "</td>" >> $GALLERY_PATH
 
     col_count=$((col_count + 1))
