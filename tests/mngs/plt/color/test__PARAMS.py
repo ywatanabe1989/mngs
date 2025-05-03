@@ -74,7 +74,6 @@ def test_params_rgba_norm():
                 rgba_norm_values[idx] == expected
             ), f"RGBA_NORM for {color} not correctly normalized"
 
-
 if __name__ == "__main__":
     import os
 
@@ -96,7 +95,7 @@ if __name__ == "__main__":
 # )
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
-#
+# 
 # # RGB
 # RGB = {
 #     "white": [255, 255, 255],
@@ -114,12 +113,12 @@ if __name__ == "__main__":
 #     "navy": [0, 0, 100],
 #     "orange": [228, 94, 50],
 # }
-#
+# 
 # RGB_NORM = {
 #     k: [round(r / 255, 2), round(g / 255, 2), round(b / 255, 2)]
 #     for k, (r, g, b) in RGB.items()
 # }
-#
+# 
 # # RGBA
 # DEF_ALPHA = 0.9
 # RGBA = {k: [r, g, b, DEF_ALPHA] for k, (r, g, b) in RGB.items()}
@@ -127,7 +126,7 @@ if __name__ == "__main__":
 # RGBA_NORM_FOR_CYCLE = {
 #     k: v for k, v in RGBA_NORM.items() if k not in ["white", "grey", "black"]
 # }
-#
+# 
 # # HEX
 # HEX = {
 #     "blue": "#0080C0",
@@ -143,8 +142,8 @@ if __name__ == "__main__":
 #     "navy": "#000064",
 #     "orange": "#E45E32",
 # }
-#
-#
+# 
+# 
 # PARAMS = dict(
 #     RGB=RGB,
 #     RGBA=RGBA,
@@ -152,12 +151,10 @@ if __name__ == "__main__":
 #     RGBA_NORM_FOR_CYCLE=RGBA_NORM_FOR_CYCLE,
 #     HEX=HEX,
 # )
-#
+# 
 # # pprint(PARAMS)
-#
+# 
 # # EOF
 # --------------------------------------------------------------------------------
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/color/_PARAMS.py
 # --------------------------------------------------------------------------------
-
-# EOF
