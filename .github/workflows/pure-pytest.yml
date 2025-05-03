@@ -1,0 +1,45 @@
+# Timestamp: "2025-05-03 15:39:59 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/.github/workflows/pure-pytest.yml
+
+name: pure-pytest
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.9, '3.10', "3.11", "3.12"]
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Run tests
+      run: |
+        mkdir -p tests
+        pytest tests/ -v --cov=./ --cov-report=xml:./tests/coverage.xml --cov-report=html:./tests/htmlcov
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./tests/coverage.xml
+
+    - name: Generate badge markdown
+      run: |
+        echo "![Test Status](https://img.shields.io/github/workflow/status/ywatanabe1989/mngs/pytest?label=tests)" >> ./docs/badge.md
+
+# EOF
