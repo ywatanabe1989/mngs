@@ -22,7 +22,7 @@ if __name__ == "__main__":
 # Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/layer/_switch.py
 # --------------------------------------------------------------------------------
 # from ._Pass import Pass
-#
+# 
 # def switch(layer, is_used):
 #     if is_used:
 #         return layer
@@ -32,5 +32,3 @@ if __name__ == "__main__":
 # --------------------------------------------------------------------------------
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/layer/_switch.py
 # --------------------------------------------------------------------------------
-
-# EOF
