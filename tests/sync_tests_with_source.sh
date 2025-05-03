@@ -1,6 +1,6 @@
 #!/bin/bash
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-03 14:35:42 (ywatanabe)"
+# Timestamp: "2025-05-03 15:09:37 (ywatanabe)"
 # File: ./tests/sync_tests_with_source.sh
 
 THIS_DIR="$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)"
@@ -253,7 +253,8 @@ move_stale_test_files_to_old() {
             tgt_path="$old_dir_with_timestamp/$stale_test_filename"
 
             echo -e "${RED}Stale Test          : $stale_test_path${NC}"
-            echo -e "${RED}Target Old Directory: $old_dir_with_timestamp${NC}"
+            # echo -e "${RED}Target Old Directory: $old_dir_with_timestamp${NC}"
+            echo -e "${RED}If you want to remove this stale test file, please run $0 -m${NC}"
 
             if [ "$DO_MOVE" = "true" ]; then
                 # Ensure target dir exists
