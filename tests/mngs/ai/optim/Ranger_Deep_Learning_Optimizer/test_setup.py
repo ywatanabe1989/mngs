@@ -22,16 +22,16 @@ if __name__ == "__main__":
 # Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/optim/Ranger_Deep_Learning_Optimizer/setup.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python
-#
+# 
 # import os
 # from setuptools import find_packages, setup
-#
-#
+# 
+# 
 # def read(fname):
 #     with open(os.path.join(os.path.dirname(__file__), fname)) as f:
 #         return f.read()
-#
-#
+# 
+# 
 # setup(
 #     name='ranger',
 #     version='0.1.dev0',
@@ -51,5 +51,3 @@ if __name__ == "__main__":
 # --------------------------------------------------------------------------------
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/optim/Ranger_Deep_Learning_Optimizer/setup.py
 # --------------------------------------------------------------------------------
-
-# EOF
