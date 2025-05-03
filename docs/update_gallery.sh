@@ -1,6 +1,6 @@
 #!/bin/bash
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-03 17:18:45 (ywatanabe)"
+# Timestamp: "2025-05-03 17:21:42 (ywatanabe)"
 # File: ./docs/update_gallery.sh
 
 THIS_DIR="$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)"
@@ -47,24 +47,52 @@ convert_test_and_source_path() {
 GALLERY_PATH=./src/mngs/plt/gallery.md
 GALLERY_DIR="$(dirname $GALLERY_PATH)"
 echo > $GALLERY_PATH
+# # Find all test image files and process them
+# for test_file_path in $(find tests/mngs -type f -name "test*.jpg"); do
+#     # Extract filename without path for display purposes
+#     test_filename="$(basename $test_file_path)"
+
+#     # Calculate relative path from gallery directory to test file
+#     # First get absolute paths
+#     abs_gallery_dir="$(cd "$(dirname "$GALLERY_PATH")" && pwd)"
+#     abs_test_path="$(cd "$(dirname "$test_file_path")" && pwd)/$(basename "$test_file_path")"
+
+#     # Create relative path using Python (more reliable than shell)
+#     test_file_path_relative=$(python3 -c "import os.path; print(os.path.relpath('$abs_test_path', '$abs_gallery_dir'))")
+
+#     # Add entry to the gallery markdown file
+#     echo "## $test_filename" >> $GALLERY_PATH
+#     echo "![Test Image]($test_file_path_relative)" >> $GALLERY_PATH
+#     echo "" >> $GALLERY_PATH
+# done
+# cat "$GALLERY_PATH"
+# echo "Gallery generation complete. Results saved to $GALLERY_PATH" | tee -a "$LOG_PATH"
+
+# Start gallery with header
+echo "# mngs.plt Gallery" > $GALLERY_PATH
+echo "" >> $GALLERY_PATH
+echo "<div style='display: flex; flex-wrap: wrap;'>" >> $GALLERY_PATH
+
 # Find all test image files and process them
 for test_file_path in $(find tests/mngs -type f -name "test*.jpg"); do
     # Extract filename without path for display purposes
     test_filename="$(basename $test_file_path)"
 
     # Calculate relative path from gallery directory to test file
-    # First get absolute paths
     abs_gallery_dir="$(cd "$(dirname "$GALLERY_PATH")" && pwd)"
     abs_test_path="$(cd "$(dirname "$test_file_path")" && pwd)/$(basename "$test_file_path")"
-
-    # Create relative path using Python (more reliable than shell)
     test_file_path_relative=$(python3 -c "import os.path; print(os.path.relpath('$abs_test_path', '$abs_gallery_dir'))")
 
-    # Add entry to the gallery markdown file
-    echo "## $test_filename" >> $GALLERY_PATH
-    echo "![Test Image]($test_file_path_relative)" >> $GALLERY_PATH
-    echo "" >> $GALLERY_PATH
+    # Add entry to the gallery with HTML for tiling and fixed width
+    echo "<div style='margin: 10px; text-align: center;'>" >> $GALLERY_PATH
+    echo "<img src='$test_file_path_relative' width='200' alt='$test_filename'>" >> $GALLERY_PATH
+    echo "<p style='font-size: 0.8em;'>$test_filename</p>" >> $GALLERY_PATH
+    echo "</div>" >> $GALLERY_PATH
 done
+
+# Close the flex container
+echo "</div>" >> $GALLERY_PATH
+
 cat "$GALLERY_PATH"
 echo "Gallery generation complete. Results saved to $GALLERY_PATH" | tee -a "$LOG_PATH"
 
