@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-27 03:11:57 (ywatanabe)"
-# File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/PARAMS.py
+# Timestamp: "2025-05-13 18:50:00 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_PARAMS.py
 # ----------------------------------------
 import os
 __FILE__ = (
-    "./src/mngs/ai/_gen_ai/PARAMS.py"
+    "./src/mngs/ai/_gen_ai/_PARAMS.py"
 )
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
