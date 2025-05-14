@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-29 14:38:43 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/src/mngs/io/_save.py
+# Timestamp: "2025-05-14 04:02:24 (ywatanabe)"
+# File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/io/_save.py
 # ----------------------------------------
 import os
 __FILE__ = (
@@ -330,8 +330,8 @@ def _save(
             for name, obj in zip(name_list, obj_list):
                 hf.create_dataset(name, data=obj)
     # pth
-    elif spath.endswith(".pth"):
-        torch.save(obj, spath)
+    elif spath.endswith(".pth") or spath.endswith(".pt"):
+        torch.save(obj, spath, **kwargs)
 
     # mat
     elif spath.endswith(".mat"):
