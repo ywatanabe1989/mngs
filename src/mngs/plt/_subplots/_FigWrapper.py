@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-03 14:56:48 (ywatanabe)"
-# File: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_FigWrapper.py
+# Timestamp: "2025-05-19 02:53:28 (ywatanabe)"
+# File: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/plt/_subplots/_FigWrapper.py.new
 # ----------------------------------------
 import os
 __FILE__ = (
@@ -11,7 +11,8 @@ __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
 from functools import wraps
-
+import warnings
+import numpy as np
 import pandas as pd
 
 
@@ -64,28 +65,79 @@ class FigWrapper:
     def export_as_csv(self):
         """Export plotted data from all axes.
         
+        This method collects data from all axes in the figure and combines 
+        them into a single DataFrame with appropriate axis identifiers in 
+        the column names.
+        
         Returns:
             pd.DataFrame: Combined DataFrame with data from all axes,
                           with axis ID prefixes for each column.
         """
         dfs = []
-        for ii, ax in enumerate(self.axes.flat):
-            if hasattr(ax, "export_as_csv"):
-                df = ax.export_as_csv()
-                if not df.empty:
-                    # Add axis ID prefix to columns
-                    df.columns = [f"ax_{ii:02d}_{col}" for col in df.columns]
-                    dfs.append(df)
-
+        
+        # Use the _traverse_axes helper method to iterate through all axes
+        # regardless of their structure (single, array, list, etc.)
+        for ii, ax in enumerate(self._traverse_axes()):
+            # Try different ways to access the export_as_csv method
+            df = None
+            try:
+                if hasattr(ax, '_axis_mpl') and hasattr(ax._axis_mpl, 'export_as_csv'):
+                    # If it's a nested structure with _axis_mpl having export_as_csv
+                    df = ax._axis_mpl.export_as_csv()
+                elif hasattr(ax, 'export_as_csv'):
+                    # Direct AxisWrapper object
+                    df = ax.export_as_csv()
+                else:
+                    # Skip if no export method available
+                    continue
+            except Exception:
+                continue
+            
+            # Process the DataFrame if it's not empty
+            if df is not None and not df.empty:
+                # Add axis ID prefix to column names if not already present
+                prefix = f"ax_{ii:02d}_"
+                df.columns = [
+                    col if col.startswith(prefix) else f"{prefix}{col}" 
+                    for col in df.columns
+                ]
+                dfs.append(df)
+        
         # Return concatenated DataFrame or empty DataFrame if no data
         return pd.concat(dfs, axis=1) if dfs else pd.DataFrame()
+    
+    def _traverse_axes(self):
+        """Helper method to traverse all axis wrappers in the figure."""
+        if hasattr(self, 'axes'):
+            # Check if we're dealing with an AxesWrapper instance
+            if hasattr(self.axes, '_axes_mngs') and hasattr(self.axes._axes_mngs, 'flat'):
+                # This is an AxesWrapper, get the individual AxisWrapper objects
+                for ax in self.axes._axes_mngs.flat:
+                    yield ax
+            elif not hasattr(self.axes, '__iter__'):
+                # Single axis case
+                yield self.axes
+            else:
+                # Multiple axes case
+                if hasattr(self.axes, 'flat'):
+                    # 2D array of axes
+                    for ax in self.axes.flat:
+                        yield ax
+                elif hasattr(self.axes, 'ravel'):
+                    # Numpy array
+                    for ax in self.axes.ravel():
+                        yield ax
+                elif isinstance(self.axes, (list, tuple)):
+                    # List of axes
+                    for ax in self.axes:
+                        yield ax
 
     def legend(self, *args, loc="upper left", **kwargs):
-        """Legend with upper left by default."""
-        for ax in self.axes:
+        """Legend with upper left by default for all axes."""
+        for ax in self._traverse_axes():
             try:
                 ax.legend(*args, loc=loc, **kwargs)
-            except:
+            except Exception as e:
                 pass
 
     def supxyt(self, x=False, y=False, t=False):
