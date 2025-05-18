@@ -8,7 +8,7 @@ if __name__ == "__main__":
     pytest.main([os.path.abspath(__file__)])
 
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/dsp/PARAMS.py
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/dsp/PARAMS.py
 # --------------------------------------------------------------------------------
 # import numpy as np
 # import pandas as pd
@@ -63,5 +63,5 @@ if __name__ == "__main__":
 # ]
 
 # --------------------------------------------------------------------------------
-# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/dsp/PARAMS.py
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/dsp/PARAMS.py
 # --------------------------------------------------------------------------------

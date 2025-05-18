@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-02 22:24:27 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_MatplotlibPlotMixin.py
+# Timestamp: "2025-05-18 17:51:44 (ywatanabe)"
+# File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_MatplotlibPlotMixin.py
 # ----------------------------------------
 import os
 __FILE__ = (
@@ -106,7 +106,7 @@ class MatplotlibPlotMixin:
         tracked_dict = {
             "x": xx,
             "kde": density,
-            "n": [len(data) for ii in range(len(xx))],
+            "n": n_samples,
         }
         self._track(
             track,

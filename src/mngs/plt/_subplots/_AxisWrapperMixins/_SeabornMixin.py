@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-01 16:27:16 (ywatanabe)"
-# File: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_SeabornMixin.py
+# Timestamp: "2025-05-18 16:26:18 (ywatanabe)"
+# File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_SeabornMixin.py
 # ----------------------------------------
 import os
 __FILE__ = (
@@ -48,7 +48,12 @@ class SeabornMixin:
 
         # Track the plot if required
         track_obj = track_obj if track_obj is not None else args
-        self._track(track, id, method_name, track_obj, kwargs)
+        # Create a tracked_dict with appropriate structure
+        tracked_dict = {
+            'data': track_obj,  # Use 'data' key for consistency with formatters
+            'args': args        # Keep args for backward compatibility
+        }
+        self._track(track, id, method_name, tracked_dict, kwargs)
 
     def _sns_base_xyhue(
         self, method_name, *args, track=True, id=None, **kwargs

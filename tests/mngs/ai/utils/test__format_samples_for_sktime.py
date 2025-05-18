@@ -8,7 +8,7 @@ if __name__ == "__main__":
     pytest.main([os.path.abspath(__file__)])
 
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/utils/_format_samples_for_sktime.py
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/utils/_format_samples_for_sktime.py
 # --------------------------------------------------------------------------------
 # import pandas as pd
 # import torch
@@ -38,5 +38,5 @@ if __name__ == "__main__":
 #         )
 
 # --------------------------------------------------------------------------------
-# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/utils/_format_samples_for_sktime.py
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/utils/_format_samples_for_sktime.py
 # --------------------------------------------------------------------------------

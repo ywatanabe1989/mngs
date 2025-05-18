@@ -62,15 +62,22 @@ class FigWrapper:
     #     self._fig_mpl.savefig(fname, *args, **kwargs)
 
     def export_as_csv(self):
-        """Export plotted data from all axes."""
+        """Export plotted data from all axes.
+        
+        Returns:
+            pd.DataFrame: Combined DataFrame with data from all axes,
+                          with axis ID prefixes for each column.
+        """
         dfs = []
         for ii, ax in enumerate(self.axes.flat):
             if hasattr(ax, "export_as_csv"):
                 df = ax.export_as_csv()
                 if not df.empty:
+                    # Add axis ID prefix to columns
                     df.columns = [f"ax_{ii:02d}_{col}" for col in df.columns]
                     dfs.append(df)
 
+        # Return concatenated DataFrame or empty DataFrame if no data
         return pd.concat(dfs, axis=1) if dfs else pd.DataFrame()
 
     def legend(self, *args, loc="upper left", **kwargs):

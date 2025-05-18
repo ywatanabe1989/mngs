@@ -95,13 +95,23 @@ def test_split_with_empty_string():
     assert fname == ''
     assert ext == ''
 
-
 if __name__ == "__main__":
+    import os
+
+    import pytest
+
     pytest.main([os.path.abspath(__file__)])
 
 # --------------------------------------------------------------------------------
-# Source Code Reference (for maintenance):
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/path/_split.py
 # --------------------------------------------------------------------------------
+# #!/usr/bin/env python3
+# # -*- coding: utf-8 -*-
+# # Time-stamp: "2024-11-02 16:18:06 (ywatanabe)"
+# # File: ./mngs_repo/src/mngs/path/_split.py
+# 
+# import os
+# 
 # def split(fpath):
 #     """Split a file path to (1) the directory path, (2) the file name, and (3) the file extention
 #     Example:
@@ -114,3 +124,9 @@ if __name__ == "__main__":
 #     base = os.path.basename(fpath)
 #     fname, ext = os.path.splitext(base)
 #     return dirname, fname, ext
+# 
+# # EOF
+
+# --------------------------------------------------------------------------------
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/path/_split.py
+# --------------------------------------------------------------------------------

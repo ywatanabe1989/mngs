@@ -8,7 +8,7 @@ if __name__ == "__main__":
     pytest.main([os.path.abspath(__file__)])
 
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/optim/_get_set.py
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/optim/_get_set.py
 # --------------------------------------------------------------------------------
 # # import torch.nn as nn
 # import torch.optim as optim
@@ -37,5 +37,5 @@ if __name__ == "__main__":
 #     return optims_dict[optim_str]
 
 # --------------------------------------------------------------------------------
-# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/optim/_get_set.py
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/optim/_get_set.py
 # --------------------------------------------------------------------------------

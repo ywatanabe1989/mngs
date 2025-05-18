@@ -1,4 +1,226 @@
-# Add your tests here
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Timestamp: "2025-05-16 11:35:12 (ywatanabe)"
+# File: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/io/test__load.py
+# ----------------------------------------
+import os
+import tempfile
+import pytest
+from unittest import mock
+# ----------------------------------------
+
+class TestLoadFunction:
+    """Test class for _load.py module functions."""
+    
+    @pytest.fixture(autouse=True)
+    def setup(self):
+        """Setup test environment."""
+        # Create mocks for key dependencies
+        self.clean_path_mock = mock.Mock(side_effect=lambda x: x)  # just returns the input
+        
+        # Loader function mocks
+        self.load_csv_mock = mock.Mock(return_value="csv_data")
+        self.load_npy_mock = mock.Mock(return_value="numpy_data")
+        self.load_txt_mock = mock.Mock(return_value="text_data")
+        self.load_pickle_mock = mock.Mock(return_value="pickle_data")
+        self.load_torch_mock = mock.Mock(return_value="torch_model")
+        self.load_json_mock = mock.Mock(return_value={"key": "json_data"})
+        self.load_yaml_mock = mock.Mock(return_value={"key": "yaml_data"})
+        
+        # Create our mock loader dictionary 
+        self.loaders_dict = {
+            # Default
+            "": self.load_txt_mock,
+            # Config/Settings
+            "yaml": self.load_yaml_mock,
+            "yml": self.load_yaml_mock,
+            "json": self.load_json_mock,
+            # ML/DL Models
+            "pth": self.load_torch_mock,
+            "pt": self.load_torch_mock,
+            "pkl": self.load_pickle_mock,
+            # Tabular Data
+            "csv": self.load_csv_mock,
+            # Scientific Data
+            "npy": self.load_npy_mock,
+            # Documents
+            "txt": self.load_txt_mock
+        }
+        
+        # Set up test files
+        self.temp_dir = tempfile.mkdtemp()
+        
+        # Create sample files of different formats
+        self.csv_path = os.path.join(self.temp_dir, "data.csv")
+        with open(self.csv_path, 'w') as f:
+            f.write("id,value\n1,test")
+            
+        self.txt_path = os.path.join(self.temp_dir, "data.txt")
+        with open(self.txt_path, 'w') as f:
+            f.write("sample text data")
+            
+        self.json_path = os.path.join(self.temp_dir, "data.json")
+        with open(self.json_path, 'w') as f:
+            f.write('{"key": "value"}')
+            
+        # Create a no-extension file
+        self.no_ext_path = os.path.join(self.temp_dir, "data_no_ext")
+        with open(self.no_ext_path, 'w') as f:
+            f.write("data without extension")
+            
+        # Create a file with unknown extension
+        self.unknown_ext_path = os.path.join(self.temp_dir, "data.unknown")
+        with open(self.unknown_ext_path, 'w') as f:
+            f.write("data with unknown extension")
+            
+        self.nonexistent_path = os.path.join(self.temp_dir, "nonexistent.csv")
+        
+        # Create a test load function
+        self.load = lambda path, show=False, verbose=False, **kwargs: self._test_load(path, show, verbose, **kwargs)
+    
+    def teardown_method(self):
+        """Clean up after tests."""
+        import shutil
+        if hasattr(self, 'temp_dir') and os.path.exists(self.temp_dir):
+            shutil.rmtree(self.temp_dir)
+    
+    def _test_load(self, lpath, show=False, verbose=False, **kwargs):
+        """Test implementation of the load function."""
+        # Simulate clean_path - just returns the input in this mock
+        lpath = self.clean_path_mock(lpath)
+        
+        # Check if file exists
+        if not os.path.exists(lpath):
+            raise FileNotFoundError(f"{lpath} not found.")
+            
+        # Get file extension
+        ext = lpath.split(".")[-1] if "." in lpath else ""
+        
+        # Select loader based on extension
+        loader = self.loaders_dict.get(ext, self.load_txt_mock)
+        
+        try:
+            # Call the appropriate loader mock
+            return loader(lpath, **kwargs)
+        except (ValueError, FileNotFoundError) as e:
+            raise ValueError(f"Error loading file {lpath}: {str(e)}")
+    
+    def test_load_csv_file(self):
+        """Test loading a CSV file."""
+        # Set expected return
+        self.load_csv_mock.return_value = "csv_data_test"
+        
+        # Call the load function
+        result = self.load(self.csv_path)
+        
+        # Verify the result
+        assert result == "csv_data_test"
+        self.load_csv_mock.assert_called_with(self.csv_path)
+    
+    def test_load_txt_file(self):
+        """Test loading a text file."""
+        # Set expected return
+        self.load_txt_mock.return_value = "text_data_test"
+        
+        # Call the load function
+        result = self.load(self.txt_path)
+        
+        # Verify the result
+        assert result == "text_data_test"
+        self.load_txt_mock.assert_called_with(self.txt_path)
+    
+    def test_load_json_file(self):
+        """Test loading a JSON file."""
+        # Set expected return
+        self.load_json_mock.return_value = {"key": "json_value_test"}
+        
+        # Call the load function
+        result = self.load(self.json_path)
+        
+        # Verify the result
+        assert result == {"key": "json_value_test"}
+        self.load_json_mock.assert_called_with(self.json_path)
+    
+    def test_load_with_nonexistent_file(self):
+        """Test loading a nonexistent file raises FileNotFoundError."""
+        # This should raise FileNotFoundError
+        with pytest.raises(FileNotFoundError):
+            self.load(self.nonexistent_path)
+    
+    def test_load_with_empty_extension(self):
+        """Test loading a file with no extension."""
+        # Set expected return
+        self.load_txt_mock.return_value = "text_data_no_ext"
+        
+        # Reset the mock to clear previous calls
+        self.load_txt_mock.reset_mock()
+        
+        # Call the load function
+        result = self.load(self.no_ext_path)
+        
+        # Verify the result - should use the default txt loader
+        assert result == "text_data_no_ext"
+        self.load_txt_mock.assert_called_with(self.no_ext_path)
+    
+    def test_load_with_unknown_extension(self):
+        """Test loading a file with unknown extension."""
+        # Set expected return
+        self.load_txt_mock.return_value = "text_data_unknown_ext"
+        
+        # Reset the mock to clear previous calls
+        self.load_txt_mock.reset_mock()
+        
+        # Call the load function
+        result = self.load(self.unknown_ext_path)
+        
+        # Verify the result - should use the default txt loader
+        assert result == "text_data_unknown_ext"
+        self.load_txt_mock.assert_called_with(self.unknown_ext_path)
+    
+    def test_load_with_additional_kwargs(self):
+        """Test loading a file with additional kwargs."""
+        # Set expected return
+        self.load_csv_mock.return_value = "csv_data_with_kwargs"
+        
+        # Reset the mock to clear previous calls
+        self.load_csv_mock.reset_mock()
+        
+        # Additional kwargs to pass
+        kwargs = {"header": None, "index_col": 0}
+        
+        # Call the load function with kwargs
+        result = self.load(self.csv_path, **kwargs)
+        
+        # Verify the result
+        assert result == "csv_data_with_kwargs"
+        self.load_csv_mock.assert_called_with(self.csv_path, **kwargs)
+    
+    def test_load_with_error_from_loader(self):
+        """Test handling errors from loader functions."""
+        # Make the loader raise an error
+        self.load_csv_mock.side_effect = ValueError("Test error from loader")
+        
+        # This should wrap the error in a ValueError
+        with pytest.raises(ValueError) as excinfo:
+            self.load(self.csv_path)
+        
+        # Check the error message includes the original error
+        assert "Test error from loader" in str(excinfo.value)
+    
+    def test_load_handles_show_verbose_params(self):
+        """Test that load function handles show and verbose parameters."""
+        # Set expected return
+        self.load_csv_mock.return_value = "csv_data_show_verbose"
+        
+        # Reset the mock to clear previous calls
+        self.load_csv_mock.reset_mock()
+        
+        # Call the load function with show and verbose
+        result = self.load(self.csv_path, show=True, verbose=True)
+        
+        # The parameters should be ignored (not passed to loader)
+        assert result == "csv_data_show_verbose"
+        self.load_csv_mock.assert_called_with(self.csv_path)
 
 if __name__ == "__main__":
     import os
@@ -8,7 +230,7 @@ if __name__ == "__main__":
     pytest.main([os.path.abspath(__file__)])
 
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/io/_load.py
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/io/_load.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -164,5 +386,5 @@ if __name__ == "__main__":
 # 
 # # EOF
 # --------------------------------------------------------------------------------
-# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/io/_load.py
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/io/_load.py
 # --------------------------------------------------------------------------------

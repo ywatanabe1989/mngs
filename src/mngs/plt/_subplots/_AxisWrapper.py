@@ -83,8 +83,10 @@ class AxisWrapper(
                         # For simplicity, just call the original method for now. Tracking needs refinement.
                         # --- Refined Tracking Call (assuming _track exists and works) ---
                         try:
+                            # Convert args to tracked_dict for consistency with other tracking
+                            tracked_dict = {"args": args}
                             self._track(
-                                should_track, id_value, name, args, kwargs
+                                should_track, id_value, name, tracked_dict, kwargs
                             )
                         except AttributeError:
                             warnings.warn(

@@ -39,13 +39,17 @@ class TrackingMixin:
     >>> ax._ax_history = OrderedDict()
     >>> ax.plot([1, 2, 3], [4, 5, 6], id="plot1")
     >>> print(ax.history)
-    {'plot1': ('plot1', 'plot', ([1, 2, 3], [4, 5, 6]), {})}
+    {'plot1': ('plot1', 'plot', {'plot_df': DataFrame, ...}, {})}
     """
 
-    def _track(self, track, id, method_name, args, kwargs):
+    def _track(self, track, id, method_name, tracked_dict, kwargs=None):
         # Extract id from kwargs and remove it before passing to matplotlib
-        if hasattr(kwargs, "get") and "id" in kwargs:
+        if kwargs is not None and hasattr(kwargs, "get") and "id" in kwargs:
             id = kwargs.pop("id")
+        
+        # Default kwargs to empty dict if None
+        if kwargs is None:
+            kwargs = {}
 
         if track is None:
             track = self.track
@@ -53,7 +57,7 @@ class TrackingMixin:
         if track:
             id = id if id is not None else self.id
             self.id += 1
-            self._ax_history[id] = (id, method_name, args, kwargs)
+            self._ax_history[id] = (id, method_name, tracked_dict, kwargs)
 
     @contextmanager
     def _no_tracking(self):
@@ -92,7 +96,7 @@ class TrackingMixin:
     #     track: Optional[bool],
     #     plot_id: Optional[str],
     #     method_name: str,
-    #     args: Any,
+    #     tracked_dict: Any,
     #     kwargs: Dict[str, Any]
     # ) -> None:
     #     """Tracks plotting operation if tracking is enabled."""
@@ -101,7 +105,7 @@ class TrackingMixin:
     #     if track:
     #         plot_id = plot_id if plot_id is not None else self.id
     #         self.id += 1
-    #         self._ax_history[plot_id] = (plot_id, method_name, args, kwargs)
+    #         self._ax_history[plot_id] = (plot_id, method_name, tracked_dict, kwargs)
 
     # @contextmanager
     # def _no_tracking(self) -> None:

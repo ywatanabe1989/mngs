@@ -8,16 +8,16 @@ if __name__ == "__main__":
     pytest.main([os.path.abspath(__file__)])
 
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/_gen_ai/_PARAMS.py
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/_gen_ai/_PARAMS.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Timestamp: "2025-04-27 03:11:57 (ywatanabe)"
-# # File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/PARAMS.py
+# # Timestamp: "2025-05-13 18:50:00 (ywatanabe)"
+# # File: /home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_PARAMS.py
 # # ----------------------------------------
 # import os
 # __FILE__ = (
-#     "./src/mngs/ai/_gen_ai/PARAMS.py"
+#     "./src/mngs/ai/_gen_ai/_PARAMS.py"
 # )
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
@@ -576,6 +576,7 @@ if __name__ == "__main__":
 # # -H 'Authorization: Bearer sk-43412ea536ff482e87a38010231ce7c3'
 # 
 # # EOF
+
 # --------------------------------------------------------------------------------
-# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/_gen_ai/_PARAMS.py
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/_gen_ai/_PARAMS.py
 # --------------------------------------------------------------------------------

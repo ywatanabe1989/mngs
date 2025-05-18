@@ -97,33 +97,58 @@ def test_safe_merge_preserves_types():
     assert result['f'] == (4, 5, 6) and isinstance(result['f'], tuple)
     assert result['g'] is None
 
-
 if __name__ == "__main__":
+    import os
+
+    import pytest
+
     pytest.main([os.path.abspath(__file__)])
 
 # --------------------------------------------------------------------------------
-# Source Code Reference (for maintenance):
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/dict/_safe_merge.py
 # --------------------------------------------------------------------------------
+# #!/usr/bin/env python3
+# # -*- coding: utf-8 -*-
+# # Time-stamp: "ywatanabe (2024-11-03 00:47:50)"
+# # File: ./mngs_repo/src/mngs/dict/_safe_merge.py
+# 
+# """
+# Functionality:
+#     - Safely merges multiple dictionaries without overlapping keys
+# Input:
+#     - Multiple dictionaries to be merged
+# Output:
+#     - A single merged dictionary
+# Prerequisites:
+#     - mngs.gen package with search function
+# """
+# 
+# from typing import Any as _Any
+# from typing import Dict
+# 
+# from ..utils import search
+# 
+# 
 # def safe_merge(*dicts: Dict[_Any, _Any]) -> Dict[_Any, _Any]:
 #     """Merges dictionaries while checking for key conflicts.
-#
+# 
 #     Example
 #     -------
 #     >>> dict1 = {'a': 1, 'b': 2}
 #     >>> dict2 = {'c': 3, 'd': 4}
 #     >>> safe_merge(dict1, dict2)
 #     {'a': 1, 'b': 2, 'c': 3, 'd': 4}
-#
+# 
 #     Parameters
 #     ----------
 #     *dicts : Dict[_Any, _Any]
 #         Variable number of dictionaries to merge
-#
+# 
 #     Returns
 #     -------
 #     Dict[_Any, _Any]
 #         Merged dictionary
-#
+# 
 #     Raises
 #     ------
 #     ValueError
@@ -141,3 +166,10 @@ if __name__ == "__main__":
 #         return merged_dict
 #     except Exception as error:
 #         raise ValueError(f"Dictionary merge failed: {str(error)}")
+# 
+# 
+# # EOF
+
+# --------------------------------------------------------------------------------
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/dict/_safe_merge.py
+# --------------------------------------------------------------------------------

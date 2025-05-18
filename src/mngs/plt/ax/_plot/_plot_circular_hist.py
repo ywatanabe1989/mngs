@@ -13,6 +13,7 @@ __DIR__ = os.path.dirname(__FILE__)
 # Time-stamp: "2024-02-03 13:10:50 (ywatanabe)"
 import matplotlib
 import numpy as np
+from ....plt.utils import assert_valid_axis
 
 
 def plot_circular_hist(
@@ -33,7 +34,7 @@ def plot_circular_hist(
 
     Parameters
     ----------
-    ax : matplotlib.axes._subplots.PolarAxesSubplot
+    ax : matplotlib.axes._subplots.PolarAxesSubplot or mngs.plt._subplots.AxisWrapper
         axis instance created with subplot_kw=dict(projection='polar').
 
     radians : array
@@ -66,9 +67,7 @@ def plot_circular_hist(
         Container of individual artists used to create the histogram
         or list of such containers if there are multiple input datasets.
     """
-    assert isinstance(
-        axis, matplotlib.axes._axes.Axes
-    ), "First argument must be a matplotlib axis"
+    assert_valid_axis(axis, "First argument must be a matplotlib axis or mngs axis wrapper")
 
     # Wrap angles to [-pi, pi)
     radians = (radians + np.pi) % (2 * np.pi) - np.pi
