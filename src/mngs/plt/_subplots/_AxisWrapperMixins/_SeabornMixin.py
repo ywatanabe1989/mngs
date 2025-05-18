@@ -175,11 +175,90 @@ class SeabornMixin:
 
     @sns_copy_doc
     def sns_histplot(
-        self, data=None, x=None, y=None, track=True, id=None, **kwargs
+        self, data=None, x=None, y=None, bins=10, align_bins=True, track=True, id=None, **kwargs
     ):
-        self._sns_base_xyhue(
-            "sns_histplot", data=data, x=x, y=y, track=track, id=id, **kwargs
-        )
+        """
+        Plot a histogram using seaborn with bin alignment support.
+        
+        This method enhances the seaborn histplot with the ability to align
+        bins across multiple histograms on the same axis and export bin data.
+        
+        Args:
+            data: Input data (DataFrame, array, or series)
+            x: Column name for x-axis data
+            y: Column name for y-axis data
+            bins: Bin specification (count or edges)
+            align_bins: Whether to align bins with other histograms on this axis
+            track: Whether to track this operation
+            id: Identifier for tracking
+            **kwargs: Additional keywords passed to seaborn histplot
+        """
+        # Method Name for downstream csv exporting
+        method_name = "sns_histplot"
+        
+        # Get the data to plot for bin alignment
+        plot_data = None
+        if data is not None and x is not None:
+            plot_data = data[x].values if hasattr(data, 'columns') and x in data.columns else None
+        
+        # Get axis and histogram IDs for bin alignment
+        axis_id = str(hash(self._axis_mpl))
+        hist_id = id if id is not None else str(self.id)
+        
+        # Calculate range from data if needed
+        range_value = kwargs.get('binrange', None)
+        
+        # Align bins if requested and data is available
+        if align_bins and plot_data is not None:
+            from ....plt.utils import histogram_bin_manager
+            bins_val, range_val = histogram_bin_manager.register_histogram(
+                axis_id, hist_id, plot_data, bins, range_value
+            )
+            
+            # Update bins in kwargs
+            kwargs['bins'] = bins_val
+            
+            # Update range in kwargs if it was provided
+            if range_value is not None:
+                kwargs['binrange'] = range_val
+        
+        # Plotting with seaborn
+        with self._no_tracking():
+            # Execute the seaborn histplot function
+            # Don't pass bins as a separate parameter since it may already be in kwargs
+            sns_plot = sns.histplot(data=data, x=x, y=y, ax=self._axis_mpl, **kwargs)
+            
+            # Extract bin information from the plotted artists
+            hist_result = None
+            if hasattr(sns_plot, 'patches') and sns_plot.patches:
+                # Get bin information from the plot patches
+                patches = sns_plot.patches
+                if patches:
+                    counts = np.array([p.get_height() for p in patches])
+                    # Extract bin edges from patch positions
+                    bin_edges = []
+                    for p in patches:
+                        bin_edges.append(p.get_x())
+                    # Add the rightmost edge
+                    if patches:
+                        bin_edges.append(patches[-1].get_x() + patches[-1].get_width())
+                        
+                    hist_result = (counts, np.array(bin_edges))
+        
+        # Create a track object for the formatter
+        track_obj = self._sns_prepare_xyhue(data, x, y, kwargs.get("hue"))
+        
+        # Enhanced tracked dict with histogram result
+        tracked_dict = {
+            'data': track_obj,
+            'args': (data, x, y),
+            'hist_result': hist_result
+        }
+        
+        # Track the operation
+        self._track(track, id, method_name, tracked_dict, kwargs)
+        
+        return sns_plot
 
     @sns_copy_doc
     def sns_kdeplot(
