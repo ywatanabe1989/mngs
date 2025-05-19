@@ -64,22 +64,34 @@ def export_as_csv(history_records):
     """
     if len(history_records) <= 0:
         warnings.warn("Plotting records not found. Cannot export empty data.")
-        return
+        return pd.DataFrame()  # Return empty DataFrame instead of None
 
-    dfs = [format_record(record) for record in list(history_records.values())]
-
-    if all(df.empty for df in dfs):
-        raise ValueError(
-            "All records resulted in empty dataframes. Cannot export data."
-        )
+    dfs = []
+    for record in list(history_records.values()):
+        try:
+            formatted_df = format_record(record)
+            if formatted_df is not None and not formatted_df.empty:
+                dfs.append(formatted_df)
+        except Exception as e:
+            warnings.warn(f"Failed to format record {record[0]}: {e}")
+    
+    # If no valid dataframes were created, return an empty one
+    if not dfs:
+        warnings.warn("No valid data found to export.")
+        return pd.DataFrame()
 
     try:
         df = pd.concat(dfs, axis=1)
         return df
     except Exception as e:
-        raise ValueError(
-            f"Failed to combine plotting records into a dataframe: {e}"
-        )
+        warnings.warn(f"Failed to combine plotting records: {e}")
+        # Return a DataFrame with metadata about what records were attempted
+        meta_df = pd.DataFrame({
+            "record_id": [r[0] for r in history_records.values()],
+            "method": [r[1] for r in history_records.values()],
+            "has_data": ["Yes" if r[2] and r[2] != {} else "No" for r in history_records.values()]
+        })
+        return meta_df
 
 
 def format_record(record):

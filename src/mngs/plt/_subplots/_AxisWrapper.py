@@ -23,7 +23,13 @@ class AxisWrapper(
     MatplotlibPlotMixin, SeabornMixin, AdjustmentMixin, TrackingMixin
 ):
     def __init__(self, fig_mngs, axis_mpl, track):
-
+        """Initialize the AxisWrapper.
+        
+        Args:
+            fig_mngs: Parent figure wrapper
+            axis_mpl: Matplotlib axis to wrap
+            track: Whether to track plotting operations
+        """
         self._fig_mpl = fig_mngs._fig_mpl
         # Axis Properties
         # self.axis = axis_mpl
@@ -37,7 +43,9 @@ class AxisWrapper(
         self._axes_mpl = axis_mpl
         # self._axes_mngs = self
 
+        # Tracking properties
         self._ax_history = {}
+        self._method_counters = {}  # Track method counts for auto-generated IDs
         self.track = track
         self.id = 0
         self._counter_part = matplotlib.axes.Axes
@@ -140,6 +148,22 @@ class AxisWrapper(
         attrs.update(object.__dir__(self))
         attrs.update(dir(self._axes_mpl))
         return sorted(attrs)
+        
+    def flatten(self):
+        """Return a list containing just this axis.
+        
+        This method makes AxisWrapper compatible with code that calls flatten()
+        on an axes collection. It returns a list containing just this single axis
+        to maintain consistency with AxesWrapper.flatten().
+        
+        Returns:
+            list: A list containing this axis wrapper
+            
+        Example:
+            # When working with either AxesWrapper or AxisWrapper, this works:
+            axes_list = list(axes.flatten())
+        """
+        return [self]
 
 
 """

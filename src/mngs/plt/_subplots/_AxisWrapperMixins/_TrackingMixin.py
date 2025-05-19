@@ -43,6 +43,15 @@ class TrackingMixin:
     """
 
     def _track(self, track, id, method_name, tracked_dict, kwargs=None):
+        """Track plotting operation with auto-generated IDs.
+        
+        Args:
+            track: Whether to track this operation
+            id: Identifier for the plot (can be None)
+            method_name: Name of the plotting method
+            tracked_dict: Dictionary of tracked data
+            kwargs: Original keyword arguments
+        """
         # Extract id from kwargs and remove it before passing to matplotlib
         if kwargs is not None and hasattr(kwargs, "get") and "id" in kwargs:
             id = kwargs.pop("id")
@@ -55,8 +64,23 @@ class TrackingMixin:
             track = self.track
 
         if track:
-            id = id if id is not None else self.id
+            # If no ID was provided, generate one using method_name + counter
+            if id is None:
+                # Initialize method counters if not exist
+                if not hasattr(self, '_method_counters'):
+                    self._method_counters = {}
+                
+                # Get current counter value for this method and increment it
+                counter = self._method_counters.get(method_name, 0)
+                self._method_counters[method_name] = counter + 1
+                
+                # Format ID as method_name_counter (e.g., bar_1, plot_3)
+                id = f"{method_name}_{counter}"
+            
+            # For backward compatibility
             self.id += 1
+            
+            # Store the tracking record
             self._ax_history[id] = (id, method_name, tracked_dict, kwargs)
 
     @contextmanager
