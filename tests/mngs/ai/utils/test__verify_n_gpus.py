@@ -8,7 +8,7 @@ if __name__ == "__main__":
     pytest.main([os.path.abspath(__file__)])
 
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/utils/_verify_n_gpus.py
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/utils/_verify_n_gpus.py
 # --------------------------------------------------------------------------------
 # import torch
 # import warnings
@@ -27,5 +27,5 @@ if __name__ == "__main__":
 #         return n_gpus
 
 # --------------------------------------------------------------------------------
-# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/utils/_verify_n_gpus.py
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/utils/_verify_n_gpus.py
 # --------------------------------------------------------------------------------

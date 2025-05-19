@@ -8,7 +8,7 @@ if __name__ == "__main__":
     pytest.main([os.path.abspath(__file__)])
 
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/stats/tests/_smirnov_grubbs.py
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/stats/tests/_smirnov_grubbs.py
 # --------------------------------------------------------------------------------
 # import numpy as np
 # from scipy import stats
@@ -110,5 +110,5 @@ if __name__ == "__main__":
 # #         return np.array(indi_outliers).squeeze()
 
 # --------------------------------------------------------------------------------
-# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/stats/tests/_smirnov_grubbs.py
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/stats/tests/_smirnov_grubbs.py
 # --------------------------------------------------------------------------------

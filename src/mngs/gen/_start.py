@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-01 23:44:56 (ywatanabe)"
-# File: /home/ywatanabe/proj/_mngs_repo/src/mngs/gen/_start.py
+# Timestamp: "2025-05-19 09:02:56 (ywatanabe)"
+# File: /ssh:ywatanabe@sp:/home/ywatanabe/proj/mngs_repo/src/mngs/gen/_start.py
 # ----------------------------------------
 import os
 __FILE__ = (
@@ -271,15 +271,15 @@ def start(
     if sdir is None:
         # Define __file__
         if file:
-            THIS_FILE = file
+            caller_file = file
         else:
-            THIS_FILE = inspect.stack()[1].filename
+            caller_file = inspect.stack()[1].filename
             if "ipython" in __file__:
-                THIS_FILE = f"/tmp/{_os.getenv('USER')}.py"
+                caller_file = f"/tmp/{_os.getenv('USER')}.py"
 
         # Define sdir
         sdir = clean_path(
-            _os.path.splitext(__file__)[0] + f"_out/RUNNING/{ID}/"
+            _os.path.splitext(caller_file)[0] + f"_out/RUNNING/{ID}/"
         )
 
         # Optional
@@ -287,7 +287,7 @@ def start(
             sdir = sdir[:-1] + f"-{sdir_suffix}/"
 
     if clear_logs:
-        _clear_python_log_dir(_sdir + sfname + "/")
+        _clear_python_log_dir(sdir + caller_file + "/")
     _os.makedirs(sdir, exist_ok=True)
     relative_sdir = _simplify_relative_path(sdir)
     ########################################

@@ -794,3 +794,6 @@ flycheck_*.el
 
 # network security
 /network-security.data
+/home/ywatanabe/.local
+
+**/.claude/settings.local.json

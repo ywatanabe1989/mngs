@@ -18,10 +18,11 @@ import pandas as pd
 from matplotlib.axes._axes import Axes
 
 from ....types import ColorLike
+from ....plt.utils import assert_valid_axis
 
 
 def _plot_single_shaded_line(
-    axis: Axes,
+    axis: Union[Axes, 'AxisWrapper'],
     xx: np.ndarray,
     y_lower: np.ndarray,
     y_middle: np.ndarray,
@@ -29,11 +30,9 @@ def _plot_single_shaded_line(
     color: Optional[ColorLike] = None,
     alpha: float = 0.3,
     **kwargs
-) -> Tuple[Axes, pd.DataFrame]:
+) -> Tuple[Union[Axes, 'AxisWrapper'], pd.DataFrame]:
     """Plot a line with shaded area between y_lower and y_upper bounds."""
-    assert isinstance(
-        axis, matplotlib.axes._axes.Axes
-    ), "First argument must be a matplotlib axis"
+    assert_valid_axis(axis, "First argument must be a matplotlib axis or mngs axis wrapper")
     assert (
         len(xx) == len(y_middle) == len(y_lower) == len(y_upper)
     ), "All arrays must have the same length"
@@ -52,18 +51,16 @@ def _plot_single_shaded_line(
 
 
 def _plot_shaded_line(
-    axis: Axes,
+    axis: Union[Axes, 'AxisWrapper'],
     xs: List[np.ndarray],
     ys_lower: List[np.ndarray],
     ys_middle: List[np.ndarray],
     ys_upper: List[np.ndarray],
     color: Optional[Union[List[ColorLike], ColorLike]] = None,
     **kwargs
-) -> Tuple[Axes, List[pd.DataFrame]]:
+) -> Tuple[Union[Axes, 'AxisWrapper'], List[pd.DataFrame]]:
     """Plot multiple lines with shaded areas between ys_lower and ys_upper bounds."""
-    assert isinstance(
-        axis, matplotlib.axes._axes.Axes
-    ), "First argument must be a matplotlib axis"
+    assert_valid_axis(axis, "First argument must be a matplotlib axis or mngs axis wrapper")
     assert (
         len(xs) == len(ys_lower) == len(ys_middle) == len(ys_upper)
     ), "All input lists must have the same length"
@@ -84,8 +81,6 @@ def _plot_shaded_line(
         for idx, (xx, y_lower, y_middle, y_upper) in enumerate(
             zip(xs, ys_lower, ys_middle, ys_upper)
         ):
-            print(this_kwargs)
-            __import__("ipdb").set_trace()
             this_kwargs = kwargs.copy()
             this_kwargs["color"] = color_list[idx]
             _, result_df = _plot_single_shaded_line(
@@ -105,19 +100,19 @@ def _plot_shaded_line(
 
 
 def plot_shaded_line(
-    axis: Axes,
+    axis: Union[Axes, 'AxisWrapper'],
     xs: Union[np.ndarray, List[np.ndarray]],
     ys_lower: Union[np.ndarray, List[np.ndarray]],
     ys_middle: Union[np.ndarray, List[np.ndarray]],
     ys_upper: Union[np.ndarray, List[np.ndarray]],
     color: Optional[Union[ColorLike, List[ColorLike]]] = None,
     **kwargs
-) -> Tuple[Axes, Union[pd.DataFrame, List[pd.DataFrame]]]:
+) -> Tuple[Union[Axes, 'AxisWrapper'], Union[pd.DataFrame, List[pd.DataFrame]]]:
     """
     Plot a line with shaded area, automatically switching between single and multiple line versions.
 
     Args:
-        axis: matplotlib axis
+        axis: matplotlib axis or mngs axis wrapper
         xs: x values (single array or list of arrays)
         ys_lower: lower bound y values (single array or list of arrays)
         ys_middle: middle y values (single array or list of arrays)
@@ -144,8 +139,8 @@ def plot_shaded_line(
             axis, xs, ys_lower, ys_middle, ys_upper, color=color, **kwargs
         )
     else:
-        return _plot_shaded_lines(
-            axis, xs, ys_lower, ys_middle, ys_upper, colors=color, **kwargs
+        return _plot_shaded_line(
+            axis, xs, ys_lower, ys_middle, ys_upper, color=color, **kwargs
         )
 
 # EOF

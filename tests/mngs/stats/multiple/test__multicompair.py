@@ -8,7 +8,7 @@ if __name__ == "__main__":
     pytest.main([os.path.abspath(__file__)])
 
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/stats/multiple/_multicompair.py
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/stats/multiple/_multicompair.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # 
@@ -40,5 +40,5 @@ if __name__ == "__main__":
 # # H_statistic, p_value = scipy.stats.kruskal(*data) # one-way ANOVA on RANKs
 
 # --------------------------------------------------------------------------------
-# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/stats/multiple/_multicompair.py
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/stats/multiple/_multicompair.py
 # --------------------------------------------------------------------------------

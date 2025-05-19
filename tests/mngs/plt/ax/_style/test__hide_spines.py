@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-02 09:02:42 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/ax/_adjust/test__hide_spines.py
+# Timestamp: "2025-05-18 16:30:42 (ywatanabe)"
+# File: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/ax/_style/test__hide_spines.py
 # ----------------------------------------
 import os
 __FILE__ = (
-    "./tests/mngs/plt/ax/_adjust/test__hide_spines.py"
+    "./tests/mngs/plt/ax/_style/test__hide_spines.py"
 )
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
 import matplotlib.pyplot as plt
-from mngs.plt.ax._style._hide_spines import hide_spines
+import sys
+
+# Add the project root to the Python path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../../")))
+from src.mngs.plt.ax._style._hide_spines import hide_spines
 
 
 class TestMainFunctionality:
@@ -135,7 +139,7 @@ if __name__ == "__main__":
     pytest.main([os.path.abspath(__file__)])
 
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/ax/_style/_hide_spines.py
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/plt/ax/_style/_hide_spines.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -223,5 +227,5 @@ if __name__ == "__main__":
 # 
 # # EOF
 # --------------------------------------------------------------------------------
-# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/ax/_style/_hide_spines.py
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/plt/ax/_style/_hide_spines.py
 # --------------------------------------------------------------------------------

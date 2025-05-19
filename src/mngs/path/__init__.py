@@ -28,7 +28,7 @@ del os, importlib, inspect, current_dir, filename, module_name, module, name, ob
 # from ._find import find_dir, find_file, find_git_root
 # from ._path import file_size, spath, split, this_path
 # from ._version import find_latest, increment_version
-# from ._clean import clean
+from ._clean import clean
 
 
 # EOF
