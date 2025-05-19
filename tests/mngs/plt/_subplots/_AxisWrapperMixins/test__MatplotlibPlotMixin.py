@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-02 21:43:16 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py
+# Timestamp: "2025-05-18 16:32:43 (ywatanabe)"
+# File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py
 # ----------------------------------------
 import os
 __FILE__ = (
@@ -13,20 +13,24 @@ __DIR__ = os.path.dirname(__FILE__)
 import matplotlib
 import mngs
 import numpy as np
+from mngs.plt import subplots  # Import from the public API
 
 matplotlib.use("agg")
 
 ACTUAL_SAVE_DIR = __file__.replace(".py", "_out")
+os.makedirs(ACTUAL_SAVE_DIR, exist_ok=True)
 
 
 def test_plot_image():
     """Test plot_image function"""
     # Figure
-    fig, ax = mngs.plt.subplots()
+    fig, ax = subplots()
     # Data
     data = np.random.randn(20, 20)
-    # Plot
-    ax.plot_image(data, cmap="viridis", interpolation="nearest")
+    # Plot - add ID for tracking
+    ax.plot_image(
+        data, cmap="viridis", interpolation="nearest", id="image_test"
+    )
     # Visualization
     ax.set_xyt("X", "Y", "Plot_Image Test")
     # Saving
@@ -34,19 +38,22 @@ def test_plot_image():
     mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
-    # Assertion
+    # Assertion for PNG
     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+    # Assertion for CSV
+    csv_spath = actual_spath.replace(".png", ".csv")
+    assert os.path.exists(csv_spath), f"Failed to save CSV data to {csv_spath}"
 
 
 def test_plot_image_xyz():
     """Test plot_image with xyz=True"""
     # Figure
-    fig, ax = mngs.plt.subplots()
+    fig, ax = subplots()
     # Data
     data = np.random.randn(20, 20)
-    # Plot
-    ax.plot_image(data, xyz=True, cmap="plasma")
+    # Plot - add ID for tracking
+    ax.plot_image(data, xyz=True, cmap="plasma", id="image_xyz_test")
     # Visualization
     ax.set_xyt("X", "Y", "Plot_Image with XYZ Test")
     # Saving
@@ -54,21 +61,24 @@ def test_plot_image_xyz():
     mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
-    # Assertion
+    # Assertion for PNG
     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+    # Assertion for CSV
+    csv_spath = actual_spath.replace(".png", ".csv")
+    assert os.path.exists(csv_spath), f"Failed to save CSV data to {csv_spath}"
 
 
 def test_plot_kde():
     """Test plot_kde function"""
     # Figure
-    fig, ax = mngs.plt.subplots()
+    fig, ax = subplots()
     # Data
     data = np.concatenate(
         [np.random.normal(0, 1, 500), np.random.normal(5, 1, 300)]
     )
-    # Plot
-    ax.plot_kde(data, label="Bimodal Distribution", fill=True)
+    # Plot - add ID for tracking
+    ax.plot_kde(data, label="Bimodal Distribution", fill=True, id="kde_test")
     # Visualization
     ax.set_xyt("Value", "Density", "PLOT_KDE Test")
     ax.legend()
@@ -77,19 +87,27 @@ def test_plot_kde():
     mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
-    # Assertion
+    # Assertion for PNG
     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+    # Assertion for CSV
+    csv_spath = actual_spath.replace(".png", ".csv")
+    assert os.path.exists(csv_spath), f"Failed to save CSV data to {csv_spath}"
 
 
 def test_plot_kde_cumulative():
     """Test plot_kde function with cumulative=True"""
     # Figure
-    fig, ax = mngs.plt.subplots()
+    fig, ax = subplots()
     # Data
     data = np.random.normal(0, 1, 1000)
-    # Plot
-    ax.plot_kde(data, label="Normal Distribution", cumulative=True)
+    # Plot - add ID for tracking
+    ax.plot_kde(
+        data,
+        label="Normal Distribution",
+        cumulative=True,
+        id="kde_cumulative_test",
+    )
     # Visualization
     ax.set_xyt("Value", "Cumulative Density", "Cumulative PLOT_KDE Test")
     ax.legend()
@@ -98,48 +116,69 @@ def test_plot_kde_cumulative():
     mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
-    # Assertion
+    # Assertion for PNG
     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+    # Assertion for CSV
+    csv_spath = actual_spath.replace(".png", ".csv")
+    assert os.path.exists(csv_spath), f"Failed to save CSV data to {csv_spath}"
 
 
 def test_plot_conf_mat():
     """Test plot_conf_mat function"""
     # Figure
-    fig, ax = mngs.plt.subplots()
+    fig, ax = subplots()
     # Data
     cm = np.array([[85, 10, 5], [15, 70, 15], [10, 20, 70]])
     class_labels = ["Class A", "Class B", "Class C"]
-    # Plot
+    # Plot - add ID for tracking
     ax.plot_conf_mat(
         cm,
         x_labels=class_labels,
         y_labels=class_labels,
         title="Confusion Matrix Test",
         calc_bacc=True,
+        id="conf_mat_test",
     )
     # Saving
     spath = f"./plot_conf_mat_test.png"
     mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
-    # Assertion
+    # Assertion for PNG
     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+    # Assertion for CSV
+    csv_spath = actual_spath.replace(".png", ".csv")
+    assert os.path.exists(csv_spath), f"Failed to save CSV data to {csv_spath}"
 
 
 def test_plot_rectangle():
     """Test plot_rectangle function"""
     # Figure
-    fig, ax = mngs.plt.subplots()
+    fig, ax = subplots()
     # Data
     x = np.linspace(0, 10, 100)
-    # Add rectangles
+    # Add rectangles - add IDs for tracking
     ax.plot_rectangle(
-        2, 0, 2, 0.5, color="red", alpha=0.3, label="Highlight Region 1"
+        2,
+        0,
+        2,
+        0.5,
+        color="red",
+        alpha=0.3,
+        label="Highlight Region 1",
+        id="rectangle_1_test",
     )
     ax.plot_rectangle(
-        6, -0.5, 2, 0.5, color="blue", alpha=0.3, label="Highlight Region 2"
+        6,
+        -0.5,
+        2,
+        0.5,
+        color="blue",
+        alpha=0.3,
+        label="Highlight Region 2",
+        id="rectangle_2_test",
     )
     # Visualization
     ax.set_xyt("X axis", "Y axis", "Plot_Rectangle Test")
@@ -149,20 +188,23 @@ def test_plot_rectangle():
     mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
-    # Assertion
+    # Assertion for PNG
     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+    # Assertion for CSV
+    csv_spath = actual_spath.replace(".png", ".csv")
+    assert os.path.exists(csv_spath), f"Failed to save CSV data to {csv_spath}"
 
 
 def test_plot_fillv():
     """Test plot_fillv function"""
     # Figure
-    fig, ax = mngs.plt.subplots()
+    fig, ax = subplots()
     # Data
     x = np.linspace(0, 10, 100)
     y = np.sin(x)
-    # Add vertical shaded regions
-    ax.plot_fillv([2, 6], [4, 8], color="green", alpha=0.3)
+    # Add vertical shaded regions - add ID for tracking
+    ax.plot_fillv([2, 6], [4, 8], color="green", alpha=0.3, id="fillv_test")
     # Visualization
     ax.set_xyt("X axis", "Y axis", "Plot_Fillv Test")
     # Saving
@@ -170,23 +212,26 @@ def test_plot_fillv():
     mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
-    # Assertion
+    # Assertion for PNG
     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+    # Assertion for CSV
+    csv_spath = actual_spath.replace(".png", ".csv")
+    assert os.path.exists(csv_spath), f"Failed to save CSV data to {csv_spath}"
 
 
 def test_plot_box():
     """Test plot_box function"""
     # Figure
-    fig, ax = mngs.plt.subplots()
+    fig, ax = subplots()
     # Data
     data = [
         np.random.normal(0, 1, 100),
         np.random.normal(2, 1.5, 100),
         np.random.normal(5, 0.8, 100),
     ]
-    # Plot
-    ax.plot_box(data, labels=["Group A", "Group B", "Group C"])
+    # Plot - add ID for tracking
+    ax.plot_box(data, labels=["Group A", "Group B", "Group C"], id="box_test")
     # Visualization
     ax.set_xyt("Groups", "Values", "Plot_Box Test")
     # Saving
@@ -194,15 +239,18 @@ def test_plot_box():
     mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
-    # Assertion
+    # Assertion for PNG
     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+    # Assertion for CSV
+    csv_spath = actual_spath.replace(".png", ".csv")
+    assert os.path.exists(csv_spath), f"Failed to save CSV data to {csv_spath}"
 
 
 def test_plot_raster():
     """Test plot_raster function"""
     # Figure
-    fig, ax = mngs.plt.subplots()
+    fig, ax = subplots()
     # Data - sample spike train data
     n_neurons = 5
     t_max = 100
@@ -212,8 +260,8 @@ def test_plot_raster():
         for _ in range(n_neurons)
     ]
     labels = [f"Neuron {ii+1}" for ii in range(n_neurons)]
-    # Plot
-    ax.plot_raster(positions, labels=labels)
+    # Plot - add ID for tracking
+    ax.plot_raster(positions, labels=labels, id="raster_test")
     # Visualization
     ax.set_xyt("Time (ms)", "Neuron", "Plot_Raster Plot Test")
     # Saving
@@ -221,19 +269,24 @@ def test_plot_raster():
     mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
-    # Assertion
+    # Assertion for PNG
     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+    # Assertion for CSV
+    csv_spath = actual_spath.replace(".png", ".csv")
+    assert os.path.exists(csv_spath), f"Failed to save CSV data to {csv_spath}"
 
 
 def test_plot_ecdf():
     """Test plot_ecdf function"""
     # Figure
-    fig, ax = mngs.plt.subplots()
+    fig, ax = subplots()
     # Data
     data = np.random.normal(0, 1, 1000)
     # Plot
-    ax.plot_ecdf(data, label="Normal Distribution PLOT_ECDF")
+    ax.plot_ecdf(
+        data, label="Normal Distribution PLOT_ECDF", id="plot_ecdf_id"
+    )
     # Visualization
     ax.set_xyt("Value", "Cumulative Probability", "PLOT_ECDF Test")
     ax.legend()
@@ -242,15 +295,18 @@ def test_plot_ecdf():
     mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
-    # Assertion
+    # Assertion for PNG
     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+    # Assertion for CSV
+    csv_spath = actual_spath.replace(".png", ".csv")
+    assert os.path.exists(csv_spath), f"Failed to save CSV data to {csv_spath}"
 
 
 def test_plot_joyplot():
     """Test plot_joyplot function"""
     # Figure
-    fig, ax = mngs.plt.subplots()
+    fig, ax = subplots()
     # Data for multiple distributions
     data = {
         "Group A": np.random.normal(0, 1, 500),
@@ -259,7 +315,7 @@ def test_plot_joyplot():
         "Group D": np.random.normal(8, 2, 500),
     }
     # Plot
-    ax.plot_joyplot(data)
+    ax.plot_joyplot(data, id="plot_joyplot_id")
     # Visualization
     ax.set_xyt("Value", "", "Plot_Joyplot Test")
     # Saving
@@ -267,22 +323,25 @@ def test_plot_joyplot():
     mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
-    # Assertion
+    # Assertion for PNG
     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+    # Assertion for CSV
+    csv_spath = actual_spath.replace(".png", ".csv")
+    assert os.path.exists(csv_spath), f"Failed to save CSV data to {csv_spath}"
 
 
 def test_plot_line():
     """Test plot_line function"""
     # Figure
-    fig, ax = mngs.plt.subplots()
+    fig, ax = subplots()
 
     # Data
     x = np.linspace(0, 10, 100)
     y = np.sin(x)
 
     # Plot
-    ax.plot_line(y, label="Sine Wave")
+    ax.plot_line(y, label="Sine Wave", id="plot_line_id")
 
     # Visualization
     ax.set_xyt("X", "Y", "Plot_Line Test")
@@ -295,9 +354,12 @@ def test_plot_line():
     # Closing
     mngs.plt.close(fig)
 
-    # Assertion
+    # Assertion for PNG
     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+    # Assertion for CSV
+    csv_spath = actual_spath.replace(".png", ".csv")
+    assert os.path.exists(csv_spath), f"Failed to save CSV data to {csv_spath}"
 
 
 def test_plot_scatter_hist():
@@ -310,7 +372,9 @@ def test_plot_scatter_hist():
     y = x + np.random.normal(0, 0.5, 500)
 
     # Plot
-    ax.plot_scatter_hist(x, y, hist_bins=30, scatter_alpha=0.7)
+    ax.plot_scatter_hist(
+        x, y, hist_bins=30, scatter_alpha=0.7, id="plot_scatter_hist_id"
+    )
 
     # Visualization
     ax.set_xyt("X Values", "Y Values", "Plot_Scatter_Hist Test")
@@ -322,15 +386,18 @@ def test_plot_scatter_hist():
     # Closing
     mngs.plt.close(fig)
 
-    # Assertion
+    # Assertion for PNG
     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+    # Assertion for CSV
+    csv_spath = actual_spath.replace(".png", ".csv")
+    assert os.path.exists(csv_spath), f"Failed to save CSV data to {csv_spath}"
 
 
 def test_plot_heatmap():
     """Test plot_heatmap function"""
     # Figure
-    fig, ax = mngs.plt.subplots()
+    fig, ax = subplots()
 
     # Data
     data = np.random.rand(5, 10)
@@ -348,6 +415,7 @@ def test_plot_heatmap():
         cmap="viridis",
         annot_color_lighter="white",
         annot_color_darker="dimgray",
+        id="plot_heatmap_id",
     )
 
     # Visualization
@@ -360,15 +428,18 @@ def test_plot_heatmap():
     # Closing
     mngs.plt.close(fig)
 
-    # Assertion
+    # Assertion for PNG
     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+    # Assertion for CSV
+    csv_spath = actual_spath.replace(".png", ".csv")
+    assert os.path.exists(csv_spath), f"Failed to save CSV data to {csv_spath}"
 
 
 def test_plot_violin():
     """Test plot_violin function"""
     # Figure
-    fig, ax = mngs.plt.subplots()
+    fig, ax = subplots()
 
     # Test with list data
     data_list = [
@@ -380,7 +451,11 @@ def test_plot_violin():
 
     # Plot traditional violin
     ax.plot_violin(
-        data_list, labels=labels, colors=["red", "blue", "green"], half=True
+        data_list,
+        labels=labels,
+        colors=["red", "blue", "green"],
+        half=True,
+        id="plot_violin_id",
     )
 
     # Visualization
@@ -393,22 +468,25 @@ def test_plot_violin():
     # Closing
     mngs.plt.close(fig)
 
-    # Assertion
+    # Assertion for PNG
     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+    # Assertion for CSV
+    csv_spath = actual_spath.replace(".png", ".csv")
+    assert os.path.exists(csv_spath), f"Failed to save CSV data to {csv_spath}"
 
 
 def test_plot_mean_std():
     """Test plot_mean_std function"""
     # Figure
-    fig, ax = mngs.plt.subplots()
+    fig, ax = subplots()
 
     # Data
     np.random.seed(42)
     data = np.random.normal(0, 1, (20, 100))  # 20 samples, 100 time points
 
     # Plot
-    ax.plot_mean_std(data, label="Mean±SD", sd=1)
+    ax.plot_mean_std(data, label="Mean±SD", sd=1, id="plot_mean_std_id")
 
     # Visualization
     ax.set_xyt("Time", "Value", "Plot_Mean_Std Test")
@@ -421,22 +499,25 @@ def test_plot_mean_std():
     # Closing
     mngs.plt.close(fig)
 
-    # Assertion
+    # Assertion for PNG
     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+    # Assertion for CSV
+    csv_spath = actual_spath.replace(".png", ".csv")
+    assert os.path.exists(csv_spath), f"Failed to save CSV data to {csv_spath}"
 
 
 def test_plot_mean_ci():
     """Test plot_mean_ci function"""
     # Figure
-    fig, ax = mngs.plt.subplots()
+    fig, ax = subplots()
 
     # Data
     np.random.seed(42)
     data = np.random.normal(0, 1, (20, 100))  # 20 samples, 100 time points
 
     # Plot
-    ax.plot_mean_ci(data, label="Mean with CI", perc=95)
+    ax.plot_mean_ci(data, label="Mean with CI", perc=95, id="plot_mean_ci_id")
 
     # Visualization
     ax.set_xyt("Time", "Value", "Plot_Mean_CI Test")
@@ -449,22 +530,25 @@ def test_plot_mean_ci():
     # Closing
     mngs.plt.close(fig)
 
-    # Assertion
+    # Assertion for PNG
     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+    # Assertion for CSV
+    csv_spath = actual_spath.replace(".png", ".csv")
+    assert os.path.exists(csv_spath), f"Failed to save CSV data to {csv_spath}"
 
 
 def test_plot_median_iqr():
     """Test plot_median_iqr function"""
     # Figure
-    fig, ax = mngs.plt.subplots()
+    fig, ax = subplots()
 
     # Data
     np.random.seed(42)
     data = np.random.normal(0, 1, (20, 100))  # 20 samples, 100 time points
 
     # Plot
-    ax.plot_median_iqr(data, label="Median with IQR")
+    ax.plot_median_iqr(data, label="Median with IQR", id="plot_median_iqr_id")
 
     # Visualization
     ax.set_xyt("Time", "Value", "Plot_Median_IQR Test")
@@ -477,15 +561,18 @@ def test_plot_median_iqr():
     # Closing
     mngs.plt.close(fig)
 
-    # Assertion
+    # Assertion for PNG
     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+    # Assertion for CSV
+    csv_spath = actual_spath.replace(".png", ".csv")
+    assert os.path.exists(csv_spath), f"Failed to save CSV data to {csv_spath}"
 
 
 def test_plot_shaded_line():
     """Test plot_shaded_line function"""
     # Figure
-    fig, ax = mngs.plt.subplots()
+    fig, ax = subplots()
 
     # Data
     x = np.linspace(0, 10, 100)
@@ -494,7 +581,14 @@ def test_plot_shaded_line():
     y_upper = y_middle + 0.2
 
     # Plot
-    ax.plot_shaded_line(x, y_lower, y_middle, y_upper, label="Sine with error")
+    ax.plot_shaded_line(
+        x,
+        y_lower,
+        y_middle,
+        y_upper,
+        label="Sine with error",
+        id="plot_shaded_line_id",
+    )
 
     # Visualization
     ax.set_xyt("X", "Y", "Plot_Shaded_Line Test")
@@ -507,9 +601,12 @@ def test_plot_shaded_line():
     # Closing
     mngs.plt.close(fig)
 
-    # Assertion
+    # Assertion for PNG
     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+    # Assertion for CSV
+    csv_spath = actual_spath.replace(".png", ".csv")
+    assert os.path.exists(csv_spath), f"Failed to save CSV data to {csv_spath}"
 
 
 # def test_plot_area():
@@ -683,7 +780,7 @@ if __name__ == "__main__":
     pytest.main([os.path.abspath(__file__)])
 
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_MatplotlibPlotMixin.py
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_MatplotlibPlotMixin.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -696,23 +793,23 @@ if __name__ == "__main__":
 # )
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
-# 
+#
 # from functools import wraps
 # from typing import Any, Dict, List, Optional, Tuple, Union
-# 
+#
 # import matplotlib
 # import numpy as np
 # import pandas as pd
 # from scipy.stats import gaussian_kde
-# 
+#
 # from ....pd import to_xyz
 # from ....plt import ax as ax_module
 # from ....types import ArrayLike
-# 
-# 
+#
+#
 # class MatplotlibPlotMixin:
 #     """Mixin class for basic plotting operations."""
-# 
+#
 #     @wraps(ax_module.plot_image)
 #     def plot_image(
 #         self,
@@ -723,13 +820,13 @@ if __name__ == "__main__":
 #     ) -> None:
 #         # Method Name for downstream csv exporting
 #         method_name = "plot_image"
-# 
+#
 #         # Plotting with pure matplotlib methods under non-tracking context
 #         with self._no_tracking():
 #             self._axis_mpl = ax_module.plot_image(
 #                 self._axis_mpl, arr_2d, **kwargs
 #             )
-# 
+#
 #         # Tracking
 #         tracked_dict = {"image_df": pd.DataFrame(arr_2d)}
 #         if kwargs.get("xyz", False):
@@ -741,9 +838,9 @@ if __name__ == "__main__":
 #             tracked_dict,
 #             None,
 #         )
-# 
+#
 #         return self._axis_mpl
-# 
+#
 #     def plot_kde(
 #         self,
 #         data: ArrayLike,
@@ -755,28 +852,28 @@ if __name__ == "__main__":
 #     ) -> None:
 #         # Method Name for downstream csv exporting
 #         method_name = "plot_kde"
-# 
+#
 #         # Sample count as label
 #         n_samples = (~np.isnan(data)).sum()
 #         if kwargs.get("label"):
 #             kwargs["label"] = f"{kwargs['label']} (n={n_samples})"
-# 
+#
 #         # Xlim (kwargs["xlim"] is not accepted in downstream plotters)
 #         xlim = kwargs.get("xlim")
 #         if not xlim:
 #             xlim = (np.nanmin(data), np.nanmax(data))
-# 
+#
 #         # X
 #         xx = np.linspace(xlim[0], xlim[1], int(1e3))
-# 
+#
 #         # Y
 #         density = gaussian_kde(data)(xx)
 #         density /= density.sum()
-# 
+#
 #         # Cumulative
 #         if cumulative:
 #             density = np.cumsum(density)
-# 
+#
 #         # Plotting with pure matplotlib methods under non-tracking context
 #         with self._no_tracking():
 #             # Filled Line
@@ -788,7 +885,7 @@ if __name__ == "__main__":
 #             # Simple Line
 #             else:
 #                 self._axis_mpl.plot(xx, density)
-# 
+#
 #         # Tracking
 #         tracked_dict = {
 #             "x": xx,
@@ -802,9 +899,9 @@ if __name__ == "__main__":
 #             tracked_dict,
 #             None,
 #         )
-# 
+#
 #         return self._axis_mpl
-# 
+#
 #     def plot_conf_mat(
 #         self,
 #         data: ArrayLike,
@@ -824,7 +921,7 @@ if __name__ == "__main__":
 #     ) -> None:
 #         # Method Name for downstream csv exporting
 #         method_name = "plot_conf_mat"
-# 
+#
 #         # Plotting with pure matplotlib methods under non-tracking context
 #         with self._no_tracking():
 #             self._axis_mpl, bacc_val = ax_module.plot_conf_mat(
@@ -842,13 +939,13 @@ if __name__ == "__main__":
 #                 calc_bacc=calc_bacc,
 #                 **kwargs,
 #             )
-# 
+#
 #         tracked_dict = {"balanced_accuracy": bacc_val}
 #         # Tracking
 #         self._track(track, id, method_name, tracked_dict, None)
-# 
+#
 #         return self._axis_mpl, bacc_val
-# 
+#
 #     @wraps(ax_module.plot_rectangle)
 #     def plot_rectangle(
 #         self,
@@ -862,19 +959,19 @@ if __name__ == "__main__":
 #     ) -> None:
 #         # Method Name for downstream csv exporting
 #         method_name = "plot_rectangle"
-# 
+#
 #         # Plotting with pure matplotlib methods under non-tracking context
 #         with self._no_tracking():
 #             self._axis_mpl = ax_module.plot_rectangle(
 #                 self._axis_mpl, xx, yy, width, height, **kwargs
 #             )
-# 
+#
 #         # Tracking
 #         tracked_dict = {"xx": xx, "yy": yy, "width": width, "height": height}
 #         self._track(track, id, method_name, tracked_dict, None)
-# 
+#
 #         return self._axis_mpl
-# 
+#
 #     @wraps(ax_module.plot_fillv)
 #     def plot_fillv(
 #         self,
@@ -888,19 +985,19 @@ if __name__ == "__main__":
 #     ) -> None:
 #         # Method Name for downstream csv exporting
 #         method_name = "plot_fillv"
-# 
+#
 #         # Plotting with pure matplotlib methods under non-tracking context
 #         with self._no_tracking():
 #             self._axis_mpl = ax_module.plot_fillv(
 #                 self._axis_mpl, starts, ends, color=color, alpha=alpha
 #             )
-# 
+#
 #         # Tracking
 #         tracked_dict = {"starts": starts, "ends": ends}
 #         self._track(track, id, method_name, tracked_dict, None)
-# 
+#
 #         return self._axis_mpl
-# 
+#
 #     def plot_box(
 #         self,
 #         data: ArrayLike,
@@ -910,28 +1007,28 @@ if __name__ == "__main__":
 #     ) -> None:
 #         # Method Name for downstream csv exporting
 #         method_name = "plot_box"
-# 
+#
 #         # Copy data
 #         _data = data.copy()
-# 
+#
 #         # Sample count as label
 #         n = len(data)
 #         if kwargs.get("label"):
 #             kwargs["label"] = kwargs["label"] + f" (n={n})"
-# 
+#
 #         # Plotting with pure matplotlib methods under non-tracking context
 #         with self._no_tracking():
 #             self._axis_mpl.boxplot(data, **kwargs)
-# 
+#
 #         # Tracking
 #         tracked_dict = {
 #             "data": _data,
 #             "n": [n for ii in range(len(data))],
 #         }
 #         self._track(track, id, method_name, tracked_dict, None)
-# 
+#
 #         return self._axis_mpl
-# 
+#
 #     @wraps(ax_module.plot_raster)
 #     def plot_raster(
 #         self,
@@ -945,19 +1042,19 @@ if __name__ == "__main__":
 #     ) -> None:
 #         # Method Name for downstream csv exporting
 #         method_name = "plot_raster"
-# 
+#
 #         # Plotting with pure matplotlib methods under non-tracking context
 #         with self._no_tracking():
 #             self._axis_mpl, raster_digit_df = ax_module.plot_raster(
 #                 self._axis_mpl, positions, time=time
 #             )
-# 
+#
 #         # Tracking
 #         tracked_dict = {"raster_digit_df": raster_digit_df}
 #         self._track(track, id, method_name, tracked_dict, None)
-# 
+#
 #         return self._axis_mpl, raster_digit_df
-# 
+#
 #     @wraps(ax_module.plot_ecdf)
 #     def plot_ecdf(
 #         self,
@@ -968,19 +1065,19 @@ if __name__ == "__main__":
 #     ) -> None:
 #         # Method Name for downstream csv exporting
 #         method_name = "plot_ecdf"
-# 
+#
 #         # Plotting with pure matplotlib methods under non-tracking context
 #         with self._no_tracking():
 #             self._axis_mpl, ecdf_df = ax_module.plot_ecdf(
 #                 self._axis_mpl, data, **kwargs
 #             )
-# 
+#
 #         # Tracking
 #         tracked_dict = {"ecdf_df": ecdf_df}
 #         self._track(track, id, method_name, tracked_dict, None)
-# 
+#
 #         return self._axis_mpl, ecdf_df
-# 
+#
 #     @wraps(ax_module.plot_joyplot)
 #     def plot_joyplot(
 #         self,
@@ -992,19 +1089,19 @@ if __name__ == "__main__":
 #     ) -> None:
 #         # Method Name for downstream csv exporting
 #         method_name = "plot_joyplot"
-# 
+#
 #         # Plotting with pure matplotlib methods under non-tracking context
 #         with self._no_tracking():
 #             self._axis_mpl = ax_module.plot_joyplot(
 #                 self._axis_mpl, data, orientation=orientation, **kwargs
 #             )
-# 
+#
 #         # Tracking
 #         tracked_dict = {"joyplot_data": data}
 #         self._track(track, id, method_name, tracked_dict, None)
-# 
+#
 #         return self._axis_mpl
-# 
+#
 #     @wraps(ax_module.plot_joyplot)
 #     def plot_joyplot(
 #         self,
@@ -1015,19 +1112,19 @@ if __name__ == "__main__":
 #     ) -> None:
 #         # Method Name for downstream csv exporting
 #         method_name = "plot_joyplot"
-# 
+#
 #         # Plotting with pure matplotlib methods under non-tracking context
 #         with self._no_tracking():
 #             self._axis_mpl = ax_module.plot_joyplot(
 #                 self._axis_mpl, data, **kwargs
 #             )
-# 
+#
 #         # Tracking
 #         tracked_dict = {"joyplot_data": data}
 #         self._track(track, id, method_name, tracked_dict, None)
-# 
+#
 #         return self._axis_mpl
-# 
+#
 #     @wraps(ax_module.plot_scatter_hist)
 #     def plot_scatter_hist(
 #         self,
@@ -1048,7 +1145,7 @@ if __name__ == "__main__":
 #         """Plot a scatter plot with marginal histograms."""
 #         # Method Name for downstream csv exporting
 #         method_name = "plot_scatter_hist"
-# 
+#
 #         # Plotting with pure matplotlib methods under non-tracking context
 #         with self._no_tracking():
 #             self._axis_mpl, ax_histx, ax_histy, hist_data = (
@@ -1067,7 +1164,7 @@ if __name__ == "__main__":
 #                     **kwargs,
 #                 )
 #             )
-# 
+#
 #         # Tracking
 #         tracked_dict = {
 #             "x": x,
@@ -1078,9 +1175,9 @@ if __name__ == "__main__":
 #             "bin_edges_y": hist_data["bin_edges_y"],
 #         }
 #         self._track(track, id, method_name, tracked_dict, None)
-# 
+#
 #         return self._axis_mpl, ax_histx, ax_histy, hist_data
-# 
+#
 #     @wraps(ax_module.plot_heatmap)
 #     def plot_heatmap(
 #         self,
@@ -1100,7 +1197,7 @@ if __name__ == "__main__":
 #         """Plot a heatmap on the axes."""
 #         # Method Name for downstream csv exporting
 #         method_name = "plot_heatmap"
-# 
+#
 #         # Plotting with pure matplotlib methods under non-tracking context
 #         with self._no_tracking():
 #             ax, im, cbar = ax_module.plot_heatmap(
@@ -1116,7 +1213,7 @@ if __name__ == "__main__":
 #                 annot_color_darker=annot_color_darker,
 #                 **kwargs,
 #             )
-# 
+#
 #         # Tracking
 #         tracked_dict = {
 #             "data": data,
@@ -1124,9 +1221,9 @@ if __name__ == "__main__":
 #             "y_labels": y_labels,
 #         }
 #         self._track(track, id, method_name, tracked_dict, None)
-# 
+#
 #         return ax, im, cbar
-# 
+#
 #     @wraps(ax_module.plot_violin)
 #     def plot_violin(
 #         self,
@@ -1144,7 +1241,7 @@ if __name__ == "__main__":
 #         """Plot a violin plot."""
 #         # Method Name for downstream csv exporting
 #         method_name = "plot_violin"
-# 
+#
 #         # Plotting with pure matplotlib methods under non-tracking context
 #         with self._no_tracking():
 #             # Handle the list-style input case
@@ -1170,7 +1267,7 @@ if __name__ == "__main__":
 #                     half=half,
 #                     **kwargs,
 #                 )
-# 
+#
 #         # Tracking
 #         tracked_dict = {
 #             "data": data,
@@ -1183,7 +1280,7 @@ if __name__ == "__main__":
 #         }
 #         self._track(track, id, method_name, tracked_dict, None)
 #         return self._axis_mpl
-# 
+#
 #     # def plot_area(
 #     #     self,
 #     #     x: ArrayLike,
@@ -1198,7 +1295,7 @@ if __name__ == "__main__":
 #     #     """Plot an area plot."""
 #     #     # Method Name for downstream csv exporting
 #     #     method_name = "plot_area"
-# 
+#
 #     #     # Plotting with pure matplotlib methods under non-tracking context
 #     #     with self._no_tracking():
 #     #         self._axis_mpl = ax_module.plot_area(
@@ -1210,13 +1307,13 @@ if __name__ == "__main__":
 #     #             alpha=alpha,
 #     #             **kwargs,
 #     #         )
-# 
+#
 #     #     # Tracking
 #     #     tracked_dict = {"x": x, "y": y}
 #     #     self._track(track, id, method_name, tracked_dict, None)
-# 
+#
 #     #     return self._axis_mpl
-# 
+#
 #     # def plot_radar(
 #     #     self,
 #     #     data: ArrayLike,
@@ -1232,14 +1329,14 @@ if __name__ == "__main__":
 #     #     """Plot a radar/spider chart."""
 #     #     # Method Name for downstream csv exporting
 #     #     method_name = "plot_radar"
-# 
+#
 #     #     # Convert data to DataFrame if not already
 #     #     if not isinstance(data, pd.DataFrame):
 #     #         if groups is not None:
 #     #             data = pd.DataFrame(data, columns=categories, index=groups)
 #     #         else:
 #     #             data = pd.DataFrame(data, columns=categories)
-# 
+#
 #     #     # Plotting with pure matplotlib methods under non-tracking context
 #     #     with self._no_tracking():
 #     #         self._axis_mpl = ax_module.plot_radar(
@@ -1251,13 +1348,13 @@ if __name__ == "__main__":
 #     #             grid_step=grid_step,
 #     #             **kwargs,
 #     #         )
-# 
+#
 #     #     # Tracking
 #     #     tracked_dict = {"radar_data": data}
 #     #     self._track(track, id, method_name, tracked_dict, None)
-# 
+#
 #     #     return self._axis_mpl
-# 
+#
 #     # def plot_bubble(
 #     #     self,
 #     #     x: ArrayLike,
@@ -1276,7 +1373,7 @@ if __name__ == "__main__":
 #     #     """Plot a bubble chart."""
 #     #     # Method Name for downstream csv exporting
 #     #     method_name = "plot_bubble"
-# 
+#
 #     #     # Plotting with pure matplotlib methods under non-tracking context
 #     #     with self._no_tracking():
 #     #         self._axis_mpl = ax_module.plot_bubble(
@@ -1292,16 +1389,16 @@ if __name__ == "__main__":
 #     #             colorbar_label=colorbar_label,
 #     #             **kwargs,
 #     #         )
-# 
+#
 #     #     # Tracking
 #     #     tracked_dict = {"x": x, "y": y, "size": size}
 #     #     if color is not None:
 #     #         tracked_dict["color"] = color
-# 
+#
 #     #     self._track(track, id, method_name, tracked_dict, None)
-# 
+#
 #     #     return self._axis_mpl
-# 
+#
 #     # def plot_ridgeline(
 #     #     self,
 #     #     data: ArrayLike,
@@ -1318,7 +1415,7 @@ if __name__ == "__main__":
 #     #     """Plot a ridgeline plot (similar to joyplot but with KDE)."""
 #     #     # Method Name for downstream csv exporting
 #     #     method_name = "plot_ridgeline"
-# 
+#
 #     #     # Ensure data is in correct format
 #     #     if isinstance(data, pd.DataFrame):
 #     #         _data = [data[col].dropna().values for col in data.columns]
@@ -1328,7 +1425,7 @@ if __name__ == "__main__":
 #     #         _data = data
 #     #     else:
 #     #         _data = [data]
-# 
+#
 #     #     # Plotting with pure matplotlib methods under non-tracking context
 #     #     with self._no_tracking():
 #     #         self._axis_mpl, ridge_data = ax_module.plot_ridgeline(
@@ -1342,7 +1439,7 @@ if __name__ == "__main__":
 #     #             bandwidth=bandwidth,
 #     #             **kwargs,
 #     #         )
-# 
+#
 #     #     # Tracking
 #     #     tracked_dict = {
 #     #         "ridgeline_data": _data,
@@ -1352,9 +1449,9 @@ if __name__ == "__main__":
 #     #     if labels is not None:
 #     #         tracked_dict["labels"] = labels
 #     #     self._track(track, id, method_name, tracked_dict, None)
-# 
+#
 #     #     return self._axis_mpl, ridge_data
-# 
+#
 #     # def plot_parallel_coordinates(
 #     #     self,
 #     #     data: pd.DataFrame,
@@ -1368,7 +1465,7 @@ if __name__ == "__main__":
 #     #     """Plot parallel coordinates."""
 #     #     # Method Name for downstream csv exporting
 #     #     method_name = "plot_parallel_coordinates"
-# 
+#
 #     #     # Plotting with pure matplotlib methods under non-tracking context
 #     #     with self._no_tracking():
 #     #         self._axis_mpl = ax_module.plot_parallel_coordinates(
@@ -1379,13 +1476,13 @@ if __name__ == "__main__":
 #     #             alpha=alpha,
 #     #             **kwargs,
 #     #         )
-# 
+#
 #     #     # Tracking
 #     #     tracked_dict = {"parallel_data": data}
 #     #     self._track(track, id, method_name, tracked_dict, None)
-# 
+#
 #     #     return self._axis_mpl
-# 
+#
 #     @wraps(ax_module.plot_line)
 #     def plot_line(
 #         self,
@@ -1398,19 +1495,19 @@ if __name__ == "__main__":
 #         """Plot a simple line."""
 #         # Method Name for downstream csv exporting
 #         method_name = "plot_line"
-# 
+#
 #         # Plotting with pure matplotlib methods under non-tracking context
 #         with self._no_tracking():
 #             self._axis_mpl, plot_df = ax_module.plot_line(
 #                 self._axis_mpl, data, xx=xx, **kwargs
 #             )
-# 
+#
 #         # Tracking
 #         tracked_dict = {"plot_df": plot_df}
 #         self._track(track, id, method_name, tracked_dict, None)
-# 
+#
 #         return self._axis_mpl, plot_df
-# 
+#
 #     @wraps(ax_module.plot_mean_std)
 #     def plot_mean_std(
 #         self,
@@ -1424,19 +1521,19 @@ if __name__ == "__main__":
 #         """Plot mean line with standard deviation shading."""
 #         # Method Name for downstream csv exporting
 #         method_name = "plot_mean_std"
-# 
+#
 #         # Plotting with pure matplotlib methods under non-tracking context
 #         with self._no_tracking():
 #             self._axis_mpl, plot_df = ax_module.plot_mean_std(
 #                 self._axis_mpl, data, xx=xx, sd=sd, **kwargs
 #             )
-# 
+#
 #         # Tracking
 #         tracked_dict = {"plot_df": plot_df}
 #         self._track(track, id, method_name, tracked_dict, None)
-# 
+#
 #         return self._axis_mpl, plot_df
-# 
+#
 #     @wraps(ax_module.plot_mean_ci)
 #     def plot_mean_ci(
 #         self,
@@ -1450,19 +1547,19 @@ if __name__ == "__main__":
 #         """Plot mean line with confidence interval shading."""
 #         # Method Name for downstream csv exporting
 #         method_name = "plot_mean_ci"
-# 
+#
 #         # Plotting with pure matplotlib methods under non-tracking context
 #         with self._no_tracking():
 #             self._axis_mpl, plot_df = ax_module.plot_mean_ci(
 #                 self._axis_mpl, data, xx=xx, perc=perc, **kwargs
 #             )
-# 
+#
 #         # Tracking
 #         tracked_dict = {"plot_df": plot_df}
 #         self._track(track, id, method_name, tracked_dict, None)
-# 
+#
 #         return self._axis_mpl, plot_df
-# 
+#
 #     @wraps(ax_module.plot_median_iqr)
 #     def plot_median_iqr(
 #         self,
@@ -1475,19 +1572,19 @@ if __name__ == "__main__":
 #         """Plot median line with interquartile range shading."""
 #         # Method Name for downstream csv exporting
 #         method_name = "plot_median_iqr"
-# 
+#
 #         # Plotting with pure matplotlib methods under non-tracking context
 #         with self._no_tracking():
 #             self._axis_mpl, plot_df = ax_module.plot_median_iqr(
 #                 self._axis_mpl, data, xx=xx, **kwargs
 #             )
-# 
+#
 #         # Tracking
 #         tracked_dict = {"plot_df": plot_df}
 #         self._track(track, id, method_name, tracked_dict, None)
-# 
+#
 #         return self._axis_mpl, plot_df
-# 
+#
 #     @wraps(ax_module.plot_shaded_line)
 #     def plot_shaded_line(
 #         self,
@@ -1504,7 +1601,7 @@ if __name__ == "__main__":
 #         """Plot a line with shaded area between lower and upper bounds."""
 #         # Method Name for downstream csv exporting
 #         method_name = "plot_shaded_line"
-# 
+#
 #         # Plotting with pure matplotlib methods under non-tracking context
 #         with self._no_tracking():
 #             self._axis_mpl, plot_df = ax_module.plot_shaded_line(
@@ -1517,14 +1614,16 @@ if __name__ == "__main__":
 #                 label=label,
 #                 **kwargs,
 #             )
-# 
+#
 #         # Tracking
 #         tracked_dict = {"plot_df": plot_df}
 #         self._track(track, id, method_name, tracked_dict, None)
-# 
+#
 #         return self._axis_mpl, plot_df
-# 
+#
 # # EOF
 # --------------------------------------------------------------------------------
-# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_MatplotlibPlotMixin.py
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_MatplotlibPlotMixin.py
 # --------------------------------------------------------------------------------
+
+# EOF

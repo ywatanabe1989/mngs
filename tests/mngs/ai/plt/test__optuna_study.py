@@ -8,7 +8,7 @@ if __name__ == "__main__":
     pytest.main([os.path.abspath(__file__)])
 
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/plt/_optuna_study.py
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/plt/_optuna_study.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -133,5 +133,5 @@ if __name__ == "__main__":
 #     mngs.ml.plt.optuna_study(lpath, "val_loss", sort=True)
 
 # --------------------------------------------------------------------------------
-# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/plt/_optuna_study.py
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/plt/_optuna_study.py
 # --------------------------------------------------------------------------------

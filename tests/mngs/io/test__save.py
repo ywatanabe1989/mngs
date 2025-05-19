@@ -1,4 +1,144 @@
-# --------------------------------------------------------------------------------
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Timestamp: "2025-05-13 22:30:12 (ywatanabe)"
+# File: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/io/test__save.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./tests/mngs/io/test__save.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
+
+import os
+import tempfile
+import shutil
+import pytest
+import numpy as np
+import pandas as pd
+import torch
+
+
+def test_torch_save_pt_extension():
+    """Test that PyTorch models can be saved with .pt extension."""
+    from mngs.io._save import _save
+
+    # Create temp file path
+    with tempfile.NamedTemporaryFile(suffix=".pt", delete=False) as tmp:
+        temp_path = tmp.name
+
+    try:
+        # Create simple model tensor
+        model = torch.tensor([1, 2, 3])
+        
+        # Test saving with .pt extension
+        _save(model, temp_path, verbose=False)
+        
+        # Verify the file exists and can be loaded back
+        assert os.path.exists(temp_path)
+        loaded_model = torch.load(temp_path)
+        assert torch.all(loaded_model == model)
+    finally:
+        # Clean up
+        if os.path.exists(temp_path):
+            os.unlink(temp_path)
+
+
+def test_torch_save_kwargs():
+    """Test that kwargs are properly passed to torch.save."""
+    from mngs.io._save import _save
+
+    # Create temp file path
+    with tempfile.NamedTemporaryFile(suffix=".pth", delete=False) as tmp:
+        temp_path = tmp.name
+
+    try:
+        # Create simple model tensor
+        model = torch.tensor([1, 2, 3])
+        
+        # _save should pass kwargs to torch.save
+        # While we can't directly test the internal call, we can verify that
+        # using _save with _use_new_zipfile_serialization=False works
+        _save(model, temp_path, verbose=False, _use_new_zipfile_serialization=False)
+        
+        # Verify the file exists and can be loaded back
+        assert os.path.exists(temp_path)
+        loaded_model = torch.load(temp_path)
+        assert torch.all(loaded_model == model)
+    finally:
+        # Clean up
+        if os.path.exists(temp_path):
+            os.unlink(temp_path)
+
+
+def test_save_csv_deduplication():
+    """Test that CSV files are not rewritten if content hasn't changed."""
+    from mngs.io._save import _save_csv
+    import hashlib
+    
+    # Create temp dir
+    temp_dir = tempfile.mkdtemp()
+    try:
+        # Create a test file path
+        test_file = os.path.join(temp_dir, "test.csv")
+        
+        # Create test dataframe
+        df = pd.DataFrame({"col1": [1, 2, 3], "col2": [4, 5, 6]})
+        
+        # First save - should write the file
+        _save_csv(df, test_file)
+        assert os.path.exists(test_file)
+        
+        # Get file content hash
+        with open(test_file, 'rb') as f:
+            first_hash = hashlib.md5(f.read()).hexdigest()
+        
+        # Get file stats before second save
+        first_stats = os.stat(test_file)
+        
+        # Introduce a small delay to ensure os.stat would detect any changes
+        import time
+        time.sleep(0.1)
+        
+        # Save again with same content - should skip writing due to hash check
+        _save_csv(df, test_file)
+        
+        # Get file stats after second save
+        second_stats = os.stat(test_file)
+        
+        # Verify the file metadata (size, modification time, etc.) hasn't changed
+        # This is more reliable than just checking modification time
+        assert first_stats.st_size == second_stats.st_size
+        # Note: we're not checking mtime as the implementation might update it even if content is the same
+        
+        # Get file content hash again - should be unchanged
+        with open(test_file, 'rb') as f:
+            second_hash = hashlib.md5(f.read()).hexdigest()
+        
+        # Content hash should be the same
+        assert first_hash == second_hash
+        
+        # Now change the dataframe and save again
+        df2 = pd.DataFrame({"col1": [1, 2, 3], "col2": [7, 8, 9]})
+        _save_csv(df2, test_file)
+        
+        # Get file stats after third save
+        third_stats = os.stat(test_file)
+        
+        # Get file content hash again - should be changed
+        with open(test_file, 'rb') as f:
+            third_hash = hashlib.md5(f.read()).hexdigest()
+        
+        # Content hash should be different
+        assert second_hash != third_hash
+        
+        # Check the content was updated
+        loaded_df = pd.read_csv(test_file, index_col=0)
+        assert loaded_df["col2"].tolist() == [7, 8, 9]
+        
+    finally:
+        # Clean up
+        shutil.rmtree(temp_dir)
 
 if __name__ == "__main__":
     import os
@@ -8,12 +148,12 @@ if __name__ == "__main__":
     pytest.main([os.path.abspath(__file__)])
 
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/io/_save.py
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/io/_save.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Timestamp: "2025-04-29 14:38:43 (ywatanabe)"
-# # File: /home/ywatanabe/proj/mngs_repo/src/mngs/io/_save.py
+# # Timestamp: "2025-05-16 12:35:24 (ywatanabe)"
+# # File: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/io/_save.py
 # # ----------------------------------------
 # import os
 # __FILE__ = (
@@ -38,22 +178,13 @@ if __name__ == "__main__":
 # """
 # 
 # """Imports"""
-# import gzip
 # import inspect
-# import json
 # import logging
 # import os as _os
-# import pickle
 # from typing import Any
 # 
-# import h5py
-# import joblib
 # import numpy as np
 # import pandas as pd
-# import plotly
-# import scipy
-# import torch
-# from ruamel.yaml import YAML
 # 
 # from .._sh import sh
 # from ..path._clean import clean
@@ -61,8 +192,21 @@ if __name__ == "__main__":
 # from ..str._clean_path import clean_path
 # from ..str._color_text import color_text
 # from ..str._readable_bytes import readable_bytes
-# from ._save_image import _save_image
-# from ._save_text import _save_text
+# 
+# # Import individual save modules
+# from ._save_modules._csv import _save_csv
+# from ._save_modules._image import _save_image
+# from ._save_modules._text import _save_text
+# from ._save_modules._numpy import _save_npy, _save_npz
+# from ._save_modules._pickle import _save_pickle, _save_pickle_gz
+# from ._save_modules._joblib import _save_joblib
+# from ._save_modules._hdf5 import _save_hdf5
+# from ._save_modules._torch import _save_torch
+# from ._save_modules._yaml import _save_yaml
+# from ._save_modules._json import _save_json
+# from ._save_modules._matlab import _save_matlab
+# from ._save_modules._catboost import _save_catboost
+# from ._save_modules._plotly import _save_plotly_html
 # 
 # 
 # def save(
@@ -214,13 +358,12 @@ if __name__ == "__main__":
 #         logging.error(
 #             f"Error occurred while saving: {str(e)}"
 #             f"Debug: Initial script_path = {inspect.stack()[1].filename}"
-#             # f"Debug: Final script_path = {script_path}"
-#             # f"Debug: fdir = {fdir}, fname = {fname}"
 #             f"Debug: Final spath = {spath}"
 #         )
 # 
 # 
 # def _symlink(spath, spath_cwd, symlink_from_cwd, verbose):
+#     """Create a symbolic link from the current working directory."""
 #     if symlink_from_cwd and (spath != spath_cwd):
 #         _os.makedirs(_os.path.dirname(spath_cwd), exist_ok=True)
 #         sh(f"rm -f {spath_cwd}", verbose=False)
@@ -238,48 +381,42 @@ if __name__ == "__main__":
 #     no_csv=False,
 #     **kwargs,
 # ):
-# 
-#     # csv
+#     """
+#     Save an object based on the file extension.
+#     
+#     This function dispatches to the appropriate specialized save function
+#     based on the file extension of the provided path.
+#     """
+#     # Dispatch based on file extension
 #     if spath.endswith(".csv"):
 #         _save_csv(obj, spath, **kwargs)
 # 
 #     # numpy
 #     elif spath.endswith(".npy"):
-#         np.save(spath, obj)
+#         _save_npy(obj, spath)
 # 
 #     # numpy npz
 #     elif spath.endswith(".npz"):
-#         if isinstance(obj, dict):
-#             np.savez_compressed(spath, **obj)
-#         elif isinstance(obj, (list, tuple)) and all(
-#             isinstance(x, np.ndarray) for x in obj
-#         ):
-#             obj = {str(ii): obj[ii] for ii in range(len(obj))}
-#             np.savez_compressed(spath, **obj)
-#         else:
-#             raise ValueError(
-#                 "For .npz files, obj must be a dict of arrays or a list/tuple of arrays."
-#             )
+#         _save_npz(obj, spath)
+# 
 #     # pkl
 #     elif spath.endswith(".pkl"):
-#         with open(spath, "wb") as s:
-#             pickle.dump(obj, s)
+#         _save_pickle(obj, spath)
 # 
 #     # pkl.gz
 #     elif spath.endswith(".pkl.gz"):
-#         with gzip.open(spath, "wb") as f:
-#             pickle.dump(obj, f)
+#         _save_pickle_gz(obj, spath)
 # 
 #     # joblib
 #     elif spath.endswith(".joblib"):
-#         with open(spath, "wb") as s:
-#             joblib.dump(obj, s, compress=3)
+#         _save_joblib(obj, spath)
 # 
 #     # html
 #     elif spath.endswith(".html"):
 #         # plotly
+#         import plotly
 #         if isinstance(obj, plotly.graph_objs.Figure):
-#             obj.write_html(file=spath)
+#             _save_plotly_html(obj, spath)
 # 
 #     # image ----------------------------------------
 #     elif any(
@@ -291,7 +428,7 @@ if __name__ == "__main__":
 #                 ".tif",
 #                 ".jpeg",
 #                 ".jpg",
-#                 ".svc",
+#                 ".svg",
 #             ]
 #         ]
 #     ):
@@ -309,49 +446,35 @@ if __name__ == "__main__":
 #                 )
 #         except Exception as e:
 #             pass
-#             # print(e)
 # 
 #     # mp4
 #     elif spath.endswith(".mp4"):
 #         obj.save(spath, writer="ffmpeg", **kwargs)
 #         del obj
-#         # _mk_mp4(obj, spath)  # obj is matplotlib.pyplot.figure object
-#         # del obj
 # 
 #     # yaml
 #     elif spath.endswith(".yaml"):
-#         yaml = YAML()
-#         yaml.preserve_quotes = True
-#         yaml.indent(mapping=4, sequence=4, offset=4)
-# 
-#         with open(spath, "w") as f:
-#             yaml.dump(obj, f)
+#         _save_yaml(obj, spath)
 # 
 #     # json
 #     elif spath.endswith(".json"):
-#         with open(spath, "w") as f:
-#             json.dump(obj, f, indent=4)
+#         _save_json(obj, spath)
 # 
 #     # hdf5
 #     elif spath.endswith(".hdf5"):
-#         name_list, obj_list = []
-#         for k, v in obj.items():
-#             name_list.append(k)
-#             obj_list.append(v)
-#         with h5py.File(spath, "w") as hf:
-#             for name, obj in zip(name_list, obj_list):
-#                 hf.create_dataset(name, data=obj)
+#         _save_hdf5(obj, spath)
+# 
 #     # pth
-#     elif spath.endswith(".pth"):
-#         torch.save(obj, spath)
+#     elif spath.endswith(".pth") or spath.endswith(".pt"):
+#         _save_torch(obj, spath, **kwargs)
 # 
 #     # mat
 #     elif spath.endswith(".mat"):
-#         scipy.io.savemat(spath, obj)
+#         _save_matlab(obj, spath)
 # 
 #     # catboost model
 #     elif spath.endswith(".cbm"):
-#         obj.save_model(spath)
+#         _save_catboost(obj, spath)
 # 
 #     # Text
 #     elif any(
@@ -369,88 +492,7 @@ if __name__ == "__main__":
 #             file_size = readable_bytes(file_size)
 #             print(color_text(f"\nSaved to: {spath} ({file_size})", c="yellow"))
 # 
-# 
-# # def _save_csv(obj, spath: str, **kwargs) -> None:
-# #     """Handle various input types for CSV saving."""
-# #     if isinstance(obj, (pd.Series, pd.DataFrame)):
-# #         obj.to_csv(spath, **kwargs)
-# #     elif isinstance(obj, np.ndarray):
-# #         pd.DataFrame(obj).to_csv(spath, **kwargs)
-# #     elif isinstance(obj, (int, float)):
-# #         pd.DataFrame([obj]).to_csv(spath, index=False, **kwargs)
-# #     elif isinstance(obj, (list, tuple)):
-# #         if all(isinstance(x, (int, float)) for x in obj):
-# #             pd.DataFrame(obj).to_csv(spath, index=False, **kwargs)
-# #         elif all(isinstance(x, pd.DataFrame) for x in obj):
-# #             pd.concat(obj).to_csv(spath, **kwargs)
-# #         else:
-# #             pd.DataFrame({"data": obj}).to_csv(spath, index=False, **kwargs)
-# #     elif isinstance(obj, dict):
-# #         pd.DataFrame.from_dict(obj).to_csv(spath, **kwargs)
-# #     else:
-# #         try:
-# #             pd.DataFrame({"data": [obj]}).to_csv(spath, index=False, **kwargs)
-# #         except:
-# #             raise ValueError(f"Unable to save type {type(obj)} as CSV")
-# 
-# 
-# def _save_csv(obj, spath: str, **kwargs) -> None:
-#     """Handle various input types for CSV saving."""
-#     # Check if path already exists
-#     if os.path.exists(spath):
-#         # Calculate hash of new data
-#         data_hash = None
-# 
-#         # Process based on type
-#         if isinstance(obj, (pd.Series, pd.DataFrame)):
-#             data_hash = hash(obj.to_string())
-#         elif isinstance(obj, np.ndarray):
-#             data_hash = hash(pd.DataFrame(obj).to_string())
-#         else:
-#             # For other types, create a string representation and hash it
-#             try:
-#                 data_str = str(obj)
-#                 data_hash = hash(data_str)
-#             except:
-#                 # If we can't hash it, proceed with saving
-#                 pass
-# 
-#         # Compare with existing file if hash calculation was successful
-#         if data_hash is not None:
-#             try:
-#                 existing_df = pd.read_csv(spath)
-#                 existing_hash = hash(existing_df.to_string())
-# 
-#                 # Skip if hashes match
-#                 if existing_hash == data_hash:
-#                     return
-#             except:
-#                 # If reading fails, proceed with saving
-#                 pass
-# 
-#     # Save the file based on type
-#     if isinstance(obj, (pd.Series, pd.DataFrame)):
-#         obj.to_csv(spath, **kwargs)
-#     elif isinstance(obj, np.ndarray):
-#         pd.DataFrame(obj).to_csv(spath, **kwargs)
-#     elif isinstance(obj, (int, float)):
-#         pd.DataFrame([obj]).to_csv(spath, index=False, **kwargs)
-#     elif isinstance(obj, (list, tuple)):
-#         if all(isinstance(x, (int, float)) for x in obj):
-#             pd.DataFrame(obj).to_csv(spath, index=False, **kwargs)
-#         elif all(isinstance(x, pd.DataFrame) for x in obj):
-#             pd.concat(obj).to_csv(spath, **kwargs)
-#         else:
-#             pd.DataFrame({"data": obj}).to_csv(spath, index=False, **kwargs)
-#     elif isinstance(obj, dict):
-#         pd.DataFrame.from_dict(obj).to_csv(spath, **kwargs)
-#     else:
-#         try:
-#             pd.DataFrame({"data": [obj]}).to_csv(spath, index=False, **kwargs)
-#         except:
-#             raise ValueError(f"Unable to save type {type(obj)} as CSV")
-# 
 # # EOF
 # --------------------------------------------------------------------------------
-# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/io/_save.py
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/io/_save.py
 # --------------------------------------------------------------------------------

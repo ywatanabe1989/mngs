@@ -12,6 +12,7 @@ __DIR__ = os.path.dirname(__FILE__)
 
 import matplotlib
 import numpy as np
+from ....plt.utils import assert_valid_axis
 
 
 def plot_fillv(axes, starts, ends, color="red", alpha=0.2):
@@ -20,7 +21,7 @@ def plot_fillv(axes, starts, ends, color="red", alpha=0.2):
 
     Parameters
     ----------
-    axes : matplotlib.axes.Axes or numpy.ndarray of matplotlib.axes.Axes
+    axes : matplotlib.axes.Axes or mngs.plt._subplots.AxisWrapper or numpy.ndarray of axes
         The axis object(s) to fill intervals on.
     starts : array-like
         Array-like of start positions.
@@ -42,9 +43,7 @@ def plot_fillv(axes, starts, ends, color="red", alpha=0.2):
     axes = axes if isinstance(axes, np.ndarray) else [axes]
 
     for ax in axes:
-        assert isinstance(
-            ax, matplotlib.axes._axes.Axes
-        ), "First argument must be a matplotlib axis"
+        assert_valid_axis(ax, "First argument must be a matplotlib axis or mngs axis wrapper")
         for start, end in zip(starts, ends):
             ax.axvspan(start, end, color=color, alpha=alpha)
 

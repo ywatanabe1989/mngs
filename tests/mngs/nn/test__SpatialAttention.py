@@ -8,7 +8,7 @@ if __name__ == "__main__":
     pytest.main([os.path.abspath(__file__)])
 
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/nn/_SpatialAttention.py
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/nn/_SpatialAttention.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -38,5 +38,5 @@ if __name__ == "__main__":
 #         return x * x_orig
 
 # --------------------------------------------------------------------------------
-# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/nn/_SpatialAttention.py
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/nn/_SpatialAttention.py
 # --------------------------------------------------------------------------------

@@ -8,7 +8,7 @@ if __name__ == "__main__":
     pytest.main([os.path.abspath(__file__)])
 
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/stats/_calc_partial_corr.py
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/stats/_calc_partial_corr.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # 
@@ -29,5 +29,5 @@ if __name__ == "__main__":
 #     return r_xy_z
 
 # --------------------------------------------------------------------------------
-# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/stats/_calc_partial_corr.py
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/stats/_calc_partial_corr.py
 # --------------------------------------------------------------------------------

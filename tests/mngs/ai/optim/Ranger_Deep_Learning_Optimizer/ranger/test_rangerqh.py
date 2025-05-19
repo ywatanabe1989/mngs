@@ -19,7 +19,7 @@ if __name__ == "__main__":
     pytest.main([os.path.abspath(__file__)])
 
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/optim/Ranger_Deep_Learning_Optimizer/ranger/rangerqh.py
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/optim/Ranger_Deep_Learning_Optimizer/ranger/rangerqh.py
 # --------------------------------------------------------------------------------
 # # RangerQH - @lessw2020 github
 # # Combines Quasi Hyperbolic momentum with Hinton Lookahead.
@@ -205,5 +205,5 @@ if __name__ == "__main__":
 # 
 
 # --------------------------------------------------------------------------------
-# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/optim/Ranger_Deep_Learning_Optimizer/ranger/rangerqh.py
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/optim/Ranger_Deep_Learning_Optimizer/ranger/rangerqh.py
 # --------------------------------------------------------------------------------

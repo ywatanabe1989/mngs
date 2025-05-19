@@ -13,7 +13,9 @@ __DIR__ = os.path.dirname(__FILE__)
 from ._calc_bacc_from_conf_mat import calc_bacc_from_conf_mat
 from ._calc_nice_ticks import calc_nice_ticks
 from ._configure_mpl import configure_mpl
+from ._histogram_utils import HistogramBinManager, histogram_bin_manager
 from ._im2grid import im2grid
+from ._is_valid_axis import is_valid_axis, assert_valid_axis
 from ._mk_colorbar import mk_colorbar
 from ._mk_patches import mk_patches
 

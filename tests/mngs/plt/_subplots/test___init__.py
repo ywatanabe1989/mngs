@@ -18,11 +18,11 @@ if __name__ == "__main__":
     pytest.main([os.path.abspath(__file__)])
 
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/__init__.py
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/plt/_subplots/__init__.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
-# # Timestamp: "2025-05-01 16:48:40 (ywatanabe)"
+# # Timestamp: "2025-05-18 05:22:40 (ywatanabe)"
 # # File: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/__init__.py
 # # ----------------------------------------
 # import os
@@ -31,6 +31,9 @@ if __name__ == "__main__":
 # )
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
+# 
+# # Import export_as_csv module functions
+# from ._export_as_csv import export_as_csv, format_record
 # 
 # # import importlib
 # # import inspect
@@ -109,5 +112,5 @@ if __name__ == "__main__":
 # 
 # # EOF
 # --------------------------------------------------------------------------------
-# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/__init__.py
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/plt/_subplots/__init__.py
 # --------------------------------------------------------------------------------

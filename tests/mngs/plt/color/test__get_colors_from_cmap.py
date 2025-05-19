@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-03 00:49:28 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/color/test__get_colors_from_cmap.py
+# Timestamp: "2025-05-13 19:58:50 (ywatanabe)"
+# File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/tests/mngs/plt/color/test__get_colors_from_cmap.py
 # ----------------------------------------
 import os
 __FILE__ = (
@@ -15,7 +15,7 @@ import pytest
 
 
 def test_get_color_from_cmap():
-    from mngs.plt.color._get_colors_from_cmap import get_color_from_cmap
+    from mngs.plt.color import get_color_from_cmap
 
     # Test with default parameters
     color = get_color_from_cmap("viridis", 0.5)
@@ -40,7 +40,7 @@ def test_get_color_from_cmap():
 
 def test_get_colors_from_cmap():
     import matplotlib
-    from mngs.plt.color._get_colors_from_cmap import get_colors_from_cmap
+    from mngs.plt.color import get_colors_from_cmap
 
     # Test with default parameters
     colors = get_colors_from_cmap("viridis", 5)
@@ -55,7 +55,7 @@ def test_get_colors_from_cmap():
 
     # Test colors are evenly spaced
     colors_check = get_colors_from_cmap("viridis", 3)
-    cmap = matplotlib.cm.get_cmap("viridis")
+    cmap = matplotlib.colormaps["viridis"]
 
     # Calculate colors directly from cmap to compare
     expected_colors = [
@@ -69,8 +69,7 @@ def test_get_colors_from_cmap():
 
 
 def test_get_categorical_colors_from_cmap():
-    from mngs.plt.color._get_colors_from_cmap import \
-        get_categorical_colors_from_cmap
+    from mngs.plt.color import get_categorical_colors_from_cmap
 
     # Test with list categories
     categories = ["cat", "dog", "bird"]
@@ -103,7 +102,7 @@ if __name__ == "__main__":
     pytest.main([os.path.abspath(__file__)])
 
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/color/_get_colors_from_cmap.py
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/plt/color/_get_colors_from_cmap.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -243,5 +242,5 @@ if __name__ == "__main__":
 # 
 # # EOF
 # --------------------------------------------------------------------------------
-# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/color/_get_colors_from_cmap.py
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/plt/color/_get_colors_from_cmap.py
 # --------------------------------------------------------------------------------

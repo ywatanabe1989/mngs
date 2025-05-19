@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-02 22:24:27 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_MatplotlibPlotMixin.py
+# Timestamp: "2025-05-18 17:51:44 (ywatanabe)"
+# File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_MatplotlibPlotMixin.py
 # ----------------------------------------
 import os
 __FILE__ = (
@@ -106,7 +106,7 @@ class MatplotlibPlotMixin:
         tracked_dict = {
             "x": xx,
             "kde": density,
-            "n": [len(data) for ii in range(len(xx))],
+            "n": n_samples,
         }
         self._track(
             track,
@@ -244,6 +244,66 @@ class MatplotlibPlotMixin:
         self._track(track, id, method_name, tracked_dict, None)
 
         return self._axis_mpl
+        
+    def hist(
+        self,
+        x: ArrayLike,
+        bins: Union[int, str, ArrayLike] = 10,
+        range: Optional[Tuple[float, float]] = None,
+        align_bins: bool = True,
+        track: bool = True,
+        id: Optional[str] = None,
+        **kwargs,
+    ) -> None:
+        """
+        Plot a histogram.
+        
+        This is an override of the standard matplotlib hist function to ensure
+        that histogram bin data is properly tracked for CSV export and bins are
+        aligned for histograms on the same axis.
+        
+        Args:
+            x: Input data
+            bins: Bin specification (count, edges, or algorithm)
+            range: Optional histogram range (min, max)
+            align_bins: Whether to align bins with other histograms on this axis
+            track: Whether to track this operation
+            id: Identifier for tracking
+            **kwargs: Additional keywords passed to matplotlib hist
+            
+        Returns:
+            Histogram output
+        """
+        # Method Name for downstream csv exporting
+        method_name = "hist"
+        
+        # Get the axis ID for bin alignment
+        axis_id = str(hash(self._axis_mpl))
+        hist_id = id if id is not None else str(self.id)
+        
+        # Align bins if requested and not the first histogram on this axis
+        if align_bins:
+            from ....plt.utils import histogram_bin_manager
+            bins, range = histogram_bin_manager.register_histogram(
+                axis_id, hist_id, x, bins, range
+            )
+        
+        # Plotting with pure matplotlib methods under non-tracking context
+        with self._no_tracking():
+            hist_data = self._axis_mpl.hist(x, bins=bins, range=range, **kwargs)
+        
+        # Save histogram result for CSV export
+        # hist_data[0] = counts, hist_data[1] = bin_edges
+        tracked_dict = {
+            "args": (x,),
+            "hist_result": (hist_data[0], hist_data[1]),
+            "bins": bins,
+            "range": range,
+        }
+        
+        self._track(track, id, method_name, tracked_dict, kwargs)
+        
+        return hist_data
 
     @wraps(ax_module.plot_raster)
     def plot_raster(
