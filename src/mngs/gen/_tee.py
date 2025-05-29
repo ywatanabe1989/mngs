@@ -107,9 +107,17 @@ class Tee:
     def buffer(self):
         return self._stream.buffer
 
-    def __del__(self):
+    def close(self):
+        """Explicitly close the log file."""
         if hasattr(self, '_log_file') and self._log_file is not None:
-            self._log_file.close()
+            try:
+                self._log_file.flush()
+                self._log_file.close()
+            except Exception:
+                pass
+    
+    def __del__(self):
+        self.close()
 
 # class Tee:
 #     def __init__(self, stream: TextIO, log_path: str) -> None:

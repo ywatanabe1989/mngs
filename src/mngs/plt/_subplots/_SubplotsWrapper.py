@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-02 12:34:31 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_SubplotsWrapper.py
+# Timestamp: "2025-05-29 03:46:53 (ywatanabe)"
+# File: /ssh:ywatanabe@sp:/home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_SubplotsWrapper.py
 # ----------------------------------------
 import os
 __FILE__ = (
@@ -31,7 +31,9 @@ class SubplotsWrapper:
         self._fig_mngs = None
         self._counter_part = plt.subplots
 
-    def __call__(self, *args, track=True, sharex=True, sharey=True, **kwargs):
+    def __call__(
+        self, *args, track=True, sharex=False, sharey=False, **kwargs
+    ):
 
         # Start from the original matplotlib figure and axes
         self._fig_mpl, self._axes_mpl = self._counter_part(

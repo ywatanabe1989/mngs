@@ -97,12 +97,14 @@ class AxesWrapper:
 
     def __getitem__(self, index):
         subset = self._axes_mngs[index]
-        if isinstance(index, slice):
-            return AxesWrapper(self._fig_mngs, subset)
+        # Handle slice or numpy array result (when accessing row/column)
+        if isinstance(subset, (slice, type(self._axes_mngs))):
+            if hasattr(subset, 'ndim') and subset.ndim > 0:
+                return AxesWrapper(self._fig_mngs, subset)
         return subset
 
     def __iter__(self):
-        return iter(self._axes_mngs.flat)
+        return iter(self._axes_mngs)
 
     def __len__(self):
         return self._axes_mngs.size
@@ -117,6 +119,11 @@ class AxesWrapper:
     @property
     def shape(self):
         return self._axes_mngs.shape
+    
+    @property
+    def flat(self):
+        """Return a flattened iterator over all axes, mimicking numpy behavior."""
+        return self._axes_mngs.flat
 
     def export_as_csv(self):
         dfs = []

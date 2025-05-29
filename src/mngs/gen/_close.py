@@ -80,6 +80,7 @@ def _args_to_str(args_dict):
         return ""
 
 def close(CONFIG, message=":)", notify=False, verbose=True, exit_status=None):
+    sys = None  # Initialize sys outside try block
     try:
         CONFIG.EXIT_STATUS = exit_status
         CONFIG = CONFIG.to_dict()
@@ -119,13 +120,20 @@ def close(CONFIG, message=":)", notify=False, verbose=True, exit_status=None):
                 print(e)
 
     finally:
-        # Only close if they're custom file objects
-        if hasattr(sys, 'stdout') and hasattr(sys.stdout, 'close') and not sys.stdout.closed:
-            if sys.stdout != sys.__stdout__:
-                sys.stdout.close()
-        if hasattr(sys, 'stderr') and hasattr(sys.stderr, 'close') and not sys.stderr.closed:
-            if sys.stderr != sys.__stderr__:
-                sys.stderr.close()
+        # Only close if they're custom file objects (Tee objects)
+        if sys:
+            try:
+                if hasattr(sys, 'stdout') and hasattr(sys.stdout, 'close'):
+                    # Check if it's a Tee object by checking for _log_file attribute
+                    if hasattr(sys.stdout, '_log_file'):
+                        sys.stdout.close()
+                if hasattr(sys, 'stderr') and hasattr(sys.stderr, 'close'):
+                    # Check if it's a Tee object by checking for _log_file attribute
+                    if hasattr(sys.stderr, '_log_file'):
+                        sys.stderr.close()
+            except Exception as e:
+                # Silent fail to ensure logs are saved even if there's an error
+                pass
     # finally:
     #     # Ensure file handles are closed
     #     if hasattr(sys, 'stdout') and hasattr(sys.stdout, 'close'):

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-26 06:08:42 (ywatanabe)"
+# Timestamp: "2025-05-28 17:05:26 (ywatanabe)"
 # File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/nn/_Filters.py
 # ----------------------------------------
 import os
@@ -10,12 +10,7 @@ __FILE__ = (
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
-import mngs
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 # Time-stamp: "2024-11-26 22:23:40 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/nn/_Filters.py
 
 THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/nn/_Filters.py"
 
@@ -379,6 +374,8 @@ class DifferentiableBandPassFilter(BaseFilter1D):
 
 
 if __name__ == "__main__":
+    import mngs
+
     # Start
     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
         sys, plt, fig_scale=5

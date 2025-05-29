@@ -1,5 +1,16 @@
-#! ./env/bin/python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Timestamp: "2025-05-26 06:26:29 (ywatanabe)"
+# File: /ssh:ywatanabe@sp:/home/ywatanabe/proj/mngs_repo/src/mngs/dsp/utils/pac.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./src/mngs/dsp/utils/pac.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
+
+#! ./env/bin/python3
 # Time-stamp: "2024-04-16 17:07:27"
 
 
@@ -11,7 +22,7 @@ This script does XYZ.
 import sys
 
 import matplotlib.pyplot as plt
-
+import mngs
 import numpy as np
 import tensorpac
 
@@ -136,8 +147,8 @@ if __name__ == "__main__":
     # Close
     mngs.gen.close(CONFIG)
 
-# EOF
-
 """
 /home/ywatanabe/proj/entrance/mngs/dsp/utils/pac.py
 """
+
+# EOF
