@@ -226,6 +226,7 @@ flycheck_*.el
 
 ### Source: /home/ywatanabe/.git-templates/.gitignore-templates/Custom/Specific.gitignore ###
 # Please add files here
+docs/to_claude
 
 ### Source: /home/ywatanabe/.git-templates/.gitignore-templates/Custom/Secrets.gitignore ###
 .git-crypt/keys
