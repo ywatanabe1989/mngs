@@ -1,4 +1,216 @@
-# Add your tests here
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Timestamp: "2025-05-30 01:00:00 (Claude)"
+# File: /tests/mngs/io/test__load.py
+
+import os
+import json
+import tempfile
+import pytest
+import numpy as np
+import pandas as pd
+from pathlib import Path
+
+import mngs.io
+
+
+class TestLoad:
+    """Test cases for mngs.io.load function."""
+    
+    @pytest.fixture
+    def temp_dir(self):
+        """Create a temporary directory for test files."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            yield tmpdir
+    
+    def test_load_json(self, temp_dir):
+        """Test loading JSON files."""
+        # Arrange
+        test_data = {"name": "test", "value": 42, "array": [1, 2, 3]}
+        json_path = os.path.join(temp_dir, "test.json")
+        with open(json_path, "w") as f:
+            json.dump(test_data, f)
+        
+        # Act
+        loaded_data = mngs.io.load(json_path)
+        
+        # Assert
+        assert loaded_data == test_data
+        assert isinstance(loaded_data, dict)
+    
+    def test_load_yaml(self, temp_dir):
+        """Test loading YAML files."""
+        # Arrange
+        yaml_content = """
+name: test
+value: 42
+array:
+  - 1
+  - 2
+  - 3
+"""
+        yaml_path = os.path.join(temp_dir, "test.yaml")
+        with open(yaml_path, "w") as f:
+            f.write(yaml_content)
+        
+        # Act
+        loaded_data = mngs.io.load(yaml_path)
+        
+        # Assert
+        assert loaded_data["name"] == "test"
+        assert loaded_data["value"] == 42
+        assert loaded_data["array"] == [1, 2, 3]
+    
+    def test_load_csv(self, temp_dir):
+        """Test loading CSV files."""
+        # Arrange
+        df = pd.DataFrame({
+            "A": [1, 2, 3],
+            "B": ["a", "b", "c"],
+            "C": [1.1, 2.2, 3.3]
+        })
+        csv_path = os.path.join(temp_dir, "test.csv")
+        df.to_csv(csv_path, index=False)
+        
+        # Act
+        loaded_df = mngs.io.load(csv_path)
+        
+        # Assert
+        assert isinstance(loaded_df, pd.DataFrame)
+        pd.testing.assert_frame_equal(loaded_df, df)
+    
+    def test_load_numpy(self, temp_dir):
+        """Test loading NumPy array files."""
+        # Arrange
+        arr = np.array([[1, 2, 3], [4, 5, 6]])
+        npy_path = os.path.join(temp_dir, "test.npy")
+        np.save(npy_path, arr)
+        
+        # Act
+        loaded_arr = mngs.io.load(npy_path)
+        
+        # Assert
+        assert isinstance(loaded_arr, np.ndarray)
+        np.testing.assert_array_equal(loaded_arr, arr)
+    
+    def test_load_txt(self, temp_dir):
+        """Test loading text files."""
+        # Arrange
+        text_content = "Hello\nWorld\nTest"
+        txt_path = os.path.join(temp_dir, "test.txt")
+        with open(txt_path, "w") as f:
+            f.write(text_content)
+        
+        # Act
+        loaded_text = mngs.io.load(txt_path)
+        
+        # Assert
+        assert loaded_text == text_content
+    
+    def test_load_markdown(self, temp_dir):
+        """Test loading markdown files."""
+        # Arrange
+        md_content = "# Header\n\nThis is a **test** markdown file."
+        md_path = os.path.join(temp_dir, "test.md")
+        with open(md_path, "w") as f:
+            f.write(md_content)
+        
+        # Act
+        loaded_md = mngs.io.load(md_path)
+        
+        # Assert
+        assert "Header" in loaded_md
+        assert "test" in loaded_md
+    
+    def test_load_nonexistent_file(self):
+        """Test loading a file that doesn't exist."""
+        # Arrange
+        fake_path = "/path/to/nonexistent/file.txt"
+        
+        # Act & Assert
+        with pytest.raises(FileNotFoundError):
+            mngs.io.load(fake_path)
+    
+    def test_load_with_extension_no_dot(self, temp_dir):
+        """Test loading a file without extension."""
+        # Arrange
+        text_content = "File without extension"
+        no_ext_path = os.path.join(temp_dir, "testfile")
+        with open(no_ext_path, "w") as f:
+            f.write(text_content)
+        
+        # Act
+        loaded_text = mngs.io.load(no_ext_path)
+        
+        # Assert
+        assert loaded_text == text_content
+    
+    def test_load_pickle(self, temp_dir):
+        """Test loading pickle files."""
+        # Arrange
+        import pickle
+        test_obj = {"key": "value", "list": [1, 2, 3], "nested": {"a": 1}}
+        pkl_path = os.path.join(temp_dir, "test.pkl")
+        with open(pkl_path, "wb") as f:
+            pickle.dump(test_obj, f)
+        
+        # Act
+        loaded_obj = mngs.io.load(pkl_path)
+        
+        # Assert
+        assert loaded_obj == test_obj
+    
+    def test_load_excel(self, temp_dir):
+        """Test loading Excel files."""
+        # Arrange
+        df = pd.DataFrame({
+            "Col1": [1, 2, 3],
+            "Col2": ["x", "y", "z"]
+        })
+        excel_path = os.path.join(temp_dir, "test.xlsx")
+        df.to_excel(excel_path, index=False)
+        
+        # Act
+        loaded_df = mngs.io.load(excel_path)
+        
+        # Assert
+        assert isinstance(loaded_df, pd.DataFrame)
+        pd.testing.assert_frame_equal(loaded_df, df)
+    
+    def test_load_tsv(self, temp_dir):
+        """Test loading TSV files."""
+        # Arrange
+        df = pd.DataFrame({
+            "A": [10, 20, 30],
+            "B": ["foo", "bar", "baz"]
+        })
+        tsv_path = os.path.join(temp_dir, "test.tsv")
+        df.to_csv(tsv_path, sep="\t", index=False)
+        
+        # Act
+        loaded_df = mngs.io.load(tsv_path)
+        
+        # Assert
+        assert isinstance(loaded_df, pd.DataFrame)
+        pd.testing.assert_frame_equal(loaded_df, df)
+    
+    def test_load_clean_path(self, temp_dir):
+        """Test that paths are cleaned properly."""
+        # Arrange
+        text_content = "Path cleaning test"
+        txt_path = os.path.join(temp_dir, "test.txt")
+        with open(txt_path, "w") as f:
+            f.write(text_content)
+        
+        # Create path with extra slashes
+        messy_path = txt_path.replace("/", "//")
+        
+        # Act
+        loaded_text = mngs.io.load(messy_path)
+        
+        # Assert
+        assert loaded_text == text_content
+
 
 if __name__ == "__main__":
     import os

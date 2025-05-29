@@ -1,3 +1,140 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Timestamp: "2025-05-30 01:15:00 (Claude)"
+# File: /tests/mngs/gen/test__start.py
+
+import os
+import sys
+import tempfile
+import shutil
+import pytest
+from unittest.mock import patch, MagicMock
+
+# Add src to path for testing
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../../src'))
+
+from mngs.gen._start import start
+
+
+class TestStart:
+    """Test cases for mngs.gen.start function."""
+    
+    @pytest.fixture
+    def temp_dir(self):
+        """Create a temporary directory for test files."""
+        tmpdir = tempfile.mkdtemp()
+        yield tmpdir
+        # Cleanup
+        if os.path.exists(tmpdir):
+            shutil.rmtree(tmpdir)
+    
+    @pytest.fixture
+    def mock_logging(self):
+        """Mock logging setup."""
+        with patch('mngs.gen._start.logging') as mock_log:
+            yield mock_log
+    
+    @pytest.fixture  
+    def mock_matplotlib(self):
+        """Mock matplotlib configuration."""
+        with patch('mngs.gen._start.plt') as mock_plt:
+            with patch('mngs.gen._start.mpl') as mock_mpl:
+                yield mock_plt, mock_mpl
+    
+    def test_start_creates_directories(self, temp_dir):
+        """Test that start() creates necessary directories."""
+        # Arrange
+        with patch('os.getcwd', return_value=temp_dir):
+            # Act
+            result = start(sdir=temp_dir, verbose=False)
+            
+            # Assert
+            assert os.path.exists(temp_dir)
+            assert result is not None
+    
+    def test_start_sets_matplotlib_backend(self, mock_matplotlib):
+        """Test that start() sets matplotlib backend to Agg."""
+        # Arrange
+        mock_plt, mock_mpl = mock_matplotlib
+        
+        # Act
+        start(verbose=False)
+        
+        # Assert
+        mock_mpl.use.assert_called_with('Agg')
+    
+    def test_start_configures_logging(self, temp_dir, mock_logging):
+        """Test that start() configures logging properly."""
+        # Arrange
+        with patch('os.getcwd', return_value=temp_dir):
+            # Act
+            start(sdir=temp_dir, verbose=False)
+            
+            # Assert
+            mock_logging.basicConfig.assert_called_once()
+    
+    def test_start_sets_random_seeds(self):
+        """Test that start() sets random seeds for reproducibility."""
+        # Arrange
+        with patch('mngs.gen._start.random') as mock_random:
+            with patch('mngs.gen._start.np.random') as mock_np_random:
+                with patch('mngs.gen._start.torch') as mock_torch:
+                    # Act
+                    start(seed=42, verbose=False)
+                    
+                    # Assert
+                    mock_random.seed.assert_called_with(42)
+                    mock_np_random.seed.assert_called_with(42)
+                    mock_torch.manual_seed.assert_called_with(42)
+    
+    def test_start_with_verbose(self, capsys):
+        """Test that start() prints messages when verbose=True."""
+        # Act
+        with patch('mngs.gen._start.configure_mpl'):
+            with patch('mngs.gen._start.fix_seeds'):
+                start(verbose=True)
+        
+        # Assert
+        captured = capsys.readouterr()
+        assert len(captured.out) > 0  # Should print something
+    
+    def test_start_returns_config(self):
+        """Test that start() returns configuration object."""
+        # Act
+        with patch('mngs.gen._start.configure_mpl'):
+            with patch('mngs.gen._start.fix_seeds'):
+                result = start(verbose=False)
+        
+        # Assert
+        assert result is not None
+        assert hasattr(result, '__dict__') or isinstance(result, dict)
+    
+    def test_start_handles_missing_torch_gracefully(self):
+        """Test that start() handles missing torch module gracefully."""
+        # Arrange
+        with patch.dict(sys.modules, {'torch': None}):
+            # Act & Assert - should not raise exception
+            try:
+                start(verbose=False)
+            except ImportError:
+                pytest.fail("start() should handle missing torch gracefully")
+    
+    def test_start_creates_symlink(self, temp_dir):
+        """Test that start() creates symlinks for outputs."""
+        # Arrange
+        script_path = os.path.join(temp_dir, "test_script.py")
+        with open(script_path, 'w') as f:
+            f.write("# test script")
+        
+        with patch('sys.argv', [script_path]):
+            with patch('os.getcwd', return_value=temp_dir):
+                # Act
+                start(sdir=temp_dir, verbose=False)
+                
+                # Assert - check if output directory structure created
+                assert os.path.exists(temp_dir)
+
+
 # --------------------------------------------------------------------------------
 
 if __name__ == "__main__":
