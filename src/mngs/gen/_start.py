@@ -274,12 +274,16 @@ def start(
             THIS_FILE = file
         else:
             THIS_FILE = inspect.stack()[1].filename
-            if "ipython" in __file__:
+            if "ipython" in THIS_FILE:
                 THIS_FILE = f"/tmp/{_os.getenv('USER')}.py"
+
+        # Convert to absolute path if relative
+        if not _os.path.isabs(THIS_FILE):
+            THIS_FILE = _os.path.abspath(THIS_FILE)
 
         # Define sdir
         sdir = clean_path(
-            _os.path.splitext(__file__)[0] + f"_out/RUNNING/{ID}/"
+            _os.path.splitext(THIS_FILE)[0] + f"_out/RUNNING/{ID}/"
         )
 
         # Optional
@@ -287,7 +291,7 @@ def start(
             sdir = sdir[:-1] + f"-{sdir_suffix}/"
 
     if clear_logs:
-        _clear_python_log_dir(_sdir + sfname + "/")
+        _clear_python_log_dir(sdir)
     _os.makedirs(sdir, exist_ok=True)
     relative_sdir = _simplify_relative_path(sdir)
     ########################################

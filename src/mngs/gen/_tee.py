@@ -89,8 +89,10 @@ class Tee:
             if self._is_stderr:
                 if isinstance(data, str) and not re.match(r"^[\s]*[0-9]+%.*\[A*$", data):
                     self._log_file.write(data)
+                    self._log_file.flush()  # Ensure immediate write
             else:
                 self._log_file.write(data)
+                self._log_file.flush()  # Ensure immediate write
 
     def flush(self) -> None:
         self._stream.flush()
@@ -182,9 +184,9 @@ def tee(sys, sdir=None, verbose=True):
     ####################
     if sdir is None:
         THIS_FILE = inspect.stack()[1].filename
-        if "ipython" in __file__:
+        if "ipython" in THIS_FILE:
             THIS_FILE = f"/tmp/{_os.getenv('USER')}.py"
-        sdir = clean_path(_os.path.splitext(__file__)[0] + "_out")
+        sdir = clean_path(_os.path.splitext(THIS_FILE)[0] + "_out")
 
     sdir = _os.path.join(sdir, "logs/")
     _os.makedirs(sdir, exist_ok=True)
