@@ -12,7 +12,13 @@ import json
 from tqdm import tqdm
 import mngs
 from pprint import pprint
-from readability import Document
+try:
+    from readability import Document
+except ImportError:
+    try:
+        from readability.readability import Document
+    except ImportError:
+        Document = None
 
 import re
 
@@ -49,6 +55,12 @@ import re
 
 
 def extract_main_content(html):
+    if Document is None:
+        # Fallback: just strip HTML tags
+        content = re.sub("<[^<]+?>", "", html)
+        content = " ".join(content.split())
+        return content[:5000]  # Limit to first 5000 chars
+    
     doc = Document(html)
     content = doc.summary()
     # Remove HTML tags
