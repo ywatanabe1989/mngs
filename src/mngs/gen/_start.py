@@ -345,7 +345,11 @@ def start(
         structure = analyze_code_flow(file)
         _printc(structure)
 
-    return CONFIGS, sys.stdout, sys.stderr, plt, CC
+    # Return appropriate values based on whether sys was provided
+    if sys is not None:
+        return CONFIGS, sys.stdout, sys.stderr, plt, CC
+    else:
+        return CONFIGS, None, None, plt, CC
 
 
 def _simplify_relative_path(sdir: str) -> str:
