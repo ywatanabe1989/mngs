@@ -15,6 +15,47 @@ import numpy as np
 
 
 class OOMFormatter(matplotlib.ticker.ScalarFormatter):
+    """Custom formatter for scientific notation with fixed order of magnitude.
+    
+    A matplotlib formatter that allows you to specify a fixed exponent for
+    scientific notation, rather than letting matplotlib choose it automatically.
+    Useful when you want consistent notation across multiple plots or specific
+    exponent values.
+    
+    Parameters
+    ----------
+    order : int or None, optional
+        Fixed order of magnitude (exponent) to use. If None, calculated
+        automatically. Default is None.
+    fformat : str, optional
+        Format string for the mantissa. Default is "%1.1f".
+    offset : bool, optional
+        Whether to use offset notation. Default is True.
+    mathText : bool, optional
+        Whether to use mathtext rendering. Default is True.
+        
+    Attributes
+    ----------
+    order : int or None
+        The fixed order of magnitude to use.
+    fformat : str
+        Format string for displaying numbers.
+        
+    Examples
+    --------
+    >>> # Force all labels to use 10^3 notation
+    >>> formatter = OOMFormatter(order=3, fformat="%1.2f")
+    >>> ax.xaxis.set_major_formatter(formatter)
+    
+    >>> # Use 10^-6 for microvolts
+    >>> formatter = OOMFormatter(order=-6, fformat="%1.1f")
+    >>> ax.yaxis.set_major_formatter(formatter)
+    
+    See Also
+    --------
+    matplotlib.ticker.ScalarFormatter : Base formatter class
+    sci_note : Convenience function using this formatter
+    """
     def __init__(
         self, order=None, fformat="%1.1f", offset=True, mathText=True
     ):

@@ -5,7 +5,8 @@
             "args": [
                 "-y",
                 "@modelcontextprotocol/server-filesystem",
-                "/home/ywatanabe/"
+                "/home/ywatanabe/",
+                "/"
             ]
         },
         "puppeteer": {
@@ -29,6 +30,13 @@
                 "ZOTERO_USER_ID": "$ZOTERO_USER_ID"
             },
             "description": "https://github.com/kaliaboi/mcp-zotero"
+        },
+        "sequential-thinking": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@modelcontextprotocol/server-sequential-thinking"
+            ]
         }
     }
 }

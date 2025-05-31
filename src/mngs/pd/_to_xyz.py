@@ -9,9 +9,11 @@ import pandas as pd
 
 def to_xyz(data_frame):
     """
-    Convert a heatmap DataFrame into x, y, z format.
+    Convert a DataFrame into x, y, z format (long format).
 
-    Ensure the index and columns are the same, and if either exists, replace with that.
+    Transforms a DataFrame from wide format (matrix/heatmap) to long format
+    where each value becomes a row with x (row index), y (column name), 
+    and z (value) columns.
 
     Example
     -------
@@ -29,16 +31,6 @@ def to_xyz(data_frame):
     pandas.DataFrame
         A DataFrame formatted with columns ['x', 'y', 'z']
     """
-    assert data_frame.shape[0] == data_frame.shape[1]
-
-    if not data_frame.index.equals(data_frame.columns):
-        if np.array_equal(data_frame.index, np.arange(len(data_frame.index))):
-            data_frame.columns = data_frame.index
-        elif np.array_equal(data_frame.columns, np.arange(len(data_frame.columns))):
-            data_frame.index = data_frame.columns
-        else:
-            raise ValueError("Either index or columns must be a range of integers")
-
     x_name = data_frame.index.name or 'x'
     y_name = data_frame.columns.name or 'y'
 
@@ -54,7 +46,10 @@ def to_xyz(data_frame):
         formatted_data_frames.append(formatted_data)
 
     result = pd.concat(formatted_data_frames, ignore_index=True)
-    result = mngs.pd.mv(result, 'z', -1)
+    
+    # Ensure column order is x, y, z
+    col_order = [x_name, y_name, 'z']
+    result = result[col_order]
 
     return result
 

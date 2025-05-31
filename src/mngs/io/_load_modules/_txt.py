@@ -67,27 +67,36 @@ def _load_txt(lpath, **kwargs):
         raise ValueError(f"Error loading file {lpath}: {str(e)}")
 
 
-def _load_txt(lpath, strip=False):
+def _load_txt(lpath, strip=False, as_lines=False):
     """
-    Load text file and return non-empty lines.
+    Load text file and return its content.
     - Warn if extension is unexpected.
     - Try UTF-8 first, then default encoding.
-    - If strip=True, strip each line.
+    - If strip=True, strip whitespace.
+    - If as_lines=True, return list of lines (backward compatibility).
     """
     if not lpath.endswith((".txt", ".log", ".event", ".py", ".sh")):
         warnings.warn(f"Unexpected extension for file: {lpath}")
 
     try:
         with open(lpath, "r", encoding="utf-8") as file:
-            raw_lines = file.read().splitlines()
+            content = file.read()
     except UnicodeDecodeError:
         with open(lpath, "r") as file:
-            raw_lines = file.read().splitlines()
+            content = file.read()
 
+    # For backward compatibility, check if as_lines parameter or legacy behavior needed
+    if as_lines:
+        raw_lines = content.splitlines()
+        if strip:
+            return [line.strip() for line in raw_lines if line.strip()]
+        return [line for line in raw_lines if line.strip()]
+    
+    # Default: return full content (possibly stripped)
     if strip:
-        return [line.strip() for line in raw_lines if line.strip()]
-
-    return [line for line in raw_lines if line.strip()]
+        return content.strip()
+    
+    return content
 
 
 def _check_encoding(file_path):

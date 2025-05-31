@@ -5,10 +5,10 @@
 
 import torch
 import torchaudio.transforms as T
-from ..decorators import torch_fn
+from ..decorators import signal_fn
 
 
-@torch_fn
+@signal_fn
 def resample(x, src_fs, tgt_fs, t=None):
     xr = T.Resample(src_fs, tgt_fs, dtype=x.dtype).to(x.device)(x)
     if t is None:

@@ -12,7 +12,7 @@ import numpy as np
 import torch
 from ..str import printc
 
-from ..decorators import torch_fn, batch_fn
+from ..decorators import signal_fn, batch_fn
 from ..nn._PAC import PAC
 
 """
@@ -20,7 +20,7 @@ mngs.dsp.pac function
 """
 
 # @batch_fn
-@torch_fn
+@signal_fn
 def pac(
     x,
     fs,
@@ -217,7 +217,7 @@ if __name__ == "__main__":
 #         def process_pac(self, x, fs, **kwargs):
 #             return pac(x, fs, **kwargs)
 
-#         @torch_fn
+#         @signal_fn
 #         def process_signal(self, x):
 #             return x * 2
 

@@ -30,7 +30,14 @@ del os, importlib, inspect, current_dir, filename, module_name, module, name, ob
 from . import desc
 from . import multiple
 from . import tests
-from .desc import describe
+from ._describe_wrapper import describe
+from ._nan_stats import nan, real
+from ._corr_test_wrapper import corr_test, corr_test_spearman, corr_test_pearson
+from .tests._corr_test import _compute_surrogate
+from ._corr_test_multi import corr_test_multi, nocorrelation_test
+from ._statistical_tests import brunner_munzel_test, smirnov_grubbs
+from ._p2stars_wrapper import p2stars
+from ._multiple_corrections import bonferroni_correction, fdr_correction, multicompair
 
 
 # EOF

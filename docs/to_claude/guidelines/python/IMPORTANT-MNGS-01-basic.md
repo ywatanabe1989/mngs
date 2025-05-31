@@ -1,7 +1,7 @@
 <!-- ---
-!-- Timestamp: 2025-05-29 20:32:54
+!-- Timestamp: 2025-05-30 04:47:50
 !-- Author: ywatanabe
-!-- File: /ssh:ywatanabe@sp:/home/ywatanabe/.dotfiles/.claude/to_claude/guidelines/python/MNGS-01-BASIC.md
+!-- File: /ssh:ywatanabe@sp:/home/ywatanabe/.dotfiles/.claude/to_claude/guidelines/python/IMPORTANT-MNGS-01-basic.md
 !-- --- -->
 
 # MNGS Basic Guidelines
@@ -10,10 +10,9 @@
 **ANY PYTHON SCRIPTS MUST BE WRITTEN IN THE MNGS FORMAT EXPLAINED BELOW.**
 THE EXCEPTIONS ARE:
     - Pacakges authored by others
-    - Source (`./src`) of pip packages to reduce dependency
-THUS, MNGS MUST BE USED IN:
+    - Source (`./src` and `./tests`) of pip packages to reduce dependency
+IN OTHER WORDS, IN ANY PYTHON PROJECT, MNGS MUST BE USED AT LEAST IN:
 - `./scripts`
-- `./tests`
 - `./examples`
 
 ## Feature Request

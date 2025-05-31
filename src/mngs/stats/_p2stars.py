@@ -65,7 +65,7 @@ def _p2stars_str(pvalue: Union[float, str], ns: bool = False) -> str:
     elif pvalue_float <= 0.05:
         return "*"
     else:
-        return "n.s." if ns else ""
+        return "ns" if ns else ""
 
 
 def _p2stars_pd(df: pd.DataFrame, ns: bool = False) -> pd.DataFrame:

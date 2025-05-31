@@ -59,6 +59,32 @@ def search(
     """
 
     def to_list(string_or_pattern):
+        """Convert various input types to a list.
+        
+        Handles conversion of different data structures to lists for
+        consistent processing in the search function.
+        
+        Parameters
+        ----------
+        string_or_pattern : str, list, tuple, array-like, or dict_keys
+            Input to be converted to list format.
+            
+        Returns
+        -------
+        list
+            The input converted to list format.
+            
+        Examples
+        --------
+        >>> to_list('hello')
+        ['hello']
+        
+        >>> to_list(['a', 'b'])
+        ['a', 'b']
+        
+        >>> to_list(np.array(['x', 'y']))
+        ['x', 'y']
+        """
         if isinstance(
             string_or_pattern, (np.ndarray, pd.Series, xr.DataArray)
         ):

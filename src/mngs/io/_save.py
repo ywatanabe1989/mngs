@@ -230,6 +230,21 @@ def _save(
     # csv
     if spath.endswith(".csv"):
         _save_csv(obj, spath, **kwargs)
+    
+    # excel
+    elif spath.endswith(".xlsx") or spath.endswith(".xls"):
+        if isinstance(obj, pd.DataFrame):
+            obj.to_excel(spath, index=False, **kwargs)
+        elif isinstance(obj, dict):
+            # Convert dict to DataFrame if possible
+            df = pd.DataFrame(obj)
+            df.to_excel(spath, index=False, **kwargs)
+        elif isinstance(obj, np.ndarray):
+            # Convert numpy array to DataFrame
+            df = pd.DataFrame(obj)
+            df.to_excel(spath, index=False, **kwargs)
+        else:
+            raise ValueError(f"Cannot save object of type {type(obj)} as Excel file")
 
     # numpy
     elif spath.endswith(".npy"):
@@ -244,12 +259,15 @@ def _save(
         ):
             obj = {str(ii): obj[ii] for ii in range(len(obj))}
             np.savez_compressed(spath, **obj)
+        elif isinstance(obj, np.ndarray):
+            # Handle single array
+            np.savez_compressed(spath, arr_0=obj)
         else:
             raise ValueError(
-                "For .npz files, obj must be a dict of arrays or a list/tuple of arrays."
+                "For .npz files, obj must be a dict of arrays, a list/tuple of arrays, or a single array."
             )
     # pkl
-    elif spath.endswith(".pkl"):
+    elif spath.endswith(".pkl") or spath.endswith(".pickle"):
         with open(spath, "wb") as s:
             pickle.dump(obj, s)
 
@@ -307,7 +325,7 @@ def _save(
         # del obj
 
     # yaml
-    elif spath.endswith(".yaml"):
+    elif spath.endswith(".yaml") or spath.endswith(".yml"):
         yaml = YAML()
         yaml.preserve_quotes = True
         yaml.indent(mapping=4, sequence=4, offset=4)
@@ -321,14 +339,34 @@ def _save(
             json.dump(obj, f, indent=4)
 
     # hdf5
-    elif spath.endswith(".hdf5"):
-        name_list, obj_list = []
-        for k, v in obj.items():
-            name_list.append(k)
-            obj_list.append(v)
+    elif spath.endswith(".hdf5") or spath.endswith(".h5"):
         with h5py.File(spath, "w") as hf:
-            for name, obj in zip(name_list, obj_list):
-                hf.create_dataset(name, data=obj)
+            def save_item(name, item, group):
+                """Recursively save items to HDF5."""
+                if isinstance(item, dict):
+                    # Create a group for nested dict
+                    subgroup = group.create_group(name)
+                    for k, v in item.items():
+                        save_item(k, v, subgroup)
+                elif isinstance(item, (np.ndarray, list, tuple)):
+                    # Save arrays and array-like objects
+                    group.create_dataset(name, data=np.array(item))
+                elif isinstance(item, (int, float, str, bool)):
+                    # Save scalars
+                    group.create_dataset(name, data=item)
+                else:
+                    # Try to convert to numpy array
+                    try:
+                        group.create_dataset(name, data=np.array(item))
+                    except:
+                        # If all else fails, pickle it
+                        import pickle
+                        pickled = pickle.dumps(item)
+                        group.create_dataset(name, data=np.void(pickled))
+            
+            # Save all items in the dictionary
+            for key, value in obj.items():
+                save_item(key, value, hf)
     # pth
     elif spath.endswith(".pth") or spath.endswith(".pt"):
         torch.save(obj, spath, **kwargs)

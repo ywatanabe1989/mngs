@@ -7,11 +7,11 @@
 
 import torch
 
-from ..decorators import torch_fn
+from ..decorators import signal_fn
 from ..nn._PSD import PSD
 
 
-@torch_fn
+@signal_fn
 def psd(
     x,
     fs,

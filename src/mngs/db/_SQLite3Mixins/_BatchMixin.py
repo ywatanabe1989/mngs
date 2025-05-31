@@ -119,7 +119,7 @@ class _BatchMixin:
                         print(
                             f"Warning: Where clause evaluation failed for row: {e}"
                         )
-            rows = filtered_rows
+                rows = filtered_rows
             schema = self.get_table_schema(table_name)
             table_columns = set(schema["name"])
             valid_columns = [col for col in rows[0].keys()]

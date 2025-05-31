@@ -1,23 +1,59 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-30 02:00:00 (Claude)"
-# File: examples/mngs/io/basic_file_operations.py
+# Timestamp: "2025-05-31 07:10:00 (Claude)"
+# File: /data/gpfs/projects/punim2354/ywatanabe/.claude-worktree/mngs_repo/examples/mngs/io/basic_file_operations.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./examples/mngs/io/basic_file_operations.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
 
 """
-Basic file I/O operations with mngs.io
+Functionalities:
+  - Demonstrates loading various file formats with mngs.io.load
+  - Shows saving data with automatic directory creation using mngs.io.save
+  - Works with NumPy arrays, DataFrames, JSON, YAML, text files
+  - Demonstrates compressed data storage and collections
+  - Saves all outputs in the mngs-managed output directory
 
-This example demonstrates:
-- Loading various file formats
-- Saving data with automatic directory creation
-- Working with different data types
+Dependencies:
+  - scripts:
+    - None
+  - packages:
+    - numpy
+    - pandas
+    - mngs
+IO:
+  - input-files:
+    - None
+
+  - output-files:
+    - arrays/random_data.npy
+    - dataframes/timeseries.csv
+    - configs/experiment_config.json
+    - configs/experiment_config.yaml
+    - arrays/compressed_data.npz
+    - reports/experiment_report.txt
+    - reports/experiment_report.md
+    - very/deep/nested/directory/structure/data.json
+    - collections/all_dataframes.csv
 """
 
-import sys
-import numpy as np
-import pandas as pd
-import mngs
+"""Imports"""
+import argparse
 
-def main():
+"""Warnings"""
+# mngs.pd.ignore_SettingWithCopyWarning()
+# warnings.simplefilter("ignore", UserWarning)
+
+"""Parameters"""
+# from mngs.io import load_configs
+# CONFIG = load_configs()
+
+"""Functions & Classes"""
+def main(args):
     """Demonstrate basic file I/O operations."""
     
     print("=== MNGS I/O Examples ===\n")
@@ -25,20 +61,18 @@ def main():
     # 1. Working with NumPy arrays
     print("1. NumPy Arrays")
     arr = np.random.randn(100, 50)
-    mngs.io.save(arr, "./output/arrays/random_data.npy")
-    loaded_arr = mngs.io.load("./output/arrays/random_data.npy")
-    print(f"   Saved and loaded array shape: {loaded_arr.shape}")
+    mngs.io.save(arr, "arrays/random_data.npy")
+    print(f"   Created array shape: {arr.shape}")
     
-    # 2. Working with DataFrames
+    # 2. Working with DataFrames  
     print("\n2. Pandas DataFrames")
     df = pd.DataFrame({
         'timestamp': pd.date_range('2024-01-01', periods=100),
         'value': np.random.randn(100),
         'category': np.random.choice(['A', 'B', 'C'], 100)
     })
-    mngs.io.save(df, "./output/dataframes/timeseries.csv", index=False)
-    loaded_df = mngs.io.load("./output/dataframes/timeseries.csv")
-    print(f"   Saved and loaded DataFrame shape: {loaded_df.shape}")
+    mngs.io.save(df, "dataframes/timeseries.csv", index=False)
+    print(f"   Created DataFrame shape: {df.shape}")
     
     # 3. Working with dictionaries/JSON
     print("\n3. Dictionaries and JSON")
@@ -57,9 +91,8 @@ def main():
             'test_size': 0.1
         }
     }
-    mngs.io.save(config, "./output/configs/experiment_config.json")
-    mngs.io.save(config, "./output/configs/experiment_config.yaml")
-    loaded_json = mngs.io.load("./output/configs/experiment_config.json")
+    mngs.io.save(config, "configs/experiment_config.json")
+    mngs.io.save(config, "configs/experiment_config.yaml")
     print(f"   Saved config with {len(config)} top-level keys")
     
     # 4. Working with compressed numpy arrays
@@ -69,8 +102,7 @@ def main():
         'labels': np.random.randint(0, 10, 1000),
         'metadata': np.array(['sample_' + str(i) for i in range(1000)])
     }
-    mngs.io.save(data_dict, "./output/arrays/compressed_data.npz")
-    loaded_npz = mngs.io.load("./output/arrays/compressed_data.npz")
+    mngs.io.save(data_dict, "arrays/compressed_data.npz")
     print(f"   Saved {len(data_dict)} arrays in compressed format")
     
     # 5. Working with text files
@@ -79,22 +111,21 @@ def main():
 ==================
 
 Date: 2025-05-30
-Model: MNGS Example
+Model: MNGS Example  
 Results: Success
 
 This is a sample report demonstrating text file handling.
 """
-    mngs.io.save(report, "./output/reports/experiment_report.txt")
-    mngs.io.save(report, "./output/reports/experiment_report.md")
-    loaded_text = mngs.io.load("./output/reports/experiment_report.txt")
-    print(f"   Saved text report with {len(loaded_text.splitlines())} lines")
+    mngs.io.save(report, "reports/experiment_report.txt")
+    mngs.io.save(report, "reports/experiment_report.md")
+    print(f"   Saved text report with {len(report.splitlines())} lines")
     
     # 6. Demonstrating automatic directory creation
     print("\n6. Automatic Directory Creation")
     nested_data = {"deep": {"nested": {"structure": "works"}}}
     mngs.io.save(
         nested_data, 
-        "./output/very/deep/nested/directory/structure/data.json"
+        "very/deep/nested/directory/structure/data.json"
     )
     print("   Created nested directory structure automatically")
     
@@ -105,18 +136,78 @@ This is a sample report demonstrating text file handling.
         for _ in range(5)
     ]
     # Save as concatenated CSV
-    mngs.io.save(df_list, "./output/collections/all_dataframes.csv")
+    mngs.io.save(df_list, "collections/all_dataframes.csv")
     print(f"   Saved {len(df_list)} DataFrames as single CSV")
     
-    print("\n✅ All examples completed successfully!")
-    print(f"📁 Check the './output/' directory for all saved files")
+    # 8. Demonstrate loading files back
+    print("\n8. Loading Files Back")
+    # Get the actual output directory from mngs
+    base_dir = os.path.dirname(os.path.dirname(CONFIG.SDIR))
+    
+    # List files created
+    print(f"\n✅ All examples completed successfully!")
+    print(f"📁 Files saved to mngs-managed output directory")
+    print(f"   Output directory: {base_dir}")
+    
+    # Show directory structure
+    print(f"\n📂 Directory structure created:")
+    for root, dirs, files in os.walk(base_dir):
+        level = root.replace(base_dir, '').count(os.sep)
+        indent = ' ' * 2 * level
+        print(f"{indent}{os.path.basename(root)}/")
+        subindent = ' ' * 2 * (level + 1)
+        for file in files[:5]:  # Show first 5 files
+            print(f"{subindent}{file}")
+        if len(files) > 5:
+            print(f"{subindent}... and {len(files)-5} more files")
+    
+    return 0
+
+def parse_args() -> argparse.Namespace:
+    """Parse command line arguments."""
+    import mngs
+
+    script_mode = mngs.gen.is_script()
+    parser = argparse.ArgumentParser(description="Basic file I/O operations with mngs.io")
+    args = parser.parse_args()
+    mngs.str.printc(args, c="yellow")
+    return args
+
+
+def run_main() -> None:
+    """Initialize mngs framework, run main function, and cleanup."""
+    global CONFIG, CC, sys, plt, np, pd, mngs, os
+
+    import sys
+    import os
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import mngs
+
+    args = parse_args()
+
+    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
+        sys,
+        plt,
+        args=args,
+        file=__FILE__,
+        verbose=False,
+        agg=True,
+    )
+
+    exit_status = main(args)
+
+    mngs.gen.close(
+        CONFIG,
+        verbose=False,
+        notify=False,
+        message="",
+        exit_status=exit_status,
+    )
 
 
 if __name__ == "__main__":
-    # Basic usage without mngs.gen.start
-    main()
-    
-    # Alternative: Full mngs workflow
-    # CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys)
-    # main()
-    # mngs.gen.close(CONFIG)
+    run_main()
+
+# EOF

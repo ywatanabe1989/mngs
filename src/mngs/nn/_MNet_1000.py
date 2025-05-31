@@ -20,7 +20,7 @@ MNet_config = {
 }
 
 
-class MNet_1000(nn.Module):
+class MNet1000(nn.Module):
     def __init__(self, config):
         super().__init__()
 
@@ -159,3 +159,6 @@ if __name__ == "__main__":
     y = model(x)
     summary(model, x)
     print(y.shape)
+
+# Backward compatibility
+MNet_1000 = MNet1000  # Deprecated: use MNet1000 instead

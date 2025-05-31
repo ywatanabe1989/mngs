@@ -123,15 +123,18 @@ def close(CONFIG, message=":)", notify=False, verbose=True, exit_status=None):
         # Only close if they're custom file objects (Tee objects)
         if sys:
             try:
-                if hasattr(sys, 'stdout') and hasattr(sys.stdout, 'close'):
-                    # Check if it's a Tee object by checking for _log_file attribute
-                    if hasattr(sys.stdout, '_log_file'):
-                        sys.stdout.close()
-                if hasattr(sys, 'stderr') and hasattr(sys.stderr, 'close'):
-                    # Check if it's a Tee object by checking for _log_file attribute
-                    if hasattr(sys.stderr, '_log_file'):
-                        sys.stderr.close()
-            except Exception as e:
+                # First, flush all outputs
+                if hasattr(sys, 'stdout') and hasattr(sys.stdout, 'flush'):
+                    sys.stdout.flush()
+                if hasattr(sys, 'stderr') and hasattr(sys.stderr, 'flush'):
+                    sys.stderr.flush()
+                
+                # Then close Tee objects
+                if hasattr(sys, 'stdout') and hasattr(sys.stdout, '_log_file'):
+                    sys.stdout.close()
+                if hasattr(sys, 'stderr') and hasattr(sys.stderr, '_log_file'):
+                    sys.stderr.close()
+            except Exception:
                 # Silent fail to ensure logs are saved even if there's an error
                 pass
     # finally:

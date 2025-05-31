@@ -12,11 +12,11 @@ import sys
 import matplotlib.pyplot as plt
 from ..nn._Hilbert import Hilbert
 
-from ..decorators import torch_fn
+from ..decorators import signal_fn
 
 
 # Functions
-@torch_fn
+@signal_fn
 def hilbert(
     x,
     dim=-1,

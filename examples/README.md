@@ -11,7 +11,14 @@ examples/
 ├── mngs/
 │   ├── io/           # File I/O examples
 │   ├── gen/          # Environment setup examples
-│   └── plt/          # Enhanced plotting examples
+│   ├── plt/          # Enhanced plotting examples
+│   ├── pd/           # Pandas utilities examples
+│   ├── dsp/          # Digital signal processing examples
+│   ├── stats/        # Statistical analysis examples
+│   ├── ai/           # AI/ML examples
+│   ├── nn/           # Neural network examples
+│   ├── db/           # Database examples
+│   └── workflows/    # Complete workflow examples
 └── README.md         # This file
 ```
 
@@ -28,6 +35,27 @@ python examples/mngs/gen/experiment_workflow.py
 
 # Enhanced plotting capabilities
 python examples/mngs/plt/enhanced_plotting.py
+
+# Pandas DataFrame operations
+python examples/mngs/pd/dataframe_operations.py
+
+# Digital signal processing
+python examples/mngs/dsp/signal_processing.py
+
+# Statistical analysis
+python examples/mngs/stats/statistical_analysis.py
+
+# Machine learning workflow
+python examples/mngs/ai/machine_learning_workflow.py
+
+# Neural network layers
+python examples/mngs/nn/neural_network_layers.py
+
+# Database operations
+python examples/mngs/db/database_operations.py
+
+# Complete scientific pipeline
+python examples/mngs/workflows/scientific_data_pipeline.py
 ```
 
 ## Example Descriptions
@@ -55,6 +83,79 @@ Illustrates advanced plotting features:
 - Statistical visualizations with error bars
 - Custom styling and formatting
 - Automatic CSV export of plotted data
+
+### 4. `pd/dataframe_operations.py`
+Demonstrates pandas utility functions:
+- DataFrame creation and type conversion with force_df
+- Column operations (melt, merge, find)
+- Advanced filtering and slicing with conditions
+- Type conversions and data cleaning
+- Coordinate transformations (xyz format)
+- Missing value handling and interpolation
+
+### 5. `dsp/signal_processing.py`
+Shows digital signal processing capabilities:
+- Signal filtering (bandpass, lowpass, highpass)
+- Power Spectral Density (PSD) analysis
+- Time-frequency analysis with wavelets
+- Hilbert transform for phase and amplitude
+- Phase-Amplitude Coupling (PAC) analysis
+- Multi-channel signal processing
+- Signal resampling and normalization
+
+### 6. `stats/statistical_analysis.py`
+Covers statistical analysis workflows:
+- Descriptive statistics with NaN handling
+- Correlation analysis (Pearson, Spearman, partial)
+- Statistical tests (Brunner-Munzel, t-test)
+- Multiple comparison corrections (Bonferroni, FDR)
+- P-value formatting and visualization
+- Outlier detection (Smirnov-Grubbs)
+- Complete analysis pipeline example
+
+### 7. `ai/machine_learning_workflow.py`
+Demonstrates machine learning capabilities:
+- Setting up reproducible ML experiments
+- Training multiple classifiers (RF, XGBoost, SVM, LR)
+- Model evaluation and comparison
+- Classification reporting with detailed metrics
+- Feature importance analysis
+- Confusion matrix visualization
+- Comprehensive ML report generation
+
+### 8. `nn/neural_network_layers.py`
+Demonstrates MNGS neural network layers:
+- Signal processing layers (Filters, Hilbert, PSD, Wavelet)
+- Data augmentation layers (ChannelGainChanger, FreqGainChanger, SwapChannels)
+- Analysis layers (PAC, ModulationIndex)
+- Complete model integration with PyTorch
+- Custom layer parameters and learning
+- Visualization of layer outputs
+- Multi-channel signal processing in neural networks
+
+### 9. `db/database_operations.py`
+Shows comprehensive database operations:
+- SQLite database creation and connection
+- Table creation with foreign keys
+- CRUD operations (Create, Read, Update, Delete)
+- Efficient batch operations
+- NumPy array storage as BLOBs with metadata
+- Transaction management for data integrity
+- CSV import/export functionality
+- Database maintenance (backup, optimization)
+- Complex queries with joins
+- Index creation for performance
+
+### 10. `workflows/scientific_data_pipeline.py`
+Shows a complete end-to-end scientific workflow:
+- Multi-module integration (gen, io, pd, dsp, stats, plt)
+- Synthetic physiological data generation
+- Signal preprocessing and filtering
+- Feature extraction from time-series data
+- Statistical analysis with multiple comparisons
+- Time-frequency analysis
+- Automated report generation
+- Publication-ready visualizations
 
 ## Key Features Demonstrated
 

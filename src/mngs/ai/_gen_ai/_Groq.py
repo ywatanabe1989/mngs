@@ -28,7 +28,7 @@ from typing import Any, Dict, Generator, List, Optional, Union
 from groq import Groq as _Groq
 import matplotlib.pyplot as plt
 
-from ._BaseGenAI import BaseGenAI
+from .base_genai import BaseGenAI
 
 """Functions & Classes"""
 

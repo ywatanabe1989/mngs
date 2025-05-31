@@ -38,7 +38,6 @@ THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/io/__init__.py"
 
 from ._cache import *
 from ._flush import *
-from ._glob import *
 from ._json2md import *
 from ._load_configs import *
 from ._load_modules import *
@@ -55,5 +54,8 @@ from ._save_optuna_study_as_csv_and_pngs import *
 # from ._save_optuna_stury import *
 from ._save import *
 from ._save_text import *
+
+# Import glob function last to override any previous glob imports
+from ._glob import glob as glob, parse_glob as parse_glob
 
 # EOF

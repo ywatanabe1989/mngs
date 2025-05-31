@@ -24,7 +24,7 @@ from typing import Dict, Generator, List, Optional
 import mngs
 import requests
 
-from ._BaseGenAI import BaseGenAI
+from .base_genai import BaseGenAI
 
 """Warnings"""
 # mngs.pd.ignore_SettingWithCopyWarning()
@@ -38,7 +38,7 @@ from ._BaseGenAI import BaseGenAI
 
 """Functions & Classes"""
 """Imports"""
-from ._BaseGenAI import BaseGenAI
+from .base_genai import BaseGenAI
 from openai import OpenAI as _OpenAI
 
 """Functions & Classes"""

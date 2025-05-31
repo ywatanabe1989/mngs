@@ -57,7 +57,7 @@ import mngs
 
 from google import genai
 
-from ._BaseGenAI import BaseGenAI
+from .base_genai import BaseGenAI
 
 """Functions & Classes"""
 

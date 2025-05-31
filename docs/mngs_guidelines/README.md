@@ -73,22 +73,30 @@ docs/mngs_guidelines/
 └── tutorials/                  # Step-by-step tutorials
 ```
 
+## 📋 Complete Reference
+
+- [**MNGS Complete API Reference**](MNGS_COMPLETE_REFERENCE.md) - All functions, classes, and methods
+- [**gen Module Detailed Reference**](modules/IMPORTANT-MNGS-20-gen-module-detailed.md)
+- [**io Module Detailed Reference**](modules/IMPORTANT-MNGS-21-io-module-detailed.md)
+
 ## 🔄 Documentation Status
 
 ### Completed
 - ✅ Agent guidelines (all 5 documents)
-- ✅ mngs.io module documentation
+- ✅ Complete API reference for all modules
+- ✅ Detailed references for gen and io modules
 - ✅ Basic structure setup
+- ✅ Example workflows
 
 ### In Progress
-- 🚧 Module-specific documentation
-- 🚧 API reference generation
-- 🚧 Example scripts
+- 🚧 Detailed references for remaining modules
+- 🚧 Sphinx HTML documentation
+- 🚧 Integration with readthedocs
 
 ### TODO
-- ⏳ Sphinx configuration
-- ⏳ Interactive tutorials
+- ⏳ Interactive Jupyter tutorials
 - ⏳ Video guides
+- ⏳ Performance benchmarks
 
 ## 🛠️ Contributing to Documentation
 

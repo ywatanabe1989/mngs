@@ -5,11 +5,11 @@
 
 import torch
 
-from ..decorators import torch_fn
+from ..decorators import signal_fn
 from ..nn._ModulationIndex import ModulationIndex
 
 
-@torch_fn
+@signal_fn
 def modulation_index(pha, amp, n_bins=18, amp_prob=False):
     """
     pha: (batch_size, n_chs, n_freqs_pha, n_segments, seq_len)

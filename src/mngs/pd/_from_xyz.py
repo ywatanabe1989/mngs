@@ -6,7 +6,7 @@
 import pandas as pd
 import numpy as np
 
-def from_xyz(data_frame, x=None, y=None, z=None):
+def from_xyz(data_frame, x=None, y=None, z=None, square=False):
     """
     Convert a DataFrame with 'x', 'y', 'z' format into a heatmap DataFrame.
 
@@ -32,11 +32,13 @@ def from_xyz(data_frame, x=None, y=None, z=None):
         Name of the column to use as y-axis. Defaults to 'y'.
     z : str, optional
         Name of the column to use as z-values. Defaults to 'z'.
+    square : bool, optional
+        If True, force the output to be a square matrix. Defaults to False.
 
     Returns
     -------
     pandas.DataFrame
-        A square DataFrame in heatmap format.
+        A DataFrame in heatmap/pivot format.
     """
     x = x or 'x'
     y = y or 'y'
@@ -44,8 +46,10 @@ def from_xyz(data_frame, x=None, y=None, z=None):
 
     heatmap = pd.pivot_table(data_frame, values=z, index=y, columns=x, aggfunc='first')
 
-    all_labels = sorted(set(heatmap.index) | set(heatmap.columns))
-    heatmap = heatmap.reindex(index=all_labels, columns=all_labels)
+    if square:
+        # Make it square by including all unique labels
+        all_labels = sorted(set(heatmap.index) | set(heatmap.columns))
+        heatmap = heatmap.reindex(index=all_labels, columns=all_labels)
 
     heatmap = heatmap.fillna(0)
 

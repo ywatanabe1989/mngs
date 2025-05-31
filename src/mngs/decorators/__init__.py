@@ -21,6 +21,7 @@ from ._pandas_fn import *
 from ._preserve_doc import *
 from ._timeout import *
 from ._torch_fn import *
+from ._signal_fn import signal_fn
 from ._wrap import wrap
 from ._batch_fn import batch_fn
 

@@ -8,13 +8,13 @@ import pandas as pd
 
 def round(df: pd.DataFrame, factor: int = 3) -> pd.DataFrame:
     """
-    Round numeric values in a DataFrame to a specified number of significant digits.
+    Round numeric values in a DataFrame to a specified number of decimal places.
 
     Example
     -------
     >>> df = pd.DataFrame({'A': [1.23456, 2.34567], 'B': ['abc', 'def'], 'C': [3, 4]})
-    >>> round(df, 3)
-       A    B  C
+    >>> round(df, 2)
+          A    B  C
     0  1.23  abc  3
     1  2.35  def  4
 
@@ -23,7 +23,7 @@ def round(df: pd.DataFrame, factor: int = 3) -> pd.DataFrame:
     df : pd.DataFrame
         Input DataFrame
     factor : int, optional
-        Number of significant digits to round to (default is 3)
+        Number of decimal places to round to (default is 3)
 
     Returns
     -------
@@ -35,7 +35,7 @@ def round(df: pd.DataFrame, factor: int = 3) -> pd.DataFrame:
             numeric_column = pd.to_numeric(column, errors='coerce')
             if np.issubdtype(numeric_column.dtype, np.integer):
                 return numeric_column.astype(int)
-            rounded = numeric_column.apply(lambda x: float(f'{x:.{factor}g}'))
+            rounded = numeric_column.round(factor)
 
             # Try converting to int if possible
             if (rounded == rounded.astype(int)).all():

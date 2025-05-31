@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-29 08:05:25 (ywatanabe)"
-# File: /ssh:ywatanabe@sp:/home/ywatanabe/proj/mngs_repo/examples/mngs_framework.py
+# Timestamp: "2025-05-31 07:15:42 (ywatanabe)"
+# File: /ssh:ywatanabe@sp:/home/ywatanabe/proj/.claude-worktree/mngs_repo/examples/mngs_framework.py
 # ----------------------------------------
 import os
 __FILE__ = (
@@ -96,7 +96,6 @@ def run_main() -> None:
         plt,
         args=args,
         file=__FILE__,
-        sdir_suffix=None,
         verbose=False,
         agg=True,
     )

@@ -1,7 +1,7 @@
 <!-- ---
-!-- Timestamp: 2025-05-29 20:36:01
+!-- Timestamp: 2025-05-30 08:21:56
 !-- Author: ywatanabe
-!-- File: /ssh:ywatanabe@sp:/home/ywatanabe/.dotfiles/.claude/to_claude/guidelines/python/MNGS-18-mngs-directory-structure-for-scientific-work.md
+!-- File: /home/ywatanabe/.dotfiles/.claude/to_claude/guidelines/python/IMPORTANT-MNGS-18-directory-structure-for-scientific-work.md
 !-- --- -->
 
 ## Directory Structure of Scientific Project

@@ -17,9 +17,23 @@ from ..types import is_listed_X
 
 
 def force_df(permutable_dict, filler=np.nan):
-
-    if is_listed_X(permutable_dict, pd.Series):
+    # Handle different input types
+    if isinstance(permutable_dict, pd.DataFrame):
+        return permutable_dict
+    elif isinstance(permutable_dict, pd.Series):
+        return permutable_dict.to_frame()
+    elif is_listed_X(permutable_dict, pd.Series):
         permutable_dict = [sr.to_dict() for sr in permutable_dict]
+    elif isinstance(permutable_dict, (list, tuple)):
+        # Convert list/tuple to dict with default column name
+        permutable_dict = {'0': permutable_dict}
+    elif isinstance(permutable_dict, np.ndarray):
+        if permutable_dict.ndim == 1:
+            permutable_dict = {'0': permutable_dict}
+        else:
+            # For 2D arrays, create column names
+            permutable_dict = {str(i): permutable_dict[:, i] for i in range(permutable_dict.shape[1])}
+    
     ## Deep copy
     permutable_dict = permutable_dict.copy()
 

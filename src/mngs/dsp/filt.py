@@ -6,28 +6,32 @@
 import mngs
 import numpy as np
 
-from ..decorators import torch_fn
+from ..decorators import signal_fn
 from ..nn import (BandPassFilter, BandStopFilter, GaussianFilter,
                   HighPassFilter, LowPassFilter)
 
 
-@torch_fn
+@signal_fn
 def gauss(x, sigma, t=None):
     return GaussianFilter(sigma)(x, t=t)
 
-@torch_fn
+@signal_fn
 def bandpass(x, fs, bands, t=None):
+    import torch
+    # Convert bands to tensor if it's not already
+    if not isinstance(bands, torch.Tensor):
+        bands = torch.tensor(bands, dtype=torch.float32)
     return BandPassFilter(bands, fs, x.shape[-1])(x, t=t)
 
-@torch_fn
+@signal_fn
 def bandstop(x, fs, bands, t=None):
     return BandStopFilter(bands, fs, x.shape[-1])(x, t=t)
 
-@torch_fn
+@signal_fn
 def lowpass(x, fs, cutoffs_hz, t=None):
     return LowPassFilter(cutoffs_hz, fs, x.shape[-1])(x, t=t)
 
-@torch_fn
+@signal_fn
 def highpass(x, fs, cutoffs_hz, t=None):
     return HighPassFilter(cutoffs_hz, fs, x.shape[-1])(x, t=t)
 

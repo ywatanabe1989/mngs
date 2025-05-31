@@ -19,6 +19,42 @@ from ....types import is_listed_X
 
 
 def set_ticks(ax, xvals=None, xticks=None, yvals=None, yticks=None):
+    """Set custom tick labels on both x and y axes.
+    
+    Convenience function to set tick positions and labels for both axes
+    at once. Automatically handles canvas updates for interactive backends.
+    
+    Parameters
+    ----------
+    ax : matplotlib.axes.Axes
+        The axes object to modify.
+    xvals : array-like, optional
+        Values corresponding to x-axis data points.
+    xticks : list, optional
+        Desired tick labels for the x-axis.
+    yvals : array-like, optional
+        Values corresponding to y-axis data points.
+    yticks : list, optional
+        Desired tick labels for the y-axis.
+        
+    Returns
+    -------
+    matplotlib.axes.Axes
+        The modified axes object.
+        
+    Examples
+    --------
+    >>> fig, ax = plt.subplots()
+    >>> x = np.linspace(0, 10, 100)
+    >>> ax.plot(x, np.sin(x))
+    >>> ax = set_ticks(ax, xvals=x, xticks=[0, 5, 10], 
+    ...                yvals=[-1, 0, 1], yticks=['-1', '0', '1'])
+    
+    See Also
+    --------
+    set_x_ticks : Set ticks for x-axis only
+    set_y_ticks : Set ticks for y-axis only
+    """
     ax = set_x_ticks(ax, x_vals=xvals, x_ticks=xticks)
     ax = set_y_ticks(ax, y_vals=yvals, y_ticks=yticks)
     canvas_type = type(ax.figure.canvas).__name__

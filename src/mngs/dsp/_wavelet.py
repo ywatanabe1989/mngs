@@ -6,12 +6,12 @@
 """mngs.dsp.wavelet function"""
 
 
-from ..decorators import batch_fn, torch_fn
+from ..decorators import batch_fn, signal_fn
 from ..nn._Wavelet import Wavelet
 
 
 # Functions
-@torch_fn
+@signal_fn
 @batch_fn
 def wavelet(
     x,
@@ -36,7 +36,7 @@ def wavelet(
     return pha, amp, freqs
 
 
-# @torch_fn
+# @signal_fn
 # def wavelet(
 #     x,
 #     fs,
@@ -45,7 +45,7 @@ def wavelet(
 #     device="cuda",
 #     batch_size=32,
 # ):
-#     @torch_fn
+#     @signal_fn
 #     def _wavelet(
 #         x,
 #         fs,

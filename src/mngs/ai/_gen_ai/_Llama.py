@@ -17,7 +17,7 @@ try:
 except:
     pass
 
-from ._BaseGenAI import BaseGenAI
+from .base_genai import BaseGenAI
 
 """Functions & Classes"""
 def print_envs():

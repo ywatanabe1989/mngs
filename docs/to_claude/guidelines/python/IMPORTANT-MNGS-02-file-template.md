@@ -1,20 +1,20 @@
 <!-- ---
-!-- Timestamp: 2025-05-29 20:32:56
+!-- Timestamp: 2025-05-31 07:42:09
 !-- Author: ywatanabe
-!-- File: /ssh:ywatanabe@sp:/home/ywatanabe/.dotfiles/.claude/to_claude/guidelines/python/MNGS-02-mngs-file-template.md
+!-- File: /ssh:ywatanabe@sp:/home/ywatanabe/.dotfiles/.claude/to_claude/guidelines/python/IMPORTANT-MNGS-02-file-template.md
 !-- --- -->
 
 ## Script Template
 
-Every script should follow this standard format:
+MNGS PYTHON SCRIPT MUST STRICTLY FOLLOW THIS STANDARD FORMAT:
 
 ```python
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Time-stamp: "2024-11-03 10:33:13 (ywatanabe)"
-# File: script_name.py
+# File: ./relative/path/from/project/root/script_name.py
 
-__file__ = "script_name.py"
+__FILE__ = "./relative/path/from/project/root/script_name.py"
 
 """
 Functionalities:
@@ -68,8 +68,7 @@ def run_main() -> None:
         sys,
         plt,
         args=args,
-        file=__file__,
-        sdir_suffix=None,
+        file=__FILE__,
         verbose=False,
         agg=True,
     )
@@ -92,8 +91,8 @@ if __name__ == '__main__':
 # EOF
 ```
 
-> **⚠️ DO NOT MODIFY THE `run_main()` FUNCTION**  
-> This handles stdout/stderr direction, logging, configuration, and more
+**⚠️ DO NOT MODIFY THE `run_main()` FUNCTION**  
+This handles stdout/stderr direction, logging, configuration, and more
 
 ## Your Understanding Check
 Did you understand the guideline? If yes, please say:

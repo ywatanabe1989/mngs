@@ -24,8 +24,16 @@ def __load_npy(lpath: str, **kwargs) -> Any:
 
 def __load_npz(lpath: str, **kwargs) -> Any:
     """Load NPZ file."""
-    obj = np.load(lpath)
-    return [v for v in dict(obj).values()]
+    obj = np.load(lpath, allow_pickle=True)
+    
+    # Check if it's a single array saved with default key
+    if len(obj.files) == 1 and obj.files[0] == 'arr_0':
+        # Return the single array directly for backward compatibility
+        return obj['arr_0']
+    
+    # Return the NpzFile object so users can access arrays by key
+    # This preserves the dictionary-like interface
+    return obj
 
 
 # EOF

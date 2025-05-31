@@ -71,7 +71,7 @@ log() {
     shift
     local message="$*"
     local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
-    
+
     case $level in
         "INFO")  echo -e "${GREEN}[INFO]${NC}  ${timestamp} - $message" ;;
         "WARN")  echo -e "${YELLOW}[WARN]${NC}  ${timestamp} - $message" ;;
@@ -83,7 +83,7 @@ log() {
 # Load project configuration
 load_config() {
     local config_file="${1:-.elisp-ci.yml}"
-    
+
     if [[ -f "$config_file" ]]; then
         log "INFO" "Loading configuration from $config_file"
         # Simple YAML parsing for our needs
@@ -105,7 +105,7 @@ load_config() {
 # Initialize elisp-ci in project
 init_project() {
     log "INFO" "Initializing elisp-ci in $(basename "$PROJECT_ROOT")"
-    
+
     # Create .elisp-ci.yml
     cat > .elisp-ci.yml << EOF
 # Elisp-CI Configuration
@@ -114,10 +114,10 @@ init_project() {
 project:
   name: "$(basename "$PROJECT_ROOT")"
   entry: "$(find . -maxdepth 1 -name "*.el" -not -path "./tests/*" | head -1 | sed 's|^./||')"
-  
+
 emacs_versions:
   - "27.1"
-  - "28.2" 
+  - "28.2"
   - "29.1"
   - "29.4"
   - "snapshot"
@@ -131,7 +131,7 @@ test:
   directory: "tests/"
   pattern: "test-*.el"
   timeout: 120
-  
+
 coverage:
   enabled: false
   threshold: 80
@@ -217,44 +217,44 @@ EOF
 # Analyze project structure and dependencies
 analyze_project() {
     log "INFO" "Analyzing project structure..."
-    
+
     # Find main elisp files
     local elisp_files=($(find . -maxdepth 2 -name "*.el" -not -path "./tests/*" -not -path "./.elisp-ci-cache/*"))
     log "INFO" "Found ${#elisp_files[@]} Elisp files"
-    
+
     # Analyze dependencies
     local all_requires=()
     for file in "${elisp_files[@]}"; do
         local requires=($(grep -h "^(require " "$file" 2>/dev/null | sed "s/(require '\\([^)]*\\).*/\\1/" || true))
         all_requires+=("${requires[@]}")
     done
-    
+
     # Remove duplicates and sort
     local unique_requires=($(printf '%s\n' "${all_requires[@]}" | sort -u))
-    
+
     log "INFO" "External dependencies detected:"
     for req in "${unique_requires[@]}"; do
         if [[ -n "$req" && ! -f "${req}.el" && ! -f "*/${req}.el" ]]; then
             echo "  - $req"
         fi
     done
-    
+
     # Find test files
     local test_files=($(find tests -name "$TEST_PATTERN" 2>/dev/null || true))
     log "INFO" "Found ${#test_files[@]} test files"
-    
+
     # Suggest improvements
     echo
     log "INFO" "Suggestions:"
-    
+
     if [[ ${#test_files[@]} -eq 0 ]]; then
         echo "  - Add test files matching pattern: $TEST_PATTERN"
     fi
-    
+
     if [[ ! -f ".elisp-ci.yml" ]]; then
         echo "  - Run 'elisp-ci init' to create configuration"
     fi
-    
+
     if [[ ! -f "Makefile" ]]; then
         echo "  - Add Makefile for convenient test execution"
     fi
@@ -265,37 +265,37 @@ run_tests() {
     local emacs_version=${1:-"current"}
     local test_dir=${2:-"$TEST_DIR"}
     local test_pattern=${3:-"$TEST_PATTERN"}
-    
+
     log "INFO" "Running tests with Emacs $emacs_version"
-    
+
     # Create cache directory
     mkdir -p .elisp-ci-cache
-    
+
     # Find test files
     local test_files=($(find "$test_dir" -name "$test_pattern" 2>/dev/null || true))
-    
+
     if [[ ${#test_files[@]} -eq 0 ]]; then
         log "ERROR" "No test files found matching pattern: $test_pattern in $test_dir"
         return 1
     fi
-    
+
     log "INFO" "Found ${#test_files[@]} test files"
-    
+
     local failed_tests=0
     local total_tests=0
-    
+
     # Run each test file
     for test_file in "${test_files[@]}"; do
         log "INFO" "Testing: $test_file"
-        
+
         local test_dir_path=$(dirname "$test_file")
         local emacs_cmd="emacs"
-        
+
         # Use specific Emacs version if available
         if [[ "$emacs_version" != "current" && -n "$(command -v "emacs-$emacs_version" 2>/dev/null)" ]]; then
             emacs_cmd="emacs-$emacs_version"
         fi
-        
+
         # Prepare load paths
         local load_paths=(
             "."
@@ -303,29 +303,29 @@ run_tests() {
             "$test_dir_path"
             "./tests/mocks"
         )
-        
+
         # Add module directories
         for dir in */; do
             if [[ -d "$dir" && "$dir" != "tests/" && "$dir" != ".git/" && "$dir" != ".elisp-ci-cache/" ]]; then
                 load_paths+=("$dir")
             fi
         done
-        
+
         # Build Emacs command
         local emacs_args=(
             "-Q" "--batch"
         )
-        
+
         for path in "${load_paths[@]}"; do
             emacs_args+=("--eval" "(add-to-list 'load-path \"$path\")")
         done
-        
+
         emacs_args+=(
             "--eval" "(require 'ert)"
             "--eval" "(load-file \"$test_file\")"
             "--eval" "(ert-run-tests-batch-and-exit)"
         )
-        
+
         # Run test
         if $emacs_cmd "${emacs_args[@]}" 2>&1; then
             log "INFO" "✓ $test_file passed"
@@ -333,10 +333,10 @@ run_tests() {
             log "ERROR" "✗ $test_file failed"
             ((failed_tests++))
         fi
-        
+
         ((total_tests++))
     done
-    
+
     # Report results
     echo
     if [[ $failed_tests -eq 0 ]]; then
@@ -351,7 +351,7 @@ run_tests() {
 # Generate GitHub Actions workflow
 generate_github_actions() {
     mkdir -p .github/workflows
-    
+
     cat > .github/workflows/elisp-ci.yml << EOF
 # GitHub Actions workflow for $(basename "$PROJECT_ROOT")
 # Generated by elisp-ci v${VERSION}
@@ -372,26 +372,26 @@ jobs:
   test:
     runs-on: ubuntu-latest
     continue-on-error: \${{ matrix.emacs_version == 'snapshot' }}
-    
+
     strategy:
       matrix:
         emacs_version: [$(printf '"%s", ' "${EMACS_VERSIONS[@]}" | sed 's/, $//'))]
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - uses: purcell/setup-emacs@master
         with:
           version: \${{ matrix.emacs_version }}
-      
+
       - name: Run Tests
         run: |
           # Install elisp-ci
           curl -L https://raw.githubusercontent.com/ywatanabe1989/elisp-ci/main/install.sh | bash
-          
+
           # Run tests
           elisp-ci test --version \${{ matrix.emacs_version }}
-      
+
       - name: Upload Coverage
         if: matrix.emacs_version == '29.4'
         uses: codecov/codecov-action@v3
@@ -405,9 +405,9 @@ EOF
 # Docker support
 docker_build() {
     log "INFO" "Building Docker images for testing..."
-    
+
     mkdir -p .elisp-ci-cache/docker
-    
+
     # Create base Dockerfile
     cat > .elisp-ci-cache/docker/Dockerfile.base << EOF
 FROM ubuntu:22.04
@@ -436,13 +436,13 @@ EOF
 
     # Build base image
     docker build -f .elisp-ci-cache/docker/Dockerfile.base -t "elisp-ci-$(basename "$PROJECT_ROOT"):base" .
-    
+
     log "INFO" "Docker base image built successfully"
 }
 
 docker_test() {
     local version=${1:-"all"}
-    
+
     if [[ "$version" == "all" ]]; then
         for v in "${EMACS_VERSIONS[@]}"; do
             log "INFO" "Testing with Emacs $v in Docker..."
@@ -459,33 +459,33 @@ docker_test() {
 # Validate configuration
 validate_config() {
     log "INFO" "Validating elisp-ci configuration..."
-    
+
     local errors=0
-    
+
     # Check if we're in a valid elisp project
     if [[ -z "$(find . -maxdepth 1 -name "*.el" -not -path "./tests/*")" ]]; then
         log "ERROR" "No Elisp files found in project root"
         ((errors++))
     fi
-    
+
     # Check test directory
     if [[ ! -d "$TEST_DIR" ]]; then
         log "ERROR" "Test directory not found: $TEST_DIR"
         ((errors++))
     fi
-    
+
     # Check for test files
     if [[ -z "$(find "$TEST_DIR" -name "$TEST_PATTERN" 2>/dev/null)" ]]; then
         log "WARN" "No test files found matching pattern: $TEST_PATTERN"
     fi
-    
+
     # Check configuration file
     if [[ -f ".elisp-ci.yml" ]]; then
         log "INFO" "Configuration file found"
     else
         log "WARN" "No .elisp-ci.yml found, using defaults"
     fi
-    
+
     if [[ $errors -eq 0 ]]; then
         log "INFO" "Configuration is valid"
         return 0
@@ -521,14 +521,14 @@ main() {
                 ;;
         esac
     done
-    
+
     # Load configuration
     load_config "${CONFIG_FILE:-.elisp-ci.yml}"
-    
+
     # Parse command
     local command=${1:-"help"}
     shift || true
-    
+
     case $command in
         "init")
             init_project "$@"
@@ -536,7 +536,7 @@ main() {
         "test")
             local version="current"
             local all_versions=false
-            
+
             while [[ $# -gt 0 ]]; do
                 case $1 in
                     --version)
@@ -560,7 +560,7 @@ main() {
                         ;;
                 esac
             done
-            
+
             if [[ "$all_versions" == true ]]; then
                 local total_failed=0
                 for v in "${EMACS_VERSIONS[@]}"; do
@@ -568,7 +568,7 @@ main() {
                         ((total_failed++))
                     fi
                 done
-                
+
                 if [[ $total_failed -gt 0 ]]; then
                     log "ERROR" "Failed testing $total_failed/${#EMACS_VERSIONS[@]} Emacs versions"
                     exit 1

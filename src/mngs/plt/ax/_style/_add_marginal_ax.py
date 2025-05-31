@@ -15,6 +15,55 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 
 def add_marginal_ax(axis, place, size=0.2, pad=0.1):
+    """Add a marginal axis to an existing axis.
+    
+    Creates a new axis adjacent to an existing one, useful for adding
+    marginal distributions, colorbars, or supplementary plots. The new
+    axis shares one dimension with the original axis.
+    
+    Parameters
+    ----------
+    axis : matplotlib.axes.Axes
+        The main axis to which a marginal axis will be added.
+    place : {'left', 'right', 'top', 'bottom'}
+        Position where the marginal axis should be placed.
+    size : float, optional
+        Size of the marginal axis as a fraction of the main axis.
+        Default is 0.2 (20%). For left/right placement, this represents
+        the width; for top/bottom, the height.
+    pad : float, optional
+        Padding between the main and marginal axes. Default is 0.1.
+        
+    Returns
+    -------
+    matplotlib.axes.Axes
+        The newly created marginal axis.
+        
+    Raises
+    ------
+    AssertionError
+        If axis is not a matplotlib axes object.
+        
+    Examples
+    --------
+    >>> fig, ax = plt.subplots()
+    >>> ax.scatter(x, y)
+    >>> ax_top = add_marginal_ax(ax, 'top', size=0.15)
+    >>> ax_top.hist(x, bins=30)  # Add x-distribution
+    
+    >>> # Add marginal distributions to scatter plot
+    >>> ax_right = add_marginal_ax(ax, 'right', size=0.2)
+    >>> ax_right.hist(y, bins=30, orientation='horizontal')
+    
+    See Also
+    --------
+    matplotlib.axes_grid1.make_axes_locatable : Used internally
+    
+    Notes
+    -----
+    The marginal axis will automatically align with the main axis
+    and adjust when the main axis is resized.
+    """
     assert isinstance(
         axis, matplotlib.axes._axes.Axes
     ), "First argument must be a matplotlib axis"
@@ -27,7 +76,7 @@ def add_marginal_ax(axis, place, size=0.2, pad=0.1):
 
     axis_marginal = divider.append_axes(place, size=size_perc_str, pad=pad)
     axis_marginal.set_box_aspect(size)
-
+    
     return axis_marginal
 
 # EOF

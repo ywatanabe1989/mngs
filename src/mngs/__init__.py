@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-03 16:31:08 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/src/mngs/__init__.py
+# Timestamp: "2025-05-30 17:05:54 (ywatanabe)"
+# File: /ssh:ywatanabe@sp:/home/ywatanabe/proj/.claude-worktree/mngs_repo/src/mngs/__init__.py
 # ----------------------------------------
 import os
 __FILE__ = (
@@ -53,17 +53,8 @@ from . import dt
 from . import dev
 # from . import context
 
-# ########################################
-# # Modules (python -m mngs print_config)
-# ########################################
-# from .gen._print_config import print_config
-# # Usage: python -m mngs print_config
 
-__copyright__ = "Copyright (C) 2024 Yusuke Watanabe"
+
 __version__ = "1.11.0"
-__license__ = "MIT"
-__author__ = "ywatanabe1989"
-__author_email__ = "ywatanabe@alumni.u-tokyo.ac.jp"
-__url__ = "https://github.com/ywatanabe1989/mngs"
 
 # EOF

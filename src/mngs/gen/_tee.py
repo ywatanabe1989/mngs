@@ -115,11 +115,21 @@ class Tee:
             try:
                 self._log_file.flush()
                 self._log_file.close()
+                self._log_file = None  # Prevent double-close
             except Exception:
                 pass
     
     def __del__(self):
-        self.close()
+        # Only attempt cleanup if Python is not shutting down
+        # This prevents "Exception ignored" errors during interpreter shutdown
+        if hasattr(self, '_log_file') and self._log_file is not None:
+            try:
+                # Check if the file object is still valid
+                if hasattr(self._log_file, 'closed') and not self._log_file.closed:
+                    self.close()
+            except Exception:
+                # Silently ignore exceptions during cleanup
+                pass
 
 # class Tee:
 #     def __init__(self, stream: TextIO, log_path: str) -> None:

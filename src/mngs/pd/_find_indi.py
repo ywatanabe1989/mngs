@@ -54,7 +54,7 @@ import pandas as pd
 
 
 
-def find_indi(df: pd.DataFrame, conditions: Dict[str, Union[str, int, float, List]]) -> pd.Series:
+def find_indi(df: pd.DataFrame, conditions: Dict[str, Union[str, int, float, List]]) -> List[int]:
     """Finds indices of rows that satisfy conditions, handling NaN values.
 
     Example
@@ -72,9 +72,12 @@ def find_indi(df: pd.DataFrame, conditions: Dict[str, Union[str, int, float, Lis
 
     Returns
     -------
-    pd.Series
-        Boolean mask of matching rows
+    List[int]
+        List of integer indices of matching rows
     """
+    if not conditions:
+        return []
+        
     if not all(col in df.columns for col in conditions):
         missing_cols = [col for col in conditions if col not in df.columns]
         raise KeyError(f"Columns not found in DataFrame: {missing_cols}")
@@ -83,7 +86,7 @@ def find_indi(df: pd.DataFrame, conditions: Dict[str, Union[str, int, float, Lis
     for key, value in conditions.items():
         if isinstance(value, (list, tuple)):
             # Handle NaN in lists
-            if None in value or pd.NA in value or pd.np.nan in value:
+            if None in value or pd.NA in value or any(pd.isna(v) for v in value):
                 condition = df[key].isin(value) | df[key].isna()
             else:
                 condition = df[key].isin(value)
@@ -95,7 +98,11 @@ def find_indi(df: pd.DataFrame, conditions: Dict[str, Union[str, int, float, Lis
                 condition = df[key] == value
         condition_series.append(condition)
 
-    return pd.concat(condition_series, axis=1).all(axis=1)
+    if condition_series:
+        mask = pd.concat(condition_series, axis=1).all(axis=1)
+        return df.index[mask].tolist()
+    else:
+        return []
 
 
 # EOF

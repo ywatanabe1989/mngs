@@ -27,7 +27,7 @@ from typing import Dict, Generator, List, Optional
 import matplotlib.pyplot as plt
 from openai import OpenAI
 
-from ._BaseGenAI import BaseGenAI
+from .base_genai import BaseGenAI
 
 """Functions & Classes"""
 
@@ -128,7 +128,7 @@ class Perplexity(BaseGenAI):
 
 
 def main() -> None:
-    from ._genai_factory import genai_factory as GenAI
+    from .genai_factory import genai_factory as GenAI
 
     models = [
         "llama-3.1-sonar-small-128k-online",

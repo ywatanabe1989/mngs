@@ -17,6 +17,7 @@ import sys
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import pprint
 import mngs
 
 # Parameters
@@ -150,7 +151,7 @@ Date: {CONFIG.START_TIME}
 
 Parameters:
 -----------
-{mngs.str.print_block(PARAMS, return_str=True)}
+{pprint.pformat(PARAMS)}
 
 Results Summary:
 ---------------

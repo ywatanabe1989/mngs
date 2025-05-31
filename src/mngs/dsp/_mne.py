@@ -5,7 +5,7 @@
 
 import mne
 import pandas as pd
-from .PARAMS import EEG_MONTAGE_1020
+from .params import EEG_MONTAGE_1020
 
 
 def get_eeg_pos(channel_names=EEG_MONTAGE_1020):

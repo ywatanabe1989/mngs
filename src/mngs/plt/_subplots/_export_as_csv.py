@@ -21,6 +21,55 @@ import xarray as xr
 
 
 def export_as_csv(history_records):
+    """Export plotting history records as a pandas DataFrame.
+    
+    Converts the plotting history records maintained by MNGS plotting
+    functions into a pandas DataFrame suitable for CSV export. This allows
+    you to save the exact data that was plotted for reproducibility and
+    further analysis.
+    
+    Parameters
+    ----------
+    history_records : dict
+        Dictionary of plotting records, typically from FigWrapper or
+        AxesWrapper history. Each record contains information about
+        plotted data.
+        
+    Returns
+    -------
+    pandas.DataFrame
+        DataFrame containing the plotted data from all records.
+        Returns empty DataFrame if no records found or concatenation fails.
+        
+    Warnings
+    --------
+    UserWarning
+        If no plotting records are found or if concatenation fails.
+        
+    Examples
+    --------
+    >>> fig, ax = mngs.plt.subplots()
+    >>> ax.plot([1, 2, 3], [4, 5, 6], label='data1')
+    >>> ax.plot([1, 2, 3], [7, 8, 9], label='data2')
+    >>> df = export_as_csv(ax.history)
+    >>> df.to_csv('plotted_data.csv')
+    
+    >>> # Access specific plot data
+    >>> fig, axes = mngs.plt.subplots(2, 2)
+    >>> # ... plotting code ...
+    >>> df = export_as_csv(fig.history)
+    >>> print(df.columns)  # Shows all plotted series
+    
+    See Also
+    --------
+    format_record : Formats individual plotting records
+    mngs.plt.subplots : Creates figures with history tracking
+    
+    Notes
+    -----
+    The history tracking feature is unique to MNGS plotting functions
+    and provides automatic data export capabilities.
+    """
     if len(history_records) <= 0:
         warnings.warn("Plotting records not found. Empty dataframe returned.")
         return pd.DataFrame()

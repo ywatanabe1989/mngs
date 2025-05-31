@@ -1,5 +1,5 @@
 <!-- ---
-!-- Timestamp: 2025-05-29 20:32:47
+!-- Timestamp: 2025-05-30 04:55:52
 !-- Author: ywatanabe
 !-- File: /ssh:ywatanabe@sp:/home/ywatanabe/.dotfiles/.claude/to_claude/guidelines/python/IMPORTANT-general.md
 !-- --- -->
@@ -16,25 +16,25 @@ THUS, MNGS MUST BE USED IN:
 - `./examples`
 For details, see the mngs guideline (`./TOP-MOST-IMPORTANT-mngs.md`).
 
-## Python General Rules
+## `chmod +x *.py`
 Do not forget to add the executable permission (`chmod +x`) for `*.py` files.
+
+## `matplotlib.use("Agtg")`
 Use `Agg` for matplotlib backend. Do not show images but save to file.
     ``` python
     import matplotlib
     matplotlib.use("Agg")
-    ```
-
-## Follow MNGS Framework
-See `./docs/to_claude/guidelines/IMPORTANT_guidelines_programming_python_MNGS_rules.md`
 
 ## Lint with Black
 IMPORTANT: LINT ALL .PY SCRIPTS USING `black` (`~/.env/bin/black`)
 
 ## Run scripts
-When writing scripts, please run them without hesitation as long as they are destructive.
+Do not hesitate to run scripts as long as they are destructive.
+Using timeout would be beneficial if scripts will take long time.
 
-## Run with CUDA
-When a GPU can accelerate processing, we prioritize GPU over CPU. If GPU is not available and CPU processing will take a long time, please let us know.
+## Use CUDA
+When a GPU can accelerate processing, we prioritize GPU over CPU. 
+If GPU is not available and CPU processing will take a long time, please let us know.
 
 ## Your Understanding Check
 Did you understand the guideline? If yes, please say:

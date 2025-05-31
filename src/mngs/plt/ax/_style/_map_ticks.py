@@ -90,6 +90,26 @@ def map_ticks(ax, src, tgt, axis="x"):
 
 
 def numeric_example():
+    """Example demonstrating numeric tick mapping.
+    
+    Shows how to replace numeric tick positions with custom labels,
+    such as replacing radian values with pi notation in trigonometric plots.
+    
+    Returns
+    -------
+    matplotlib.figure.Figure
+        Figure with two subplots showing before and after tick mapping.
+        
+    Examples
+    --------
+    >>> fig = numeric_example()
+    >>> plt.show()
+    
+    Notes
+    -----
+    The top subplot shows original numeric labels, while the bottom
+    subplot shows the same data with custom pi notation labels.
+    """
     fig, axs = plt.subplots(2, 1, figsize=(10, 6))  # Two rows, one column
 
     # Original plot
@@ -111,6 +131,27 @@ def numeric_example():
 
 
 def string_example():
+    """Example demonstrating string tick mapping.
+    
+    Shows how to replace categorical string labels with more descriptive
+    alternatives, useful for improving plot readability.
+    
+    Returns
+    -------
+    matplotlib.figure.Figure
+        Figure with two subplots showing before and after tick mapping.
+        
+    Examples
+    --------
+    >>> fig = string_example()
+    >>> plt.show()
+    
+    Notes
+    -----
+    The top subplot shows original short category labels (A, B, C...),
+    while the bottom subplot shows the same data with descriptive Greek
+    letter names.
+    """
     fig, axs = plt.subplots(2, 1, figsize=(10, 6))  # Two rows, one column
 
     # Original plot with categorical string labels

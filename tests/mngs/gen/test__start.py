@@ -13,7 +13,7 @@ from unittest.mock import patch, MagicMock
 # Add src to path for testing
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../../src'))
 
-from mngs.gen._start import start
+import mngs
 
 
 class TestStart:

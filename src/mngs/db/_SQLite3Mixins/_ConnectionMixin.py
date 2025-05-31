@@ -36,6 +36,7 @@ class _ConnectionMixin:
         self.db_path = db_path
         self.conn = None
         self.cursor = None
+        self.temp_path = None  # Initialize temp_path attribute
         if db_path:
             self.connect(db_path, use_temp_db)
 
@@ -85,7 +86,7 @@ class _ConnectionMixin:
         self.cursor = None
         self.conn = None
 
-        if self.temp_path and os.path.exists(self.temp_path):
+        if hasattr(self, 'temp_path') and self.temp_path and os.path.exists(self.temp_path):
             try:
                 os.remove(self.temp_path)
                 self.temp_path = None

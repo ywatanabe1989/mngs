@@ -1,25 +1,31 @@
-# import torch.nn as nn
-import torch.optim as optim
-from .Ranger_Deep_Learning_Optimizer.ranger.ranger2020 import Ranger
+#!/usr/bin/env python3
+"""Optimizer utilities - legacy interface maintained for compatibility."""
+
+import warnings
+from ._optimizers import get_optimizer, set_optimizer
 
 
-# def set_an_optim(models, optim_str, lr):
-def set(models, optim_str, lr):    
-    """Sets an optimizer to models"""
-    if not isinstance(models, list):
-        models = [models]
-    learnable_params = []
-    for m in models:
-        learnable_params += list(m.parameters())
-    # optim = mngs.ml.switch_optim(optim_str)
-    optim = get(optim_str)    
-    return optim(learnable_params, lr)
+def set(models, optim_str, lr):
+    """Sets an optimizer to models.
+    
+    DEPRECATED: Use set_optimizer instead.
+    """
+    warnings.warn(
+        "mngs.ai.optim.set is deprecated. Use mngs.ai.optim.set_optimizer instead.",
+        DeprecationWarning,
+        stacklevel=2
+    )
+    return set_optimizer(models, optim_str, lr)
+
 
 def get(optim_str):
-    optims_dict = {
-        "adam": optim.Adam,
-        "ranger": Ranger,
-        "rmsprop": optim.RMSprop,
-        "sgd": optim.SGD
-        }
-    return optims_dict[optim_str]
+    """Get optimizer class by name.
+    
+    DEPRECATED: Use get_optimizer instead.
+    """
+    warnings.warn(
+        "mngs.ai.optim.get is deprecated. Use mngs.ai.optim.get_optimizer instead.",
+        DeprecationWarning,
+        stacklevel=2
+    )
+    return get_optimizer(optim_str)

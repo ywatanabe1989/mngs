@@ -14,6 +14,45 @@ import matplotlib
 
 
 def force_aspect(axis, aspect=1):
+    """Force a specific aspect ratio on axes containing images.
+    
+    Adjusts the aspect ratio of axes to ensure images are displayed with
+    the desired proportions, preventing distortion. Particularly useful
+    for heatmaps, spectrograms, or other image-based visualizations.
+    
+    Parameters
+    ----------
+    axis : matplotlib.axes.Axes
+        The axes object containing images to adjust.
+    aspect : float, optional
+        Desired aspect ratio (width/height). Default is 1 (square).
+        
+    Returns
+    -------
+    matplotlib.axes.Axes
+        The modified axes object with forced aspect ratio.
+        
+    Raises
+    ------
+    AssertionError
+        If axis is not a matplotlib axes object.
+        
+    Examples
+    --------
+    >>> fig, ax = plt.subplots()
+    >>> data = np.random.rand(10, 20)
+    >>> ax.imshow(data)
+    >>> ax = force_aspect(ax, aspect=0.5)  # Make twice as tall as wide
+    
+    >>> # For square heatmaps
+    >>> ax.imshow(correlation_matrix)
+    >>> ax = force_aspect(ax, aspect=1)
+    
+    Notes
+    -----
+    This function requires that at least one image has been added to the
+    axes using imshow() or similar before calling.
+    """
     assert isinstance(
         axis, matplotlib.axes._axes.Axes
     ), "First argument must be a matplotlib axes"
