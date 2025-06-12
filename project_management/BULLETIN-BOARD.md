@@ -21,7 +21,7 @@ Notes:
    - Local PDF search with metadata extraction
    - Automatic PDF download functionality
 2. **Key features delivered**:
-   - Unified API: mngs.scholar.search(query, web=True, local=True, local_paths=["."])
+   - Unified API: mngs.scholar.search(query, web=True, local=["path1", "path2"])
    - Environment variable support: MNGS_SCHOLAR_DIR (defaults to ~/.mngs/scholar)
    - Both async and sync interfaces for flexibility
    - Intelligent deduplication and ranking
@@ -36,6 +36,13 @@ Notes:
    - Committed with ID: 83b2d2a
    - Pushed to origin/claude-develop
    - Will be included in existing PR #61
+5. **API refinement (per user feedback)**:
+   - Simplified API by combining local and local_paths parameters
+   - Changed 'local' from bool to Optional[List[Union[str, Path]]]
+   - Default is local=None (or []) for web-only search
+   - Providing paths in 'local' automatically enables local search
+   - Committed with ID: 5f4d318
+   - Much cleaner and more intuitive interface
 
 ## Agent: 01e5ea25-2f77-4e06-9609-522087af8d52
 Role: Import Issue Resolution & Test Coverage Enhancement
