@@ -23,11 +23,9 @@ def demo_simple_search():
     """Demonstrate simple synchronous search."""
     print("=== Simple Web Search ===")
     
-    # Search for papers about deep learning
+    # Search for papers about deep learning (web only by default)
     papers = mngs.scholar.search_sync(
         "deep learning transformer architecture",
-        web=True,
-        local=False,
         max_results=5
     )
     
@@ -51,8 +49,7 @@ def demo_local_search():
     papers = mngs.scholar.search_sync(
         "neural networks",
         web=False,
-        local=True,
-        local_paths=["."],  # Current directory
+        local=["."],  # Current directory
         max_results=5
     )
     
@@ -73,7 +70,7 @@ def demo_combined_search():
     papers = mngs.scholar.search_sync(
         "machine learning applications",
         web=True,
-        local=True,
+        local=[".", "./papers"],  # Search current dir and papers dir
         max_results=10,
         use_vector_search=True  # Use semantic similarity
     )
@@ -99,7 +96,7 @@ async def demo_async_search_with_download():
     papers = await mngs.scholar.search(
         "attention mechanism deep learning",
         web=True,
-        local=False,
+        local=[],  # No local search
         max_results=3,
         download_pdfs=True,  # Download available PDFs
         web_sources=["arxiv"]  # Only search arXiv for downloadable papers

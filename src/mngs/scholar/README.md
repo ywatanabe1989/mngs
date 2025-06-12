@@ -17,21 +17,26 @@ A unified interface for searching and managing scientific literature from both w
 ```python
 import mngs.scholar
 
-# Simple search (both web and local)
+# Simple search (web only by default)
 papers = mngs.scholar.search_sync("deep learning sleep")
 
-# Web-only search with PDF download
+# Search both web and local directories
 papers = mngs.scholar.search_sync(
     "transformer architecture",
-    local=False,
-    download_pdfs=True
+    local=["./papers", "~/Documents/research"]
 )
 
 # Local-only search
 papers = mngs.scholar.search_sync(
     "neural oscillations",
     web=False,
-    local_paths=["./papers", "~/Documents/research"]
+    local=["./my_papers"]
+)
+
+# Web search with PDF download
+papers = mngs.scholar.search_sync(
+    "machine learning",
+    download_pdfs=True
 )
 ```
 
@@ -62,14 +67,13 @@ export MNGS_SCHOLAR_DIR="~/my_papers"  # Default: ~/.mngs/scholar
 
 ### Main Functions
 
-#### `search(query, web=True, local=True, ...)`
+#### `search(query, web=True, local=None, ...)`
 Asynchronous search function for finding papers.
 
 **Parameters:**
 - `query` (str): Search query
 - `web` (bool): Search web sources
-- `local` (bool): Search local files
-- `local_paths` (list): Directories to search
+- `local` (list): Local directories to search (None or [] for no local search)
 - `max_results` (int): Maximum results to return
 - `download_pdfs` (bool): Download PDFs for web results
 - `use_vector_search` (bool): Use semantic similarity

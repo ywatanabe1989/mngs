@@ -15,21 +15,26 @@ Examples
 --------
 >>> import mngs.scholar
 >>> 
->>> # Simple search (both web and local)
+>>> # Simple search (web only by default)
 >>> papers = mngs.scholar.search_sync("deep learning sleep")
 >>> 
->>> # Web-only search with PDF download
+>>> # Search both web and specific local directories
 >>> papers = mngs.scholar.search_sync(
 ...     "transformer architecture",
-...     local=False,
-...     download_pdfs=True
+...     local=["./papers", "~/Documents/research"]
 ... )
 >>> 
->>> # Local-only search with custom paths
+>>> # Local-only search
 >>> papers = mngs.scholar.search_sync(
 ...     "neural oscillations",
 ...     web=False,
-...     local_paths=["./papers", "~/Documents/research"]
+...     local=["./my_papers"]
+... )
+>>> 
+>>> # Web search with PDF download
+>>> papers = mngs.scholar.search_sync(
+...     "attention mechanism",
+...     download_pdfs=True
 ... )
 >>> 
 >>> # Build index for faster local search

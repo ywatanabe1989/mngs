@@ -35,8 +35,7 @@ def get_scholar_dir() -> Path:
 async def search(
     query: str,
     web: bool = True,
-    local: bool = True,
-    local_paths: Optional[List[Union[str, Path]]] = None,
+    local: Optional[List[Union[str, Path]]] = None,
     max_results: int = 20,
     download_pdfs: bool = False,
     use_vector_search: bool = True,
@@ -50,10 +49,9 @@ async def search(
         Search query
     web : bool
         Whether to search web sources (PubMed, arXiv, etc.)
-    local : bool
-        Whether to search local PDF files
-    local_paths : List[str or Path], optional
-        Local directories to search (default: current directory)
+    local : List[str or Path], optional
+        Local directories to search. If None or empty list, no local search.
+        If provided, searches these specific paths.
     max_results : int
         Maximum number of results to return
     download_pdfs : bool
@@ -73,30 +71,25 @@ async def search(
     >>> import asyncio
     >>> import mngs.scholar
     >>> 
-    >>> # Simple search
+    >>> # Search web only (no local)
     >>> papers = asyncio.run(mngs.scholar.search("deep learning"))
     >>> 
-    >>> # Search only local files
+    >>> # Search specific local directories
     >>> papers = asyncio.run(mngs.scholar.search(
     ...     "neural networks",
     ...     web=False,
-    ...     local_paths=["./papers", "~/Documents/papers"]
+    ...     local=["./papers", "~/Documents/papers"]
     ... ))
     >>> 
-    >>> # Search and download PDFs
+    >>> # Search both web and local
     >>> papers = asyncio.run(mngs.scholar.search(
     ...     "transformer architecture",
+    ...     local=["./my_papers"],
     ...     download_pdfs=True
     ... ))
     """
     all_papers = []
     scholar_dir = get_scholar_dir()
-    
-    # Default local paths
-    if local_paths is None:
-        local_paths = [Path(".")]
-    else:
-        local_paths = [Path(p).expanduser() for p in local_paths]
     
     # Search web sources
     if web:
@@ -108,8 +101,9 @@ async def search(
         all_papers.extend(web_papers)
         logger.info(f"Found {len(web_papers)} papers from web sources")
     
-    # Search local sources
+    # Search local sources if paths provided
     if local:
+        local_paths = [Path(p).expanduser() for p in local]
         local_papers = await _search_local_sources(
             query, 
             local_paths, 
@@ -358,8 +352,7 @@ def build_index(
 def search_sync(
     query: str,
     web: bool = True,
-    local: bool = True,
-    local_paths: Optional[List[Union[str, Path]]] = None,
+    local: Optional[List[Union[str, Path]]] = None,
     max_results: int = 20,
     download_pdfs: bool = False,
     use_vector_search: bool = True,
@@ -373,16 +366,26 @@ def search_sync(
     --------
     >>> import mngs.scholar
     >>> 
-    >>> # Simple synchronous search
+    >>> # Simple synchronous search (web only)
     >>> papers = mngs.scholar.search_sync("machine learning")
-    >>> for paper in papers[:3]:
-    ...     print(f"- {paper.title}")
+    >>> 
+    >>> # Search with local directories
+    >>> papers = mngs.scholar.search_sync(
+    ...     "deep learning",
+    ...     local=["./papers", "~/Documents/research"]
+    ... )
+    >>> 
+    >>> # Local only search
+    >>> papers = mngs.scholar.search_sync(
+    ...     "neural networks",
+    ...     web=False,
+    ...     local=["./my_papers"]
+    ... )
     """
     return asyncio.run(search(
         query=query,
         web=web,
         local=local,
-        local_paths=local_paths,
         max_results=max_results,
         download_pdfs=download_pdfs,
         use_vector_search=use_vector_search,
