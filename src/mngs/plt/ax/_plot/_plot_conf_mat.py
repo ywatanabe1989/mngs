@@ -4,9 +4,8 @@
 # File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_plot/_plot_conf_mat.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/plt/ax/_plot/_plot_conf_mat.py"
-)
+
+__FILE__ = "./src/mngs/plt/ax/_plot/_plot_conf_mat.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -134,4 +133,8 @@ def plot_conf_mat(
     else:
         return axis, None
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> origin/main
 # EOF

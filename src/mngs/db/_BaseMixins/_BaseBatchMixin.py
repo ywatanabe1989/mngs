@@ -8,8 +8,14 @@ THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_BaseMixins/_BaseBatchMi
 from typing import List, Any, Optional, Dict, Union
 import pandas as pd
 
+
 class _BaseBatchMixin:
-    def insert_many(self, table: str, records: List[Dict[str, Any]], batch_size: Optional[int] = None):
+    def insert_many(
+        self,
+        table: str,
+        records: List[Dict[str, Any]],
+        batch_size: Optional[int] = None,
+    ):
         raise NotImplementedError
 
     def _prepare_insert_query(self, table: str, record: Dict[str, Any]) -> str:
@@ -18,7 +24,7 @@ class _BaseBatchMixin:
     def _prepare_batch_parameters(self, records: List[Dict[str, Any]]) -> tuple:
         raise NotImplementedError
 
-    def dataframe_to_sql(self, df: pd.DataFrame, table: str, if_exists: str = 'fail'):
+    def dataframe_to_sql(self, df: pd.DataFrame, table: str, if_exists: str = "fail"):
         raise NotImplementedError
 
 

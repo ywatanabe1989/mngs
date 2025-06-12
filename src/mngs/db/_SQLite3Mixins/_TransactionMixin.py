@@ -3,11 +3,14 @@
 # Time-stamp: "2024-11-29 04:32:42 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/db/_SQLite3Mixins/_TransactionMixin.py
 
-THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_SQLite3Mixins/_TransactionMixin.py"
+THIS_FILE = (
+    "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_SQLite3Mixins/_TransactionMixin.py"
+)
 
 import sqlite3
 import contextlib
 from .._BaseMixins._BaseTransactionMixin import _BaseTransactionMixin
+
 
 class _TransactionMixin:
     """Transaction management functionality"""
@@ -63,5 +66,6 @@ class _TransactionMixin:
     def _check_writable(self) -> None:
         if not self.writable:
             raise ValueError("Database is in read-only mode")
+
 
 # EOF

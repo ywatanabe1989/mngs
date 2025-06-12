@@ -3,6 +3,7 @@
 # Time-stamp: "2024-11-14 07:55:42 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/io/_load_modules/_markdown.py
 
+
 def _load_markdown(lpath_md, style="plain_text", **kwargs):
     """
     Load and convert Markdown content from a file.
@@ -54,9 +55,7 @@ def _load_markdown(lpath_md, style="plain_text", **kwargs):
         plain_text = text_maker.handle(html_content)
         return plain_text
     else:
-        raise ValueError(
-            "Invalid style option. Choose 'html' or 'plain_text'."
-        )
+        raise ValueError("Invalid style option. Choose 'html' or 'plain_text'.")
 
 
 def load_markdown(lpath_md, style="plain_text"):

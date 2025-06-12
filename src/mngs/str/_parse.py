@@ -77,9 +77,7 @@ def parse(
         errors.append(str(e))
         # logging.warning(f"Second attempt failed: {e}")
 
-    raise ValueError(
-        f"Parsing failed in both directions: {' | '.join(errors)}"
-    )
+    raise ValueError(f"Parsing failed in both directions: {' | '.join(errors)}")
 
 
 def _parse(string: str, expression: str) -> Dict[str, Union[str, int]]:
@@ -138,9 +136,7 @@ def _parse(string: str, expression: str) -> Dict[str, Union[str, int]]:
 
     for placeholder, value in zip(placeholders, groups):
         if placeholder in result and result[placeholder] != value:
-            raise ValueError(
-                f"Inconsistent values for placeholder '{placeholder}'"
-            )
+            raise ValueError(f"Inconsistent values for placeholder '{placeholder}'")
         result[placeholder] = value
 
     return _DotDict(result)

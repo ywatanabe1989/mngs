@@ -4,9 +4,8 @@
 # File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/tests/mngs/plt/ax/_plot/test__plot_conf_mat.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./tests/mngs/plt/ax/_plot/test__plot_conf_mat.py"
-)
+
+__FILE__ = "./tests/mngs/plt/ax/_plot/test__plot_conf_mat.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -50,9 +49,7 @@ class TestPlotConfMat:
         save(self.fig, spath)
         # Check saved file
         actual_spath = os.path.join(self.out_dir, spath)
-        assert os.path.exists(
-            actual_spath
-        ), f"Failed to save figure to {spath}"
+        assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
 
     def test_basic_functionality(self):
         # Test basic confusion matrix plotting
@@ -156,9 +153,7 @@ class TestPlotConfMat:
         # Check saved file
         ACTUAL_SAVE_DIR = __file__.replace(".py", "_out")
         actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
-        assert os.path.exists(
-            actual_spath
-        ), f"Failed to save figure to {spath}"
+        assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
 
 
 class TestMNGSPlotConfMat(TestPlotConfMat):

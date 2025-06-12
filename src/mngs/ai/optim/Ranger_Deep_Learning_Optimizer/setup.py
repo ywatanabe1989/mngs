@@ -10,17 +10,15 @@ def read(fname):
 
 
 setup(
-    name='ranger',
-    version='0.1.dev0',
-    packages=find_packages(
-        exclude=['tests', '*.tests', '*.tests.*', 'tests.*']
-    ),
-    package_dir={'ranger': os.path.join('.', 'ranger')},
-    description='Ranger - a synergistic optimizer using RAdam '
-                '(Rectified Adam) and LookAhead in one codebase ',
-    long_description=read('README.md'),
-    long_description_content_type='text/markdown',
-    author='Less Wright',
-    license='Apache',
-    install_requires=['torch']
+    name="ranger",
+    version="0.1.dev0",
+    packages=find_packages(exclude=["tests", "*.tests", "*.tests.*", "tests.*"]),
+    package_dir={"ranger": os.path.join(".", "ranger")},
+    description="Ranger - a synergistic optimizer using RAdam "
+    "(Rectified Adam) and LookAhead in one codebase ",
+    long_description=read("README.md"),
+    long_description_content_type="text/markdown",
+    author="Less Wright",
+    license="Apache",
+    install_requires=["torch"],
 )

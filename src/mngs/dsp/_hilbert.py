@@ -12,17 +12,18 @@ import sys
 import matplotlib.pyplot as plt
 from ..nn._Hilbert import Hilbert
 
-from ..decorators import torch_fn
+from ..decorators import signal_fn
 
 
 # Functions
-@torch_fn
+@signal_fn
 def hilbert(
     x,
     dim=-1,
 ):
     y = Hilbert(x.shape[-1], dim=dim)(x)
     return y[..., 0], y[..., 1]
+
 
 if __name__ == "__main__":
     import mngs

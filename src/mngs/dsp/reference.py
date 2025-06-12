@@ -9,11 +9,10 @@ from ..decorators import torch_fn as _torch_fn
 
 @_torch_fn
 def common_average(x, dim=-2):
-    re_referenced = (x - x.mean(dim=dim, keepdims=True)) / x.std(
-        dim=dim, keepdims=True
-    )
+    re_referenced = (x - x.mean(dim=dim, keepdims=True)) / x.std(dim=dim, keepdims=True)
     assert x.shape == re_referenced.shape
     return re_referenced
+
 
 @_torch_fn
 def random(x, dim=-2):
@@ -25,6 +24,7 @@ def random(x, dim=-2):
     assert x.shape == re_referenced.shape
     return re_referenced
 
+
 @_torch_fn
 def take_reference(x, tgt_indi, dim=-2):
     idx_all = [slice(None)] * x.ndim
@@ -32,6 +32,7 @@ def take_reference(x, tgt_indi, dim=-2):
     re_referenced = x - x[tgt_indi]
     assert x.shape == re_referenced.shape
     return re_referenced
+
 
 if __name__ == "__main__":
     import mngs

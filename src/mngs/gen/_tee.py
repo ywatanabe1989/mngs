@@ -73,6 +73,7 @@ from ..str._printc import printc
 
 #         return g
 
+
 class Tee:
     def __init__(self, stream: TextIO, log_path: str) -> None:
         self._stream = stream
@@ -87,10 +88,14 @@ class Tee:
         self._stream.write(data)
         if self._log_file is not None:
             if self._is_stderr:
-                if isinstance(data, str) and not re.match(r"^[\s]*[0-9]+%.*\[A*$", data):
+                if isinstance(data, str) and not re.match(
+                    r"^[\s]*[0-9]+%.*\[A*$", data
+                ):
                     self._log_file.write(data)
+                    self._log_file.flush()  # Ensure immediate write
             else:
                 self._log_file.write(data)
+                self._log_file.flush()  # Ensure immediate write
 
     def flush(self) -> None:
         self._stream.flush()
@@ -107,9 +112,28 @@ class Tee:
     def buffer(self):
         return self._stream.buffer
 
+    def close(self):
+        """Explicitly close the log file."""
+        if hasattr(self, "_log_file") and self._log_file is not None:
+            try:
+                self._log_file.flush()
+                self._log_file.close()
+                self._log_file = None  # Prevent double-close
+            except Exception:
+                pass
+
     def __del__(self):
-        if hasattr(self, '_log_file') and self._log_file is not None:
-            self._log_file.close()
+        # Only attempt cleanup if Python is not shutting down
+        # This prevents "Exception ignored" errors during interpreter shutdown
+        if hasattr(self, "_log_file") and self._log_file is not None:
+            try:
+                # Check if the file object is still valid
+                if hasattr(self._log_file, "closed") and not self._log_file.closed:
+                    self.close()
+            except Exception:
+                # Silently ignore exceptions during cleanup
+                pass
+
 
 # class Tee:
 #     def __init__(self, stream: TextIO, log_path: str) -> None:
@@ -141,6 +165,7 @@ class Tee:
 #     @property
 #     def buffer(self):
 #         return getattr(self._stream, 'buffer', self._stream)
+
 
 def tee(sys, sdir=None, verbose=True):
     """Redirects stdout and stderr to both console and log files.
@@ -174,9 +199,9 @@ def tee(sys, sdir=None, verbose=True):
     ####################
     if sdir is None:
         THIS_FILE = inspect.stack()[1].filename
-        if "ipython" in __file__:
+        if "ipython" in THIS_FILE:
             THIS_FILE = f"/tmp/{_os.getenv('USER')}.py"
-        sdir = clean_path(_os.path.splitext(__file__)[0] + "_out")
+        sdir = clean_path(_os.path.splitext(THIS_FILE)[0] + "_out")
 
     sdir = _os.path.join(sdir, "logs/")
     _os.makedirs(sdir, exist_ok=True)
@@ -191,6 +216,7 @@ def tee(sys, sdir=None, verbose=True):
         printc(message)
 
     return sys_stdout, sys_stderr
+
 
 main = tee
 

@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/utils/_mk_colorbar.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/plt/utils/_mk_colorbar.py"
-)
+
+__FILE__ = "./src/mngs/plt/utils/_mk_colorbar.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -41,6 +40,7 @@ def mk_colorbar(start="white", end="blue"):
     import matplotlib.colors as mcolors
     import matplotlib.pyplot as plt
     import numpy as np
+
     # import mngs
     from mngs.plt.color._PARAMS import RGB
 
@@ -50,9 +50,7 @@ def mk_colorbar(start="white", end="blue"):
 
     # Create a colormap
     colors = [start_rgb, end_rgb]
-    cmap = mcolors.LinearSegmentedColormap.from_list(
-        "custom_cmap", colors, N=256
-    )
+    cmap = mcolors.LinearSegmentedColormap.from_list("custom_cmap", colors, N=256)
 
     # Create the figure and plot the colorbar
     fig, ax = plt.subplots(figsize=(6, 1))
@@ -62,5 +60,6 @@ def mk_colorbar(start="white", end="blue"):
     ax.set_yticks([])
 
     return fig
+
 
 # EOF

@@ -37,12 +37,14 @@ def std(x, axis=-1, dim=None, keepdims=False):
 def var(x, axis=-1, dim=None, keepdims=False):
     return x.var(dim, keepdims=keepdims)
 
+
 @torch_fn
 def zscore(x, axis=-1, dim=None, keepdims=True):
     _mean = mean(x, dim=dim, keepdims=True)
     _std = std(x, dim=dim, keepdims=True)
     zscores = (x - _mean) / _std
     return zscores if keepdims else zscores.squeeze(dim)
+
 
 @torch_fn
 def skewness(x, axis=-1, dim=None, keepdims=False):
@@ -53,11 +55,7 @@ def skewness(x, axis=-1, dim=None, keepdims=False):
 @torch_fn
 def kurtosis(x, axis=-1, dim=None, keepdims=False):
     zscores = zscore(x, axis=axis, keepdims=True)
-    return (
-        torch.mean(torch.pow(zscores, 4.0), dim=dim, keepdims=keepdims) - 3.0
-    )
-
-
+    return torch.mean(torch.pow(zscores, 4.0), dim=dim, keepdims=keepdims) - 3.0
 
 
 @torch_fn

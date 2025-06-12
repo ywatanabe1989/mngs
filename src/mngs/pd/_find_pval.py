@@ -57,9 +57,7 @@ def find_pval(
     elif isinstance(data, (np.ndarray, list, dict)):
         return _find_pval(data, multiple)
     else:
-        raise ValueError(
-            "Input must be a pandas DataFrame, numpy array, list, or dict"
-        )
+        raise ValueError("Input must be a pandas DataFrame, numpy array, list, or dict")
 
 
 def _find_pval(

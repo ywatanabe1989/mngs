@@ -36,9 +36,7 @@ def to_xy(data_frame):
 
         if (data_frame.index == np.array(range(len(data_frame.index)))).all():
             data_frame.columns = data_frame.index
-        elif (
-            data_frame.columns == np.array(range(len(data_frame.columns)))
-        ).all():
+        elif (data_frame.columns == np.array(range(len(data_frame.columns)))).all():
             data_frame.index = data_frame.columns
         else:
             ValueError
@@ -53,9 +51,7 @@ def to_xy(data_frame):
         column_data_frame = pd.DataFrame(column_data_frame)
         column_data_frame["x"] = column_data_frame.index
         column_data_frame["y"] = y_label
-        column_data_frame = column_data_frame.reset_index().drop(
-            columns=["index"]
-        )
+        column_data_frame = column_data_frame.reset_index().drop(columns=["index"])
         column_data_frame = column_data_frame.rename(columns={y_label: "z"})
         column_data_frame = mngs.pd.mv(column_data_frame, "z", -1)
         formatted_data_frames.append(column_data_frame)

@@ -38,9 +38,7 @@ def geometric_median(xx, dim=-1):
     points = []
     # Loop over each index in the specified dimension
     for i in range(dim_size):
-        indi[
-            dim
-        ] = i
+        indi[dim] = i
         # Set the slice for the current index in the target dimension
         slice_data = xx[tuple(indi)]  # Extract the data for the current index
         points.append(slice_data)
@@ -59,9 +57,7 @@ if __name__ == "__main__":
     # args = parser.parse_args()
 
     # Main
-    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
-        sys, plt, verbose=False
-    )
+    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt, verbose=False)
     main()
     mngs.gen.close(CONFIG, verbose=False, notify=False)
 

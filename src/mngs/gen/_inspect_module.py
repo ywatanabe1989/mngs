@@ -205,6 +205,7 @@ def _inspect_module(
 
     return df[columns]
 
+
 def _print_module_contents(df: pd.DataFrame) -> None:
     """Prints module contents in tree structure.
 
@@ -231,6 +232,7 @@ def _print_module_contents(df: pd.DataFrame) -> None:
 
         print(f"{prefix}({row['Type']}) {row['Name']}{row['Docstring']}")
         depth_last[depth] = is_last
+
 
 if __name__ == "__main__":
 

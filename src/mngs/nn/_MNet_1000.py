@@ -20,7 +20,7 @@ MNet_config = {
 }
 
 
-class MNet_1000(nn.Module):
+class MNet1000(nn.Module):
     def __init__(self, config):
         super().__init__()
 
@@ -29,34 +29,29 @@ class MNet_1000(nn.Module):
         # fc
         N_FC_IN = 15950
 
-
         # conv
-        self.backborn = nn.Sequential(*[
-            
-            nn.Conv2d(1, 40, kernel_size=(config["n_chs"], 4)),
-            nn.Mish(),
+        self.backborn = nn.Sequential(
+            *[
+                nn.Conv2d(1, 40, kernel_size=(config["n_chs"], 4)),
+                nn.Mish(),
+                nn.Conv2d(40, 40, kernel_size=(1, 4)),
+                nn.BatchNorm2d(40),
+                nn.MaxPool2d((1, 5)),
+                nn.Mish(),
+                SwapLayer(),
+                nn.Conv2d(1, 50, kernel_size=(8, 12)),
+                nn.BatchNorm2d(50),
+                nn.MaxPool2d((3, 3)),
+                nn.Mish(),
+                nn.Conv2d(50, 50, kernel_size=(1, 5)),
+                nn.BatchNorm2d(50),
+                nn.MaxPool2d((1, 2)),
+                nn.Mish(),
+                ReshapeLayer(),
+                nn.Linear(N_FC_IN, config["n_fc1"]),
+            ]
+        )
 
-            nn.Conv2d(40, 40, kernel_size=(1, 4)),
-            nn.BatchNorm2d(40),
-            nn.MaxPool2d((1, 5)),
-            nn.Mish(),
-
-            SwapLayer(),
-
-            nn.Conv2d(1, 50, kernel_size=(8, 12)),
-            nn.BatchNorm2d(50),
-            nn.MaxPool2d((3, 3)),
-            nn.Mish(),
-
-            nn.Conv2d(50, 50, kernel_size=(1, 5)),
-            nn.BatchNorm2d(50),
-            nn.MaxPool2d((1, 2)),
-            nn.Mish(),
-
-            ReshapeLayer(),
-            nn.Linear(N_FC_IN, config["n_fc1"]),
-            ])
-        
         # # conv
         # self.conv1 = nn.Conv2d(1, 40, kernel_size=(config["n_chs"], 4))
         # self.act1 = nn.Mish()
@@ -77,7 +72,6 @@ class MNet_1000(nn.Module):
         # self.bn4 = nn.BatchNorm2d(50)
         # self.pool4 = nn.MaxPool2d((1, 2))
         # self.act4 = nn.Mish()
-
 
         self.fc = nn.Sequential(
             # nn.Linear(N_FC_IN, config["n_fc1"]),
@@ -125,9 +119,7 @@ class MNet_1000(nn.Module):
         x = self._reshape_input(x, self.config["n_chs"])
         x = self.backborn(x)
         return x
-        
 
-    
 
 class SwapLayer(nn.Module):
     def __init__(
@@ -137,7 +129,8 @@ class SwapLayer(nn.Module):
 
     def forward(self, x):
         return x.transpose(1, 2)
-    
+
+
 class ReshapeLayer(nn.Module):
     def __init__(
         self,
@@ -159,3 +152,6 @@ if __name__ == "__main__":
     y = model(x)
     summary(model, x)
     print(y.shape)
+
+# Backward compatibility
+MNet_1000 = MNet1000  # Deprecated: use MNet1000 instead

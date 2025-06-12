@@ -4,11 +4,11 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_style/_shift.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/plt/ax/_style/_shift.py"
-)
+
+__FILE__ = "./src/mngs/plt/ax/_style/_shift.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
+
 
 def shift(ax, dx=0, dy=0):
     """

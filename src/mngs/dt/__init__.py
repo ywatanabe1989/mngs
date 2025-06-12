@@ -4,9 +4,8 @@
 # File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/dt/__init__.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/dt/__init__.py"
-)
+
+__FILE__ = "./src/mngs/dt/__init__.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 #!/usr/bin/env python3

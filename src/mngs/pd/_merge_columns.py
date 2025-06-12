@@ -15,11 +15,12 @@ import pandas as pd
 def merge_columns(
     df: pd.DataFrame,
     *args: Union[str, List[str], Tuple[str, ...]],
+    sep: str = None,
     sep1: str = "_",
     sep2: str = "-",
     name: str = "merged"
 ) -> pd.DataFrame:
-    """Creates a new column by joining specified columns with their labels.
+    """Creates a new column by joining specified columns.
 
     Example
     -------
@@ -28,10 +29,18 @@ def merge_columns(
     ...     'B': [1, 6, 11],
     ...     'C': [2, 7, 12]
     ... })
-    >>> merge_columns(df, 'A', 'B', sep1='_', sep2='-')
+    >>> # Simple concatenation with separator
+    >>> merge_columns(df, 'A', 'B', sep=' ')
        A  B  C    A_B
-    0  0  1  2  A-0_B-1
-    1  5  6  7  A-5_B-6
+    0  0  1  2    0 1
+    1  5  6  7    5 6
+    2 10 11 12  10 11
+
+    >>> # With column labels
+    >>> merge_columns(df, 'A', 'B', sep1='_', sep2='-')
+       A  B  C        A_B
+    0  0  1  2    A-0_B-1
+    1  5  6  7    A-5_B-6
     2 10 11 12  A-10_B-11
 
     Parameters
@@ -40,6 +49,8 @@ def merge_columns(
         Input DataFrame
     *args : Union[str, List[str], Tuple[str, ...]]
         Column names to join
+    sep : str, optional
+        Simple separator for values only (overrides sep1/sep2)
     sep1 : str, optional
         Separator between column-value pairs, by default "_"
     sep2 : str, optional
@@ -62,12 +73,31 @@ def merge_columns(
         missing = [col for col in columns if col not in _df.columns]
         raise KeyError(f"Columns not found in DataFrame: {missing}")
 
-    merged_col = _df[list(columns)].apply(
-        lambda row: sep1.join(f"{col}{sep2}{val}" for col, val in row.items()),
-        axis=1,
-    )
+    if sep is not None:
+        # Simple value concatenation
+        merged_col = (
+            _df[list(columns)]
+            .astype(str)
+            .apply(
+                lambda row: sep.join(row.values),
+                axis=1,
+            )
+        )
+    else:
+        # Concatenation with column labels
+        merged_col = _df[list(columns)].apply(
+            lambda row: sep1.join(f"{col}{sep2}{val}" for col, val in row.items()),
+            axis=1,
+        )
 
-    new_col_name = sep1.join(columns) if not name else str(name)
+    # Determine column name
+    if name == "merged" and sep is not None:
+        # When using simple separator and default name, use joined column names
+        new_col_name = "_".join(columns)
+    else:
+        # Use provided name or default
+        new_col_name = name
+
     _df[new_col_name] = merged_col
     return _df
 
@@ -80,7 +110,6 @@ merge_cols = merge_columns
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-10-07 12:03:29 (ywatanabe)"
 # # ./src/mngs/pd/_merge_cols.py
-
 
 
 # def merge_columns(df, *args, sep1="_", sep2="-", name="merged"):

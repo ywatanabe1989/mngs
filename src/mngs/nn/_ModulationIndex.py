@@ -102,9 +102,7 @@ class ModulationIndex(nn.Module):
         counts = pha_masks.sum(dim=i_time, keepdims=True)
         amp_means = amp_sums / (counts + epsilon)
 
-        amp_probs = amp_means / (
-            amp_means.sum(dim=-1, keepdims=True) + epsilon
-        )
+        amp_probs = amp_means / (amp_means.sum(dim=-1, keepdims=True) + epsilon)
 
         if self.amp_prob:
             return amp_probs.detach().cpu()
@@ -172,9 +170,7 @@ if __name__ == "__main__":
     import mngs
 
     # Start
-    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
-        sys, plt, fig_scale=3
-    )
+    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt, fig_scale=3)
 
     # Parameters
     FS = 512

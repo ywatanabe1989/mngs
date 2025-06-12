@@ -19,9 +19,9 @@ def title2path(title):
         A path-friendly string derived from the input title.
     """
     if isinstance(title, dict):
-        from mngs.gen import dict2str
+        from mngs.dict import to_str
 
-        title = dict2str(title)
+        title = to_str(title)
 
     path = title
 

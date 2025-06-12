@@ -13,7 +13,6 @@ import pandas as pd
 # /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/db/_delete_duplicates_clean.py
 
 
-
 """
 Functionality:
     - Deletes duplicate entries from an SQLite database table
@@ -26,13 +25,7 @@ Prerequisites:
 """
 
 
-
-
-def _sort_db(
-    cursor: sqlite3.Cursor,
-    table_name: str,
-    columns: List[str]
-) -> None:
+def _sort_db(cursor: sqlite3.Cursor, table_name: str, columns: List[str]) -> None:
     """
     Sorts the database table based on the specified columns.
 
@@ -53,10 +46,12 @@ def _sort_db(
     >>> conn.commit()
     >>> conn.close()
     """
-    columns_str = ', '.join(columns)
+    columns_str = ", ".join(columns)
     temp_table = f"{table_name}_temp"
 
-    cursor.execute(f"CREATE TABLE {temp_table} AS SELECT * FROM {table_name} ORDER BY {columns_str}")
+    cursor.execute(
+        f"CREATE TABLE {temp_table} AS SELECT * FROM {table_name} ORDER BY {columns_str}"
+    )
     cursor.execute(f"DROP TABLE {table_name}")
     cursor.execute(f"ALTER TABLE {temp_table} RENAME TO {table_name}")
 
@@ -76,11 +71,7 @@ def _determine_columns(
         columns = (
             all_columns
             if include_blob
-            else [
-                col
-                for col in all_columns
-                if column_types[col].lower() != "blob"
-            ]
+            else [col for col in all_columns if column_types[col].lower() != "blob"]
         )
     elif isinstance(columns, str):
         columns = [columns]
@@ -89,6 +80,7 @@ def _determine_columns(
     print(f"Columns considered for duplicates: {columns_str}")
 
     return columns
+
 
 def _fetch_as_df(
     cursor: sqlite3.Cursor, columns: List[str], table_name: str
@@ -100,15 +92,15 @@ def _fetch_as_df(
     df_entries = cursor.fetchall()
     return pd.DataFrame(df_entries, columns=columns)
 
+
 def _find_duplicated(df: pd.DataFrame) -> pd.DataFrame:
     df_duplicated = df[df.duplicated(keep="first")].copy()
     duplication_rate = len(df_duplicated) / (len(df) - len(df_duplicated))
-    print(
-        f"\n{100*duplication_rate:.2f}% of data was duplicated. Cleaning up..."
-    )
+    print(f"\n{100*duplication_rate:.2f}% of data was duplicated. Cleaning up...")
     print(f"\nOriginal entries:\n{df.head()}")
     print(f"\nDuplicated entries:\n{df_duplicated.head()}")
     return df_duplicated
+
 
 def verify_duplicated_index(
     cursor: sqlite3.Cursor, duplicated_row: pd.Series, table_name: str, dry_run: bool
@@ -135,13 +127,16 @@ def verify_duplicated_index(
 
     return select_query, is_verified
 
+
 def _delete_entry(
     cursor: sqlite3.Cursor,
     duplicated_row: pd.Series,
     table_name: str,
     dry_run: bool = True,
 ) -> None:
-    select_query, is_verified = verify_duplicated_index(cursor, duplicated_row, table_name, dry_run)
+    select_query, is_verified = verify_duplicated_index(
+        cursor, duplicated_row, table_name, dry_run
+    )
     if is_verified:
         delete_query = select_query.replace("SELECT", "DELETE")
         if dry_run:
@@ -344,7 +339,9 @@ def delete_duplicates(
 
         # Create a temporary table to store unique rows
         temp_table = f"{table_name}_temp"
-        cursor.execute(f"CREATE TABLE {temp_table} AS SELECT DISTINCT {columns_str} FROM {table_name} LIMIT 0")
+        cursor.execute(
+            f"CREATE TABLE {temp_table} AS SELECT DISTINCT {columns_str} FROM {table_name} LIMIT 0"
+        )
 
         # Process in small chunks
         offset = 0

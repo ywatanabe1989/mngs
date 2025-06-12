@@ -4,9 +4,8 @@
 # File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py"
-)
+
+__FILE__ = "./tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -74,11 +73,17 @@ def test_plot_kde():
     # Figure
     fig, ax = subplots()
     # Data
+<<<<<<< HEAD
+    data = np.concatenate([np.random.normal(0, 1, 500), np.random.normal(5, 1, 300)])
+    # Plot
+    ax.plot_kde(data, label="Bimodal Distribution", fill=True)
+=======
     data = np.concatenate(
         [np.random.normal(0, 1, 500), np.random.normal(5, 1, 300)]
     )
     # Plot - add ID for tracking
     ax.plot_kde(data, label="Bimodal Distribution", fill=True, id="kde_test")
+>>>>>>> origin/main
     # Visualization
     ax.set_xyt("Value", "Density", "PLOT_KDE Test")
     ax.legend()
@@ -159,6 +164,10 @@ def test_plot_rectangle():
     fig, ax = subplots()
     # Data
     x = np.linspace(0, 10, 100)
+<<<<<<< HEAD
+    # Add rectangles
+    ax.plot_rectangle(2, 0, 2, 0.5, color="red", alpha=0.3, label="Highlight Region 1")
+=======
     # Add rectangles - add IDs for tracking
     ax.plot_rectangle(
         2,
@@ -170,6 +179,7 @@ def test_plot_rectangle():
         label="Highlight Region 1",
         id="rectangle_1_test",
     )
+>>>>>>> origin/main
     ax.plot_rectangle(
         6,
         -0.5,
@@ -450,6 +460,9 @@ def test_plot_violin():
     labels = ["Group A", "Group B", "Group C"]
 
     # Plot traditional violin
+<<<<<<< HEAD
+    ax.plot_violin(data_list, labels=labels, colors=["red", "blue", "green"], half=True)
+=======
     ax.plot_violin(
         data_list,
         labels=labels,
@@ -457,6 +470,7 @@ def test_plot_violin():
         half=True,
         id="plot_violin_id",
     )
+>>>>>>> origin/main
 
     # Visualization
     ax.set_xyt("Groups", "Values", "Plot_Violin Test (Traditional)")

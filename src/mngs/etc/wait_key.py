@@ -6,11 +6,12 @@ import readchar
 import time
 import multiprocessing
 
+
 def wait_key(p):
     key = "x"
     while key != "q":
         key = readchar.readchar()
-        print(key)        
+        print(key)
     print("q was pressed.")
     p.terminate()
     # event.set()
@@ -24,9 +25,10 @@ def count():
         time.sleep(1)
         counter += 1
 
+
 if __name__ == "__main__":
     p1 = multiprocessing.Process(target=count)
-    
+
     p1.start()
     waitKey(p1)
     print("aaa")

@@ -26,6 +26,8 @@ Prerequisites:
 import os
 
 """Functions & Classes"""
+
+
 def clean_path(path_string: str) -> str:
     """Cleans and normalizes a file system path string.
 
@@ -52,8 +54,8 @@ def clean_path(path_string: str) -> str:
         if not isinstance(path_string, str):
             raise TypeError("Input must be a string")
 
-        if path_string.startswith("f\""):
-            path_string = path_string.replace("f\"", "")[:-1]
+        if path_string.startswith('f"'):
+            path_string = path_string.replace('f"', "")[:-1]
 
         # Normalize path separators
         cleaned_path = os.path.normpath(path_string)
@@ -68,5 +70,6 @@ def clean_path(path_string: str) -> str:
 
     except Exception as error:
         raise ValueError(f"Path cleaning failed: {str(error)}")
+
 
 # EOF

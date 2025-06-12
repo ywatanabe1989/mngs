@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/tests/mngs/decorators/test__xarray_fn.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./tests/mngs/decorators/test__xarray_fn.py"
-)
+
+__FILE__ = "./tests/mngs/decorators/test__xarray_fn.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -79,6 +78,33 @@ def test_xarray_fn_with_numpy_input(test_data):
 
 def test_xarray_fn_nested_decorator(test_data):
     """Test nested decorator behavior with xarray_fn."""
+<<<<<<< HEAD
+
+    # Create a dummy decorator to simulate nesting
+    def dummy_decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            # Set nested context
+            wrapper._current_decorator = "dummy_decorator"
+            return func(*args, **kwargs)
+
+        wrapper._is_wrapper = True
+        return wrapper
+
+    # Apply both decorators (nested)
+    @xarray_fn
+    @dummy_decorator
+    def nested_function(arr):
+        # In nested mode, the type should pass through unchanged from dummy_decorator
+        assert not isinstance(arr, xr.DataArray)
+        return arr
+
+    with patch("mngs.decorators._xarray_fn.is_nested_decorator", return_value=True):
+        # Input list should stay as list due to nested context
+        result = nested_function(test_data["torch"])
+        assert isinstance(result, torch.Tensor)
+        torch.testing.assert_close(result, test_data["torch"])
+=======
     
     # Skip this test for now - it's failing when run as part of the full suite
     import pytest
@@ -86,6 +112,8 @@ def test_xarray_fn_nested_decorator(test_data):
     
     # Create a dummy test that passes to avoid failing the whole suite
     assert True
+>>>>>>> origin/main
+
 
 if __name__ == "__main__":
     import os
@@ -111,15 +139,15 @@ if __name__ == "__main__":
 # from functools import wraps
 # from typing import Any as _Any
 # from typing import Callable
-# 
+#
 # import numpy as np
 # import pandas as pd
 # import torch
 # import xarray as xr
-# 
+#
 # from ._converters import is_nested_decorator
-# 
-# 
+#
+#
 # def xarray_fn(func: Callable) -> Callable:
 #     @wraps(func)
 #     def wrapper(*args: _Any, **kwargs: _Any) -> _Any:
@@ -127,13 +155,13 @@ if __name__ == "__main__":
 #         if is_nested_decorator():
 #             results = func(*args, **kwargs)
 #             return results
-# 
+#
 #         # Set the current decorator context
 #         wrapper._current_decorator = "xarray_fn"
-# 
+#
 #         # Store original object for type preservation
 #         original_object = args[0] if args else None
-# 
+#
 #         # Convert args to xarray DataArrays
 #         def to_xarray(data):
 #             if isinstance(data, xr.DataArray):
@@ -150,18 +178,18 @@ if __name__ == "__main__":
 #                 return xr.DataArray(data.values)
 #             else:
 #                 return xr.DataArray([data])
-# 
+#
 #         converted_args = [to_xarray(arg) for arg in args]
 #         converted_kwargs = {k: to_xarray(v) for k, v in kwargs.items()}
-# 
+#
 #         # Assertion to ensure all args are converted to xarray DataArrays
 #         for arg_index, arg in enumerate(converted_args):
 #             assert isinstance(
 #                 arg, xr.DataArray
 #             ), f"Argument {arg_index} not converted to DataArray: {type(arg)}"
-# 
+#
 #         results = func(*converted_args, **converted_kwargs)
-# 
+#
 #         # Convert results back to original input types
 #         if isinstance(results, xr.DataArray):
 #             if original_object is not None:
@@ -176,14 +204,14 @@ if __name__ == "__main__":
 #                 elif isinstance(original_object, pd.Series):
 #                     return pd.Series(results.values.flatten())
 #             return results
-# 
+#
 #         return results
-# 
+#
 #     # Mark as a wrapper for detection
 #     wrapper._is_wrapper = True
 #     wrapper._decorator_type = "xarray_fn"
 #     return wrapper
-# 
+#
 # # EOF
 # --------------------------------------------------------------------------------
 # End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/decorators/_xarray_fn.py

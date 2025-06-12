@@ -34,6 +34,8 @@ from ..str import printc
 from ._get_processor_usages import get_processor_usages
 
 """Functions & Classes"""
+
+
 def log_processor_usages(
     path: str = "/tmp/mngs/processor_usages.csv",
     limit_min: float = 30,
@@ -67,7 +69,7 @@ def log_processor_usages(
     if background:
         process = Process(
             target=_log_processor_usages,
-            args=(path, limit_min, interval_s, init, verbose)
+            args=(path, limit_min, interval_s, init, verbose),
         )
         process.start()
         return process
@@ -79,6 +81,7 @@ def log_processor_usages(
         init=init,
         verbose=verbose,
     )
+
 
 def _log_processor_usages(
     path: str = "/tmp/mngs/processor_usages.csv",
@@ -119,6 +122,7 @@ def _log_processor_usages(
         _add(path, verbose=verbose)
         time.sleep(interval_s)
 
+
 # def _ensure_log_file(path: str, init: bool) -> None:
 #     def _create_path(path):
 #         os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -150,11 +154,13 @@ def _add(path: str, verbose: bool = True) -> None:
     now = get_processor_usages()
 
     # Append mode without loading entire file
-    with open(path, 'a') as f:
-        now.to_csv(f, header=f.tell()==0, index=False)
+    with open(path, "a") as f:
+        now.to_csv(f, header=f.tell() == 0, index=False)
+
 
 def _ensure_log_file(path: str, init: bool) -> None:
     """Creates or reinitializes log file with headers."""
+
     def _create_path(path):
         os.makedirs(os.path.dirname(path), exist_ok=True)
         # Write only headers
@@ -170,6 +176,7 @@ def _ensure_log_file(path: str, init: bool) -> None:
             _create_path(path)
         except Exception as err:
             raise RuntimeError(f"Failed to init log file: {err}")
+
 
 main = log_processor_usages
 

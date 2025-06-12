@@ -21,7 +21,7 @@ if __name__ == "__main__":
 # )
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
-# 
+#
 # # Adjust
 # from ._style._add_marginal_ax import add_marginal_ax
 # from ._style._add_panel import add_panel, panel
@@ -47,7 +47,7 @@ if __name__ == "__main__":
 #     sharexy,
 #     sharey,
 # )
-# 
+#
 # # Plot
 # from ._plot._plot_heatmap import plot_heatmap
 # from ._plot._plot_circular_hist import plot_circular_hist
@@ -68,15 +68,15 @@ if __name__ == "__main__":
 #     plot_mean_ci,
 #     plot_median_iqr,
 # )
-# 
-# 
+#
+#
 # # ################################################################################
 # # # For Matplotlib Compatibility
 # # ################################################################################
 # # import matplotlib.pyplot.axis as counter_part
 # # _local_module_attributes = list(globals().keys())
 # # print(_local_module_attributes)
-# 
+#
 # # def __getattr__(name):
 # #     """
 # #     Fallback to fetch attributes from matplotlib.pyplot
@@ -90,7 +90,7 @@ if __name__ == "__main__":
 # #         raise AttributeError(
 # #             f"module '{__name__}' nor matplotlib.pyplot has attribute '{name}'"
 # #         ) from None
-# 
+#
 # # def __dir__():
 # #     """
 # #     Provide combined directory for tab completion, including
@@ -102,14 +102,14 @@ if __name__ == "__main__":
 # #     pyplot_attrs = set(dir(counter_part))
 # #     # Return the sorted union
 # #     return sorted(local_attrs.union(pyplot_attrs))
-# 
+#
 # # """
 # # import matplotlib.pyplot as plt
 # # import mngs.plt as mplt
-# 
+#
 # # print(set(dir(mplt.ax)) - set(dir(plt.axis)))
 # # """
-# 
+#
 # # EOF
 # --------------------------------------------------------------------------------
 # End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/plt/ax/__init__.py

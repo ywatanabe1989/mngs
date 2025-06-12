@@ -4,9 +4,8 @@
 # File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_MatplotlibPlotMixin.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/plt/_subplots/_AxisWrapperMixins/_MatplotlibPlotMixin.py"
-)
+
+__FILE__ = "./src/mngs/plt/_subplots/_AxisWrapperMixins/_MatplotlibPlotMixin.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -39,9 +38,7 @@ class MatplotlibPlotMixin:
 
         # Plotting with pure matplotlib methods under non-tracking context
         with self._no_tracking():
-            self._axis_mpl = ax_module.plot_image(
-                self._axis_mpl, arr_2d, **kwargs
-            )
+            self._axis_mpl = ax_module.plot_image(self._axis_mpl, arr_2d, **kwargs)
 
         # Tracking
         tracked_dict = {"image_df": pd.DataFrame(arr_2d)}
@@ -391,9 +388,7 @@ class MatplotlibPlotMixin:
 
         # Plotting with pure matplotlib methods under non-tracking context
         with self._no_tracking():
-            self._axis_mpl = ax_module.plot_joyplot(
-                self._axis_mpl, data, **kwargs
-            )
+            self._axis_mpl = ax_module.plot_joyplot(self._axis_mpl, data, **kwargs)
 
         # Tracking
         tracked_dict = {"joyplot_data": data}
@@ -424,21 +419,19 @@ class MatplotlibPlotMixin:
 
         # Plotting with pure matplotlib methods under non-tracking context
         with self._no_tracking():
-            self._axis_mpl, ax_histx, ax_histy, hist_data = (
-                ax_module.plot_scatter_hist(
-                    self._axis_mpl,
-                    x,
-                    y,
-                    hist_bins=hist_bins,
-                    scatter_alpha=scatter_alpha,
-                    scatter_size=scatter_size,
-                    scatter_color=scatter_color,
-                    hist_color_x=hist_color_x,
-                    hist_color_y=hist_color_y,
-                    hist_alpha=hist_alpha,
-                    scatter_ratio=scatter_ratio,
-                    **kwargs,
-                )
+            self._axis_mpl, ax_histx, ax_histy, hist_data = ax_module.plot_scatter_hist(
+                self._axis_mpl,
+                x,
+                y,
+                hist_bins=hist_bins,
+                scatter_alpha=scatter_alpha,
+                scatter_size=scatter_size,
+                scatter_color=scatter_color,
+                hist_color_x=hist_color_x,
+                hist_color_y=hist_color_y,
+                hist_alpha=hist_alpha,
+                scatter_ratio=scatter_ratio,
+                **kwargs,
             )
 
         # Tracking
@@ -897,4 +890,8 @@ class MatplotlibPlotMixin:
 
         return self._axis_mpl, plot_df
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> origin/main
 # EOF

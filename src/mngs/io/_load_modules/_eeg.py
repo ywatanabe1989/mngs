@@ -86,8 +86,7 @@ def _load_eeg_data(path: str, **kwargs) -> Any:
             raw = mne.io.read_raw(lpath, preload=True, **kwargs)
         elif extension == "eeg":
             is_BrainVision = any(
-                os.path.isfile(lpath.replace(".eeg", ext))
-                for ext in [".vhdr", ".vmrk"]
+                os.path.isfile(lpath.replace(".eeg", ext)) for ext in [".vhdr", ".vmrk"]
             )
             is_NihonKoden = any(
                 os.path.isfile(lpath.replace(".eeg", ext))
@@ -97,9 +96,7 @@ def _load_eeg_data(path: str, **kwargs) -> Any:
             # Brain Vision
             if is_BrainVision:
                 lpath_v = lpath.replace(".eeg", ".vhdr")
-                raw = mne.io.read_raw_brainvision(
-                    lpath_v, preload=True, **kwargs
-                )
+                raw = mne.io.read_raw_brainvision(lpath_v, preload=True, **kwargs)
             # Nihon Koden
             if is_NihonKoden:
                 # raw = mne.io.read_raw_nihon(lpath, preload=True, **kwargs)

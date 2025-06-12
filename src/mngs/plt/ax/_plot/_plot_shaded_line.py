@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_plot/_plot_shaded_line.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/plt/ax/_plot/_plot_shaded_line.py"
-)
+
+__FILE__ = "./src/mngs/plt/ax/_plot/_plot_shaded_line.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -73,9 +72,7 @@ def _plot_shaded_line(
         if not isinstance(colors, list):
             color_list = [colors] * len(xs)
         else:
-            assert len(colors) == len(
-                xs
-            ), "Number of colors must match number of lines"
+            assert len(colors) == len(xs), "Number of colors must match number of lines"
             color_list = colors
 
         for idx, (xx, y_lower, y_middle, y_upper) in enumerate(
@@ -88,9 +85,7 @@ def _plot_shaded_line(
             )
             results.append(result_df)
     else:
-        for xx, y_lower, y_middle, y_upper in zip(
-            xs, ys_lower, ys_middle, ys_upper
-        ):
+        for xx, y_lower, y_middle, y_upper in zip(xs, ys_lower, ys_middle, ys_upper):
             _, result_df = _plot_single_shaded_line(
                 axis, xx, y_lower, y_middle, y_upper, **kwargs
             )
@@ -142,5 +137,6 @@ def plot_shaded_line(
         return _plot_shaded_line(
             axis, xs, ys_lower, ys_middle, ys_upper, color=color, **kwargs
         )
+
 
 # EOF

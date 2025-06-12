@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/ax/_adjust/test__rotate_labels.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./tests/mngs/plt/ax/_adjust/test__rotate_labels.py"
-)
+
+__FILE__ = "./tests/mngs/plt/ax/_adjust/test__rotate_labels.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -121,9 +120,8 @@ class TestMainFunctionality:
         # Check saved file
         ACTUAL_SAVE_DIR = __file__.replace(".py", "_out")
         actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
-        assert os.path.exists(
-            actual_spath
-        ), f"Failed to save figure to {spath}"
+        assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+
 
 if __name__ == "__main__":
     import os
@@ -139,14 +137,14 @@ if __name__ == "__main__":
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-10-27 13:24:32 (ywatanabe)"
 # # /home/ywatanabe/proj/_mngs_repo_openhands/src/mngs/plt/ax/_rotate_labels.py
-# 
+#
 # """This script does XYZ."""
-# 
+#
 # """Imports"""
 # def rotate_labels(ax, x=45, y=45, x_ha='center', y_ha='center'):
 #     """
 #     Rotate x and y axis labels of a matplotlib Axes object.
-# 
+#
 #     Parameters
 #     ----------
 #     ax : matplotlib.axes.Axes
@@ -159,12 +157,12 @@ if __name__ == "__main__":
 #         Horizontal alignment for x-axis labels. Default is 'center'.
 #     y_ha : str, optional
 #         Horizontal alignment for y-axis labels. Default is 'center'.
-# 
+#
 #     Returns
 #     -------
 #     matplotlib.axes.Axes
 #         The modified Axes object.
-# 
+#
 #     Example
 #     -------
 #     fig, ax = plt.subplots()
@@ -175,11 +173,11 @@ if __name__ == "__main__":
 #     # Get current tick positions
 #     xticks = ax.get_xticks()
 #     yticks = ax.get_yticks()
-# 
+#
 #     # Set ticks explicitly
 #     ax.set_xticks(xticks)
 #     ax.set_yticks(yticks)
-# 
+#
 #     # Set labels with rotation
 #     ax.set_xticklabels(ax.get_xticklabels(), rotation=x, ha=x_ha)
 #     ax.set_yticklabels(ax.get_yticklabels(), rotation=y, ha=y_ha)

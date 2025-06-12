@@ -1,6 +1,8 @@
-def SigMacro_processFigure_S():
-    """Print a macro for SigmaPlot (v12.0) to format a panel. Please refer to the 'Automating Routine Tasks' section of the official documentation."""
-
+def sigmacro_process_figure_s():
+    """Print a macro for SigmaPlot (v12.0) to format a panel.
+    
+    Please refer to the 'Automating Routine Tasks' section of the official documentation.
+    """
     print(
         """
 Option Explicit
@@ -110,3 +112,17 @@ Sub Main()
 End Sub
     """
     )
+
+
+# Backward compatibility alias
+import warnings
+
+
+def SigMacro_processFigure_S():
+    """Deprecated: Use sigmacro_process_figure_s() instead."""
+    warnings.warn(
+        "SigMacro_processFigure_S is deprecated, use sigmacro_process_figure_s() instead",
+        DeprecationWarning,
+        stacklevel=2
+    )
+    return sigmacro_process_figure_s()

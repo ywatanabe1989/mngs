@@ -6,7 +6,10 @@ import pandas as pd
 import re
 from typing import Union, List
 
-def p2stars(input_data: Union[float, str, pd.DataFrame], ns: bool = False) -> Union[str, pd.DataFrame]:
+
+def p2stars(
+    input_data: Union[float, str, pd.DataFrame], ns: bool = False
+) -> Union[str, pd.DataFrame]:
     """
     Convert p-value(s) to significance stars.
 
@@ -46,12 +49,13 @@ def p2stars(input_data: Union[float, str, pd.DataFrame], ns: bool = False) -> Un
     else:
         raise ValueError("Input must be a float, string, or a pandas DataFrame")
 
+
 def _p2stars_str(pvalue: Union[float, str], ns: bool = False) -> str:
     try:
         if isinstance(pvalue, str):
             pvalue = pvalue.strip().lower()
-            if pvalue in ['na', 'nan', 'null', '']:
-                return 'NA'
+            if pvalue in ["na", "nan", "null", ""]:
+                return "NA"
         pvalue_float = float(pvalue)
         if pvalue_float < 0 or pvalue_float > 1:
             raise ValueError(f"P-value must be between 0 and 1, got {pvalue_float}")
@@ -65,11 +69,12 @@ def _p2stars_str(pvalue: Union[float, str], ns: bool = False) -> str:
     elif pvalue_float <= 0.05:
         return "*"
     else:
-        return "n.s." if ns else ""
+        return "ns" if ns else ""
 
 
 def _p2stars_pd(df: pd.DataFrame, ns: bool = False) -> pd.DataFrame:
     from mngs.stats import find_pval
+
     pvalue_cols = find_pval(df, multiple=True)
     assert pvalue_cols, "No p-value columns found in DataFrame"
 
@@ -86,6 +91,7 @@ def _p2stars_pd(df: pd.DataFrame, ns: bool = False) -> pd.DataFrame:
         df = df.reindex(columns=cols)
 
     return df
+
 
 # def _find_pvalue_columns(df: pd.DataFrame) -> List[str]:
 #     """

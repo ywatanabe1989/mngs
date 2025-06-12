@@ -727,6 +727,4 @@ def float_linspace(start, stop, num_points):
     return np.array(values)
 
 
-
-
 # EOF

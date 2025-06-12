@@ -4,9 +4,8 @@
 # File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/io/_load_modules/_matlab.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "/ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/io/_load_modules/_matlab.py"
-)
+
+__FILE__ = "/ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/io/_load_modules/_matlab.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -32,8 +31,7 @@ def _load_matlab(lpath: str, **kwargs) -> Any:
             return read_mat(lpath, **kwargs)
         except Exception as e2:
             # Both methods failed
-            raise ValueError(
-                f"Error loading file {lpath}: {str(e1)}\nAnd: {str(e2)}"
-            )
+            raise ValueError(f"Error loading file {lpath}: {str(e1)}\nAnd: {str(e2)}")
+
 
 # EOF

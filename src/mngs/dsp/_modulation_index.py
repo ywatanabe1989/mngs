@@ -5,17 +5,18 @@
 
 import torch
 
-from ..decorators import torch_fn
+from ..decorators import signal_fn
 from ..nn._ModulationIndex import ModulationIndex
 
 
-@torch_fn
+@signal_fn
 def modulation_index(pha, amp, n_bins=18, amp_prob=False):
     """
     pha: (batch_size, n_chs, n_freqs_pha, n_segments, seq_len)
     amp: (batch_size, n_chs, n_freqs_amp, n_segments, seq_len)
     """
     return ModulationIndex(n_bins=n_bins, amp_prob=amp_prob)(pha, amp)
+
 
 def _reshape(x, batch_size=2, n_chs=4):
     return (
@@ -26,6 +27,7 @@ def _reshape(x, batch_size=2, n_chs=4):
         .repeat(batch_size, n_chs, 1, 1, 1)
     )
 
+
 if __name__ == "__main__":
     import sys
 
@@ -33,9 +35,7 @@ if __name__ == "__main__":
     import mngs
 
     # Start
-    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
-        sys, plt, fig_scale=3
-    )
+    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt, fig_scale=3)
 
     # Parameters
     FS = 512

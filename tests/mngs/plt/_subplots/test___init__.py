@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/_subplots/test___init__.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./tests/mngs/plt/_subplots/test___init__.py"
-)
+
+__FILE__ = "./tests/mngs/plt/_subplots/test___init__.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -31,28 +30,32 @@ if __name__ == "__main__":
 # )
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
+<<<<<<< HEAD
+#
+=======
 # 
 # # Import export_as_csv module functions
 # from ._export_as_csv import export_as_csv, format_record
 # 
+>>>>>>> origin/main
 # # import importlib
 # # import inspect
-# 
+#
 # # # Get the current directory
 # # current_dir = os.path.dirname(__file__)
-# 
+#
 # # # Iterate through all Python files in the current directory
 # # for filename in os.listdir(current_dir):
 # #     if filename.endswith(".py") and not filename.startswith("__"):
 # #         module_name = filename[:-3]  # Remove .py extension
 # #         module = importlib.import_module(f".{module_name}", package=__name__)
-# 
+#
 # #         # Import only functions and classes from the module
 # #         for name, obj in inspect.getmembers(module):
 # #             if inspect.isfunction(obj) or inspect.isclass(obj):
 # #                 if not name.startswith("_"):
 # #                     globals()[name] = obj
-# 
+#
 # # # Clean up temporary variables
 # # del (
 # #     os,
@@ -65,16 +68,16 @@ if __name__ == "__main__":
 # #     name,
 # #     obj,
 # # )
-# 
+#
 # # ################################################################################
 # # # For Matplotlib Compatibility
 # # ################################################################################
 # # import matplotlib.pyplot.subplots as counter_part
-# 
+#
 # # _local_module_attributes = list(globals().keys())
 # # print(_local_module_attributes)
-# 
-# 
+#
+#
 # # def __getattr__(name):
 # #     """
 # #     Fallback to fetch attributes from matplotlib.pyplot
@@ -88,8 +91,8 @@ if __name__ == "__main__":
 # #         raise AttributeError(
 # #             f"module '{__name__}' nor matplotlib.pyplot has attribute '{name}'"
 # #         ) from None
-# 
-# 
+#
+#
 # # def __dir__():
 # #     """
 # #     Provide combined directory for tab completion, including
@@ -101,15 +104,15 @@ if __name__ == "__main__":
 # #     pyplot_attrs = set(dir(counter_part))
 # #     # Return the sorted union
 # #     return sorted(local_attrs.union(pyplot_attrs))
-# 
-# 
+#
+#
 # """
 # import matplotlib.pyplot as plt
 # import mngs.plt as mplt
-# 
+#
 # print(set(dir(mplt.subplots)) - set(dir(plt.subplots)))
 # """
-# 
+#
 # # EOF
 # --------------------------------------------------------------------------------
 # End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/plt/_subplots/__init__.py

@@ -7,6 +7,7 @@ THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_BaseMixins/_BaseBackupM
 
 from typing import Optional
 
+
 class _BaseBackupMixin:
     def backup_table(self, table: str, file_path: str):
         raise NotImplementedError
@@ -20,7 +21,10 @@ class _BaseBackupMixin:
     def restore_database(self, file_path: str):
         raise NotImplementedError
 
-    def copy_table(self, source_table: str, target_table: str, where: Optional[str] = None):
+    def copy_table(
+        self, source_table: str, target_table: str, where: Optional[str] = None
+    ):
         raise NotImplementedError
+
 
 # EOF

@@ -5,8 +5,15 @@
 
 import os
 
+<<<<<<< HEAD
+
+def clean(string):
+    string = string.replace("/./", "/").replace("//", "/").replace(" ", "_")
+    return string
+=======
 def clean(path_string):
     """Cleans and normalizes a file system path string.
+>>>>>>> origin/main
 
     Example
     -------

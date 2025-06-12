@@ -4,11 +4,11 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/types/_is_listed_X.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/types/_is_listed_X.py"
-)
+
+__FILE__ = "./src/mngs/types/_is_listed_X.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
+
 
 def is_listed_X(obj, types):
     """
@@ -48,5 +48,23 @@ def is_listed_X(obj, types):
 
     except:
         return False
+
+
+# More conventional alias
+def is_list_of_type(obj, types):
+    """
+    Check if obj is a list where all elements are of one of the specified types.
+    
+    This is an alias for is_listed_X with a more conventional name.
+    
+    Args:
+        obj: Object to check
+        types: Type or list of types to check against
+        
+    Returns:
+        bool: True if obj is a list and all elements are of one of the specified types
+    """
+    return is_listed_X(obj, types)
+
 
 # EOF

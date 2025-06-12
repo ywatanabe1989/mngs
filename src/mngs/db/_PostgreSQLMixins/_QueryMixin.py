@@ -3,14 +3,24 @@
 # Timestamp: "2025-02-27 22:15:24 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_PostgreSQLMixins/_QueryMixin.py
 
-THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQLMixins/_QueryMixin.py"
+THIS_FILE = (
+    "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQLMixins/_QueryMixin.py"
+)
 
 from typing import List, Dict, Any, Optional, Union, Tuple
 from .._BaseMixins._BaseQueryMixin import _BaseQueryMixin
 
+
 class _QueryMixin(_BaseQueryMixin):
-    def select(self, table: str, columns: Optional[List[str]] = None, where: Optional[str] = None,
-               params: Optional[tuple] = None, order_by: Optional[str] = None, limit: Optional[int] = None) -> List[Dict[str, Any]]:
+    def select(
+        self,
+        table: str,
+        columns: Optional[List[str]] = None,
+        where: Optional[str] = None,
+        params: Optional[tuple] = None,
+        order_by: Optional[str] = None,
+        limit: Optional[int] = None,
+    ) -> List[Dict[str, Any]]:
         """Execute a SELECT query with optional conditions"""
         cols_str = "*" if not columns else ", ".join(columns)
         query = f"SELECT {cols_str} FROM {table}"
@@ -41,7 +51,13 @@ class _QueryMixin(_BaseQueryMixin):
 
         self.execute(query, tuple(values))
 
-    def update(self, table: str, data: Dict[str, Any], where: str, params: Optional[tuple] = None) -> int:
+    def update(
+        self,
+        table: str,
+        data: Dict[str, Any],
+        where: str,
+        params: Optional[tuple] = None,
+    ) -> int:
         """Update records in a table"""
         self._check_writable()
         set_items = [f"{k} = %s" for k in data.keys()]
@@ -66,7 +82,9 @@ class _QueryMixin(_BaseQueryMixin):
         self.execute(query, params)
         return self.cursor.rowcount
 
-    def execute_query(self, query: str, params: Optional[tuple] = None) -> List[Dict[str, Any]]:
+    def execute_query(
+        self, query: str, params: Optional[tuple] = None
+    ) -> List[Dict[str, Any]]:
         """Execute a custom query and return results as dictionaries"""
         self.execute(query, params)
 
@@ -75,7 +93,9 @@ class _QueryMixin(_BaseQueryMixin):
             return [dict(zip(columns, row)) for row in self.cursor.fetchall()]
         return []
 
-    def count(self, table: str, where: Optional[str] = None, params: Optional[tuple] = None) -> int:
+    def count(
+        self, table: str, where: Optional[str] = None, params: Optional[tuple] = None
+    ) -> int:
         """Count records in a table"""
         query = f"SELECT COUNT(*) FROM {table}"
         if where:
@@ -83,5 +103,6 @@ class _QueryMixin(_BaseQueryMixin):
 
         self.execute(query, params)
         return self.cursor.fetchone()[0]
+
 
 # EOF

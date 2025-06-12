@@ -4,9 +4,8 @@
 # File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/dict/_DotDict.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/dict/_DotDict.py"
-)
+
+__FILE__ = "./src/mngs/dict/_DotDict.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -39,49 +38,55 @@ class DotDict:
         # Called for obj.key when key is not found by normal attribute lookup
         # Allow access to internal methods/attributes starting with '_'
         if key.startswith("_"):
-             return super().__getattribute__(key) # Use superclass method for internal attrs
+            return super().__getattribute__(
+                key
+            )  # Use superclass method for internal attrs
         try:
             return self._data[key]
         except KeyError:
             # Mimic standard attribute access behavior
-            raise AttributeError(f"'{type(self).__name__}' object has no attribute '{key}'")
+            raise AttributeError(
+                f"'{type(self).__name__}' object has no attribute '{key}'"
+            )
 
     def __setattr__(self, key, value):
         # Called for obj.key = value
         # Protect internal attributes
         if key == "_data" or key.startswith("_"):
-             super().__setattr__(key, value)
+            super().__setattr__(key, value)
         else:
             # Store in the internal dictionary
             if isinstance(value, dict):
-                value = DotDict(value) # Convert dicts on the fly
+                value = DotDict(value)  # Convert dicts on the fly
             self._data[key] = value
 
     def __delattr__(self, key):
-         # Called for del obj.key
+        # Called for del obj.key
         if key.startswith("_"):
             super().__delattr__(key)
         else:
             try:
                 del self._data[key]
             except KeyError:
-                raise AttributeError(f"'{type(self).__name__}' object has no attribute '{key}'")
+                raise AttributeError(
+                    f"'{type(self).__name__}' object has no attribute '{key}'"
+                )
 
     # --- Item Access (for any key type) ---
 
     def __getitem__(self, key):
         # Called for obj[key]
-        return self._data[key] # Raises KeyError if not found
+        return self._data[key]  # Raises KeyError if not found
 
     def __setitem__(self, key, value):
         # Called for obj[key] = value
         if isinstance(value, dict):
-             value = DotDict(value) # Convert dicts on the fly
+            value = DotDict(value)  # Convert dicts on the fly
         self._data[key] = value
 
     def __delitem__(self, key):
         # Called for del obj[key]
-        del self._data[key] # Raises KeyError if not found
+        del self._data[key]  # Raises KeyError if not found
 
     # --- Standard Dictionary Methods (operating on _data) ---
 
@@ -104,6 +109,7 @@ class DotDict:
         """
         Returns a string representation, handling non-JSON-serializable objects.
         """
+
         def default_handler(obj):
             # Handle DotDict specifically during serialization if needed,
             # otherwise represent non-serializable items as strings.
@@ -112,17 +118,16 @@ class DotDict:
             try:
                 # Attempt standard JSON serialization first
                 json.dumps(obj)
-                return obj # Let json.dumps handle it if possible
+                return obj  # Let json.dumps handle it if possible
             except (TypeError, OverflowError):
-                 return str(obj) # Fallback for non-serializable types
+                return str(obj)  # Fallback for non-serializable types
 
         try:
             # Use the internal _data for representation
             return json.dumps(self.to_dict(), indent=4, default=default_handler)
         except TypeError as e:
-             # Fallback if default_handler still fails (e.g., complex recursion)
-             return f"<DotDict object at {hex(id(self))}, contains: {list(self._data.keys())}> Error: {e}"
-
+            # Fallback if default_handler still fails (e.g., complex recursion)
+            return f"<DotDict object at {hex(id(self))}, contains: {list(self._data.keys())}> Error: {e}"
 
     def __repr__(self):
         """
@@ -163,10 +168,12 @@ class DotDict:
         if isinstance(dictionary, dict):
             iterator = dictionary.items()
         # Allow updating from iterables of key-value pairs
-        elif hasattr(dictionary, '__iter__'):
+        elif hasattr(dictionary, "__iter__"):
             iterator = dictionary
         else:
-            raise TypeError("Input must be a dictionary or an iterable of key-value pairs.")
+            raise TypeError(
+                "Input must be a dictionary or an iterable of key-value pairs."
+            )
 
         for key, value in iterator:
             # Use __setitem__ to handle potential DotDict conversion
@@ -195,10 +202,10 @@ class DotDict:
             raise TypeError(f"pop expected at most 2 arguments, got {1 + len(args)}")
         if key not in self._data:
             if args:
-                return args[0] # Return default if provided
+                return args[0]  # Return default if provided
             else:
-                 raise KeyError(key)
-        return self._data.pop(key) # Use internal dict's pop
+                raise KeyError(key)
+        return self._data.pop(key)  # Use internal dict's pop
 
     def __contains__(self, key):
         """
@@ -219,7 +226,7 @@ class DotDict:
         Use deepcopy for a fully independent copy.
         """
         # Create a new instance using a copy of the internal data
-        return DotDict(self._data.copy()) # Shallow copy of internal dict
+        return DotDict(self._data.copy())  # Shallow copy of internal dict
 
     def __dir__(self):
         """
@@ -231,23 +238,25 @@ class DotDict:
 
         # Get the keys from the internal data dictionary
         # Filter for keys that are valid identifiers for attribute access
-        data_keys = set(key for key in self._data.keys() if isinstance(key, str) and key.isidentifier())
+        data_keys = set(
+            key
+            for key in self._data.keys()
+            if isinstance(key, str) and key.isidentifier()
+        )
 
         # Return a sorted list of the combined unique names
         return sorted(list(standard_attrs.union(data_keys)))
 
+
 # Example Usage:
-if __name__ == '__main__':
+if __name__ == "__main__":
     data = {
         "name": "example",
         "version": 1,
         100: "integer key",
-        "nested": {
-            "value1": True,
-            200: False
-        },
+        "nested": {"value1": True, 200: False},
         "list_val": [1, {"a": 2}],
-        "invalid-key": "hyphenated"
+        "invalid-key": "hyphenated",
     }
 
     dd = DotDict(data)
@@ -267,8 +276,8 @@ if __name__ == '__main__':
     dd.name = "updated example"
     dd[100] = "new integer value"
     dd.nested[200] = "updated nested int key"
-    dd[300] = "new top-level int key" # Add new int key
-    dd['new-key'] = 'another invalid id key'
+    dd[300] = "new top-level int key"  # Add new int key
+    dd["new-key"] = "another invalid id key"
 
     print("\n--- After Modifications ---")
     print(f"dd.name: {dd.name}")
@@ -276,7 +285,6 @@ if __name__ == '__main__':
     print(f"dd.nested[200]: {dd.nested[200]}")
     print(f"dd[300]: {dd[300]}")
     print(f"dd['new-key']: {dd['new-key']}")
-
 
     print("\n--- Representation ---")
     print(f"repr(dd): {repr(dd)}")

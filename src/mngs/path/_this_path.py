@@ -6,11 +6,13 @@
 
 import inspect
 
+
 def this_path(ipython_fake_path="/tmp/fake.py"):
     THIS_FILE = inspect.stack()[1].filename
     if "ipython" in __file__:
         THIS_FILE = ipython_fake_path
     return __file__
+
 
 get_this_path = this_path
 

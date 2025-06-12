@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/ax/_plot/test__plot_shaded_line.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./tests/mngs/plt/ax/_plot/test__plot_shaded_line.py"
-)
+
+__FILE__ = "./tests/mngs/plt/ax/_plot/test__plot_shaded_line.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -44,9 +43,7 @@ class TestPlotShadedLine:
         save(self.fig, spath)
         # Check saved file
         actual_spath = os.path.join(self.out_dir, spath)
-        assert os.path.exists(
-            actual_spath
-        ), f"Failed to save figure to {spath}"
+        assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
 
     def test_plot_single_shaded_line(self):
         # Test with single shaded line
@@ -102,9 +99,8 @@ class TestPlotShadedLine:
 
         # Check results
         assert len(self.ax.lines) >= 2, "Expected at least 2 lines"
-        assert (
-            len(self.ax.collections) >= 2
-        ), "Expected at least 2 shaded areas"
+        assert len(self.ax.collections) >= 2, "Expected at least 2 shaded areas"
+
 
 if __name__ == "__main__":
     import os
@@ -127,17 +123,17 @@ if __name__ == "__main__":
 # )
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
-# 
+#
 # from typing import List, Optional, Tuple, Union
-# 
+#
 # import matplotlib
 # import numpy as np
 # import pandas as pd
 # from matplotlib.axes._axes import Axes
-# 
+#
 # from ....types import ColorLike
-# 
-# 
+#
+#
 # def _plot_single_shaded_line(
 #     axis: Axes,
 #     xx: np.ndarray,
@@ -155,7 +151,7 @@ if __name__ == "__main__":
 #     assert (
 #         len(xx) == len(y_middle) == len(y_lower) == len(y_upper)
 #     ), "All arrays must have the same length"
-# 
+#
 #     label = kwargs.get("label")
 #     if kwargs.get("label"):
 #         del kwargs["label"]
@@ -163,12 +159,12 @@ if __name__ == "__main__":
 #     kwargs["linewidth"] = 0
 #     kwargs["edgecolor"] = "none"  # Remove edge line
 #     axis.fill_between(xx, y_lower, y_upper, alpha=alpha, color=color, **kwargs)
-# 
+#
 #     return axis, pd.DataFrame(
 #         {"x": xx, "y_lower": y_lower, "y_middle": y_middle, "y_upper": y_upper}
 #     )
-# 
-# 
+#
+#
 # def _plot_shaded_line(
 #     axis: Axes,
 #     xs: List[np.ndarray],
@@ -185,11 +181,11 @@ if __name__ == "__main__":
 #     assert (
 #         len(xs) == len(ys_lower) == len(ys_middle) == len(ys_upper)
 #     ), "All input lists must have the same length"
-# 
+#
 #     results = []
 #     colors = color
 #     color_list = colors
-# 
+#
 #     if colors is not None:
 #         if not isinstance(colors, list):
 #             color_list = [colors] * len(xs)
@@ -198,7 +194,7 @@ if __name__ == "__main__":
 #                 xs
 #             ), "Number of colors must match number of lines"
 #             color_list = colors
-# 
+#
 #         for idx, (xx, y_lower, y_middle, y_upper) in enumerate(
 #             zip(xs, ys_lower, ys_middle, ys_upper)
 #         ):
@@ -218,10 +214,10 @@ if __name__ == "__main__":
 #                 axis, xx, y_lower, y_middle, y_upper, **kwargs
 #             )
 #             results.append(result_df)
-# 
+#
 #     return axis, results
-# 
-# 
+#
+#
 # def plot_shaded_line(
 #     axis: Axes,
 #     xs: Union[np.ndarray, List[np.ndarray]],
@@ -233,7 +229,7 @@ if __name__ == "__main__":
 # ) -> Tuple[Axes, Union[pd.DataFrame, List[pd.DataFrame]]]:
 #     """
 #     Plot a line with shaded area, automatically switching between single and multiple line versions.
-# 
+#
 #     Args:
 #         axis: matplotlib axis
 #         xs: x values (single array or list of arrays)
@@ -242,7 +238,7 @@ if __name__ == "__main__":
 #         ys_upper: upper bound y values (single array or list of arrays)
 #         color: color or list of colors for the lines
 #         **kwargs: additional plotting parameters
-# 
+#
 #     Returns:
 #         tuple: (axis, DataFrame or list of DataFrames with plot data)
 #     """
@@ -252,12 +248,12 @@ if __name__ == "__main__":
 #         and isinstance(ys_middle, list)
 #         and isinstance(ys_upper, list)
 #     )
-# 
+#
 #     if is_single:
 #         assert (
 #             len(xs) == len(ys_lower) == len(ys_middle) == len(ys_upper)
 #         ), "All arrays must have the same length for single line plot"
-# 
+#
 #         return _plot_single_shaded_line(
 #             axis, xs, ys_lower, ys_middle, ys_upper, color=color, **kwargs
 #         )
@@ -265,7 +261,7 @@ if __name__ == "__main__":
 #         return _plot_shaded_lines(
 #             axis, xs, ys_lower, ys_middle, ys_upper, colors=color, **kwargs
 #         )
-# 
+#
 # # EOF
 # --------------------------------------------------------------------------------
 # End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/plt/ax/_plot/_plot_shaded_line.py

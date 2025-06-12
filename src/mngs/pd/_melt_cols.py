@@ -12,7 +12,10 @@
 from typing import List, Optional
 import pandas as pd
 
-def melt_cols(df: pd.DataFrame, cols: List[str], id_columns: Optional[List[str]] = None) -> pd.DataFrame:
+
+def melt_cols(
+    df: pd.DataFrame, cols: List[str], id_columns: Optional[List[str]] = None
+) -> pd.DataFrame:
     """
     Melt specified columns while preserving links to other data in a DataFrame.
 
@@ -60,9 +63,11 @@ def melt_cols(df: pd.DataFrame, cols: List[str], id_columns: Optional[List[str]]
     id_columns = id_columns or [col for col in df.columns if col not in cols]
 
     df_copy = df.reset_index(drop=True)
-    df_copy['global_index'] = df_copy.index
+    df_copy["global_index"] = df_copy.index
 
-    melted_df = df_copy[cols + ['global_index']].melt(id_vars=['global_index'])
-    formatted_df = melted_df.merge(df_copy[id_columns + ['global_index']], on='global_index')
+    melted_df = df_copy[cols + ["global_index"]].melt(id_vars=["global_index"])
+    formatted_df = melted_df.merge(
+        df_copy[id_columns + ["global_index"]], on="global_index"
+    )
 
-    return formatted_df.drop('global_index', axis=1)
+    return formatted_df.drop("global_index", axis=1)

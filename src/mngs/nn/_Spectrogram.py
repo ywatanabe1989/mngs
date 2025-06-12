@@ -46,9 +46,7 @@ class Spectrogram(nn.Module):
         spectrograms = []
 
         for ch in range(n_chs):
-            x_ch = x[:, ch, :].unsqueeze(
-                1
-            )  # Maintain expected input shape for stft
+            x_ch = x[:, ch, :].unsqueeze(1)  # Maintain expected input shape for stft
             spec = torch.stft(
                 x_ch.squeeze(1),
                 n_fft=self.n_fft,
@@ -67,17 +65,13 @@ class Spectrogram(nn.Module):
         spectrograms = torch.cat(spectrograms, dim=1)
 
         # Calculate frequencies (y-axis)
-        freqs = torch.linspace(
-            0, self.sampling_rate / 2, steps=self.n_fft // 2 + 1
-        )
+        freqs = torch.linspace(0, self.sampling_rate / 2, steps=self.n_fft // 2 + 1)
 
         # Calculate times (x-axis)
         # The number of frames can be computed from the size of the last dimension of the spectrogram
         n_frames = spectrograms.shape[-1]
         # Time of each frame in seconds, considering the hop length and sampling rate
-        times_sec = torch.arange(0, n_frames) * (
-            self.hop_length / self.sampling_rate
-        )
+        times_sec = torch.arange(0, n_frames) * (self.hop_length / self.sampling_rate)
 
         return spectrograms, freqs, times_sec
 
@@ -159,9 +153,7 @@ if __name__ == "__main__":
     plt.show()
 
     # Torch Audio
-    transform = torchaudio.transforms.Spectrogram(
-        n_fft=16, normalized=True
-    ).cuda()
+    transform = torchaudio.transforms.Spectrogram(n_fft=16, normalized=True).cuda()
     xx = torch.tensor(x).float().cuda()[0, 0]
     ss = transform(xx)
     sns.heatmap(ss.detach().cpu().numpy())

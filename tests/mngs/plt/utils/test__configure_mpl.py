@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/utils/test__configure_mpl.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./tests/mngs/plt/utils/test__configure_mpl.py"
-)
+
+__FILE__ = "./tests/mngs/plt/utils/test__configure_mpl.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -148,6 +147,7 @@ def test_configure_mpl_verbose_output(capsys):
         # Restore original settings
         plt.rcParams.update(original_rcparams)
 
+
 if __name__ == "__main__":
     import os
 
@@ -169,14 +169,14 @@ if __name__ == "__main__":
 # )
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
-# 
+#
 # from typing import Any, Dict, Tuple, Union
-# 
+#
 # import matplotlib.pyplot as plt
 # import mngs
 # import numpy as np
-# 
-# 
+#
+#
 # def configure_mpl(
 #     plt,
 #     fig_size_mm=(160, 100),
@@ -192,7 +192,7 @@ if __name__ == "__main__":
 #     **kwargs,
 # ) -> Tuple[Any, Dict]:
 #     """Configures Matplotlib settings for publication-quality plots.
-# 
+#
 #     Parameters
 #     ----------
 #     plt : matplotlib.pyplot
@@ -221,7 +221,7 @@ if __name__ == "__main__":
 #         Color transparency, by default 0.85
 #     verbose : bool, optional
 #         Whether to print configuration details, by default False
-# 
+#
 #     Returns
 #     -------
 #     tuple
@@ -229,36 +229,36 @@ if __name__ == "__main__":
 #     """
 #     # Convert base font size
 #     base_size = _convert_font_size(fontsize)
-# 
+#
 #     # Ensure minimum sizes for different elements with better proportions
 #     title_size = max(base_size * 1.25, 10.0)  # Increased for better hierarchy
 #     label_size = max(base_size * 1.0, 9.0)  # Minimum 9pt for good readability
 #     small_size = max(
 #         base_size * 0.85, 8.0
 #     )  # Increased ratio for better legibility
-# 
+#
 #     # Colors
 #     RGBA = {
 #         k: mngs.plt.color.update_alpha(v, alpha)
 #         for k, v in mngs.plt.color.PARAMS["RGBA"].items()
 #     }
-# 
+#
 #     RGBA_NORM = {
 #         k: tuple(mngs.plt.color.update_alpha(v, alpha))
 #         for k, v in mngs.plt.color.PARAMS["RGBA_NORM"].items()
 #     }
-# 
+#
 #     RGBA_NORM_FOR_CYCLE = {
 #         k: tuple(mngs.plt.color.update_alpha(v, alpha))
 #         for k, v in mngs.plt.color.PARAMS["RGBA_NORM_FOR_CYCLE"].items()
 #     }
-# 
+#
 #     # Normalize figure size from mm to inches
 #     figsize_inch = (
 #         fig_size_mm[0] / 25.4 * fig_scale,
 #         fig_size_mm[1] / 25.4 * fig_scale,
 #     )
-# 
+#
 #     # Update Matplotlib configuration
 #     plt.rcParams.update(
 #         {
@@ -293,7 +293,7 @@ if __name__ == "__main__":
 #             "grid.alpha": 0.3,
 #         }
 #     )
-# 
+#
 #     if verbose:
 #         print("\n" + "-" * 40)
 #         print("Matplotlib has been configured as follows:\n")
@@ -316,20 +316,20 @@ if __name__ == "__main__":
 #         for color_str, rgba in RGBA.items():
 #             print(f"  {color_str}: {rgba}")
 #         print("-" * 40)
-# 
+#
 #     return plt, RGBA_NORM
-# 
-# 
+#
+#
 # def _convert_font_size(size: Union[str, int, float]) -> float:
 #     """Converts various font size specifications to numerical values.
-# 
+#
 #     Parameters
 #     ----------
 #     size : Union[str, int, float]
 #         Font size specification. Can be:
 #         - String: 'xx-small', 'x-small', 'small', 'medium', 'large', 'x-large', 'xx-large'
 #         - Numeric: direct point size value
-# 
+#
 #     Returns
 #     -------
 #     float
@@ -350,8 +350,8 @@ if __name__ == "__main__":
 #         return max(float(size), 9.0)  # Ensure minimum size of 9
 #     else:
 #         raise ValueError(f"Unsupported font size type: {type(size)}")
-# 
-# 
+#
+#
 # if __name__ == "__main__":
 #     plt, CC = configure_mpl(plt)
 #     fig, axes = plt.subplots(nrows=2, sharex=True, sharey=True)
@@ -364,7 +364,7 @@ if __name__ == "__main__":
 #     axes[0].legend()
 #     axes[1].legend()
 #     plt.show()
-# 
+#
 # # EOF
 # --------------------------------------------------------------------------------
 # End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/plt/utils/_configure_mpl.py

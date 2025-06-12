@@ -3,18 +3,27 @@
 # Timestamp: "2025-02-27 22:15:38 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_PostgreSQLMixins/_TableMixin.py
 
-THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQLMixins/_TableMixin.py"
+THIS_FILE = (
+    "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQLMixins/_TableMixin.py"
+)
 
 from typing import Any, Dict, List, Union
 import psycopg2
 
+
 class _TableMixin:
-    def create_table(self, table_name: str, columns: Dict[str, str],
-                    foreign_keys: List[Dict[str, str]] = None,
-                    if_not_exists: bool = True) -> None:
+    def create_table(
+        self,
+        table_name: str,
+        columns: Dict[str, str],
+        foreign_keys: List[Dict[str, str]] = None,
+        if_not_exists: bool = True,
+    ) -> None:
         try:
             exists_clause = "IF NOT EXISTS" if if_not_exists else ""
-            columns_def = [f"{col_name} {col_type}" for col_name, col_type in columns.items()]
+            columns_def = [
+                f"{col_name} {col_type}" for col_name, col_type in columns.items()
+            ]
 
             if foreign_keys:
                 for fk in foreign_keys:
@@ -44,36 +53,56 @@ class _TableMixin:
         except (Exception, psycopg2.Error) as err:
             raise ValueError(f"Failed to rename table: {err}")
 
-    def add_columns(self, table_name: str, columns: Dict[str, str],
-                   default_values: Dict[str, Any] = None) -> None:
+    def add_columns(
+        self,
+        table_name: str,
+        columns: Dict[str, str],
+        default_values: Dict[str, Any] = None,
+    ) -> None:
         try:
             for col_name, col_type in columns.items():
                 default_value = default_values.get(col_name) if default_values else None
-                default_clause = f" DEFAULT {default_value}" if default_value is not None else ""
+                default_clause = (
+                    f" DEFAULT {default_value}" if default_value is not None else ""
+                )
 
-                self.execute(f"ALTER TABLE {table_name} ADD COLUMN {col_name} {col_type}{default_clause}")
+                self.execute(
+                    f"ALTER TABLE {table_name} ADD COLUMN {col_name} {col_type}{default_clause}"
+                )
 
         except (Exception, psycopg2.Error) as err:
             raise ValueError(f"Failed to add columns: {err}")
 
-    def add_column(self, table_name: str, column_name: str,
-                  column_type: str, default_value: Any = None) -> None:
+    def add_column(
+        self,
+        table_name: str,
+        column_name: str,
+        column_type: str,
+        default_value: Any = None,
+    ) -> None:
         try:
-            default_clause = f" DEFAULT {default_value}" if default_value is not None else ""
-            self.execute(f"ALTER TABLE {table_name} ADD COLUMN {column_name} {column_type}{default_clause}")
+            default_clause = (
+                f" DEFAULT {default_value}" if default_value is not None else ""
+            )
+            self.execute(
+                f"ALTER TABLE {table_name} ADD COLUMN {column_name} {column_type}{default_clause}"
+            )
 
         except (Exception, psycopg2.Error) as err:
             raise ValueError(f"Failed to add column: {err}")
 
-    def drop_columns(self, table_name: str, columns: Union[str, List[str]],
-                    if_exists: bool = True) -> None:
+    def drop_columns(
+        self, table_name: str, columns: Union[str, List[str]], if_exists: bool = True
+    ) -> None:
         try:
             if isinstance(columns, str):
                 columns = [columns]
 
             exists_clause = "IF EXISTS" if if_exists else ""
             for column in columns:
-                self.execute(f"ALTER TABLE {table_name} DROP COLUMN {exists_clause} {column}")
+                self.execute(
+                    f"ALTER TABLE {table_name} DROP COLUMN {exists_clause} {column}"
+                )
 
         except (Exception, psycopg2.Error) as err:
             raise ValueError(f"Failed to drop columns: {err}")
@@ -122,7 +151,7 @@ class _TableMixin:
     def get_table_stats(self, table_name: str) -> Dict[str, int]:
         try:
             stats = {}
-            stats['row_count'] = self.get_row_count(table_name)
+            stats["row_count"] = self.get_row_count(table_name)
 
             size_query = f"""
             SELECT pg_total_relation_size('{table_name}') as total_size,
@@ -131,14 +160,17 @@ class _TableMixin:
             """
             size_result = self.execute(size_query).fetchone()
 
-            stats.update({
-                'total_size': size_result[0],
-                'table_size': size_result[1],
-                'index_size': size_result[2]
-            })
+            stats.update(
+                {
+                    "total_size": size_result[0],
+                    "table_size": size_result[1],
+                    "index_size": size_result[2],
+                }
+            )
             return stats
 
         except (Exception, psycopg2.Error) as err:
             raise ValueError(f"Failed to get table stats: {err}")
+
 
 # EOF

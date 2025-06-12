@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_raster.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./tests/mngs/plt/ax/_plot/test__plot_raster.py"
-)
+
+__FILE__ = "./tests/mngs/plt/ax/_plot/test__plot_raster.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -47,9 +46,7 @@ class TestMainFunctionality:
         save(self.fig, spath)
         # Check saved file
         actual_spath = os.path.join(self.out_dir, spath)
-        assert os.path.exists(
-            actual_spath
-        ), f"Failed to save figure to {spath}"
+        assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
 
     def test_basic_functionality(self):
         # Test basic plot_raster plot creation
@@ -123,9 +120,7 @@ class TestMainFunctionality:
 
     def test_with_kwargs(self):
         # Test with additional kwargs
-        ax, df = plot_raster(
-            self.ax, self.positions, linewidths=2.0, linelengths=0.8
-        )
+        ax, df = plot_raster(self.ax, self.positions, linewidths=2.0, linelengths=0.8)
         self.ax.set_title("Raster Plot with Custom Line Properties")
 
         # Save figure
@@ -161,6 +156,7 @@ class TestMainFunctionality:
                     found
                 ), f"No event found near position {pos} for channel {channel_idx}"
 
+
 if __name__ == "__main__":
     import os
 
@@ -182,16 +178,16 @@ if __name__ == "__main__":
 # )
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
-# 
+#
 # import matplotlib
-# 
+#
 # from bisect import bisect_left
-# 
+#
 # import matplotlib.pyplot as plt
 # import numpy as np
 # import pandas as pd
-# 
-# 
+#
+#
 # def plot_raster(
 #     ax,
 #     event_times,
@@ -203,7 +199,7 @@ if __name__ == "__main__":
 # ):
 #     """
 #     Create a raster plot using eventplot with custom labels and colors.
-# 
+#
 #     Parameters
 #     ----------
 #     ax : matplotlib.axes.Axes
@@ -220,7 +216,7 @@ if __name__ == "__main__":
 #         Orientation of raster plot (default: horizontal).
 #     **kwargs : dict
 #         Additional keyword arguments for eventplot.
-# 
+#
 #     Returns
 #     -------
 #     ax : matplotlib.axes.Axes
@@ -231,68 +227,68 @@ if __name__ == "__main__":
 #     assert isinstance(
 #         ax, matplotlib.axes._axes.Axes
 #     ), "First argument must be a matplotlib axis"
-# 
+#
 #     # Format event_times data
 #     event_times_list = _ensure_list(event_times)
-# 
+#
 #     # Handle colors and labels
 #     colors = _handle_colors(colors, event_times_list)
-# 
+#
 #     # Plotting as eventplot using event_times_list
 #     for ii, (pos, color) in enumerate(zip(event_times_list, colors)):
 #         label = _define_label(labels, ii)
 #         ax.eventplot(
 #             pos, orientation=orientation, colors=color, label=label, **kwargs
 #         )
-# 
+#
 #     # Legend
 #     if labels is not None:
 #         ax.legend()
-# 
+#
 #     # Return event_times in a useful format
 #     event_times_digital_df = _event_times_to_digital_df(event_times_list, time)
-# 
+#
 #     return ax, event_times_digital_df
-# 
-# 
+#
+#
 # def _ensure_list(event_times):
 #     return [
 #         [pos] if isinstance(pos, (int, float)) else pos for pos in event_times
 #     ]
-# 
-# 
+#
+#
 # def _define_label(labels, ii):
 #     if (labels is not None) and (ii < len(labels)):
 #         return labels[ii]
 #     else:
 #         return None
-# 
-# 
+#
+#
 # def _handle_colors(colors, event_times_list):
 #     if colors is None:
 #         colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
 #     if len(colors) < len(event_times_list):
 #         colors = colors * (len(event_times_list) // len(colors) + 1)
 #     return colors
-# 
-# 
+#
+#
 # def _event_times_to_digital_df(event_times_list, time):
 #     if time is None:
 #         time = np.linspace(
 #             0, np.max([np.max(pos) for pos in event_times_list]), 1000
 #         )
-# 
+#
 #     digi = np.full((len(event_times_list), len(time)), np.nan, dtype=float)
-# 
+#
 #     for i_ch, posis_ch in enumerate(event_times_list):
 #         for posi_ch in posis_ch:
 #             i_insert = bisect_left(time, posi_ch)
 #             if i_insert == len(time):
 #                 i_insert -= 1
 #             digi[i_ch, i_insert] = i_ch
-# 
+#
 #     return pd.DataFrame(digi.T, index=time)
-# 
+#
 # # EOF
 # --------------------------------------------------------------------------------
 # End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/plt/ax/_plot/_plot_raster.py

@@ -3,10 +3,13 @@
 # Time-stamp: "2024-11-25 06:02:43 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/db/_BaseMixins/_BaseConnectionMixin.py
 
-THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_BaseMixins/_BaseConnectionMixin.py"
+THIS_FILE = (
+    "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_BaseMixins/_BaseConnectionMixin.py"
+)
 
 import threading
 from typing import Optional
+
 
 class _BaseConnectionMixin:
     def __init__(self):
@@ -30,7 +33,7 @@ class _BaseConnectionMixin:
     def reconnect(self):
         raise NotImplementedError
 
-    def execute(self, query: str, parameters = ()) -> None:
+    def execute(self, query: str, parameters=()) -> None:
         raise NotImplementedError
 
     def executemany(self, query: str, parameters) -> None:

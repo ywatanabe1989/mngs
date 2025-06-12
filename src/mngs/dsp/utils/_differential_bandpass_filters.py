@@ -36,12 +36,8 @@ def init_bandpass_filters(
     cycle=3,
 ):
     # Learnable parameters
-    pha_mids = nn.Parameter(
-        torch.linspace(pha_low_hz, pha_high_hz, pha_n_bands)
-    )
-    amp_mids = nn.Parameter(
-        torch.linspace(amp_low_hz, amp_high_hz, amp_n_bands)
-    )
+    pha_mids = nn.Parameter(torch.linspace(pha_low_hz, pha_high_hz, pha_n_bands))
+    amp_mids = nn.Parameter(torch.linspace(amp_low_hz, amp_high_hz, amp_n_bands))
     filters = build_bandpass_filters(sig_len, fs, pha_mids, amp_mids, cycle)
     return filters, pha_mids, amp_mids
 
@@ -84,9 +80,7 @@ if __name__ == "__main__":
     import mngs
 
     # Start
-    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
-        sys, plt, agg=True
-    )
+    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt, agg=True)
 
     # Demo signal
     freqs_hz = [10, 30, 100, 300]

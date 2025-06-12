@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/__init__.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/plt/_subplots/_AxisWrapperMixins/__init__.py"
-)
+
+__FILE__ = "./src/mngs/plt/_subplots/_AxisWrapperMixins/__init__.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 from ._AdjustmentMixin import AdjustmentMixin

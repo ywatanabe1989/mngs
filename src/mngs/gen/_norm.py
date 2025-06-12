@@ -83,6 +83,7 @@ def to_01(x, axis=-1, dim=None, device="cuda"):
     x_max = x.max(dim=dim, keepdim=True)[0]
     return (x - x_min) / (x_max - x_min)
 
+
 @torch_fn
 def to_nan01(x, axis=-1, dim=None, device="cuda"):
     """Min-max scales tensor handling NaN values along specified dimension.
@@ -106,6 +107,7 @@ def to_nan01(x, axis=-1, dim=None, device="cuda"):
     x_min = torch.nanmin(x, dim=dim, keepdim=True)[0]
     x_max = torch.nanmax(x, dim=dim, keepdim=True)[0]
     return (x - x_min) / (x_max - x_min)
+
 
 @torch_fn
 def unbias(x, axis=-1, dim=None, fn="mean", device="cuda"):
@@ -135,6 +137,7 @@ def unbias(x, axis=-1, dim=None, fn="mean", device="cuda"):
         return x - x.min(dim=dim, keepdims=True)[0]
     raise ValueError(f"Unsupported unbiasing method: {fn}")
 
+
 @torch_fn
 def clip_perc(x, lower_perc=2.5, upper_perc=97.5, axis=-1, dim=None, device="cuda"):
     """Clips tensor values between specified percentiles along dimension.
@@ -159,8 +162,8 @@ def clip_perc(x, lower_perc=2.5, upper_perc=97.5, axis=-1, dim=None, device="cud
     torch.Tensor
         Clipped tensor
     """
-    lower = torch.quantile(x, lower_perc/100, dim=dim, keepdim=True)
-    upper = torch.quantile(x, upper_perc/100, dim=dim, keepdim=True)
+    lower = torch.quantile(x, lower_perc / 100, dim=dim, keepdim=True)
+    upper = torch.quantile(x, upper_perc / 100, dim=dim, keepdim=True)
     return torch.clamp(x, min=lower, max=upper)
 
 

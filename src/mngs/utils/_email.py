@@ -15,7 +15,7 @@ from ..reproduce._gen_ID import gen_ID
 
 import re
 
-ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
+ansi_escape = re.compile(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])")
 
 
 def send_gmail(
@@ -59,23 +59,22 @@ def send_gmail(
         gmail_body = _MIMEText(message, "plain")
         gmail.attach(gmail_body)
 
-
         # Attachment files
         if attachment_paths:
             for path in attachment_paths:
                 _, ext = os.path.splitext(path)
-                if ext.lower() == '.log':
-                    with open(path, 'r', encoding='utf-8') as file:
+                if ext.lower() == ".log":
+                    with open(path, "r", encoding="utf-8") as file:
                         content = file.read()
-                        cleaned_content = ansi_escape.sub('', content)
-                        part = _MIMEText(cleaned_content, 'plain')
+                        cleaned_content = ansi_escape.sub("", content)
+                        part = _MIMEText(cleaned_content, "plain")
 
                         # part = _MIMEText(file.read(), 'plain')
                 else:
                     mime_type, _ = mimetypes.guess_type(path)
                     if mime_type is None:
-                        mime_type = 'text/plain'
-                    main_type, sub_type = mime_type.split('/', 1)
+                        mime_type = "text/plain"
+                    main_type, sub_type = mime_type.split("/", 1)
                     with open(path, "rb") as file:
                         part = _MIMEBase(main_type, sub_type)
                         part.set_payload(file.read())

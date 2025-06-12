@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-02 09:00:58 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_style/_hide_spines.py
+# Timestamp: "2025-06-07 15:45:36 (ywatanabe)"
+# File: /ssh:ywatanabe@sp:/home/ywatanabe/proj/.claude-worktree/mngs_repo/src/mngs/plt/ax/_style/_hide_spines.py
 # ----------------------------------------
 import os
 __FILE__ = (
@@ -19,11 +19,11 @@ from ....plt.utils import assert_valid_axis
 def hide_spines(
     axis,
     top=True,
-    bottom=True,
-    left=True,
+    bottom=False,
+    left=False,
     right=True,
-    ticks=True,
-    labels=True,
+    ticks=False,
+    labels=False,
 ):
     """
     Hides the specified spines of a matplotlib Axes object or mngs axis wrapper and optionally removes the ticks and labels.
@@ -35,18 +35,18 @@ def hide_spines(
     Arguments:
         ax (matplotlib.axes.Axes or mngs.plt._subplots.AxisWrapper): The axis for which the spines will be hidden.
         top (bool, optional): If True, hides the top spine. Defaults to True.
-        bottom (bool, optional): If True, hides the bottom spine. Defaults to True.
-        left (bool, optional): If True, hides the left spine. Defaults to True.
+        bottom (bool, optional): If True, hides the bottom spine. Defaults to False.
+        left (bool, optional): If True, hides the left spine. Defaults to False.
         right (bool, optional): If True, hides the right spine. Defaults to True.
-        ticks (bool, optional): If True, removes the ticks from the hidden spines' axes. Defaults to True.
-        labels (bool, optional): If True, removes the labels from the hidden spines' axes. Defaults to True.
+        ticks (bool, optional): If True, removes the ticks from the hidden spines' axes. Defaults to False.
+        labels (bool, optional): If True, removes the labels from the hidden spines' axes. Defaults to False.
 
     Returns:
         matplotlib.axes.Axes or mngs.plt._subplots.AxisWrapper: The modified axis with the specified spines hidden.
 
     Example:
         >>> fig, ax = plt.subplots()
-        >>> hide_spines(ax, top=False, labels=False)
+        >>> hide_spines(ax)
         >>> plt.show()
     """
     assert_valid_axis(axis, "First argument must be a matplotlib axis or mngs axis wrapper")

@@ -4,9 +4,8 @@
 # File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/tests/custom/test_pip_install_latest.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./tests/custom/test_pip_install_latest.py"
-)
+
+__FILE__ = "./tests/custom/test_pip_install_latest.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 # #!/usr/bin/env python3

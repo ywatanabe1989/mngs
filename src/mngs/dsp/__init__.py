@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from . import PARAMS, add_noise, filt, norm, reference, utils
+from . import params, add_noise, filt, norm, reference, utils
 from ._crop import crop
 from ._demo_sig import demo_sig
 from ._detect_ripples import detect_ripples
@@ -16,7 +16,7 @@ from ._transform import to_segments, to_sktime_df
 from ._wavelet import wavelet
 
 # try:
-#     from . import PARAMS, add_noise, filt, norm, reference, utils
+#     from . import params, add_noise, filt, norm, reference, utils
 # except ImportError as e:
 #     warnings.warn(f"Warning: Failed to import some modules. Error: {e}")
 
@@ -88,7 +88,7 @@ from ._wavelet import wavelet
 # # #!/usr/bin/env python3
 
 
-# # from . import PARAMS, add_noise, filt, norm, reference, utils
+# # from . import params, add_noise, filt, norm, reference, utils
 # # from ._crop import crop
 # # from ._demo_sig import demo_sig
 # # from ._detect_ripples import detect_ripples
@@ -106,3 +106,6 @@ from ._wavelet import wavelet
 # # from ._time import time
 # # from ._transform import to_segments, to_sktime_df
 # # from ._wavelet import wavelet
+
+# Backward compatibility
+PARAMS = params  # Deprecated: use params instead

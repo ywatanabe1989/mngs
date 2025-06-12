@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/tests/mngs/decorators/test__preserve_doc.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./tests/mngs/decorators/test__preserve_doc.py"
-)
+
+__FILE__ = "./tests/mngs/decorators/test__preserve_doc.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -206,6 +205,7 @@ def test_preserve_doc_with_empty_docstring():
 # --------------------------------------------------------------------------------
 # --------------------------------------------------------------------------------
 
+
 def test_preserve_doc_preserves_name():
     """Test that preserve_doc preserves the original function's name."""
 
@@ -286,18 +286,18 @@ if __name__ == "__main__":
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-14 07:44:00 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/decorators/_preserve_doc.py
-# 
+#
 # from functools import wraps
-# 
+#
 # def preserve_doc(loader_func):
 #     """Wrap the loader functions to preserve their docstrings"""
 #     @wraps(loader_func)
 #     def wrapper(*args, **kwargs):
 #         return loader_func(*args, **kwargs)
-# 
+#
 #     return wrapper
-# 
-# 
+#
+#
 # # EOF
 
 # --------------------------------------------------------------------------------

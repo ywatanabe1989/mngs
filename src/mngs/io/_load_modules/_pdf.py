@@ -3,8 +3,17 @@
 # Time-stamp: "2024-11-14 07:55:46 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/io/_load_modules/_pdf.py
 
+try:
+    import PyPDF2
+except ImportError:
+    PyPDF2 = None
+
+
 def _load_pdf(lpath, **kwargs):
     """Load PDF file and return extracted text."""
+    if PyPDF2 is None:
+        raise ImportError("PyPDF2 is required for PDF loading. Install with: pip install PyPDF2")
+        
     try:
         if not lpath.endswith(".pdf"):
             raise ValueError("File must have .pdf extension")

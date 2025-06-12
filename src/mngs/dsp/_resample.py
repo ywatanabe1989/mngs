@@ -5,10 +5,10 @@
 
 import torch
 import torchaudio.transforms as T
-from ..decorators import torch_fn
+from ..decorators import signal_fn
 
 
-@torch_fn
+@signal_fn
 def resample(x, src_fs, tgt_fs, t=None):
     xr = T.Resample(src_fs, tgt_fs, dtype=x.dtype).to(x.device)(x)
     if t is None:
@@ -22,7 +22,6 @@ if __name__ == "__main__":
     import sys
 
     import matplotlib.pyplot as plt
-    
 
     # Start
     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt)
@@ -48,9 +47,7 @@ if __name__ == "__main__":
     i_batch, i_ch = 0, 0
     fig, axes = plt.subplots(nrows=3, sharex=True, sharey=True)
     axes[0].plot(tt, xx[i_batch, i_ch], label=f"Original ({SRC_FS} Hz)")
-    axes[1].plot(
-        td, xd[i_batch, i_ch], label=f"Down-sampled ({TGT_FS_DOWN} Hz)"
-    )
+    axes[1].plot(td, xd[i_batch, i_ch], label=f"Down-sampled ({TGT_FS_DOWN} Hz)")
     axes[2].plot(tu, xu[i_batch, i_ch], label=f"Up-sampled ({TGT_FS_UP} Hz)")
     for ax in axes:
         ax.legend(loc="upper left")

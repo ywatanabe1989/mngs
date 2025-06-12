@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/io/_load_modules/_txt.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/io/_load_modules/_txt.py"
-)
+
+__FILE__ = "./src/mngs/io/_load_modules/_txt.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -42,52 +41,41 @@ import warnings
 
 #     except (ValueError, FileNotFoundError) as e:
 #         raise ValueError(f"Error loading file {lpath}: {str(e)}")
-def _load_txt(lpath, **kwargs):
-    """Load text file and return non-empty lines."""
-    try:
-        if not lpath.endswith((".txt", ".log", ".event", ".py", ".sh", "")):
-            warnings.warn("File must have .txt, .log or .event extension")
-        try:
-            with open(lpath, "r", encoding="utf-8") as f:
-                return [
-                    line.strip()
-                    for line in f.read().splitlines()
-                    if line.strip()
-                ]
-        except UnicodeDecodeError:
-            # fallback: detect correct encoding
-            encoding = _check_encoding(lpath)
-            with open(lpath, "r", encoding=encoding) as f:
-                return [
-                    line.strip()
-                    for line in f.read().splitlines()
-                    if line.strip()
-                ]
-    except (ValueError, FileNotFoundError) as e:
-        raise ValueError(f"Error loading file {lpath}: {str(e)}")
+# Removed duplicate function - see main _load_txt below
 
 
-def _load_txt(lpath, strip=False):
+def _load_txt(lpath, strip=False, as_lines=False):
     """
-    Load text file and return non-empty lines.
+    Load text file and return its content.
     - Warn if extension is unexpected.
     - Try UTF-8 first, then default encoding.
-    - If strip=True, strip each line.
+    - If strip=True, strip whitespace.
+    - If as_lines=True, return list of lines (backward compatibility).
     """
     if not lpath.endswith((".txt", ".log", ".event", ".py", ".sh")):
         warnings.warn(f"Unexpected extension for file: {lpath}")
 
     try:
         with open(lpath, "r", encoding="utf-8") as file:
-            raw_lines = file.read().splitlines()
+            content = file.read()
     except UnicodeDecodeError:
-        with open(lpath, "r") as file:
-            raw_lines = file.read().splitlines()
+        # Fallback: try to detect correct encoding
+        encoding = _check_encoding(lpath)
+        with open(lpath, "r", encoding=encoding) as file:
+            content = file.read()
 
+    # For backward compatibility, check if as_lines parameter or legacy behavior needed
+    if as_lines:
+        raw_lines = content.splitlines()
+        if strip:
+            return [line.strip() for line in raw_lines if line.strip()]
+        return [line for line in raw_lines if line.strip()]
+
+    # Default: return full content (possibly stripped)
     if strip:
-        return [line.strip() for line in raw_lines if line.strip()]
+        return content.strip()
 
-    return [line for line in raw_lines if line.strip()]
+    return content
 
 
 def _check_encoding(file_path):

@@ -3,6 +3,7 @@
 # Time-stamp: "2024-11-02 04:06:54 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/str/_readable_bytes.py
 
+
 def readable_bytes(num, suffix="B"):
     """Convert a number of bytes to a human-readable format.
 

@@ -1,128 +1,295 @@
-<!-- ---
-!-- title: ./mngs_repo/src/mngs/ai/README.md
-!-- author: ywatanabe
-!-- date: 2024-11-20 00:28:42
-!-- --- -->
+# MNGS AI Module
 
-
-# [`mngs.ai`](https://github.com/ywatanabe1989/mngs/tree/main/src/mngs/ai/)
+The AI module provides machine learning and artificial intelligence utilities for the MNGS framework.
 
 ## Overview
-The `mngs.ai` module provides a collection of artificial intelligence and machine learning utilities, focusing on deep learning with PyTorch and various AI-related tasks.
 
-python -c "import mngs; from pprint import pprint; pprint(dir(mngs.ai))"
+The AI module is organized into several submodules:
+
+### Core Components
+
+- **`genai`** - Generative AI integration with multiple providers (OpenAI, Anthropic, Google, etc.)
+- **`training`** - Training utilities (EarlyStopping, LearningCurveLogger)
+- **`classification`** - Classification tools (ClassificationReporter, ClassifierServer)
+
+### Neural Network Components
+
+- **`layer`** - Custom neural network layers
+- **`loss`** - Loss functions for training
+- **`act`** - Activation functions
+- **`optim`** - Optimizers and optimization utilities
+
+### Analysis & Visualization
+
+- **`plt`** - AI-specific plotting utilities
+- **`metrics`** - Performance metrics
+- **`clustering`** - Clustering algorithms (UMAP, PCA)
+- **`feature_extraction`** - Feature extraction methods
+
+### Utilities
+
+- **`utils`** - General AI/ML utilities
+- **`sampling`** - Data sampling methods
+- **`sklearn`** - Scikit-learn integration
 
 ## Installation
+
 ```bash
 pip install mngs
 ```
 
-## Features
-- Classification utilities (ClassificationReporter, MultiClassificationReporter, ClassifierServer)
-- Early stopping implementation for training
-- Learning curve logging and visualization
-- Clustering algorithms (UMAP)
-- Custom PyTorch layers and loss functions
-- Optimization utilities (Ranger optimizer)
-- Metrics calculation and evaluation tools
-- Generative AI interfaces (OpenAI, Claude, Llama, etc.)
-
 ## Quick Start
-```python
-import mngs.ai as ai
-import torch
-import torch.nn as nn
 
-# Classification example
-model = nn.Linear(10, 2)
-reporter = ai.ClassificationReporter("./results")
+### Generative AI (GenAI)
+
+The GenAI module provides a unified interface for multiple AI providers:
+
+```python
+from mngs.ai.genai import GenAI
+
+# Basic usage
+ai = GenAI(provider="openai")
+response = ai.complete("What is machine learning?")
+print(response)
+
+# With specific model and configuration
+ai = GenAI(
+    provider="anthropic",
+    model="claude-3-opus-20240229",
+    system_prompt="You are a helpful AI assistant."
+)
+response = ai.complete("Explain neural networks")
+
+# Check costs
+print(ai.get_cost_summary())
+```
+
+For one-off completions:
+
+```python
+from mngs.ai.genai import complete
+
+response = complete("Quick question", provider="openai")
+```
+
+### Training Utilities
+
+```python
+from mngs.ai import EarlyStopping, LearningCurveLogger
 
 # Early stopping
-early_stopping = ai.EarlyStopping(patience=10, verbose=True)
+early_stopper = EarlyStopping(patience=10, min_delta=0.001)
 
-# Learning curve logger
-logger = ai.LearningCurveLogger()
-
-# Custom loss function
-loss_fn = ai.MultiTaskLoss()
-
-# Optimization
-optimizer = ai.optim.Ranger(model.parameters())
-
-# Metrics
-accuracy = ai.metrics.balanced_accuracy_score(y_true, y_pred)
-
-# Generative AI
-gen_ai = ai.genai.GenAI(model="gpt-3.5-turbo")
-response = gen_ai.generate("Tell me a joke.")
+# Learning curve logging
+logger = LearningCurveLogger(log_dir="./logs")
 ```
 
-## API Reference
-- `mngs.ai.ClassificationReporter`: Utility for classification model evaluation and reporting
-- `mngs.ai.MultiClassificationReporter`: Manages multiple ClassificationReporter instances for multi-target classification tasks
-- `mngs.ai.ClassifierServer`: Server for deploying classification models
-- `mngs.ai.EarlyStopping`: Implementation of early stopping for training
-- `mngs.ai.LearningCurveLogger`: Logger for tracking and visualizing learning curves
-- `mngs.ai.clustering.UMAP`: UMAP implementation for clustering
-- `mngs.ai.layer`: Custom PyTorch layers
-- `mngs.ai.loss`: Custom loss functions
-- `mngs.ai.optim`: Optimization utilities including Ranger optimizer
-- `mngs.ai.metrics`: Various evaluation metrics
-- `mngs.ai.genai`: Interfaces for generative AI models
-
-## Detailed Usage
-
-### EarlyStopping
-
-The `EarlyStopping` class is used to monitor the validation score during training and stop the process if no improvement is seen for a specified number of consecutive checks.
-
-```python
-from mngs.ai import EarlyStopping
-
-early_stopping = EarlyStopping(patience=7, verbose=True, delta=1e-5, direction="minimize")
-```
-
-### ClassificationReporter
-
-The `ClassificationReporter` class is used for reporting various classification metrics and saving them. It calculates and saves metrics such as Balanced Accuracy, Matthews Correlation Coefficient (MCC), Confusion Matrix, Classification Report, ROC AUC score/curve, and Precision-Recall AUC score/curve.
+### Classification
 
 ```python
 from mngs.ai import ClassificationReporter
 
-reporter = ClassificationReporter(save_directory)
-reporter.calc_metrics(true_class, pred_class, pred_proba, labels)
+reporter = ClassificationReporter()
+report = reporter.generate_report(y_true, y_pred)
+```
+
+## GenAI Module Features
+
+### Supported Providers
+
+- OpenAI (GPT-3.5, GPT-4, etc.)
+- Anthropic (Claude 3 Opus, Sonnet, Haiku)
+- Google (Gemini)
+- Groq
+- DeepSeek
+- Perplexity
+- Local LLaMA models
+
+### Key Features
+
+1. **Unified Interface**: Same API for all providers
+2. **Cost Tracking**: Automatic token counting and cost calculation
+3. **Chat History**: Maintains conversation context
+4. **Error Handling**: Robust error handling across providers
+5. **Type Safety**: Provider enum for type-safe provider selection
+6. **Streaming Support**: Stream responses (provider-dependent)
+7. **Image Support**: Multi-modal capabilities (provider-dependent)
+
+### Example: Multi-Provider Comparison
+
+```python
+from mngs.ai.genai import GenAI, Provider
+
+prompt = "Explain quantum computing in simple terms"
+
+# Compare different providers
+for provider in [Provider.OPENAI, Provider.ANTHROPIC]:
+    try:
+        ai = GenAI(provider=provider)
+        response = ai.complete(prompt)
+        print(f"\n{provider.value}: {response[:100]}...")
+        print(f"Cost: {ai.get_cost_summary()}")
+    except Exception as e:
+        print(f"{provider.value} error: {e}")
+```
+
+## Migration from Old API
+
+If you're using the old `genai_factory` or `BaseGenAI`:
+
+```python
+# Old way (deprecated)
+from mngs.ai._gen_ai import genai_factory
+ai = genai_factory("gpt-4")
+response = ai.run("Hello")
+
+# New way
+from mngs.ai.genai import GenAI
+ai = GenAI(provider="openai", model="gpt-4")
+response = ai.complete("Hello")
+```
+
+See [Migration Guide](genai/MIGRATION_GUIDE.md) for detailed migration instructions.
+
+## Neural Network Components
+
+### Custom Layers
+
+```python
+import torch.nn as nn
+from mngs.ai.layer import Pass, Switch
+
+model = nn.Sequential(
+    nn.Linear(784, 256),
+    Pass(),  # Identity layer
+    Switch(lambda x: x > 0),  # Conditional switching
+    nn.Linear(256, 10)
+)
+```
+
+### Loss Functions
+
+```python
+from mngs.ai.loss import MultiTaskLoss, L1L2Loss
+
+# Multi-task learning
+criterion = MultiTaskLoss(task_weights=[1.0, 0.5])
+
+# Combined L1 and L2 loss
+criterion = L1L2Loss(l1_weight=0.1, l2_weight=0.9)
+```
+
+## Clustering & Dimensionality Reduction
+
+```python
+from mngs.ai.clustering import umap, pca
+
+# UMAP embedding
+embedding = umap(data, n_components=2)
+
+# PCA
+principal_components = pca(data, n_components=10)
+```
+
+## Classification Tools
+
+### ClassificationReporter
+
+Comprehensive classification metrics and reporting:
+
+```python
+from mngs.ai import ClassificationReporter
+
+reporter = ClassificationReporter(save_dir="./results")
+reporter.calc_metrics(y_true, y_pred, y_prob, labels=['class0', 'class1'])
 reporter.summarize()
 reporter.save()
 ```
 
-### MultiClassificationReporter
+### EarlyStopping
 
-The `MultiClassificationReporter` class manages multiple `ClassificationReporter` instances, one for each target in a multi-target classification task.
+Monitor validation performance and stop training early:
 
 ```python
-from mngs.ai import MultiClassificationReporter
+from mngs.ai import EarlyStopping
 
-multi_reporter = MultiClassificationReporter(save_directory, targets=['target1', 'target2'])
-multi_reporter.calc_metrics(true_class, pred_class, pred_proba, labels, tgt='target1')
-multi_reporter.summarize(tgt='target1')
-multi_reporter.save(tgt='target1')
+early_stopper = EarlyStopping(
+    patience=10,
+    verbose=True,
+    delta=0.001,
+    direction="minimize"
+)
+
+for epoch in range(100):
+    val_loss = train_epoch()
+    early_stopper(val_loss, model)
+    if early_stopper.early_stop:
+        print("Early stopping triggered")
+        break
 ```
 
-## Use Cases
-- Deep learning model development and training
-- Model evaluation and performance analysis
-- Clustering and dimensionality reduction
-- Natural language processing tasks
-- Generative AI applications
-- Multi-target classification tasks
+## Best Practices
 
-## Performance
-The `mngs.ai` module is built on top of PyTorch, leveraging GPU acceleration for computationally intensive tasks when available.
+1. **API Keys**: Set environment variables for API keys
+   - `OPENAI_API_KEY`
+   - `ANTHROPIC_API_KEY`
+   - etc.
+
+2. **Cost Management**: Monitor costs with detailed tracking
+   ```python
+   costs = ai.get_detailed_costs()
+   print(f"Total: ${costs['total_cost']:.4f}")
+   ```
+
+3. **Error Handling**: Always handle potential API errors
+   ```python
+   try:
+       response = ai.complete(prompt)
+   except ValueError as e:
+       print(f"Configuration error: {e}")
+   except Exception as e:
+       print(f"API error: {e}")
+   ```
+
+4. **Memory Management**: Clear history when not needed
+   ```python
+   ai.clear_history()  # Free up memory
+   ```
+
+## Examples
+
+See the [examples directory](../../../examples/mngs/ai/) for complete working examples:
+- `genai_example.py` - Comprehensive GenAI usage examples
+- More examples coming soon...
+
+## API Reference
+
+### Main Classes
+- `GenAI` - Main generative AI interface
+- `ClassificationReporter` - Classification metrics and reporting
+- `EarlyStopping` - Early stopping for training
+- `LearningCurveLogger` - Learning curve tracking
+
+### Submodules
+- `mngs.ai.genai` - Generative AI providers
+- `mngs.ai.training` - Training utilities
+- `mngs.ai.classification` - Classification tools
+- `mngs.ai.clustering` - Clustering algorithms
+- `mngs.ai.layer` - Custom layers
+- `mngs.ai.loss` - Loss functions
+- `mngs.ai.metrics` - Evaluation metrics
+- `mngs.ai.optim` - Optimizers
 
 ## Contributing
-Contributions to improve `mngs.ai` are welcome. Please submit pull requests or open issues on the GitHub repository.
+
+When contributing to the AI module:
+1. Follow the existing code style
+2. Add tests for new features
+3. Update documentation
+4. Consider backward compatibility
 
 ## Contact
+
 Yusuke Watanabe (ywata1989@gmail.com)
 
 For more information and updates, please visit the [mngs GitHub repository](https://github.com/ywatanabe1989/mngs).

@@ -5,6 +5,7 @@
 
 import re
 
+
 def remove_ansi(string):
     """
     Removes ANSI escape sequences from a given text chunk.

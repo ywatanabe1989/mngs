@@ -4,22 +4,26 @@
 # File: ./mngs_repo/src/mngs/dsp/add_noise.py
 
 import torch
-from ..decorators import torch_fn
+from ..decorators import signal_fn
+
 
 def _uniform(shape, amp=1.0):
     a, b = -amp, amp
     return -amp + (2 * amp) * torch.rand(shape)
 
-@torch_fn
+
+@signal_fn
 def gauss(x, amp=1.0):
     noise = amp * torch.randn(x.shape)
     return x + noise.to(x.device)
 
-@torch_fn
+
+@signal_fn
 def white(x, amp=1.0):
     return x + _uniform(x.shape, amp=amp).to(x.device)
 
-@torch_fn
+
+@signal_fn
 def pink(x, amp=1.0, dim=-1):
     """
     Adds pink noise to a given tensor along a specified dimension.
@@ -43,12 +47,14 @@ def pink(x, amp=1.0, dim=-1):
     noise = noise * (amp / noise_amp)
     return x + noise.to(x.device)
 
-@torch_fn
+
+@signal_fn
 def brown(x, amp=1.0, dim=-1):
     noise = _uniform(x.shape, amp=amp)
     noise = torch.cumsum(noise, dim=dim)
     noise = mngs.dsp.norm.minmax(noise, amp=amp, dim=dim)
     return x + noise.to(x.device)
+
 
 if __name__ == "__main__":
     import sys
@@ -75,9 +81,7 @@ if __name__ == "__main__":
     }
 
     # Plots
-    fig, axes = mngs.plt.subplots(
-        nrows=len(funcs), ncols=2, sharex=True, sharey=True
-    )
+    fig, axes = mngs.plt.subplots(nrows=len(funcs), ncols=2, sharex=True, sharey=True)
     count = 0
     for (k, fn), axes_row in zip(funcs.items(), axes):
         for ax in axes_row:

@@ -4,9 +4,8 @@
 # File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/tests/mngs/plt/color/test__get_colors_from_cmap.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./tests/mngs/plt/color/test__get_colors_from_cmap.py"
-)
+
+__FILE__ = "./tests/mngs/plt/color/test__get_colors_from_cmap.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -69,7 +68,11 @@ def test_get_colors_from_cmap():
 
 
 def test_get_categorical_colors_from_cmap():
+<<<<<<< HEAD
+    from mngs.plt.color._get_colors_from_cmap import get_categorical_colors_from_cmap
+=======
     from mngs.plt.color import get_categorical_colors_from_cmap
+>>>>>>> origin/main
 
     # Test with list categories
     categories = ["cat", "dog", "bird"]
@@ -88,12 +91,168 @@ def test_get_categorical_colors_from_cmap():
 
     # Test with duplicate categories
     duplicate_categories = ["A", "B", "A", "C", "B"]
-    dup_cat_colors = get_categorical_colors_from_cmap(
-        "plasma", duplicate_categories
-    )
+    dup_cat_colors = get_categorical_colors_from_cmap("plasma", duplicate_categories)
     assert set(dup_cat_colors.keys()) == {"A", "B", "C"}
     assert len(dup_cat_colors) == 3
 
+<<<<<<< HEAD
+
+def test_get_color_from_cmap_edge_cases():
+    """Test edge cases for get_color_from_cmap."""
+    from mngs.plt.color._get_colors_from_cmap import get_color_from_cmap
+    
+    # Test with value at exact boundaries
+    color_0 = get_color_from_cmap("viridis", 0.0)
+    color_1 = get_color_from_cmap("viridis", 1.0)
+    assert all(0 <= val <= 1 for val in color_0)
+    assert all(0 <= val <= 1 for val in color_1)
+    
+    # Test with negative value (should clip to 0)
+    color_neg = get_color_from_cmap("plasma", -0.5)
+    color_0_expected = get_color_from_cmap("plasma", 0.0)
+    assert color_neg == color_0_expected
+    
+    # Test with value > 1 (should clip to 1)
+    color_high = get_color_from_cmap("Blues", 1.5)
+    color_1_expected = get_color_from_cmap("Blues", 1.0)
+    assert color_high == color_1_expected
+    
+    # Test with zero-width value range
+    color_zero_range = get_color_from_cmap("coolwarm", 5, value_range=(5, 5))
+    # Should handle gracefully (norm_value becomes nan, clipped to 0 or 1)
+    assert all(0 <= val <= 1 for val in color_zero_range)
+
+
+def test_get_colors_from_cmap_edge_cases():
+    """Test edge cases for get_colors_from_cmap."""
+    from mngs.plt.color._get_colors_from_cmap import get_colors_from_cmap
+    
+    # Test with n_colors = 0
+    colors_0 = get_colors_from_cmap("viridis", 0)
+    assert colors_0 == []
+    
+    # Test with n_colors = 1
+    colors_1 = get_colors_from_cmap("plasma", 1)
+    assert len(colors_1) == 1
+    assert colors_1[0] == get_color_from_cmap("plasma", 0.0)
+    
+    # Test with large n_colors
+    colors_large = get_colors_from_cmap("Blues", 100)
+    assert len(colors_large) == 100
+    
+    # Test with negative value range
+    colors_neg_range = get_colors_from_cmap("coolwarm", 5, value_range=(-2, -1))
+    assert len(colors_neg_range) == 5
+    
+
+def test_get_categorical_colors_edge_cases():
+    """Test edge cases for get_categorical_colors_from_cmap."""
+    from mngs.plt.color._get_colors_from_cmap import get_categorical_colors_from_cmap
+    
+    # Test with empty list
+    empty_colors = get_categorical_colors_from_cmap("viridis", [])
+    assert empty_colors == {}
+    
+    # Test with single category
+    single_cat = get_categorical_colors_from_cmap("plasma", ["only_one"])
+    assert len(single_cat) == 1
+    assert "only_one" in single_cat
+    
+    # Test with many categories (more than typical colormap size)
+    many_cats = list(range(50))
+    many_colors = get_categorical_colors_from_cmap("tab20", many_cats)
+    assert len(many_colors) == 50
+    
+    # Test with mixed types
+    mixed_cats = [1, "two", 3.0, "four", 5]
+    mixed_colors = get_categorical_colors_from_cmap("Set3", mixed_cats)
+    assert len(mixed_colors) == 5
+    assert all(cat in mixed_colors for cat in mixed_cats)
+
+
+def test_colormap_variations():
+    """Test with different types of colormaps."""
+    from mngs.plt.color._get_colors_from_cmap import get_colors_from_cmap
+    
+    # Sequential colormaps
+    sequential_cmaps = ["Blues", "Greens", "Oranges", "Purples"]
+    for cmap in sequential_cmaps:
+        colors = get_colors_from_cmap(cmap, 5)
+        assert len(colors) == 5
+    
+    # Diverging colormaps
+    diverging_cmaps = ["coolwarm", "RdBu", "seismic", "bwr"]
+    for cmap in diverging_cmaps:
+        colors = get_colors_from_cmap(cmap, 5)
+        assert len(colors) == 5
+    
+    # Qualitative colormaps
+    qualitative_cmaps = ["tab10", "tab20", "Set1", "Set3"]
+    for cmap in qualitative_cmaps:
+        colors = get_colors_from_cmap(cmap, 5)
+        assert len(colors) == 5
+
+
+def test_alpha_values():
+    """Test alpha channel handling."""
+    from mngs.plt.color._get_colors_from_cmap import (
+        get_color_from_cmap,
+        get_colors_from_cmap,
+        get_categorical_colors_from_cmap
+    )
+    
+    # Test alpha = 0
+    color_transparent = get_color_from_cmap("viridis", 0.5, alpha=0.0)
+    assert color_transparent[3] == 0.0
+    
+    # Test alpha = 0.5
+    colors_semi = get_colors_from_cmap("plasma", 3, alpha=0.5)
+    assert all(color[3] == 0.5 for color in colors_semi)
+    
+    # Test alpha = 1.0 (default)
+    colors_opaque = get_colors_from_cmap("Blues", 3)
+    assert all(color[3] == 1.0 for color in colors_opaque)
+    
+    # Test categorical with various alphas
+    for alpha in [0.0, 0.25, 0.5, 0.75, 1.0]:
+        cat_colors = get_categorical_colors_from_cmap("Set1", ["A", "B"], alpha=alpha)
+        assert all(color[3] == alpha for color in cat_colors.values())
+
+
+def test_invalid_colormap():
+    """Test behavior with invalid colormap names."""
+    from mngs.plt.color._get_colors_from_cmap import get_color_from_cmap
+    
+    # matplotlib should raise an error for invalid colormap
+    with pytest.raises(ValueError):
+        get_color_from_cmap("not_a_real_colormap", 0.5)
+
+
+def test_color_consistency():
+    """Test that colors are consistent across calls."""
+    from mngs.plt.color._get_colors_from_cmap import (
+        get_color_from_cmap,
+        get_colors_from_cmap
+    )
+    
+    # Same parameters should give same color
+    color1 = get_color_from_cmap("viridis", 0.5)
+    color2 = get_color_from_cmap("viridis", 0.5)
+    assert color1 == color2
+    
+    # Colors from list should match individual calls
+    colors_list = get_colors_from_cmap("plasma", 3)
+    color_0 = get_color_from_cmap("plasma", 0.0)
+    color_half = get_color_from_cmap("plasma", 0.5)
+    color_1 = get_color_from_cmap("plasma", 1.0)
+    
+    assert colors_list[0] == color_0
+    assert colors_list[1] == color_half
+    assert colors_list[2] == color_1
+
+
+=======
+>>>>>>> origin/main
 if __name__ == "__main__":
     import os
 

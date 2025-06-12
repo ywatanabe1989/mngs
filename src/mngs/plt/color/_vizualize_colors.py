@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/color/_vizualize_colors.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/plt/color/_vizualize_colors.py"
-)
+
+__FILE__ = "./src/mngs/plt/color/_vizualize_colors.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -34,9 +33,7 @@ def vizualize_colors(colors):
         # )
 
         # Line plot
-        ax.plot_shaded_line(
-            xx, yy - ss, yy, yy + ss, color=rgba, label=color_str
-        )
+        ax.plot_shaded_line(xx, yy - ss, yy, yy + ss, color=rgba, label=color_str)
 
         # # Scatter plot
         # axes[2].scatter(xx, yy, color=rgba, label=color_str)
@@ -52,5 +49,6 @@ def vizualize_colors(colors):
     # plt.tight_layout()
     # plt.show()
     return fig, ax
+
 
 # EOF

@@ -68,13 +68,9 @@ class VitFeatureExtractor:
 
     def _validate_inputs(self):
         if self.model_name not in self.valid_models:
-            raise ValueError(
-                f"Invalid model name. Choose from: {self.valid_models}"
-            )
+            raise ValueError(f"Invalid model name. Choose from: {self.valid_models}")
         if not _os.path.exists(self.torch_home):
-            raise FileNotFoundError(
-                f"Model directory not found: {self.torch_home}"
-            )
+            raise FileNotFoundError(f"Model directory not found: {self.torch_home}")
 
     def _preprocess_array(
         self,

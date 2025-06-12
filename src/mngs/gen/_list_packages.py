@@ -6,18 +6,24 @@
 Functionality:
     * Lists and analyzes installed Python packages and their modules
 Input:
-    * None (uses pkg_resources to get installed packages)
+    * None (uses importlib.metadata to get installed packages)
 Output:
     * DataFrame containing package module information
 Prerequisites:
-    * pkg_resources, pandas
+    * importlib.metadata (Python 3.8+) or importlib_metadata, pandas
 """
 
 import sys
 from typing import Optional
 
 import pandas as pd
-import pkg_resources
+
+try:
+    # Python 3.8+ standard library
+    from importlib.metadata import distributions
+except ImportError:
+    # Fallback for older Python versions
+    from importlib_metadata import distributions
 
 from ._inspect_module import inspect_module
 
@@ -45,9 +51,9 @@ def list_packages(
 
     # Get installed packages, excluding problematic ones
     installed_packages = [
-        dist.key.replace("-", "_")
-        for dist in pkg_resources.working_set
-        if not any(pat in dist.key.lower() for pat in skip_patterns)
+        dist.name.replace("-", "_")
+        for dist in distributions()
+        if not any(pat in dist.name.lower() for pat in skip_patterns)
     ]
 
     # Focus on commonly used packages first

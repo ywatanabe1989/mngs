@@ -217,7 +217,6 @@ def find(rootdir, type="f", exp=["*"]):
                 # Construct the full path
                 path = os.path.join(root, name)
 
-
                 # If an _exp is provided, use fnmatch to filter names
                 if _exp and not fnmatch.fnmatch(name, _exp):
                     continue
@@ -282,8 +281,6 @@ def find_latest(dirname, fname, ext, version_prefix="_v"):
                 latest_file = file
 
     return latest_file
-
-
 
 
 # EOF

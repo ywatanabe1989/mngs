@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_AxisWrapper.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/plt/_subplots/_AxisWrapper.py"
-)
+
+__FILE__ = "./src/mngs/plt/_subplots/_AxisWrapper.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -15,13 +14,15 @@ from functools import wraps
 
 import matplotlib
 
-from ._AxisWrapperMixins import (AdjustmentMixin, MatplotlibPlotMixin,
-                                 SeabornMixin, TrackingMixin)
+from ._AxisWrapperMixins import (
+    AdjustmentMixin,
+    MatplotlibPlotMixin,
+    SeabornMixin,
+    TrackingMixin,
+)
 
 
-class AxisWrapper(
-    MatplotlibPlotMixin, SeabornMixin, AdjustmentMixin, TrackingMixin
-):
+class AxisWrapper(MatplotlibPlotMixin, SeabornMixin, AdjustmentMixin, TrackingMixin):
     def __init__(self, fig_mngs, axis_mpl, track):
         """Initialize the AxisWrapper.
         
@@ -50,8 +51,29 @@ class AxisWrapper(
         self.id = 0
         self._counter_part = matplotlib.axes.Axes
 
-    def get_figure(self):
+    def get_figure(self, root=True):
+        """Get the figure, compatible with matplotlib 3.8+"""
         return self._fig_mpl
+    
+    def twinx(self):
+        """Create a twin y-axis and wrap it with AxisWrapper."""
+        twin_ax = self._axes_mpl.twinx()
+        # Create a mock figure wrapper for the twin axis
+        class MockFigWrapper:
+            def __init__(self, fig_mpl):
+                self._fig_mpl = fig_mpl
+        mock_fig = MockFigWrapper(self._fig_mpl)
+        return AxisWrapper(fig_mngs=mock_fig, axis_mpl=twin_ax, track=self.track)
+    
+    def twiny(self):
+        """Create a twin x-axis and wrap it with AxisWrapper."""
+        twin_ax = self._axes_mpl.twiny()
+        # Create a mock figure wrapper for the twin axis
+        class MockFigWrapper:
+            def __init__(self, fig_mpl):
+                self._fig_mpl = fig_mpl
+        mock_fig = MockFigWrapper(self._fig_mpl)
+        return AxisWrapper(fig_mngs=mock_fig, axis_mpl=twin_ax, track=self.track)
 
     def __getattr__(self, name):
         # 0. Check if the attribute is explicitly defined in AxisWrapper or its Mixins
@@ -76,33 +98,51 @@ class AxisWrapper(
 
                     # Determine if tracking should occur
                     should_track = (
-                        track_override
-                        if track_override is not None
-                        else self.track
+                        track_override if track_override is not None else self.track
                     )
 
-                    # Track the method call if tracking enabled for this call
-                    # We only track if an 'id' was provided, explicit tracking methods handle other cases
-                    if should_track and id_value is not None:
+                    # Track the method call if tracking enabled
+                    # Expanded list of matplotlib plotting methods to track
+                    tracking_methods = {
+                        # Basic plots
+                        'plot', 'scatter', 'bar', 'barh', 'hist', 'boxplot', 'violinplot',
+                        # Line plots
+                        'fill_between', 'fill_betweenx', 'errorbar', 'step', 'stem',
+                        # Statistical plots  
+                        'hist2d', 'hexbin', 'pie',
+                        # Contour plots
+                        'contour', 'contourf', 'tricontour', 'tricontourf',
+                        # Image plots
+                        'imshow', 'matshow', 'spy',
+                        # Quiver plots
+                        'quiver', 'streamplot',
+                        # 3D-related (if axes3d)
+                        'plot3D', 'scatter3D', 'bar3d', 'plot_surface', 'plot_wireframe',
+                        # Text and annotations (data-containing)
+                        'annotate', 'text'
+                    }
+                    if should_track and name in tracking_methods:
                         # Use the _track method from TrackingMixin
-                        # Pass method name, args, kwargs (original ones, maybe without id/track?)
-                        # The current _track implementation in the mixin needs review for consistency
-                        # Let's assume _track handles getting the method name and uses id_value
-                        # For simplicity, just call the original method for now. Tracking needs refinement.
-                        # --- Refined Tracking Call (assuming _track exists and works) ---
+                        # If no id provided, it will auto-generate one
                         try:
+<<<<<<< HEAD
+                            self._track(should_track, id_value, name, args, kwargs)
+=======
                             # Convert args to tracked_dict for consistency with other tracking
                             tracked_dict = {"args": args}
                             self._track(
                                 should_track, id_value, name, tracked_dict, kwargs
                             )
+>>>>>>> origin/main
                         except AttributeError:
                             warnings.warn(
                                 f"Tracking setup incomplete for AxisWrapper ({name}).",
                                 UserWarning,
                                 stacklevel=2,
                             )
-                        # ------------------------------------------------------------
+                        except Exception as e:
+                            # Silently continue if tracking fails to not break plotting
+                            pass
                     return result  # Return the result of the original call
 
                 return wrapper
@@ -143,10 +183,37 @@ class AxisWrapper(
         )
 
     def __dir__(self):
-        # Combine attributes from both self and the wrapped matplotlib figure
-        attrs = set(dir(self.__class__))
-        attrs.update(object.__dir__(self))
-        attrs.update(dir(self._axes_mpl))
+        # Start with attributes from the class and all parent classes (mixins)
+        attrs = set()
+        
+        # Get attributes from all parent classes including mixins
+        for cls in self.__class__.__mro__:
+            attrs.update(cls.__dict__.keys())
+        
+        # Add instance attributes
+        attrs.update(self.__dict__.keys())
+        
+        # Safely get matplotlib axes attributes
+        try:
+            # Get attributes from the wrapped matplotlib axes
+            if hasattr(self._axes_mpl, '__class__'):
+                # Get class methods from matplotlib.axes.Axes
+                for cls in self._axes_mpl.__class__.__mro__:
+                    attrs.update(name for name in cls.__dict__.keys() if not name.startswith('_'))
+            
+            # Add instance attributes of the matplotlib axes
+            if hasattr(self._axes_mpl, '__dict__'):
+                attrs.update(name for name in self._axes_mpl.__dict__.keys() if not name.startswith('_'))
+                
+        except Exception:
+            # If any error occurs, add common matplotlib methods manually
+            attrs.update(['plot', 'scatter', 'bar', 'barh', 'hist', 'boxplot', 
+                         'set_xlabel', 'set_ylabel', 'set_title', 'legend',
+                         'set_xlim', 'set_ylim', 'grid', 'annotate', 'text'])
+        
+        # Remove private attributes
+        attrs = {attr for attr in attrs if not attr.startswith('_')}
+        
         return sorted(attrs)
         
     def flatten(self):

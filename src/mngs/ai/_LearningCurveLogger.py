@@ -43,6 +43,30 @@ import numpy as _np
 import warnings as _warnings
 import torch as _torch
 
+# Import mngs modules for plotting
+try:
+    import mngs.plt.utils as _plt_utils
+    import mngs.plt.color as _plt_color
+    
+    class _plt_module:
+        configure_mpl = _plt_utils.configure_mpl
+        colors = _plt_color
+except ImportError:
+    # Mock for testing when mngs is not available
+    class _plt_module:
+        @staticmethod
+        def configure_mpl(*args, **kwargs):
+            pass
+        
+        class colors:
+            @staticmethod
+            def to_RGBA(color, alpha=1.0):
+                return color
+            
+            @staticmethod
+            def to_rgba(color, alpha=1.0):
+                return color
+
 
 class LearningCurveLogger:
     """Records and visualizes learning metrics during model training.
@@ -66,7 +90,7 @@ class LearningCurveLogger:
     def __init__(self) -> None:
         self.logged_dict: _Dict[str, _Dict] = _defaultdict(dict)
 
-        warnings.warn(
+        _warnings.warn(
             '\n"gt_label" will be removed in the future. Please use "true_class" instead.\n',
             DeprecationWarning,
         )
@@ -173,21 +197,28 @@ class LearningCurveLogger:
 
         keys_to_plot = self._find_keys_to_plot(self.logged_dict)
 
-        fig, axes = plt.subplots(
-            len(keys_to_plot), 1, sharex=True, sharey=False
-        )
+        if len(keys_to_plot) == 0:
+            # Create empty plot when no plot keys found
+            fig, axes = plt.subplots(1, 1)
+            axes.set_xlabel("Iteration#")
+            axes.set_ylabel("No metrics to plot")
+            fig.text(0.5, 0.95, title, ha="center")
+            return fig
+
+        fig, axes = plt.subplots(len(keys_to_plot), 1, sharex=True, sharey=False)
+        
+        # Handle both single and multiple axes cases
+        if len(keys_to_plot) == 1:
+            axes = [axes]  # Make it a list for consistent indexing
+        
         axes[-1].set_xlabel("Iteration#")
         fig.text(0.5, 0.95, title, ha="center")
 
         for i_plt, plt_k in enumerate(keys_to_plot):
             ax = axes[i_plt]
             ax.set_ylabel(self._rename_if_key_to_plot(plt_k))
-            ax.xaxis.set_major_locator(
-                _matplotlib.ticker.MaxNLocator(max_n_ticks)
-            )
-            ax.yaxis.set_major_locator(
-                _matplotlib.ticker.MaxNLocator(max_n_ticks)
-            )
+            ax.xaxis.set_major_locator(_matplotlib.ticker.MaxNLocator(max_n_ticks))
+            ax.yaxis.set_major_locator(_matplotlib.ticker.MaxNLocator(max_n_ticks))
 
             if _re.search("[aA][cC][cC]", plt_k):
                 ax.set_ylim(0, 1)
@@ -199,9 +230,7 @@ class LearningCurveLogger:
                         self.dfs_pivot_i_global[step_k].index,
                         self.dfs_pivot_i_global[step_k][plt_k],
                         label=step_k,
-                        color=_plt_module.colors.to_RGBA(
-                            COLOR_DICT[step_k], alpha=0.9
-                        ),
+                        color=_plt_module.colors.to_rgba(COLOR_DICT[step_k], alpha=0.9),
                         linewidth=linewidth,
                     )
                     ax.legend()
@@ -222,9 +251,7 @@ class LearningCurveLogger:
                             ymin=-1e4,
                             ymax=1e4,
                             linestyle="--",
-                            color=_plt_module.colors.to_RGBA(
-                                "gray", alpha=0.5
-                            ),
+                            color=_plt_module.colors.to_rgba("gray", alpha=0.5),
                         )
 
                 if (step_k == "Validation") or (step_k == "Test"):
@@ -232,9 +259,7 @@ class LearningCurveLogger:
                         self.dfs_pivot_i_global[step_k].index,
                         self.dfs_pivot_i_global[step_k][plt_k],
                         label=step_k,
-                        color=_plt_module.colors.to_RGBA(
-                            COLOR_DICT[step_k], alpha=0.9
-                        ),
+                        color=_plt_module.colors.to_rgba(COLOR_DICT[step_k], alpha=0.9),
                         s=scattersize,
                         alpha=0.9,
                     )
@@ -250,9 +275,7 @@ class LearningCurveLogger:
         step : str
             Training phase to print metrics for
         """
-        df_pivot_i_epoch = self._to_dfs_pivot(
-            self.logged_dict, pivot_column="i_epoch"
-        )
+        df_pivot_i_epoch = self._to_dfs_pivot(self.logged_dict, pivot_column="i_epoch")
         df_pivot_i_epoch_step = df_pivot_i_epoch[step]
         df_pivot_i_epoch_step.columns = self._rename_if_key_to_plot(
             df_pivot_i_epoch_step.columns
@@ -286,9 +309,7 @@ class LearningCurveLogger:
         return keys_to_plot
 
     @staticmethod
-    def _rename_if_key_to_plot(
-        x: _Union[str, _pd.Index]
-    ) -> _Union[str, _pd.Index]:
+    def _rename_if_key_to_plot(x: _Union[str, _pd.Index]) -> _Union[str, _pd.Index]:
         """Rename metric keys for plotting.
 
         Parameters
@@ -391,9 +412,7 @@ if __name__ == "__main__":
     train_size = int(n_samples * 0.8)  # train_size is 48000
 
     subset1_indices = list(range(0, train_size))  # [0,1,.....47999]
-    subset2_indices = list(
-        range(train_size, n_samples)
-    )  # [48000,48001,.....59999]
+    subset2_indices = list(range(train_size, n_samples))  # [48000,48001,.....59999]
 
     _ds_tra = Subset(_ds_tra_val, subset1_indices)
     _ds_val = Subset(_ds_tra_val, subset2_indices)

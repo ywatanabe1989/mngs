@@ -32,6 +32,7 @@ from ...decorators import pandas_fn
 
 ArrayLike = Union[np.ndarray, torch.Tensor, pd.Series]
 
+
 @pandas_fn
 def fdr_correction(results: pd.DataFrame) -> pd.DataFrame:
     """
@@ -73,9 +74,12 @@ def fdr_correction(results: pd.DataFrame) -> pd.DataFrame:
         nan_rows[f"{pval_col}_fdr"] = np.nan
 
         results = pd.concat([non_nan, nan_rows]).sort_index()
-        results[f"{pval_col}_fdr_stars"] = results[f"{pval_col}_fdr"].apply(mngs.stats.p2stars)
+        results[f"{pval_col}_fdr_stars"] = results[f"{pval_col}_fdr"].apply(
+            mngs.stats.p2stars
+        )
 
     return results
+
 
 # def _ecdf(xx: ArrayLike) -> ArrayLike:
 #     """Compute empirical cumulative distribution function."""
@@ -148,13 +152,13 @@ if __name__ == "__main__":
     pvals = [0.02, 0.03, 0.05]
     pvals_torch = torch.tensor(np.array([0.02, 0.03, 0.05]))
 
-    reject, pvals_corrected = fdr_correction(pd.DataFrame({'p_value': pvals}))
+    reject, pvals_corrected = fdr_correction(pd.DataFrame({"p_value": pvals}))
 
     reject_torch, pvals_corrected_torch = fdr_correction_torch(
         pvals_torch, alpha=0.05, method="indep"
     )
 
-    arr = pvals_corrected['fdr_p_value'].to_numpy().astype(float)
+    arr = pvals_corrected["fdr_p_value"].to_numpy().astype(float)
     tor = pvals_corrected_torch.numpy().astype(float)
     print(mngs.gen.isclose(arr, tor))
 

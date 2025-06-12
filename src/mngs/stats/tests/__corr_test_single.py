@@ -8,6 +8,7 @@ import mngs
 from scipy import stats
 from typing import Any, Literal, Dict, Callable
 
+
 def _corr_test_base(
     data1: np.ndarray,
     data2: np.ndarray,
@@ -15,7 +16,7 @@ def _corr_test_base(
     num_permutations: int,
     seed: int,
     corr_func: Callable,
-    test_name: str
+    test_name: str,
 ) -> Dict[str, Any]:
     np.random.seed(seed)
 
@@ -23,10 +24,12 @@ def _corr_test_base(
     data1, data2 = data1[non_nan_indices], data2[non_nan_indices]
 
     corr_obs, _ = corr_func(data1, data2)
-    surrogate = np.array([
-        corr_func(data1, np.random.permutation(data2))[0]
-        for _ in range(num_permutations)
-    ])
+    surrogate = np.array(
+        [
+            corr_func(data1, np.random.permutation(data2))[0]
+            for _ in range(num_permutations)
+        ]
+    )
 
     rank = bisect_right(sorted(surrogate), corr_obs)
     pvalue = min(rank, num_permutations - rank) / num_permutations * 2
@@ -55,6 +58,7 @@ def _corr_test_base(
         "H0": f"There is no {test_name.lower()} correlation between the two variables",
     }
 
+
 def corr_test_spearman(
     data1: np.ndarray,
     data2: np.ndarray,
@@ -62,7 +66,16 @@ def corr_test_spearman(
     num_permutations: int = 1_000,
     seed: int = 42,
 ) -> Dict[str, Any]:
-    return _corr_test_base(data1, data2, only_significant, num_permutations, seed, stats.spearmanr, "Spearman")
+    return _corr_test_base(
+        data1,
+        data2,
+        only_significant,
+        num_permutations,
+        seed,
+        stats.spearmanr,
+        "Spearman",
+    )
+
 
 def corr_test_pearson(
     data1: np.ndarray,
@@ -71,7 +84,16 @@ def corr_test_pearson(
     num_permutations: int = 1_000,
     seed: int = 42,
 ) -> Dict[str, Any]:
-    return _corr_test_base(data1, data2, only_significant, num_permutations, seed, stats.pearsonr, "Pearson")
+    return _corr_test_base(
+        data1,
+        data2,
+        only_significant,
+        num_permutations,
+        seed,
+        stats.pearsonr,
+        "Pearson",
+    )
+
 
 def corr_test(
     data1: np.ndarray,
@@ -111,11 +133,14 @@ def corr_test(
     >>> results = corr_test(xx, yy, test="pearson")
     """
     if test == "spearman":
-        return corr_test_spearman(data1, data2, only_significant, num_permutations, seed)
+        return corr_test_spearman(
+            data1, data2, only_significant, num_permutations, seed
+        )
     elif test == "pearson":
         return corr_test_pearson(data1, data2, only_significant, num_permutations, seed)
     else:
         raise ValueError("Invalid test type. Choose 'pearson' or 'spearman'.")
+
 
 if __name__ == "__main__":
     xx = np.array([3, 4, 4, 5, 7, 8, 10, 12, 13, 15])

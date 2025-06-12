@@ -1,7 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+<<<<<<< HEAD
+# Timestamp: "2025-06-09 20:21:41 (ywatanabe)"
+# File: /ssh:ywatanabe@sp:/home/ywatanabe/proj/.claude-worktree/mngs_repo/src/mngs/plt/_subplots/_AxesWrapper.py
+=======
 # Timestamp: "2025-05-19 15:36:54 (ywatanabe)"
 # File: /ssh:ywatanabe@sp:/home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxesWrapper.py
+>>>>>>> origin/main
 # ----------------------------------------
 import os
 __FILE__ = (
@@ -21,7 +26,8 @@ class AxesWrapper:
         self._fig_mngs = fig_mngs
         self._axes_mngs = axes_mngs
 
-    def get_figure(self):
+    def get_figure(self, root=True):
+        """Get the figure, compatible with matplotlib 3.8+"""
         return self._fig_mngs
 
     def __dir__(self):
@@ -75,12 +81,23 @@ class AxesWrapper:
 
     def __getitem__(self, index):
         subset = self._axes_mngs[index]
+<<<<<<< HEAD
+        # Handle slice or numpy array result (when accessing row/column)
+        if isinstance(subset, (slice, type(self._axes_mngs))):
+            if hasattr(subset, "ndim") and subset.ndim > 0:
+                return AxesWrapper(self._fig_mngs, subset)
+=======
         if isinstance(subset, np.ndarray):
             return AxesWrapper(self._fig_mngs, subset)
+>>>>>>> origin/main
         return subset
 
+    def __setitem__(self, index, value):
+        """Support item assignment for axes[row, col] = new_axis operations."""
+        self._axes_mngs[index] = value
+
     def __iter__(self):
-        return iter(self._axes_mngs.flat)
+        return iter(self._axes_mngs)
 
     def __len__(self):
         return self._axes_mngs.size
@@ -135,6 +152,16 @@ class AxesWrapper:
     def shape(self):
         return self._axes_mngs.shape
 
+<<<<<<< HEAD
+    @property
+    def flat(self):
+        """Return a flattened iterator over all axes, mimicking numpy behavior."""
+        return self._axes_mngs.flat
+
+    def flatten(self):
+        """Return a flattened numpy array which includes axis wrappers"""
+        return self._axes_mngs.flat
+=======
     def flatten(self):
         """Return a flattened array of all axes in the AxesWrapper.
 
@@ -153,6 +180,7 @@ class AxesWrapper:
             axes_array = axes.flatten()
         """
         return np.array([ax for ax in self._axes_mngs.flat])
+>>>>>>> origin/main
 
     def export_as_csv(self):
         dfs = []

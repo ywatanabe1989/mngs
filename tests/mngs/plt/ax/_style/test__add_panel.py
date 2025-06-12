@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/ax/_adjust/test__add_panel.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./tests/mngs/plt/ax/_adjust/test__add_panel.py"
-)
+
+__FILE__ = "./tests/mngs/plt/ax/_adjust/test__add_panel.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -60,9 +59,7 @@ class TestMainFunctionality:
         # Test with custom width and height
         tgt_width_mm = 50
         tgt_height_mm = 30
-        fig, ax = add_panel(
-            tgt_width_mm=tgt_width_mm, tgt_height_mm=tgt_height_mm
-        )
+        fig, ax = add_panel(tgt_width_mm=tgt_width_mm, tgt_height_mm=tgt_height_mm)
 
         # Calculate expected dimensions
         MM_TO_INCH_FACTOR = 1 / 25.4
@@ -135,9 +132,8 @@ class TestMainFunctionality:
         # Check saved file
         ACTUAL_SAVE_DIR = __file__.replace(".py", "_out")
         actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
-        assert os.path.exists(
-            actual_spath
-        ), f"Failed to save figure to {spath}"
+        assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+
 
 if __name__ == "__main__":
     import os
@@ -160,29 +156,29 @@ if __name__ == "__main__":
 # )
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
-# 
+#
 # # Time-stamp: "2024-02-03 15:34:08 (ywatanabe)"
-# 
+#
 # import matplotlib.pyplot as plt
 # from mngs.decorators import deprecated
-# 
-# 
+#
+#
 # def add_panel(tgt_width_mm=40, tgt_height_mm=None):
 #     """Creates a fixed-size ax figure for panels."""
-# 
+#
 #     H_TO_W_RATIO = 0.7
 #     MM_TO_INCH_FACTOR = 1 / 25.4
-# 
+#
 #     if tgt_height_mm is None:
 #         tgt_height_mm = H_TO_W_RATIO * tgt_width_mm
-# 
+#
 #     # Convert target dimensions from millimeters to inches
 #     tgt_width_in = tgt_width_mm * MM_TO_INCH_FACTOR
 #     tgt_height_in = tgt_height_mm * MM_TO_INCH_FACTOR
-# 
+#
 #     # Create a figure with the specified dimensions
 #     fig = plt.figure(figsize=(tgt_width_in * 2, tgt_height_in * 2))
-# 
+#
 #     # Calculate the position and size of the axes in figure units (0 to 1)
 #     left = (fig.get_figwidth() - tgt_width_in) / 2 / fig.get_figwidth()
 #     bottom = (fig.get_figheight() - tgt_height_in) / 2 / fig.get_figheight()
@@ -194,15 +190,15 @@ if __name__ == "__main__":
 #             tgt_height_in / fig.get_figheight(),
 #         ]
 #     )
-# 
+#
 #     return fig, ax
-# 
-# 
+#
+#
 # @deprecated("Use add_panel instead")
 # def panel(tgt_width_mm=40, tgt_height_mm=None):
 #     return add_panel(tgt_width_mm=40, tgt_height_mm=None)
-# 
-# 
+#
+#
 # if __name__ == "__main__":
 #     # Example usage:
 #     fig, ax = panel(tgt_width_mm=40, tgt_height_mm=40 * 0.7)
@@ -210,7 +206,7 @@ if __name__ == "__main__":
 #     ax.scatter([1, 2, 3], [4, 5, 6])
 #     # ... compatible with other ax plotting methods as well
 #     plt.show()
-# 
+#
 # # EOF
 # --------------------------------------------------------------------------------
 # End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/plt/ax/_style/_add_panel.py

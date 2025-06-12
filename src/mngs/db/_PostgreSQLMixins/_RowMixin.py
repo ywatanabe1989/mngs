@@ -9,11 +9,18 @@ from typing import List, Optional
 import pandas as pd
 import psycopg2
 
+
 class _RowMixin:
-    def get_rows(self, table_name: str, columns: List[str] = None,
-                 where: str = None, order_by: str = None,
-                 limit: Optional[int] = None, offset: Optional[int] = None,
-                 return_as: str = "dataframe"):
+    def get_rows(
+        self,
+        table_name: str,
+        columns: List[str] = None,
+        where: str = None,
+        order_by: str = None,
+        limit: Optional[int] = None,
+        offset: Optional[int] = None,
+        return_as: str = "dataframe",
+    ):
         try:
             if columns is None:
                 columns_str = "*"
@@ -63,5 +70,6 @@ class _RowMixin:
 
         except (Exception, psycopg2.Error) as err:
             raise ValueError(f"Failed to get row count: {err}")
+
 
 # EOF

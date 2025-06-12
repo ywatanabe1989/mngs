@@ -40,16 +40,16 @@ def cache(id, *args):
     --------
     >>> import mngs
     >>> import numpy as np
-    >>> 
+    >>>
     >>> # Variables to cache
     >>> var1 = "x"
     >>> var2 = 1
     >>> var3 = np.ones(10)
-    >>> 
+    >>>
     >>> # Saving
     >>> var1, var2, var3 = mngs.io.cache("my_id", "var1", "var2", "var3")
     >>> print(var1, var2, var3)
-    >>> 
+    >>>
     >>> # Loading when not all variables are defined and the id exists
     >>> del var1, var2, var3
     >>> var1, var2, var3 = mngs.io.cache("my_id", "var1", "var2", "var3")
@@ -78,9 +78,7 @@ def cache(id, *args):
                 loaded_data = pickle.load(f)
             return tuple(loaded_data[arg] for arg in args)
         else:
-            raise ValueError(
-                "Cache file not found and not all variables are defined."
-            )
+            raise ValueError("Cache file not found and not all variables are defined.")
 
 
 # Usage example
@@ -101,4 +99,3 @@ if __name__ == "__main__":
     del var1, var2, var3
     var1, var2, var3 = mngs.io.cache("my_id", "var1", "var2", "var3")
     print(var1, var2, var3)
-

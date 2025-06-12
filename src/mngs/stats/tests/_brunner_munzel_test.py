@@ -20,8 +20,19 @@ from scipy import stats
 import pandas as pd
 import xarray as xr
 import torch
-from ...types import List, Tuple, Dict, Any, Union, Sequence, Literal, Iterable, ArrayLike
+from ...types import (
+    List,
+    Tuple,
+    Dict,
+    Any,
+    Union,
+    Sequence,
+    Literal,
+    Iterable,
+    ArrayLike,
+)
 from ...decorators import numpy_fn
+
 
 @numpy_fn
 def brunner_munzel_test(
@@ -66,9 +77,7 @@ def brunner_munzel_test(
     n1, n2 = len(x1), len(x2)
 
     if n1 == 0 or n2 == 0:
-        raise ValueError(
-            "Input arrays must not be empty after removing NaN values"
-        )
+        raise ValueError("Input arrays must not be empty after removing NaN values")
 
     R = stats.rankdata(np.concatenate([x1, x2]))
     R1, R2 = R[:n1], R[n1:]
@@ -85,18 +94,10 @@ def brunner_munzel_test(
         dof = (n1 * var1 + n2 * var2) ** 2 / (
             (n1 * var1) ** 2 / (n1 - 1) + (n2 * var2) ** 2 / (n2 - 1)
         )
-        c = (
-            stats.t.cdf(abs(w_statistic), dof)
-            if not np.isinf(w_statistic)
-            else 0.0
-        )
+        c = stats.t.cdf(abs(w_statistic), dof) if not np.isinf(w_statistic) else 0.0
     else:
         dof = np.nan
-        c = (
-            stats.norm.cdf(abs(w_statistic))
-            if not np.isinf(w_statistic)
-            else 0.0
-        )
+        c = stats.norm.cdf(abs(w_statistic)) if not np.isinf(w_statistic) else 0.0
 
     p_value = min(c, 1.0 - c) * 2.0
     effsize = (r2_mean - r1_mean) / (n1 + n2) + 0.5

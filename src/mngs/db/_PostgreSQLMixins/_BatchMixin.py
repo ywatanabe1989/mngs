@@ -3,21 +3,29 @@
 # Timestamp: "2025-02-27 22:14:16 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_PostgreSQLMixins/_BatchMixin.py
 
-THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQLMixins/_BatchMixin.py"
+THIS_FILE = (
+    "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQLMixins/_BatchMixin.py"
+)
 
 from typing import List, Any, Optional, Dict, Union
 import pandas as pd
 from .._BaseMixins._BaseBatchMixin import _BaseBatchMixin
 
+
 class _BatchMixin(_BaseBatchMixin):
-    def insert_many(self, table: str, records: List[Dict[str, Any]], batch_size: Optional[int] = None) -> None:
+    def insert_many(
+        self,
+        table: str,
+        records: List[Dict[str, Any]],
+        batch_size: Optional[int] = None,
+    ) -> None:
         if not records:
             return
 
         query = self._prepare_insert_query(table, records[0])
         if batch_size and batch_size > 0:
             for i in range(0, len(records), batch_size):
-                batch = records[i:i + batch_size]
+                batch = records[i : i + batch_size]
                 parameters = self._prepare_batch_parameters(batch)
                 self.executemany(query, parameters)
         else:
@@ -38,11 +46,13 @@ class _BatchMixin(_BaseBatchMixin):
         columns = list(records[0].keys())
         return [tuple(record[col] for col in columns) for record in records]
 
-    def dataframe_to_sql(self, df: pd.DataFrame, table: str, if_exists: str = 'fail') -> None:
-        if if_exists not in ['fail', 'replace', 'append']:
+    def dataframe_to_sql(
+        self, df: pd.DataFrame, table: str, if_exists: str = "fail"
+    ) -> None:
+        if if_exists not in ["fail", "replace", "append"]:
             raise ValueError("if_exists must be one of 'fail', 'replace', or 'append'")
 
-        if if_exists == 'replace':
+        if if_exists == "replace":
             self.execute(f"DROP TABLE IF EXISTS {table}")
             # Create table based on DataFrame schema
             columns = []
@@ -52,20 +62,21 @@ class _BatchMixin(_BaseBatchMixin):
             columns_str = ", ".join(columns)
             self.execute(f"CREATE TABLE {table} ({columns_str})")
 
-        records = df.to_dict('records')
+        records = df.to_dict("records")
         self.insert_many(table, records)
 
     def _map_dtype_to_postgres(self, dtype) -> str:
         dtype_str = str(dtype)
-        if 'int' in dtype_str:
-            return 'INTEGER'
-        elif 'float' in dtype_str:
-            return 'REAL'
-        elif 'datetime' in dtype_str:
-            return 'TIMESTAMP'
-        elif 'bool' in dtype_str:
-            return 'BOOLEAN'
+        if "int" in dtype_str:
+            return "INTEGER"
+        elif "float" in dtype_str:
+            return "REAL"
+        elif "datetime" in dtype_str:
+            return "TIMESTAMP"
+        elif "bool" in dtype_str:
+            return "BOOLEAN"
         else:
-            return 'TEXT'
+            return "TEXT"
+
 
 # EOF

@@ -6,12 +6,12 @@
 """mngs.dsp.wavelet function"""
 
 
-from ..decorators import batch_fn, torch_fn
+from ..decorators import batch_fn, signal_fn
 from ..nn._Wavelet import Wavelet
 
 
 # Functions
-@torch_fn
+@signal_fn
 @batch_fn
 def wavelet(
     x,
@@ -21,11 +21,7 @@ def wavelet(
     device="cuda",
     batch_size=32,
 ):
-    m = (
-        Wavelet(fs, freq_scale=freq_scale, out_scale="linear")
-        .to(device)
-        .eval()
-    )
+    m = Wavelet(fs, freq_scale=freq_scale, out_scale="linear").to(device).eval()
     pha, amp, freqs = m(x.to(device))
 
     if out_scale == "log":
@@ -36,7 +32,7 @@ def wavelet(
     return pha, amp, freqs
 
 
-# @torch_fn
+# @signal_fn
 # def wavelet(
 #     x,
 #     fs,
@@ -45,7 +41,7 @@ def wavelet(
 #     device="cuda",
 #     batch_size=32,
 # ):
-#     @torch_fn
+#     @signal_fn
 #     def _wavelet(
 #         x,
 #         fs,
@@ -129,9 +125,7 @@ if __name__ == "__main__":
     import numpy as np
 
     # Start
-    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
-        sys, plt, agg=True
-    )
+    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt, agg=True)
 
     # Parameters
     FS = 512

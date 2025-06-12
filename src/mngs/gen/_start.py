@@ -1,7 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+<<<<<<< HEAD
+# Timestamp: "2025-06-08 13:00:20 (ywatanabe)"
+# File: /ssh:ywatanabe@sp:/home/ywatanabe/proj/.claude-worktree/mngs_repo/src/mngs/gen/_start.py
+=======
 # Timestamp: "2025-05-19 09:02:56 (ywatanabe)"
 # File: /ssh:ywatanabe@sp:/home/ywatanabe/proj/mngs_repo/src/mngs/gen/_start.py
+>>>>>>> origin/main
 # ----------------------------------------
 import os
 __FILE__ = (
@@ -210,7 +215,7 @@ def start(
     # font_size_legend: int = 6,
     hide_top_right_spines: bool = True,
     alpha: float = 0.9,
-    line_width: float = 0.5,
+    line_width: float = 1.0,
     clear_logs: bool = False,
     verbose: bool = True,
 ) -> Tuple[DotDict, Any, Any, Any, Optional[Dict[str, Any]]]:
@@ -273,13 +278,27 @@ def start(
         if file:
             caller_file = file
         else:
+<<<<<<< HEAD
+            THIS_FILE = inspect.stack()[1].filename
+            if "ipython" in THIS_FILE:
+                THIS_FILE = f"/tmp/{_os.getenv('USER')}.py"
+=======
             caller_file = inspect.stack()[1].filename
             if "ipython" in __file__:
                 caller_file = f"/tmp/{_os.getenv('USER')}.py"
+>>>>>>> origin/main
+
+        # Convert to absolute path if relative
+        if not _os.path.isabs(THIS_FILE):
+            THIS_FILE = _os.path.abspath(THIS_FILE)
 
         # Define sdir
         sdir = clean_path(
+<<<<<<< HEAD
+            _os.path.splitext(THIS_FILE)[0] + f"_out/RUNNING/{ID}/"
+=======
             _os.path.splitext(caller_file)[0] + f"_out/RUNNING/{ID}/"
+>>>>>>> origin/main
         )
 
         # Optional
@@ -287,7 +306,11 @@ def start(
             sdir = sdir[:-1] + f"-{sdir_suffix}/"
 
     if clear_logs:
+<<<<<<< HEAD
+        _clear_python_log_dir(sdir)
+=======
         _clear_python_log_dir(sdir + caller_file + "/")
+>>>>>>> origin/main
     _os.makedirs(sdir, exist_ok=True)
     relative_sdir = _simplify_relative_path(sdir)
     ########################################
@@ -341,7 +364,11 @@ def start(
         structure = analyze_code_flow(file)
         _printc(structure)
 
-    return CONFIGS, sys.stdout, sys.stderr, plt, CC
+    # Return appropriate values based on whether sys was provided
+    if sys is not None:
+        return CONFIGS, sys.stdout, sys.stderr, plt, CC
+    else:
+        return CONFIGS, None, None, plt, CC
 
 
 def _simplify_relative_path(sdir: str) -> str:

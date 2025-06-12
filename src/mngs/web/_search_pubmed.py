@@ -32,6 +32,8 @@ import pandas as pd
 import requests
 
 """Functions & Classes"""
+
+
 def _search_pubmed(query: str, retmax: int = 300) -> Dict[str, Any]:
     try:
         base_url = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
@@ -127,9 +129,7 @@ def _parse_abstract_xml(xml_text: str) -> Dict[str, tuple]:
     for article in root.findall(".//PubmedArticle"):
         pmid = article.find(".//PMID").text
         abstract_element = article.find(".//Abstract/AbstractText")
-        abstract = (
-            abstract_element.text if abstract_element is not None else ""
-        )
+        abstract = abstract_element.text if abstract_element is not None else ""
 
         # DOI
         doi_element = article.find(".//ArticleId[@IdType='doi']")
@@ -173,9 +173,7 @@ def _get_citation(pmid: str) -> str:
 def get_crossref_metrics(doi: str) -> Dict[str, Any]:
     """Get article metrics from CrossRef using DOI."""
     base_url = "https://api.crossref.org/works/"
-    headers = {
-        "User-Agent": "mailto:your.email@example.com"
-    }  # Replace with your email
+    headers = {"User-Agent": "mailto:your.email@example.com"}  # Replace with your email
 
     response = requests.get(f"{base_url}{doi}", headers=headers)
     if response.ok:
@@ -222,11 +220,7 @@ def save_bibtex(
     mngs.str.printc(f"Saved to: {str(bibtex_file)}", c="yellow")
 
 
-
-
-def format_bibtex(
-    paper: Dict[str, Any], pmid: str, abstract_data: tuple
-) -> str:
+def format_bibtex(paper: Dict[str, Any], pmid: str, abstract_data: tuple) -> str:
     abstract, keywords, doi = abstract_data
 
     # Get CrossRef and Scimago metrics
@@ -248,9 +242,7 @@ def format_bibtex(
 
     # Title words
     title_words = title.split()
-    first_title_word = "".join(
-        c.lower() for c in title_words[0] if c.isalnum()
-    )
+    first_title_word = "".join(c.lower() for c in title_words[0] if c.isalnum())
     second_title_word = (
         "".join(c.lower() for c in title_words[1] if c.isalnum())
         if len(title_words) > 1
@@ -289,9 +281,7 @@ async def fetch_async(
         return {}
 
 
-async def batch__fetch_details(
-    pmids: List[str], batch_size: int = 20
-) -> List[Dict]:
+async def batch__fetch_details(pmids: List[str], batch_size: int = 20) -> List[Dict]:
     """Fetches details for multiple PMIDs concurrently.
 
     Parameters
@@ -327,13 +317,9 @@ async def batch__fetch_details(
                 "retmode": "json",
             }
 
+            tasks.append(fetch_async(session, f"{base_url}efetch.fcgi", efetch_params))
             tasks.append(
-                fetch_async(session, f"{base_url}efetch.fcgi", efetch_params)
-            )
-            tasks.append(
-                fetch_async(
-                    session, f"{base_url}esummary.fcgi", esummary_params
-                )
+                fetch_async(session, f"{base_url}esummary.fcgi", esummary_params)
             )
 
         results = await asyncio.gather(*tasks)
@@ -368,10 +354,7 @@ def search_pubmed(query: str, n_entries: int = 10) -> int:
 
             if isinstance(xml_response, str):
                 abstracts = _parse_abstract_xml(xml_response)
-                if (
-                    isinstance(json_response, dict)
-                    and "result" in json_response
-                ):
+                if isinstance(json_response, dict) and "result" in json_response:
                     details = json_response["result"]
                     save_bibtex(details, abstracts, output_file)
 
@@ -447,7 +430,6 @@ def run_main() -> None:
         message="",
         exit_status=exit_status,
     )
-
 
 
 if __name__ == "__main__":

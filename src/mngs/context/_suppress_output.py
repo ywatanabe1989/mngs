@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/context/_suppress_output.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/context/_suppress_output.py"
-)
+
+__FILE__ = "./src/mngs/context/_suppress_output.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 

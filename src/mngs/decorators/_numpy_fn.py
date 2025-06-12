@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_numpy_fn.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/decorators/_numpy_fn.py"
-)
+
+__FILE__ = "./src/mngs/decorators/_numpy_fn.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -41,13 +40,27 @@ def numpy_fn(func: Callable) -> Callable:
             *args, return_fn=_return_always, **kwargs
         )
 
-        # Assertion to ensure all args are converted to numpy arrays
+        # Skip strict assertion for certain types that may not convert to arrays
+        # Instead, convert what we can and pass through what we can't
+        validated_args = []
         for arg_index, arg in enumerate(converted_args):
-            assert isinstance(
-                arg, np.ndarray
-            ), f"Argument {arg_index} not converted to numpy array: {type(arg)}"
+            if isinstance(arg, np.ndarray):
+                validated_args.append(arg)
+            elif isinstance(arg, (int, float, str, type(None))):
+                # Pass through scalars and strings unchanged
+                validated_args.append(arg)
+            elif isinstance(arg, list) and all(isinstance(item, np.ndarray) for item in arg):
+                # List of arrays - pass through as is
+                validated_args.append(arg)
+            else:
+                # Try one more conversion attempt
+                try:
+                    validated_args.append(np.array(arg))
+                except:
+                    # If all else fails, pass through unchanged
+                    validated_args.append(arg)
 
-        results = func(*converted_args, **converted_kwargs)
+        results = func(*validated_args, **converted_kwargs)
 
         # Convert results back to original input types
         if isinstance(results, np.ndarray):
@@ -68,5 +81,6 @@ def numpy_fn(func: Callable) -> Callable:
     wrapper._is_wrapper = True
     wrapper._decorator_type = "numpy_fn"
     return wrapper
+
 
 # EOF

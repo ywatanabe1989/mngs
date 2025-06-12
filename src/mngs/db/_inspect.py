@@ -13,9 +13,6 @@ from typing import Any, Dict, List, Optional, Tuple
 # /mnt/ssd/mngs_repo/src/mngs/db/_inspect.py
 
 
-
-
-
 class Inspector:
     def __init__(self, db_path: str):
         if not os.path.exists(db_path):
@@ -30,9 +27,7 @@ class Inspector:
         """
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
-            cursor.execute(
-                "SELECT name FROM sqlite_master WHERE type='table';"
-            )
+            cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
             return [table[0] for table in cursor.fetchall()]
 
     def get_table_info(
@@ -94,7 +89,9 @@ class Inspector:
             return columns, sample_data, total_rows
 
     def inspect(
-            self, table_names: Optional[List[str]] = None, verbose=True,
+        self,
+        table_names: Optional[List[str]] = None,
+        verbose=True,
     ) -> List[Dict[str, Any]]:
         import pandas as pd
 
@@ -110,15 +107,10 @@ class Inspector:
             meta["table_name"] = table_name
             meta["n_total_rows"] = total_rows
 
-
             sample_data = pd.DataFrame(
                 [
                     {
-                        col: (
-                            str(value)
-                            if not isinstance(value, bytes)
-                            else "<BLOB>"
-                        )
+                        col: (str(value) if not isinstance(value, bytes) else "<BLOB>")
                         for col, value in zip(column_names, row)
                     }
                     for row in rows
@@ -139,7 +131,9 @@ class Inspector:
         return data_tables
 
 
-def inspect(lpath_db: str, table_names: Optional[List[str]] = None, verbose: bool = True) -> None:
+def inspect(
+    lpath_db: str, table_names: Optional[List[str]] = None, verbose: bool = True
+) -> None:
     """
     Inspects the specified SQLite database.
 

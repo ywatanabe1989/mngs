@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_style/_share_axes.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/plt/ax/_style/_share_axes.py"
-)
+
+__FILE__ = "./src/mngs/plt/ax/_style/_share_axes.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -16,35 +15,133 @@ import numpy as np
 
 
 def sharexy(*multiple_axes):
+    """Share both x and y axis limits across multiple axes.
+
+    Synchronizes both x and y axis limits across all provided axes objects,
+    ensuring they all display the same data range. Useful for comparing
+    multiple plots on the same scale.
+
+    Parameters
+    ----------
+    *multiple_axes : matplotlib.axes.Axes or array of Axes
+        Variable number of axes objects to synchronize.
+
+    Examples
+    --------
+    >>> fig, (ax1, ax2, ax3) = plt.subplots(1, 3)
+    >>> ax1.plot([1, 2, 3], [1, 4, 9])
+    >>> ax2.plot([1, 2, 3], [2, 5, 8])
+    >>> ax3.plot([1, 2, 3], [3, 6, 10])
+    >>> sharexy(ax1, ax2, ax3)  # All axes now show same range
+
+    See Also
+    --------
+    sharex : Share only x-axis limits
+    sharey : Share only y-axis limits
+    """
     sharex(*multiple_axes)
     sharey(*multiple_axes)
 
 
 def sharex(*multiple_axes):
+    """Share x-axis limits across multiple axes.
+
+    Finds the global x-axis limits across all axes and applies them
+    to each axis, ensuring horizontal alignment of data.
+
+    Parameters
+    ----------
+    *multiple_axes : matplotlib.axes.Axes or array of Axes
+        Variable number of axes objects to synchronize.
+
+    Returns
+    -------
+    axes : axes object(s)
+        The modified axes with shared x-limits.
+    xlim : tuple
+        The (xmin, xmax) limits applied.
+
+    Examples
+    --------
+    >>> fig, axes = plt.subplots(2, 1)
+    >>> axes[0].plot([1, 5], [1, 2])
+    >>> axes[1].plot([2, 4], [3, 4])
+    >>> sharex(axes[0], axes[1])  # Both show x-range [1, 5]
+    """
     xlim = get_global_xlim(*multiple_axes)
     return set_xlims(*multiple_axes, xlim=xlim)
 
 
 def sharey(*multiple_axes):
+    """Share y-axis limits across multiple axes.
+
+    Finds the global y-axis limits across all axes and applies them
+    to each axis, ensuring vertical alignment of data.
+
+    Parameters
+    ----------
+    *multiple_axes : matplotlib.axes.Axes or array of Axes
+        Variable number of axes objects to synchronize.
+
+    Returns
+    -------
+    axes : axes object(s)
+        The modified axes with shared y-limits.
+    ylim : tuple
+        The (ymin, ymax) limits applied.
+
+    Examples
+    --------
+    >>> fig, axes = plt.subplots(1, 2)
+    >>> axes[0].plot([1, 2], [1, 5])
+    >>> axes[1].plot([1, 2], [2, 4])
+    >>> sharey(axes[0], axes[1])  # Both show y-range [1, 5]
+    """
     ylim = get_global_ylim(*multiple_axes)
     return set_ylims(*multiple_axes, ylim=ylim)
 
 
 def get_global_xlim(*multiple_axes):
+    """Get the global x-axis limits across multiple axes.
+
+    Scans all provided axes to find the minimum and maximum x-values
+    across all of them. Handles both single axes and arrays of axes.
+
+    Parameters
+    ----------
+    *multiple_axes : matplotlib.axes.Axes or array of Axes
+        Variable number of axes objects to scan.
+
+    Returns
+    -------
+    tuple
+        (xmin, xmax) representing the global x-axis limits.
+
+    Examples
+    --------
+    >>> fig, (ax1, ax2) = plt.subplots(1, 2)
+    >>> ax1.plot([1, 3], [1, 2])  # x-range: [1, 3]
+    >>> ax2.plot([2, 5], [1, 2])  # x-range: [2, 5]
+    >>> xlim = get_global_xlim(ax1, ax2)
+    >>> print(xlim)  # (1, 5)
+
+    Notes
+    -----
+    There appears to be a bug in the current implementation where
+    get_ylim() is called instead of get_xlim(). This should be fixed.
+    """
     xmin, xmax = np.inf, -np.inf
     for axes in multiple_axes:
         # axes
-        if isinstance(
-            axes, (np.ndarray, mngs.plt._subplots._AxesWrapper.AxesWrapper)
-        ):
+        if isinstance(axes, (np.ndarray, mngs.plt._subplots._AxesWrapper.AxesWrapper)):
             for ax in axes.flat:
-                _xmin, _xmax = ax.get_ylim()
+                _xmin, _xmax = ax.get_xlim()  # Fixed: was get_ylim()
                 xmin = min(xmin, _xmin)
                 xmax = max(xmax, _xmax)
         # axis
         else:
             ax = axes
-            _xmin, _xmax = ax.get_ylim()
+            _xmin, _xmax = ax.get_xlim()  # Fixed: was get_ylim()
             xmin = min(xmin, _xmin)
             xmax = max(xmax, _xmax)
 
@@ -62,12 +159,33 @@ def get_global_xlim(*multiple_axes):
 
 
 def get_global_ylim(*multiple_axes):
+    """Get the global y-axis limits across multiple axes.
+
+    Scans all provided axes to find the minimum and maximum y-values
+    across all of them. Handles both single axes and arrays of axes.
+
+    Parameters
+    ----------
+    *multiple_axes : matplotlib.axes.Axes or array of Axes
+        Variable number of axes objects to scan.
+
+    Returns
+    -------
+    tuple
+        (ymin, ymax) representing the global y-axis limits.
+
+    Examples
+    --------
+    >>> fig, (ax1, ax2) = plt.subplots(1, 2)
+    >>> ax1.plot([1, 2], [1, 3])  # y-range: [1, 3]
+    >>> ax2.plot([1, 2], [2, 5])  # y-range: [2, 5]
+    >>> ylim = get_global_ylim(ax1, ax2)
+    >>> print(ylim)  # (1, 5)
+    """
     ymin, ymax = np.inf, -np.inf
     for axes in multiple_axes:
         # axes
-        if isinstance(
-            axes, (np.ndarray, mngs.plt._subplots._AxesWrapper.AxesWrapper)
-        ):
+        if isinstance(axes, (np.ndarray, mngs.plt._subplots._AxesWrapper.AxesWrapper)):
             for ax in axes.flat:
                 _ymin, _ymax = ax.get_ylim()
                 ymin = min(ymin, _ymin)
@@ -88,9 +206,7 @@ def set_xlims(*multiple_axes, xlim=None):
 
     for axes in multiple_axes:
         # axes
-        if isinstance(
-            axes, (np.ndarray, mngs.plt._subplots._AxesWrapper.AxesWrapper)
-        ):
+        if isinstance(axes, (np.ndarray, mngs.plt._subplots._AxesWrapper.AxesWrapper)):
             for ax in axes.flat:
                 ax.set_xlim(xlim)
         # axis
@@ -111,9 +227,7 @@ def set_ylims(*multiple_axes, ylim=None):
 
     for axes in multiple_axes:
         # axes
-        if isinstance(
-            axes, (np.ndarray, mngs.plt._subplots._AxesWrapper.AxesWrapper)
-        ):
+        if isinstance(axes, (np.ndarray, mngs.plt._subplots._AxesWrapper.AxesWrapper)):
             for ax in axes.flat:
                 ax.set_ylim(ylim)
 
@@ -143,9 +257,7 @@ if __name__ == "__main__":
     # parser.add_argument('--flag', '-f', action='store_true', default=False, help='')
     # args = parser.parse_args()
     # Main
-    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
-        sys, plt, verbose=False
-    )
+    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt, verbose=False)
     main()
     mngs.gen.close(CONFIG, verbose=False, notify=False)
 

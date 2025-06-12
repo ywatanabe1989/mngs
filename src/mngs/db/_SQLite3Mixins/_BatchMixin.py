@@ -29,6 +29,7 @@ from typing import Dict, List, Optional
 from .._BaseMixins._BaseBatchMixin import _BaseBatchMixin
 import sqlite3
 
+
 class _BatchMixin:
     """Batch operations functionality"""
 
@@ -55,12 +56,14 @@ class _BatchMixin:
             # Replace the problematic code block with:
             if columns:
                 valid_columns = [
-                    col for col in columns
+                    col
+                    for col in columns
                     if col in table_columns and col.isidentifier()
                 ]
             else:
                 valid_columns = [
-                    col for col in rows[0].keys()
+                    col
+                    for col in rows[0].keys()
                     if col in table_columns and col.isidentifier()
                 ]
 
@@ -100,7 +103,9 @@ class _BatchMixin:
                     row_params = [row[col] for col in valid_columns]
                     if where:
                         # Add any parameters needed for WHERE clause
-                        row_params.extend([row[col] for col in where.split() if col in row])
+                        row_params.extend(
+                            [row[col] for col in where.split() if col in row]
+                        )
                     params.append(tuple(row_params))
 
                 self.executemany(query, params)
@@ -116,10 +121,8 @@ class _BatchMixin:
                         if result:
                             filtered_rows.append(row)
                     except Exception as e:
-                        print(
-                            f"Warning: Where clause evaluation failed for row: {e}"
-                        )
-            rows = filtered_rows
+                        print(f"Warning: Where clause evaluation failed for row: {e}")
+                rows = filtered_rows
             schema = self.get_table_schema(table_name)
             table_columns = set(schema["name"])
             valid_columns = [col for col in rows[0].keys()]
@@ -134,9 +137,7 @@ class _BatchMixin:
                         if from_col not in row or row[from_col] is None:
                             if to_col in row:
                                 query = f"SELECT {from_col} FROM {ref_table} WHERE {to_col} = ?"
-                                result = self.execute(
-                                    query, (row[to_col],)
-                                ).fetchone()
+                                result = self.execute(query, (row[to_col],)).fetchone()
                                 if result:
                                     row[from_col] = result[0]
 
@@ -208,7 +209,9 @@ class _BatchMixin:
                 where=where,
             )
 
-    def delete_where(self, table_name: str, where: str, limit: Optional[int] = None) -> None:
+    def delete_where(
+        self, table_name: str, where: str, limit: Optional[int] = None
+    ) -> None:
         with self.transaction():
             if not where or not isinstance(where, str):
                 raise ValueError("Invalid where clause")

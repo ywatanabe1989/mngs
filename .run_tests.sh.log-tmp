@@ -1,172 +1,25 @@
-[0;30mLOG_PATH: /home/ywatanabe/proj/mngs_repo/.run_tests.sh.log[0m
-[0;30mLOG_PATH_TMP: /home/ywatanabe/proj/mngs_repo/.run_tests.sh.log-tmp[0m
+[0;30mLOG_PATH: /data/gpfs/projects/punim2354/ywatanabe/.claude-worktree/mngs_repo/.run_tests.sh.log[0m
+[0;30mLOG_PATH_TMP: /data/gpfs/projects/punim2354/ywatanabe/.claude-worktree/mngs_repo/.run_tests.sh.log-tmp[0m
 [0;30mTest run 1 of 1[0m
 [0;30mpytest.ini:
 [pytest]
-pythonpath = .
-testpaths =
-    ./tests/mngs/plt
-norecursedirs =
-    *.egg
-    .eggs
-    dist
-    build
-    docs
-    .tox
-    .git
-    __pycache__
-    .old
-python_files =
-    test_*.py
-addopts =
-    --import-mode=importlib
-    -q
-    --no-header
+testpaths = tests
+python_files = test_*.py
+python_classes = Test*
+python_functions = test_*
+addopts = 
+    -v
     --tb=short
-    --color=yes
-    -s
-env =
-    PYTHONPATH=.
-    TESTING=True[0m
-Sun May 18 07:42:24 PM AEST 2025
-[1m============================= test session starts ==============================[0m
-Testing with matplotlib axis...
-✓ Test completed with matplotlib axis
-
-Testing with mngs axis wrapper...
-Is valid axis: True
-✓ Test completed with axis wrapper
-
-Tests completed!
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/custom/test_csv_export_with_index_handling.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/custom/test_export_as_csv_custom.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/custom/test_export_as_csv_functionality.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/custom/test_export_as_csv_matplotlib.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/custom/test_export_as_csv_missing.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/custom/test_export_as_csv_seaborn.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/custom/test_matplotlib_compatibility.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/custom/test_mngs_io_consistency.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/custom/test_pip_install_latest.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/test___init__.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/decorators/test___init__.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/decorators/test__not_implemented.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/decorators/test__numpy_fn.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/decorators/test__pandas_fn.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/decorators/test__preserve_doc.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/decorators/test__timeout.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/decorators/test__torch_fn.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/decorators/test__wrap.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/decorators/test__xarray_fn.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/dict/test__safe_merge.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/gen/test__cache.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/io/test__glob.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/io/test__json2md.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/io/test__load.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/io/test__save.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/io/_save_modules/test__catboost.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/io/_save_modules/test__csv.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/io/_save_modules/test__hdf5.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/io/_save_modules/test__joblib.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/io/_save_modules/test__json.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/io/_save_modules/test__matlab.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/io/_save_modules/test__numpy.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/io/_save_modules/test__pickle.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/io/_save_modules/test__plotly.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/io/_save_modules/test__text.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/io/_save_modules/test__torch.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/io/_save_modules/test__yaml.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/path/test__clean.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/path/test__getsize.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/path/test__increment_version.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/path/test__split.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/pd/test__force_df.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/test__tpl.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/_subplots/test__AxesWrapper.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/_subplots/test__AxisWrapper.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/_subplots/test__FigWrapper.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/_subplots/test__export_as_csv.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__TrackingMixin.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test___init__.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test_export_to_csv.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/_subplots/_export_as_csv_formatters/test__formatters.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/ax/_plot/test__plot_circular_hist.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/ax/_plot/test__plot_conf_mat.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/ax/_plot/test__plot_cube.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/ax/_plot/test__plot_ecdf.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/ax/_plot/test__plot_fillv.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/ax/_plot/test__plot_heatmap.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/ax/_plot/test__plot_image.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/ax/_plot/test__plot_joyplot.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/ax/_plot/test__plot_raster.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/ax/_plot/test__plot_rectangle.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/ax/_plot/test__plot_shaded_line.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/ax/_plot/test__plot_statistical_shaded_line.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/ax/_plot/test__plot_violin.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/ax/_style/test__add_marginal_ax.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/ax/_style/test__add_panel.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/ax/_style/test__extend.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/ax/_style/test__force_aspect.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/ax/_style/test__format_label.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/ax/_style/test__hide_spines.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/ax/_style/test__map_ticks.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/ax/_style/test__rotate_labels.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/ax/_style/test__sci_note.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/ax/_style/test__set_n_ticks.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/ax/_style/test__set_size.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/ax/_style/test__set_supxyt.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/ax/_style/test__set_ticks.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/ax/_style/test__set_xyt.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/ax/_style/test__share_axes.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/ax/_style/test__shift.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/color/test__PARAMS.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/color/test__add_hue_col.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/color/test__colors.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/color/test__get_colors_from_cmap.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/color/test__interpolate.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/color/test__vizualize_colors.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/utils/test__configure_mpl.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/utils/test__im2grid.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/utils/test__is_valid_axis.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/utils/test__mk_colorbar.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/plt/utils/test__mk_patches.py
-/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/mngs/str/test__readable_bytes.py
-collected 412 items / 4 errors
-
-==================================== ERRORS ====================================
-[31m[1m__________ ERROR collecting tests/custom/test_export_as_csv_custom.py __________[0m
-[31mImportError while importing test module '/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/custom/test_export_as_csv_custom.py'.
-Hint: make sure your test modules/packages have valid Python names.
-Traceback:
-tests/custom/test_export_as_csv_custom.py:13: in <module>
-    from test_export_as_csv_utils import OUTPUT_DIR, verify_csv_export
-E   ModuleNotFoundError: No module named 'test_export_as_csv_utils'[0m
-[31m[1m________ ERROR collecting tests/custom/test_export_as_csv_matplotlib.py ________[0m
-[31mImportError while importing test module '/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/custom/test_export_as_csv_matplotlib.py'.
-Hint: make sure your test modules/packages have valid Python names.
-Traceback:
-tests/custom/test_export_as_csv_matplotlib.py:13: in <module>
-    from test_export_as_csv_utils import OUTPUT_DIR, verify_csv_export
-E   ModuleNotFoundError: No module named 'test_export_as_csv_utils'[0m
-[31m[1m_________ ERROR collecting tests/custom/test_export_as_csv_missing.py __________[0m
-[31mImportError while importing test module '/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/custom/test_export_as_csv_missing.py'.
-Hint: make sure your test modules/packages have valid Python names.
-Traceback:
-tests/custom/test_export_as_csv_missing.py:18: in <module>
-    from test_export_as_csv_utils import OUTPUT_DIR, verify_csv_export
-E   ModuleNotFoundError: No module named 'test_export_as_csv_utils'[0m
-[31m[1m_________ ERROR collecting tests/custom/test_export_as_csv_seaborn.py __________[0m
-[31mImportError while importing test module '/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/tests/custom/test_export_as_csv_seaborn.py'.
-Hint: make sure your test modules/packages have valid Python names.
-Traceback:
-tests/custom/test_export_as_csv_seaborn.py:13: in <module>
-    from test_export_as_csv_utils import OUTPUT_DIR, verify_csv_export
-E   ModuleNotFoundError: No module named 'test_export_as_csv_utils'[0m
-[36m[1m=========================== short test summary info ============================[0m
-[31mERROR[0m ../../../../../../home/ywatanabe/proj/mngs_repo/tests/custom/test_export_as_csv_custom.py
-[31mERROR[0m ../../../../../../home/ywatanabe/proj/mngs_repo/tests/custom/test_export_as_csv_matplotlib.py
-[31mERROR[0m ../../../../../../home/ywatanabe/proj/mngs_repo/tests/custom/test_export_as_csv_missing.py
-[31mERROR[0m ../../../../../../home/ywatanabe/proj/mngs_repo/tests/custom/test_export_as_csv_seaborn.py
-!!!!!!!!!!!!!!!!!!! Interrupted: 4 errors during collection !!!!!!!!!!!!!!!!!!!!
-[31m============================== [31m[1m4 errors[0m[31m in 17.96s[0m[31m ==============================[0m
+    --strict-markers
+    --disable-warnings
+    -p no:warnings
+markers =
+    slow: marks tests as slow (deselect with '-m "not slow"')
+    integration: marks tests as integration tests
+    unit: marks tests as unit tests
+    asyncio: marks tests as async tests
+filterwarnings =
+    ignore::DeprecationWarning
+    ignore::PendingDeprecationWarning
+    ignore::FutureWarning[0m
+Thu Jun 12 03:07:52 PM AEST 2025

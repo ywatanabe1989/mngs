@@ -1,5 +1,8 @@
-def SigMacro_toBlue():
-    """Print a macro for SigmaPlot (v12.0) that changes the color and style of the selected object. Please refer to the 'Automating Routine Tasks' section of the official documentation."""
+def sigmacro_to_blue():
+    """Print a macro for SigmaPlot (v12.0) that changes the color and style of the selected object.
+    
+    Please refer to the 'Automating Routine Tasks' section of the official documentation.
+    """
     print(
         """
 Option Explicit
@@ -153,3 +156,17 @@ ErrorHandler:
 End Sub
 """
     )
+
+
+# Backward compatibility alias
+import warnings
+
+
+def SigMacro_toBlue():
+    """Deprecated: Use sigmacro_to_blue() instead."""
+    warnings.warn(
+        "SigMacro_toBlue is deprecated, use sigmacro_to_blue() instead",
+        DeprecationWarning,
+        stacklevel=2
+    )
+    return sigmacro_to_blue()

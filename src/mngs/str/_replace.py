@@ -15,7 +15,10 @@ THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/str/_replace.py"
 from typing import Union, Dict, Optional
 from ..dict import DotDict as _DotDict
 
-def replace(string: str, replacements: Optional[Union[str, Dict[str, str]]] = None) -> str:
+
+def replace(
+    string: str, replacements: Optional[Union[str, Dict[str, str]]] = None
+) -> str:
     """Replace placeholders in the string with corresponding values from replacements.
 
     This function replaces placeholders in the format {key} within the input string
@@ -67,6 +70,7 @@ def replace(string: str, replacements: Optional[Union[str, Dict[str, str]]] = No
             result = result.replace(placeholder, str(value))
 
     return result
+
 
 # EOF
 

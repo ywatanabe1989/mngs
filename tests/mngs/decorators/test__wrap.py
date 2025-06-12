@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/tests/mngs/decorators/test__wrap.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./tests/mngs/decorators/test__wrap.py"
-)
+
+__FILE__ = "./tests/mngs/decorators/test__wrap.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -325,6 +324,7 @@ def test_wrap_manual_usage():
 # --------------------------------------------------------------------------------
 # --------------------------------------------------------------------------------
 
+
 def test_wrap_preserves_function_metadata():
     """Test that wrap preserves the original function's metadata."""
 
@@ -439,7 +439,7 @@ if __name__ == "__main__":
 # )
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
-# 
+#
 # def wrap(func):
 #     """Basic function wrapper that preserves function metadata.
 #     Usage:
@@ -454,17 +454,17 @@ if __name__ == "__main__":
 #     or when you want to ensure function metadata is preserved.
 #     """
 #     import functools
-# 
+#
 #     @functools.wraps(func)
 #     def wrapper(*args, **kwargs):
 #         return func(*args, **kwargs)
-# 
+#
 #     # Store reference to original function
 #     wrapper._original_func = func
 #     # Mark as a wrapper for detection
 #     wrapper._is_wrapper = True
 #     return wrapper
-# 
+#
 # # EOF
 # --------------------------------------------------------------------------------
 # End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/decorators/_wrap.py

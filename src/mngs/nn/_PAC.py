@@ -74,7 +74,6 @@ class PAC(nn.Module):
         self.dh_amp = mngs.gen.DimHandler()
 
     def forward(self, x):
-
         """x.shape: (batch_size, n_chs, seq_len) or (batch_size, n_chs, n_segments, seq_len)"""
 
         with torch.set_grad_enabled(bool(self.trainable)):
@@ -112,7 +111,7 @@ class PAC(nn.Module):
             pha = pha[..., edge_len:-edge_len].half()
             amp = amp[..., edge_len:-edge_len].half()
 
-            pac_or_amp_prob = self.Modulation_index(pha, amp)#.squeeze()
+            pac_or_amp_prob = self.Modulation_index(pha, amp)  # .squeeze()
             # print(pac_or_amp_prob.shape)
             # pac_or_amp_prob = pac_or_amp_prob.squeeze()
 
@@ -362,9 +361,7 @@ if __name__ == "__main__":
     plt.bar(xx, amp_prob[0])
     """
 
-    mngs.gen.print_block(
-        f"PAC calculation time: {ts.delta(-1,-2):.3f} sec", c="yellow"
-    )
+    mngs.gen.print_block(f"PAC calculation time: {ts.delta(-1,-2):.3f} sec", c="yellow")
     # 0.17 sec
     mngs.gen.print_block(
         f"x.shape: {xx.shape}"

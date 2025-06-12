@@ -164,6 +164,7 @@ def _get_gpu_usage(n_round: int = 1) -> Tuple[float, float]:
 
 if __name__ == "__main__":
     import mngs
+
     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt, verbose=False)
 
     usage = mngs.resource.get_processor_usages()

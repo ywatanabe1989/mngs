@@ -5,6 +5,7 @@
 
 import numpy as np
 
+
 def crop(sig_2d, window_length, overlap_factor=0.0, axis=-1, time=None):
     """
     Crops the input signal into overlapping windows of a specified length,
@@ -24,9 +25,7 @@ def crop(sig_2d, window_length, overlap_factor=0.0, axis=-1, time=None):
     if axis < 0:
         axis += sig_2d.ndim
     if axis >= sig_2d.ndim or axis < 0:
-        raise ValueError(
-            "Invalid axis. Axis out of range for sig_2d dimensions."
-        )
+        raise ValueError("Invalid axis. Axis out of range for sig_2d dimensions.")
 
     if time is not None:
         # Validate the length of the time vector against the signal's dimension
@@ -72,6 +71,7 @@ def crop(sig_2d, window_length, overlap_factor=0.0, axis=-1, time=None):
     else:
         return cropped_windows, cropped_times
 
+
 def main():
     import random
 
@@ -101,6 +101,7 @@ def main():
     end = start + window_pts
     assert np.allclose(sig2d[:, start:end], xx[i_seg])
 
+
 if __name__ == "__main__":
     # parser = argparse.ArgumentParser(description='')
     # import argparse
@@ -114,9 +115,7 @@ if __name__ == "__main__":
     # parser.add_argument('--flag', '-f', action='store_true', default=False, help='')
     # args = parser.parse_args()
     # Main
-    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
-        sys, plt, verbose=False
-    )
+    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt, verbose=False)
     main()
     mngs.gen.close(CONFIG, verbose=False, notify=False)
 

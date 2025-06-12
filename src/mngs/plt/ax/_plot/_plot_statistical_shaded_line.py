@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_plot_statistical_shaded_line.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/plt/ax/_plot_statistical_shaded_line.py"
-)
+
+__FILE__ = "./src/mngs/plt/ax/_plot_statistical_shaded_line.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -104,12 +103,17 @@ def plot_mean_std(axis, data, xx=None, sd=1, **kwargs):
     if "label" in kwargs and kwargs["label"]:
         kwargs["label"] = f"{kwargs['label']} (n={n_samples})"
 
-    return mngs_plt_plot_shaded_line(
-        axis, xx, y_lower, central, y_upper, **kwargs
-    )
+    return mngs_plt_plot_shaded_line(axis, xx, y_lower, central, y_upper, **kwargs)
 
 
 def plot_mean_ci(axis, data, xx=None, perc=95, **kwargs):
+<<<<<<< HEAD
+    """Plot mean line with confidence interval shading."""
+    assert isinstance(
+        axis, matplotlib.axes._axes.Axes
+    ), "First argument must be a matplotlib axis"
+    assert isinstance(perc, (int, float)), f"perc must be a number, got {type(perc)}"
+=======
     """
     Plot mean line with confidence interval shading.
     
@@ -135,6 +139,7 @@ def plot_mean_ci(axis, data, xx=None, perc=95, **kwargs):
     assert isinstance(
         perc, (int, float)
     ), f"perc must be a number, got {type(perc)}"
+>>>>>>> origin/main
     assert 0 <= perc <= 100, f"perc must be between 0 and 100, got {perc}"
     data = np.asarray(data)
     assert data.ndim <= 2, f"Data must be 1D or 2D, got {data.ndim}D"
@@ -167,9 +172,7 @@ def plot_mean_ci(axis, data, xx=None, perc=95, **kwargs):
     if "label" in kwargs and kwargs["label"]:
         kwargs["label"] = f"{kwargs['label']} (n={n_samples}, CI={perc}%)"
 
-    return mngs_plt_plot_shaded_line(
-        axis, xx, y_lower, central, y_upper, **kwargs
-    )
+    return mngs_plt_plot_shaded_line(axis, xx, y_lower, central, y_upper, **kwargs)
 
 
 def plot_median_iqr(axis, data, xx=None, **kwargs):
@@ -220,8 +223,7 @@ def plot_median_iqr(axis, data, xx=None, **kwargs):
     if "label" in kwargs and kwargs["label"]:
         kwargs["label"] = f"{kwargs['label']} (n={n_samples}, IQR)"
 
-    return mngs_plt_plot_shaded_line(
-        axis, xx, y_lower, central, y_upper, **kwargs
-    )
+    return mngs_plt_plot_shaded_line(axis, xx, y_lower, central, y_upper, **kwargs)
+
 
 # EOF

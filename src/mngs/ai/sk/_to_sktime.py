@@ -56,9 +56,7 @@ def to_sktime_df(X):
         Return:
         - dims (pandas.Series): A Series where each element is a pandas Series representing a univariate time series.
         """
-        return pd.Series(
-            [pd.Series(x[d], name=f"dim_{d}") for d in range(x.shape[0])]
-        )
+        return pd.Series([pd.Series(x[d], name=f"dim_{d}") for d in range(x.shape[0])])
 
     sktime_df = pd.DataFrame(
         [_format_a_sample_for_sktime(X[i]) for i in range(X.shape[0])]

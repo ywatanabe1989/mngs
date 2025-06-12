@@ -4,9 +4,8 @@
 # File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin.py"
-)
+
+__FILE__ = "./tests/mngs/plt/_subplots/_AxisWrapperMixins/test__SeabornMixin.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -81,9 +80,7 @@ def test_sns_heatmap():
     data = np.random.rand(10, 10)
     correlation_matrix = np.corrcoef(data)
     # Plot
-    ax.sns_heatmap(
-        correlation_matrix, annot=True, cmap="coolwarm", vmin=-1, vmax=1
-    )
+    ax.sns_heatmap(correlation_matrix, annot=True, cmap="coolwarm", vmin=-1, vmax=1)
     # Visualization
     ax.set_xyt("Features", "Features", "Seaborn Heatmap Test")
     # Saving
@@ -126,9 +123,7 @@ def test_sns_histplot():
             "value": np.concatenate(
                 [np.random.normal(0, 1, 1000), np.random.normal(4, 1, 500)]
             ),
-            "group": np.concatenate(
-                [np.repeat("A", 1000), np.repeat("B", 500)]
-            ),
+            "group": np.concatenate([np.repeat("A", 1000), np.repeat("B", 500)]),
         }
     )
     # Plot
@@ -155,9 +150,7 @@ def test_sns_kdeplot():
             "value": np.concatenate(
                 [np.random.normal(0, 1, 500), np.random.normal(3, 1, 500)]
             ),
-            "group": np.concatenate(
-                [np.repeat("A", 500), np.repeat("B", 500)]
-            ),
+            "group": np.concatenate([np.repeat("A", 500), np.repeat("B", 500)]),
         }
     )
     # Plot
@@ -251,9 +244,7 @@ def test_sns_stripplot():
         }
     )
     # Plot
-    ax.sns_stripplot(
-        data=data, x="group", y="value", jitter=True, palette="Set3"
-    )
+    ax.sns_stripplot(data=data, x="group", y="value", jitter=True, palette="Set3")
     # Visualization
     ax.set_xyt("Groups", "Values", "Seaborn Stripplot Test")
     # Saving

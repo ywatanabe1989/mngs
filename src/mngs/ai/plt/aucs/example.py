@@ -52,9 +52,7 @@ plt.rcParams["figure.figsize"] = (16 * scale, 9 * scale)
 fig_roc, metrics_roc = roc_auc(plt, y_test, predicted_proba, labels)
 fig_roc.show()
 ## Precision-Recall Curve
-fig_pre_rec, metrics_pre_rec = pre_rec_auc(
-    plt, y_test, predicted_proba, labels
-)
+fig_pre_rec, metrics_pre_rec = pre_rec_auc(plt, y_test, predicted_proba, labels)
 fig_pre_rec.show()
 
 #

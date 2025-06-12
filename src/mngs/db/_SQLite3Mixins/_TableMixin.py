@@ -15,6 +15,7 @@ from typing import Any, Dict, List, Union
 import pandas as pd
 from .._BaseMixins._BaseTableMixin import _BaseTableMixin
 
+
 class _TableMixin:
     """Table management functionality"""
 
@@ -33,10 +34,12 @@ class _TableMixin:
                 for col_name, col_type in columns.items():
                     column_defs.append(f"{col_name} {col_type}")
                     if "BLOB" in col_type.upper():
-                        column_defs.extend([
-                            f"{col_name}_dtype TEXT DEFAULT 'unknown'",
-                            f"{col_name}_shape TEXT DEFAULT 'unknown'",
-                        ])
+                        column_defs.extend(
+                            [
+                                f"{col_name}_dtype TEXT DEFAULT 'unknown'",
+                                f"{col_name}_shape TEXT DEFAULT 'unknown'",
+                            ]
+                        )
 
                 if foreign_keys:
                     for fk in foreign_keys:
@@ -98,7 +101,9 @@ class _TableMixin:
                 return
 
             try:
-                query = f"ALTER TABLE {table_name} ADD COLUMN {column_name} {column_type}"
+                query = (
+                    f"ALTER TABLE {table_name} ADD COLUMN {column_name} {column_type}"
+                )
                 if default_value is not None:
                     query += f" DEFAULT {default_value}"
                 self.execute(query)
@@ -173,5 +178,6 @@ class _TableMixin:
             }
         except sqlite3.Error as err:
             raise ValueError(f"Failed to get table size: {err}")
+
 
 # EOF

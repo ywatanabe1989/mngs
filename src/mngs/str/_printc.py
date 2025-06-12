@@ -13,6 +13,7 @@ THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/str/_printc.py"
 from ._color_text import color_text
 from pprint import pprint as _pprint
 
+
 def printc(message, c="blue", char="-", n=40):
     """Print a message surrounded by a character border.
 
@@ -50,5 +51,6 @@ def printc(message, c="blue", char="-", n=40):
         text = color_text(text, c)
 
     print(text)
+
 
 # EOF

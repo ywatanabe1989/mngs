@@ -3,6 +3,9 @@
 # Time-stamp: "2024-11-14 07:55:45 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/io/_load_modules/_optuna.py
 
+from ._yaml import _load_yaml
+
+
 def load_yaml_as_an_optuna_dict(fpath_yaml, trial):
     """
     Load a YAML file and convert it to an Optuna-compatible dictionary.
@@ -29,7 +32,7 @@ def load_yaml_as_an_optuna_dict(fpath_yaml, trial):
     ValueError
         If the YAML file contains invalid configuration for Optuna.
     """
-    _d = load(fpath_yaml)
+    _d = _load_yaml(fpath_yaml)
 
     for k, v in _d.items():
         dist = v["distribution"]
@@ -41,14 +44,10 @@ def load_yaml_as_an_optuna_dict(fpath_yaml, trial):
             _d[k] = trial.suggest_int(k, float(v["min"]), float(v["max"]))
 
         elif dist == "loguniform":
-            _d[k] = trial.suggest_loguniform(
-                k, float(v["min"]), float(v["max"])
-            )
+            _d[k] = trial.suggest_loguniform(k, float(v["min"]), float(v["max"]))
 
         elif dist == "intloguniform":
-            _d[k] = trial.suggest_int(
-                k, float(v["min"]), float(v["max"]), log=True
-            )
+            _d[k] = trial.suggest_int(k, float(v["min"]), float(v["max"]), log=True)
 
     return _d
 
@@ -107,7 +106,7 @@ def load_yaml_as_an_optuna_dict(fpath_yaml, trial):
     dict
         A dictionary with Optuna-compatible parameter suggestions.
     """
-    _d = load(fpath_yaml)
+    _d = _load_yaml(fpath_yaml)
 
     for k, v in _d.items():
 
@@ -120,14 +119,10 @@ def load_yaml_as_an_optuna_dict(fpath_yaml, trial):
             _d[k] = trial.suggest_int(k, float(v["min"]), float(v["max"]))
 
         elif dist == "loguniform":
-            _d[k] = trial.suggest_loguniform(
-                k, float(v["min"]), float(v["max"])
-            )
+            _d[k] = trial.suggest_loguniform(k, float(v["min"]), float(v["max"]))
 
         elif dist == "intloguniform":
-            _d[k] = trial.suggest_int(
-                k, float(v["min"]), float(v["max"]), log=True
-            )
+            _d[k] = trial.suggest_int(k, float(v["min"]), float(v["max"]), log=True)
 
     return _d
 

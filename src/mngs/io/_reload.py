@@ -53,14 +53,9 @@ def reload(module_or_func, verbose=False):
         # Attempt to reload its module.
         module_name = module_or_func.__module__
         if module_name not in sys.modules:
-            print(
-                f"Module {module_name} not found in sys.modules. Cannot reload."
-            )
+            print(f"Module {module_name} not found in sys.modules. Cannot reload.")
             return
-    elif (
-        hasattr(module_or_func, "__name__")
-        and module_or_func.__name__ in sys.modules
-    ):
+    elif hasattr(module_or_func, "__name__") and module_or_func.__name__ in sys.modules:
         # Otherwise, assume it's a module and try to get its name directly.
         module_name = module_or_func.__name__
     else:
@@ -81,4 +76,3 @@ def reload(module_or_func, verbose=False):
     except Exception as e:
         # Catch any other exceptions and print an error message.
         print(f"Failed to reload module {module_name}. Error: {e}")
-

@@ -10,11 +10,10 @@ from PIL import Image
 
 def _load_image(lpath: str, **kwargs) -> Any:
     """Load image file."""
-    if not any(
-        lpath.endswith(ext) for ext in [".jpg", ".png", ".tiff", ".tif"]
-    ):
+    supported_exts = [".jpg", ".jpeg", ".png", ".tiff", ".tif"]
+    if not any(lpath.lower().endswith(ext) for ext in supported_exts):
         raise ValueError("Unsupported image format")
-    return Image.open(lpath)
+    return Image.open(lpath, **kwargs)
 
 
 # EOF

@@ -11,6 +11,7 @@ from typing import List, Tuple
 import pandas as pd
 from .._BaseMixins._BaseQueryMixin import _BaseQueryMixin
 
+
 class _QueryMixin:
     """Query execution functionality"""
 
@@ -24,8 +25,10 @@ class _QueryMixin:
         if not self.cursor:
             raise ConnectionError("Database not connected")
 
-        if any(keyword in query.upper()
-               for keyword in ["INSERT", "UPDATE", "DELETE", "DROP", "CREATE", "ALTER"]):
+        if any(
+            keyword in query.upper()
+            for keyword in ["INSERT", "UPDATE", "DELETE", "DROP", "CREATE", "ALTER"]
+        ):
             self._check_writable()
 
         try:
@@ -40,8 +43,10 @@ class _QueryMixin:
         if not self.cursor:
             raise ConnectionError("Database not connected")
 
-        if any(keyword in query.upper()
-               for keyword in ["INSERT", "UPDATE", "DELETE", "DROP", "CREATE", "ALTER"]):
+        if any(
+            keyword in query.upper()
+            for keyword in ["INSERT", "UPDATE", "DELETE", "DROP", "CREATE", "ALTER"]
+        ):
             self._check_writable()
 
         try:

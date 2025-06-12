@@ -18,6 +18,7 @@ import numpy as np
 from .._mv_to_tmp import _mv_to_tmp
 
 
+
 def _save_listed_dfs_as_csv(
     listed_dfs,
     spath_csv,
@@ -40,9 +41,7 @@ def _save_listed_dfs_as_csv(
     if overwrite == True:
         _mv_to_tmp(spath_csv, L=2)
 
-    indi_suffix = (
-        np.arange(len(listed_dfs)) if indi_suffix is None else indi_suffix
-    )
+    indi_suffix = np.arange(len(listed_dfs)) if indi_suffix is None else indi_suffix
     for i, df in enumerate(listed_dfs):
         with open(spath_csv, mode="a") as f:
             f_writer = csv.writer(f)

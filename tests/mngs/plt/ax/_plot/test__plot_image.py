@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/ax/_plot/test__plot_image.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./tests/mngs/plt/ax/_plot/test__plot_image.py"
-)
+
+__FILE__ = "./tests/mngs/plt/ax/_plot/test__plot_image.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -105,9 +104,8 @@ class TestPlotImage:
         # Check saved file
         ACTUAL_SAVE_DIR = __file__.replace(".py", "_out")
         actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
-        assert os.path.exists(
-            actual_spath
-        ), f"Failed to save figure to {spath}"
+        assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+
 
 if __name__ == "__main__":
     import os
@@ -130,10 +128,10 @@ if __name__ == "__main__":
 # )
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
-# 
+#
 # import matplotlib
-# 
-# 
+#
+#
 # def plot_image(
 #     ax,
 #     arr_2d,
@@ -155,18 +153,18 @@ if __name__ == "__main__":
 #     """
 #     assert isinstance(ax, matplotlib.axes._axes.Axes)
 #     assert arr_2d.ndim == 2
-# 
+#
 #     if kwargs.get("xyz"):
 #         kwargs.pop("xyz")
-# 
+#
 #     # Transposes arr_2d for correct orientation
 #     arr_2d = arr_2d.T
-# 
+#
 #     # Cals the original ax.imshow() method on the transposed array
 #     im = ax.imshow(
 #         arr_2d, cmap=cmap, vmin=vmin, vmax=vmax, aspect=aspect, **kwargs
 #     )
-# 
+#
 #     # Color bar
 #     if cbar:
 #         fig = ax.get_figure()
@@ -175,12 +173,12 @@ if __name__ == "__main__":
 #         )
 #         if cbar_label:
 #             _cbar.set_label(cbar_label)
-# 
+#
 #     # Invert y-axis to match typical image orientation
 #     ax.invert_yaxis()
-# 
+#
 #     return ax
-# 
+#
 # # EOF
 # --------------------------------------------------------------------------------
 # End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/plt/ax/_plot/_plot_image.py

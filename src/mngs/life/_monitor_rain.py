@@ -19,9 +19,8 @@ except:
 """Functions & Classes"""
 API_KEY = "your_api_key"
 CITY = "your_city"
-API_URL = (
-    f"http://api.openweathermap.org/data/2.5/weather?q={CITY}&appid={API_KEY}"
-)
+API_URL = f"http://api.openweathermap.org/data/2.5/weather?q={CITY}&appid={API_KEY}"
+
 
 def check_rain():
     response = requests.get(API_URL)
@@ -37,12 +36,14 @@ def notify_rain():
         timeout=10,
     )
 
+
 def monitor_rain():
     while True:
         check_rain()
         time.sleep(300)  # Check every 5 minutes
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     monitor_rain()
 
 # EOF

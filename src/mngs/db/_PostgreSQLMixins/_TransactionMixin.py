@@ -3,10 +3,13 @@
 # Timestamp: "2025-02-27 22:15:42 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_PostgreSQLMixins/_TransactionMixin.py
 
-THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQLMixins/_TransactionMixin.py"
+THIS_FILE = (
+    "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQLMixins/_TransactionMixin.py"
+)
 
 import psycopg2
 from .._BaseMixins._BaseTransactionMixin import _BaseTransactionMixin
+
 
 class _TransactionMixin(_BaseTransactionMixin):
     def begin(self) -> None:
@@ -49,5 +52,6 @@ class _TransactionMixin(_BaseTransactionMixin):
     def _check_writable(self) -> None:
         if not self.writable:
             raise ValueError("Database is in read-only mode")
+
 
 # EOF

@@ -24,9 +24,7 @@ class Wavelet(nn.Module):
         super().__init__()
         self.register_buffer("dummy", torch.tensor(0))
         self.kernel = None
-        self.init_kernel(
-            samp_rate, kernel_size=kernel_size, freq_scale=freq_scale
-        )
+        self.init_kernel(samp_rate, kernel_size=kernel_size, freq_scale=freq_scale)
         self.out_scale = out_scale
 
     def forward(self, x):
@@ -77,9 +75,7 @@ class Wavelet(nn.Module):
 
         # Repeats freqs
         freqs = (
-            self.freqs.unsqueeze(0)
-            .unsqueeze(0)
-            .repeat(pha.shape[0], pha.shape[1], 1)
+            self.freqs.unsqueeze(0).unsqueeze(0).repeat(pha.shape[0], pha.shape[1], 1)
         )
 
         if self.out_scale == "log":
@@ -96,9 +92,7 @@ class Wavelet(nn.Module):
         self.freqs = torch.tensor(freqs).float().to(device)
 
     @staticmethod
-    def gen_morlet_to_nyquist(
-        samp_rate, kernel_size=None, freq_scale="linear"
-    ):
+    def gen_morlet_to_nyquist(samp_rate, kernel_size=None, freq_scale="linear"):
         """
         Generates Morlet wavelets for exponentially increasing frequency bands up to the Nyquist frequency.
 

@@ -4,9 +4,8 @@
 # File: /ssh:ywatanabe@sp:/home/ywatanabe/proj/mngs_repo/src/mngs/plt/utils/_configure_mpl.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/plt/utils/_configure_mpl.py"
-)
+
+__FILE__ = "./src/mngs/plt/utils/_configure_mpl.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -29,6 +28,8 @@ def configure_mpl(
     hide_top_right_spines=True,
     line_width=1.0,  # Increased from 0.5 for better visibility
     alpha=0.85,  # Adjusted for better contrast
+    enable_latex=True,  # Enable LaTeX rendering by default
+    latex_preamble=None,  # Custom LaTeX preamble
     verbose=False,
     **kwargs,
 ) -> Tuple[Any, Dict]:
@@ -60,8 +61,15 @@ def configure_mpl(
         Default line width, by default 1.0
     alpha : float, optional
         Color transparency, by default 0.85
+<<<<<<< HEAD
+    enable_latex : bool, optional
+        Whether to enable LaTeX text rendering, by default True
+    latex_preamble : str, optional
+        Custom LaTeX preamble for additional packages, by default None
+=======
     n_ticks : int, optional
         Number of ticks on each axis, by default 4
+>>>>>>> origin/main
     verbose : bool, optional
         Whether to print configuration details, by default False
 
@@ -76,9 +84,7 @@ def configure_mpl(
     # Ensure minimum sizes for different elements with better proportions
     title_size = max(base_size * 1.25, 10.0)  # Increased for better hierarchy
     label_size = max(base_size * 1.0, 9.0)  # Minimum 9pt for good readability
-    small_size = max(
-        base_size * 0.85, 8.0
-    )  # Increased ratio for better legibility
+    small_size = max(base_size * 0.85, 8.0)  # Increased ratio for better legibility
 
     # Colors
     RGBA = {
@@ -102,40 +108,112 @@ def configure_mpl(
         fig_size_mm[1] / 25.4 * fig_scale,
     )
 
+    # Prepare matplotlib configuration
+    mpl_config = {
+        # Resolution
+        "figure.dpi": dpi_display,
+        "savefig.dpi": dpi_save,
+        # Figure Size
+        "figure.figsize": figsize_inch,
+        # Font Sizes
+        "font.size": base_size,
+        "axes.titlesize": title_size,
+        "axes.labelsize": label_size,
+        "xtick.labelsize": small_size,
+        "ytick.labelsize": small_size,
+        "legend.fontsize": small_size,
+        # Auto Layout
+        "figure.autolayout": autolayout,
+        # Top and Right Axes
+        "axes.spines.top": not hide_top_right_spines,
+        "axes.spines.right": not hide_top_right_spines,
+        # Spine width
+        "axes.linewidth": 0.8,  # Slightly thicker axes lines
+        # Custom color cycle
+        "axes.prop_cycle": plt.cycler(color=list(RGBA_NORM_FOR_CYCLE.values())),
+        # Line
+        "lines.linewidth": line_width,
+        "lines.markersize": 6.0,  # Better default marker size
+        # Grid (if used)
+        "grid.linewidth": 0.6,
+        "grid.alpha": 0.3,
+    }
+    
+    # Configure LaTeX rendering if enabled with enhanced fallback
+    if enable_latex:
+        latex_success = False
+        try:
+            # Try to enable LaTeX rendering
+            test_config = {
+                "text.usetex": True,
+                "text.latex.preamble": latex_preamble or r"\usepackage{amsmath}\usepackage{amssymb}",
+                "font.family": "serif",
+                "font.serif": ["Computer Modern Roman"],
+                "mathtext.fontset": "cm",
+            }
+            
+            # Test LaTeX capability before applying
+            with plt.rc_context(test_config):
+                try:
+                    # Create a test figure to verify LaTeX works
+                    fig, ax = plt.subplots(figsize=(1, 1))
+                    ax.text(0.5, 0.5, r'$x^2 + y^2 = r^2$', usetex=True)
+                    fig.canvas.draw()  # Force rendering
+                    plt.close(fig)
+                    latex_success = True
+                except Exception as latex_error:
+                    plt.close(fig)
+                    if verbose:
+                        print(f"⚠️  LaTeX test render failed: {latex_error}")
+                    raise latex_error
+            
+            if latex_success:
+                mpl_config.update(test_config)
+                if verbose:
+                    print("✅ LaTeX rendering enabled and tested")
+                    
+        except Exception as e:
+            if verbose:
+                print(f"⚠️  LaTeX rendering failed, falling back to mathtext: {e}")
+                print("    This may be due to missing LaTeX fonts or Node.js conflicts")
+            
+            # Enhanced fallback to mathtext with better configuration
+            mpl_config.update({
+                "text.usetex": False,
+                "mathtext.default": "regular",
+                "font.family": "serif",
+                "mathtext.fontset": "cm",
+                "mathtext.fallback": "cm",  # Fallback font for missing symbols
+            })
+            
+            # Enable LaTeX fallback mode in the str module
+            try:
+                from mngs.str._latex_fallback import set_fallback_mode
+                set_fallback_mode("force_mathtext")
+                if verbose:
+                    print("📝 Enabled automatic LaTeX fallback mode")
+            except ImportError:
+                if verbose:
+                    print("⚠️  LaTeX fallback module not available")
+                    
+    else:
+        # Use mathtext only with enhanced configuration
+        mpl_config.update({
+            "text.usetex": False,
+            "mathtext.default": "regular",
+            "mathtext.fontset": "cm",
+            "mathtext.fallback": "cm",
+        })
+        
+        # Set fallback mode to mathtext
+        try:
+            from mngs.str._latex_fallback import set_fallback_mode
+            set_fallback_mode("force_mathtext")
+        except ImportError:
+            pass
+
     # Update Matplotlib configuration
-    plt.rcParams.update(
-        {
-            # Resolution
-            "figure.dpi": dpi_display,
-            "savefig.dpi": dpi_save,
-            # Figure Size
-            "figure.figsize": figsize_inch,
-            # Font Sizes
-            "font.size": base_size,
-            "axes.titlesize": title_size,
-            "axes.labelsize": label_size,
-            "xtick.labelsize": small_size,
-            "ytick.labelsize": small_size,
-            "legend.fontsize": small_size,
-            # Auto Layout
-            "figure.autolayout": autolayout,
-            # Top and Right Axes
-            "axes.spines.top": not hide_top_right_spines,
-            "axes.spines.right": not hide_top_right_spines,
-            # Spine width
-            "axes.linewidth": 0.8,  # Slightly thicker axes lines
-            # Custom color cycle
-            "axes.prop_cycle": plt.cycler(
-                color=list(RGBA_NORM_FOR_CYCLE.values())
-            ),
-            # Line
-            "lines.linewidth": line_width,
-            "lines.markersize": 6.0,  # Better default marker size
-            # Grid (if used)
-            "grid.linewidth": 0.6,
-            "grid.alpha": 0.3,
-        }
-    )
+    plt.rcParams.update(mpl_config)
 
     if verbose:
         print("\n" + "-" * 40)

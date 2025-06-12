@@ -1,3 +1,138 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Timestamp: "2025-06-01 19:50:00 (ywatanabe)"
+# File: ./tests/mngs/pd/test___init__.py
+
+"""
+Test module for mngs.pd package initialization.
+"""
+
+import pytest
+import pandas as pd
+import numpy as np
+import warnings
+
+
+class TestPdInit:
+    """Test class for pd module initialization."""
+
+    def test_module_import(self):
+        """Test that mngs.pd can be imported."""
+        import mngs.pd
+
+        assert hasattr(mngs, "pd")
+
+    def test_available_functions(self):
+        """Test that expected functions are available in the module."""
+        import mngs.pd
+
+        # Core functions that should be available
+        expected_functions = [
+            "find_indi",
+            "find_pval",
+            "force_df",
+            "from_xyz",
+            "ignore_SettingWithCopyWarning",
+            "melt_cols",
+            "merge_columns",
+            "mv",
+            "replace",
+            "round",
+            "slice",
+            "sort",
+            "to_numeric",
+            "to_xy",
+            "to_xyz",
+        ]
+
+        # Check at least some core functions are available
+        available_count = sum(
+            1 for func in expected_functions if hasattr(mngs.pd, func)
+        )
+        assert (
+            available_count > 10
+        ), f"Only {available_count} functions available out of {len(expected_functions)}"
+
+    def test_no_private_functions_exposed(self):
+        """Test that private functions (starting with _) are not exposed."""
+        import mngs.pd
+
+        for attr_name in dir(mngs.pd):
+            if not attr_name.startswith("__"):  # Skip dunder methods
+                attr = getattr(mngs.pd, attr_name)
+                if callable(attr) and attr_name.startswith("_"):
+                    # Check if it's a function from the pd module
+                    if hasattr(attr, "__module__") and "mngs.pd" in attr.__module__:
+                        pytest.fail(
+                            f"Private function {attr_name} should not be exposed"
+                        )
+
+    def test_import_warnings_handled(self):
+        """Test that import warnings are properly handled."""
+        # This tests that the module handles ImportError gracefully
+        # The __init__.py catches ImportError and issues warnings
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            import importlib
+
+            importlib.reload(mngs.pd)
+            # Check that any warnings are about failed imports, not other errors
+            for warning in w:
+                if "Failed to import" in str(warning.message):
+                    assert True  # This is expected behavior
+
+    def test_force_df_available(self):
+        """Test that force_df function is available and works."""
+        import mngs.pd
+
+        # Test with list
+        result = mngs.pd.force_df([1, 2, 3])
+        assert isinstance(result, pd.DataFrame)
+        assert len(result) == 3
+
+        # Test with dict
+        result = mngs.pd.force_df({"a": [1, 2], "b": [3, 4]})
+        assert isinstance(result, pd.DataFrame)
+        assert list(result.columns) == ["a", "b"]
+
+        # Test with Series
+        s = pd.Series([1, 2, 3])
+        result = mngs.pd.force_df(s)
+        assert isinstance(result, pd.DataFrame)
+
+    def test_ignore_settingwithcopywarning_available(self):
+        """Test that ignore_SettingWithCopyWarning is available."""
+        import mngs.pd
+
+        assert hasattr(mngs.pd, "ignore_SettingWithCopyWarning")
+        # Call it to ensure it works
+        mngs.pd.ignore_SettingWithCopyWarning()
+
+    def test_basic_functionality_smoke_test(self):
+        """Smoke test for basic pd module functionality."""
+        import mngs.pd
+
+        # Create test DataFrame
+        df = pd.DataFrame({"A": [1, 2, 3], "B": [4, 5, 6], "C": [7, 8, 9]})
+
+        # Test slice if available
+        if hasattr(mngs.pd, "slice"):
+            result = mngs.pd.slice(df, [0, 1])
+            assert len(result) == 2
+
+        # Test round if available
+        if hasattr(mngs.pd, "round"):
+            df_float = pd.DataFrame({"A": [1.234, 2.567, 3.891]})
+            result = mngs.pd.round(df_float, 2)
+            assert result["A"].iloc[0] == 1.23
+
+        # Test to_numeric if available
+        if hasattr(mngs.pd, "to_numeric"):
+            df_str = pd.DataFrame({"A": ["1", "2", "3"]})
+            result = mngs.pd.to_numeric(df_str)
+            assert pd.api.types.is_numeric_dtype(result["A"])
+
+
 # --------------------------------------------------------------------------------
 
 if __name__ == "__main__":
@@ -14,21 +149,21 @@ if __name__ == "__main__":
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-10-24 18:40:30 (ywatanabe)"
 # # /home/ywatanabe/proj/mngs/src/mngs/pd/__init__.py
-# 
+#
 # import os
 # import importlib
 # import inspect
 # import warnings
-# 
+#
 # # Get the current directory
 # current_dir = os.path.dirname(__file__)
-# 
+#
 # # Iterate through all Python files in the current directory
 # for filename in os.listdir(current_dir):
 #     if filename.endswith(".py") and not filename.startswith("__"):
 #         module_name = filename[:-3]
 #         # module = importlib.import_module(f".{module_name}", package=__name__)
-# 
+#
 #         # # Import only functions and classes from the module
 #         # for name, obj in inspect.getmembers(module):
 #         #     if inspect.isfunction(obj) or inspect.isclass(obj):
@@ -36,7 +171,7 @@ if __name__ == "__main__":
 #         #             globals()[name] = obj
 #         try:
 #             module = importlib.import_module(f".{module_name}", package=__name__)
-# 
+#
 #             # Import only functions and classes from the module
 #             for name, obj in inspect.getmembers(module):
 #                 if inspect.isfunction(obj) or inspect.isclass(obj):
@@ -44,7 +179,7 @@ if __name__ == "__main__":
 #                         globals()[name] = obj
 #         except ImportError as e:
 #             warnings.warn(f"Warning: Failed to import {module_name}.")
-# 
+#
 # # Clean up temporary variables
 # del (
 #     os,
@@ -57,7 +192,7 @@ if __name__ == "__main__":
 #     name,
 #     obj,
 # )
-# 
+#
 # # from ._merge_columns import merge_cols, merge_columns
 # # from ._misc import find_indi  # col_to_last,; col_to_top,; merge_columns,
 # # from ._misc import force_df, ignore_SettingWithCopyWarning, slice

@@ -1,21 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-04-26 06:08:42 (ywatanabe)"
+# Timestamp: "2025-05-28 17:05:26 (ywatanabe)"
 # File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/nn/_Filters.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/nn/_Filters.py"
-)
+
+__FILE__ = "./src/mngs/nn/_Filters.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
-import mngs
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 # Time-stamp: "2024-11-26 22:23:40 (ywatanabe)"
-# File: ./mngs_repo/src/mngs/nn/_Filters.py
+
+import numpy as np
 
 THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/nn/_Filters.py"
 
@@ -151,6 +147,9 @@ class BandPassFilter(BaseFilter1D):
 
         # Check bands definitions
         nyq = fs / 2.0
+        # Convert bands to tensor if it's a numpy array
+        if isinstance(bands, np.ndarray):
+            bands = torch.tensor(bands)
         bands = torch.clip(bands, 0.1, nyq - 1)
         for ll, hh in bands:
             assert 0 < ll
@@ -168,10 +167,13 @@ class BandPassFilter(BaseFilter1D):
 
     @staticmethod
     def init_kernels(seq_len, fs, bands):
+        # Convert seq_len and fs to numpy arrays for design_filter (expects numpy_fn)
+        seq_len_array = np.array([seq_len])
+        fs_array = np.array([fs])
         filters = [
             design_filter(
-                seq_len,
-                fs,
+                seq_len_array,
+                fs_array,
                 low_hz=ll,
                 high_hz=hh,
                 is_bandstop=False,
@@ -179,9 +181,16 @@ class BandPassFilter(BaseFilter1D):
             for ll, hh in bands
         ]
 
-        kernels = zero_pad(filters)
+        # Convert filters list to tensors for zero_pad
+        filters_tensors = [
+            torch.tensor(f) if not isinstance(f, torch.Tensor) else f for f in filters
+        ]
+
+        kernels = zero_pad(filters_tensors)
         kernels = ensure_even_len(kernels)
-        kernels = torch.tensor(kernels).clone().detach()
+        if not isinstance(kernels, torch.Tensor):
+            kernels = torch.tensor(kernels)
+        kernels = kernels.clone().detach()
         # kernels = kernels.clone().detach().requires_grad_(True)
         return kernels
 
@@ -209,16 +218,24 @@ class BandStopFilter(BaseFilter1D):
 
     @staticmethod
     def init_kernels(seq_len, fs, bands):
-        kernels = zero_pad(
-            [
-                design_filter(
-                    seq_len, fs, low_hz=ll, high_hz=hh, is_bandstop=True
-                )
-                for ll, hh in bands
-            ]
-        )
+        # Convert to numpy arrays for design_filter
+        seq_len_array = np.array([seq_len])
+        fs_array = np.array([fs])
+        filters = [
+            design_filter(
+                seq_len_array, fs_array, low_hz=ll, high_hz=hh, is_bandstop=True
+            )
+            for ll, hh in bands
+        ]
+        # Convert filters list to tensors for zero_pad
+        filters_tensors = [
+            torch.tensor(f) if not isinstance(f, torch.Tensor) else f for f in filters
+        ]
+        kernels = zero_pad(filters_tensors)
         kernels = ensure_even_len(kernels)
-        return torch.tensor(kernels)
+        if not isinstance(kernels, torch.Tensor):
+            kernels = torch.tensor(kernels)
+        return kernels
 
 
 class LowPassFilter(BaseFilter1D):
@@ -235,22 +252,28 @@ class LowPassFilter(BaseFilter1D):
             assert 0 < cc
             assert cc < nyq
 
-        self.register_buffer(
-            "kernels", self.init_kernels(seq_len, fs, cutoffs_hz)
-        )
+        self.register_buffer("kernels", self.init_kernels(seq_len, fs, cutoffs_hz))
 
     @staticmethod
     def init_kernels(seq_len, fs, cutoffs_hz):
-        kernels = zero_pad(
-            [
-                design_filter(
-                    seq_len, fs, low_hz=None, high_hz=cc, is_bandstop=False
-                )
-                for cc in cutoffs_hz
-            ]
-        )
+        # Convert to numpy arrays for design_filter
+        seq_len_array = np.array([seq_len])
+        fs_array = np.array([fs])
+        filters = [
+            design_filter(
+                seq_len_array, fs_array, low_hz=None, high_hz=cc, is_bandstop=False
+            )
+            for cc in cutoffs_hz
+        ]
+        # Convert filters list to tensors for zero_pad
+        filters_tensors = [
+            torch.tensor(f) if not isinstance(f, torch.Tensor) else f for f in filters
+        ]
+        kernels = zero_pad(filters_tensors)
         kernels = ensure_even_len(kernels)
-        return torch.tensor(kernels)
+        if not isinstance(kernels, torch.Tensor):
+            kernels = torch.tensor(kernels)
+        return kernels
 
 
 class HighPassFilter(BaseFilter1D):
@@ -267,22 +290,28 @@ class HighPassFilter(BaseFilter1D):
             assert 0 < cc
             assert cc < nyq
 
-        self.register_buffer(
-            "kernels", self.init_kernels(seq_len, fs, cutoffs_hz)
-        )
+        self.register_buffer("kernels", self.init_kernels(seq_len, fs, cutoffs_hz))
 
     @staticmethod
     def init_kernels(seq_len, fs, cutoffs_hz):
-        kernels = zero_pad(
-            [
-                design_filter(
-                    seq_len, fs, low_hz=cc, high_hz=None, is_bandstop=False
-                )
-                for cc in cutoffs_hz
-            ]
-        )
+        # Convert to numpy arrays for design_filter
+        seq_len_array = np.array([seq_len])
+        fs_array = np.array([fs])
+        filters = [
+            design_filter(
+                seq_len_array, fs_array, low_hz=cc, high_hz=None, is_bandstop=False
+            )
+            for cc in cutoffs_hz
+        ]
+        # Convert filters list to tensors for zero_pad
+        filters_tensors = [
+            torch.tensor(f) if not isinstance(f, torch.Tensor) else f for f in filters
+        ]
+        kernels = zero_pad(filters_tensors)
         kernels = ensure_even_len(kernels)
-        return torch.tensor(kernels)
+        if not isinstance(kernels, torch.Tensor):
+            kernels = torch.tensor(kernels)
+        return kernels
 
 
 class GaussianFilter(BaseFilter1D):
@@ -379,10 +408,10 @@ class DifferentiableBandPassFilter(BaseFilter1D):
 
 
 if __name__ == "__main__":
+    import mngs
+
     # Start
-    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
-        sys, plt, fig_scale=5
-    )
+    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt, fig_scale=5)
 
     xx, tt, fs = mngs.dsp.demo_sig(sig_type="chirp", fs=1024)
     xx = torch.tensor(xx).cuda()

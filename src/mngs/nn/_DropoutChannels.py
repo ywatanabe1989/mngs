@@ -12,10 +12,7 @@ import random
 
 
 class DropoutChannels(nn.Module):
-    def __init__(
-        self,
-        dropout=0.5
-    ):
+    def __init__(self, dropout=0.5):
         super().__init__()
         self.dropout = nn.Dropout(p=dropout)
 
@@ -23,7 +20,7 @@ class DropoutChannels(nn.Module):
         """x: [batch_size, n_chs, seq_len]"""
         if self.training:
             orig_chs = torch.arange(x.shape[1])
-            
+
             indi_orig = self.dropout(torch.ones(x.shape[1])).bool()
             chs_to_shuffle = orig_chs[~indi_orig]
 

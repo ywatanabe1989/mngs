@@ -12,10 +12,7 @@ import random
 
 
 class SwapChannels(nn.Module):
-    def __init__(
-        self,
-        dropout=0.5
-    ):
+    def __init__(self, dropout=0.5):
         super().__init__()
         self.dropout = nn.Dropout(p=dropout)
 
@@ -23,11 +20,13 @@ class SwapChannels(nn.Module):
         """x: [batch_size, n_chs, seq_len]"""
         if self.training:
             orig_chs = torch.arange(x.shape[1])
-            
+
             indi_orig = self.dropout(torch.ones(x.shape[1])).bool()
             chs_to_shuffle = orig_chs[~indi_orig]
 
-            rand_chs = random.sample(list(np.array(chs_to_shuffle)), len(chs_to_shuffle))
+            rand_chs = random.sample(
+                list(np.array(chs_to_shuffle)), len(chs_to_shuffle)
+            )
 
             swapped_chs = orig_chs.clone()
             swapped_chs[~indi_orig] = torch.LongTensor(rand_chs)

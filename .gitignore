@@ -796,4 +796,6 @@ flycheck_*.el
 /network-security.data
 /home/ywatanabe/.local
 
+# SigMacro - embedded git repository
+SigMacro/
 **/.claude/settings.local.json

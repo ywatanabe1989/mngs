@@ -5,6 +5,7 @@
 
 THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/gen/_to_odd.py"
 
+
 def to_odd(n):
     """Convert a number to the nearest odd number less than or equal to itself.
 

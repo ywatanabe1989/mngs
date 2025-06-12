@@ -3,13 +3,16 @@
 # Time-stamp: "2024-11-24 22:08:33 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/db/_Basemodules/_BaseTransactionMixin.py
 
-THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_Basemodules/_BaseTransactionMixin.py"
+THIS_FILE = (
+    "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_Basemodules/_BaseTransactionMixin.py"
+)
 
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 import contextlib
+
 
 class _BaseTransactionMixin:
     @contextlib.contextmanager
