@@ -9,6 +9,7 @@ import json
 import sys
 import argparse
 
+
 def json2md(obj, level=1):
     output = []
     if isinstance(obj, dict):
@@ -28,20 +29,21 @@ def json2md(obj, level=1):
                 output.append("* " + str(item))
     return "\n".join(filter(None, output))
 
+
 def main():
-    parser = argparse.ArgumentParser(description='Convert JSON to Markdown')
-    parser.add_argument('input', help='Input JSON file')
-    parser.add_argument('-o', '--output', help='Output file (default: stdout)')
+    parser = argparse.ArgumentParser(description="Convert JSON to Markdown")
+    parser.add_argument("input", help="Input JSON file")
+    parser.add_argument("-o", "--output", help="Output file (default: stdout)")
     args = parser.parse_args()
 
     try:
-        with open(args.input, 'r') as f:
+        with open(args.input, "r") as f:
             data = json.load(f)
 
         result = json2md(data)
 
         if args.output:
-            with open(args.output, 'w') as f:
+            with open(args.output, "w") as f:
                 f.write(result)
         else:
             print(result)
@@ -49,6 +51,7 @@ def main():
     except FileNotFoundError:
         print(f"Error: File {args.input} not found", file=sys.stderr)
         sys.exit(1)
+
 
 if __name__ == "__main__":
     main()

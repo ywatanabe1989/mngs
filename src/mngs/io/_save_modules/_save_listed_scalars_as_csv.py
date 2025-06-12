@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd
 from ._mv_to_tmp import _mv_to_tmp
 
+
 def _save_listed_scalars_as_csv(
     listed_scalars,
     spath_csv,
@@ -20,9 +21,7 @@ def _save_listed_scalars_as_csv(
 
     if overwrite == True:
         _mv_to_tmp(spath_csv, L=2)
-    indi_suffix = (
-        np.arange(len(listed_scalars)) if indi_suffix is None else indi_suffix
-    )
+    indi_suffix = np.arange(len(listed_scalars)) if indi_suffix is None else indi_suffix
     df = pd.DataFrame(
         {"{}".format(column_name): listed_scalars}, index=indi_suffix
     ).round(round)

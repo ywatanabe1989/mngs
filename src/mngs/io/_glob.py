@@ -53,7 +53,7 @@ def glob(expression, parse=False, ensure_one=False):
     """
     glob_pattern = _re.sub(r"{[^}]*}", "*", expression)
     # Enable recursive globbing for ** patterns
-    recursive = '**' in glob_pattern
+    recursive = "**" in glob_pattern
     try:
         found_paths = _natsorted(_glob(eval(glob_pattern), recursive=recursive))
     except:
@@ -68,6 +68,7 @@ def glob(expression, parse=False, ensure_one=False):
 
     else:
         return found_paths
+
 
 def parse_glob(expression, ensure_one=False):
     """
@@ -97,5 +98,6 @@ def parse_glob(expression, ensure_one=False):
     AssertionError  # if more than one file matches
     """
     return glob(expression, parse=True, ensure_one=ensure_one)
+
 
 # EOF

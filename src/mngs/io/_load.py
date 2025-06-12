@@ -4,9 +4,8 @@
 # File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/io/_load.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "/ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/io/_load.py"
-)
+
+__FILE__ = "/ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/io/_load.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -14,6 +13,7 @@ from typing import Any
 import glob
 from ..decorators import preserve_doc
 from ..str._clean_path import clean_path
+
 # from ._load_modules._catboost import _load_catboost
 from ._load_modules._con import _load_con
 from ._load_modules._db import _load_sqlite3db
@@ -35,9 +35,8 @@ from ._load_modules._xml import _load_xml
 from ._load_modules._yaml import _load_yaml
 from ._load_modules._matlab import _load_matlab
 
-def load(
-    lpath: str, show: bool = False, verbose: bool = False, **kwargs
-) -> Any:
+
+def load(lpath: str, show: bool = False, verbose: bool = False, **kwargs) -> Any:
     """
     Load data from various file formats.
 
@@ -85,7 +84,7 @@ def load(
     lpath = clean_path(lpath)
 
     # Check if it's a glob pattern
-    if '*' in lpath or '?' in lpath or '[' in lpath:
+    if "*" in lpath or "?" in lpath or "[" in lpath:
         # Handle glob pattern
         matched_files = sorted(glob.glob(lpath))
         if not matched_files:
@@ -164,5 +163,6 @@ def load(
         return loader(lpath, **kwargs)
     except (ValueError, FileNotFoundError) as e:
         raise ValueError(f"Error loading file {lpath}: {str(e)}")
+
 
 # EOF

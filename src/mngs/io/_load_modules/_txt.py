@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/io/_load_modules/_txt.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/io/_load_modules/_txt.py"
-)
+
+__FILE__ = "./src/mngs/io/_load_modules/_txt.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -42,29 +41,7 @@ import warnings
 
 #     except (ValueError, FileNotFoundError) as e:
 #         raise ValueError(f"Error loading file {lpath}: {str(e)}")
-def _load_txt(lpath, **kwargs):
-    """Load text file and return non-empty lines."""
-    try:
-        if not lpath.endswith((".txt", ".log", ".event", ".py", ".sh", "")):
-            warnings.warn("File must have .txt, .log or .event extension")
-        try:
-            with open(lpath, "r", encoding="utf-8") as f:
-                return [
-                    line.strip()
-                    for line in f.read().splitlines()
-                    if line.strip()
-                ]
-        except UnicodeDecodeError:
-            # fallback: detect correct encoding
-            encoding = _check_encoding(lpath)
-            with open(lpath, "r", encoding=encoding) as f:
-                return [
-                    line.strip()
-                    for line in f.read().splitlines()
-                    if line.strip()
-                ]
-    except (ValueError, FileNotFoundError) as e:
-        raise ValueError(f"Error loading file {lpath}: {str(e)}")
+# Removed duplicate function - see main _load_txt below
 
 
 def _load_txt(lpath, strip=False, as_lines=False):
@@ -82,7 +59,9 @@ def _load_txt(lpath, strip=False, as_lines=False):
         with open(lpath, "r", encoding="utf-8") as file:
             content = file.read()
     except UnicodeDecodeError:
-        with open(lpath, "r") as file:
+        # Fallback: try to detect correct encoding
+        encoding = _check_encoding(lpath)
+        with open(lpath, "r", encoding=encoding) as file:
             content = file.read()
 
     # For backward compatibility, check if as_lines parameter or legacy behavior needed
@@ -91,11 +70,11 @@ def _load_txt(lpath, strip=False, as_lines=False):
         if strip:
             return [line.strip() for line in raw_lines if line.strip()]
         return [line for line in raw_lines if line.strip()]
-    
+
     # Default: return full content (possibly stripped)
     if strip:
         return content.strip()
-    
+
     return content
 
 

@@ -4,9 +4,8 @@
 # File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/io/_load_configs.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "/ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/io/_load_configs.py"
-)
+
+__FILE__ = "/ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/io/_load_configs.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -19,6 +18,7 @@ THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/io/_load_configs.py"
 from ..dict import DotDict
 from ._load import load
 from ._glob import glob
+
 
 def load_configs(IS_DEBUG=None, show=False, verbose=False):
     """Load YAML configuration files from ./config directory.
@@ -37,6 +37,7 @@ def load_configs(IS_DEBUG=None, show=False, verbose=False):
     DotDict
         Merged configuration dictionary
     """
+
     def apply_debug_values(config, IS_DEBUG):
         """Apply debug values if IS_DEBUG is True."""
         if not IS_DEBUG or not isinstance(config, (dict, DotDict)):
@@ -54,9 +55,13 @@ def load_configs(IS_DEBUG=None, show=False, verbose=False):
 
     try:
         # Set debug mode
-        IS_DEBUG = IS_DEBUG or os.getenv("CI") == "True" or (
-            os.path.exists("./config/IS_DEBUG.yaml") and
-            load("./config/IS_DEBUG.yaml").get("IS_DEBUG")
+        IS_DEBUG = (
+            IS_DEBUG
+            or os.getenv("CI") == "True"
+            or (
+                os.path.exists("./config/IS_DEBUG.yaml")
+                and load("./config/IS_DEBUG.yaml").get("IS_DEBUG")
+            )
         )
 
         # Load and merge configs
@@ -70,6 +75,7 @@ def load_configs(IS_DEBUG=None, show=False, verbose=False):
     except Exception as e:
         print(f"Error loading configs: {e}")
         return DotDict({})
+
 
 # def load_configs(IS_DEBUG=None, show=False, verbose=False):
 #     """

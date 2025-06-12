@@ -4,9 +4,8 @@
 # File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/io/_save.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/io/_save.py"
-)
+
+__FILE__ = "./src/mngs/io/_save.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -26,22 +25,10 @@ THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/io/_save.py"
 """
 
 """Imports"""
-import gzip
 import inspect
-import json
 import logging
 import os as _os
-import pickle
 from typing import Any
-
-import h5py
-import joblib
-import numpy as np
-import pandas as pd
-import plotly
-import scipy
-import torch
-from ruamel.yaml import YAML
 
 from .._sh import sh
 from ..path._clean import clean
@@ -49,8 +36,109 @@ from ..path._getsize import getsize
 from ..str._clean_path import clean_path
 from ..str._color_text import color_text
 from ..str._readable_bytes import readable_bytes
-from ._save_image import _save_image
-from ._save_text import _save_text
+
+# Import save functions from the new modular structure
+from ._save_modules import (
+    save_csv,
+    save_excel,
+    save_npy,
+    save_npz,
+    save_pickle,
+    save_pickle_compressed,
+    save_joblib,
+    save_torch,
+    save_json,
+    save_yaml,
+    save_hdf5,
+    save_matlab,
+    save_catboost,
+    save_text,
+    save_html,
+    save_image,
+    save_mp4,
+)
+
+
+def _get_figure_with_data(obj):
+    """
+    Extract figure or axes object that may contain plotting data for CSV export.
+    
+    Parameters
+    ----------
+    obj : various matplotlib objects
+        Could be Figure, Axes, FigWrapper, AxisWrapper, or other matplotlib objects
+        
+    Returns
+    -------
+    object or None
+        Figure or axes object that has export_as_csv methods, or None if not found
+    """
+    import matplotlib.pyplot as plt
+    import matplotlib.figure
+    import matplotlib.axes
+    
+    # Check if object already has export methods (MNGS wrapped objects)
+    if hasattr(obj, 'export_as_csv'):
+        return obj
+    
+    # Handle matplotlib Figure objects
+    if isinstance(obj, matplotlib.figure.Figure):
+        # Get the current axes that might be wrapped with MNGS functionality
+        current_ax = plt.gca()
+        if hasattr(current_ax, 'export_as_csv'):
+            return current_ax
+        
+        # Check all axes in the figure
+        for ax in obj.axes:
+            if hasattr(ax, 'export_as_csv'):
+                return ax
+                
+        return None
+    
+    # Handle matplotlib Axes objects  
+    if isinstance(obj, matplotlib.axes.Axes):
+        if hasattr(obj, 'export_as_csv'):
+            return obj
+        return None
+    
+    # Handle FigWrapper or similar MNGS objects
+    if hasattr(obj, 'figure') and hasattr(obj.figure, 'axes'):
+        # Check if the wrapper itself has export methods
+        if hasattr(obj, 'export_as_csv'):
+            return obj
+            
+        # Check the underlying figure's axes
+        for ax in obj.figure.axes:
+            if hasattr(ax, 'export_as_csv'):
+                return ax
+                
+        return None
+    
+    # Handle AxisWrapper or similar MNGS objects
+    if hasattr(obj, '_axis_mpl') or hasattr(obj, '_ax'):
+        if hasattr(obj, 'export_as_csv'):
+            return obj
+        return None
+    
+    # Try to get the current figure and its axes as fallback
+    try:
+        current_fig = plt.gcf()
+        current_ax = plt.gca() 
+        
+        if hasattr(current_ax, 'export_as_csv'):
+            return current_ax
+        elif hasattr(current_fig, 'export_as_csv'):
+            return current_fig
+            
+        # Check all axes in current figure
+        for ax in current_fig.axes:
+            if hasattr(ax, 'export_as_csv'):
+                return ax
+                
+    except:
+        pass
+    
+    return None
 
 
 def save(
@@ -143,9 +231,34 @@ def save(
         ########################################
         spath, sfname = None, None
 
-        # f-expression handling
-        if specified_path.startswith('f"'):
-            specified_path = eval(specified_path)
+        # f-expression handling - safely parse f-strings
+        if specified_path.startswith('f"') or specified_path.startswith("f'"):
+            # Remove the f prefix and quotes
+            path_content = specified_path[2:-1]
+            
+            # Get the caller's frame to access their local variables
+            frame = inspect.currentframe().f_back
+            try:
+                # Use string formatting with the caller's locals and globals
+                # This is much safer than eval() as it only does string substitution
+                import re
+                # Find all {variable} patterns
+                variables = re.findall(r'\{([^}]+)\}', path_content)
+                format_dict = {}
+                for var in variables:
+                    # Only allow simple variable names, not arbitrary expressions
+                    if re.match(r'^[a-zA-Z_][a-zA-Z0-9_]*$', var):
+                        if var in frame.f_locals:
+                            format_dict[var] = frame.f_locals[var]
+                        elif var in frame.f_globals:
+                            format_dict[var] = frame.f_globals[var]
+                    else:
+                        raise ValueError(f"Invalid variable name in f-string: {var}")
+                
+                # Use str.format() which is safe
+                specified_path = path_content.format(**format_dict)
+            finally:
+                del frame  # Avoid reference cycles
 
         # When full path
         if specified_path.startswith("/"):
@@ -171,13 +284,13 @@ def save(
         spath_cwd = clean(spath_cwd)
 
         # Removes spath and spath_cwd to prevent potential circular links
+        # Skip deletion for CSV files to allow caching to work
         for path in [spath_final, spath_cwd]:
-            sh(f"rm -f {path}", verbose=False)
+            if not path.endswith('.csv'):
+                sh(f"rm -f {path}", verbose=False)
 
         if dry_run:
-            print(
-                color_text(f"\n(dry run) Saved to: {spath_final}", c="yellow")
-            )
+            print(color_text(f"\n(dry run) Saved to: {spath_final}", c="yellow"))
             return
 
         # Ensure directory exists
@@ -226,166 +339,22 @@ def _save(
     no_csv=False,
     **kwargs,
 ):
-
-    # csv
-    if spath.endswith(".csv"):
-        _save_csv(obj, spath, **kwargs)
+    # Get file extension
+    ext = _os.path.splitext(spath)[1].lower()
     
-    # excel
-    elif spath.endswith(".xlsx") or spath.endswith(".xls"):
-        if isinstance(obj, pd.DataFrame):
-            obj.to_excel(spath, index=False, **kwargs)
-        elif isinstance(obj, dict):
-            # Convert dict to DataFrame if possible
-            df = pd.DataFrame(obj)
-            df.to_excel(spath, index=False, **kwargs)
-        elif isinstance(obj, np.ndarray):
-            # Convert numpy array to DataFrame
-            df = pd.DataFrame(obj)
-            df.to_excel(spath, index=False, **kwargs)
+    # Try dispatch dictionary first for O(1) lookup
+    if ext in _FILE_HANDLERS:
+        # Check if handler needs special parameters
+        if ext in ['.png', '.jpg', '.jpeg', '.gif', '.tiff', '.tif', '.svc']:
+            _FILE_HANDLERS[ext](obj, spath, no_csv=no_csv, symlink_from_cwd=symlink_from_cwd, dry_run=dry_run, **kwargs)
         else:
-            raise ValueError(f"Cannot save object of type {type(obj)} as Excel file")
-
-    # numpy
-    elif spath.endswith(".npy"):
-        np.save(spath, obj)
-
-    # numpy npz
-    elif spath.endswith(".npz"):
-        if isinstance(obj, dict):
-            np.savez_compressed(spath, **obj)
-        elif isinstance(obj, (list, tuple)) and all(
-            isinstance(x, np.ndarray) for x in obj
-        ):
-            obj = {str(ii): obj[ii] for ii in range(len(obj))}
-            np.savez_compressed(spath, **obj)
-        elif isinstance(obj, np.ndarray):
-            # Handle single array
-            np.savez_compressed(spath, arr_0=obj)
-        else:
-            raise ValueError(
-                "For .npz files, obj must be a dict of arrays, a list/tuple of arrays, or a single array."
-            )
-    # pkl
-    elif spath.endswith(".pkl") or spath.endswith(".pickle"):
-        with open(spath, "wb") as s:
-            pickle.dump(obj, s)
-
-    # pkl.gz
+            _FILE_HANDLERS[ext](obj, spath, **kwargs)
+    # csv - special case as it doesn't have a dot prefix in dispatch
+    elif spath.endswith(".csv"):
+        save_csv(obj, spath, **kwargs)
+    # Check for special extension cases not in dispatch
     elif spath.endswith(".pkl.gz"):
-        with gzip.open(spath, "wb") as f:
-            pickle.dump(obj, f)
-
-    # joblib
-    elif spath.endswith(".joblib"):
-        with open(spath, "wb") as s:
-            joblib.dump(obj, s, compress=3)
-
-    # html
-    elif spath.endswith(".html"):
-        # plotly
-        if isinstance(obj, plotly.graph_objs.Figure):
-            obj.write_html(file=spath)
-
-    # image ----------------------------------------
-    elif any(
-        [
-            spath.endswith(image_ext)
-            for image_ext in [
-                ".png",
-                ".tiff",
-                ".tif",
-                ".jpeg",
-                ".jpg",
-                ".svc",
-            ]
-        ]
-    ):
-        _save_image(obj, spath, **kwargs)
-        ext = _os.path.splitext(spath)[1].lower()
-        try:
-            if not no_csv:
-                ext_wo_dot = ext.replace(".", "")
-                save(
-                    obj.export_as_csv(),
-                    spath.replace(ext_wo_dot, "csv"),
-                    symlink_from_cwd=symlink_from_cwd,
-                    dry_run=dry_run,
-                    **kwargs,
-                )
-        except Exception as e:
-            pass
-            # print(e)
-
-    # mp4
-    elif spath.endswith(".mp4"):
-        obj.save(spath, writer="ffmpeg", **kwargs)
-        del obj
-        # _mk_mp4(obj, spath)  # obj is matplotlib.pyplot.figure object
-        # del obj
-
-    # yaml
-    elif spath.endswith(".yaml") or spath.endswith(".yml"):
-        yaml = YAML()
-        yaml.preserve_quotes = True
-        yaml.indent(mapping=4, sequence=4, offset=4)
-
-        with open(spath, "w") as f:
-            yaml.dump(obj, f)
-
-    # json
-    elif spath.endswith(".json"):
-        with open(spath, "w") as f:
-            json.dump(obj, f, indent=4)
-
-    # hdf5
-    elif spath.endswith(".hdf5") or spath.endswith(".h5"):
-        with h5py.File(spath, "w") as hf:
-            def save_item(name, item, group):
-                """Recursively save items to HDF5."""
-                if isinstance(item, dict):
-                    # Create a group for nested dict
-                    subgroup = group.create_group(name)
-                    for k, v in item.items():
-                        save_item(k, v, subgroup)
-                elif isinstance(item, (np.ndarray, list, tuple)):
-                    # Save arrays and array-like objects
-                    group.create_dataset(name, data=np.array(item))
-                elif isinstance(item, (int, float, str, bool)):
-                    # Save scalars
-                    group.create_dataset(name, data=item)
-                else:
-                    # Try to convert to numpy array
-                    try:
-                        group.create_dataset(name, data=np.array(item))
-                    except:
-                        # If all else fails, pickle it
-                        import pickle
-                        pickled = pickle.dumps(item)
-                        group.create_dataset(name, data=np.void(pickled))
-            
-            # Save all items in the dictionary
-            for key, value in obj.items():
-                save_item(key, value, hf)
-    # pth
-    elif spath.endswith(".pth") or spath.endswith(".pt"):
-        torch.save(obj, spath, **kwargs)
-
-    # mat
-    elif spath.endswith(".mat"):
-        scipy.io.savemat(spath, obj)
-
-    # catboost model
-    elif spath.endswith(".cbm"):
-        obj.save_model(spath)
-
-    # Text
-    elif any(
-        spath.endswith(ext)
-        for ext in [".txt", ".md", ".py", ".html", ".css", ".js"]
-    ):
-        _save_text(obj, spath)
-
+        save_pickle_compressed(obj, spath, **kwargs)
     else:
         raise ValueError(f"Unsupported file format. {spath} was not saved.")
 
@@ -396,84 +365,95 @@ def _save(
             print(color_text(f"\nSaved to: {spath} ({file_size})", c="yellow"))
 
 
-# def _save_csv(obj, spath: str, **kwargs) -> None:
-#     """Handle various input types for CSV saving."""
-#     if isinstance(obj, (pd.Series, pd.DataFrame)):
-#         obj.to_csv(spath, **kwargs)
-#     elif isinstance(obj, np.ndarray):
-#         pd.DataFrame(obj).to_csv(spath, **kwargs)
-#     elif isinstance(obj, (int, float)):
-#         pd.DataFrame([obj]).to_csv(spath, index=False, **kwargs)
-#     elif isinstance(obj, (list, tuple)):
-#         if all(isinstance(x, (int, float)) for x in obj):
-#             pd.DataFrame(obj).to_csv(spath, index=False, **kwargs)
-#         elif all(isinstance(x, pd.DataFrame) for x in obj):
-#             pd.concat(obj).to_csv(spath, **kwargs)
-#         else:
-#             pd.DataFrame({"data": obj}).to_csv(spath, index=False, **kwargs)
-#     elif isinstance(obj, dict):
-#         pd.DataFrame.from_dict(obj).to_csv(spath, **kwargs)
-#     else:
-#         try:
-#             pd.DataFrame({"data": [obj]}).to_csv(spath, index=False, **kwargs)
-#         except:
-#             raise ValueError(f"Unable to save type {type(obj)} as CSV")
-
-
-def _save_csv(obj, spath: str, **kwargs) -> None:
-    """Handle various input types for CSV saving."""
-    # Check if path already exists
-    if os.path.exists(spath):
-        # Calculate hash of new data
-        data_hash = None
-
-        # Process based on type
-        if isinstance(obj, (pd.Series, pd.DataFrame)):
-            data_hash = hash(obj.to_string())
-        elif isinstance(obj, np.ndarray):
-            data_hash = hash(pd.DataFrame(obj).to_string())
-        else:
-            # For other types, create a string representation and hash it
-            try:
-                data_str = str(obj)
-                data_hash = hash(data_str)
-            except:
-                # If we can't hash it, proceed with saving
-                pass
-
-        # Compare with existing file if hash calculation was successful
-        if data_hash is not None:
-            try:
-                existing_df = pd.read_csv(spath)
-                existing_hash = hash(existing_df.to_string())
-
-                # Skip if hashes match
-                if existing_hash == data_hash:
-                    return
-            except:
-                # If reading fails, proceed with saving
-                pass
-
-    # Save the file based on type
-    if isinstance(obj, (pd.Series, pd.DataFrame)):
-        obj.to_csv(spath, **kwargs)
-    elif isinstance(obj, np.ndarray):
-        pd.DataFrame(obj).to_csv(spath, **kwargs)
-    elif isinstance(obj, (int, float)):
-        pd.DataFrame([obj]).to_csv(spath, index=False, **kwargs)
-    elif isinstance(obj, (list, tuple)):
-        if all(isinstance(x, (int, float)) for x in obj):
-            pd.DataFrame(obj).to_csv(spath, index=False, **kwargs)
-        elif all(isinstance(x, pd.DataFrame) for x in obj):
-            pd.concat(obj).to_csv(spath, **kwargs)
-        else:
-            pd.DataFrame({"data": obj}).to_csv(spath, index=False, **kwargs)
-    elif isinstance(obj, dict):
-        pd.DataFrame.from_dict(obj).to_csv(spath, **kwargs)
-    else:
+def _handle_image_with_csv(obj, spath, no_csv=False, symlink_from_cwd=False, dry_run=False, **kwargs):
+    """Handle image file saving with optional CSV export."""
+    save_image(obj, spath, **kwargs)
+    
+    if not no_csv:
+        ext = _os.path.splitext(spath)[1].lower()
+        ext_wo_dot = ext.replace(".", "")
+        
         try:
-            pd.DataFrame({"data": [obj]}).to_csv(spath, index=False, **kwargs)
-        except:
-            raise ValueError(f"Unable to save type {type(obj)} as CSV")
+            # Get the figure object that may contain plot data
+            fig_obj = _get_figure_with_data(obj)
+            
+            if fig_obj is not None:
+                # Save regular CSV if export method exists
+                if hasattr(fig_obj, 'export_as_csv'):
+                    csv_data = fig_obj.export_as_csv()
+                    if csv_data is not None and not csv_data.empty:
+                        save(
+                            csv_data,
+                            spath.replace(ext_wo_dot, "csv"),
+                            symlink_from_cwd=symlink_from_cwd,
+                            dry_run=dry_run,
+                            no_csv=True,
+                            **kwargs,
+                        )
+                
+                # Save SigmaPlot CSV if method exists
+                if hasattr(fig_obj, 'export_as_csv_for_sigmaplot'):
+                    sigmaplot_data = fig_obj.export_as_csv_for_sigmaplot()
+                    if sigmaplot_data is not None and not sigmaplot_data.empty:
+                        save(
+                            sigmaplot_data,
+                            spath.replace(ext_wo_dot, "csv").replace(".csv", "_for_sigmaplot.csv"),
+                            symlink_from_cwd=symlink_from_cwd,
+                            dry_run=dry_run,
+                            no_csv=True,
+                            **kwargs,
+                        )
+        except Exception:
+            pass
+
+
+# Dispatch dictionary for O(1) file format lookup
+_FILE_HANDLERS = {
+    # Excel formats
+    '.xlsx': save_excel,
+    '.xls': save_excel,
+    
+    # NumPy formats
+    '.npy': save_npy,
+    '.npz': save_npz,
+    
+    # Pickle formats
+    '.pkl': save_pickle,
+    '.pickle': save_pickle,
+    '.pkl.gz': save_pickle_compressed,
+    
+    # Other binary formats
+    '.joblib': save_joblib,
+    '.pth': save_torch,
+    '.pt': save_torch,
+    '.mat': save_matlab,
+    '.cbm': save_catboost,
+    
+    # Text formats
+    '.json': save_json,
+    '.yaml': save_yaml,
+    '.yml': save_yaml,
+    '.txt': save_text,
+    '.md': save_text,
+    '.py': save_text,
+    '.css': save_text,
+    '.js': save_text,
+    
+    # Data formats
+    '.html': save_html,
+    '.hdf5': save_hdf5,
+    '.h5': save_hdf5,
+    
+    # Media formats
+    '.mp4': save_mp4,
+    '.png': _handle_image_with_csv,
+    '.jpg': _handle_image_with_csv,
+    '.jpeg': _handle_image_with_csv,
+    '.gif': _handle_image_with_csv,
+    '.tiff': _handle_image_with_csv,
+    '.tif': _handle_image_with_csv,
+    '.svc': _handle_image_with_csv,
+}
+
 
 # EOF
