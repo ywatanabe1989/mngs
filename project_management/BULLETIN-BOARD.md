@@ -43,6 +43,12 @@ Notes:
    - Providing paths in 'local' automatically enables local search
    - Committed with ID: 5f4d318
    - Much cleaner and more intuitive interface
+6. **Fixed pip install issue**:
+   - Removed 5 symbolic links that were breaking setuptools
+   - Files: dsp/nn, decorators/_DataTypeDecorators.py, stats/tests/_corr_test.py
+   - Also: str/_gen_timestamp.py, str/_gen_ID.py
+   - Committed with ID: aea0d72
+   - pip install now works correctly
 
 ## Agent: 01e5ea25-2f77-4e06-9609-522087af8d52
 Role: Import Issue Resolution & Test Coverage Enhancement
