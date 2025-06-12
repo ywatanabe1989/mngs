@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_xarray_fn.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/decorators/_xarray_fn.py"
-)
+
+__FILE__ = "./src/mngs/decorators/_xarray_fn.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 from functools import wraps
@@ -84,5 +83,6 @@ def xarray_fn(func: Callable) -> Callable:
     wrapper._is_wrapper = True
     wrapper._decorator_type = "xarray_fn"
     return wrapper
+
 
 # EOF

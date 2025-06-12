@@ -3,9 +3,12 @@
 # Time-stamp: "2024-11-24 22:14:24 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/db/_Basemodules/_BaseSchemaMixin.py
 
-THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_Basemodules/_BaseSchemaMixin.py"
+THIS_FILE = (
+    "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_Basemodules/_BaseSchemaMixin.py"
+)
 
 from typing import List, Dict, Any, Optional
+
 
 class _BaseSchemaMixin:
     def get_tables(self) -> List[str]:
@@ -29,7 +32,9 @@ class _BaseSchemaMixin:
     def column_exists(self, table: str, column: str) -> bool:
         raise NotImplementedError
 
-    def create_index(self, table: str, columns: List[str], index_name: Optional[str] = None) -> None:
+    def create_index(
+        self, table: str, columns: List[str], index_name: Optional[str] = None
+    ) -> None:
         raise NotImplementedError
 
     def drop_index(self, index_name: str) -> None:

@@ -5,6 +5,7 @@
 
 THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/path/_clean.py"
 
+
 def clean(string):
     string = string.replace("/./", "/").replace("//", "/").replace(" ", "_")
     return string

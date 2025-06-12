@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_circular_hist.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./tests/mngs/plt/ax/_plot/test__plot_circular_hist.py"
-)
+
+__FILE__ = "./tests/mngs/plt/ax/_plot/test__plot_circular_hist.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -41,9 +40,7 @@ class TestPlotCircularHist:
         save(self.fig, spath)
         # Check saved file
         actual_spath = os.path.join(self.out_dir, spath)
-        assert os.path.exists(
-            actual_spath
-        ), f"Failed to save figure to {spath}"
+        assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
 
     def test_basic_functionality(self):
         # Test with default parameters
@@ -64,9 +61,7 @@ class TestPlotCircularHist:
     def test_with_custom_bins(self):
         # Test with custom number of bins
         bin_count = 24
-        n, bins, patches = plot_circular_hist(
-            self.ax, self.rads, bins=bin_count
-        )
+        n, bins, patches = plot_circular_hist(self.ax, self.rads, bins=bin_count)
         self.ax.set_title("Circular Histogram with Custom Bins")
 
         # Save figure
@@ -99,15 +94,11 @@ class TestPlotCircularHist:
 
         # Check that patches have the correct color
         for patch in patches:
-            assert patch.get_edgecolor()[0:3] == matplotlib.colors.to_rgb(
-                color
-            )
+            assert patch.get_edgecolor()[0:3] == matplotlib.colors.to_rgb(color)
 
     def test_with_non_density(self):
         # Test with density=False
-        n, bins, patches = plot_circular_hist(
-            self.ax, self.rads, density=False
-        )
+        n, bins, patches = plot_circular_hist(self.ax, self.rads, density=False)
         self.ax.set_title("Circular Histogram with Non-Density")
 
         # Save figure
@@ -119,9 +110,7 @@ class TestPlotCircularHist:
     def test_with_offset(self):
         # Test with custom offset
         offset = np.pi / 4  # 45 degrees
-        n, bins, patches = plot_circular_hist(
-            self.ax, self.rads, offset=offset
-        )
+        n, bins, patches = plot_circular_hist(self.ax, self.rads, offset=offset)
         self.ax.set_title("Circular Histogram with Offset")
 
         # Save figure
@@ -133,9 +122,7 @@ class TestPlotCircularHist:
     def test_with_range_bias(self):
         # Test with range_bias
         range_bias = 0.5
-        n, bins, patches = plot_circular_hist(
-            self.ax, self.rads, range_bias=range_bias
-        )
+        n, bins, patches = plot_circular_hist(self.ax, self.rads, range_bias=range_bias)
         self.ax.set_title("Circular Histogram with Range Bias")
 
         # Save figure
@@ -145,9 +132,7 @@ class TestPlotCircularHist:
         assert np.isclose(bins[0], -np.pi + range_bias, atol=1e-5)
 
     def test_plot_circular_hist_savefig(self):
-        n, bins, patches = plot_circular_hist(
-            self.ax, self.rads, color="green"
-        )
+        n, bins, patches = plot_circular_hist(self.ax, self.rads, color="green")
         self.ax.set_title("Circular Histogram Test")
 
         # Saving
@@ -159,9 +144,7 @@ class TestPlotCircularHist:
         # Check saved file
         ACTUAL_SAVE_DIR = __file__.replace(".py", "_out")
         actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
-        assert os.path.exists(
-            actual_spath
-        ), f"Failed to save figure to {spath}"
+        assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
 
 
 # class TestMainFunctionality:
@@ -292,12 +275,12 @@ if __name__ == "__main__":
 # )
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
-# 
+#
 # # Time-stamp: "2024-02-03 13:10:50 (ywatanabe)"
 # import matplotlib
 # import numpy as np
-# 
-# 
+#
+#
 # def plot_circular_hist(
 #     axis,
 #     radians,
@@ -313,38 +296,38 @@ if __name__ == "__main__":
 #         fig, ax = plt.subplots(subplot_kw=dict(projection="polar"))
 #         ax = mngs.plt.plot_circular_hist(ax, radians)
 #     Produce a circular histogram of angles on ax.
-# 
+#
 #     Parameters
 #     ----------
 #     ax : matplotlib.axes._subplots.PolarAxesSubplot
 #         axis instance created with subplot_kw=dict(projection='polar').
-# 
+#
 #     radians : array
 #         Angles to plot, expected in units of radians.
-# 
+#
 #     bins : int, optional
 #         Defines the number of equal-width bins in the range. The default is 16.
-# 
+#
 #     density : bool, optional
 #         If True plot frequency proportional to area. If False plot frequency
 #         proportional to radius. The default is True.
-# 
+#
 #     offset : float, optional
 #         Sets the offset for the location of the 0 direction in units of
 #         radians. The default is 0.
-# 
+#
 #     gaps : bool, optional
 #         Whether to allow gaps between bins. When gaps = False the bins are
 #         forced to partition the entire [-pi, pi] range. The default is True.
-# 
+#
 #     Returns
 #     -------
 #     n : array or list of arrays
 #         The number of values in each bin.
-# 
+#
 #     bins : array
 #         The edges of the bins.
-# 
+#
 #     patches : `.BarContainer` or list of a single `.Polygon`
 #         Container of individual artists used to create the histogram
 #         or list of such containers if there are multiple input datasets.
@@ -352,22 +335,22 @@ if __name__ == "__main__":
 #     assert isinstance(
 #         axis, matplotlib.axes._axes.Axes
 #     ), "First argument must be a matplotlib axis"
-# 
+#
 #     # Wrap angles to [-pi, pi)
 #     radians = (radians + np.pi) % (2 * np.pi) - np.pi
-# 
+#
 #     # Force bins to partition entire circle
 #     if not gaps:
 #         bins = np.linspace(-np.pi, np.pi, num=bins + 1)
-# 
+#
 #     # Bin data and record counts
 #     n, bins = np.histogram(
 #         radians, bins=bins, range=(-np.pi + range_bias, np.pi + range_bias)
 #     )
-# 
+#
 #     # Compute width of each bin
 #     widths = np.diff(bins)
-# 
+#
 #     # By default plot frequency proportional to area
 #     if density:
 #         # Area to assign each bin
@@ -377,12 +360,12 @@ if __name__ == "__main__":
 #     # Otherwise plot frequency proportional to radius
 #     else:
 #         radius = n
-# 
+#
 #     mean_val = np.nanmean(radians)
 #     std_val = np.nanstd(radians)
 #     axis.axvline(mean_val, color=color)
 #     axis.text(mean_val, 1, std_val)
-# 
+#
 #     # Plot data on ax
 #     patches = axis.bar(
 #         bins[:-1],
@@ -395,16 +378,16 @@ if __name__ == "__main__":
 #         fill=False,
 #         linewidth=1,
 #     )
-# 
+#
 #     # Set the direction of the zero angle
 #     axis.set_theta_offset(offset)
-# 
+#
 #     # Remove ylabels for area plots (they are mostly obstructive)
 #     if density:
 #         axis.set_yticks([])
-# 
+#
 #     return n, bins, patches
-# 
+#
 # # EOF
 # --------------------------------------------------------------------------------
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/ax/_plot/_plot_circular_hist.py

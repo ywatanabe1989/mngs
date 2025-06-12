@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/tests/custom/test_mngs_run.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./tests/custom/test_mngs_run.py"
-)
+
+__FILE__ = "./tests/custom/test_mngs_run.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -50,6 +49,8 @@ import argparse
 # CONFIG = load_configs()
 
 """Functions & Classes"""
+
+
 def main(args):
     return 0
 

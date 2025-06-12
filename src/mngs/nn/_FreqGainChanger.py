@@ -37,7 +37,7 @@ import julius
 #         sum_gains_orig = gains_orig.sum()
 
 #         # use_freqs = self.dropout(torch.ones(self.n_bands)).bool().long()
-#         use_freqs = self.dropout(self.ones) / 2 # .bool().long()        
+#         use_freqs = self.dropout(self.ones) / 2 # .bool().long()
 
 #         gains = gains_orig * use_freqs
 #         sum_gains = gains.sum()
@@ -47,8 +47,9 @@ import julius
 #         x *= use_freqs.unsqueeze(-1).unsqueeze(-1).unsqueeze(-1)
 #         x /= gain_ratio
 #         x = x.sum(axis=0)
-        
+
 #         return x
+
 
 class FreqGainChanger(nn.Module):
     def __init__(self, n_bands, samp_rate, dropout_ratio=0.5):
@@ -62,9 +63,16 @@ class FreqGainChanger(nn.Module):
         """x: [batch_size, n_chs, seq_len]"""
         if self.training:
             x = julius.bands.split_bands(x, self.samp_rate, n_bands=self.n_bands)
-            freq_gains = torch.rand(self.n_bands).unsqueeze(-1).unsqueeze(-1).unsqueeze(-1).to(x.device) + .5
+            freq_gains = (
+                torch.rand(self.n_bands)
+                .unsqueeze(-1)
+                .unsqueeze(-1)
+                .unsqueeze(-1)
+                .to(x.device)
+                + 0.5
+            )
             freq_gains = F.softmax(freq_gains, dim=0)
-            x = (x*freq_gains).sum(axis=0)
+            x = (x * freq_gains).sum(axis=0)
 
         return x
         # import ipdb; ipdb.set_trace()
@@ -73,22 +81,18 @@ class FreqGainChanger(nn.Module):
         # sum_gains_orig = gains_orig.sum()
 
         # # use_freqs = self.dropout(torch.ones(self.n_bands)).bool().long()
-        # use_freqs = self.dropout(self.ones) / 2 # .bool().long()        
+        # use_freqs = self.dropout(self.ones) / 2 # .bool().long()
 
         # gains = gains_orig * use_freqs
         # sum_gains = gains.sum()
         # gain_ratio = sum_gains / sum_gains_orig
 
-
         # x *= use_freqs.unsqueeze(-1).unsqueeze(-1).unsqueeze(-1)
         # x /= gain_ratio
         # x = x.sum(axis=0)
-        
+
         # return x
 
-
-
-    
 
 if __name__ == "__main__":
     # Parameters
@@ -104,6 +108,3 @@ if __name__ == "__main__":
     # fd.eval()
     y = fgc(x)
     y.sum().backward()
-
-    
-    

@@ -5,6 +5,7 @@
 
 THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/gen/_to_even.py"
 
+
 def to_even(n):
     """Convert a number to the nearest even number less than or equal to itself.
 

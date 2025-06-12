@@ -27,18 +27,18 @@ class TestGoogleProvider:
             max_tokens=None,  # Will be set to default
             timeout=30.0,
             max_retries=3,
-            system_prompt="You are a helpful assistant."
+            system_prompt="You are a helpful assistant.",
         )
 
     @pytest.fixture
     def provider(self, config):
         """Create test provider instance."""
-        with patch('google.genai.Client'):
+        with patch("google.genai.Client"):
             return GoogleProvider(config)
 
     def test_init(self, config):
         """Test provider initialization."""
-        with patch('google.genai.Client') as mock_client:
+        with patch("google.genai.Client") as mock_client:
             provider = GoogleProvider(config)
             assert provider.config == config
             assert provider.api_key == "test-api-key"
@@ -50,7 +50,7 @@ class TestGoogleProvider:
     def test_init_with_env_key(self):
         """Test initialization with environment variable."""
         with patch.dict(os.environ, {"GOOGLE_API_KEY": "env-api-key"}):
-            with patch('google.genai.Client'):
+            with patch("google.genai.Client"):
                 config = ProviderConfig(model="gemini-1.5-pro-latest")
                 provider = GoogleProvider(config)
                 assert provider.api_key == "env-api-key"
@@ -74,7 +74,7 @@ class TestGoogleProvider:
             {"role": "system", "content": "You are helpful"},
             {"role": "user", "content": "Hello"},
             {"role": "assistant", "content": "Hi there!"},
-            {"role": "model", "content": "How can I help?"}
+            {"role": "model", "content": "How can I help?"},
         ]
         # Should not raise
         provider.validate_messages(messages)
@@ -95,10 +95,10 @@ class TestGoogleProvider:
         """Test message formatting for Google API."""
         messages = [
             {"role": "user", "content": "Hello"},
-            {"role": "assistant", "content": "Hi there!"}
+            {"role": "assistant", "content": "Hi there!"},
         ]
         formatted = provider.format_messages(messages)
-        
+
         # Should include system prompt as user/model exchange
         assert len(formatted) == 4
         assert formatted[0]["role"] == "user"
@@ -112,23 +112,21 @@ class TestGoogleProvider:
     def test_format_messages_no_system_prompt(self, config):
         """Test message formatting without system prompt."""
         config.system_prompt = None
-        with patch('google.genai.Client'):
+        with patch("google.genai.Client"):
             provider = GoogleProvider(config)
-        
+
         messages = [{"role": "user", "content": "Hello"}]
         formatted = provider.format_messages(messages)
-        
+
         assert len(formatted) == 1
         assert formatted[0]["role"] == "user"
         assert formatted[0]["parts"][0]["text"] == "Hello"
 
     def test_format_messages_with_parts(self, provider):
         """Test formatting messages that already have parts."""
-        messages = [
-            {"role": "user", "parts": [{"text": "Hello"}]}
-        ]
+        messages = [{"role": "user", "parts": [{"text": "Hello"}]}]
         formatted = provider.format_messages(messages)
-        
+
         # Skip system prompt for this test
         assert formatted[-1]["role"] == "user"
         assert formatted[-1]["parts"] == [{"text": "Hello"}]
@@ -139,23 +137,22 @@ class TestGoogleProvider:
         mock_response = Mock()
         mock_response.text = "This is a test response from Gemini"
         mock_response.usage_metadata = Mock(
-            prompt_token_count=10,
-            candidates_token_count=20
+            prompt_token_count=10, candidates_token_count=20
         )
-        
+
         provider.client.models.generate_content = Mock(return_value=mock_response)
-        
+
         # Test
         messages = [{"role": "user", "content": "Hello Gemini"}]
         result = provider.complete(messages)
-        
+
         assert result["content"] == "This is a test response from Gemini"
         assert result["usage"]["prompt_tokens"] == 10
         assert result["usage"]["completion_tokens"] == 20
         assert result["usage"]["total_tokens"] == 30
         assert result["model"] == "gemini-1.5-pro-latest"
         assert result["finish_reason"] == "stop"
-        
+
         # Verify API call
         provider.client.models.generate_content.assert_called_once()
         call_args = provider.client.models.generate_content.call_args
@@ -167,21 +164,23 @@ class TestGoogleProvider:
         mock_chunks = [
             Mock(text="Hello", usage_metadata=None),
             Mock(text=" from", usage_metadata=None),
-            Mock(text=" Gemini!", usage_metadata=Mock(
-                prompt_token_count=5,
-                candidates_token_count=3
-            ))
+            Mock(
+                text=" Gemini!",
+                usage_metadata=Mock(prompt_token_count=5, candidates_token_count=3),
+            ),
         ]
-        
-        provider.client.models.generate_content_stream = Mock(return_value=iter(mock_chunks))
-        
+
+        provider.client.models.generate_content_stream = Mock(
+            return_value=iter(mock_chunks)
+        )
+
         # Test
         messages = [{"role": "user", "content": "Hi"}]
         result = provider.stream(messages)
-        
+
         # Verify it returns an iterator
         assert isinstance(result, Iterator)
-        
+
         # Collect chunks
         chunks = list(result)
         assert len(chunks) == 4  # 3 content chunks + 1 usage chunk
@@ -198,7 +197,7 @@ class TestGoogleProvider:
         provider.client.models.generate_content = Mock(
             side_effect=Exception("API Error")
         )
-        
+
         # Test
         messages = [{"role": "user", "content": "Hello"}]
         with pytest.raises(RuntimeError, match="Google Generative AI error"):
@@ -210,13 +209,13 @@ class TestGoogleProvider:
         mock_response = Mock()
         mock_response.text = "Response without usage"
         mock_response.usage_metadata = None
-        
+
         provider.client.models.generate_content = Mock(return_value=mock_response)
-        
+
         # Test
         messages = [{"role": "user", "content": "Test"}]
         result = provider.complete(messages)
-        
+
         assert result["content"] == "Response without usage"
         assert result["usage"] == {}
 
@@ -224,10 +223,12 @@ class TestGoogleProvider:
         """Test that system messages are converted to user messages."""
         messages = [
             {"role": "system", "content": "Additional context"},
-            {"role": "user", "content": "Question"}
+            {"role": "user", "content": "Question"},
         ]
         formatted = provider.format_messages(messages)
-        
+
         # Find the additional context message (after initial system prompt)
-        context_msg = next(m for m in formatted if "Additional context" in m["parts"][0]["text"])
+        context_msg = next(
+            m for m in formatted if "Additional context" in m["parts"][0]["text"]
+        )
         assert context_msg["role"] == "user"  # system -> user

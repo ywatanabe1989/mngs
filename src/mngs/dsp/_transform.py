@@ -33,10 +33,7 @@ def to_sktime_df(arr):
     for i in range(n_samples):
         # Combine all channels into a single cell
         combined_series = pd.Series(
-            {
-                f"channel_{j}": pd.Series(arr[i, :, j])
-                for j in range(n_channels)
-            }
+            {f"channel_{j}": pd.Series(arr[i, :, j]) for j in range(n_channels)}
         )
         sktime_df.iloc[i, 0] = combined_series
 
@@ -53,6 +50,7 @@ def to_segments(x, window_size, overlap_factor=1, dim=-1):
 
 if __name__ == "__main__":
     import mngs
+
     x, t, f = mngs.dsp.demo_sig()
 
     y = to_segments(x, 256)

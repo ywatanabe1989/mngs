@@ -9,6 +9,7 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 from sklearn.metrics import balanced_accuracy_score
 from sklearn.metrics import confusion_matrix as sklearn_confusion_matrix
 
+
 def conf_mat(
     plt,
     cm=None,
@@ -112,7 +113,11 @@ def conf_mat(
 
     cm = pd.DataFrame(data=cm).copy()
 
-    labels_to_latex = lambda labels: [mngs.gen.to_latex_style(label) for label in labels] if labels is not None else None
+    labels_to_latex = lambda labels: (
+        [mngs.gen.to_latex_style(label) for label in labels]
+        if labels is not None
+        else None
+    )
     pred_labels = labels_to_latex(pred_labels)
     true_labels = labels_to_latex(true_labels)
     labels = labels_to_latex(labels)
@@ -196,6 +201,7 @@ def conf_mat(
 
     return fig, cm
 
+
 def calc_bACC_from_cm(cm):
     """
     Calculate balanced accuracy from confusion matrix.
@@ -223,6 +229,26 @@ def calc_bACC_from_cm(cm):
         except:
             bacc = np.nan
         return round(bacc, 3)
+
+
+def calc_balanced_accuracy_from_cm(cm):
+    """
+    Calculate balanced accuracy from confusion matrix (snake_case alias).
+    
+    This is an alias for calc_bACC_from_cm with snake_case naming.
+    
+    Parameters
+    ----------
+    cm : array-like
+        Confusion matrix
+        
+    Returns
+    -------
+    float
+        Balanced accuracy
+    """
+    return calc_bACC_from_cm(cm)
+
 
 if __name__ == "__main__":
     import sys

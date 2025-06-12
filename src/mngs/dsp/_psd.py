@@ -35,6 +35,7 @@ def psd(
     psd, freqs = PSD(fs, prob=prob, dim=dim)(x)
     return psd, freqs
 
+
 def band_powers(self, psd):
     """
     Calculate the average power for specified frequency bands.
@@ -43,9 +44,7 @@ def band_powers(self, psd):
 
     out = []
     for ll, hh in zip(self.low_freqs, self.high_freqs):
-        band_indices = torch.where((freqs >= ll) & (freqs <= hh))[0].to(
-            psd.device
-        )
+        band_indices = torch.where((freqs >= ll) & (freqs <= hh))[0].to(psd.device)
         band_power = psd[..., band_indices].sum(dim=self.dim)
         bandwidth = hh - ll
         avg_band_power = band_power / bandwidth
@@ -56,6 +55,7 @@ def band_powers(self, psd):
     # Average Power in Each Frequency Band
     avg_band_powers = self.calc_band_avg_power(psd, freqs)
     return (avg_band_powers,)
+
 
 if __name__ == "__main__":
     import sys

@@ -27,7 +27,7 @@ class TestPerplexityProvider:
             max_tokens=None,  # Will be set based on model
             timeout=30.0,
             max_retries=3,
-            system_prompt="Be precise and concise."
+            system_prompt="Be precise and concise.",
         )
 
     @pytest.fixture
@@ -53,16 +53,19 @@ class TestPerplexityProvider:
     def test_init_32k_model(self):
         """Test max_tokens for 32k model."""
         config = ProviderConfig(
-            api_key="test-key",
-            model="llama-3-sonar-small-32k-chat"
+            api_key="test-key", model="llama-3-sonar-small-32k-chat"
         )
         provider = PerplexityProvider(config)
         assert provider.config.max_tokens == 32_000
 
     def test_supported_models(self):
         """Test supported models list."""
-        assert "llama-3.1-sonar-small-128k-online" in PerplexityProvider.SUPPORTED_MODELS
-        assert "llama-3.1-sonar-large-128k-online" in PerplexityProvider.SUPPORTED_MODELS
+        assert (
+            "llama-3.1-sonar-small-128k-online" in PerplexityProvider.SUPPORTED_MODELS
+        )
+        assert (
+            "llama-3.1-sonar-large-128k-online" in PerplexityProvider.SUPPORTED_MODELS
+        )
         assert "llama-3-70b-instruct" in PerplexityProvider.SUPPORTED_MODELS
         assert "mixtral-8x7b-instruct" in PerplexityProvider.SUPPORTED_MODELS
 
@@ -71,7 +74,7 @@ class TestPerplexityProvider:
         messages = [
             {"role": "system", "content": "You are helpful"},
             {"role": "user", "content": "Hello"},
-            {"role": "assistant", "content": "Hi there!"}
+            {"role": "assistant", "content": "Hi there!"},
         ]
         # Should not raise
         provider.validate_messages(messages)
@@ -90,11 +93,9 @@ class TestPerplexityProvider:
 
     def test_format_messages(self, provider):
         """Test message formatting."""
-        messages = [
-            {"role": "user", "content": "What is epilepsy?"}
-        ]
+        messages = [{"role": "user", "content": "What is epilepsy?"}]
         formatted = provider.format_messages(messages)
-        
+
         # Should include system prompt
         assert len(formatted) == 2
         assert formatted[0]["role"] == "system"
@@ -105,10 +106,10 @@ class TestPerplexityProvider:
         """Test message formatting without system prompt."""
         config.system_prompt = None
         provider = PerplexityProvider(config)
-        
+
         messages = [{"role": "user", "content": "Hello"}]
         formatted = provider.format_messages(messages)
-        
+
         assert formatted == messages
 
     @patch("openai.OpenAI")
@@ -117,29 +118,36 @@ class TestPerplexityProvider:
         # Mock the OpenAI client
         mock_client = Mock()
         mock_openai_class.return_value = mock_client
-        
+
         # Create new provider to use mocked client
         provider = PerplexityProvider(provider.config)
-        
+
         # Mock the API response
         mock_response = Mock()
-        mock_response.choices = [Mock(message=Mock(content="Test response with citations"), finish_reason="stop")]
-        mock_response.usage = Mock(prompt_tokens=10, completion_tokens=20, total_tokens=30)
+        mock_response.choices = [
+            Mock(
+                message=Mock(content="Test response with citations"),
+                finish_reason="stop",
+            )
+        ]
+        mock_response.usage = Mock(
+            prompt_tokens=10, completion_tokens=20, total_tokens=30
+        )
         mock_response.model = "llama-3.1-sonar-small-128k-online"
-        
+
         mock_client.chat.completions.create.return_value = mock_response
-        
+
         # Test
         messages = [{"role": "user", "content": "Tell me about epilepsy"}]
         result = provider.complete(messages)
-        
+
         assert result["content"] == "Test response with citations"
         assert result["usage"]["prompt_tokens"] == 10
         assert result["usage"]["completion_tokens"] == 20
         assert result["usage"]["total_tokens"] == 30
         assert result["model"] == "llama-3.1-sonar-small-128k-online"
         assert result["finish_reason"] == "stop"
-        
+
         # Verify API call
         mock_client.chat.completions.create.assert_called_once()
         call_kwargs = mock_client.chat.completions.create.call_args.kwargs
@@ -154,34 +162,45 @@ class TestPerplexityProvider:
         # Mock the OpenAI client
         mock_client = Mock()
         mock_openai_class.return_value = mock_client
-        
+
         # Create new provider to use mocked client
         provider = PerplexityProvider(provider.config)
-        
+
         # Mock streaming response
         mock_chunks = [
-            Mock(choices=[Mock(delta=Mock(content="Epilepsy is"), finish_reason=None)], usage=None, model="llama-3.1-sonar-small-128k-online"),
-            Mock(choices=[Mock(delta=Mock(content=" a neurological"), finish_reason=None)], usage=None),
-            Mock(choices=[Mock(delta=Mock(content=" disorder."), finish_reason="stop")], 
-                 usage=Mock(prompt_tokens=5, completion_tokens=5, total_tokens=10))
+            Mock(
+                choices=[Mock(delta=Mock(content="Epilepsy is"), finish_reason=None)],
+                usage=None,
+                model="llama-3.1-sonar-small-128k-online",
+            ),
+            Mock(
+                choices=[
+                    Mock(delta=Mock(content=" a neurological"), finish_reason=None)
+                ],
+                usage=None,
+            ),
+            Mock(
+                choices=[Mock(delta=Mock(content=" disorder."), finish_reason="stop")],
+                usage=Mock(prompt_tokens=5, completion_tokens=5, total_tokens=10),
+            ),
         ]
-        
+
         mock_client.chat.completions.create.return_value = iter(mock_chunks)
-        
+
         # Test
         messages = [{"role": "user", "content": "What is epilepsy?"}]
         result = provider.stream(messages)
-        
+
         # Verify it returns an iterator
         assert isinstance(result, Iterator)
-        
+
         # Collect chunks
         chunks = list(result)
         assert len(chunks) >= 3
         assert chunks[0]["content"] == "Epilepsy is"
         assert chunks[1]["content"] == " a neurological"
         assert chunks[2]["content"] == " disorder."
-        
+
         # Find the chunk with usage info
         usage_chunk = next((c for c in chunks if "usage" in c), None)
         assert usage_chunk is not None
@@ -194,13 +213,13 @@ class TestPerplexityProvider:
         # Mock the OpenAI client
         mock_client = Mock()
         mock_openai_class.return_value = mock_client
-        
+
         # Create new provider to use mocked client
         provider = PerplexityProvider(provider.config)
-        
+
         # Mock API error
         mock_client.chat.completions.create.side_effect = Exception("API Error")
-        
+
         # Test
         messages = [{"role": "user", "content": "Hello"}]
         with pytest.raises(RuntimeError, match="Perplexity API error"):
@@ -210,31 +229,34 @@ class TestPerplexityProvider:
         """Test client is initialized with correct parameters."""
         with patch("openai.OpenAI") as mock_openai_class:
             provider = PerplexityProvider(config)
-            
+
             # Verify OpenAI client was initialized with correct params
             mock_openai_class.assert_called_once_with(
-                api_key="test-api-key",
-                base_url="https://api.perplexity.ai"
+                api_key="test-api-key", base_url="https://api.perplexity.ai"
             )
 
     def test_additional_kwargs(self, provider):
         """Test that additional kwargs are passed through."""
-        with patch.object(provider.client.chat.completions, 'create') as mock_create:
+        with patch.object(provider.client.chat.completions, "create") as mock_create:
             mock_response = Mock()
-            mock_response.choices = [Mock(message=Mock(content="Response"), finish_reason="stop")]
-            mock_response.usage = Mock(prompt_tokens=5, completion_tokens=10, total_tokens=15)
+            mock_response.choices = [
+                Mock(message=Mock(content="Response"), finish_reason="stop")
+            ]
+            mock_response.usage = Mock(
+                prompt_tokens=5, completion_tokens=10, total_tokens=15
+            )
             mock_response.model = "llama-3.1-sonar-small-128k-online"
             mock_create.return_value = mock_response
-            
+
             messages = [{"role": "user", "content": "Test"}]
             # Perplexity-specific parameters
             result = provider.complete(
                 messages,
                 search_domain_filter=["perplexity.ai"],
                 return_images=False,
-                search_recency_filter="month"
+                search_recency_filter="month",
             )
-            
+
             # Verify additional params were passed
             call_kwargs = mock_create.call_args.kwargs
             assert "search_domain_filter" in call_kwargs

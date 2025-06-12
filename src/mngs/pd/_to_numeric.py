@@ -6,7 +6,7 @@
 import pandas as pd
 
 
-def to_numeric(df, errors='coerce'):
+def to_numeric(df, errors="coerce"):
     """Convert all possible columns in a DataFrame to numeric types.
 
     Parameters
@@ -26,12 +26,12 @@ def to_numeric(df, errors='coerce'):
     for col in df_copy.columns:
         # First try to convert
         original_col = df_copy[col]
-        converted_col = pd.to_numeric(df_copy[col], errors='coerce')
-        
+        converted_col = pd.to_numeric(df_copy[col], errors="coerce")
+
         # Check if conversion resulted in all NaN when original had values
         if converted_col.isna().all() and not original_col.isna().all():
             # This is likely a pure string column
-            if errors == 'ignore':
+            if errors == "ignore":
                 # Keep original for pure string columns
                 continue
             else:
@@ -39,14 +39,15 @@ def to_numeric(df, errors='coerce'):
                 df_copy[col] = converted_col
         elif not converted_col.equals(original_col):
             # Conversion changed something
-            if errors == 'ignore':
+            if errors == "ignore":
                 # Only convert if it doesn't introduce new NaNs
                 if converted_col.isna().sum() == original_col.isna().sum():
                     df_copy[col] = converted_col
-            elif errors == 'coerce':
+            elif errors == "coerce":
                 df_copy[col] = converted_col
-            elif errors == 'raise':
-                df_copy[col] = pd.to_numeric(df_copy[col], errors='raise')
+            elif errors == "raise":
+                df_copy[col] = pd.to_numeric(df_copy[col], errors="raise")
     return df_copy
+
 
 # EOF

@@ -9,7 +9,6 @@ import os
 from ._split import split
 
 
-
 def mk_spath(sfname, makedirs=False):
     """
     Create a save path based on the calling script's location.

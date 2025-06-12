@@ -11,7 +11,10 @@ import pandas as pd
 import torch
 import xarray as xr
 
-ArrayLike = Union[list, tuple, np.ndarray, pd.Series, pd.DataFrame, xr.DataArray, torch.Tensor]
+ArrayLike = Union[
+    list, tuple, np.ndarray, pd.Series, pd.DataFrame, xr.DataArray, torch.Tensor
+]
+
 
 def var_info(variable: Any) -> dict:
     """Returns type and structural information about a variable.
@@ -38,17 +41,18 @@ def var_info(variable: Any) -> dict:
     dict
         Dictionary containing variable information.
     """
-    info = {'type': type(variable).__name__}
+    info = {"type": type(variable).__name__}
 
     # Length check
-    if hasattr(variable, '__len__'):
-        info['length'] = len(variable)
+    if hasattr(variable, "__len__"):
+        info["length"] = len(variable)
 
     # Shape check for array-like objects
-    if isinstance(variable, (np.ndarray, pd.DataFrame, pd.Series,
-                           xr.DataArray, torch.Tensor)):
-        info['shape'] = variable.shape
-        info['dimensions'] = len(variable.shape)
+    if isinstance(
+        variable, (np.ndarray, pd.DataFrame, pd.Series, xr.DataArray, torch.Tensor)
+    ):
+        info["shape"] = variable.shape
+        info["dimensions"] = len(variable.shape)
 
     # Special handling for nested lists
     elif isinstance(variable, list):
@@ -60,8 +64,8 @@ def var_info(variable: Any) -> dict:
                 shape.append(len(current[0]))
                 current = current[0]
                 depth += 1
-            info['shape'] = tuple(shape)
-            info['dimensions'] = depth
+            info["shape"] = tuple(shape)
+            info["dimensions"] = depth
 
     return info
 

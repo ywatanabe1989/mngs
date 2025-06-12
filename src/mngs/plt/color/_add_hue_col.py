@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/color/_add_hue_col.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/plt/color/_add_hue_col.py"
-)
+
+__FILE__ = "./src/mngs/plt/color/_add_hue_col.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -37,5 +36,6 @@ def add_hue_col(df):
     dummy_row["hue"] = 1
     df_added = pd.concat([df, dummy_row], axis=0)
     return df_added
+
 
 # EOF

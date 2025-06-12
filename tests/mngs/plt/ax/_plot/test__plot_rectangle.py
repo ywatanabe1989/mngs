@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/ax/_plot/test__plot_rectangle.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./tests/mngs/plt/ax/_plot/test__plot_rectangle.py"
-)
+
+__FILE__ = "./tests/mngs/plt/ax/_plot/test__plot_rectangle.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -88,15 +87,9 @@ class TestMainFunctionality:
         assert len(ax.patches) == 3
 
         # Check colors of plot_rectangles
-        assert ax.patches[0].get_facecolor()[0:3] == matplotlib.colors.to_rgb(
-            "red"
-        )
-        assert ax.patches[1].get_facecolor()[0:3] == matplotlib.colors.to_rgb(
-            "blue"
-        )
-        assert ax.patches[2].get_facecolor()[0:3] == matplotlib.colors.to_rgb(
-            "green"
-        )
+        assert ax.patches[0].get_facecolor()[0:3] == matplotlib.colors.to_rgb("red")
+        assert ax.patches[1].get_facecolor()[0:3] == matplotlib.colors.to_rgb("blue")
+        assert ax.patches[2].get_facecolor()[0:3] == matplotlib.colors.to_rgb("green")
 
     def test_edge_cases(self):
         # Test with zero width/height
@@ -113,9 +106,7 @@ class TestMainFunctionality:
 
     def test_plot_rectangle_savefig(self):
 
-        ax = plot_rectangle(
-            self.ax, 0.2, 0.3, 0.5, 0.4, facecolor="blue", alpha=0.5
-        )
+        ax = plot_rectangle(self.ax, 0.2, 0.3, 0.5, 0.4, facecolor="blue", alpha=0.5)
         ax.set_xlim(0, 1)
         ax.set_ylim(0, 1)
 
@@ -128,9 +119,8 @@ class TestMainFunctionality:
         # Check saved file
         ACTUAL_SAVE_DIR = __file__.replace(".py", "_out")
         actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
-        assert os.path.exists(
-            actual_spath
-        ), f"Failed to save figure to {spath}"
+        assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+
 
 if __name__ == "__main__":
     import os
@@ -153,14 +143,14 @@ if __name__ == "__main__":
 # )
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
-# 
+#
 # from matplotlib.patches import Rectangle
-# 
-# 
+#
+#
 # def plot_rectangle(ax, xx, yy, ww, hh, **kwargs):
 #     ax.add_patch(Rectangle((xx, yy), ww, hh, **kwargs))
 #     return ax
-# 
+#
 # # EOF
 # --------------------------------------------------------------------------------
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/ax/_plot/_plot_rectangle.py

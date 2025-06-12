@@ -4,11 +4,11 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_wrap.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/decorators/_wrap.py"
-)
+
+__FILE__ = "./src/mngs/decorators/_wrap.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
+
 
 def wrap(func):
     """Basic function wrapper that preserves function metadata.
@@ -34,5 +34,6 @@ def wrap(func):
     # Mark as a wrapper for detection
     wrapper._is_wrapper = True
     return wrapper
+
 
 # EOF

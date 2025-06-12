@@ -7,36 +7,48 @@ import mngs
 import numpy as np
 
 from ..decorators import signal_fn
-from ..nn import (BandPassFilter, BandStopFilter, GaussianFilter,
-                  HighPassFilter, LowPassFilter)
+from ..nn import (
+    BandPassFilter,
+    BandStopFilter,
+    GaussianFilter,
+    HighPassFilter,
+    LowPassFilter,
+)
 
 
 @signal_fn
 def gauss(x, sigma, t=None):
     return GaussianFilter(sigma)(x, t=t)
 
+
 @signal_fn
 def bandpass(x, fs, bands, t=None):
     import torch
+
     # Convert bands to tensor if it's not already
     if not isinstance(bands, torch.Tensor):
         bands = torch.tensor(bands, dtype=torch.float32)
     return BandPassFilter(bands, fs, x.shape[-1])(x, t=t)
 
+
 @signal_fn
 def bandstop(x, fs, bands, t=None):
     return BandStopFilter(bands, fs, x.shape[-1])(x, t=t)
+
 
 @signal_fn
 def lowpass(x, fs, cutoffs_hz, t=None):
     return LowPassFilter(cutoffs_hz, fs, x.shape[-1])(x, t=t)
 
+
 @signal_fn
 def highpass(x, fs, cutoffs_hz, t=None):
     return HighPassFilter(cutoffs_hz, fs, x.shape[-1])(x, t=t)
 
+
 def _custom_print(x):
     print(type(x), x.shape)
+
 
 if __name__ == "__main__":
     import sys
@@ -87,9 +99,7 @@ if __name__ == "__main__":
     }
 
     # Plots traces
-    fig, axes = plt.subplots(
-        nrows=len(filted), ncols=1, sharex=True, sharey=True
-    )
+    fig, axes = plt.subplots(nrows=len(filted), ncols=1, sharex=True, sharey=True)
     i_batch = 0
     i_ch = 0
     i_filt = 0
@@ -109,9 +119,7 @@ if __name__ == "__main__":
     mngs.io.save(fig, "traces.png")
 
     # Calculates and Plots PSD
-    fig, axes = plt.subplots(
-        nrows=len(filted), ncols=1, sharex=True, sharey=True
-    )
+    fig, axes = plt.subplots(nrows=len(filted), ncols=1, sharex=True, sharey=True)
     i_batch = 0
     i_ch = 0
     i_filt = 0

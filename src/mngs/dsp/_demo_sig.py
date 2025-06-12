@@ -20,6 +20,7 @@ from ..io._load_configs import load_configs
 # Config
 CONFIG = load_configs(verbose=False)
 
+
 # Functions
 def demo_sig(
     sig_type="periodic",
@@ -76,9 +77,7 @@ def demo_sig(
 
     if sig_type == "uniform":
         return (
-            np.random.uniform(
-                low=-0.5, high=0.5, size=(batch_size, n_chs, len(tt))
-            ),
+            np.random.uniform(low=-0.5, high=0.5, size=(batch_size, n_chs, len(tt))),
             tt,
             fs,
         )
@@ -146,6 +145,7 @@ def demo_sig(
             fs,
         )
 
+
 def _demo_sig_pac(
     batch_size=8,
     n_chs=19,
@@ -195,6 +195,7 @@ def _demo_sig_pac(
 
     return signals
 
+
 def _demo_sig_tensorpac(
     batch_size=8,
     n_chs=19,
@@ -219,9 +220,8 @@ def _demo_sig_tensorpac(
     x_4d = np.stack([x_3d for _ in range(n_chs)], axis=1)
     return x_4d, tt
 
-def _demo_sig_meg(
-    batch_size=8, n_chs=19, t_sec=10, fs=512, verbose=False, **kwargs
-):
+
+def _demo_sig_meg(batch_size=8, n_chs=19, t_sec=10, fs=512, verbose=False, **kwargs):
     data_path = sample.data_path()
     meg_path = data_path / "MEG" / "sample"
     raw_fname = meg_path / "sample_audvis_raw.fif"
@@ -237,9 +237,8 @@ def _demo_sig_meg(
         picks=raw.ch_names[: batch_size * n_chs], verbose=verbose
     ).reshape(batch_size, n_chs, -1)
 
-def _demo_sig_periodic_1d(
-    t_sec=10, fs=512, freqs_hz=None, verbose=False, **kwargs
-):
+
+def _demo_sig_periodic_1d(t_sec=10, fs=512, freqs_hz=None, verbose=False, **kwargs):
     """Returns a demo signal with the shape (t_sec*fs,)."""
 
     if freqs_hz is None:
@@ -253,12 +252,12 @@ def _demo_sig_periodic_1d(
 
     summed = np.array(
         [
-            np.random.rand()
-            * np.sin((f_hz * t + np.random.rand()) * (2 * np.pi))
+            np.random.rand() * np.sin((f_hz * t + np.random.rand()) * (2 * np.pi))
             for f_hz in freqs_hz
         ]
     ).sum(axis=0)
     return summed
+
 
 def _demo_sig_chirp_1d(
     t_sec=10, fs=512, low_hz=None, high_hz=None, verbose=False, **kwargs
@@ -279,12 +278,14 @@ def _demo_sig_chirp_1d(
     x *= 1.0 + 0.5 * np.sin(2.0 * np.pi * 3.0 * t)
     return x
 
+
 def _demo_sig_ripple_1d(t_sec=10, fs=512, **kwargs):
     n_samples = t_sec * fs
     t = simulate_time(n_samples, fs)
     n_ripples = random.randint(1, 5)
     mid_time = np.random.permutation(t)[:n_ripples]
     return simulate_LFP(t, mid_time, noise_amplitude=1.2, ripple_amplitude=5)
+
 
 if __name__ == "__main__":
     import mngs

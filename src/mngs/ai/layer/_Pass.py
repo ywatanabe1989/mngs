@@ -7,9 +7,13 @@ THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/layer/_Pass.py"
 
 import torch.nn as nn
 
+
 class Pass(nn.Module):
-    def __init__(self,):
+    def __init__(
+        self,
+    ):
         super().__init__()
+
     def forward(self, x):
         return x
 

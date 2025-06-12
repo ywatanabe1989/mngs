@@ -11,14 +11,23 @@ import pytest
 from unittest.mock import patch, MagicMock
 
 # Add src to path for testing
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../../src'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../../../src"))
 
 import mngs
+from mngs.gen._start import (
+    start,
+    _print_header,
+    _initialize_env,
+    _setup_configs,
+    _setup_matplotlib,
+    _get_debug_mode,
+    _get_mngs_version,
+)
 
 
 class TestStart:
     """Test cases for mngs.gen.start function."""
-    
+
     @pytest.fixture
     def temp_dir(self):
         """Create a temporary directory for test files."""
@@ -27,110 +36,110 @@ class TestStart:
         # Cleanup
         if os.path.exists(tmpdir):
             shutil.rmtree(tmpdir)
-    
+
     @pytest.fixture
     def mock_logging(self):
         """Mock logging setup."""
-        with patch('mngs.gen._start.logging') as mock_log:
+        with patch("mngs.gen._start.logging") as mock_log:
             yield mock_log
-    
-    @pytest.fixture  
+
+    @pytest.fixture
     def mock_matplotlib(self):
         """Mock matplotlib configuration."""
-        with patch('mngs.gen._start.plt') as mock_plt:
-            with patch('mngs.gen._start.mpl') as mock_mpl:
+        with patch("mngs.gen._start.plt") as mock_plt:
+            with patch("mngs.gen._start.mpl") as mock_mpl:
                 yield mock_plt, mock_mpl
-    
+
     def test_start_creates_directories(self, temp_dir):
         """Test that start() creates necessary directories."""
         # Arrange
-        with patch('os.getcwd', return_value=temp_dir):
+        with patch("os.getcwd", return_value=temp_dir):
             # Act
             result = start(sdir=temp_dir, verbose=False)
-            
+
             # Assert
             assert os.path.exists(temp_dir)
             assert result is not None
-    
+
     def test_start_sets_matplotlib_backend(self, mock_matplotlib):
         """Test that start() sets matplotlib backend to Agg."""
         # Arrange
         mock_plt, mock_mpl = mock_matplotlib
-        
+
         # Act
         start(verbose=False)
-        
+
         # Assert
-        mock_mpl.use.assert_called_with('Agg')
-    
+        mock_mpl.use.assert_called_with("Agg")
+
     def test_start_configures_logging(self, temp_dir, mock_logging):
         """Test that start() configures logging properly."""
         # Arrange
-        with patch('os.getcwd', return_value=temp_dir):
+        with patch("os.getcwd", return_value=temp_dir):
             # Act
             start(sdir=temp_dir, verbose=False)
-            
+
             # Assert
             mock_logging.basicConfig.assert_called_once()
-    
+
     def test_start_sets_random_seeds(self):
         """Test that start() sets random seeds for reproducibility."""
         # Arrange
-        with patch('mngs.gen._start.random') as mock_random:
-            with patch('mngs.gen._start.np.random') as mock_np_random:
-                with patch('mngs.gen._start.torch') as mock_torch:
+        with patch("mngs.gen._start.random") as mock_random:
+            with patch("mngs.gen._start.np.random") as mock_np_random:
+                with patch("mngs.gen._start.torch") as mock_torch:
                     # Act
                     start(seed=42, verbose=False)
-                    
+
                     # Assert
                     mock_random.seed.assert_called_with(42)
                     mock_np_random.seed.assert_called_with(42)
                     mock_torch.manual_seed.assert_called_with(42)
-    
+
     def test_start_with_verbose(self, capsys):
         """Test that start() prints messages when verbose=True."""
         # Act
-        with patch('mngs.gen._start.configure_mpl'):
-            with patch('mngs.gen._start.fix_seeds'):
+        with patch("mngs.gen._start.configure_mpl"):
+            with patch("mngs.gen._start.fix_seeds"):
                 start(verbose=True)
-        
+
         # Assert
         captured = capsys.readouterr()
         assert len(captured.out) > 0  # Should print something
-    
+
     def test_start_returns_config(self):
         """Test that start() returns configuration object."""
         # Act
-        with patch('mngs.gen._start.configure_mpl'):
-            with patch('mngs.gen._start.fix_seeds'):
+        with patch("mngs.gen._start.configure_mpl"):
+            with patch("mngs.gen._start.fix_seeds"):
                 result = start(verbose=False)
-        
+
         # Assert
         assert result is not None
-        assert hasattr(result, '__dict__') or isinstance(result, dict)
-    
+        assert hasattr(result, "__dict__") or isinstance(result, dict)
+
     def test_start_handles_missing_torch_gracefully(self):
         """Test that start() handles missing torch module gracefully."""
         # Arrange
-        with patch.dict(sys.modules, {'torch': None}):
+        with patch.dict(sys.modules, {"torch": None}):
             # Act & Assert - should not raise exception
             try:
                 start(verbose=False)
             except ImportError:
                 pytest.fail("start() should handle missing torch gracefully")
-    
+
     def test_start_creates_symlink(self, temp_dir):
         """Test that start() creates symlinks for outputs."""
         # Arrange
         script_path = os.path.join(temp_dir, "test_script.py")
-        with open(script_path, 'w') as f:
+        with open(script_path, "w") as f:
             f.write("# test script")
-        
-        with patch('sys.argv', [script_path]):
-            with patch('os.getcwd', return_value=temp_dir):
+
+        with patch("sys.argv", [script_path]):
+            with patch("os.getcwd", return_value=temp_dir):
                 # Act
                 start(sdir=temp_dir, verbose=False)
-                
+
                 # Assert - check if output directory structure created
                 assert os.path.exists(temp_dir)
 
@@ -158,9 +167,9 @@ if __name__ == "__main__":
 # )
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
-# 
+#
 # THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/gen/_start.py"
-# 
+#
 # import inspect
 # import os as _os
 # import re
@@ -169,10 +178,10 @@ if __name__ == "__main__":
 # from pprint import pprint
 # from time import sleep
 # from typing import Any, Dict, Optional, Tuple
-# 
+#
 # import matplotlib
 # import matplotlib.pyplot as plt_module
-# 
+#
 # from ..dev._analyze_code_flow import analyze_code_flow
 # from ..dict import DotDict
 # from ..gen._tee import tee
@@ -184,7 +193,7 @@ if __name__ == "__main__":
 # from ..reproduce._gen_ID import gen_ID
 # from ..str._clean_path import clean_path
 # from ..str._printc import printc as _printc
-# 
+#
 # """
 # Functionality:
 #     * Initializes experimental environment with reproducible settings
@@ -203,8 +212,8 @@ if __name__ == "__main__":
 #     * matplotlib
 #     * mngs package
 # """
-# 
-# 
+#
+#
 # def _print_header(
 #     ID: str,
 #     PID: int,
@@ -214,7 +223,7 @@ if __name__ == "__main__":
 #     verbose: bool = True,
 # ) -> None:
 #     """Prints formatted header with mngs version, ID, and PID information.
-# 
+#
 #     Parameters
 #     ----------
 #     ID : str
@@ -229,7 +238,7 @@ if __name__ == "__main__":
 #     _printc(
 #         (f"## mngs v{_get_mngs_version()}\n" f"## {ID} (PID: {PID})"), char="#"
 #     )
-# 
+#
 #     _printc((f"{file}\n" f"{args}"), c="yellow", char="=")
 #     sleep(1)
 #     if verbose:
@@ -237,16 +246,16 @@ if __name__ == "__main__":
 #         pprint(configs)
 #         print(f"\n{'-'*40}\n")
 #     sleep(1)
-# 
-# 
+#
+#
 # def _initialize_env(IS_DEBUG: bool) -> Tuple[str, int]:
 #     """Initialize environment with ID and PID.
-# 
+#
 #     Parameters
 #     ----------
 #     IS_DEBUG : bool
 #         Debug mode flag
-# 
+#
 #     Returns
 #     -------
 #     tuple
@@ -255,8 +264,8 @@ if __name__ == "__main__":
 #     ID = gen_ID(N=4) if not IS_DEBUG else "DEBUG_" + gen_ID(N=4)
 #     PID = _os.getpid()
 #     return ID, PID
-# 
-# 
+#
+#
 # def _setup_configs(
 #     IS_DEBUG: bool,
 #     ID: str,
@@ -267,7 +276,7 @@ if __name__ == "__main__":
 #     verbose: bool,
 # ) -> Dict[str, Any]:
 #     """Setup configuration dictionary with basic parameters.
-# 
+#
 #     Parameters
 #     ----------
 #     IS_DEBUG : bool
@@ -282,13 +291,13 @@ if __name__ == "__main__":
 #         Relative save directory path
 #     verbose : bool
 #         Verbosity flag
-# 
+#
 #     Returns
 #     -------
 #     dict
 #         Configuration dictionary
 #     """
-# 
+#
 #     CONFIGS = load_configs(IS_DEBUG).to_dict()
 #     CONFIGS.update(
 #         {
@@ -301,13 +310,13 @@ if __name__ == "__main__":
 #         }
 #     )
 #     return CONFIGS
-# 
-# 
+#
+#
 # def _setup_matplotlib(
 #     plt: plt_module = None, agg: bool = False, **mpl_kwargs: Any
 # ) -> Tuple[Any, Optional[Dict[str, Any]]]:
 #     """Configure matplotlib settings.
-# 
+#
 #     Parameters
 #     ----------
 #     plt : module
@@ -316,7 +325,7 @@ if __name__ == "__main__":
 #         Whether to use Agg backend
 #     **mpl_kwargs : dict
 #         Additional matplotlib configuration parameters
-# 
+#
 #     Returns
 #     -------
 #     tuple
@@ -330,8 +339,8 @@ if __name__ == "__main__":
 #             matplotlib.use("Agg")
 #         return plt, CC
 #     return plt, None
-# 
-# 
+#
+#
 # def start(
 #     sys: sys_module = None,
 #     plt: plt_module = None,
@@ -364,7 +373,7 @@ if __name__ == "__main__":
 #     verbose: bool = True,
 # ) -> Tuple[DotDict, Any, Any, Any, Optional[Dict[str, Any]]]:
 #     """Initialize experiment environment with reproducibility settings.
-# 
+#
 #     Parameters
 #     ----------
 #     sys : module, optional
@@ -401,7 +410,7 @@ if __name__ == "__main__":
 #         Default line width for plots
 #     clear_logs : bool, default=False
 #         Whether to clear existing log directory
-# 
+#
 #     Returns
 #     -------
 #     tuple
@@ -413,7 +422,7 @@ if __name__ == "__main__":
 #     """
 #     IS_DEBUG = _get_debug_mode()
 #     ID, PID = _initialize_env(IS_DEBUG)
-# 
+#
 #     ########################################
 #     # Defines SDIR (DO NOT MODIFY THIS SECTION)
 #     ########################################
@@ -425,38 +434,38 @@ if __name__ == "__main__":
 #             THIS_FILE = inspect.stack()[1].filename
 #             if "ipython" in __file__:
 #                 THIS_FILE = f"/tmp/{_os.getenv('USER')}.py"
-# 
+#
 #         # Define sdir
 #         sdir = clean_path(
 #             _os.path.splitext(__file__)[0] + f"_out/RUNNING/{ID}/"
 #         )
-# 
+#
 #         # Optional
 #         if sdir_suffix:
 #             sdir = sdir[:-1] + f"-{sdir_suffix}/"
-# 
+#
 #     if clear_logs:
 #         _clear_python_log_dir(_sdir + sfname + "/")
 #     _os.makedirs(sdir, exist_ok=True)
 #     relative_sdir = _simplify_relative_path(sdir)
 #     ########################################
-# 
+#
 #     # Setup configs after having all necessary parameters
 #     CONFIGS = _setup_configs(
 #         IS_DEBUG, ID, PID, file, sdir, relative_sdir, verbose
 #     )
-# 
+#
 #     # Logging
 #     if sys is not None:
 #         flush(sys)
 #         sys.stdout, sys.stderr = tee(sys, sdir=sdir, verbose=verbose)
 #         CONFIGS["sys"] = sys
-# 
+#
 #     # Random Seeds
 #     fix_seeds(
 #         os=os, random=random, np=np, torch=torch, seed=seed, verbose=verbose
 #     )
-# 
+#
 #     # Matplotlib configurations
 #     plt, CC = _setup_matplotlib(
 #         plt,
@@ -477,38 +486,38 @@ if __name__ == "__main__":
 #         # font_size_legend=font_size_legend,
 #         verbose=verbose,
 #     )
-# 
+#
 #     # Adds argument-parsed variables
 #     if args is not None:
 #         CONFIGS["ARGS"] = vars(args) if hasattr(args, "__dict__") else args
-# 
+#
 #     CONFIGS = DotDict(CONFIGS)
-# 
+#
 #     _print_header(ID, PID, file, args, CONFIGS, verbose)
-# 
+#
 #     if show_execution_flow:
 #         structure = analyze_code_flow(file)
 #         _printc(structure)
-# 
+#
 #     return CONFIGS, sys.stdout, sys.stderr, plt, CC
-# 
-# 
+#
+#
 # def _simplify_relative_path(sdir: str) -> str:
 #     """
 #     Simplify the relative path by removing specific patterns.
-# 
+#
 #     Example
 #     -------
 #     sdir = '/home/user/scripts/memory-load/distance_between_gs_stats/RUNNING/2024Y-09M-12D-02h44m40s_GlBZ'
 #     simplified_path = simplify_relative_path(sdir)
 #     print(simplified_path)
 #     # Output: './memory-load/distance_between_gs_stats/'
-# 
+#
 #     Parameters
 #     ----------
 #     sdir : str
 #         The directory path to simplify
-# 
+#
 #     Returns
 #     -------
 #     str
@@ -524,8 +533,8 @@ if __name__ == "__main__":
 #         r"\d{4}Y-\d{2}M-\d{2}D-\d{2}h\d{2}m\d{2}s_\w+/?$", "", simplified_path
 #     )
 #     return simplified_path
-# 
-# 
+#
+#
 # def _get_debug_mode() -> bool:
 #     # Debug mode check
 #     try:
@@ -536,59 +545,59 @@ if __name__ == "__main__":
 #                 IS_DEBUG = True
 #         else:
 #             IS_DEBUG = False
-# 
+#
 #     except Exception as e:
 #         print(e)
 #         IS_DEBUG = False
 #     return IS_DEBUG
-# 
-# 
+#
+#
 # def _clear_python_log_dir(log_dir: str) -> None:
 #     try:
 #         if _os.path.exists(log_dir):
 #             _os.system(f"rm -rf {log_dir}")
 #     except Exception as e:
 #         print(f"Failed to clear directory {log_dir}: {e}")
-# 
-# 
+#
+#
 # def _get_mngs_version() -> str:
 #     """Gets mngs version"""
 #     try:
 #         import mngs
-# 
+#
 #         return mngs.__version__
 #     except Exception as e:
 #         print(e)
 #         return "(not found)"
-# 
-# 
+#
+#
 # if __name__ == "__main__":
 #     import os
 #     import sys
-# 
+#
 #     import matplotlib.pyplot as plt
 #     import mngs
-# 
+#
 #     # Config
 #     CONFIG = mngs.io.load_configs()
-# 
+#
 #     # Functions
 #     # Your awesome code here :)
-# 
+#
 #     if __name__ == "__main__":
 #         # Start
 #         CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt)
-# 
+#
 #         # Your awesome code here :)
-# 
+#
 #         # Close
 #         mngs.gen.close(CONFIG)
-# 
-# 
+#
+#
 # """
 # /home/ywatanabe/proj/entrance/mngs/gen/_start.py
 # """
-# 
+#
 # # EOF
 # --------------------------------------------------------------------------------
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/gen/_start.py

@@ -8,6 +8,7 @@ THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_SQLite3Mixins/_IndexMix
 from typing import List
 from .._BaseMixins._BaseIndexMixin import _BaseIndexMixin
 
+
 class _IndexMixin:
     """Index management functionality"""
 

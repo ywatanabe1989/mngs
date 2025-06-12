@@ -4,4 +4,4 @@
 from .multi_task_loss import MultiTaskLoss
 from ._L1L2Losses import *
 
-__all__ = ['MultiTaskLoss']
+__all__ = ["MultiTaskLoss"]

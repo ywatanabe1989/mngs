@@ -30,10 +30,10 @@ class BNet(nn.Module):
         super().__init__()
         self.dummy_param = nn.Parameter(torch.empty(0))
         # N_VIRTUAL_CHS = 32
-        # "n_virtual_chs":16,        
+        # "n_virtual_chs":16,
 
         self.sc = mngs.nn.SwapChannels()
-        self.dc = mngs.nn.DropoutChannels(dropout=0.01)        
+        self.dc = mngs.nn.DropoutChannels(dropout=0.01)
         self.fgc = mngs.nn.FreqGainChanger(
             BNet_config["n_bands"], BNet_config["SAMP_RATE"]
         )
@@ -44,16 +44,19 @@ class BNet(nn.Module):
             ]
         )
 
-        self.cgcs = [mngs.nn.ChannelGainChanger(n_ch) for n_ch in BNet_config["n_chs_of_modalities"]]
-        # self.cgc = mngs.nn.ChannelGainChanger(N_VIRTUAL_CHS)        
+        self.cgcs = [
+            mngs.nn.ChannelGainChanger(n_ch)
+            for n_ch in BNet_config["n_chs_of_modalities"]
+        ]
+        # self.cgc = mngs.nn.ChannelGainChanger(N_VIRTUAL_CHS)
 
         # MNet_config["n_chs"] = BNet_config["n_virtual_chs"]  # BNet_config["n_chs"] # override
 
         n_chs = BNet_config["n_virtual_chs"]
         self.blk1 = mngs.nn.ResNetBasicBlock(n_chs, n_chs)
-        self.blk2 = mngs.nn.ResNetBasicBlock(int(n_chs/2**1), int(n_chs/2**1))
-        self.blk3 = mngs.nn.ResNetBasicBlock(int(n_chs/2**2), int(n_chs/2**2))
-        self.blk4 = mngs.nn.ResNetBasicBlock(int(n_chs/2**3), int(n_chs/2**3))
+        self.blk2 = mngs.nn.ResNetBasicBlock(int(n_chs / 2**1), int(n_chs / 2**1))
+        self.blk3 = mngs.nn.ResNetBasicBlock(int(n_chs / 2**2), int(n_chs / 2**2))
+        self.blk4 = mngs.nn.ResNetBasicBlock(int(n_chs / 2**3), int(n_chs / 2**3))
         self.blk5 = mngs.nn.ResNetBasicBlock(1, 1)
         self.blk6 = mngs.nn.ResNetBasicBlock(1, 1)
         self.blk7 = mngs.nn.ResNetBasicBlock(1, 1)
@@ -80,36 +83,36 @@ class BNet(nn.Module):
         return (x - x.mean(dim=-1, keepdims=True)) / x.std(dim=-1, keepdims=True)
 
     def forward(self, x, i_head):
-        x = self._znorm_along_the_last_dim(x)        
+        x = self._znorm_along_the_last_dim(x)
         # x = self.sc(x)
-        x = self.dc(x)        
+        x = self.dc(x)
         x = self.fgc(x)
         x = self.cgcs[i_head](x)
         x = self.heads[i_head](x)
 
         x = self.blk1(x)
-        x = F.avg_pool1d(x.transpose(1,2), kernel_size=2).transpose(1,2)
+        x = F.avg_pool1d(x.transpose(1, 2), kernel_size=2).transpose(1, 2)
         x = F.avg_pool1d(x, kernel_size=2)
         x = self.blk2(x)
-        x = F.avg_pool1d(x.transpose(1,2), kernel_size=2).transpose(1,2)
-        x = F.avg_pool1d(x, kernel_size=2)        
+        x = F.avg_pool1d(x.transpose(1, 2), kernel_size=2).transpose(1, 2)
+        x = F.avg_pool1d(x, kernel_size=2)
         x = self.blk3(x)
-        x = F.avg_pool1d(x.transpose(1,2), kernel_size=2).transpose(1,2)
-        x = F.avg_pool1d(x, kernel_size=2)        
+        x = F.avg_pool1d(x.transpose(1, 2), kernel_size=2).transpose(1, 2)
+        x = F.avg_pool1d(x, kernel_size=2)
         x = self.blk4(x)
-        x = F.avg_pool1d(x.transpose(1,2), kernel_size=2).transpose(1,2)
-        x = F.avg_pool1d(x, kernel_size=2)        
+        x = F.avg_pool1d(x.transpose(1, 2), kernel_size=2).transpose(1, 2)
+        x = F.avg_pool1d(x, kernel_size=2)
 
         x = self.blk5(x)
-        x = F.avg_pool1d(x, kernel_size=2)        
+        x = F.avg_pool1d(x, kernel_size=2)
         x = self.blk6(x)
-        x = F.avg_pool1d(x, kernel_size=2)        
+        x = F.avg_pool1d(x, kernel_size=2)
         x = self.blk7(x)
-        x = F.avg_pool1d(x, kernel_size=2)        
+        x = F.avg_pool1d(x, kernel_size=2)
 
+        import ipdb
 
-        import ipdb; ipdb.set_trace()                        
-
+        ipdb.set_trace()
 
         # x = self.cgc(x)
         x = self.MNet.forward_bb(x)
@@ -124,7 +127,7 @@ class BNet(nn.Module):
 # }
 BNet_config = {
     "n_bands": 6,
-    "n_virtual_chs":16,
+    "n_virtual_chs": 16,
     "SAMP_RATE": 250,
     "n_fc1": 1024,
     "d_ratio1": 0.85,
@@ -142,19 +145,18 @@ if __name__ == "__main__":
     BS, N_CHS, SEQ_LEN = 16, 19, 1024
     x_EEG = torch.rand(BS, N_CHS, SEQ_LEN).cuda()
 
-    
     # m = mngs.nn.ResNetBasicBlock(19, 19).cuda()
     # m(x_EEG)
     # model = MNetBackBorn(mngs.nn.MNet_config).cuda()
     # model(x_MEG)
     # Model
     BNet_config["n_chs_of_modalities"] = [160, 19]
-    BNet_config["n_classes_of_modalities"] = [2, 4]    
+    BNet_config["n_classes_of_modalities"] = [2, 4]
     model = BNet(BNet_config, mngs.nn.MNet_config).cuda()
 
     # MEG
     y = model(x_MEG, 0)
-    y = model(x_EEG, 1)    
+    y = model(x_EEG, 1)
 
     # # EEG
     # y = model(x_EEG)

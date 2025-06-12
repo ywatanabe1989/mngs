@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/utils/_calc_bacc_from_conf_mat.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/plt/utils/_calc_bacc_from_conf_mat.py"
-)
+
+__FILE__ = "./src/mngs/plt/utils/_calc_bacc_from_conf_mat.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -37,12 +36,11 @@ def calc_bacc_from_conf_mat(confusion_matrix: np.ndarray, n_round=3) -> float:
     """
     with suppress_output():
         try:
-            per_class = np.diag(confusion_matrix) / np.nansum(
-                confusion_matrix, axis=1
-            )
+            per_class = np.diag(confusion_matrix) / np.nansum(confusion_matrix, axis=1)
             bacc = np.nanmean(per_class)
         except:
             bacc = np.nan
         return round(bacc, n_round)
+
 
 # EOF

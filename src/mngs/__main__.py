@@ -16,11 +16,13 @@
 """
 
 import warnings
+
 warnings.filterwarnings("ignore")
 
 import sys
 from typing import List
 from .gen._print_config import print_config_main
+
 
 def main(args: List[str] = None) -> None:
     """
@@ -41,27 +43,29 @@ def main(args: List[str] = None) -> None:
     >>> main_module.main(['print_config', 'SOME_KEY'])
     """
 
+
 from .gen._print_config import print_config_main
+
 
 def main():
     """Main entry point for MNGS command-line interface.
-    
+
     Provides command-line access to various MNGS utilities. Currently
     supports configuration printing functionality.
-    
+
     Commands
     --------
     print_config : Print configuration values
         Usage: python -m mngs print_config [key]
-        
+
     Examples
     --------
     >>> # Print all configuration
     >>> python -m mngs print_config
-    
+
     >>> # Print specific configuration key
     >>> python -m mngs print_config DATABASE_URL
-    
+
     Raises
     ------
     SystemExit
@@ -79,6 +83,7 @@ def main():
     else:
         print(f"Unknown command: {command}")
         sys.exit(1)
+
 
 if __name__ == "__main__":
     main()

@@ -1,4 +1,41 @@
-LOG_PATH: /home/ywatanabe/proj/.claude-worktree/mngs_repo/.run_tests.sh.log
-LOG_PATH_TMP: /home/ywatanabe/proj/.claude-worktree/mngs_repo/.run_tests.sh.log-tmp
+LOG_PATH: /data/gpfs/projects/punim2354/ywatanabe/.claude-worktree/mngs_repo/.run_tests.sh.log
+LOG_PATH_TMP: /data/gpfs/projects/punim2354/ywatanabe/.claude-worktree/mngs_repo/.run_tests.sh.log-tmp
 Test run 1 of 1
-Sat May 31 07:35:12 AM AEST 2025
+[pytest]
+testpaths = tests
+python_files = test_*.py
+python_classes = Test*
+python_functions = test_*
+addopts = 
+    -v
+    --tb=short
+    --strict-markers
+    --disable-warnings
+    -p no:warnings
+markers =
+    slow: marks tests as slow (deselect with '-m "not slow"')
+    integration: marks tests as integration tests
+    unit: marks tests as unit tests
+    asyncio: marks tests as async tests
+filterwarnings =
+    ignore::DeprecationWarning
+    ignore::PendingDeprecationWarning
+    ignore::FutureWarningMon Jun  9 11:12:33 PM AEST 2025
+============================= test session starts ==============================
+platform linux -- Python 3.10.4, pytest-8.3.5, pluggy-1.6.0 -- /home/ywatanabe/proj/.claude-worktree/mngs_repo/.env-3.10/bin/python3.10
+cachedir: .pytest_cache
+rootdir: /data/gpfs/projects/punim2354/ywatanabe/.claude-worktree/mngs_repo
+configfile: tests/pytest.ini
+testpaths: tests
+plugins: anyio-4.9.0, xdist-3.7.0, env-1.1.5, cov-6.1.1
+collecting ... /data/gpfs/projects/punim2354/ywatanabe/.claude-worktree/mngs_repo/tests/custom/test_matplotlib_compatibility.py
+/data/gpfs/projects/punim2354/ywatanabe/.claude-worktree/mngs_repo/tests/custom/test_pip_install_latest.py
+/data/gpfs/projects/punim2354/ywatanabe/.claude-worktree/mngs_repo/tests/integration/test_module_integration.py
+/data/gpfs/projects/punim2354/ywatanabe/.claude-worktree/mngs_repo/tests/mngs/test___init__.py
+/data/gpfs/projects/punim2354/ywatanabe/.claude-worktree/mngs_repo/tests/mngs/test___main__.py
+/data/gpfs/projects/punim2354/ywatanabe/.claude-worktree/mngs_repo/tests/mngs/test___version__.py
+/data/gpfs/projects/punim2354/ywatanabe/.claude-worktree/mngs_repo/tests/mngs/test__sh.py
+/data/gpfs/projects/punim2354/ywatanabe/.claude-worktree/mngs_repo/tests/mngs/ai/test_ClassificationReporter.py
+/data/gpfs/projects/punim2354/ywatanabe/.claude-worktree/mngs_repo/tests/mngs/ai/test_ClassifierServer.py
+/data/gpfs/projects/punim2354/ywatanabe/.claude-worktree/mngs_repo/tests/mngs/ai/test_EarlyStopping.py
+/data/gpfs/projects/punim2354/ywatanabe/.claude-worktree/mngs_repo/tests/mngs/ai/test__LearningCurveLogger.py

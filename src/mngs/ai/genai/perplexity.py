@@ -37,7 +37,7 @@ warnings.warn(
     "perplexity.py is deprecated. Please use perplexity_provider.py instead. "
     "See PROVIDER_MIGRATION_GUIDE.md for migration instructions.",
     DeprecationWarning,
-    stacklevel=2
+    stacklevel=2,
 )
 
 """Functions & Classes"""
@@ -73,9 +73,7 @@ class Perplexity(BaseGenAI):
         )
 
     def _init_client(self) -> OpenAI:
-        return OpenAI(
-            api_key=self.api_key, base_url="https://api.perplexity.ai"
-        )
+        return OpenAI(api_key=self.api_key, base_url="https://api.perplexity.ai")
         # return OpenAI(
         #     api_key=self.api_key, base_url="https://api.perplexity.ai/chat/completions"
         # )
@@ -146,12 +144,8 @@ def main() -> None:
         "llama-3.1-sonar-large-128k-online",
         "llama-3.1-sonar-huge-128k-online",
     ]
-    ai = GenAI(
-        model=models[0], api_key=os.getenv("PERPLEXITY_API_KEY"), stream=False
-    )
-    out = ai(
-        "tell me about important citations for epilepsy prediction with citations"
-    )
+    ai = GenAI(model=models[0], api_key=os.getenv("PERPLEXITY_API_KEY"), stream=False)
+    out = ai("tell me about important citations for epilepsy prediction with citations")
     print(out)
 
 
@@ -201,9 +195,7 @@ def main():
 if __name__ == "__main__":
     import mngs
 
-    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
-        sys, plt, verbose=False
-    )
+    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt, verbose=False)
     main()
     mngs.gen.close(CONFIG, verbose=False, notify=False)
 

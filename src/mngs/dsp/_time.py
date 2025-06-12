@@ -9,9 +9,7 @@ import numpy as np
 
 def time(start_sec, end_sec, fs):
     # return np.linspace(start_sec, end_sec, (end_sec - start_sec) * fs)
-    return mngs.gen.float_linspace(
-        start_sec, end_sec, (end_sec - start_sec) * fs
-    )
+    return mngs.gen.float_linspace(start_sec, end_sec, (end_sec - start_sec) * fs)
 
 
 def main():
@@ -23,7 +21,6 @@ if __name__ == "__main__":
     import sys
 
     import matplotlib.pyplot as plt
-    
 
     # # Argument Parser
     # import argparse
@@ -32,9 +29,7 @@ if __name__ == "__main__":
     # parser.add_argument('--flag', '-f', action='store_true', default=False, help='')
     # args = parser.parse_args()
     # Main
-    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
-        sys, plt, verbose=False
-    )
+    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt, verbose=False)
     main()
     mngs.gen.close(CONFIG, verbose=False, notify=False)
 

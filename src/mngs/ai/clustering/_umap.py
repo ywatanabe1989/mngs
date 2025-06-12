@@ -291,11 +291,7 @@ def _run_umap(umap_model, data_all, labels_all, supervised, title):
     if not umap_model:
         umap_model = umap_orig.UMAP(random_state=42)
         supervised_label_or_none = labels_all[0] if supervised else None
-        title = (
-            f"(Supervised) {title}"
-            if supervised
-            else f"(Unsupervised) {title}"
-        )
+        title = f"(Supervised) {title}" if supervised else f"(Unsupervised) {title}"
         _umap = umap_model.fit(data_all[0], y=supervised_label_or_none)
     else:
         _umap = umap_model
@@ -311,12 +307,7 @@ def _check_input_vars(data_all, labels_all, hues_all, hues_colors_all):
     if hues_colors_all is None:
         hues_colors_all = [None for _ in range(len(data_all))]
 
-    assert (
-        len(data_all)
-        == len(labels_all)
-        == len(hues_all)
-        == len(hues_colors_all)
-    )
+    assert len(data_all) == len(labels_all) == len(hues_all) == len(hues_colors_all)
 
     assert (
         isinstance(data_all, list)
@@ -361,9 +352,7 @@ def _test(dataset_str="iris"):
     # Save legend figures if any
     if legend_figs:
         for i, leg_fig in enumerate(legend_figs):
-            mngs.io.save(
-                leg_fig, f"/tmp/mngs/umap/{dataset_str}_legend_{i}.jpg"
-            )
+            mngs.io.save(leg_fig, f"/tmp/mngs/umap/{dataset_str}_legend_{i}.jpg")
 
 
 main = umap

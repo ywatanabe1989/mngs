@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_plot/_plot_ecdf.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/plt/ax/_plot/_plot_ecdf.py"
-)
+
+__FILE__ = "./src/mngs/plt/ax/_plot/_plot_ecdf.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -81,5 +80,6 @@ def plot_ecdf(axis, data, **kwargs):
     )
 
     return axis, df
+
 
 # EOF

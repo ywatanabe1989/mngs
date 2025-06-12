@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/utils/__init__.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/plt/utils/__init__.py"
-)
+
+__FILE__ = "./src/mngs/plt/utils/__init__.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -16,5 +15,6 @@ from ._configure_mpl import configure_mpl
 from ._im2grid import im2grid
 from ._mk_colorbar import mk_colorbar
 from ._mk_patches import mk_patches
+from ._colorbar import colorbar, add_shared_colorbar
 
 # EOF

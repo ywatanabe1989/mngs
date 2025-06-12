@@ -54,4 +54,5 @@ def decapitalize(input_string: str) -> str:
     except Exception as error:
         raise ValueError(f"String processing failed: {str(error)}")
 
+
 # EOF

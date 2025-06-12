@@ -6,11 +6,12 @@
 import warnings
 from contextlib import contextmanager
 
+
 @contextmanager
 def ignore_setting_with_copy_warning():
     """
     Context manager to temporarily ignore pandas SettingWithCopyWarning.
-    
+
     Example
     -------
     >>> with ignore_SettingWithCopyWarning():
@@ -20,7 +21,7 @@ def ignore_setting_with_copy_warning():
         from pandas.errors import SettingWithCopyWarning
     except ImportError:
         from pandas.core.common import SettingWithCopyWarning
-    
+
     # Save current warning filters
     with warnings.catch_warnings():
         warnings.simplefilter(action="ignore", category=SettingWithCopyWarning)

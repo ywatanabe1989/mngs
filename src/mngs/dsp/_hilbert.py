@@ -24,6 +24,7 @@ def hilbert(
     y = Hilbert(x.shape[-1], dim=dim)(x)
     return y[..., 0], y[..., 1]
 
+
 if __name__ == "__main__":
     import mngs
 

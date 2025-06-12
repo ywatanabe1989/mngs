@@ -4,4 +4,4 @@
 from .classification_reporter import ClassificationReporter
 from .classifier_server import ClassifierServer
 
-__all__ = ['ClassificationReporter', 'ClassifierServer']
+__all__ = ["ClassificationReporter", "ClassifierServer"]

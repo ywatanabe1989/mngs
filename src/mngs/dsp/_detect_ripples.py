@@ -45,6 +45,7 @@ def detect_ripples(
     except ValueError as e:
         print("Caught an error:", e)
 
+
 def _preprocess(xx, fs, low_hz, high_hz, smoothing_sigma_ms=4):
     # Ensures three dimensional
     if xx.ndim == 2:
@@ -78,9 +79,7 @@ def _preprocess(xx, fs, low_hz, high_hz, smoothing_sigma_ms=4):
     # Calculate RMS
     xx = xx**2
     _, xx = hilbert(xx)
-    xx = gauss(xx, smoothing_sigma_ms * 1e-3 * fs_tgt).squeeze(
-        -2
-    )
+    xx = gauss(xx, smoothing_sigma_ms * 1e-3 * fs_tgt).squeeze(-2)
     xx = np.sqrt(xx)
 
     # Scales across channels
@@ -88,6 +87,7 @@ def _preprocess(xx, fs, low_hz, high_hz, smoothing_sigma_ms=4):
     xx = to_z(xx, dim=-1)
 
     return xx, fs_tgt
+
 
 def _find_events(xx_r, fs_r, sd, min_duration_ms):
     def _find_events_1d(xx_ri, fs_r, sd, min_duration_ms):
@@ -104,14 +104,11 @@ def _find_events(xx_r, fs_r, sd, min_duration_ms):
             right_bound = np.where(xx_ri[peak:] < 0)[0]
 
             left_ips = left_bound.max() if left_bound.size > 0 else peak
-            right_ips = (
-                peak + right_bound.min() if right_bound.size > 0 else peak
-            )
+            right_ips = peak + right_bound.min() if right_bound.size > 0 else peak
 
             # Avoid duplicates: Check if the current peak range is already listed
             if not any(
-                (left_ips == start and right_ips == end)
-                for start, end in peak_ranges
+                (left_ips == start and right_ips == end) for start, end in peak_ranges
             ):
                 peaks_all.append(peak)
                 peak_ranges.append((left_ips, right_ips))
@@ -129,9 +126,7 @@ def _find_events(xx_r, fs_r, sd, min_duration_ms):
                 }
             ).round(3)
         else:
-            df = pd.DataFrame(
-                columns=["start_s", "peak_s", "end_s", "peak_amp_sd"]
-            )
+            df = pd.DataFrame(columns=["start_s", "peak_s", "end_s", "peak_amp_sd"])
 
         # Duration
         df["duration_s"] = df.end_s - df.start_s
@@ -155,13 +150,13 @@ def _find_events(xx_r, fs_r, sd, min_duration_ms):
 
     return dfs
 
+
 def _drop_ripples_at_edges(df, low_hz, xx_r, fs_r):
     edge_s = 1 / low_hz * 3
-    indi_drop = (df.start_s < edge_s) + (
-        xx_r.shape[-1] / fs_r - edge_s < df.end_s
-    )
+    indi_drop = (df.start_s < edge_s) + (xx_r.shape[-1] / fs_r - edge_s < df.end_s)
     df = df[~indi_drop]
     return df
+
 
 def _calc_relative_peak_position(df):
     delta_s = df.peak_s - df.start_s
@@ -169,11 +164,13 @@ def _calc_relative_peak_position(df):
     df["rel_peak_pos"] = np.round(rel_peak, 3)
     return df
 
+
 # def _calc_incidence(df, xx_r, fs_r):
 #     n_ripples = len(df)
 #     rec_s = xx_r.shape[-1] / fs_r
 #     df["incidence_hz"] = n_ripples / rec_s
 #     return df
+
 
 def _sort_columns(df):
     sorted_columns = [
@@ -188,10 +185,12 @@ def _sort_columns(df):
     df = df[sorted_columns]
     return df
 
+
 def main():
     xx, tt, fs = demo_sig(sig_type="ripple")
     df = detect_ripples(xx, fs, 80, 140)
     print(df)
+
 
 if __name__ == "__main__":
     import sys
@@ -206,9 +205,7 @@ if __name__ == "__main__":
     # parser.add_argument('--flag', '-f', action='store_true', default=False, help='')
     # args = parser.parse_args()
     # Main
-    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
-        sys, plt, verbose=False
-    )
+    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt, verbose=False)
     main()
     mngs.gen.close(CONFIG, verbose=False, notify=False)
 

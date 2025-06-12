@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/ax/_plot/test__plot_ecdf.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./tests/mngs/plt/ax/_plot/test__plot_ecdf.py"
-)
+
+__FILE__ = "./tests/mngs/plt/ax/_plot/test__plot_ecdf.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -57,9 +56,7 @@ class TestPlotECDF:
 
     def test_with_plot_kwargs(self):
         # Test with additional plot kwargs
-        ax, df = plot_ecdf(
-            self.ax, self.data, color="red", linewidth=2, alpha=0.5
-        )
+        ax, df = plot_ecdf(self.ax, self.data, color="red", linewidth=2, alpha=0.5)
 
         # Plot style should be applied
         for line in self.ax.lines:
@@ -96,9 +93,8 @@ class TestPlotECDF:
         # Check saved file
         ACTUAL_SAVE_DIR = __file__.replace(".py", "_out")
         actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
-        assert os.path.exists(
-            actual_spath
-        ), f"Failed to save figure to {spath}"
+        assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+
 
 if __name__ == "__main__":
     import os
@@ -121,21 +117,21 @@ if __name__ == "__main__":
 # )
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
-# 
+#
 # import warnings
-# 
+#
 # import matplotlib
 # import numpy as np
-# 
+#
 # from ....pd._force_df import force_df as mngs_pd_force_df
-# 
-# 
+#
+#
 # def plot_ecdf(axis, data, **kwargs):
 #     """Plot Empirical Cumulative Distribution Function (ECDF).
-# 
+#
 #     The ECDF shows the proportion of data points less than or equal to each value,
 #     representing the empirical estimate of the cumulative distribution function.
-# 
+#
 #     Parameters
 #     ----------
 #     axis : matplotlib.axes.Axes
@@ -144,7 +140,7 @@ if __name__ == "__main__":
 #         Data to compute and plot ECDF for. NaN values are ignored.
 #     **kwargs : dict
 #         Additional arguments to pass to plot function
-# 
+#
 #     Returns
 #     -------
 #     tuple
@@ -153,34 +149,34 @@ if __name__ == "__main__":
 #     assert isinstance(
 #         axis, matplotlib.axes._axes.Axes
 #     ), "First argument must be a matplotlib axis"
-# 
+#
 #     # Flatten and remove NaN values
 #     data = np.hstack(data)
-# 
+#
 #     # Warnings
 #     if np.isnan(data).any():
 #         warnings.warn("NaN value are ignored for ECDF plot.")
 #     data = data[~np.isnan(data)]
 #     nn = len(data)
-# 
+#
 #     # Sort the data and compute the ECDF values
 #     data_sorted = np.sort(data)
 #     ecdf_perc = 100 * np.arange(1, len(data_sorted) + 1) / len(data_sorted)
-# 
+#
 #     # Create the pseudo x-axis for step plotting
 #     x_step = np.repeat(data_sorted, 2)[1:]
 #     y_step = np.repeat(ecdf_perc, 2)[:-1]
-# 
+#
 #     # Plot the ECDF using steps
 #     axis.plot(x_step, y_step, drawstyle="steps-post", **kwargs)
-# 
+#
 #     # Scatter the original data points
 #     axis.plot(data_sorted, ecdf_perc, marker=".", linestyle="none")
-# 
+#
 #     # Set ylim, xlim, and aspect ratio
 #     axis.set_ylim(0, 100)
 #     axis.set_xlim(0, 1.0)
-# 
+#
 #     # Create a DataFrame to hold the ECDF data
 #     df = mngs_pd_force_df(
 #         {
@@ -191,9 +187,9 @@ if __name__ == "__main__":
 #             "y_step": y_step,
 #         }
 #     )
-# 
+#
 #     return axis, df
-# 
+#
 # # EOF
 # --------------------------------------------------------------------------------
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/ax/_plot/_plot_ecdf.py

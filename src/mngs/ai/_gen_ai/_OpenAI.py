@@ -120,9 +120,7 @@ class OpenAI(BaseGenAI):
         if kwargs.get("model").startswith("o"):
             for reasoning_effort in ["low", "midium", "high"]:
                 kwargs["reasoning_effort"] = reasoning_effort
-                kwargs["model"] = kwargs["model"].replace(
-                    f"-{reasoning_effort}", ""
-                )
+                kwargs["model"] = kwargs["model"].replace(f"-{reasoning_effort}", "")
             full_response = self._api_call_static()
             for char in full_response:
                 yield char
@@ -220,9 +218,7 @@ if __name__ == "__main__":
     import matplotlib.pyplot as plt
     import mngs
 
-    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
-        sys, plt, verbose=False
-    )
+    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt, verbose=False)
     main()
     mngs.gen.close(CONFIG, verbose=False, notify=False)
 

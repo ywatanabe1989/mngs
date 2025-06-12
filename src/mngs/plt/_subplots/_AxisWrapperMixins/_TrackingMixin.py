@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_TrackingMixin.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/plt/_subplots/_AxisWrapperMixins/_TrackingMixin.py"
-)
+
+__FILE__ = "./src/mngs/plt/_subplots/_AxisWrapperMixins/_TrackingMixin.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -26,6 +25,7 @@ from contextlib import contextmanager
 import pandas as pd
 
 from .._export_as_csv import export_as_csv as _export_as_csv
+from .._export_as_csv import export_as_csv_for_sigmaplot as _export_as_csv_for_sigmaplot
 
 
 class TrackingMixin:
@@ -81,10 +81,37 @@ class TrackingMixin:
 
     def export_as_csv(self):
         """
-        Export tracked plotting data to a DataFrame in SigmaPlot format.
+        Export tracked plotting data to a DataFrame.
         """
         df = _export_as_csv(self.history)
 
+        return df if df is not None else pd.DataFrame()
+    
+    def export_as_csv_for_sigmaplot(self, include_visual_params=True):
+        """
+        Export tracked plotting data to a DataFrame in SigmaPlot format.
+        
+        Parameters
+        ----------
+        include_visual_params : bool, optional
+            Whether to include visual parameters (xlabel, ylabel, scales, etc.)
+            at the top of the CSV. Default is True.
+            
+        Returns
+        -------
+        pandas.DataFrame
+            DataFrame containing the plotted data formatted for SigmaPlot.
+            
+        Examples
+        --------
+        >>> fig, ax = mngs.plt.subplots()
+        >>> ax.plot([1, 2, 3], [4, 5, 6])
+        >>> ax.scatter([1, 2, 3], [7, 8, 9])
+        >>> df = ax.export_as_csv_for_sigmaplot()
+        >>> df.to_csv('for_sigmaplot.csv', index=False)
+        """
+        df = _export_as_csv_for_sigmaplot(self.history, include_visual_params)
+        
         return df if df is not None else pd.DataFrame()
 
     # def _track(
@@ -126,5 +153,6 @@ class TrackingMixin:
     #     """Converts plotting history to a SigmaPlot-compatible DataFrame."""
     #     df = _export_as_csv(self.history)
     #     return df if df is not None else pd.DataFrame()
+
 
 # EOF

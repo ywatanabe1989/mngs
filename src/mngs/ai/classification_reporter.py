@@ -38,6 +38,7 @@ class MultiClassificationReporter(object):
 
         self.tgt2id = {tgt: i_tgt for i_tgt, tgt in enumerate(tgts)}
         self.reporters = [ClassificationReporter(sdir) for sdir in sdirs]
+
     def add(self, obj_name, obj, tgt=None):
         i_tgt = self.tgt2id[tgt]
         self.reporters[i_tgt].add(obj_name, obj)
@@ -160,6 +161,11 @@ class ClassificationReporter(object):
         if show:
             print(f"\nBalanced ACC in fold#{i_fold} was {balanced_acc:.3f}\n")
         return balanced_acc
+    
+    @staticmethod
+    def calc_balanced_accuracy(true_class, pred_class, i_fold, show=False):
+        """Balanced accuracy (snake_case alias for calc_bACC)"""
+        return ClassificationReporter.calc_bACC(true_class, pred_class, i_fold, show)
 
     @staticmethod
     def calc_mcc(true_class, pred_class, i_fold, show=False):
@@ -212,9 +218,7 @@ class ClassificationReporter(object):
             ],
             axis=1,
         )
-        clf_report = clf_report.rename(
-            columns={"accuracy": "balanced accuracy"}
-        )
+        clf_report = clf_report.rename(columns={"accuracy": "balanced accuracy"})
         clf_report = clf_report.round(3)
         clf_report["index"] = clf_report.index
         clf_report.loc["support", "index"] = "sample size"
@@ -263,6 +267,19 @@ class ClassificationReporter(object):
                 auc_plt_config=auc_plt_config,
             )
         return roc_auc
+    
+    def calc_aucs(self, true_class, pred_proba, labels, i_fold, show=True, auc_plt_config=None):
+        """Calculate AUCs (snake_case alias for calc_AUCs)"""
+        if auc_plt_config is None:
+            auc_plt_config = dict(
+                figsize=(7, 7),
+                labelsize=8,
+                fontsize=7,
+                legendfontsize=6,
+                tick_size=0.8,
+                tick_width=0.2,
+            )
+        return self.calc_AUCs(true_class, pred_proba, labels, i_fold, show, auc_plt_config)
 
     def _calc_AUCs_binary(
         self,
@@ -344,6 +361,19 @@ class ClassificationReporter(object):
         self.folds_dict["PRE_REC_fig"].append(fig_prerec)
 
         return roc_auc
+    
+    def _calc_aucs_binary(self, true_class, pred_proba, i_fold, show=False, auc_plt_config=None):
+        """Calculates metrics for binary classification (snake_case alias)."""
+        if auc_plt_config is None:
+            auc_plt_config = dict(
+                figsize=(7, 7),
+                labelsize=8,
+                fontsize=7,
+                legendfontsize=6,
+                tick_size=0.8,
+                tick_width=0.2,
+            )
+        return self._calc_AUCs_binary(true_class, pred_proba, i_fold, show, auc_plt_config)
 
 
 # #!/usr/bin/env python3

@@ -5,6 +5,7 @@
 
 import re
 
+
 def squeeze_spaces(string, pattern=" +", repl=" "):
     """Replace multiple occurrences of a pattern in a string with a single replacement.
 

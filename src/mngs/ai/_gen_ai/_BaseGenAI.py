@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_BaseGenAI.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/ai/_gen_ai/_BaseGenAI.py"
-)
+
+__FILE__ = "./src/mngs/ai/_gen_ai/_BaseGenAI.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -19,9 +18,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from ...io._load import load
-from .calc_cost import calc_cost
-from .format_output_func import format_output_func
-from .params import MODELS
+from ._calc_cost import calc_cost
+from ._format_output_func import format_output_func
+from ._PARAMS import MODELS
 
 
 class BaseGenAI(ABC):
@@ -120,9 +119,7 @@ class BaseGenAI(ABC):
             # Escape special characters
             escaped_content = [repr(line)[1:-1] for line in file_content]
             prompt = (
-                str(prompt).strip()
-                + "\n\n"
-                + str("\n".join(escaped_content)).strip()
+                str(prompt).strip() + "\n\n" + str("\n".join(escaped_content)).strip()
             )
 
         # if prompt_file:
@@ -230,9 +227,7 @@ class BaseGenAI(ABC):
         return history
 
     @staticmethod
-    def _ensure_start_from_user(
-        history: List[Dict[str, str]]
-    ) -> List[Dict[str, str]]:
+    def _ensure_start_from_user(history: List[Dict[str, str]]) -> List[Dict[str, str]]:
         if history and history[0]["role"] != "user":
             history.pop(0)
         return history
@@ -314,9 +309,7 @@ class BaseGenAI(ABC):
         return calc_cost(self.model, self.input_tokens, self.output_tokens)
 
     @staticmethod
-    def _to_stream(
-        string: Union[str, List[str]]
-    ) -> Generator[str, None, None]:
+    def _to_stream(string: Union[str, List[str]]) -> Generator[str, None, None]:
         """Converts string or list of strings to generator for streaming."""
         chunks = string if isinstance(string, list) else [string]
         for chunk in chunks:
@@ -331,9 +324,7 @@ def main() -> None:
 if __name__ == "__main__":
     import mngs
 
-    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
-        sys, plt, verbose=False
-    )
+    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt, verbose=False)
     main()
     mngs.gen.close(CONFIG, verbose=False, notify=False)
 

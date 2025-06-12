@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/ax/_adjust/test__hide_spines.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./tests/mngs/plt/ax/_adjust/test__hide_spines.py"
-)
+
+__FILE__ = "./tests/mngs/plt/ax/_adjust/test__hide_spines.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -45,9 +44,7 @@ class TestMainFunctionality:
 
     def test_hide_specific_spines(self):
         # Test hiding only specific spines
-        ax = hide_spines(
-            self.ax, top=True, bottom=False, left=True, right=False
-        )
+        ax = hide_spines(self.ax, top=True, bottom=False, left=True, right=False)
 
         # Check that only specified spines are hidden
         assert not ax.spines["top"].get_visible()
@@ -70,12 +67,8 @@ class TestMainFunctionality:
         fig.canvas.draw()
         assert ax.xaxis.get_major_ticks() != []
         assert ax.yaxis.get_major_ticks() != []
-        assert not all(
-            label.get_text() == "" for label in ax.get_xticklabels()
-        )
-        assert not all(
-            label.get_text() == "" for label in ax.get_yticklabels()
-        )
+        assert not all(label.get_text() == "" for label in ax.get_xticklabels())
+        assert not all(label.get_text() == "" for label in ax.get_yticklabels())
 
     def test_savefig(self):
         from mngs.io import save
@@ -90,9 +83,7 @@ class TestMainFunctionality:
         # Check saved file
         ACTUAL_SAVE_DIR = __file__.replace(".py", "_out")
         actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
-        assert os.path.exists(
-            actual_spath
-        ), f"Failed to save figure to {spath}"
+        assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
 
     # def test_hide_ticks_only(self):
     #     # Test hiding ticks but keeping labels
@@ -148,12 +139,12 @@ if __name__ == "__main__":
 # )
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
-# 
+#
 # # Time-stamp: "2024-04-26 20:03:45 (ywatanabe)"
-# 
+#
 # import matplotlib
-# 
-# 
+#
+#
 # def hide_spines(
 #     axis,
 #     top=True,
@@ -165,11 +156,11 @@ if __name__ == "__main__":
 # ):
 #     """
 #     Hides the specified spines of a matplotlib Axes object and optionally removes the ticks and labels.
-# 
+#
 #     This function is designed to work with matplotlib Axes objects. It allows for a cleaner, more minimalist
 #     presentation of plots by hiding the spines (the lines denoting the boundaries of the plot area) and optionally
 #     removing the ticks and labels from the axes.
-# 
+#
 #     Arguments:
 #         ax (matplotlib.axes.Axes): The Axes object for which the spines will be hidden.
 #         top (bool, optional): If True, hides the top spine. Defaults to True.
@@ -178,10 +169,10 @@ if __name__ == "__main__":
 #         right (bool, optional): If True, hides the right spine. Defaults to True.
 #         ticks (bool, optional): If True, removes the ticks from the hidden spines' axes. Defaults to True.
 #         labels (bool, optional): If True, removes the labels from the hidden spines' axes. Defaults to True.
-# 
+#
 #     Returns:
 #         matplotlib.axes.Axes: The modified Axes object with the specified spines hidden.
-# 
+#
 #     Example:
 #         >>> fig, ax = plt.subplots()
 #         >>> hide_spines(ax, top=False, labels=False)
@@ -190,7 +181,7 @@ if __name__ == "__main__":
 #     assert isinstance(
 #         axis, matplotlib.axes._axes.Axes
 #     ), "First argument must be a matplotlib axis"
-# 
+#
 #     tgts = []
 #     if top:
 #         tgts.append("top")
@@ -200,27 +191,27 @@ if __name__ == "__main__":
 #         tgts.append("left")
 #     if right:
 #         tgts.append("right")
-# 
+#
 #     for tgt in tgts:
 #         # Spines
 #         axis.spines[tgt].set_visible(False)
-# 
+#
 #         # Ticks
 #         if ticks:
 #             if tgt == "bottom":
 #                 axis.xaxis.set_ticks_position("none")
 #             elif tgt == "left":
 #                 axis.yaxis.set_ticks_position("none")
-# 
+#
 #         # Labels
 #         if labels:
 #             if tgt == "bottom":
 #                 axis.set_xticklabels([])
 #             elif tgt == "left":
 #                 axis.set_yticklabels([])
-# 
+#
 #     return axis
-# 
+#
 # # EOF
 # --------------------------------------------------------------------------------
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/ax/_style/_hide_spines.py

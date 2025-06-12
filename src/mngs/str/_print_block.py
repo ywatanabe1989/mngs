@@ -5,6 +5,7 @@
 
 from ._color_text import color_text
 
+
 def printc(message, char="-", n=40, c="cyan"):
     """Print a message surrounded by a character border.
 
@@ -41,5 +42,6 @@ def printc(message, char="-", n=40, c="cyan"):
     if c is not None:
         text = color_text(text, c)
     print(text)
+
 
 # EOF

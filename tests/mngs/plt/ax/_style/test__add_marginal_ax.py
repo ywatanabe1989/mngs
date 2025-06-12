@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/ax/_adjust/test__add_marginal_ax.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./tests/mngs/plt/ax/_adjust/test__add_marginal_ax.py"
-)
+
+__FILE__ = "./tests/mngs/plt/ax/_adjust/test__add_marginal_ax.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -159,9 +158,8 @@ class TestMainFunctionality:
         # Check saved file
         ACTUAL_SAVE_DIR = __file__.replace(".py", "_out")
         actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
-        assert os.path.exists(
-            actual_spath
-        ), f"Failed to save figure to {spath}"
+        assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+
 
 if __name__ == "__main__":
     import os
@@ -184,27 +182,27 @@ if __name__ == "__main__":
 # )
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
-# 
+#
 # import matplotlib
 # from mpl_toolkits.axes_grid1 import make_axes_locatable
-# 
-# 
+#
+#
 # def add_marginal_ax(axis, place, size=0.2, pad=0.1):
 #     assert isinstance(
 #         axis, matplotlib.axes._axes.Axes
 #     ), "First argument must be a matplotlib axis"
-# 
+#
 #     divider = make_axes_locatable(axis)
-# 
+#
 #     size_perc_str = f"{size*100}%"
 #     if place in ["left", "right"]:
 #         size = 1.0 / size
-# 
+#
 #     axis_marginal = divider.append_axes(place, size=size_perc_str, pad=pad)
 #     axis_marginal.set_box_aspect(size)
-# 
+#
 #     return axis_marginal
-# 
+#
 # # EOF
 # --------------------------------------------------------------------------------
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/ax/_style/_add_marginal_ax.py

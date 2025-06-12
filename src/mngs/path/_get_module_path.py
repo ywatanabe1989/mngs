@@ -3,6 +3,7 @@
 # Time-stamp: "2024-11-14 07:39:32 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/path/_get_module_path.py
 
+
 def get_data_path_from_a_package(package_str, resource):
     """
     Get the path to a data file within a package.

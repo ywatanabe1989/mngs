@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/_im2grid.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/plt/_im2grid.py"
-)
+
+__FILE__ = "./src/mngs/plt/_im2grid.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -66,5 +65,6 @@ def im2grid(image_paths, default_color=(255, 255, 255)):
                 grid_image.paste(img, (x * img_width, y * img_height))
 
     return grid_image
+
 
 # EOF

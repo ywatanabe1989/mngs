@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-01 23:44:56 (ywatanabe)"
-# File: /home/ywatanabe/proj/_mngs_repo/src/mngs/gen/_start.py
+# Timestamp: "2025-06-08 13:00:20 (ywatanabe)"
+# File: /ssh:ywatanabe@sp:/home/ywatanabe/proj/.claude-worktree/mngs_repo/src/mngs/gen/_start.py
 # ----------------------------------------
 import os
 __FILE__ = (
@@ -210,7 +210,7 @@ def start(
     # font_size_legend: int = 6,
     hide_top_right_spines: bool = True,
     alpha: float = 0.9,
-    line_width: float = 0.5,
+    line_width: float = 1.0,
     clear_logs: bool = False,
     verbose: bool = True,
 ) -> Tuple[DotDict, Any, Any, Any, Optional[Dict[str, Any]]]:

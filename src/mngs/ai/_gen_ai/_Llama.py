@@ -20,6 +20,8 @@ except:
 from .base_genai import BaseGenAI
 
 """Functions & Classes"""
+
+
 def print_envs():
     settings = {
         "MASTER_ADDR": os.getenv("MASTER_ADDR", "localhost"),
@@ -60,13 +62,9 @@ class Llama(BaseGenAI):
         os.environ["RANK"] = os.getenv("RANK", "0")
         print_envs()
 
-        self.ckpt_dir = (
-            ckpt_dir if ckpt_dir else f"Meta-{model}/"
-        )
+        self.ckpt_dir = ckpt_dir if ckpt_dir else f"Meta-{model}/"
         self.tokenizer_path = (
-            tokenizer_path
-            if tokenizer_path
-            else f"./Meta-{model}/tokenizer.model"
+            tokenizer_path if tokenizer_path else f"./Meta-{model}/tokenizer.model"
         )
         self.max_seq_len = max_seq_len
         self.max_batch_size = max_batch_size
@@ -137,9 +135,7 @@ def main():
 
 if __name__ == "__main__":
     # Main
-    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
-        sys, plt, verbose=False
-    )
+    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt, verbose=False)
     main()
     mngs.gen.close(CONFIG, verbose=False, notify=False)
 

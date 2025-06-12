@@ -107,9 +107,7 @@ def get_clang_version(run_lambda):
 
 
 def get_cmake_version(run_lambda):
-    return run_and_parse_first_match(
-        run_lambda, "cmake --version", r"cmake (.*)"
-    )
+    return run_and_parse_first_match(run_lambda, "cmake --version", r"cmake (.*)")
 
 
 def get_nvidia_driver_version(run_lambda):
@@ -119,9 +117,7 @@ def get_nvidia_driver_version(run_lambda):
             run_lambda, cmd, r"com[.]nvidia[.]CUDA [(](.*?)[)]"
         )
     smi = get_nvidia_smi()
-    return run_and_parse_first_match(
-        run_lambda, smi, r"Driver Version: (.*?) "
-    )
+    return run_and_parse_first_match(run_lambda, smi, r"Driver Version: (.*?) ")
 
 
 def get_gpu_info(run_lambda):
@@ -143,9 +139,7 @@ def get_gpu_info(run_lambda):
 
 
 def get_running_cuda_version(run_lambda):
-    return run_and_parse_first_match(
-        run_lambda, "nvcc --version", r"release .+ V(.*)"
-    )
+    return run_and_parse_first_match(run_lambda, "nvcc --version", r"release .+ V(.*)")
 
 
 def get_cudnn_version(run_lambda):
@@ -190,9 +184,7 @@ def get_nvidia_smi():
     smi = "nvidia-smi"
     if get_platform() == "win32":
         system_root = os.environ.get("SYSTEMROOT", "C:\\Windows")
-        program_files_root = os.environ.get(
-            "PROGRAMFILES", "C:\\Program Files"
-        )
+        program_files_root = os.environ.get("PROGRAMFILES", "C:\\Program Files")
         legacy_path = os.path.join(
             program_files_root, "NVIDIA Corporation", "NVSMI", smi
         )
@@ -219,9 +211,7 @@ def get_platform():
 
 
 def get_mac_version(run_lambda):
-    return run_and_parse_first_match(
-        run_lambda, "sw_vers -productVersion", r"(.*)"
-    )
+    return run_and_parse_first_match(run_lambda, "sw_vers -productVersion", r"(.*)")
 
 
 def get_windows_version(run_lambda):
@@ -280,6 +270,7 @@ def get_os(run_lambda):
 def get_pip_packages(run_lambda):
     """Returns `pip list` output. Note: will also find conda-installed pytorch
     and numpy packages."""
+
     # People genly have `pip` as `pip` or `pip3`
     def run_with_pip(pip):
         if get_platform() == "win32":
@@ -288,9 +279,7 @@ def get_pip_packages(run_lambda):
             grep_cmd = r'{} /R "numpy torch"'.format(findstr_cmd)
         else:
             grep_cmd = r'grep "torch\|numpy"'
-        return run_and_read_all(
-            run_lambda, pip + " list --format=freeze | " + grep_cmd
-        )
+        return run_and_read_all(run_lambda, pip + " list --format=freeze | " + grep_cmd)
 
     # Try to figure out if the user is running pip or pip3.
     out2 = run_with_pip("pip")
@@ -322,9 +311,7 @@ def get_env_info():
         if (
             not hasattr(torch.version, "hip") or torch.version.hip is None
         ):  # cuda version
-            hip_compiled_version = (
-                hip_runtime_version
-            ) = miopen_runtime_version = "N/A"
+            hip_compiled_version = hip_runtime_version = miopen_runtime_version = "N/A"
         else:  # HIP version
             cfg = torch._C._show_config().split("\n")
             hip_runtime_version = [
@@ -336,12 +323,8 @@ def get_env_info():
             cuda_version_str = "N/A"
             hip_compiled_version = torch.version.hip
     else:
-        version_str = (
-            debug_mode_str
-        ) = cuda_available_str = cuda_version_str = "N/A"
-        hip_compiled_version = (
-            hip_runtime_version
-        ) = miopen_runtime_version = "N/A"
+        version_str = debug_mode_str = cuda_available_str = cuda_version_str = "N/A"
+        hip_compiled_version = hip_runtime_version = miopen_runtime_version = "N/A"
 
     return SystemEnv(
         torch_version=version_str,
@@ -462,12 +445,8 @@ def pretty_str(envinfo):
     mutable_dict = replace_nones(mutable_dict)
 
     # If either of these are '', replace with 'No relevant packages'
-    mutable_dict["pip_packages"] = replace_if_empty(
-        mutable_dict["pip_packages"]
-    )
-    mutable_dict["conda_packages"] = replace_if_empty(
-        mutable_dict["conda_packages"]
-    )
+    mutable_dict["pip_packages"] = replace_if_empty(mutable_dict["pip_packages"])
+    mutable_dict["conda_packages"] = replace_if_empty(mutable_dict["conda_packages"])
 
     # Tag conda and pip packages with a prefix
     # If they were previously None, they'll show up as ie '[conda] Could not collect'

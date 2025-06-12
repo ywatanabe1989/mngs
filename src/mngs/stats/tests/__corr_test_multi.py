@@ -11,6 +11,7 @@ from ...decorators import numpy_fn
 import multiprocessing as mp
 from functools import partial
 import pandas as pd
+
 # def _compute_surrogate(args):
 #     data1, data2, corr_func, seed = args
 #     np.random.seed(seed)
@@ -20,6 +21,7 @@ import pandas as pd
 
 #     non_nan_indices = ~(np.isnan(data1) | np.isnan(data2))
 #     data1, data2 = data1[non_nan_indices], data2[non_nan_indices]
+
 
 #     return corr_func(data1, data2)[0]
 def _compute_surrogate(args):
@@ -34,6 +36,7 @@ def _compute_surrogate(args):
         non_nan_indices = ~(np.isnan(data1) | np.isnan(data2))
         return corr_func(data1[non_nan_indices], data2[non_nan_indices])[0]
 
+
 def _corr_test_base(
     data1: np.ndarray,
     data2: np.ndarray,
@@ -42,15 +45,15 @@ def _corr_test_base(
     seed: int,
     corr_func: Callable,
     test_name: str,
-    n_jobs: int = -1
+    n_jobs: int = -1,
 ) -> Dict[str, Any]:
     np.random.seed(seed)
-    seeds = np.random.randint(0, n_perm*100, size=n_perm)
+    seeds = np.random.randint(0, n_perm * 100, size=n_perm)
 
     if corr_func != stats.spearmanr:
         # Convert to numeric, replacing non-numeric values with NaN
-        data1 = pd.to_numeric(data1, errors='coerce')
-        data2 = pd.to_numeric(data2, errors='coerce')
+        data1 = pd.to_numeric(data1, errors="coerce")
+        data2 = pd.to_numeric(data2, errors="coerce")
 
         # Remove NaN values
         mask = ~(np.isnan(data1) | np.isnan(data2))
@@ -90,19 +93,20 @@ def _corr_test_base(
     if n_jobs != 1:
         n_jobs = mp.cpu_count() if n_jobs == -1 else n_jobs
         with mp.Pool(n_jobs) as pool:
-            surrogate = np.array(pool.map(_compute_surrogate,
-                                          [(data1, data2, corr_func, s) for s in seeds]))
+            surrogate = np.array(
+                pool.map(
+                    _compute_surrogate, [(data1, data2, corr_func, s) for s in seeds]
+                )
+            )
     else:
-        surrogate = np.array([
-            _compute_surrogate((data1, data2, corr_func, s))
-            for s in seeds
-        ])
+        surrogate = np.array(
+            [_compute_surrogate((data1, data2, corr_func, s)) for s in seeds]
+        )
 
     # Add normality test for surrogate distribution
     _, p_normal = stats.normaltest(surrogate)
     if not p_normal > 0.05:
         print(f"Warning: Surrogate distribution may not be normal (p={p_normal:.3f})")
-
 
     rank = bisect_right(sorted(surrogate), corr_obs)
     pvalue = min(rank, n_perm - rank) / n_perm * 2
@@ -131,6 +135,7 @@ def _corr_test_base(
         "H0": f"There is no {test_name.lower()} correlation between the two variables",
     }
 
+
 @numpy_fn
 def corr_test_spearman(
     data1: np.ndarray,
@@ -139,7 +144,10 @@ def corr_test_spearman(
     n_perm: int = 1_000,
     seed: int = 42,
 ) -> Dict[str, Any]:
-    return _corr_test_base(data1, data2, only_significant, n_perm, seed, stats.spearmanr, "Spearman")
+    return _corr_test_base(
+        data1, data2, only_significant, n_perm, seed, stats.spearmanr, "Spearman"
+    )
+
 
 @numpy_fn
 def corr_test_pearson(
@@ -149,7 +157,10 @@ def corr_test_pearson(
     n_perm: int = 1_000,
     seed: int = 42,
 ) -> Dict[str, Any]:
-    return _corr_test_base(data1, data2, only_significant, n_perm, seed, stats.pearsonr, "Pearson")
+    return _corr_test_base(
+        data1, data2, only_significant, n_perm, seed, stats.pearsonr, "Pearson"
+    )
+
 
 @numpy_fn
 def corr_test(
@@ -195,6 +206,7 @@ def corr_test(
         return corr_test_pearson(data1, data2, only_significant, n_perm, seed)
     else:
         raise ValueError("Invalid test type. Choose 'pearson' or 'spearman'.")
+
 
 if __name__ == "__main__":
     xx = np.array([3, 4, 4, 5, 7, 8, 10, 12, 13, 15])

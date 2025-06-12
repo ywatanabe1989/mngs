@@ -4,9 +4,8 @@
 # File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_set_ticks.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/plt/ax/_set_ticks.py"
-)
+
+__FILE__ = "./src/mngs/plt/ax/_set_ticks.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -20,10 +19,10 @@ from ....types import is_listed_X
 
 def set_ticks(ax, xvals=None, xticks=None, yvals=None, yticks=None):
     """Set custom tick labels on both x and y axes.
-    
+
     Convenience function to set tick positions and labels for both axes
     at once. Automatically handles canvas updates for interactive backends.
-    
+
     Parameters
     ----------
     ax : matplotlib.axes.Axes
@@ -36,20 +35,20 @@ def set_ticks(ax, xvals=None, xticks=None, yvals=None, yticks=None):
         Values corresponding to y-axis data points.
     yticks : list, optional
         Desired tick labels for the y-axis.
-        
+
     Returns
     -------
     matplotlib.axes.Axes
         The modified axes object.
-        
+
     Examples
     --------
     >>> fig, ax = plt.subplots()
     >>> x = np.linspace(0, 10, 100)
     >>> ax.plot(x, np.sin(x))
-    >>> ax = set_ticks(ax, xvals=x, xticks=[0, 5, 10], 
+    >>> ax = set_ticks(ax, xvals=x, xticks=[0, 5, 10],
     ...                yvals=[-1, 0, 1], yticks=['-1', '0', '1'])
-    
+
     See Also
     --------
     set_x_ticks : Set ticks for x-axis only
@@ -112,16 +111,11 @@ def set_x_ticks(ax, x_vals=None, x_ticks=None):
             ax.set_xticklabels(x_ticks)
         else:
             x_vals = np.array(
-                [
-                    label.get_text().replace("−", "-")
-                    for label in ax.get_xticklabels()
-                ]
+                [label.get_text().replace("−", "-") for label in ax.get_xticklabels()]
             )
             x_vals = x_vals.astype(float)
             x_indi = np.argmin(
-                np.array(
-                    np.abs(x_vals[:, np.newaxis] - x_ticks[np.newaxis, :])
-                ),
+                np.array(np.abs(x_vals[:, np.newaxis] - x_ticks[np.newaxis, :])),
                 axis=0,
             )
             ax.set_xticks(ax.get_xticks()[x_indi])
@@ -219,16 +213,11 @@ def set_y_ticks(ax, y_vals=None, y_ticks=None):
             ax.set_yticklabels(y_ticks)
         else:
             y_vals = np.array(
-                [
-                    label.get_text().replace("−", "-")
-                    for label in ax.get_yticklabels()
-                ]
+                [label.get_text().replace("−", "-") for label in ax.get_yticklabels()]
             )
             y_vals = y_vals.astype(float)
             y_indi = np.argmin(
-                np.array(
-                    np.abs(y_vals[:, np.newaxis] - y_ticks[np.newaxis, :])
-                ),
+                np.array(np.abs(y_vals[:, np.newaxis] - y_ticks[np.newaxis, :])),
                 axis=0,
             )
             ax.set_yticks(ax.get_yticks()[y_indi])

@@ -32,3 +32,20 @@ def bACC(true_class, pred_class):
             pred_class.reshape(-1),  # [REVISED]
         )
     return round(bACC_score, 3)  # [REVISED]
+
+
+# Snake_case alias for consistency
+def balanced_accuracy(true_class, pred_class):
+    """
+    Calculates the balanced accuracy score between predicted and true class labels.
+    
+    This is an alias for bACC() with snake_case naming.
+    
+    Parameters:
+    - true_class (array-like or torch.Tensor): True class labels.
+    - pred_class (array-like or torch.Tensor): Predicted class labels.
+    
+    Returns:
+    - float: The balanced accuracy score rounded to three decimal places.
+    """
+    return bACC(true_class, pred_class)

@@ -56,7 +56,14 @@ def _save_configs(CONFIG):
     mngs_io_save(CONFIG, CONFIG["SDIR"] + "CONFIGS/CONFIG.yaml", verbose=False)
 
 
-def _escape_ANSI_from_log_files(log_files):
+def _escape_ansi_from_log_files(log_files):
+    """Remove ANSI escape sequences from log files.
+    
+    Parameters
+    ----------
+    log_files : list
+        List of log file paths to clean
+    """
     ansi_escape = re.compile(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])")
 
     # ANSI code escape
@@ -79,6 +86,7 @@ def _args_to_str(args_dict):
     else:
         return ""
 
+
 def close(CONFIG, message=":)", notify=False, verbose=True, exit_status=None):
     sys = None  # Initialize sys outside try block
     try:
@@ -95,7 +103,7 @@ def close(CONFIG, message=":)", notify=False, verbose=True, exit_status=None):
 
         # ANSI code escape
         log_files = _glob(CONFIG["SDIR"] + "logs/*.log")
-        _escape_ANSI_from_log_files(log_files)
+        _escape_ansi_from_log_files(log_files)
         # mngs_io_flush(sys=sys)
 
         if CONFIG.get("ARGS"):
@@ -124,15 +132,15 @@ def close(CONFIG, message=":)", notify=False, verbose=True, exit_status=None):
         if sys:
             try:
                 # First, flush all outputs
-                if hasattr(sys, 'stdout') and hasattr(sys.stdout, 'flush'):
+                if hasattr(sys, "stdout") and hasattr(sys.stdout, "flush"):
                     sys.stdout.flush()
-                if hasattr(sys, 'stderr') and hasattr(sys.stderr, 'flush'):
+                if hasattr(sys, "stderr") and hasattr(sys.stderr, "flush"):
                     sys.stderr.flush()
-                
+
                 # Then close Tee objects
-                if hasattr(sys, 'stdout') and hasattr(sys.stdout, '_log_file'):
+                if hasattr(sys, "stdout") and hasattr(sys.stdout, "_log_file"):
                     sys.stdout.close()
-                if hasattr(sys, 'stderr') and hasattr(sys.stderr, '_log_file'):
+                if hasattr(sys, "stderr") and hasattr(sys.stderr, "_log_file"):
                     sys.stderr.close()
             except Exception:
                 # Silent fail to ensure logs are saved even if there's an error

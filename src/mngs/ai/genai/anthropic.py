@@ -56,7 +56,7 @@ class Anthropic(BaseGenAI):
     ) -> None:
 
         if model == "claude-3-7-sonnet-2025-0219":
-            max_tokens=128_000
+            max_tokens = 128_000
 
         api_key = api_key or os.getenv("ANTHROPIC_API_KEY")
 
@@ -164,14 +164,9 @@ def main() -> None:
 if __name__ == "__main__":
     import mngs
 
-    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
-        sys, plt, verbose=False
-    )
+    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt, verbose=False)
     main()
     mngs.gen.close(CONFIG, verbose=False, notify=False)
-
-
-
 
 
 """

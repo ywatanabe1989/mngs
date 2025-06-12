@@ -3,6 +3,7 @@
 # Time-stamp: "2024-11-02 14:28:12 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/reproduce/_fix_seeds.py
 
+
 def fix_seeds(
     os=None, random=None, np=None, torch=None, tf=None, seed=42, verbose=True
 ):
@@ -36,9 +37,7 @@ def fix_seeds(
 
     if verbose:
         print(f"\n{'-'*40}\n")
-        print(
-            f"Random seeds of the following packages have been fixed as {seed}"
-        )
+        print(f"Random seeds of the following packages have been fixed as {seed}")
         print(os_str, random_str, np_str, torch_str, tf_str)
         print(f"\n{'-'*40}\n")
 

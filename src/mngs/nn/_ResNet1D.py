@@ -6,17 +6,13 @@ import torch
 import torch.nn as nn
 from torchsummary import summary
 
+
 class ResNet1D(nn.Module):
     """
     A representative convolutional neural network for signal classification tasks.
     """
 
-    def __init__(
-        self,
-            n_chs=19,
-            n_out=10,
-            n_blks=5
-    ):
+    def __init__(self, n_chs=19, n_out=10, n_blks=5):
         super().__init__()
 
         # Parameters
@@ -104,7 +100,8 @@ class ResNetBasicBlock(nn.Module):
         x = self.activation(x)
 
         return x
-    
+
+
 if __name__ == "__main__":
     import sys
 
@@ -116,8 +113,8 @@ if __name__ == "__main__":
     Xb = torch.rand(bs, n_chs, seq_len)
 
     model = ResNet1D(
-            n_chs=n_chs,
-            n_out=4,
+        n_chs=n_chs,
+        n_out=4,
     )  # utils.load_yaml("./config/global.yaml")["EMOTIONS"]
     y = model(Xb)  # 16,4
     summary(model, Xb)

@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_signal_fn.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/decorators/_signal_fn.py"
-)
+
+__FILE__ = "./src/mngs/decorators/_signal_fn.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -24,11 +23,12 @@ from ._converters import _return_always, is_nested_decorator, to_torch
 
 def signal_fn(func: Callable) -> Callable:
     """Decorator for signal processing functions that converts only the first argument (signal) to torch tensor.
-    
+
     This decorator is designed for DSP functions where:
     - The first argument is the signal data that should be converted to torch tensor
     - Other arguments (like sampling frequency, bands, etc.) should remain as-is
     """
+
     @wraps(func)
     def wrapper(*args: _Any, **kwargs: _Any) -> _Any:
         # Skip conversion if already in a nested decorator context
@@ -41,12 +41,12 @@ def signal_fn(func: Callable) -> Callable:
 
         # Store original object for type preservation
         original_object = args[0] if args else None
-        
+
         # Convert only the first argument (signal) to torch tensor
         if args:
             # Convert first argument to torch
             converted_first_arg = to_torch(args[0], return_fn=_return_always)[0][0]
-            
+
             # Keep other arguments as-is
             converted_args = (converted_first_arg,) + args[1:]
         else:
@@ -68,13 +68,15 @@ def signal_fn(func: Callable) -> Callable:
                 elif isinstance(original_object, xr.DataArray):
                     return xr.DataArray(results.detach().cpu().numpy())
             return results
-        
+
         # Handle tuple returns (e.g., (signal, frequencies))
         elif isinstance(results, tuple):
             converted_results = []
             for r in results:
                 if isinstance(r, torch.Tensor):
-                    if original_object is not None and isinstance(original_object, np.ndarray):
+                    if original_object is not None and isinstance(
+                        original_object, np.ndarray
+                    ):
                         converted_results.append(r.detach().cpu().numpy())
                     else:
                         converted_results.append(r)
@@ -88,5 +90,6 @@ def signal_fn(func: Callable) -> Callable:
     wrapper._is_wrapper = True
     wrapper._decorator_type = "signal_fn"
     return wrapper
+
 
 # EOF

@@ -3,7 +3,9 @@
 # Timestamp: "2025-02-27 22:14:52 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_PostgreSQLMixins/_ConnectionMixin.py
 
-THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQLMixins/_ConnectionMixin.py"
+THIS_FILE = (
+    "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQLMixins/_ConnectionMixin.py"
+)
 
 from typing import Any, Tuple
 import psycopg2
@@ -59,9 +61,7 @@ class _ConnectionMixin(_BaseConnectionMixin):
         if self.db_config:
             self.connect()
         else:
-            raise ValueError(
-                "No database configuration specified for reconnection"
-            )
+            raise ValueError("No database configuration specified for reconnection")
 
     def execute(self, query: str, parameters: Tuple = None) -> Any:
         """Execute a database query."""
@@ -76,7 +76,6 @@ class _ConnectionMixin(_BaseConnectionMixin):
             self.conn.rollback()
             raise psycopg2.Error(f"Query execution failed: {err}")
 
-
     def executemany(self, query: str, parameters: list) -> None:
         """Execute multiple database queries."""
         if not self.cursor:
@@ -88,5 +87,6 @@ class _ConnectionMixin(_BaseConnectionMixin):
         except psycopg2.Error as err:
             self.conn.rollback()
             raise psycopg2.Error(f"Batch query execution failed: {err}")
+
 
 # EOF

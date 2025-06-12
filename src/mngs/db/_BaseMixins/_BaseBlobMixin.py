@@ -10,6 +10,7 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 import numpy as np
 import pandas as pd
 
+
 class _BaseBlobMixin(ABC):
     """Base class for BLOB data handling functionality"""
 

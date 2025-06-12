@@ -35,9 +35,7 @@ def set_yaxis_for_acc(ax, key_plt):
 
 
 def plot_tra(ax, metrics_df, key_plt, lw=1, color="blue"):
-    indi_step = mngs.gen.search(
-        "^[Tt]rain(ing)?", metrics_df.step, as_bool=True
-    )[0]
+    indi_step = mngs.gen.search("^[Tt]rain(ing)?", metrics_df.step, as_bool=True)[0]
     step_df = metrics_df[indi_step]
 
     if len(step_df) != 0:
@@ -54,9 +52,7 @@ def plot_tra(ax, metrics_df, key_plt, lw=1, color="blue"):
 
 
 def scatter_val(ax, metrics_df, key_plt, s=3, color="green"):
-    indi_step = mngs.gen.search(
-        "^[Vv]alid(ation)?", metrics_df.step, as_bool=True
-    )[0]
+    indi_step = mngs.gen.search("^[Vv]alid(ation)?", metrics_df.step, as_bool=True)[0]
     step_df = metrics_df[indi_step]
     if len(step_df) != 0:
         ax.scatter(
@@ -105,9 +101,7 @@ def select_ticks(metrics_df, max_n_ticks=4):
     # Calculate epoch starts and their corresponding labels for ticks
     unique_epochs = metrics_df["i_epoch"].drop_duplicates().values
     epoch_starts = (
-        metrics_df[metrics_df["i_batch"] == 0]["i_global"]
-        .drop_duplicates()
-        .values
+        metrics_df[metrics_df["i_batch"] == 0]["i_global"].drop_duplicates().values
     )
 
     # Given the performance issue, let's just select a few epoch starts for labeling
@@ -173,12 +167,8 @@ def learning_curve(
 
         ax = set_yaxis_for_acc(ax, key_plt)
         ax = plot_tra(ax, metrics_df, key_plt, lw=linewidth, color=cc["blue"])
-        ax = scatter_val(
-            ax, metrics_df, key_plt, s=scattersize, color=cc["green"]
-        )
-        ax = scatter_tes(
-            ax, metrics_df, key_plt, s=scattersize, color=cc["red"]
-        )
+        ax = scatter_val(ax, metrics_df, key_plt, s=scattersize, color=cc["green"])
+        ax = scatter_tes(ax, metrics_df, key_plt, s=scattersize, color=cc["red"])
 
         # # Custom tick marks
         # ax = mngs.plt.ax.map_ticks(
@@ -199,8 +189,6 @@ if __name__ == "__main__":
 
     sdir, _, _ = mngs.gen.split_fpath(lpath)
     metrics_df = mngs.io.load(lpath)
-    fig = learning_curve(
-        metrics_df, title="Pretraining on db_v8", yscale="log"
-    )
+    fig = learning_curve(metrics_df, title="Pretraining on db_v8", yscale="log")
     # plt.show()
     mngs.io.save(fig, sdir + "learning_curve.png")

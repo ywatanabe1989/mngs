@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_panel.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/plt/ax/_panel.py"
-)
+
+__FILE__ = "./src/mngs/plt/ax/_panel.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -50,10 +49,10 @@ def add_panel(tgt_width_mm=40, tgt_height_mm=None):
 @deprecated("Use add_panel instead")
 def panel(tgt_width_mm=40, tgt_height_mm=None):
     """Create a figure panel with specified dimensions (deprecated).
-    
+
     This function is deprecated and maintained only for backward compatibility.
     Please use `add_panel` instead.
-    
+
     Parameters
     ----------
     tgt_width_mm : float, optional
@@ -61,21 +60,21 @@ def panel(tgt_width_mm=40, tgt_height_mm=None):
     tgt_height_mm : float or None, optional
         Target height in millimeters. If None, uses golden ratio.
         Default is None.
-        
+
     Returns
     -------
     tuple
         (fig, ax) - matplotlib figure and axes objects
-        
+
     See Also
     --------
     add_panel : The recommended function to use instead
-    
+
     Examples
     --------
     >>> # Deprecated usage
     >>> fig, ax = panel(tgt_width_mm=40, tgt_height_mm=30)
-    
+
     >>> # Recommended alternative
     >>> fig, ax = add_panel(tgt_width_mm=40, tgt_height_mm=30)
     """

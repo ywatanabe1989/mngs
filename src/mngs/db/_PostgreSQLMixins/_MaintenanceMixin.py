@@ -3,7 +3,9 @@
 # Timestamp: "2025-02-27 22:15:18 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_PostgreSQLMixins/_MaintenanceMixin.py
 
-THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQLMixins/_MaintenanceMixin.py"
+THIS_FILE = (
+    "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQLMixins/_MaintenanceMixin.py"
+)
 
 import pandas as pd
 import contextlib
@@ -143,7 +145,9 @@ class _MaintenanceMixin(_BaseMaintenanceMixin):
                 for column in table_sample.columns:
                     if table_sample[column].dtype == object:
                         try:
-                            pd.to_datetime(table_sample[column], format='mixed', errors='raise')
+                            pd.to_datetime(
+                                table_sample[column], format="mixed", errors="raise"
+                            )
                             continue
                         except (ValueError, TypeError):
                             pass
@@ -166,5 +170,6 @@ class _MaintenanceMixin(_BaseMaintenanceMixin):
             return sample_tables
         except psycopg2.Error as err:
             raise ValueError(f"Failed to get summaries: {err}")
+
 
 # EOF

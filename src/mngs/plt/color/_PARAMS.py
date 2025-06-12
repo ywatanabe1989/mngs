@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/colors/_PARAMS.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/plt/colors/_PARAMS.py"
-)
+
+__FILE__ = "./src/mngs/plt/colors/_PARAMS.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 

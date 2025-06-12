@@ -12,10 +12,10 @@ def replace(dataframe, old_value, new_value=None, regex=False, cols=None):
     -------
     import pandas as pd
     df = pd.DataFrame({'A': ['abc-123', 'def-456'], 'B': ['ghi-789', 'jkl-012']})
-    
+
     # Replace single value
     df_replaced = replace(df, 'abc', 'xyz')
-    
+
     # Replace with dictionary
     replace_dict = {'-': '_', '1': 'one'}
     df_replaced = replace(df, replace_dict, cols=['A'])

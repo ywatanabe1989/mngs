@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/types/_ArrayLike.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/types/_ArrayLike.py"
-)
+
+__FILE__ = "./src/mngs/types/_ArrayLike.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -31,10 +30,15 @@ ArrayLike = _Union[
 
 
 def is_array_like(obj) -> bool:
-    """Check if object is array-like."""
+    """Check if object is array-like.
+    
+    Returns:
+        bool: True if object is array-like, False otherwise.
+    """
     return isinstance(
         obj,
         (_List, _Tuple, _np.ndarray, _pd.Series, _pd.DataFrame, _xr.DataArray),
     ) or _torch.is_tensor(obj)
+
 
 # EOF

@@ -43,6 +43,7 @@ from openai import OpenAI as _OpenAI
 
 """Functions & Classes"""
 
+
 class DeepSeek(BaseGenAI):
     def __init__(
         self,
@@ -121,7 +122,7 @@ class DeepSeek(BaseGenAI):
                     current_text = chunk.choices[0].delta.content
                     if current_text:
                         buffer += current_text
-                        if any(char in '.!?\n ' for char in current_text):
+                        if any(char in ".!?\n " for char in current_text):
                             yield buffer
                             buffer = ""
                 except Exception as e:
@@ -130,7 +131,8 @@ class DeepSeek(BaseGenAI):
         if buffer:
             yield buffer
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     # -----------------------------------
     # Initiatialization of mngs format
     # -----------------------------------

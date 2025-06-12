@@ -3,14 +3,22 @@
 # Timestamp: "2025-02-27 22:15:05 (ywatanabe)"
 # File: /home/ywatanabe/proj/mngs_dev/src/mngs/db/_PostgreSQLMixins/_IndexMixin.py
 
-THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQLMixins/_IndexMixin.py"
+THIS_FILE = (
+    "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_PostgreSQLMixins/_IndexMixin.py"
+)
 
 from typing import List
 import psycopg2
 
+
 class _IndexMixin:
-    def create_index(self, table_name: str, column_names: List[str],
-                    index_name: str = None, unique: bool = False) -> None:
+    def create_index(
+        self,
+        table_name: str,
+        column_names: List[str],
+        index_name: str = None,
+        unique: bool = False,
+    ) -> None:
         try:
             if index_name is None:
                 index_name = f"idx_{table_name}_{'_'.join(column_names)}"
@@ -51,5 +59,6 @@ class _IndexMixin:
 
         except (Exception, psycopg2.Error) as err:
             raise ValueError(f"Failed to get indexes: {err}")
+
 
 # EOF

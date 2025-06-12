@@ -1,22 +1,172 @@
-# --------------------------------------------------------------------------------
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Time-stamp: "2025-06-02 14:48:00 (ywatanabe)"
+# File: ./tests/mngs/db/_SQLite3Mixins/test__ConnectionMixin.py
+
+"""
+Functionality:
+    * Tests database connection management for SQLite3
+    * Validates connection opening, closing, and error handling
+    * Tests connection pooling and thread safety
+Input:
+    * Database connection parameters
+Output:
+    * Test results
+Prerequisites:
+    * pytest
+    * sqlite3
+"""
+
+import pytest
+import sqlite3
+import tempfile
+import os
+from unittest.mock import Mock, patch, MagicMock
+import threading
+
+
+class TestConnectionMixin:
+    """Test cases for _ConnectionMixin"""
+    
+    def test_connect_basic(self):
+        """Test basic connection establishment"""
+        from mngs.db._SQLite3Mixins._ConnectionMixin import _ConnectionMixin
+        
+        with tempfile.NamedTemporaryFile(suffix='.db', delete=False) as tmp:
+            db_path = tmp.name
+            
+        try:
+            mixin = _ConnectionMixin()
+            mixin._db_path = db_path
+            
+            # Test connect
+            mixin.connect()
+            assert mixin._connection is not None
+            assert isinstance(mixin._connection, sqlite3.Connection)
+            
+            mixin.close()
+        finally:
+            os.unlink(db_path)
+            
+    def test_disconnect(self):
+        """Test connection closing"""
+        from mngs.db._SQLite3Mixins._ConnectionMixin import _ConnectionMixin
+        
+        mixin = _ConnectionMixin()
+        mixin._connection = Mock()
+        
+        mixin.close()
+        mixin._connection.close.assert_called_once()
+        assert mixin._connection is None
+        
+    def test_is_connected(self):
+        """Test connection status checking"""
+        from mngs.db._SQLite3Mixins._ConnectionMixin import _ConnectionMixin
+        
+        mixin = _ConnectionMixin()
+        
+        # Not connected
+        assert not mixin.is_connected()
+        
+        # Connected
+        mixin._connection = Mock()
+        assert mixin.is_connected()
+        
+    def test_execute_basic(self):
+        """Test basic query execution"""
+        from mngs.db._SQLite3Mixins._ConnectionMixin import _ConnectionMixin
+        
+        mixin = _ConnectionMixin()
+        mock_cursor = Mock()
+        mixin._connection = Mock(cursor=Mock(return_value=mock_cursor))
+        
+        # Test execute
+        mixin.execute("SELECT * FROM test")
+        mock_cursor.execute.assert_called_with("SELECT * FROM test", ())
+        
+    def test_executemany(self):
+        """Test bulk query execution"""
+        from mngs.db._SQLite3Mixins._ConnectionMixin import _ConnectionMixin
+        
+        mixin = _ConnectionMixin()
+        mock_cursor = Mock()
+        mixin._connection = Mock(cursor=Mock(return_value=mock_cursor))
+        
+        # Test executemany
+        values = [(1, "a"), (2, "b")]
+        mixin.executemany("INSERT INTO test VALUES (?, ?)", values)
+        mock_cursor.executemany.assert_called_with("INSERT INTO test VALUES (?, ?)", values)
+        
+    def test_auto_reconnect(self):
+        """Test automatic reconnection on failure"""
+        from mngs.db._SQLite3Mixins._ConnectionMixin import _ConnectionMixin
+        
+        mixin = _ConnectionMixin()
+        mixin._db_path = ":memory:"
+        mixin._auto_reconnect = True
+        
+        # Simulate connection failure
+        mixin._connection = Mock()
+        mixin._connection.cursor.side_effect = sqlite3.OperationalError("Database is locked")
+        
+        with patch.object(mixin, 'connect') as mock_connect:
+            with pytest.raises(sqlite3.OperationalError):
+                mixin.execute("SELECT 1")
+            mock_connect.assert_called()
+            
+    def test_connection_timeout(self):
+        """Test connection timeout handling"""
+        from mngs.db._SQLite3Mixins._ConnectionMixin import _ConnectionMixin
+        
+        mixin = _ConnectionMixin()
+        mixin._db_path = ":memory:"
+        mixin._timeout = 5.0
+        
+        mixin.connect()
+        # Verify timeout was set
+        assert mixin._connection is not None
+        
+    def test_thread_safety(self):
+        """Test thread-safe connection handling"""
+        from mngs.db._SQLite3Mixins._ConnectionMixin import _ConnectionMixin
+        
+        mixin = _ConnectionMixin()
+        mixin._db_path = ":memory:"
+        results = []
+        
+        def worker():
+            try:
+                mixin.connect()
+                mixin.execute("SELECT 1")
+                results.append("success")
+            except Exception as e:
+                results.append(f"error: {e}")
+                
+        threads = [threading.Thread(target=worker) for _ in range(3)]
+        for t in threads:
+            t.start()
+        for t in threads:
+            t.join()
+            
+        # Should handle concurrent access
+        assert len(results) == 3
+
+
+def main():
+    """Run the tests"""
+    pytest.main([__file__, "-v"])
+
 
 if __name__ == "__main__":
-    import os
-
-    import pytest
-
-    pytest.main([os.path.abspath(__file__)])
-
-# --------------------------------------------------------------------------------
-# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/db/_SQLite3Mixins/_ConnectionMixin.py
+    main()\n\n# --------------------------------------------------------------------------------\n# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/db/_SQLite3Mixins/_ConnectionMixin.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-11-29 04:33:58 (ywatanabe)"
 # # File: ./mngs_repo/src/mngs/db/_SQLite3Mixins/_ConnectionMixin.py
-# 
+#
 # THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_SQLite3Mixins/_ConnectionMixin.py"
-# 
+#
 # """
 # 1. Functionality:
 #    - Manages SQLite database connections with thread-safe operations
@@ -29,7 +179,7 @@ if __name__ == "__main__":
 #    - sqlite3
 #    - threading
 # """
-# 
+#
 # import sqlite3
 # import threading
 # from typing import Optional
@@ -38,10 +188,10 @@ if __name__ == "__main__":
 # import tempfile
 # from .._BaseMixins._BaseConnectionMixin import _BaseConnectionMixin
 # import contextlib
-# 
+#
 # class _ConnectionMixin:
 #     """Connection management functionality"""
-# 
+#
 #     def __init__(self, db_path: str, use_temp_db: bool = False):
 #         self.lock = threading.Lock()
 #         self._maintenance_lock = threading.Lock()
@@ -50,13 +200,13 @@ if __name__ == "__main__":
 #         self.cursor = None
 #         if db_path:
 #             self.connect(db_path, use_temp_db)
-# 
+#
 #     def __enter__(self):
 #         return self
-# 
+#
 #     def __exit__(self, exc_type, exc_val, exc_tb):
 #         self.close()
-# 
+#
 #     def _create_temp_copy(self, db_path: str) -> str:
 #         """Creates temporary copy of database."""
 #         temp_dir = tempfile.gettempdir()
@@ -65,16 +215,16 @@ if __name__ == "__main__":
 #         )
 #         shutil.copy2(db_path, self.temp_path)
 #         return self.temp_path
-# 
+#
 #     def connect(self, db_path: str, use_temp_db: bool = False) -> None:
 #         if self.conn:
 #             self.close()
-# 
+#
 #         path_to_connect = self._create_temp_copy(db_path) if use_temp_db else db_path
-# 
+#
 #         self.conn = sqlite3.connect(path_to_connect, timeout=60.0)
 #         self.cursor = self.conn.cursor()
-# 
+#
 #         with self.lock:
 #             # WAL mode settings
 #             self.cursor.execute("PRAGMA journal_mode = WAL")
@@ -84,7 +234,7 @@ if __name__ == "__main__":
 #             self.cursor.execute("PRAGMA temp_store = MEMORY")
 #             self.cursor.execute("PRAGMA cache_size = -2000")
 #             self.conn.commit()
-# 
+#
 #     def close(self) -> None:
 #         if self.cursor:
 #             self.cursor.close()
@@ -96,21 +246,21 @@ if __name__ == "__main__":
 #                 pass
 #         self.cursor = None
 #         self.conn = None
-# 
+#
 #         if self.temp_path and os.path.exists(self.temp_path):
 #             try:
 #                 os.remove(self.temp_path)
 #                 self.temp_path = None
 #             except OSError:
 #                 pass
-# 
+#
 #     def reconnect(self, use_temp_db: bool = False) -> None:
 #         if self.db_path:
 #             self.connect(self.db_path, use_temp_db)
 #         else:
 #             raise ValueError("No database path specified for reconnection")
-# 
-# 
+#
+#
 # # EOF
 
 # --------------------------------------------------------------------------------

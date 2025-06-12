@@ -4,9 +4,8 @@
 # File: /ssh:ywatanabe@sp:/home/ywatanabe/proj/.claude-worktree/mngs_repo/examples/mngs_framework.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./examples/mngs_framework.py"
-)
+
+__FILE__ = "./examples/mngs_framework.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -50,6 +49,8 @@ import argparse
 # CONFIG = load_configs()
 
 """Functions & Classes"""
+
+
 def main(args):
     return 0
 

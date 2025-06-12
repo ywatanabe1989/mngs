@@ -108,9 +108,7 @@ class CodeFlowAnalyzer:
                 func_name = node.func.id
 
                 if func_name not in self.skip_functions:
-                    self.execution_flow.append(
-                        (depth, func_name, self.sequence)
-                    )
+                    self.execution_flow.append((depth, func_name, self.sequence))
                     self.sequence += 1
 
             elif isinstance(node.func, ast.Attribute):
@@ -124,9 +122,7 @@ class CodeFlowAnalyzer:
                 func_name = ".".join(parts)
 
                 if not any(skip in func_name for skip in self.skip_functions):
-                    self.execution_flow.append(
-                        (depth, func_name, self.sequence)
-                    )
+                    self.execution_flow.append((depth, func_name, self.sequence))
                     self.sequence += 1
 
         if self.sequence == 1:
@@ -221,7 +217,6 @@ class CodeFlowAnalyzer:
             except Exception as e:
                 print(e)
                 return str(e)
-
 
 
 def analyze_code_flow(lpath):

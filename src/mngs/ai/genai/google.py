@@ -6,31 +6,6 @@
 THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_Google.py"
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 """
 Functionality:
     - Implements Google's Generative AI (Gemini) interface
@@ -67,7 +42,7 @@ warnings.warn(
     "google.py is deprecated. Please use google_provider.py instead. "
     "See PROVIDER_MIGRATION_GUIDE.md for migration instructions.",
     DeprecationWarning,
-    stacklevel=2
+    stacklevel=2,
 )
 
 """Functions & Classes"""
@@ -115,9 +90,7 @@ class Google(BaseGenAI):
 
         try:
             self.input_tokens += response.usage_metadata.prompt_token_count
-            self.output_tokens += (
-                response.usage_metadata.candidates_token_count
-            )
+            self.output_tokens += response.usage_metadata.candidates_token_count
         except:
             pass
 
@@ -137,12 +110,8 @@ class Google(BaseGenAI):
         ):
             if chunk:
                 try:
-                    self.input_tokens += (
-                        chunk.usage_metadata.prompt_token_count
-                    )
-                    self.output_tokens += (
-                        chunk.usage_metadata.candidates_token_count
-                    )
+                    self.input_tokens += chunk.usage_metadata.prompt_token_count
+                    self.output_tokens += chunk.usage_metadata.candidates_token_count
                 except:
                     pass
 
@@ -186,9 +155,7 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
-        sys, plt, verbose=False
-    )
+    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt, verbose=False)
     main()
     mngs.gen.close(CONFIG, verbose=False, notify=False)
 
@@ -197,20 +164,6 @@ if __name__ == "__main__":
 python src/mngs/ai/_gen_ai/_Google.py
 python -m src.mngs.ai._gen_ai._Google
 """
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 # EOF

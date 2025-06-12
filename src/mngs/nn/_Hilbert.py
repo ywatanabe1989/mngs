@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/nn/_Hilbert.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "/home/ywatanabe/proj/mngs_repo/src/mngs/nn/_Hilbert.py"
-)
+
+__FILE__ = "/home/ywatanabe/proj/mngs_repo/src/mngs/nn/_Hilbert.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 #!/usr/bin/env python

@@ -39,15 +39,11 @@ def optuna_study(lpath, value_str, sort=False):
     print(f"Best trial user attributes: {best_trial.user_attrs}")
 
     # Merge the user attributes into the study history DataFrame
-    study_history = study.trials_dataframe().rename(
-        columns={"value": value_str}
-    )
+    study_history = study.trials_dataframe().rename(columns={"value": value_str})
 
     if sort:
         ascending = "MINIMIZE" in str(study.directions[0])  # [REVISED]
-        study_history = study_history.sort_values(
-            [value_str], ascending=ascending
-        )
+        study_history = study_history.sort_values([value_str], ascending=ascending)
 
     # Add user attributes to the study history DataFrame
     attrs_df = []
@@ -74,17 +70,13 @@ def optuna_study(lpath, value_str, sort=False):
     print(study_history)
 
     # To visualize the optimization history:
-    fig = optuna.visualization.plot_optimization_history(
-        study, target_name=value_str
-    )
+    fig = optuna.visualization.plot_optimization_history(study, target_name=value_str)
     mngs.io.save(fig, sdir + "optimization_history.png")
     mngs.io.save(fig, sdir + "optimization_history.html")
     plt.close()
 
     # To visualize the parameter importances:
-    fig = optuna.visualization.plot_param_importances(
-        study, target_name=value_str
-    )
+    fig = optuna.visualization.plot_param_importances(study, target_name=value_str)
     mngs.io.save(fig, sdir + "param_importances.png")
     mngs.io.save(fig, sdir + "param_importances.html")
     plt.close()
@@ -102,9 +94,7 @@ def optuna_study(lpath, value_str, sort=False):
     plt.close()
 
     # To visualize the parallel coordinate plot of the study:
-    fig = optuna.visualization.plot_parallel_coordinate(
-        study, target_name=value_str
-    )
+    fig = optuna.visualization.plot_parallel_coordinate(study, target_name=value_str)
     mngs.io.save(fig, sdir + "parallel_coordinate.png")
     mngs.io.save(fig, sdir + "parallel_coordinate.html")
     plt.close()

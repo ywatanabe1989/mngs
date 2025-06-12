@@ -6,6 +6,7 @@
 import numpy as np
 import pandas as pd
 
+
 def round(df: pd.DataFrame, factor: int = 3) -> pd.DataFrame:
     """
     Round numeric values in a DataFrame to a specified number of decimal places.
@@ -30,9 +31,10 @@ def round(df: pd.DataFrame, factor: int = 3) -> pd.DataFrame:
     pd.DataFrame
         DataFrame with rounded numeric values
     """
+
     def custom_round(column):
         try:
-            numeric_column = pd.to_numeric(column, errors='coerce')
+            numeric_column = pd.to_numeric(column, errors="coerce")
             if np.issubdtype(numeric_column.dtype, np.integer):
                 return numeric_column.astype(int)
             rounded = numeric_column.round(factor)
@@ -46,6 +48,7 @@ def round(df: pd.DataFrame, factor: int = 3) -> pd.DataFrame:
             return column
 
     return df.apply(custom_round)
+
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-

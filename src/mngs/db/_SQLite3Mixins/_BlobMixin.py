@@ -12,6 +12,7 @@ from typing import Dict, List, Optional, Tuple, Union
 import numpy as np
 from .._BaseMixins._BaseBlobMixin import _BaseBlobMixin
 
+
 class _BlobMixin:
     """BLOB data handling functionality"""
 
@@ -27,9 +28,7 @@ class _BlobMixin:
     ) -> None:
         with self.lock:
             if not isinstance(data, (np.ndarray, list)):
-                raise ValueError(
-                    "Input must be a NumPy array or list of arrays"
-                )
+                raise ValueError("Input must be a NumPy array or list of arrays")
 
             try:
                 if ids is not None:
@@ -37,9 +36,7 @@ class _BlobMixin:
                         ids = [ids]
                         data = [data]
                     if len(ids) != len(data):
-                        raise ValueError(
-                            "Length of ids must match number of arrays"
-                        )
+                        raise ValueError("Length of ids must match number of arrays")
 
                     for id_, arr in zip(ids, data):
                         if not isinstance(arr, np.ndarray):
@@ -156,9 +153,7 @@ class _BlobMixin:
                                 data = data.reshape(shape)
                         id_to_data[id_val] = data
 
-            all_data = [
-                id_to_data[id_val] for id_val in ids if id_val in id_to_data
-            ]
+            all_data = [id_to_data[id_val] for id_val in ids if id_val in id_to_data]
             return np.stack(all_data, axis=0) if all_data else None
 
         except Exception as err:
@@ -176,9 +171,9 @@ class _BlobMixin:
             return None
 
         if dtype_str and shape_str:
-            return np.frombuffer(
-                binary_data, dtype=np.dtype(dtype_str)
-            ).reshape(eval(shape_str))
+            return np.frombuffer(binary_data, dtype=np.dtype(dtype_str)).reshape(
+                eval(shape_str)
+            )
         elif dtype and shape:
             return np.frombuffer(binary_data, dtype=dtype).reshape(shape)
         return binary_data
@@ -202,8 +197,7 @@ class _BlobMixin:
                 ]
             elif dtype and shape:
                 arrays = [
-                    self.binary_to_array(x, dtype=dtype, shape=shape)
-                    for x in df[col]
+                    self.binary_to_array(x, dtype=dtype, shape=shape) for x in df[col]
                 ]
             result[col] = np.stack(arrays)
 

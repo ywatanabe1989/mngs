@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/ax/_plot/test__plot_conf_mat.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./tests/mngs/plt/ax/_plot/test__plot_conf_mat.py"
-)
+
+__FILE__ = "./tests/mngs/plt/ax/_plot/test__plot_conf_mat.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -45,9 +44,7 @@ class TestPlotConfMat:
         save(self.fig, spath)
         # Check saved file
         actual_spath = os.path.join(self.out_dir, spath)
-        assert os.path.exists(
-            actual_spath
-        ), f"Failed to save figure to {spath}"
+        assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
 
     def test_basic_functionality(self):
         # Test basic confusion matrix plotting
@@ -151,9 +148,7 @@ class TestPlotConfMat:
         # Check saved file
         ACTUAL_SAVE_DIR = __file__.replace(".py", "_out")
         actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
-        assert os.path.exists(
-            actual_spath
-        ), f"Failed to save figure to {spath}"
+        assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
 
 
 # class TestMainFunctionality:
@@ -307,19 +302,19 @@ if __name__ == "__main__":
 # )
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
-# 
+#
 # from typing import List, Optional, Tuple, Union
-# 
+#
 # import matplotlib
 # import matplotlib.pyplot as plt
 # import numpy as np
 # import pandas as pd
 # import seaborn as sns
-# 
+#
 # from ...utils._calc_bacc_from_conf_mat import calc_bacc_from_conf_mat
 # from .._style._extend import extend as mngs_plt_extend
-# 
-# 
+#
+#
 # def plot_conf_mat(
 #     axis: plt.Axes,
 #     data: Union[np.ndarray, pd.DataFrame],
@@ -336,7 +331,7 @@ if __name__ == "__main__":
 #     **kwargs,
 # ) -> Union[plt.Axes, Tuple[plt.Axes, float]]:
 #     """Creates a confusion matrix heatmap with optional balanced accuracy.
-# 
+#
 #     Parameters
 #     ----------
 #     axis : plt.Axes
@@ -363,12 +358,12 @@ if __name__ == "__main__":
 #         Y-axis extension ratio
 #     calc_bacc : bool, optional
 #         Calculate Balanced Accuracy from Confusion Matrix
-# 
+#
 #     Returns
 #     -------
 #     Union[plt.Axes, Tuple[plt.Axes, float]]
 #         Axes object and optionally balanced accuracy
-# 
+#
 #     Example
 #     -------
 #     >>> data = np.array([[10, 2, 0], [1, 15, 3], [0, 2, 20]])
@@ -378,17 +373,17 @@ if __name__ == "__main__":
 #     >>> print(f"Balanced Accuracy: {bacc:.3f}")
 #     Balanced Accuracy: 0.889
 #     """
-# 
+#
 #     assert isinstance(
 #         axis, matplotlib.axes._axes.Axes
 #     ), "First argument must be a matplotlib axis"
-# 
+#
 #     if not isinstance(data, pd.DataFrame):
 #         data = pd.DataFrame(data)
-# 
+#
 #     bacc_val = calc_bacc_from_conf_mat(data.values)
 #     title = f"{title} (bACC = {bacc_val:.3f})"
-# 
+#
 #     res = sns.heatmap(
 #         data,
 #         ax=axis,
@@ -399,21 +394,21 @@ if __name__ == "__main__":
 #         vmin=0,
 #         **kwargs,
 #     )
-# 
+#
 #     res.invert_yaxis()
-# 
+#
 #     for _, spine in res.spines.items():
 #         spine.set_visible(False)
-# 
+#
 #     axis.set_xlabel("Predicted label")
 #     axis.set_ylabel("True label")
 #     axis.set_title(title)
-# 
+#
 #     if x_labels is not None:
 #         axis.set_xticklabels(x_labels)
 #     if y_labels is not None:
 #         axis.set_yticklabels(y_labels)
-# 
+#
 #     axis = mngs_plt_extend(axis, x_extend_ratio, y_extend_ratio)
 #     if data.shape[0] == data.shape[1]:
 #         axis.set_box_aspect(1)
@@ -427,12 +422,12 @@ if __name__ == "__main__":
 #             rotation=label_rotation_xy[1],
 #             fontdict={"horizontalalignment": "right"},
 #         )
-# 
+#
 #     if calc_bacc:
 #         return axis, bacc_val
 #     else:
 #         return axis, None
-# 
+#
 # # EOF
 # --------------------------------------------------------------------------------
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/ax/_plot/_plot_conf_mat.py

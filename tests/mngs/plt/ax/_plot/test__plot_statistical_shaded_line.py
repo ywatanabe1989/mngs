@@ -4,11 +4,11 @@
 # File: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/ax/_plot/test__plot_statistical_shaded_line.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./tests/mngs/plt/ax/_plot/test__plot_statistical_shaded_line.py"
-)
+
+__FILE__ = "./tests/mngs/plt/ax/_plot/test__plot_statistical_shaded_line.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
+
 
 def test_plot_line_savefig():
     import matplotlib.pyplot as plt
@@ -93,6 +93,7 @@ def test_plot_median_iqr_savefig():
     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
 
+
 if __name__ == "__main__":
     import os
 
@@ -114,14 +115,14 @@ if __name__ == "__main__":
 # )
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
-# 
+#
 # import matplotlib
 # import numpy as np
 # import pandas as pd
-# 
+#
 # from ._plot_shaded_line import plot_shaded_line as mngs_plt_plot_shaded_line
-# 
-# 
+#
+#
 # def plot_line(axis, data, xx=None, **kwargs):
 #     """Plot a simple line."""
 #     assert isinstance(
@@ -138,8 +139,8 @@ if __name__ == "__main__":
 #     ), f"xx length ({len(xx)}) must match data length ({len(data)})"
 #     axis.plot(xx, data, **kwargs)
 #     return axis, pd.DataFrame({"x": xx, "y": data})
-# 
-# 
+#
+#
 # def plot_mean_std(axis, data, xx=None, sd=1, **kwargs):
 #     """Plot mean line with standard deviation shading."""
 #     assert isinstance(
@@ -157,26 +158,26 @@ if __name__ == "__main__":
 #     assert (
 #         len(xx) == expected_len
 #     ), f"xx length ({len(xx)}) must match data length ({expected_len})"
-# 
+#
 #     if data.ndim == 1:
 #         central = data
 #         error = np.zeros_like(central)
 #     else:
 #         central = np.nanmean(data, axis=0)
 #         error = np.nanstd(data, axis=0) * sd
-# 
+#
 #     y_lower = central - error
 #     y_upper = central + error
 #     n_samples = data.shape[0] if data.ndim > 1 else 1
-# 
+#
 #     if "label" in kwargs and kwargs["label"]:
 #         kwargs["label"] = f"{kwargs['label']} (n={n_samples})"
-# 
+#
 #     return mngs_plt_plot_shaded_line(
 #         axis, xx, y_lower, central, y_upper, **kwargs
 #     )
-# 
-# 
+#
+#
 # def plot_mean_ci(axis, data, xx=None, perc=95, **kwargs):
 #     """Plot mean line with confidence interval shading."""
 #     assert isinstance(
@@ -188,17 +189,17 @@ if __name__ == "__main__":
 #     assert 0 <= perc <= 100, f"perc must be between 0 and 100, got {perc}"
 #     data = np.asarray(data)
 #     assert data.ndim <= 2, f"Data must be 1D or 2D, got {data.ndim}D"
-# 
+#
 #     if xx is None:
 #         xx = np.arange(data.shape[1] if data.ndim > 1 else len(data))
 #     else:
 #         xx = np.asarray(xx)
-# 
+#
 #     expected_len = data.shape[1] if data.ndim > 1 else len(data)
 #     assert (
 #         len(xx) == expected_len
 #     ), f"xx length ({len(xx)}) must match data length ({expected_len})"
-# 
+#
 #     if data.ndim == 1:
 #         central = data
 #         y_lower = central
@@ -211,17 +212,17 @@ if __name__ == "__main__":
 #         y_upper_perc = (1 - alpha / 2) * 100
 #         y_lower = np.nanpercentile(data, y_lower_perc, axis=0)
 #         y_upper = np.nanpercentile(data, y_upper_perc, axis=0)
-# 
+#
 #     n_samples = data.shape[0] if data.ndim > 1 else 1
-# 
+#
 #     if "label" in kwargs and kwargs["label"]:
 #         kwargs["label"] = f"{kwargs['label']} (n={n_samples}, CI={perc}%)"
-# 
+#
 #     return mngs_plt_plot_shaded_line(
 #         axis, xx, y_lower, central, y_upper, **kwargs
 #     )
-# 
-# 
+#
+#
 # def plot_median_iqr(axis, data, xx=None, **kwargs):
 #     """Plot median line with interquartile range shading."""
 #     assert isinstance(
@@ -229,17 +230,17 @@ if __name__ == "__main__":
 #     ), "First argument must be a matplotlib axis"
 #     data = np.asarray(data)
 #     assert data.ndim <= 2, f"Data must be 1D or 2D, got {data.ndim}D"
-# 
+#
 #     if xx is None:
 #         xx = np.arange(data.shape[1] if data.ndim > 1 else len(data))
 #     else:
 #         xx = np.asarray(xx)
-# 
+#
 #     expected_len = data.shape[1] if data.ndim > 1 else len(data)
 #     assert (
 #         len(xx) == expected_len
 #     ), f"xx length ({len(xx)}) must match data length ({expected_len})"
-# 
+#
 #     if data.ndim == 1:
 #         central = data
 #         y_lower = central
@@ -248,16 +249,16 @@ if __name__ == "__main__":
 #         central = np.nanmedian(data, axis=0)
 #         y_lower = np.nanpercentile(data, 25, axis=0)
 #         y_upper = np.nanpercentile(data, 75, axis=0)
-# 
+#
 #     n_samples = data.shape[0] if data.ndim > 1 else 1
-# 
+#
 #     if "label" in kwargs and kwargs["label"]:
 #         kwargs["label"] = f"{kwargs['label']} (n={n_samples}, IQR)"
-# 
+#
 #     return mngs_plt_plot_shaded_line(
 #         axis, xx, y_lower, central, y_upper, **kwargs
 #     )
-# 
+#
 # # EOF
 # --------------------------------------------------------------------------------
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/ax/_plot/_plot_statistical_shaded_line.py

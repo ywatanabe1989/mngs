@@ -18,6 +18,7 @@ import yaml as _yaml
 from ._utils._get_env_info import get_env_info
 from ..str import readable_bytes
 
+
 def get_specs(
     system=True,
     # boot_time=True,
@@ -69,9 +70,7 @@ def get_specs(
 
     collected_info = {}  # OrderedDict()
 
-    collected_info["Collected Time"] = _datetime.now().strftime(
-        "%Y-%m-%d %H:%M:%S"
-    )
+    collected_info["Collected Time"] = _datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     if system:
         collected_info["System Information"] = _system_info()
     # if boot_time:

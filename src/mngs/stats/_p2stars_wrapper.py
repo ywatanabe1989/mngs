@@ -11,12 +11,14 @@ import numpy as np
 from typing import Union, List
 
 
-def p2stars(input_data: Union[float, np.ndarray, List], 
-            thresholds: List[float] = None, 
-            symbols: List[str] = None) -> Union[str, List[str]]:
+def p2stars(
+    input_data: Union[float, np.ndarray, List],
+    thresholds: List[float] = None,
+    symbols: List[str] = None,
+) -> Union[str, List[str]]:
     """
     Wrapper for p2stars that handles array inputs and returns 'ns' for non-significant.
-    
+
     Parameters
     ----------
     input_data : float, np.ndarray, or List
@@ -27,24 +29,25 @@ def p2stars(input_data: Union[float, np.ndarray, List],
         Custom symbols for each threshold (default: ['***', '**', '*'])
     """
     from ._p2stars import p2stars as _p2stars_impl
-    
+
     # Handle custom thresholds/symbols
     if thresholds is not None and symbols is not None:
+
         def custom_p2stars(p):
             try:
                 p_float = float(p)
                 for threshold, symbol in zip(thresholds, symbols):
                     if p_float <= threshold:
                         return symbol
-                return 'ns'
+                return "ns"
             except (ValueError, TypeError):
-                return 'NA'
-        
+                return "NA"
+
         if isinstance(input_data, (np.ndarray, list)):
             return [custom_p2stars(p) for p in input_data]
         else:
             return custom_p2stars(input_data)
-    
+
     # Default behavior
     if isinstance(input_data, (np.ndarray, list)):
         return [_p2stars_impl(p, ns=True) for p in input_data]

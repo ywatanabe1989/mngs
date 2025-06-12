@@ -29,6 +29,8 @@ import matplotlib.pyplot as plt
 import mngs
 
 """Functions & Classes"""
+
+
 def format_output_func(out_text: str) -> str:
     """Formats AI output text with proper link handling and markdown conversion.
 
@@ -48,10 +50,9 @@ def format_output_func(out_text: str) -> str:
     str
         HTML formatted text with proper link handling
     """
+
     def find_unwrapped_urls(text: str) -> List[str]:
-        url_pattern = (
-            r'(?<!<a href=")(https?://|doi:|http://doi.org/)[^\s,<>"]+'
-        )
+        url_pattern = r'(?<!<a href=")(https?://|doi:|http://doi.org/)[^\s,<>"]+'
         return re.findall(url_pattern, text)
 
     def add_a_href_tag(text: str) -> str:
@@ -61,9 +62,7 @@ def format_output_func(out_text: str) -> str:
                 url = "https://doi.org/" + url[4:]
             return f'<a href="{url}">{url}</a>'
 
-        url_pattern = (
-            r'(?<!<a href=")(https?://|doi:|http://doi.org/)[^\s,<>"]+'
-        )
+        url_pattern = r'(?<!<a href=")(https?://|doi:|http://doi.org/)[^\s,<>"]+'
         return re.sub(url_pattern, replace_url, text)
 
     def add_masked_api_key(text: str, api_key: str) -> str:
@@ -75,13 +74,13 @@ def format_output_func(out_text: str) -> str:
     formatted_text = re.sub(r"^<p>(.*)</p>$", r"\1", formatted_text, flags=re.DOTALL)
     return formatted_text
 
+
 def main() -> None:
     pass
 
+
 if __name__ == "__main__":
-    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
-        sys, plt, verbose=False
-    )
+    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt, verbose=False)
     main()
     mngs.gen.close(CONFIG, verbose=False, notify=False)
 
@@ -179,6 +178,6 @@ if __name__ == "__main__":
 #     main()
 #     mngs.gen.close(CONFIG, verbose=False, notify=False)
 
-# 
+#
 
 # EOF

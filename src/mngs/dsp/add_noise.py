@@ -6,18 +6,22 @@
 import torch
 from ..decorators import signal_fn
 
+
 def _uniform(shape, amp=1.0):
     a, b = -amp, amp
     return -amp + (2 * amp) * torch.rand(shape)
+
 
 @signal_fn
 def gauss(x, amp=1.0):
     noise = amp * torch.randn(x.shape)
     return x + noise.to(x.device)
 
+
 @signal_fn
 def white(x, amp=1.0):
     return x + _uniform(x.shape, amp=amp).to(x.device)
+
 
 @signal_fn
 def pink(x, amp=1.0, dim=-1):
@@ -43,12 +47,14 @@ def pink(x, amp=1.0, dim=-1):
     noise = noise * (amp / noise_amp)
     return x + noise.to(x.device)
 
+
 @signal_fn
 def brown(x, amp=1.0, dim=-1):
     noise = _uniform(x.shape, amp=amp)
     noise = torch.cumsum(noise, dim=dim)
     noise = mngs.dsp.norm.minmax(noise, amp=amp, dim=dim)
     return x + noise.to(x.device)
+
 
 if __name__ == "__main__":
     import sys
@@ -75,9 +81,7 @@ if __name__ == "__main__":
     }
 
     # Plots
-    fig, axes = mngs.plt.subplots(
-        nrows=len(funcs), ncols=2, sharex=True, sharey=True
-    )
+    fig, axes = mngs.plt.subplots(nrows=len(funcs), ncols=2, sharex=True, sharey=True)
     count = 0
     for (k, fn), axes_row in zip(funcs.items(), axes):
         for ax in axes_row:

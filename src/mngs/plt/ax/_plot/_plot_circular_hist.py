@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_plot/_plot_circular_hist.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/plt/ax/_plot/_plot_circular_hist.py"
-)
+
+__FILE__ = "./src/mngs/plt/ax/_plot/_plot_circular_hist.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -121,5 +120,6 @@ def plot_circular_hist(
         axis.set_yticks([])
 
     return n, bins, patches
+
 
 # EOF

@@ -9,10 +9,9 @@ from torchsummary import summary
 import mngs
 import numpy as np
 
+
 class SpatialAttention(nn.Module):
-    def __init__(
-            self, n_chs_in
-    ):
+    def __init__(self, n_chs_in):
         super().__init__()
         self.aap = nn.AdaptiveAvgPool1d(1)
         self.conv11 = nn.Conv1d(in_channels=n_chs_in, out_channels=1, kernel_size=1)

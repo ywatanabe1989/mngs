@@ -12,8 +12,8 @@ def this_path(when_ipython="/tmp/fake.py"):
         THIS_FILE = when_ipython
     return __file__
 
-get_this_path = this_path
 
+get_this_path = this_path
 
 
 # EOF

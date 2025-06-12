@@ -20,7 +20,7 @@ from .provider_base import ProviderConfig
 
 class ProviderRegistry:
     """Registry for managing AI providers and their aliases."""
-    
+
     def __init__(self):
         """Initialize the registry with provider storage and aliases."""
         self._providers: Dict[Provider, Type[BaseProvider]] = {}
@@ -33,7 +33,6 @@ class ProviderRegistry:
             "gpt-4": Provider.OPENAI,
             "gpt-4o": Provider.OPENAI,
             "o1": Provider.OPENAI,
-            
             # Anthropic aliases
             "anthropic": Provider.ANTHROPIC,
             "claude": Provider.ANTHROPIC,
@@ -42,35 +41,31 @@ class ProviderRegistry:
             "claude-3-opus": Provider.ANTHROPIC,
             "claude-3-sonnet": Provider.ANTHROPIC,
             "claude-3-haiku": Provider.ANTHROPIC,
-            
             # Google aliases
             "google": Provider.GOOGLE,
             "gemini": Provider.GOOGLE,
             "bard": Provider.GOOGLE,
             "bison": Provider.GOOGLE,
             "palm": Provider.GOOGLE,
-            
             # Groq aliases
             "groq": Provider.GROQ,
             "mixtral": Provider.GROQ,
             "llama": Provider.GROQ,
             "llama2": Provider.GROQ,
             "llama3": Provider.GROQ,
-            
             # Perplexity aliases
             "perplexity": Provider.PERPLEXITY,
             "pplx": Provider.PERPLEXITY,
-            
             # DeepSeek aliases
             "deepseek": Provider.DEEPSEEK,
             "deepseek-coder": Provider.DEEPSEEK,
             "deepseek-chat": Provider.DEEPSEEK,
         }
-    
+
     def register(self, provider: Provider, provider_class: Type[BaseProvider]) -> None:
         """
         Register a provider implementation.
-        
+
         Parameters
         ----------
         provider : Provider
@@ -79,21 +74,21 @@ class ProviderRegistry:
             Provider implementation class
         """
         self._providers[provider] = provider_class
-    
+
     def get(self, provider: Provider) -> Type[BaseProvider]:
         """
         Get a registered provider class.
-        
+
         Parameters
         ----------
         provider : Provider
             Provider enum value
-            
+
         Returns
         -------
         Type[BaseProvider]
             Provider implementation class
-            
+
         Raises
         ------
         ValueError
@@ -102,57 +97,64 @@ class ProviderRegistry:
         if provider not in self._providers:
             raise ValueError(f"Provider {provider} is not registered")
         return self._providers[provider]
-    
+
     def resolve_provider(self, provider_or_model: str) -> Provider:
         """
         Resolve a provider from a string or model name.
-        
+
         Parameters
         ----------
         provider_or_model : str
             Provider name, alias, or model name
-            
+
         Returns
         -------
         Provider
             Resolved provider enum value
-            
+
         Raises
         ------
         ValueError
             If provider cannot be resolved
         """
         provider_lower = provider_or_model.lower()
-        
+
         # Direct provider name match
         for p in Provider:
             if p.value == provider_lower:
                 return p
-        
+
         # Alias match
         if provider_lower in self._aliases:
             return self._aliases[provider_lower]
-        
+
         # Try to infer from model name patterns
         model_patterns = {
-            Provider.OPENAI: ["gpt-", "o1-", "text-davinci", "text-curie", "text-babbage", "text-ada"],
+            Provider.OPENAI: [
+                "gpt-",
+                "o1-",
+                "text-davinci",
+                "text-curie",
+                "text-babbage",
+                "text-ada",
+            ],
             Provider.ANTHROPIC: ["claude-"],
             Provider.GOOGLE: ["gemini-", "palm-", "bison"],
             Provider.GROQ: ["mixtral-", "llama-"],
             Provider.PERPLEXITY: ["pplx-", "perplexity-"],
             Provider.DEEPSEEK: ["deepseek-"],
         }
-        
+
         for provider, patterns in model_patterns.items():
             if any(provider_lower.startswith(pattern) for pattern in patterns):
                 return provider
-        
+
         raise ValueError(f"Cannot resolve provider from: {provider_or_model}")
-    
+
     def list_providers(self) -> list[Provider]:
         """
         List registered providers.
-        
+
         Returns
         -------
         list[Provider]
@@ -174,7 +176,7 @@ def _auto_register():
     if _auto_register_called:
         return
     _auto_register_called = True
-    
+
     # Try to import and register providers
     try:
         # Import providers here to trigger their registration
@@ -190,12 +192,13 @@ def _auto_register():
     except ImportError as e:
         # Log import errors but continue
         import warnings
+
         warnings.warn(f"Failed to import some providers: {e}")
 
 
 class ModelRegistry:
     """Registry for model information."""
-    
+
     @staticmethod
     def get_models_for_provider(provider: str) -> list[str]:
         """Get available models for a provider."""
@@ -207,7 +210,7 @@ class ModelRegistry:
 def register_provider(name: str, provider_class: Type[BaseProvider]) -> None:
     """
     Register a provider implementation.
-    
+
     Parameters
     ----------
     name : str
@@ -233,7 +236,7 @@ def create_provider(
 ) -> BaseProvider:
     """
     Create a provider instance.
-    
+
     Parameters
     ----------
     provider : str
@@ -256,7 +259,7 @@ def create_provider(
         Number of drafts to generate
     **kwargs : Any
         Additional provider-specific parameters
-        
+
     Returns
     -------
     BaseProvider
@@ -264,13 +267,13 @@ def create_provider(
     """
     # Auto-register providers
     _auto_register()
-    
+
     # Resolve provider
     provider_enum = _registry.resolve_provider(provider)
-    
+
     # Get provider class
     provider_class = _registry.get(provider_enum)
-    
+
     # Create configuration
     config = ProviderConfig(
         api_key=api_key,
@@ -283,7 +286,7 @@ def create_provider(
         n_draft=n_draft,
         kwargs=kwargs,
     )
-    
+
     # Instantiate provider
     return provider_class(config)
 
@@ -302,10 +305,10 @@ def GenAI(
 ) -> BaseProvider:
     """
     Create an AI provider instance (backward compatibility).
-    
+
     This function maintains backward compatibility with the old API.
     If provider is not specified, it infers from the model name.
-    
+
     Parameters
     ----------
     api_key : Optional[str]
@@ -328,7 +331,7 @@ def GenAI(
         Provider name (if not specified, inferred from model)
     **kwargs : Any
         Additional provider-specific parameters
-        
+
     Returns
     -------
     BaseProvider
@@ -348,7 +351,7 @@ def GenAI(
             n_draft=n_draft,
             **kwargs,
         )
-    
+
     # Otherwise, try to infer from model name
     return create_provider(
         provider=model,  # Let resolve_provider handle it

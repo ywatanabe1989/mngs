@@ -1,7 +1,7 @@
 <!-- ---
-!-- Timestamp: 2025-05-31 07:42:09
+!-- Timestamp: 2025-06-01 01:05:51
 !-- Author: ywatanabe
-!-- File: /ssh:ywatanabe@sp:/home/ywatanabe/.dotfiles/.claude/to_claude/guidelines/python/IMPORTANT-MNGS-02-file-template.md
+!-- File: /home/ywatanabe/.dotfiles/.claude/to_claude/guidelines/python/IMPORTANT-MNGS-02-file-template.md
 !-- --- -->
 
 ## Script Template
@@ -11,29 +11,50 @@ MNGS PYTHON SCRIPT MUST STRICTLY FOLLOW THIS STANDARD FORMAT:
 ```python
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-11-03 10:33:13 (ywatanabe)"
-# File: ./relative/path/from/project/root/script_name.py
-
-__FILE__ = "./relative/path/from/project/root/script_name.py"
+# Timestamp: "2025-05-31 07:15:35 (ywatanabe)"
+# File: ./relative/path/from/project/script.py
+# ----------------------------------------
+import os
+__FILE__ = (
+    "./relative/path/from/project/script.py"
+)
+__DIR__ = os.path.dirname(__FILE__)
+# ----------------------------------------
 
 """
 Functionalities:
   - Does XYZ
+  - Does XYZ
+  - Does XYZ
   - Saves XYZ
 
 Dependencies:
-  - scripts: /path/to/script1, /path/to/script2
-  - packages: package1, package2
-
+  - scripts:
+    - /path/to/script1
+    - /path/to/script2
+  - packages:
+    - package1
+    - package2
 IO:
-  - input-files: /path/to/input/file.xxx
-  - output-files: /path/to/output/file.xxx
+  - input-files:
+    - /path/to/input/file.xxx
+    - /path/to/input/file.xxx
+
+  - output-files:
+    - /path/to/input/file.xxx
+    - /path/to/input/file.xxx
+
+(Remove me: Please fill docstrings above, while keeping the bulette point style, and remove this instruction line)
 """
 
 """Imports"""
-import os
-import sys
 import argparse
+
+"""Warnings"""
+# mngs.pd.ignore_SettingWithCopyWarning()
+# warnings.simplefilter("ignore", UserWarning)
+# with warnings.catch_warnings():
+#     warnings.simplefilter("ignore", UserWarning)
 
 """Parameters"""
 # from mngs.io import load_configs
@@ -41,29 +62,46 @@ import argparse
 
 """Functions & Classes"""
 def main(args):
-    # Main functionality goes here
-    pass
+    return 0
+
 
 def parse_args() -> argparse.Namespace:
     """Parse command line arguments."""
     import mngs
+
     script_mode = mngs.gen.is_script()
-    parser = argparse.ArgumentParser(description='')
+    parser = argparse.ArgumentParser(description="")
+    # parser.add_argument(
+    #     "--var",
+    #     "-v",
+    #     type=int,
+    #     choices=None,
+    #     default=1,
+    #     help="(default: %(default)s)",
+    # )
+    # parser.add_argument(
+    #     "--flag",
+    #     "-f",
+    #     action="store_true",
+    #     default=False,
+    #     help="(default: %%(default)s)",
+    # )
     args = parser.parse_args()
-    mngs.str.printc(args, c='yellow')
+    mngs.str.printc(args, c="yellow")
     return args
+
 
 def run_main() -> None:
     """Initialize mngs framework, run main function, and cleanup."""
     global CONFIG, CC, sys, plt
 
     import sys
+
     import matplotlib.pyplot as plt
     import mngs
 
     args = parse_args()
 
-    # Start mngs framework
     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
         sys,
         plt,
@@ -73,10 +111,8 @@ def run_main() -> None:
         agg=True,
     )
 
-    # Main
     exit_status = main(args)
 
-    # Close the mngs framework
     mngs.gen.close(
         CONFIG,
         verbose=False,
@@ -85,7 +121,8 @@ def run_main() -> None:
         exit_status=exit_status,
     )
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     run_main()
 
 # EOF

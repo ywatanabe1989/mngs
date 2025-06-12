@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_style/_sci_note.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/plt/ax/_style/_sci_note.py"
-)
+
+__FILE__ = "./src/mngs/plt/ax/_style/_sci_note.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -16,12 +15,12 @@ import numpy as np
 
 class OOMFormatter(matplotlib.ticker.ScalarFormatter):
     """Custom formatter for scientific notation with fixed order of magnitude.
-    
+
     A matplotlib formatter that allows you to specify a fixed exponent for
     scientific notation, rather than letting matplotlib choose it automatically.
     Useful when you want consistent notation across multiple plots or specific
     exponent values.
-    
+
     Parameters
     ----------
     order : int or None, optional
@@ -33,32 +32,31 @@ class OOMFormatter(matplotlib.ticker.ScalarFormatter):
         Whether to use offset notation. Default is True.
     mathText : bool, optional
         Whether to use mathtext rendering. Default is True.
-        
+
     Attributes
     ----------
     order : int or None
         The fixed order of magnitude to use.
     fformat : str
         Format string for displaying numbers.
-        
+
     Examples
     --------
     >>> # Force all labels to use 10^3 notation
     >>> formatter = OOMFormatter(order=3, fformat="%1.2f")
     >>> ax.xaxis.set_major_formatter(formatter)
-    
+
     >>> # Use 10^-6 for microvolts
     >>> formatter = OOMFormatter(order=-6, fformat="%1.1f")
     >>> ax.yaxis.set_major_formatter(formatter)
-    
+
     See Also
     --------
     matplotlib.ticker.ScalarFormatter : Base formatter class
     sci_note : Convenience function using this formatter
     """
-    def __init__(
-        self, order=None, fformat="%1.1f", offset=True, mathText=True
-    ):
+
+    def __init__(self, order=None, fformat="%1.1f", offset=True, mathText=True):
         self.order = order
         self.fformat = fformat
         matplotlib.ticker.ScalarFormatter.__init__(
@@ -111,9 +109,7 @@ def sci_note(
         if order_x is None:
             order_x = np.floor(np.log10(np.max(np.abs(ax.get_xlim())) + 1e-5))
 
-        ax.xaxis.set_major_formatter(
-            OOMFormatter(order=int(order_x), fformat=fformat)
-        )
+        ax.xaxis.set_major_formatter(OOMFormatter(order=int(order_x), fformat=fformat))
         ax.ticklabel_format(axis="x", style="sci", scilimits=scilimits)
         ax.xaxis.labelpad = pad_x
         shift_x = (ax.get_xlim()[0] - ax.get_xlim()[1]) * 0.01
@@ -124,9 +120,7 @@ def sci_note(
         if order_y is None:
             order_y = np.floor(np.log10(np.max(np.abs(ax.get_ylim())) + 1e-5))
 
-        ax.yaxis.set_major_formatter(
-            OOMFormatter(order=int(order_y), fformat=fformat)
-        )
+        ax.yaxis.set_major_formatter(OOMFormatter(order=int(order_y), fformat=fformat))
         ax.ticklabel_format(axis="y", style="sci", scilimits=scilimits)
         ax.yaxis.labelpad = pad_y
         shift_y = (ax.get_ylim()[0] - ax.get_ylim()[1]) * 0.01

@@ -12,6 +12,7 @@ import json
 from tqdm import tqdm
 import mngs
 from pprint import pprint
+
 try:
     from readability import Document
 except ImportError:
@@ -60,7 +61,7 @@ def extract_main_content(html):
         content = re.sub("<[^<]+?>", "", html)
         content = " ".join(content.split())
         return content[:5000]  # Limit to first 5000 chars
-    
+
     doc = Document(html)
     content = doc.summary()
     # Remove HTML tags
@@ -90,9 +91,7 @@ def crawl_url(url, max_depth=1):
                 soup = BeautifulSoup(response.text, "html.parser")
 
                 for link in soup.find_all("a", href=True):
-                    absolute_link = urllib.parse.urljoin(
-                        current_url, link["href"]
-                    )
+                    absolute_link = urllib.parse.urljoin(current_url, link["href"])
                     if absolute_link not in visited:
                         to_visit.append((absolute_link, depth + 1))
 
@@ -113,15 +112,11 @@ def crawl_to_json(start_url):
         llm = mngs.ai.GenAI("gpt-4o-mini")
         return {
             "url": url,
-            "content": llm(
-                f"Summarize this page in 1 line:\n\n{contents[url]}"
-            ),
+            "content": llm(f"Summarize this page in 1 line:\n\n{contents[url]}"),
         }
 
     with ThreadPoolExecutor() as executor:
-        future_to_url = {
-            executor.submit(process_url, url): url for url in crawled_urls
-        }
+        future_to_url = {executor.submit(process_url, url): url for url in crawled_urls}
         crawled_pages = []
         for future in tqdm(
             as_completed(future_to_url),
@@ -137,9 +132,7 @@ def crawl_to_json(start_url):
 
 def summarize_all(json_contents):
     llm = mngs.ai.GenAI("gpt-4o-mini")
-    out = llm(
-        f"Summarize this json file with 5 bullet points:\n\n{json_contents}"
-    )
+    out = llm(f"Summarize this json file with 5 bullet points:\n\n{json_contents}")
     return out
 
 

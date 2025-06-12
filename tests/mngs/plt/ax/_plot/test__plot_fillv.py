@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/_mngs_repo/tests/mngs/plt/ax/_plot/test__plot_fillv.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./tests/mngs/plt/ax/_plot/test__plot_fillv.py"
-)
+
+__FILE__ = "./tests/mngs/plt/ax/_plot/test__plot_fillv.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -52,9 +51,7 @@ class TestPlotFillV:
         save(fig, spath)
         # Check saved file
         actual_spath = os.path.join(self.out_dir, spath)
-        assert os.path.exists(
-            actual_spath
-        ), f"Failed to save figure to {spath}"
+        assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
 
     def test_single_axis(self):
         # Test with single axis
@@ -100,9 +97,9 @@ class TestPlotFillV:
         self.save_test_figure(self.fig, "test_custom_color")
 
         # Check color
-        assert self.ax.patches[0].get_facecolor()[
-            0:3
-        ] == matplotlib.colors.to_rgb(color)
+        assert self.ax.patches[0].get_facecolor()[0:3] == matplotlib.colors.to_rgb(
+            color
+        )
 
     def test_plot_fillv_savefig(self):
         starts = [2, 4]
@@ -120,9 +117,7 @@ class TestPlotFillV:
         # Check saved file
         ACTUAL_SAVE_DIR = __file__.replace(".py", "_out")
         actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
-        assert os.path.exists(
-            actual_spath
-        ), f"Failed to save figure to {spath}"
+        assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
 
 
 if __name__ == "__main__":

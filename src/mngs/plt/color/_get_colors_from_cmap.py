@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/color/_get_from_cmap.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/plt/color/_get_from_cmap.py"
-)
+
+__FILE__ = "./src/mngs/plt/color/_get_from_cmap.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -102,10 +101,7 @@ def get_colors_from_cmap(
     else:
         values = np.linspace(value_range[0], value_range[1], n_colors)
 
-    return [
-        get_color_from_cmap(cmap_name, val, value_range, alpha)
-        for val in values
-    ]
+    return [get_color_from_cmap(cmap_name, val, value_range, alpha) for val in values]
 
 
 def get_categorical_colors_from_cmap(
@@ -133,5 +129,6 @@ def get_categorical_colors_from_cmap(
     colors = get_colors_from_cmap(cmap_name, n_categories, alpha=alpha)
 
     return {cat: colors[idx] for idx, cat in enumerate(unique_categories)}
+
 
 # EOF

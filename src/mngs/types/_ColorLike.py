@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/types/_ColorLike.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/types/_ColorLike.py"
-)
+
+__FILE__ = "./src/mngs/types/_ColorLike.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 from typing import List, Tuple, Union

@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_plot/_plot_image2d.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/plt/ax/_plot/_plot_image2d.py"
-)
+
+__FILE__ = "./src/mngs/plt/ax/_plot/_plot_image2d.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -42,9 +41,7 @@ def plot_image(
     arr_2d = arr_2d.T
 
     # Cals the original ax.imshow() method on the transposed array
-    im = ax.imshow(
-        arr_2d, cmap=cmap, vmin=vmin, vmax=vmax, aspect=aspect, **kwargs
-    )
+    im = ax.imshow(arr_2d, cmap=cmap, vmin=vmin, vmax=vmax, aspect=aspect, **kwargs)
 
     # Color bar
     if cbar:
@@ -59,5 +56,6 @@ def plot_image(
     ax.invert_yaxis()
 
     return ax
+
 
 # EOF

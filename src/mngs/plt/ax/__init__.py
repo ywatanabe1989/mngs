@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/__init__.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/plt/ax/__init__.py"
-)
+
+__FILE__ = "./src/mngs/plt/ax/__init__.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -17,6 +16,15 @@ from ._style._extend import extend
 from ._style._force_aspect import force_aspect
 from ._style._format_label import format_label
 from ._style._hide_spines import hide_spines
+from ._style._show_spines import (
+    show_spines,
+    show_all_spines,
+    show_classic_spines,
+    show_box_spines,
+    toggle_spines,
+    scientific_spines,
+    clean_spines,
+)
 from ._style._map_ticks import map_ticks
 from ._style._rotate_labels import rotate_labels
 from ._style._sci_note import sci_note
@@ -34,6 +42,11 @@ from ._style._share_axes import (
     sharex,
     sharexy,
     sharey,
+)
+from ._style._set_log_scale import (
+    set_log_scale,
+    smart_log_limits,
+    add_log_scale_indicator,
 )
 
 # Plot

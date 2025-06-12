@@ -4,9 +4,8 @@
 # File: /ssh:ywatanabe@sp:/home/ywatanabe/proj/.claude-worktree/mngs_repo/src/mngs/__version__.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/__version__.py"
-)
+
+__FILE__ = "./src/mngs/__version__.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 

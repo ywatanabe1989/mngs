@@ -5,8 +5,29 @@
 
 import numpy as np
 import re
+from collections import abc
 
-def search(patterns, strings, only_perfect_match=False, as_bool=False, ensure_one=False):
+try:
+    import pandas as pd
+except ImportError:
+    pd = None
+
+try:
+    import xarray as xr
+except ImportError:
+    xr = None
+
+try:
+    from natsort import natsorted
+except ImportError:
+    # Fallback to regular sorted if natsort not available
+    def natsorted(iterable):
+        return sorted(iterable)
+
+
+def search(
+    patterns, strings, only_perfect_match=False, as_bool=False, ensure_one=False
+):
     """Search for patterns in strings using regular expressions.
 
     Parameters
@@ -47,11 +68,24 @@ def search(patterns, strings, only_perfect_match=False, as_bool=False, ensure_on
     """
 
     def to_list(string_or_pattern):
-        if isinstance(string_or_pattern, (np.ndarray, pd.Series, xr.DataArray)):
+        # Check for numpy arrays first
+        if isinstance(string_or_pattern, np.ndarray):
             return string_or_pattern.tolist()
-        elif isinstance(string_or_pattern, abc.KeysView):
+        
+        # Check for pandas types if pandas is available
+        if pd is not None:
+            if isinstance(string_or_pattern, (pd.Series, pd.Index)):
+                return string_or_pattern.tolist()
+        
+        # Check for xarray types if xarray is available
+        if xr is not None:
+            if isinstance(string_or_pattern, xr.DataArray):
+                return string_or_pattern.tolist()
+        
+        # Check for other iterables
+        if isinstance(string_or_pattern, abc.KeysView):
             return list(string_or_pattern)
-        elif not isinstance(string_or_pattern, (list, tuple, pd.Index)):
+        elif not isinstance(string_or_pattern, (list, tuple)):
             return [string_or_pattern]
         return string_or_pattern
 
@@ -72,7 +106,9 @@ def search(patterns, strings, only_perfect_match=False, as_bool=False, ensure_on
     keys_matched = list(np.array(strings)[indices_matched])
 
     if ensure_one:
-        assert len(indices_matched) == 1, "Expected exactly one match, but found {}".format(len(indices_matched))
+        assert (
+            len(indices_matched) == 1
+        ), "Expected exactly one match, but found {}".format(len(indices_matched))
 
     if as_bool:
         bool_matched = np.zeros(len(strings), dtype=bool)

@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_batch_fn.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/decorators/_batch_fn.py"
-)
+
+__FILE__ = "./src/mngs/decorators/_batch_fn.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 from typing import Any as _Any
@@ -14,6 +13,7 @@ from typing import Any as _Any
 from functools import wraps
 from typing import Callable
 
+import numpy as np
 import torch
 from tqdm import tqdm as _tqdm
 
@@ -29,10 +29,25 @@ def batch_fn(func: Callable) -> Callable:
 
         # Set the current decorator context
         wrapper._current_decorator = "batch_fn"
+        
+        # Mark that batch_fn has been applied
+        if not hasattr(wrapper, '_decorator_order'):
+            wrapper._decorator_order = []
+        wrapper._decorator_order.append('batch_fn')
 
         batch_size = int(kwargs.pop("batch_size", 4))
         if len(x) <= batch_size:
-            return func(x, *args, **kwargs, batch_size=batch_size)
+            # Only pass batch_size if the function accepts it
+            import inspect
+            try:
+                sig = inspect.signature(func)
+                if 'batch_size' in sig.parameters:
+                    return func(x, *args, **kwargs, batch_size=batch_size)
+                else:
+                    return func(x, *args, **kwargs)
+            except:
+                # Fallback for wrapped functions
+                return func(x, *args, **kwargs)
 
         n_batches = (len(x) + batch_size - 1) // batch_size
         results = []
@@ -41,9 +56,17 @@ def batch_fn(func: Callable) -> Callable:
             start = i_batch * batch_size
             end = min((i_batch + 1) * batch_size, len(x))
 
-            batch_result = func(
-                x[start:end], *args, **kwargs, batch_size=batch_size
-            )
+            # Only pass batch_size if the function accepts it
+            import inspect
+            try:
+                sig = inspect.signature(func)
+                if 'batch_size' in sig.parameters:
+                    batch_result = func(x[start:end], *args, **kwargs, batch_size=batch_size)
+                else:
+                    batch_result = func(x[start:end], *args, **kwargs)
+            except:
+                # Fallback for wrapped functions
+                batch_result = func(x[start:end], *args, **kwargs)
 
             if isinstance(batch_result, torch.Tensor):
                 batch_result = batch_result.cpu()
@@ -57,19 +80,48 @@ def batch_fn(func: Callable) -> Callable:
 
         if isinstance(results[0], tuple):
             n_vars = len(results[0])
-            combined_results = [
-                torch.vstack([res[i_var] for res in results])
-                for i_var in range(n_vars)
-            ]
+            combined_results = []
+            for i_var in range(n_vars):
+                # Check if this element is stackable (tensor/array) or should be kept as-is
+                first_elem = results[0][i_var]
+                if isinstance(first_elem, (torch.Tensor, np.ndarray)):
+                    # Stack tensors/arrays
+                    if isinstance(first_elem, torch.Tensor):
+                        if first_elem.ndim == 0:
+                            combined = torch.stack([res[i_var] for res in results])
+                        else:
+                            combined = torch.vstack([res[i_var] for res in results])
+                    else:
+                        combined = np.vstack([res[i_var] for res in results])
+                    combined_results.append(combined)
+                else:
+                    # For non-tensor elements (like lists), just take the first one
+                    # (assuming they're all the same across batches)
+                    combined_results.append(first_elem)
             return tuple(combined_results)
         elif isinstance(results[0], torch.Tensor):
-            return torch.vstack(results)
+            # Check if results are 0-D tensors (scalars)
+            if results[0].ndim == 0:
+                return torch.stack(results)
+            else:
+                return torch.vstack(results)
+        elif isinstance(results[0], np.ndarray):
+            # Handle numpy arrays
+            if results[0].ndim == 0:
+                return np.array(results)
+            else:
+                return np.vstack(results)
+        elif isinstance(results[0], (int, float)):
+            # Handle scalar results
+            return np.array(results) if len(results) > 1 else results[0]
         else:
+            # For lists and other types
             return sum(results, [])
 
     # Mark as a wrapper for detection
     wrapper._is_wrapper = True
     wrapper._decorator_type = "batch_fn"
     return wrapper
+
 
 # EOF

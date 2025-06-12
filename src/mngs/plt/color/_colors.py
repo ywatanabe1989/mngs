@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/colors/_colors.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/plt/colors/_colors.py"
-)
+
+__FILE__ = "./src/mngs/plt/colors/_colors.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -125,9 +124,7 @@ def cycle_color_bgr(i_color, colors=None):
 
 def gradiate_color_bgr(bgr_or_bgra, n=5):
     rgb_or_rgba = (
-        bgr2rgb(bgr_or_bgra)
-        if len(bgr_or_bgra) == 3
-        else bgra2rgba(bgr_or_bgra)
+        bgr2rgb(bgr_or_bgra) if len(bgr_or_bgra) == 3 else bgra2rgba(bgr_or_bgra)
     )
     rgb_gradient = gradiate_color_rgb(rgb_or_rgba, n)
     return [

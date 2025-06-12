@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_style/_extend.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/plt/ax/_style/_extend.py"
-)
+
+__FILE__ = "./src/mngs/plt/ax/_style/_extend.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -61,5 +60,6 @@ def extend(axis, x_ratio=1.0, y_ratio=1.0):
         ]
     )
     return axis
+
 
 # EOF

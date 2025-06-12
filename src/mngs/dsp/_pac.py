@@ -19,6 +19,7 @@ from ..nn._PAC import PAC
 mngs.dsp.pac function
 """
 
+
 # @batch_fn
 @signal_fn
 def pac(
@@ -72,9 +73,7 @@ def pac(
 
         agg = []
         for ii in range(n_batches):
-            start, end = batch_size_ch * ii, min(
-                batch_size_ch * (ii + 1), n_chs
-            )
+            start, end = batch_size_ch * ii, min(batch_size_ch * (ii + 1), n_chs)
             _pac = m(x[:, start:end, :].to(device)).detach().cpu()
             agg.append(_pac)
 
@@ -113,7 +112,6 @@ if __name__ == "__main__":
     # Start
     CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt)
 
-
     pac, freqs_pha, freqs_amp = mngs.dsp.pac(
         np.random.rand(1, 16, 24000),
         400,
@@ -136,7 +134,6 @@ if __name__ == "__main__":
 #             xx, tt, fs = mngs.dsp.demo_sig(
 #                 batch_size=1, n_chs=1, fs=FS, t_sec=T_SEC, sig_type="pac"
 #             )
-
 
 
 #             # mngs.str.print_debug()

@@ -86,8 +86,8 @@ def verify_non_leakage(
     return True
 
 
-@torch_fn
 @batch_fn
+@torch_fn
 def describe(
     x: torch.Tensor,
     axis: int = -1,

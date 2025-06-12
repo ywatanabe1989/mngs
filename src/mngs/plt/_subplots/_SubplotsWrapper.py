@@ -4,9 +4,8 @@
 # File: /ssh:ywatanabe@sp:/home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_SubplotsWrapper.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/plt/_subplots/_SubplotsWrapper.py"
-)
+
+__FILE__ = "./src/mngs/plt/_subplots/_SubplotsWrapper.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -31,10 +30,14 @@ class SubplotsWrapper:
         self._fig_mngs = None
         self._counter_part = plt.subplots
 
-    def __call__(
-        self, *args, track=True, sharex=False, sharey=False, **kwargs
-    ):
+    def __call__(self, *args, track=True, sharex=False, sharey=False, constrained_layout=None, **kwargs):
 
+        # If constrained_layout is not specified, use it by default for better colorbar handling
+        if constrained_layout is None and 'layout' not in kwargs:
+            # Use a dict to set padding parameters for better spacing
+            # Increased w_pad to prevent colorbar overlap
+            kwargs['constrained_layout'] = {'w_pad': 0.1, 'h_pad': 0.1, 'wspace': 0.05, 'hspace': 0.05}
+            
         # Start from the original matplotlib figure and axes
         self._fig_mpl, self._axes_mpl = self._counter_part(
             *args, sharex=sharex, sharey=sharey, **kwargs
@@ -51,9 +54,7 @@ class SubplotsWrapper:
         if axes_array_mpl.size == 1:
             # Use squeeze() to get the scalar Axes object if it's a 0-d array
             ax_mpl_scalar = (
-                axes_array_mpl.item()
-                if axes_array_mpl.ndim == 0
-                else axes_array_mpl[0]
+                axes_array_mpl.item() if axes_array_mpl.ndim == 0 else axes_array_mpl[0]
             )
             self._axis_mngs = AxisWrapper(self._fig_mngs, ax_mpl_scalar, track)
             self._fig_mngs.axes = np.atleast_1d([self._axis_mngs])

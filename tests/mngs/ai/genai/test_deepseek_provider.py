@@ -27,7 +27,7 @@ class TestDeepSeekProvider:
             max_tokens=100,
             timeout=30.0,
             max_retries=3,
-            system_prompt="You are a helpful assistant."
+            system_prompt="You are a helpful assistant.",
         )
 
     @pytest.fixture
@@ -58,7 +58,7 @@ class TestDeepSeekProvider:
         messages = [
             {"role": "system", "content": "You are helpful"},
             {"role": "user", "content": "Hello"},
-            {"role": "assistant", "content": "Hi there!"}
+            {"role": "assistant", "content": "Hi there!"},
         ]
         # Should not raise
         provider.validate_messages(messages)
@@ -77,11 +77,9 @@ class TestDeepSeekProvider:
 
     def test_format_messages(self, provider):
         """Test message formatting."""
-        messages = [
-            {"role": "user", "content": "Hello"}
-        ]
+        messages = [{"role": "user", "content": "Hello"}]
         formatted = provider.format_messages(messages)
-        
+
         # Should include system prompt
         assert len(formatted) == 2
         assert formatted[0]["role"] == "system"
@@ -92,10 +90,10 @@ class TestDeepSeekProvider:
         """Test message formatting without system prompt."""
         config.system_prompt = None
         provider = DeepSeekProvider(config)
-        
+
         messages = [{"role": "user", "content": "Hello"}]
         formatted = provider.format_messages(messages)
-        
+
         assert formatted == messages
 
     @patch("openai.OpenAI")
@@ -104,27 +102,27 @@ class TestDeepSeekProvider:
         # Mock the OpenAI client
         mock_client = Mock()
         mock_openai_class.return_value = mock_client
-        
+
         # Create new provider to use mocked client
         provider = DeepSeekProvider(provider.config)
-        
+
         # Mock the API response
         mock_response = Mock()
         mock_response.choices = [Mock(message=Mock(content="Test response"))]
         mock_response.usage = Mock(prompt_tokens=10, completion_tokens=20)
         mock_response.model = "deepseek-chat"
-        
+
         mock_client.chat.completions.create.return_value = mock_response
-        
+
         # Test
         messages = [{"role": "user", "content": "Hello"}]
         result = provider.complete(messages)
-        
+
         assert result["content"] == "Test response"
         assert result["usage"]["prompt_tokens"] == 10
         assert result["usage"]["completion_tokens"] == 20
         assert result["model"] == "deepseek-chat"
-        
+
         # Verify API call
         mock_client.chat.completions.create.assert_called_once()
         call_kwargs = mock_client.chat.completions.create.call_args.kwargs
@@ -139,27 +137,29 @@ class TestDeepSeekProvider:
         # Mock the OpenAI client
         mock_client = Mock()
         mock_openai_class.return_value = mock_client
-        
+
         # Create new provider to use mocked client
         provider = DeepSeekProvider(provider.config)
-        
+
         # Mock streaming response
         mock_chunks = [
             Mock(choices=[Mock(delta=Mock(content="Hello"))], usage=None),
             Mock(choices=[Mock(delta=Mock(content=" world"))], usage=None),
-            Mock(choices=[Mock(delta=Mock(content="!"))], 
-                 usage=Mock(prompt_tokens=5, completion_tokens=3))
+            Mock(
+                choices=[Mock(delta=Mock(content="!"))],
+                usage=Mock(prompt_tokens=5, completion_tokens=3),
+            ),
         ]
-        
+
         mock_client.chat.completions.create.return_value = iter(mock_chunks)
-        
+
         # Test
         messages = [{"role": "user", "content": "Hi"}]
         result = provider.stream(messages)
-        
+
         # Verify it returns an iterator
         assert isinstance(result, Iterator)
-        
+
         # Collect chunks
         chunks = list(result)
         assert len(chunks) == 3
@@ -175,13 +175,13 @@ class TestDeepSeekProvider:
         # Mock the OpenAI client
         mock_client = Mock()
         mock_openai_class.return_value = mock_client
-        
+
         # Create new provider to use mocked client
         provider = DeepSeekProvider(provider.config)
-        
+
         # Mock API error
         mock_client.chat.completions.create.side_effect = Exception("API Error")
-        
+
         # Test
         messages = [{"role": "user", "content": "Hello"}]
         with pytest.raises(Exception, match="API Error"):
@@ -191,9 +191,8 @@ class TestDeepSeekProvider:
         """Test client is initialized with correct parameters."""
         with patch("openai.OpenAI") as mock_openai_class:
             provider = DeepSeekProvider(config)
-            
+
             # Verify OpenAI client was initialized with correct params
             mock_openai_class.assert_called_once_with(
-                api_key="test-api-key",
-                base_url="https://api.deepseek.com/beta"
+                api_key="test-api-key", base_url="https://api.deepseek.com/beta"
             )

@@ -4,9 +4,8 @@
 # File: /ssh:ywatanabe@sp:/home/ywatanabe/proj/mngs_repo/src/mngs/dsp/utils/pac.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/dsp/utils/pac.py"
-)
+
+__FILE__ = "./src/mngs/dsp/utils/pac.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -33,9 +32,7 @@ def calc_pac_with_tensorpac(xx, fs, t_sec, i_batch=0, i_ch=0):
     p = tensorpac.Pac(f_pha="hres", f_amp="mres", dcomplex="wavelet")
 
     # Bandpass Filtering and Hilbert Transformation
-    phases = p.filter(
-        fs, xx[i_batch, i_ch], ftype="phase", n_jobs=1
-    )  # (50, 20, 2048)
+    phases = p.filter(fs, xx[i_batch, i_ch], ftype="phase", n_jobs=1)  # (50, 20, 2048)
     amplitudes = p.filter(
         fs, xx[i_batch, i_ch], ftype="amplitude", n_jobs=1
     )  # (50, 20, 2048)
@@ -107,6 +104,32 @@ def plot_PAC_mngs_vs_tensorpac(pac_mngs, pac_tp, freqs_pha, freqs_amp):
     fig.supylabel("Frequency for amplitude [Hz]")
 
     return fig
+
+
+# Snake_case alias for consistency
+def plot_pac_mngs_vs_tensorpac(pac_mngs, pac_tp, freqs_pha, freqs_amp):
+    """
+    Plot comparison between MNGS and Tensorpac phase-amplitude coupling results.
+    
+    This is an alias for plot_PAC_mngs_vs_tensorpac with snake_case naming.
+    
+    Parameters
+    ----------
+    pac_mngs : array-like
+        PAC values from MNGS
+    pac_tp : array-like
+        PAC values from Tensorpac
+    freqs_pha : array-like
+        Phase frequencies
+    freqs_amp : array-like
+        Amplitude frequencies
+        
+    Returns
+    -------
+    fig : matplotlib.figure.Figure
+        The generated figure
+    """
+    return plot_PAC_mngs_vs_tensorpac(pac_mngs, pac_tp, freqs_pha, freqs_amp)
 
 
 if __name__ == "__main__":

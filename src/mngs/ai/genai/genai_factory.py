@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_genai_factory.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/ai/_gen_ai/_genai_factory.py"
-)
+
+__FILE__ = "./src/mngs/ai/_gen_ai/_genai_factory.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -67,5 +66,6 @@ def genai_factory(
         chat_history=chat_history,
         max_tokens=max_tokens,
     )
+
 
 # EOF

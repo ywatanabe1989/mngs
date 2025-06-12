@@ -4,14 +4,14 @@
 # File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/utils/_compress_hdf5.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "/ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/utils/_compress_hdf5.py"
-)
+
+__FILE__ = "/ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/utils/_compress_hdf5.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 import h5py
 import numpy as np
 from tqdm import tqdm
+
 
 def compress_hdf5(input_file, output_file=None, compression_level=4):
     """
@@ -32,7 +32,7 @@ def compress_hdf5(input_file, output_file=None, compression_level=4):
 
     print(f"Compressing {input_file} to {output_file}")
 
-    with h5py.File(input_file, 'r') as src, h5py.File(output_file, 'w') as dst:
+    with h5py.File(input_file, "r") as src, h5py.File(output_file, "w") as dst:
         # Copy file attributes
         for key, value in src.attrs.items():
             dst.attrs[key] = value
@@ -53,16 +53,18 @@ def compress_hdf5(input_file, output_file=None, compression_level=4):
                     name,
                     shape=obj.shape,
                     dtype=obj.dtype,
-                    compression='gzip',
+                    compression="gzip",
                     compression_opts=compression_level,
-                    chunks=chunks
+                    chunks=chunks,
                 )
 
                 # Copy data and attributes
                 if len(obj.shape) > 0 and obj.shape[0] > 10000000:
                     # Process large datasets in chunks to avoid memory issues
                     chunk_size = 5000000  # Adjust based on your available RAM
-                    for i in tqdm(range(0, obj.shape[0], chunk_size), desc=f"Copying {name}"):
+                    for i in tqdm(
+                        range(0, obj.shape[0], chunk_size), desc=f"Copying {name}"
+                    ):
                         end = min(i + chunk_size, obj.shape[0])
                         if len(obj.shape) == 1:
                             compressed_data[i:end] = obj[i:end]
@@ -86,18 +88,27 @@ def compress_hdf5(input_file, output_file=None, compression_level=4):
         # Process all objects in the file
         src.visititems(copy_dataset)
 
-    print(f"Compression complete. Original size: {os.path.getsize(input_file)/1e9:.2f} GB, "
-          f"New size: {os.path.getsize(output_file)/1e9:.2f} GB")
+    print(
+        f"Compression complete. Original size: {os.path.getsize(input_file)/1e9:.2f} GB, "
+        f"New size: {os.path.getsize(output_file)/1e9:.2f} GB"
+    )
 
     return output_file
+
 
 if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser(description="Compress existing HDF5 files with gzip compression")
+    parser = argparse.ArgumentParser(
+        description="Compress existing HDF5 files with gzip compression"
+    )
     parser.add_argument("input_file", help="Path to the input HDF5 file")
-    parser.add_argument("--output_file", help="Path to the output compressed HDF5 file", default=None)
-    parser.add_argument("--compression", type=int, help="Compression level (1-9)", default=4)
+    parser.add_argument(
+        "--output_file", help="Path to the output compressed HDF5 file", default=None
+    )
+    parser.add_argument(
+        "--compression", type=int, help="Compression level (1-9)", default=4
+    )
 
     args = parser.parse_args()
     compress_existing_h5(args.input_file, args.output_file, args.compression)

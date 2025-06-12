@@ -94,10 +94,26 @@ class AxisWrapper(MatplotlibPlotMixin, SeabornMixin, AdjustmentMixin, TrackingMi
                     )
 
                     # Track the method call if tracking enabled
-                    # Track all plotting methods, not just those with explicit id
-                    if should_track and name in ['plot', 'scatter', 'bar', 'hist', 'boxplot', 
-                                                  'fill_between', 'errorbar', 'step', 'stem',
-                                                  'pie', 'hexbin', 'contour', 'contourf']:
+                    # Expanded list of matplotlib plotting methods to track
+                    tracking_methods = {
+                        # Basic plots
+                        'plot', 'scatter', 'bar', 'barh', 'hist', 'boxplot', 'violinplot',
+                        # Line plots
+                        'fill_between', 'fill_betweenx', 'errorbar', 'step', 'stem',
+                        # Statistical plots  
+                        'hist2d', 'hexbin', 'pie',
+                        # Contour plots
+                        'contour', 'contourf', 'tricontour', 'tricontourf',
+                        # Image plots
+                        'imshow', 'matshow', 'spy',
+                        # Quiver plots
+                        'quiver', 'streamplot',
+                        # 3D-related (if axes3d)
+                        'plot3D', 'scatter3D', 'bar3d', 'plot_surface', 'plot_wireframe',
+                        # Text and annotations (data-containing)
+                        'annotate', 'text'
+                    }
+                    if should_track and name in tracking_methods:
                         # Use the _track method from TrackingMixin
                         # If no id provided, it will auto-generate one
                         try:
@@ -151,10 +167,37 @@ class AxisWrapper(MatplotlibPlotMixin, SeabornMixin, AdjustmentMixin, TrackingMi
         )
 
     def __dir__(self):
-        # Combine attributes from both self and the wrapped matplotlib figure
-        attrs = set(dir(self.__class__))
-        attrs.update(object.__dir__(self))
-        attrs.update(dir(self._axes_mpl))
+        # Start with attributes from the class and all parent classes (mixins)
+        attrs = set()
+        
+        # Get attributes from all parent classes including mixins
+        for cls in self.__class__.__mro__:
+            attrs.update(cls.__dict__.keys())
+        
+        # Add instance attributes
+        attrs.update(self.__dict__.keys())
+        
+        # Safely get matplotlib axes attributes
+        try:
+            # Get attributes from the wrapped matplotlib axes
+            if hasattr(self._axes_mpl, '__class__'):
+                # Get class methods from matplotlib.axes.Axes
+                for cls in self._axes_mpl.__class__.__mro__:
+                    attrs.update(name for name in cls.__dict__.keys() if not name.startswith('_'))
+            
+            # Add instance attributes of the matplotlib axes
+            if hasattr(self._axes_mpl, '__dict__'):
+                attrs.update(name for name in self._axes_mpl.__dict__.keys() if not name.startswith('_'))
+                
+        except Exception:
+            # If any error occurs, add common matplotlib methods manually
+            attrs.update(['plot', 'scatter', 'bar', 'barh', 'hist', 'boxplot', 
+                         'set_xlabel', 'set_ylabel', 'set_title', 'legend',
+                         'set_xlim', 'set_ylim', 'grid', 'annotate', 'text'])
+        
+        # Remove private attributes
+        attrs = {attr for attr in attrs if not attr.startswith('_')}
+        
         return sorted(attrs)
 
 

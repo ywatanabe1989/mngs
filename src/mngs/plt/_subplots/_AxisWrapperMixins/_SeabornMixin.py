@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_SeabornMixin.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/plt/_subplots/_AxisWrapperMixins/_SeabornMixin.py"
-)
+
+__FILE__ = "./src/mngs/plt/_subplots/_AxisWrapperMixins/_SeabornMixin.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -50,16 +49,12 @@ class SeabornMixin:
         track_obj = track_obj if track_obj is not None else args
         self._track(track, id, method_name, track_obj, kwargs)
 
-    def _sns_base_xyhue(
-        self, method_name, *args, track=True, id=None, **kwargs
-    ):
+    def _sns_base_xyhue(self, method_name, *args, track=True, id=None, **kwargs):
         """Formats data passed to sns functions with (data=data, x=x, y=y) keyword arguments"""
         df = kwargs.get("data")
         x, y, hue = kwargs.get("x"), kwargs.get("y"), kwargs.get("hue")
 
-        track_obj = (
-            self._sns_prepare_xyhue(df, x, y, hue) if df is not None else None
-        )
+        track_obj = self._sns_prepare_xyhue(df, x, y, hue) if df is not None else None
         self._sns_base(
             method_name,
             *args,
@@ -69,9 +64,7 @@ class SeabornMixin:
             **kwargs,
         )
 
-    def _sns_prepare_xyhue(
-        self, data=None, x=None, y=None, hue=None, **kwargs
-    ):
+    def _sns_prepare_xyhue(self, data=None, x=None, y=None, hue=None, **kwargs):
         """Returns obj to track"""
         data = data.reset_index()
 
@@ -90,10 +83,7 @@ class SeabornMixin:
             elif y is None:
 
                 df = pd.concat(
-                    [
-                        data.loc[data[hue] == hh, x]
-                        for hh in data[hue].unique()
-                    ],
+                    [data.loc[data[hue] == hh, x] for hh in data[hue].unique()],
                     axis=1,
                 )
                 return df
@@ -124,9 +114,7 @@ class SeabornMixin:
                 )
 
     @sns_copy_doc
-    def sns_barplot(
-        self, data=None, x=None, y=None, track=True, id=None, **kwargs
-    ):
+    def sns_barplot(self, data=None, x=None, y=None, track=True, id=None, **kwargs):
         self._sns_base_xyhue(
             "sns_barplot", data=data, x=x, y=y, track=track, id=id, **kwargs
         )
@@ -164,14 +152,10 @@ class SeabornMixin:
         df = args[0]
         if xyz:
             df = mngs.pd.to_xyz(df)
-        self._sns_base(
-            method_name, *args, track=track, track_obj=df, id=id, **kwargs
-        )
+        self._sns_base(method_name, *args, track=track, track_obj=df, id=id, **kwargs)
 
     @sns_copy_doc
-    def sns_histplot(
-        self, data=None, x=None, y=None, track=True, id=None, **kwargs
-    ):
+    def sns_histplot(self, data=None, x=None, y=None, track=True, id=None, **kwargs):
         self._sns_base_xyhue(
             "sns_histplot", data=data, x=x, y=y, track=track, id=id, **kwargs
         )
@@ -215,9 +199,7 @@ class SeabornMixin:
         self._sns_base("sns_pairplot", *args, track=track, id=id, **kwargs)
 
     @sns_copy_doc
-    def sns_scatterplot(
-        self, data=None, x=None, y=None, track=True, id=None, **kwargs
-    ):
+    def sns_scatterplot(self, data=None, x=None, y=None, track=True, id=None, **kwargs):
         self._sns_base_xyhue(
             "sns_scatterplot",
             data=data,
@@ -229,17 +211,25 @@ class SeabornMixin:
         )
 
     @sns_copy_doc
-    def sns_swarmplot(
-        self, data=None, x=None, y=None, track=True, id=None, **kwargs
-    ):
+    def sns_lineplot(self, data=None, x=None, y=None, track=True, id=None, **kwargs):
+        self._sns_base_xyhue(
+            "sns_lineplot",
+            data=data,
+            x=x,
+            y=y,
+            track=track,
+            id=id,
+            **kwargs,
+        )
+
+    @sns_copy_doc
+    def sns_swarmplot(self, data=None, x=None, y=None, track=True, id=None, **kwargs):
         self._sns_base_xyhue(
             "sns_swarmplot", data=data, x=x, y=y, track=track, id=id, **kwargs
         )
 
     @sns_copy_doc
-    def sns_stripplot(
-        self, data=None, x=None, y=None, track=True, id=None, **kwargs
-    ):
+    def sns_stripplot(self, data=None, x=None, y=None, track=True, id=None, **kwargs):
         self._sns_base_xyhue(
             "sns_stripplot", data=data, x=x, y=y, track=track, id=id, **kwargs
         )
@@ -288,5 +278,79 @@ class SeabornMixin:
     @sns_copy_doc
     def sns_jointplot(self, *args, track=True, id=None, **kwargs):
         self._sns_base("sns_jointplot", *args, track=track, id=id, **kwargs)
+
+    def sns_plot(self, plot_type, *args, data=None, x=None, y=None, hue=None, 
+                 track=True, id=None, **kwargs):
+        """
+        General-purpose Seaborn plotting method.
+        
+        Parameters
+        ----------
+        plot_type : str
+            The name of the Seaborn plotting function (e.g., 'barplot', 'scatterplot')
+        *args : tuple
+            Positional arguments to pass to the Seaborn function
+        data : DataFrame, optional
+            Input data structure
+        x, y : str, optional
+            Column names for x and y axes
+        hue : str, optional
+            Column name for color grouping
+        track : bool, default=True
+            Whether to track this plot for export
+        id : str, optional
+            Identifier for tracking
+        **kwargs : dict
+            Additional keyword arguments for the Seaborn function
+            
+        Returns
+        -------
+        ax : matplotlib Axes
+            The axis with the plot
+            
+        Examples
+        --------
+        >>> ax.sns_plot('barplot', data=df, x='category', y='value')
+        >>> ax.sns_plot('heatmap', correlation_matrix, annot=True)
+        >>> ax.sns_plot('regplot', data=df, x='x', y='y', scatter_kws={'alpha': 0.5})
+        """
+        # Check if the plot type exists in seaborn
+        if not hasattr(sns, plot_type):
+            raise ValueError(f"'{plot_type}' is not a valid Seaborn plotting function")
+        
+        # Determine if this is a data-based plot (uses x, y, hue)
+        data_based_plots = {
+            'barplot', 'boxplot', 'violinplot', 'stripplot', 'swarmplot',
+            'pointplot', 'scatterplot', 'lineplot', 'histplot', 'kdeplot',
+            'ecdfplot', 'rugplot', 'boxenplot'
+        }
+        
+        # Route to appropriate method
+        if plot_type in data_based_plots and data is not None:
+            # Use the xyhue method for data-based plots
+            method_name = f"sns_{plot_type}"
+            self._sns_base_xyhue(
+                method_name, 
+                data=data, 
+                x=x, 
+                y=y, 
+                hue=hue,
+                track=track, 
+                id=id, 
+                **kwargs
+            )
+        else:
+            # Use the base method for matrix plots or non-data plots
+            method_name = f"sns_{plot_type}"
+            self._sns_base(
+                method_name, 
+                *args, 
+                track=track, 
+                id=id, 
+                **kwargs
+            )
+        
+        return self._axis_mpl
+
 
 # EOF

@@ -34,7 +34,7 @@ warnings.warn(
     "deepseek.py is deprecated. Please use deepseek_provider.py instead. "
     "See PROVIDER_MIGRATION_GUIDE.md for migration instructions.",
     DeprecationWarning,
-    stacklevel=2
+    stacklevel=2,
 )
 
 """Warnings"""
@@ -53,6 +53,7 @@ from .base_genai import BaseGenAI
 from openai import OpenAI as _OpenAI
 
 """Functions & Classes"""
+
 
 class DeepSeek(BaseGenAI):
     def __init__(
@@ -132,7 +133,7 @@ class DeepSeek(BaseGenAI):
                     current_text = chunk.choices[0].delta.content
                     if current_text:
                         buffer += current_text
-                        if any(char in '.!?\n ' for char in current_text):
+                        if any(char in ".!?\n " for char in current_text):
                             yield buffer
                             buffer = ""
                 except Exception as e:
@@ -141,7 +142,8 @@ class DeepSeek(BaseGenAI):
         if buffer:
             yield buffer
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     # -----------------------------------
     # Initiatialization of mngs format
     # -----------------------------------

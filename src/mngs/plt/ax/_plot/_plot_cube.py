@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_plot/_plot_cube.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/plt/ax/_plot/_plot_cube.py"
-)
+
+__FILE__ = "./src/mngs/plt/ax/_plot/_plot_cube.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -31,9 +30,7 @@ def plot_cube(ax, xlim, ylim, zlim, c="blue", alpha=1.0):
         Matplotlib axis with the cube plotted
     """
     # Validate inputs
-    assert hasattr(
-        ax, "plot3D"
-    ), "The axis must be a 3D axis with plot3D method"
+    assert hasattr(ax, "plot3D"), "The axis must be a 3D axis with plot3D method"
     assert len(xlim) == 2, "xlim must be a tuple of (min, max)"
     assert len(ylim) == 2, "ylim must be a tuple of (min, max)"
     assert len(zlim) == 2, "zlim must be a tuple of (min, max)"
@@ -55,5 +52,6 @@ def plot_cube(ax, xlim, ylim, zlim, c="blue", alpha=1.0):
             ax.plot3D(*zip(start, end), c=c, linewidth=3, alpha=alpha)
 
     return ax
+
 
 # EOF

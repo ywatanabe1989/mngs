@@ -3,6 +3,7 @@
 from torch.utils.data import Dataset
 import numpy as np
 
+
 class DefaultDataset(Dataset):
     """
     Apply transform for the first element of arrs_list
@@ -23,7 +24,7 @@ class DefaultDataset(Dataset):
 
     def __init__(self, arrs_list, transform=None):
         self.arrs_list = arrs_list
-        self.arrs = arrs_list # alias
+        self.arrs = arrs_list  # alias
 
         assert np.all([len(arr) for arr in arrs_list])
 
@@ -39,6 +40,7 @@ class DefaultDataset(Dataset):
         # Here, you might want to transform, or apply DA on X as a numpy array
         if self.transform:
             dtype_orig = arrs_list_idx[0].dtype
-            arrs_list_idx[0] = self.transform(arrs_list_idx[0].astype(np.float64))\
-                                   .astype(dtype_orig)
+            arrs_list_idx[0] = self.transform(
+                arrs_list_idx[0].astype(np.float64)
+            ).astype(dtype_orig)
         return arrs_list_idx

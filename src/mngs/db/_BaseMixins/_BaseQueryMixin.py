@@ -10,24 +10,42 @@ THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_Basemodules/_BaseQueryM
 
 from typing import List, Dict, Any, Optional, Union, Tuple
 
+
 class _BaseQueryMixin:
-    def select(self, table: str, columns: Optional[List[str]] = None, where: Optional[str] = None,
-               params: Optional[tuple] = None, order_by: Optional[str] = None, limit: Optional[int] = None) -> List[Dict[str, Any]]:
+    def select(
+        self,
+        table: str,
+        columns: Optional[List[str]] = None,
+        where: Optional[str] = None,
+        params: Optional[tuple] = None,
+        order_by: Optional[str] = None,
+        limit: Optional[int] = None,
+    ) -> List[Dict[str, Any]]:
         raise NotImplementedError
 
     def insert(self, table: str, data: Dict[str, Any]) -> None:
         raise NotImplementedError
 
-    def update(self, table: str, data: Dict[str, Any], where: str, params: Optional[tuple] = None) -> int:
+    def update(
+        self,
+        table: str,
+        data: Dict[str, Any],
+        where: str,
+        params: Optional[tuple] = None,
+    ) -> int:
         raise NotImplementedError
 
     def delete(self, table: str, where: str, params: Optional[tuple] = None) -> int:
         raise NotImplementedError
 
-    def execute_query(self, query: str, params: Optional[tuple] = None) -> List[Dict[str, Any]]:
+    def execute_query(
+        self, query: str, params: Optional[tuple] = None
+    ) -> List[Dict[str, Any]]:
         raise NotImplementedError
 
-    def count(self, table: str, where: Optional[str] = None, params: Optional[tuple] = None) -> int:
+    def count(
+        self, table: str, where: Optional[str] = None, params: Optional[tuple] = None
+    ) -> int:
         raise NotImplementedError
 
 

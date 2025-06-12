@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/ai/_gen_ai/_PARAMS.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/ai/_gen_ai/_PARAMS.py"
-)
+
+__FILE__ = "./src/mngs/ai/_gen_ai/_PARAMS.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 

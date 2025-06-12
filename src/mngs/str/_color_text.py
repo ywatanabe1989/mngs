@@ -3,6 +3,7 @@
 # Time-stamp: "2024-11-02 04:00:36 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/gen/_color_text.py
 
+
 def color_text(text, c="green"):
     """Apply ANSI color codes to text.
 

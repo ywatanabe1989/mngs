@@ -51,7 +51,7 @@ class Groq(BaseGenAI):
             "Groq class is deprecated. Use GenAI(provider='groq') instead. "
             "Example: from mngs.ai.genai import GenAI; ai = GenAI(provider='groq', model='llama3-8b-8192')",
             DeprecationWarning,
-            stacklevel=2
+            stacklevel=2,
         )
         max_tokens = min(max_tokens, 8000)
         if not api_key:

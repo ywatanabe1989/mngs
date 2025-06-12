@@ -3,7 +3,9 @@
 # Time-stamp: "2024-11-25 01:37:20 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/db/_SQLite3Mixins/_MaintenanceMixin.py
 
-THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_SQLite3Mixins/_MaintenanceMixin.py"
+THIS_FILE = (
+    "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_SQLite3Mixins/_MaintenanceMixin.py"
+)
 
 import contextlib
 import sqlite3
@@ -12,6 +14,7 @@ from typing import ContextManager, Dict, List, Optional
 import pandas as pd
 
 from .._BaseMixins._BaseMaintenanceMixin import _BaseMaintenanceMixin
+
 
 class _MaintenanceMixin:
     """Database maintenance functionality"""
@@ -33,7 +36,10 @@ class _MaintenanceMixin:
     ) -> None:
         with self.maintenance_lock():
             try:
-                def _progress(status: sqlite3.Connection, remaining: int, total: int) -> None:
+
+                def _progress(
+                    status: sqlite3.Connection, remaining: int, total: int
+                ) -> None:
                     if progress:
                         progress(total - remaining, total)
 
@@ -88,17 +94,12 @@ class _MaintenanceMixin:
                     except:
                         pass
 
-                    if (
-                        table_sample[column]
-                        .apply(lambda x: isinstance(x, str))
-                        .all()
-                    ):
+                    if table_sample[column].apply(lambda x: isinstance(x, str)).all():
                         continue
 
             sample_tables[table_name] = table_sample
 
         return sample_tables
-
 
     def fix_corruption(self) -> bool:
         """Attempts to fix database corruption"""
@@ -170,5 +171,6 @@ class _MaintenanceMixin:
 
             except sqlite3.Error as error:
                 raise ValueError(f"Failed to fix indexes: {error}")
+
 
 # EOF

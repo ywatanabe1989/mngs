@@ -9,24 +9,27 @@ import pandas as pd
 
 import mngs
 
-def interpolate_roc_data_points(df):
-    df_new = pd.DataFrame({
-        "x": np.arange(1001)/1000,
-        "y": np.nan,
-        "threshold": np.nan,    
-    })
 
-    for i_row in range(len(df)-1):
+def interpolate_roc_data_points(df):
+    df_new = pd.DataFrame(
+        {
+            "x": np.arange(1001) / 1000,
+            "y": np.nan,
+            "threshold": np.nan,
+        }
+    )
+
+    for i_row in range(len(df) - 1):
         x_pre = df.iloc[i_row]["fpr"]
-        x_post = df.iloc[i_row+1]["fpr"]
+        x_post = df.iloc[i_row + 1]["fpr"]
 
         indi = (x_pre <= df_new["x"]) * (df_new["x"] <= x_post)
 
         y_pre = df.iloc[i_row]["tpr"]
-        y_post = df.iloc[i_row+1]["tpr"]
+        y_post = df.iloc[i_row + 1]["tpr"]
 
         t_pre = df.iloc[i_row]["threshold"]
-        t_post = df.iloc[i_row+1]["threshold"]
+        t_post = df.iloc[i_row + 1]["threshold"]
 
         df_new["y"][indi] = y_pre
         df_new["threshold"][indi] = t_pre
@@ -121,7 +124,6 @@ def roc_auc(plt, true_class, pred_proba, labels, sdir_for_csv=None):
             df = interpolate_roc_data_points(df)
             spath = f"{sdir_for_csv}{class_name}.csv"
             mngs.io.save(df, spath)
-
 
     # Plot FPR-TPR curve for each class and iso-f1 curves
     colors = cycle(["navy", "turquoise", "darkorange", "cornflowerblue", "teal"])
@@ -234,7 +236,9 @@ if __name__ == "__main__":
 
     y_test[y_test == 9] = 8  # override 9 as 8
     ## Main
-    fig, metrics_dict = roc_auc(plt, y_test, predicted_proba, labels, sdir_for_csv="./tmp/roc_test/")
+    fig, metrics_dict = roc_auc(
+        plt, y_test, predicted_proba, labels, sdir_for_csv="./tmp/roc_test/"
+    )
 
     fig.show()
 

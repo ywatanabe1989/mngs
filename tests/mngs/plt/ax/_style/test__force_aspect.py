@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/ax/_adjust/test__force_aspect.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./tests/mngs/plt/ax/_adjust/test__force_aspect.py"
-)
+
+__FILE__ = "./tests/mngs/plt/ax/_adjust/test__force_aspect.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -66,9 +65,7 @@ class TestMainFunctionality:
     def test_with_multiple_images(self):
         # Add another image with different dimensions
         second_data = np.random.rand(5, 10)  # Height x Width
-        second_im = self.ax.imshow(
-            second_data, extent=[0, 10, 0, 5]
-        )  # Width x Height
+        second_im = self.ax.imshow(second_data, extent=[0, 10, 0, 5])  # Width x Height
 
         # The function should use the first image from get_images()
         ax = force_aspect(self.ax)
@@ -83,9 +80,7 @@ class TestMainFunctionality:
         # Create an image with negative extent
         neg_data = np.random.rand(10, 20)  # Height x Width
         neg_ax = self.fig.add_subplot(133)
-        neg_im = neg_ax.imshow(
-            neg_data, extent=[-20, 0, -10, 0]
-        )  # Width x Height
+        neg_im = neg_ax.imshow(neg_data, extent=[-20, 0, -10, 0])  # Width x Height
 
         # Test force_aspect
         neg_ax = force_aspect(neg_ax)
@@ -108,9 +103,8 @@ class TestMainFunctionality:
         # Check saved file
         ACTUAL_SAVE_DIR = __file__.replace(".py", "_out")
         actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
-        assert os.path.exists(
-            actual_spath
-        ), f"Failed to save figure to {spath}"
+        assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+
 
 if __name__ == "__main__":
     import os
@@ -133,24 +127,24 @@ if __name__ == "__main__":
 # )
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
-# 
+#
 # import matplotlib
-# 
-# 
+#
+#
 # def force_aspect(axis, aspect=1):
 #     assert isinstance(
 #         axis, matplotlib.axes._axes.Axes
 #     ), "First argument must be a matplotlib axes"
-# 
+#
 #     im = axis.get_images()
-# 
+#
 #     extent = im[0].get_extent()
-# 
+#
 #     axis.set_aspect(
 #         abs((extent[1] - extent[0]) / (extent[3] - extent[2])) / aspect
 #     )
 #     return axis
-# 
+#
 # # EOF
 # --------------------------------------------------------------------------------
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/ax/_style/_force_aspect.py

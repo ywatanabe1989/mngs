@@ -1,5 +1,5 @@
 <!-- ---
-!-- Timestamp: 2025-05-30 06:34:35
+!-- Timestamp: 2025-06-01 02:11:57
 !-- Author: ywatanabe
 !-- File: /home/ywatanabe/.dotfiles/.claude/to_claude/guidelines/project/IMPORTANT-bug-report.md
 !-- --- -->
@@ -34,8 +34,10 @@ Consider reverting to the latest commit which did not raise the problem. We some
   - [x] Identify root cause
   - [ ] Fix XXX
   ```
-
-
 - Once merge succeeded, delete the merged feature branch
+
+## Your Understanding Check
+Did you understand the guideline? If yes, please say:
+`CLAUDE UNDERSTOOD: <THIS FILE PATH HERE>`
 
 <!-- EOF -->

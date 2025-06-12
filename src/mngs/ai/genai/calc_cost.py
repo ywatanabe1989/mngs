@@ -23,11 +23,7 @@ import pandas as pd
 from .params import MODELS
 
 
-def calc_cost(
-    model: str,
-    input_tokens: int,
-    output_tokens: int
-) -> float:
+def calc_cost(model: str, input_tokens: int, output_tokens: int) -> float:
     """Calculates API usage cost based on token count.
 
     Example
@@ -63,11 +59,11 @@ def calc_cost(
 
     costs = models_df[["input_cost", "output_cost"]][indi]
     cost = (
-        input_tokens * costs["input_cost"]
-        + output_tokens * costs["output_cost"]
+        input_tokens * costs["input_cost"] + output_tokens * costs["output_cost"]
     ) / 1_000_000
 
     return cost.iloc[0]
+
 
 # def calc_cost(model, input_tokens, output_tokens):
 #     indi = MODELS["name"] == model

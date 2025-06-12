@@ -6,6 +6,7 @@
 import subprocess
 import mngs
 
+
 def sh(command_str, verbose=True):
     """
     Executes a shell command from Python.
@@ -40,9 +41,7 @@ if __name__ == "__main__":
     import matplotlib.pyplot as plt
     import mngs
 
-    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
-        sys, plt, verbose=False
-    )
+    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt, verbose=False)
     sh("ls")
     mngs.gen.close(CONFIG, verbose=False, notify=False)
 

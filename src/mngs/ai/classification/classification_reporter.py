@@ -26,6 +26,7 @@ from sklearn.metrics import (
 )
 
 import mngs
+
 _fix_seeds = mngs.reproduce.fix_seeds
 
 
@@ -39,6 +40,7 @@ class MultiClassificationReporter(object):
 
         self.tgt2id = {tgt: i_tgt for i_tgt, tgt in enumerate(tgts)}
         self.reporters = [ClassificationReporter(sdir) for sdir in sdirs]
+
     def add(self, obj_name, obj, tgt=None):
         i_tgt = self.tgt2id[tgt]
         self.reporters[i_tgt].add(obj_name, obj)
@@ -213,9 +215,7 @@ class ClassificationReporter(object):
             ],
             axis=1,
         )
-        clf_report = clf_report.rename(
-            columns={"accuracy": "balanced accuracy"}
-        )
+        clf_report = clf_report.rename(columns={"accuracy": "balanced accuracy"})
         clf_report = clf_report.round(3)
         clf_report["index"] = clf_report.index
         clf_report.loc["support", "index"] = "sample size"

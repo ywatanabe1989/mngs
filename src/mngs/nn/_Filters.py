@@ -4,9 +4,8 @@
 # File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/nn/_Filters.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/nn/_Filters.py"
-)
+
+__FILE__ = "./src/mngs/nn/_Filters.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -181,10 +180,12 @@ class BandPassFilter(BaseFilter1D):
             )
             for ll, hh in bands
         ]
-        
+
         # Convert filters list to tensors for zero_pad
-        filters_tensors = [torch.tensor(f) if not isinstance(f, torch.Tensor) else f for f in filters]
-        
+        filters_tensors = [
+            torch.tensor(f) if not isinstance(f, torch.Tensor) else f for f in filters
+        ]
+
         kernels = zero_pad(filters_tensors)
         kernels = ensure_even_len(kernels)
         if not isinstance(kernels, torch.Tensor):
@@ -227,7 +228,9 @@ class BandStopFilter(BaseFilter1D):
             for ll, hh in bands
         ]
         # Convert filters list to tensors for zero_pad
-        filters_tensors = [torch.tensor(f) if not isinstance(f, torch.Tensor) else f for f in filters]
+        filters_tensors = [
+            torch.tensor(f) if not isinstance(f, torch.Tensor) else f for f in filters
+        ]
         kernels = zero_pad(filters_tensors)
         kernels = ensure_even_len(kernels)
         if not isinstance(kernels, torch.Tensor):
@@ -249,9 +252,7 @@ class LowPassFilter(BaseFilter1D):
             assert 0 < cc
             assert cc < nyq
 
-        self.register_buffer(
-            "kernels", self.init_kernels(seq_len, fs, cutoffs_hz)
-        )
+        self.register_buffer("kernels", self.init_kernels(seq_len, fs, cutoffs_hz))
 
     @staticmethod
     def init_kernels(seq_len, fs, cutoffs_hz):
@@ -265,7 +266,9 @@ class LowPassFilter(BaseFilter1D):
             for cc in cutoffs_hz
         ]
         # Convert filters list to tensors for zero_pad
-        filters_tensors = [torch.tensor(f) if not isinstance(f, torch.Tensor) else f for f in filters]
+        filters_tensors = [
+            torch.tensor(f) if not isinstance(f, torch.Tensor) else f for f in filters
+        ]
         kernels = zero_pad(filters_tensors)
         kernels = ensure_even_len(kernels)
         if not isinstance(kernels, torch.Tensor):
@@ -287,9 +290,7 @@ class HighPassFilter(BaseFilter1D):
             assert 0 < cc
             assert cc < nyq
 
-        self.register_buffer(
-            "kernels", self.init_kernels(seq_len, fs, cutoffs_hz)
-        )
+        self.register_buffer("kernels", self.init_kernels(seq_len, fs, cutoffs_hz))
 
     @staticmethod
     def init_kernels(seq_len, fs, cutoffs_hz):
@@ -303,7 +304,9 @@ class HighPassFilter(BaseFilter1D):
             for cc in cutoffs_hz
         ]
         # Convert filters list to tensors for zero_pad
-        filters_tensors = [torch.tensor(f) if not isinstance(f, torch.Tensor) else f for f in filters]
+        filters_tensors = [
+            torch.tensor(f) if not isinstance(f, torch.Tensor) else f for f in filters
+        ]
         kernels = zero_pad(filters_tensors)
         kernels = ensure_even_len(kernels)
         if not isinstance(kernels, torch.Tensor):
@@ -408,9 +411,7 @@ if __name__ == "__main__":
     import mngs
 
     # Start
-    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
-        sys, plt, fig_scale=5
-    )
+    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt, fig_scale=5)
 
     xx, tt, fs = mngs.dsp.demo_sig(sig_type="chirp", fs=1024)
     xx = torch.tensor(xx).cuda()

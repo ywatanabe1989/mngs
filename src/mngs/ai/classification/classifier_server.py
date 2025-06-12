@@ -3,7 +3,9 @@
 # Time-stamp: "2024-12-12 06:49:15 (ywatanabe)"
 # File: ./mngs_repo/src/mngs/ai/ClassifierServer.py
 
-THIS_FILE = "/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/ClassifierServer.py"
+THIS_FILE = (
+    "/data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/ClassifierServer.py"
+)
 
 """
 Functionality:
@@ -98,15 +100,11 @@ class ClassifierServer:
                 random_state=random_state
             ),
             "KNeighborsClassifier": _KNeighborsClassifier(),
-            "AdaBoostClassifier": _AdaBoostClassifier(
-                random_state=random_state
-            ),
+            "AdaBoostClassifier": _AdaBoostClassifier(random_state=random_state),
             "LinearSVC": _LinearSVC(
                 class_weight=self.class_weight, random_state=random_state
             ),
-            "SVC": _SVC(
-                class_weight=self.class_weight, random_state=random_state
-            ),
+            "SVC": _SVC(class_weight=self.class_weight, random_state=random_state),
         }
 
     def __call__(

@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_plot/_plot_scatter_hist.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/plt/ax/_plot/_plot_scatter_hist.py"
-)
+
+__FILE__ = "./src/mngs/plt/ax/_plot/_plot_scatter_hist.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -129,5 +128,6 @@ def plot_scatter_hist(
     }
 
     return ax, ax_histx, ax_histy, hist_data
+
 
 # EOF

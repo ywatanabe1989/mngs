@@ -18,15 +18,15 @@ class PSD(nn.Module):
         is_complex = signal.is_complex()
         if is_complex:
             signal_fft = torch.fft.fft(signal, dim=self.dim)
-            freqs = torch.fft.fftfreq(
-                signal.size(self.dim), 1 / self.sample_rate
-            ).to(signal.device)
+            freqs = torch.fft.fftfreq(signal.size(self.dim), 1 / self.sample_rate).to(
+                signal.device
+            )
 
         else:
             signal_fft = torch.fft.rfft(signal, dim=self.dim)
-            freqs = torch.fft.rfftfreq(
-                signal.size(self.dim), 1 / self.sample_rate
-            ).to(signal.device)
+            freqs = torch.fft.rfftfreq(signal.size(self.dim), 1 / self.sample_rate).to(
+                signal.device
+            )
 
         power_spectrum = torch.abs(signal_fft) ** 2
         power_spectrum = power_spectrum / signal.size(self.dim)

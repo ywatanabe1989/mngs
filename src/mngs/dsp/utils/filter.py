@@ -12,9 +12,7 @@ from ...gen._to_even import to_even
 
 
 @numpy_fn
-def design_filter(
-    sig_len, fs, low_hz=None, high_hz=None, cycle=3, is_bandstop=False
-):
+def design_filter(sig_len, fs, low_hz=None, high_hz=None, cycle=3, is_bandstop=False):
     """
     Designs a Finite Impulse Response (FIR) filter based on the specified parameters.
 
@@ -74,9 +72,7 @@ def design_filter(
         if filter_mode in ["lowpass", "bandstop"]:
             low_freq = low_hz
         else:  # 'highpass' or 'bandpass'
-            low_freq = (
-                high_hz if filter_mode == "highpass" else min(low_hz, high_hz)
-            )
+            low_freq = high_hz if filter_mode == "highpass" else min(low_hz, high_hz)
         return low_freq
 
     def determine_order(filter_mode, fs, low_freq, sig_len, cycle):
@@ -111,6 +107,7 @@ def design_filter(
         ipdb.set_trace()
 
     return h
+
 
 @numpy_fn
 def plot_filter_responses(filter, fs, worN=8000, title=None):
@@ -148,8 +145,10 @@ def plot_filter_responses(filter, fs, worN=8000, title=None):
 
     return fig
 
+
 if __name__ == "__main__":
     import mngs
+
     # Example usage
     xx, tt, fs = mngs.dsp.demo_sig()
     batch_size, n_chs, seq_len = xx.shape
@@ -157,9 +156,7 @@ if __name__ == "__main__":
     lp_filter = design_filter(seq_len, fs, low_hz=30, high_hz=None)
     hp_filter = design_filter(seq_len, fs, low_hz=None, high_hz=70)
     bp_filter = design_filter(seq_len, fs, low_hz=30, high_hz=70)
-    bs_filter = design_filter(
-        seq_len, fs, low_hz=30, high_hz=70, is_bandstop=True
-    )
+    bs_filter = design_filter(seq_len, fs, low_hz=30, high_hz=70, is_bandstop=True)
 
     fig = plot_filter_responses(lp_filter, fs, title="Lowpass Filter")
     fig = plot_filter_responses(hp_filter, fs, title="Highpass Filter")

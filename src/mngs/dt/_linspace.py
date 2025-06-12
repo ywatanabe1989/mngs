@@ -4,9 +4,8 @@
 # File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/dt/_linspace.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/dt/_linspace.py"
-)
+
+__FILE__ = "./src/mngs/dt/_linspace.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -36,24 +35,16 @@ def linspace(
     """
     # Type checking
     if not isinstance(start_dt, datetime.datetime):
-        raise TypeError(
-            f"start_dt must be a datetime object, got {type(start_dt)}"
-        )
+        raise TypeError(f"start_dt must be a datetime object, got {type(start_dt)}")
 
     if not isinstance(end_dt, datetime.datetime):
-        raise TypeError(
-            f"end_dt must be a datetime object, got {type(end_dt)}"
-        )
+        raise TypeError(f"end_dt must be a datetime object, got {type(end_dt)}")
 
     if n_samples is not None and not isinstance(n_samples, (int, float)):
         raise TypeError(f"n_samples must be a number, got {type(n_samples)}")
 
-    if sampling_rate is not None and not isinstance(
-        sampling_rate, (int, float)
-    ):
-        raise TypeError(
-            f"sampling_rate must be a number, got {type(sampling_rate)}"
-        )
+    if sampling_rate is not None and not isinstance(sampling_rate, (int, float)):
+        raise TypeError(f"sampling_rate must be a number, got {type(sampling_rate)}")
 
     if start_dt >= end_dt:
         raise ValueError("start_dt must be earlier than end_dt")

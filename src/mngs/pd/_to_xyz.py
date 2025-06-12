@@ -7,12 +7,13 @@ import mngs
 import numpy as np
 import pandas as pd
 
+
 def to_xyz(data_frame):
     """
     Convert a DataFrame into x, y, z format (long format).
 
     Transforms a DataFrame from wide format (matrix/heatmap) to long format
-    where each value becomes a row with x (row index), y (column name), 
+    where each value becomes a row with x (row index), y (column name),
     and z (value) columns.
 
     Example
@@ -31,27 +32,30 @@ def to_xyz(data_frame):
     pandas.DataFrame
         A DataFrame formatted with columns ['x', 'y', 'z']
     """
-    x_name = data_frame.index.name or 'x'
-    y_name = data_frame.columns.name or 'y'
+    x_name = data_frame.index.name or "x"
+    y_name = data_frame.columns.name or "y"
 
     formatted_data_frames = []
 
     for column in data_frame.columns:
         column_data_frame = data_frame[column]
-        formatted_data = pd.DataFrame({
-            x_name: column_data_frame.index,
-            y_name: column,
-            'z': column_data_frame.values
-        })
+        formatted_data = pd.DataFrame(
+            {
+                x_name: column_data_frame.index,
+                y_name: column,
+                "z": column_data_frame.values,
+            }
+        )
         formatted_data_frames.append(formatted_data)
 
     result = pd.concat(formatted_data_frames, ignore_index=True)
-    
+
     # Ensure column order is x, y, z
-    col_order = [x_name, y_name, 'z']
+    col_order = [x_name, y_name, "z"]
     result = result[col_order]
 
     return result
+
 
 # def to_xyz(data_frame):
 #     """

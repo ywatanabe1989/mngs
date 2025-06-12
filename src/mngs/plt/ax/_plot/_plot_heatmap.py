@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_plot/_plot_heatmap.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/plt/ax/_plot/_plot_heatmap.py"
-)
+
+__FILE__ = "./src/mngs/plt/ax/_plot/_plot_heatmap.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -74,9 +73,7 @@ def plot_heatmap(
     )
 
     if show_annot:
-        textcolors = _switch_annot_colors(
-            cmap, annot_color_lighter, annot_color_darker
-        )
+        textcolors = _switch_annot_colors(cmap, annot_color_lighter, annot_color_darker)
         texts = _mpl_annotate_heatmap(
             im,
             valfmt=annot_format,
@@ -96,14 +93,10 @@ def _switch_annot_colors(cmap, annot_color_lighter, annot_color_darker):
 
     # Calculate perceived brightness
     dark_brightness = (
-        0.2126 * dark_color[0]
-        + 0.7152 * dark_color[1]
-        + 0.0722 * dark_color[2]
+        0.2126 * dark_color[0] + 0.7152 * dark_color[1] + 0.0722 * dark_color[2]
     )
     light_brightness = (
-        0.2126 * light_color[0]
-        + 0.7152 * light_color[1]
-        + 0.0722 * light_color[2]
+        0.2126 * light_color[0] + 0.7152 * light_color[1] + 0.0722 * light_color[2]
     )
 
     # Choose text colors based on background brightness

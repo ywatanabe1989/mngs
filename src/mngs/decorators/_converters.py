@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_converters.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/decorators/_converters.py"
-)
+
+__FILE__ = "./src/mngs/decorators/_converters.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -61,9 +60,7 @@ def _try_device(tensor: torch.Tensor, device: str) -> torch.Tensor:
         return tensor.to(device)
     except RuntimeError as error:
         if "cuda" in str(error).lower() and device == "cuda":
-            warnings.warn(
-                "CUDA memory insufficient, falling back to CPU.", UserWarning
-            )
+            warnings.warn("CUDA memory insufficient, falling back to CPU.", UserWarning)
             return tensor.cpu()
         raise error
 
@@ -77,11 +74,8 @@ def is_torch(*args: _Any, **kwargs: _Any) -> bool:
 
 def is_cuda(*args: _Any, **kwargs: _Any) -> bool:
     """Check if any input is a CUDA tensor."""
-    return any(
-        (isinstance(arg, torch.Tensor) and arg.is_cuda) for arg in args
-    ) or any(
-        (isinstance(val, torch.Tensor) and val.is_cuda)
-        for val in kwargs.values()
+    return any((isinstance(arg, torch.Tensor) and arg.is_cuda) for arg in args) or any(
+        (isinstance(val, torch.Tensor) and val.is_cuda) for val in kwargs.values()
     )
 
 
@@ -110,9 +104,7 @@ def to_torch(
 ) -> _Any:
     """Convert various data types to PyTorch tensors."""
     if device is None:
-        device = kwargs.get(
-            "device", "cuda" if torch.cuda.is_available() else "cpu"
-        )
+        device = kwargs.get("device", "cuda" if torch.cuda.is_available() else "cpu")
 
     def _to_torch(data: _Any) -> _Any:
         """Internal conversion function for various data types."""
@@ -120,9 +112,36 @@ def to_torch(
         if data is None:
             return None
 
+        # Don't convert scalars (int, float, bool, str) - they should remain as is
+        if isinstance(data, (int, float, bool, str)):
+            return data
+
         # Handle collections
         if isinstance(data, (tuple, list)):
-            return [_to_torch(item) for item in data if item is not None]
+            # Check if it's a tuple/list of integers (like dimensions)
+            if all(isinstance(item, int) for item in data):
+                return data  # Keep as is for dimension tuples
+            
+            # Check if it's a numeric array-like structure
+            try:
+                # Try to convert to tensor directly
+                new_data = torch.tensor(data).float()
+                new_data = _try_device(new_data, device)
+                if device == "cuda":
+                    _conversion_warning(data, new_data)
+                return new_data
+            except:
+                # If conversion fails, process items individually and return as tensor if possible
+                converted_items = [_to_torch(item) for item in data if item is not None]
+                # Try to stack if all items are tensors
+                if converted_items and all(isinstance(item, torch.Tensor) for item in converted_items):
+                    try:
+                        # Stack tensors along a new dimension
+                        return torch.stack(converted_items)
+                    except:
+                        # Return as list if stacking fails
+                        return converted_items
+                return converted_items
 
         # Handle pandas types
         if isinstance(data, (pd.Series, pd.DataFrame)):
@@ -132,8 +151,8 @@ def to_torch(
                 _conversion_warning(data, new_data)
             return new_data
 
-        # Handle arrays and lists
-        if isinstance(data, (np.ndarray, list)):
+        # Handle arrays
+        if isinstance(data, np.ndarray):
             new_data = torch.tensor(data).float()
             new_data = _try_device(new_data, device)
             if device == "cuda":
@@ -158,20 +177,27 @@ def to_torch(
     }
 
     # Handle axis/dim parameter conversion
-    if "axis" in converted_kwargs:
+    # Only convert axis to dim if dim is not already present
+    if "axis" in converted_kwargs and "dim" not in converted_kwargs:
         converted_kwargs["dim"] = converted_kwargs.pop("axis")
 
     # Return in the specified format
     return return_fn(*converted_args, **converted_kwargs)
 
 
-def to_numpy(
-    *args: _Any, return_fn: Callable = _return_if, **kwargs: _Any
-) -> _Any:
+def to_numpy(*args: _Any, return_fn: Callable = _return_if, **kwargs: _Any) -> _Any:
     """Convert various data types to NumPy arrays."""
 
     def _to_numpy(data: _Any) -> _Any:
         """Internal conversion function for various data types."""
+        # Check for None
+        if data is None:
+            return None
+
+        # Don't convert scalars (int, float, bool, str) - they should remain as is
+        if isinstance(data, (int, float, bool, str)):
+            return data
+
         # Handle pandas types
         if isinstance(data, (pd.Series, pd.DataFrame)):
             return data.to_numpy().squeeze()
@@ -180,13 +206,28 @@ def to_numpy(
         if isinstance(data, torch.Tensor):
             return data.detach().cpu().numpy()
 
-        # Handle lists
-        if isinstance(data, list):
-            return np.array(data)
-
-        # Handle tuples (recursively)
-        if isinstance(data, tuple):
-            return [_to_numpy(item) for item in data if item is not None]
+        # Handle lists and tuples
+        if isinstance(data, (list, tuple)):
+            # Check if it's a tuple/list of integers (like dimensions)
+            if all(isinstance(item, int) for item in data):
+                return data  # Keep as is for dimension tuples
+            
+            # Check if it's a numeric array-like structure
+            try:
+                # Try to convert to numpy array directly
+                return np.array(data)
+            except:
+                # If conversion fails, process items individually
+                converted_items = [_to_numpy(item) for item in data if item is not None]
+                # Try to stack if all items are numpy arrays
+                if converted_items and all(isinstance(item, np.ndarray) for item in converted_items):
+                    try:
+                        # Stack arrays along a new dimension
+                        return np.stack(converted_items)
+                    except:
+                        # Return as list if stacking fails
+                        return converted_items
+                return converted_items
 
         # Return as is for other types
         return data
@@ -198,7 +239,8 @@ def to_numpy(
     }
 
     # Handle dim/axis parameter conversion
-    if "dim" in converted_kwargs:
+    # Only convert dim to axis if axis is not already present
+    if "dim" in converted_kwargs and "axis" not in converted_kwargs:
         converted_kwargs["axis"] = converted_kwargs.pop("dim")
 
     # Return in the specified format
@@ -235,5 +277,6 @@ def is_nested_decorator():
 
     # If we found more than one decorator in the chain
     return len(decorator_chain) > 1
+
 
 # EOF

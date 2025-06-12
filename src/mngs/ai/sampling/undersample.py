@@ -5,10 +5,14 @@
 
 THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/sampling/undersample.py"
 
+from typing import Tuple
 from ...types import ArrayLike
 from imblearn.under_sampling import RandomUnderSampler
 
-def undersample(X: ArrayLike, y: ArrayLike, random_state: int = 42) -> Tuple[ArrayLike, ArrayLike]:
+
+def undersample(
+    X: ArrayLike, y: ArrayLike, random_state: int = 42
+) -> Tuple[ArrayLike, ArrayLike]:
     """Undersample data preserving input type.
 
     Args:

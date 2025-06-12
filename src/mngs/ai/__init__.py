@@ -7,7 +7,7 @@ from .genai import GenAI  # Main GenAI factory
 # Training utilities
 from .training import EarlyStopping, LearningCurveLogger
 
-# Classification utilities  
+# Classification utilities
 from .classification import ClassificationReporter, ClassifierServer
 
 # Import submodules for namespace access
@@ -33,29 +33,29 @@ from .optim import get_optimizer, set_optimizer
 
 __all__ = [
     # Main factory
-    'GenAI',
+    "GenAI",
     # Training
-    'EarlyStopping',
-    'LearningCurveLogger',
+    "EarlyStopping",
+    "LearningCurveLogger",
     # Classification
-    'ClassificationReporter', 
-    'ClassifierServer',
+    "ClassificationReporter",
+    "ClassifierServer",
     # Submodules
-    'act',
-    'classification',
-    'clustering',
-    'feature_extraction',
-    'genai',
-    'layer',
-    'loss',
-    'metrics',
-    'optim',
-    'plt',
-    'sampling',
-    'sklearn',
-    'training',
-    'utils',
+    "act",
+    "classification",
+    "clustering",
+    "feature_extraction",
+    "genai",
+    "layer",
+    "loss",
+    "metrics",
+    "optim",
+    "plt",
+    "sampling",
+    "sklearn",
+    "training",
+    "utils",
     # Optimizer functions
-    'get_optimizer',
-    'set_optimizer',
+    "get_optimizer",
+    "set_optimizer",
 ]

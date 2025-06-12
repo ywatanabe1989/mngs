@@ -1,5 +1,5 @@
 <!-- ---
-!-- Timestamp: 2025-05-30 17:36:55
+!-- Timestamp: 2025-05-31 18:09:11
 !-- Author: ywatanabe
 !-- File: /home/ywatanabe/.dotfiles/.claude/to_claude/guidelines/project/IMPORTANT-project-management-bulletin-board.md
 !-- --- -->

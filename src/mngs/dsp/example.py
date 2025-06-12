@@ -199,7 +199,6 @@ def plot_psd(plt, sigs, sig_col, sig_type):
 
 
 if __name__ == "__main__":
-    
 
     # Parameters
     T_SEC = 4

@@ -9,6 +9,7 @@
 
 from ..decorators import torch_fn
 
+
 @torch_fn
 def ensure_3d(x):
     if x.ndim == 1:  # assumes (seq_len,)

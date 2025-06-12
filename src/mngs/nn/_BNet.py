@@ -32,7 +32,7 @@ class BNet(nn.Module):
         N_VIRTUAL_CHS = 32
 
         self.sc = mngs.nn.SwapChannels()
-        self.dc = mngs.nn.DropoutChannels(dropout=0.01)        
+        self.dc = mngs.nn.DropoutChannels(dropout=0.01)
         self.fgc = mngs.nn.FreqGainChanger(
             BNet_config["n_bands"], BNet_config["SAMP_RATE"]
         )
@@ -44,7 +44,7 @@ class BNet(nn.Module):
         )
 
         self.cgcs = [mngs.nn.ChannelGainChanger(n_ch) for n_ch in BNet_config["n_chs"]]
-        # self.cgc = mngs.nn.ChannelGainChanger(N_VIRTUAL_CHS)        
+        # self.cgc = mngs.nn.ChannelGainChanger(N_VIRTUAL_CHS)
 
         MNet_config["n_chs"] = N_VIRTUAL_CHS  # BNet_config["n_chs"] # override
         self.MNet = mngs.nn.MNet_1000(MNet_config)
@@ -69,13 +69,15 @@ class BNet(nn.Module):
         return (x - x.mean(dim=-1, keepdims=True)) / x.std(dim=-1, keepdims=True)
 
     def forward(self, x, i_head):
-        x = self._znorm_along_the_last_dim(x)        
+        x = self._znorm_along_the_last_dim(x)
         # x = self.sc(x)
-        x = self.dc(x)        
+        x = self.dc(x)
         x = self.fgc(x)
         x = self.cgcs[i_head](x)
         x = self.heads[i_head](x)
-        import ipdb; ipdb.set_trace()
+        import ipdb
+
+        ipdb.set_trace()
         # x = self.cgc(x)
         x = self.MNet.forward_bb(x)
         x = self.fcs[i_head](x)
@@ -111,12 +113,12 @@ if __name__ == "__main__":
     # model(x_MEG)
     # Model
     BNet_config["n_chs"] = [160, 19]
-    BNet_config["n_classes"] = [2, 4]    
+    BNet_config["n_classes"] = [2, 4]
     model = BNet(BNet_config, mngs.nn.MNet_config).cuda()
 
     # MEG
     y = model(x_MEG, 0)
-    y = model(x_EEG, 1)    
+    y = model(x_EEG, 1)
 
     # # EEG
     # y = model(x_EEG)

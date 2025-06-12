@@ -11,6 +11,7 @@ from typing import Optional
 import pandas as pd
 from .._BaseMixins._BaseRowMixin import _BaseRowMixin
 
+
 class _RowMixin:
     """Row operations functionality"""
 
@@ -46,9 +47,7 @@ class _RowMixin:
             query = " ".join(query_parts)
             self.cursor.execute(query)
 
-            column_names = [
-                description[0] for description in self.cursor.description
-            ]
+            column_names = [description[0] for description in self.cursor.description]
             data = self.cursor.fetchall()
 
             if return_as == "list":

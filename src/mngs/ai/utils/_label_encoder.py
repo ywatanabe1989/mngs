@@ -66,9 +66,7 @@ class LabelEncoder(SklearnLabelEncoder):
         """
         y = self._check_input(y)
         new_unique_labels = np.unique(y)
-        unique_labels = np.unique(
-            np.concatenate((self.classes_, new_unique_labels))
-        )
+        unique_labels = np.unique(np.concatenate((self.classes_, new_unique_labels)))
         self.classes_ = unique_labels
         return self
 

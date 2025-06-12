@@ -35,7 +35,7 @@ def merge_columns(
     0  0  1  2    0 1
     1  5  6  7    5 6
     2 10 11 12  10 11
-    
+
     >>> # With column labels
     >>> merge_columns(df, 'A', 'B', sep1='_', sep2='-')
        A  B  C        A_B
@@ -75,9 +75,13 @@ def merge_columns(
 
     if sep is not None:
         # Simple value concatenation
-        merged_col = _df[list(columns)].astype(str).apply(
-            lambda row: sep.join(row.values),
-            axis=1,
+        merged_col = (
+            _df[list(columns)]
+            .astype(str)
+            .apply(
+                lambda row: sep.join(row.values),
+                axis=1,
+            )
         )
     else:
         # Concatenation with column labels
@@ -89,11 +93,11 @@ def merge_columns(
     # Determine column name
     if name == "merged" and sep is not None:
         # When using simple separator and default name, use joined column names
-        new_col_name = '_'.join(columns)
+        new_col_name = "_".join(columns)
     else:
         # Use provided name or default
         new_col_name = name
-        
+
     _df[new_col_name] = merged_col
     return _df
 
@@ -106,7 +110,6 @@ merge_cols = merge_columns
 # # -*- coding: utf-8 -*-
 # # Time-stamp: "2024-10-07 12:03:29 (ywatanabe)"
 # # ./src/mngs/pd/_merge_cols.py
-
 
 
 # def merge_columns(df, *args, sep1="_", sep2="-", name="merged"):

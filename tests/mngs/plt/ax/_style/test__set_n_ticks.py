@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/ax/_adjust/test__set_n_ticks.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./tests/mngs/plt/ax/_adjust/test__set_n_ticks.py"
-)
+
+__FILE__ = "./tests/mngs/plt/ax/_adjust/test__set_n_ticks.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -49,9 +48,7 @@ class TestMainFunctionality:
         ACTUAL_SAVE_DIR = __file__.replace(".py", "_out")
 
         actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
-        assert os.path.exists(
-            actual_spath
-        ), f"Failed to save figure to {spath}"
+        assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
 
     # def test_basic_functionality(self):
     #     # Test with default parameters (4 ticks)
@@ -99,9 +96,7 @@ class TestMainFunctionality:
         self.fig.canvas.draw()
 
         # Check x ticks change but y ticks remain default
-        visible_xticks = len(
-            [t for t in ax.xaxis.get_major_ticks() if t.get_visible()]
-        )
+        visible_xticks = len([t for t in ax.xaxis.get_major_ticks() if t.get_visible()])
         assert 6 <= visible_xticks <= 8
 
     def test_y_ticks_only(self):
@@ -112,15 +107,14 @@ class TestMainFunctionality:
         self.fig.canvas.draw()
 
         # Check y ticks change but x ticks remain default
-        visible_yticks = len(
-            [t for t in ax.yaxis.get_major_ticks() if t.get_visible()]
-        )
+        visible_yticks = len([t for t in ax.yaxis.get_major_ticks() if t.get_visible()])
         assert 6 <= visible_yticks <= 8
 
     # def test_error_handling(self):
     #     # Test with invalid input types
     #     with pytest.raises(Exception):
     #         set_n_ticks(self.ax, n_xticks="invalid")
+
 
 if __name__ == "__main__":
     import os
@@ -143,10 +137,10 @@ if __name__ == "__main__":
 # )
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
-# 
+#
 # import matplotlib
-# 
-# 
+#
+#
 # def set_n_ticks(
 #     ax,
 #     n_xticks=4,
@@ -156,18 +150,18 @@ if __name__ == "__main__":
 #     Example:
 #         ax = set_n_ticks(ax)
 #     """
-# 
+#
 #     if n_xticks is not None:
 #         ax.xaxis.set_major_locator(matplotlib.ticker.MaxNLocator(n_xticks))
-# 
+#
 #     if n_yticks is not None:
 #         ax.yaxis.set_major_locator(matplotlib.ticker.MaxNLocator(n_yticks))
-# 
+#
 #     # Force the figure to redraw to reflect changes
 #     ax.figure.canvas.draw()
-# 
+#
 #     return ax
-# 
+#
 # # EOF
 # --------------------------------------------------------------------------------
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/ax/_style/_set_n_ticks.py

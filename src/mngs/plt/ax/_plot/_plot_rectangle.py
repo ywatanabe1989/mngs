@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_plot/_plot_rectangle.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/plt/ax/_plot/_plot_rectangle.py"
-)
+
+__FILE__ = "./src/mngs/plt/ax/_plot/_plot_rectangle.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -15,10 +14,10 @@ from matplotlib.patches import Rectangle
 
 def plot_rectangle(ax, xx, yy, ww, hh, **kwargs):
     """Add a rectangle patch to an axes.
-    
+
     Convenience function for adding rectangular patches to plots, useful for
     highlighting regions, creating box annotations, or drawing geometric shapes.
-    
+
     Parameters
     ----------
     ax : matplotlib.axes.Axes
@@ -39,25 +38,25 @@ def plot_rectangle(ax, xx, yy, ww, hh, **kwargs):
         - linewidth/lw : edge line width
         - alpha : transparency (0-1)
         - linestyle/ls : edge line style
-        
+
     Returns
     -------
     matplotlib.axes.Axes
         The axes with the rectangle added.
-        
+
     Examples
     --------
     >>> fig, ax = plt.subplots()
     >>> ax.plot([0, 10], [0, 10])
     >>> # Highlight a region
     >>> plot_rectangle(ax, 2, 3, 4, 3, facecolor='yellow', alpha=0.3)
-    
+
     >>> # Draw a box annotation
     >>> plot_rectangle(ax, 5, 5, 2, 2, facecolor='none', edgecolor='red', linewidth=2)
-    
+
     >>> # Create a filled rectangle
     >>> plot_rectangle(ax, 0, 0, 1, 1, facecolor='blue', edgecolor='black')
-    
+
     See Also
     --------
     matplotlib.patches.Rectangle : The underlying Rectangle class
@@ -65,5 +64,6 @@ def plot_rectangle(ax, xx, yy, ww, hh, **kwargs):
     """
     ax.add_patch(Rectangle((xx, yy), ww, hh, **kwargs))
     return ax
+
 
 # EOF

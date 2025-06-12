@@ -5,6 +5,7 @@
 
 import os
 
+
 def split(fpath):
     """Split a file path to (1) the directory path, (2) the file name, and (3) the file extention
     Example:
@@ -17,5 +18,6 @@ def split(fpath):
     base = os.path.basename(fpath)
     fname, ext = os.path.splitext(base)
     return dirname, fname, ext
+
 
 # EOF

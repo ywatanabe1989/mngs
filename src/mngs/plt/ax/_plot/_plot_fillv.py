@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_plot_fillv.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/plt/ax/_plot_fillv.py"
-)
+
+__FILE__ = "./src/mngs/plt/ax/_plot_fillv.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -52,5 +51,6 @@ def plot_fillv(axes, starts, ends, color="red", alpha=0.2):
         return axes[0]
     else:
         return axes
+
 
 # EOF

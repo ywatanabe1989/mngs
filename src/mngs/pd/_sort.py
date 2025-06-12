@@ -55,17 +55,11 @@ def sort(
         Sorted DataFrame with reordered columns.
     """
     if orders:
-        by = (
-            [by]
-            if isinstance(by, str)
-            else list(orders.keys()) if by is None else by
-        )
+        by = [by] if isinstance(by, str) else list(orders.keys()) if by is None else by
 
         def apply_custom_order(column):
             return (
-                pd.Categorical(
-                    column, categories=orders[column.name], ordered=True
-                )
+                pd.Categorical(column, categories=orders[column.name], ordered=True)
                 if column.name in orders
                 else column
             )

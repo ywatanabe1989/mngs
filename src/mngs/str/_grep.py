@@ -5,6 +5,7 @@
 
 import re
 
+
 def grep(str_list, search_key):
     """Search for a key in a list of strings and return matching items.
 

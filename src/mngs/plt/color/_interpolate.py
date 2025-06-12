@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/color/_interp_colors.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/plt/color/_interp_colors.py"
-)
+
+__FILE__ = "./src/mngs/plt/color/_interp_colors.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -18,14 +17,13 @@ from mngs.decorators import deprecated
 def gen_interpolate(color_start, color_end, num_points, round=3):
     color_start_rgba = np.array(mcolors.to_rgba(color_start))
     color_end_rgba = np.array(mcolors.to_rgba(color_end))
-    rgba_values = np.linspace(
-        color_start_rgba, color_end_rgba, num_points
-    ).round(round)
+    rgba_values = np.linspace(color_start_rgba, color_end_rgba, num_points).round(round)
     return [list(color) for color in rgba_values]
 
 
 @deprecated("Use gen_interpolate instead")
 def interpolate(color_start, color_end, num_points, round=3):
     return gen_interpolate(color_start, color_end, num_points, round=round)
+
 
 # EOF

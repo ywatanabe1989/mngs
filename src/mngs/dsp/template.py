@@ -3,14 +3,13 @@
 # Time-stamp: "2024-04-10 15:57:54 (ywatanabe)"
 
 
-
 # FUnctions
 
 if __name__ == "__main__":
     import sys
 
     import matplotlib.pyplot as plt
-    
+
     import torch
 
     # Start

@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_plot/_plot_conf_mat.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/plt/ax/_plot/_plot_conf_mat.py"
-)
+
+__FILE__ = "./src/mngs/plt/ax/_plot/_plot_conf_mat.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -134,5 +133,6 @@ def plot_conf_mat(
         return axis, bacc_val
     else:
         return axis, None
+
 
 # EOF

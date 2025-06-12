@@ -53,8 +53,9 @@ import pandas as pd
 #     return pd.concat(condition_series, axis=1).all(axis=1)
 
 
-
-def find_indi(df: pd.DataFrame, conditions: Dict[str, Union[str, int, float, List]]) -> List[int]:
+def find_indi(
+    df: pd.DataFrame, conditions: Dict[str, Union[str, int, float, List]]
+) -> List[int]:
     """Finds indices of rows that satisfy conditions, handling NaN values.
 
     Example
@@ -77,7 +78,7 @@ def find_indi(df: pd.DataFrame, conditions: Dict[str, Union[str, int, float, Lis
     """
     if not conditions:
         return []
-        
+
     if not all(col in df.columns for col in conditions):
         missing_cols = [col for col in conditions if col not in df.columns]
         raise KeyError(f"Columns not found in DataFrame: {missing_cols}")
@@ -86,7 +87,24 @@ def find_indi(df: pd.DataFrame, conditions: Dict[str, Union[str, int, float, Lis
     for key, value in conditions.items():
         if isinstance(value, (list, tuple)):
             # Handle NaN in lists
-            if None in value or pd.NA in value or any(pd.isna(v) for v in value):
+            has_na = False
+            try:
+                # Check for None
+                if None in value:
+                    has_na = True
+                # Check for pd.NA (may raise TypeError)
+                elif any(v is pd.NA for v in value):
+                    has_na = True
+                # Check for np.nan
+                elif any(pd.isna(v) for v in value):
+                    has_na = True
+            except (TypeError, ValueError):
+                # If any check fails, try alternative approach
+                has_na = any(
+                    pd.isna(v) if not isinstance(v, str) else False for v in value
+                )
+
+            if has_na:
                 condition = df[key].isin(value) | df[key].isna()
             else:
                 condition = df[key].isin(value)

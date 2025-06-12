@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_plot/_plot_violin.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/plt/ax/_plot/_plot_violin.py"
-)
+
+__FILE__ = "./src/mngs/plt/ax/_plot/_plot_violin.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -54,9 +53,7 @@ def plot_violin(
 
     for idx, values in enumerate(data_list):
         all_values.extend(values)
-        group_label = (
-            labels[idx] if labels and idx < len(labels) else f"x {idx}"
-        )
+        group_label = labels[idx] if labels and idx < len(labels) else f"x {idx}"
         all_groups.extend([group_label] * len(values))
 
     # Create DataFrame
@@ -67,22 +64,16 @@ def plot_violin(
         if isinstance(colors, list):
             kwargs["palette"] = {
                 group: color
-                for group, color in zip(
-                    set(all_groups), colors[: len(set(all_groups))]
-                )
+                for group, color in zip(set(all_groups), colors[: len(set(all_groups))])
             }
         else:
             kwargs["palette"] = colors
 
     # Call seaborn-based function
-    return sns_plot_violin(
-        ax, data=df, x="x", y="y", hue="x", half=half, **kwargs
-    )
+    return sns_plot_violin(ax, data=df, x="x", y="y", hue="x", half=half, **kwargs)
 
 
-def sns_plot_violin(
-    ax, data=None, x=None, y=None, hue=None, half=False, **kwargs
-):
+def sns_plot_violin(ax, data=None, x=None, y=None, hue=None, half=False, **kwargs):
     """
     Plot a violin plot with option for half violins.
     Parameters
@@ -154,9 +145,7 @@ def sns_plot_violin(
     df_conc = df_conc.sort_values(x)
 
     # Plot
-    sns.violinplot(
-        data=df_conc, x=x, y=y, hue="x", split=True, ax=ax, **kwargs
-    )
+    sns.violinplot(data=df_conc, x=x, y=y, hue="x", split=True, ax=ax, **kwargs)
 
     # Remove right half of violins
     for collection in ax.collections:
@@ -321,9 +310,7 @@ def half_violin(ax, data=None, x=None, y=None, hue=None, **kwargs):
             kwargs["palette"] = palette + palette
 
     # Plot
-    sns.violinplot(
-        data=df, x=x, y=y, hue="_fake_hue", split=True, ax=ax, **kwargs
-    )
+    sns.violinplot(data=df, x=x, y=y, hue="_fake_hue", split=True, ax=ax, **kwargs)
 
     # Remove right half of violins
     for collection in ax.collections:

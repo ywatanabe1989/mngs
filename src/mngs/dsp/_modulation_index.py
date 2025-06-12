@@ -17,6 +17,7 @@ def modulation_index(pha, amp, n_bins=18, amp_prob=False):
     """
     return ModulationIndex(n_bins=n_bins, amp_prob=amp_prob)(pha, amp)
 
+
 def _reshape(x, batch_size=2, n_chs=4):
     return (
         torch.tensor(x)
@@ -26,6 +27,7 @@ def _reshape(x, batch_size=2, n_chs=4):
         .repeat(batch_size, n_chs, 1, 1, 1)
     )
 
+
 if __name__ == "__main__":
     import sys
 
@@ -33,9 +35,7 @@ if __name__ == "__main__":
     import mngs
 
     # Start
-    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
-        sys, plt, fig_scale=3
-    )
+    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt, fig_scale=3)
 
     # Parameters
     FS = 512

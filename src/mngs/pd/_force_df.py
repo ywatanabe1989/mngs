@@ -4,9 +4,8 @@
 # File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/pd/_force_df.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/pd/_force_df.py"
-)
+
+__FILE__ = "./src/mngs/pd/_force_df.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -26,14 +25,16 @@ def force_df(permutable_dict, filler=np.nan):
         permutable_dict = [sr.to_dict() for sr in permutable_dict]
     elif isinstance(permutable_dict, (list, tuple)):
         # Convert list/tuple to dict with default column name
-        permutable_dict = {'0': permutable_dict}
+        permutable_dict = {"0": permutable_dict}
     elif isinstance(permutable_dict, np.ndarray):
         if permutable_dict.ndim == 1:
-            permutable_dict = {'0': permutable_dict}
+            permutable_dict = {"0": permutable_dict}
         else:
             # For 2D arrays, create column names
-            permutable_dict = {str(i): permutable_dict[:, i] for i in range(permutable_dict.shape[1])}
-    
+            permutable_dict = {
+                str(i): permutable_dict[:, i] for i in range(permutable_dict.shape[1])
+            }
+
     ## Deep copy
     permutable_dict = permutable_dict.copy()
 
@@ -58,5 +59,6 @@ def force_df(permutable_dict, filler=np.nan):
     out_df = pd.DataFrame(permutable_dict)
 
     return out_df
+
 
 # EOF

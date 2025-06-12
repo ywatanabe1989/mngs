@@ -13,9 +13,7 @@ class EarlyStopping:
 
     """
 
-    def __init__(
-        self, patience=7, verbose=False, delta=1e-5, direction="minimize"
-    ):
+    def __init__(self, patience=7, verbose=False, delta=1e-5, direction="minimize"):
         """
         Args:
             patience (int): How long to wait after last time validation score improved.
@@ -33,7 +31,7 @@ class EarlyStopping:
 
         # default
         self.counter = 0
-        self.best_score = np.Inf if direction == "minimize" else -np.Inf
+        self.best_score = np.inf if direction == "minimize" else -np.inf
         self.best_i_global = None
         self.models_spaths_dict = {}
 

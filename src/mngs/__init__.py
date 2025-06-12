@@ -4,9 +4,8 @@
 # File: /ssh:ywatanabe@sp:/home/ywatanabe/proj/.claude-worktree/mngs_repo/src/mngs/__init__.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/__init__.py"
-)
+
+__FILE__ = "./src/mngs/__init__.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -20,7 +19,7 @@ THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/__init__.py"
 import warnings
 
 # Configure warnings
-warnings.filterwarnings('ignore', category=DeprecationWarning)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 ########################################
 # Warnings
@@ -51,8 +50,9 @@ from . import str
 from . import parallel
 from . import dt
 from . import dev
-# from . import context
+from . import scholar
 
+# from . import context
 
 
 __version__ = "1.11.0"

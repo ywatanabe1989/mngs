@@ -1,8 +1,40 @@
 <!-- ---
-!-- Timestamp: 2025-05-01 23:37:46
+!-- Timestamp: 2025-06-04 10:33:57
 !-- Author: ywatanabe
-!-- File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/TODO.md
+!-- File: /ssh:ywatanabe@sp:/home/ywatanabe/proj/.claude-worktree/mngs_repo/src/mngs/plt/TODO.md
 !-- --- -->
+
+/home/ywatanabe/proj/.claude-worktree/mngs_repo/src/mngs/plt/README.md
+
+This example is already comprehensive. However, could you add all the examples in working code while keeping "EXACTLY ALL THE CODE IN THIS MODULE, mngs.plt"
+Also, could you change the layout to allocate each plot type a dedicated block? FOr example,
+In the AAB (Arrange-Act-Assert) pattern.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## `ax.plot_raster(spike_times, trial_ids, color='black', marker='|', id='raster')`
+![ax.plot_raster](../../examples/plt_gallery/figures/ax.plot_raster.gif)
+fig, ax = plt.subplots()
+spike_times = ...
+ax.plot(...)
+mngs.io.save(fig, "plot_raster_example.gif")
+
 
 # Matplotlib Enhancement Package Blueprint
 

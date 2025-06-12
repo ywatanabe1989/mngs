@@ -11,11 +11,18 @@ THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/db/_Basemodules/_BaseRowMix
 
 from typing import List, Optional
 
+
 class _BaseRowMixin:
-    def get_rows(self, table_name: str, columns: List[str] = None,
-                 where: str = None, order_by: str = None,
-                 limit: Optional[int] = None, offset: Optional[int] = None,
-                 return_as: str = "dataframe"):
+    def get_rows(
+        self,
+        table_name: str,
+        columns: List[str] = None,
+        where: str = None,
+        order_by: str = None,
+        limit: Optional[int] = None,
+        offset: Optional[int] = None,
+        return_as: str = "dataframe",
+    ):
         raise NotImplementedError
 
     def get_row_count(self, table_name: str = None, where: str = None) -> int:

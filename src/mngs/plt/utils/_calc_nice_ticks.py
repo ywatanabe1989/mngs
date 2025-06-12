@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_calc_nice_ticks.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./src/mngs/plt/_calc_nice_ticks.py"
-)
+
+__FILE__ = "./src/mngs/plt/_calc_nice_ticks.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -87,21 +86,16 @@ def calc_nice_ticks(
 
     # Filter out ticks outside the original data range if needed
     if not allow_edge_min:
-        tick_locations = [
-            tick for tick in tick_locations if tick >= original_min
-        ]
+        tick_locations = [tick for tick in tick_locations if tick >= original_min]
     if not allow_edge_max:
-        tick_locations = [
-            tick for tick in tick_locations if tick <= original_max
-        ]
+        tick_locations = [tick for tick in tick_locations if tick <= original_max]
 
     # Convert to integers if all values can be represented as integers
-    if prefer_integer and all(
-        float(int(tick)) == tick for tick in tick_locations
-    ):
+    if prefer_integer and all(float(int(tick)) == tick for tick in tick_locations):
         tick_locations = [int(tick) for tick in tick_locations]
 
     # Convert to simple list
     return np.array(tick_locations).tolist()
+
 
 # EOF

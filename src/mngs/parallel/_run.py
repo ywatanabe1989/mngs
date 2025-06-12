@@ -69,9 +69,7 @@ def run(
     n_jobs = cpu_count if n_jobs < 0 else n_jobs
 
     if n_jobs > cpu_count:
-        warnings.warn(
-            f"n_jobs ({n_jobs}) is greater than CPU count ({cpu_count})"
-        )
+        warnings.warn(f"n_jobs ({n_jobs}) is greater than CPU count ({cpu_count})")
     if n_jobs < 1:
         raise ValueError("n_jobs must be >= 1 or -1")
 
@@ -79,12 +77,9 @@ def run(
 
     with ThreadPoolExecutor(max_workers=n_jobs) as executor:
         futures = {
-            executor.submit(func, *args): idx
-            for idx, args in enumerate(args_list)
+            executor.submit(func, *args): idx for idx, args in enumerate(args_list)
         }
-        for future in tqdm(
-            as_completed(futures), total=len(args_list), desc=desc
-        ):
+        for future in tqdm(as_completed(futures), total=len(args_list), desc=desc):
             idx = futures[future]
             results[idx] = future.result()
 

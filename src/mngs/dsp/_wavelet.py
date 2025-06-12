@@ -21,11 +21,7 @@ def wavelet(
     device="cuda",
     batch_size=32,
 ):
-    m = (
-        Wavelet(fs, freq_scale=freq_scale, out_scale="linear")
-        .to(device)
-        .eval()
-    )
+    m = Wavelet(fs, freq_scale=freq_scale, out_scale="linear").to(device).eval()
     pha, amp, freqs = m(x.to(device))
 
     if out_scale == "log":
@@ -129,9 +125,7 @@ if __name__ == "__main__":
     import numpy as np
 
     # Start
-    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(
-        sys, plt, agg=True
-    )
+    CONFIG, sys.stdout, sys.stderr, plt, CC = mngs.gen.start(sys, plt, agg=True)
 
     # Parameters
     FS = 512

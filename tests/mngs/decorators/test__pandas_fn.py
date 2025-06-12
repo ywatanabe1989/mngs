@@ -4,9 +4,8 @@
 # File: /home/ywatanabe/proj/mngs_repo/tests/mngs/decorators/test__pandas_fn.py
 # ----------------------------------------
 import os
-__FILE__ = (
-    "./tests/mngs/decorators/test__pandas_fn.py"
-)
+
+__FILE__ = "./tests/mngs/decorators/test__pandas_fn.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
@@ -60,9 +59,7 @@ def test_pandas_fn_with_df_input(test_data):
     # Input is DataFrame, output should be DataFrame
     result = dummy_function(test_data["pandas_df"])
     assert isinstance(result, pd.DataFrame)
-    pd.testing.assert_frame_equal(
-        result, pd.DataFrame({"col1": [2.0, 4.0, 6.0]})
-    )
+    pd.testing.assert_frame_equal(result, pd.DataFrame({"col1": [2.0, 4.0, 6.0]}))
 
 
 def test_pandas_fn_with_numpy_input(test_data):
@@ -101,13 +98,12 @@ def test_pandas_fn_nested_decorator(test_data):
         assert not isinstance(arr, pd.DataFrame)
         return arr
 
-    with patch(
-        "mngs.decorators._pandas_fn.is_nested_decorator", return_value=True
-    ):
+    with patch("mngs.decorators._pandas_fn.is_nested_decorator", return_value=True):
         # Input series should stay as series due to nested context
         result = nested_function(test_data["pandas_series"])
         assert isinstance(result, pd.Series)
         pd.testing.assert_series_equal(result, test_data["pandas_series"])
+
 
 if __name__ == "__main__":
     import os
@@ -130,21 +126,21 @@ if __name__ == "__main__":
 # )
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
-# 
+#
 # THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/decorators/_pandas_fn.py"
-# 
+#
 # from functools import wraps
 # from typing import Any as _Any
 # from typing import Callable
-# 
+#
 # import numpy as np
 # import pandas as pd
 # import torch
 # import xarray as xr
-# 
+#
 # from ._converters import is_nested_decorator
-# 
-# 
+#
+#
 # def pandas_fn(func: Callable) -> Callable:
 #     @wraps(func)
 #     def wrapper(*args: _Any, **kwargs: _Any) -> _Any:
@@ -152,13 +148,13 @@ if __name__ == "__main__":
 #         if is_nested_decorator():
 #             results = func(*args, **kwargs)
 #             return results
-# 
+#
 #         # Set the current decorator context
 #         wrapper._current_decorator = "pandas_fn"
-# 
+#
 #         # Store original object for type preservation
 #         original_object = args[0] if args else None
-# 
+#
 #         # Convert args to pandas DataFrames
 #         def to_pandas(data):
 #             if isinstance(data, pd.DataFrame):
@@ -175,18 +171,18 @@ if __name__ == "__main__":
 #                 return pd.DataFrame(data.values)
 #             else:
 #                 return pd.DataFrame([data])
-# 
+#
 #         converted_args = [to_pandas(arg) for arg in args]
 #         converted_kwargs = {k: to_pandas(v) for k, v in kwargs.items()}
-# 
+#
 #         # Assertion to ensure all args are converted to pandas DataFrames
 #         for arg_index, arg in enumerate(converted_args):
 #             assert isinstance(
 #                 arg, pd.DataFrame
 #             ), f"Argument {arg_index} not converted to DataFrame: {type(arg)}"
-# 
+#
 #         results = func(*converted_args, **converted_kwargs)
-# 
+#
 #         # Convert results back to original input types
 #         if isinstance(results, pd.DataFrame):
 #             if original_object is not None:
@@ -205,14 +201,14 @@ if __name__ == "__main__":
 #                 elif isinstance(original_object, xr.DataArray):
 #                     return xr.DataArray(results.values)
 #             return results
-# 
+#
 #         return results
-# 
+#
 #     # Mark as a wrapper for detection
 #     wrapper._is_wrapper = True
 #     wrapper._decorator_type = "pandas_fn"
 #     return wrapper
-# 
+#
 # # EOF
 # --------------------------------------------------------------------------------
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/decorators/_pandas_fn.py
