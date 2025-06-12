@@ -50,8 +50,8 @@ def get_color_from_cmap(
     tuple
         RGBA color tuple with values from 0 to 1
     """
-    # Get the colormap
-    cmap = matplotlib.cm.get_cmap(cmap_name)
+    # Get the colormap using the recommended approach
+    cmap = matplotlib.colormaps[cmap_name]
 
     # Normalize the value
     if value_range is None:

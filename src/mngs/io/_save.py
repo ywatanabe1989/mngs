@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-14 04:02:24 (ywatanabe)"
+# Timestamp: "2025-05-18 16:49:44 (ywatanabe)"
 # File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/io/_save.py
 # ----------------------------------------
 import os
@@ -8,6 +8,8 @@ import os
 __FILE__ = "./src/mngs/io/_save.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
+
+import warnings
 
 THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/io/_save.py"
 
@@ -56,6 +58,9 @@ from ._save_modules import (
     save_html,
     save_image,
     save_mp4,
+    save_listed_dfs_as_csv,
+    save_listed_scalars_as_csv,
+    save_optuna_study_as_csv_and_pngs,
 )
 
 
@@ -315,13 +320,12 @@ def save(
         logging.error(
             f"Error occurred while saving: {str(e)}"
             f"Debug: Initial script_path = {inspect.stack()[1].filename}"
-            # f"Debug: Final script_path = {script_path}"
-            # f"Debug: fdir = {fdir}, fname = {fname}"
             f"Debug: Final spath = {spath}"
         )
 
 
 def _symlink(spath, spath_cwd, symlink_from_cwd, verbose):
+    """Create a symbolic link from the current working directory."""
     if symlink_from_cwd and (spath != spath_cwd):
         _os.makedirs(_os.path.dirname(spath_cwd), exist_ok=True)
         sh(f"rm -f {spath_cwd}", verbose=False)
@@ -356,7 +360,7 @@ def _save(
     elif spath.endswith(".pkl.gz"):
         save_pickle_compressed(obj, spath, **kwargs)
     else:
-        raise ValueError(f"Unsupported file format. {spath} was not saved.")
+        warnings.warn(f"Unsupported file format. {spath} was not saved.")
 
     if verbose:
         if _os.path.exists(spath):

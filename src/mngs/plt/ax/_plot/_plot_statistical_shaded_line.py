@@ -12,15 +12,34 @@ __DIR__ = os.path.dirname(__FILE__)
 import matplotlib
 import numpy as np
 import pandas as pd
+from ....plt.utils import assert_valid_axis
 
 from ._plot_shaded_line import plot_shaded_line as mngs_plt_plot_shaded_line
 
 
 def plot_line(axis, data, xx=None, **kwargs):
-    """Plot a simple line."""
-    assert isinstance(
-        axis, matplotlib.axes._axes.Axes
-    ), "First argument must be a matplotlib axis"
+    """
+    Plot a simple line.
+    
+    Parameters
+    ----------
+    axis : matplotlib.axes.Axes or mngs.plt._subplots.AxisWrapper
+        The axis to plot on
+    data : array-like
+        Data to plot
+    xx : array-like, optional
+        X coordinates for the data. If None, will use np.arange(len(data))
+    **kwargs
+        Additional keyword arguments passed to axis.plot()
+        
+    Returns
+    -------
+    axis : matplotlib.axes.Axes or mngs.plt._subplots.AxisWrapper
+        The axis with the plot
+    df : pandas.DataFrame
+        DataFrame with x and y values
+    """
+    assert_valid_axis(axis, "First argument must be a matplotlib axis or mngs axis wrapper")
     data = np.asarray(data)
     assert data.ndim <= 2, f"Data must be 1D or 2D, got {data.ndim}D"
     if xx is None:
@@ -35,10 +54,28 @@ def plot_line(axis, data, xx=None, **kwargs):
 
 
 def plot_mean_std(axis, data, xx=None, sd=1, **kwargs):
-    """Plot mean line with standard deviation shading."""
-    assert isinstance(
-        axis, matplotlib.axes._axes.Axes
-    ), "First argument must be a matplotlib axis"
+    """
+    Plot mean line with standard deviation shading.
+    
+    Parameters
+    ----------
+    axis : matplotlib.axes.Axes or mngs.plt._subplots.AxisWrapper
+        The axis to plot on
+    data : array-like
+        Data to plot, can be 1D or 2D. If 2D, mean and std are calculated across the first dimension
+    xx : array-like, optional
+        X coordinates for the data. If None, will use np.arange(len(data))
+    sd : float, optional
+        Number of standard deviations for the shaded region. Default is 1
+    **kwargs
+        Additional keyword arguments passed to plot_shaded_line()
+        
+    Returns
+    -------
+    axis : matplotlib.axes.Axes or mngs.plt._subplots.AxisWrapper
+        The axis with the plot
+    """
+    assert_valid_axis(axis, "First argument must be a matplotlib axis or mngs axis wrapper")
     assert isinstance(sd, (int, float)), f"sd must be a number, got {type(sd)}"
     assert sd >= 0, f"sd must be non-negative, got {sd}"
     data = np.asarray(data)
@@ -70,11 +107,39 @@ def plot_mean_std(axis, data, xx=None, sd=1, **kwargs):
 
 
 def plot_mean_ci(axis, data, xx=None, perc=95, **kwargs):
+<<<<<<< HEAD
     """Plot mean line with confidence interval shading."""
     assert isinstance(
         axis, matplotlib.axes._axes.Axes
     ), "First argument must be a matplotlib axis"
     assert isinstance(perc, (int, float)), f"perc must be a number, got {type(perc)}"
+=======
+    """
+    Plot mean line with confidence interval shading.
+    
+    Parameters
+    ----------
+    axis : matplotlib.axes.Axes or mngs.plt._subplots.AxisWrapper
+        The axis to plot on
+    data : array-like
+        Data to plot, can be 1D or 2D. If 2D, mean and percentiles are calculated across the first dimension
+    xx : array-like, optional
+        X coordinates for the data. If None, will use np.arange(len(data))
+    perc : float, optional
+        Confidence interval percentage (0-100). Default is 95
+    **kwargs
+        Additional keyword arguments passed to plot_shaded_line()
+        
+    Returns
+    -------
+    axis : matplotlib.axes.Axes or mngs.plt._subplots.AxisWrapper
+        The axis with the plot
+    """
+    assert_valid_axis(axis, "First argument must be a matplotlib axis or mngs axis wrapper")
+    assert isinstance(
+        perc, (int, float)
+    ), f"perc must be a number, got {type(perc)}"
+>>>>>>> origin/main
     assert 0 <= perc <= 100, f"perc must be between 0 and 100, got {perc}"
     data = np.asarray(data)
     assert data.ndim <= 2, f"Data must be 1D or 2D, got {data.ndim}D"
@@ -111,10 +176,26 @@ def plot_mean_ci(axis, data, xx=None, perc=95, **kwargs):
 
 
 def plot_median_iqr(axis, data, xx=None, **kwargs):
-    """Plot median line with interquartile range shading."""
-    assert isinstance(
-        axis, matplotlib.axes._axes.Axes
-    ), "First argument must be a matplotlib axis"
+    """
+    Plot median line with interquartile range shading.
+    
+    Parameters
+    ----------
+    axis : matplotlib.axes.Axes or mngs.plt._subplots.AxisWrapper
+        The axis to plot on
+    data : array-like
+        Data to plot, can be 1D or 2D. If 2D, median and IQR are calculated across the first dimension
+    xx : array-like, optional
+        X coordinates for the data. If None, will use np.arange(len(data))
+    **kwargs
+        Additional keyword arguments passed to plot_shaded_line()
+        
+    Returns
+    -------
+    axis : matplotlib.axes.Axes or mngs.plt._subplots.AxisWrapper
+        The axis with the plot
+    """
+    assert_valid_axis(axis, "First argument must be a matplotlib axis or mngs axis wrapper")
     data = np.asarray(data)
     assert data.ndim <= 2, f"Data must be 1D or 2D, got {data.ndim}D"
 

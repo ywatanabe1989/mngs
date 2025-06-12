@@ -296,4 +296,36 @@ def test_ensure_3d_integration_with_torch_operations():
 
 
 if __name__ == "__main__":
+<<<<<<< HEAD
     pytest.main([os.path.abspath(__file__), "-v"])
+=======
+    import os
+
+    import pytest
+
+    pytest.main([os.path.abspath(__file__)])
+
+# --------------------------------------------------------------------------------
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/dsp/utils/_ensure_3d.py
+# --------------------------------------------------------------------------------
+# #!/usr/bin/env python3
+# # -*- coding: utf-8 -*-
+# # Time-stamp: "2024-11-05 01:04:03 (ywatanabe)"
+# # File: ./mngs_repo/src/mngs/dsp/utils/_ensure_3d.py
+# 
+# from ...decorators import torch_fn
+# 
+# @torch_fn
+# def ensure_3d(x):
+#     if x.ndim == 1:  # assumes (seq_len,)
+#         x = x.unsqueeze(0).unsqueeze(0)
+#     elif x.ndim == 2:  # assumes (batch_siize, seq_len)
+#         x = x.unsqueeze(1)
+#     return x
+# 
+# # EOF
+
+# --------------------------------------------------------------------------------
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/dsp/utils/_ensure_3d.py
+# --------------------------------------------------------------------------------
+>>>>>>> origin/main

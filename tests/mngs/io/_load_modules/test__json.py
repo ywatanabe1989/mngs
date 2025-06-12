@@ -182,4 +182,38 @@ def test_load_json_large_file():
 
 
 if __name__ == "__main__":
+<<<<<<< HEAD
     pytest.main([os.path.abspath(__file__), "-v"])
+=======
+    import os
+
+    import pytest
+
+    pytest.main([os.path.abspath(__file__)])
+
+# --------------------------------------------------------------------------------
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/io/_load_modules/_json.py
+# --------------------------------------------------------------------------------
+# #!/usr/bin/env python3
+# # -*- coding: utf-8 -*-
+# # Time-stamp: "2024-11-14 07:55:40 (ywatanabe)"
+# # File: ./mngs_repo/src/mngs/io/_load_modules/_json.py
+# 
+# import json
+# from typing import Any
+# 
+# 
+# def _load_json(lpath: str, **kwargs) -> Any:
+#     """Load JSON file."""
+#     if not lpath.endswith(".json"):
+#         raise ValueError("File must have .json extension")
+#     with open(lpath, "r") as f:
+#         return json.load(f)
+# 
+# 
+# # EOF
+
+# --------------------------------------------------------------------------------
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/io/_load_modules/_json.py
+# --------------------------------------------------------------------------------
+>>>>>>> origin/main

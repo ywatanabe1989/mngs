@@ -278,7 +278,7 @@ if __name__ == "__main__":
     pytest.main([os.path.abspath(__file__)])
 
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/stats/multiple/_multicompair.py
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/stats/multiple/_multicompair.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 #
@@ -308,5 +308,12 @@ if __name__ == "__main__":
 # # t_statistic, p_value = scipy.stats.ttest_ind(data1, data2, equal_var=False) # Welch's t test
 # # W_statistic, p_value = scipy.stats.brunnermunzel(data1, data2)
 # # H_statistic, p_value = scipy.stats.kruskal(*data) # one-way ANOVA on RANKs
+<<<<<<< HEAD
 #
 # # EOF
+=======
+
+# --------------------------------------------------------------------------------
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/stats/multiple/_multicompair.py
+# --------------------------------------------------------------------------------
+>>>>>>> origin/main

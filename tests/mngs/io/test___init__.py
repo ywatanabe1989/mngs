@@ -252,6 +252,21 @@ if __name__ == "__main__":
     import pytest
 
     pytest.main([os.path.abspath(__file__)])
+<<<<<<< HEAD
+=======
+
+# --------------------------------------------------------------------------------
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/io/__init__.py
+# --------------------------------------------------------------------------------
+# #!/usr/bin/env python3
+# # -*- coding: utf-8 -*-
+# # Timestamp: "2025-04-22 09:27:44 (ywatanabe)"
+# # File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/io/__init__.py
+# # ----------------------------------------
+# import os
+# __FILE__ = (
+#     "/ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/io/__init__.py"
+>>>>>>> origin/main
 # )
 # __DIR__ = os.path.dirname(__FILE__)
 # # ----------------------------------------
@@ -304,5 +319,5 @@ if __name__ == "__main__":
 #
 # # EOF
 # --------------------------------------------------------------------------------
-# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/io/__init__.py
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/io/__init__.py
 # --------------------------------------------------------------------------------

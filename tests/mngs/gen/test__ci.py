@@ -675,7 +675,16 @@ if __name__ == "__main__":
     pytest.main([__file__, "-v", "-s"])
 
 # --------------------------------------------------------------------------------
+<<<<<<< HEAD
 # Function Reference: ci(xx, axis=None)
+=======
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/gen/_ci.py
+# --------------------------------------------------------------------------------
+# #!./env/bin/python3
+# # -*- coding: utf-8 -*-
+# # Time-stamp: "2024-06-04 06:55:56 (ywatanabe)"
+# # /home/ywatanabe/proj/mngs/src/mngs/gen/_ci.py
+>>>>>>> origin/main
 # 
 # Calculates 95% confidence interval using the formula:
 # CI = 1.96 * std / sqrt(n)
@@ -685,6 +694,17 @@ if __name__ == "__main__":
 # - std is the standard deviation of non-NaN values
 # - n is the count of non-NaN values
 # 
+<<<<<<< HEAD
 # Note: The axis parameter has limitations due to the NaN filtering implementation
 # which flattens the array after filtering.
 # --------------------------------------------------------------------------------
+=======
+# 
+# def ci(xx, axis=None):
+#     indi = ~np.isnan(xx)
+#     return 1.96 * (xx[indi]).std(axis=axis) / np.sqrt(indi.sum())
+
+# --------------------------------------------------------------------------------
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/gen/_ci.py
+# --------------------------------------------------------------------------------
+>>>>>>> origin/main

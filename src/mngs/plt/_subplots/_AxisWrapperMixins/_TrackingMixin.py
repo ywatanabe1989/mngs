@@ -39,21 +39,49 @@ class TrackingMixin:
     >>> ax._ax_history = OrderedDict()
     >>> ax.plot([1, 2, 3], [4, 5, 6], id="plot1")
     >>> print(ax.history)
-    {'plot1': ('plot1', 'plot', ([1, 2, 3], [4, 5, 6]), {})}
+    {'plot1': ('plot1', 'plot', {'plot_df': DataFrame, ...}, {})}
     """
 
-    def _track(self, track, id, method_name, args, kwargs):
+    def _track(self, track, id, method_name, tracked_dict, kwargs=None):
+        """Track plotting operation with auto-generated IDs.
+        
+        Args:
+            track: Whether to track this operation
+            id: Identifier for the plot (can be None)
+            method_name: Name of the plotting method
+            tracked_dict: Dictionary of tracked data
+            kwargs: Original keyword arguments
+        """
         # Extract id from kwargs and remove it before passing to matplotlib
-        if hasattr(kwargs, "get") and "id" in kwargs:
+        if kwargs is not None and hasattr(kwargs, "get") and "id" in kwargs:
             id = kwargs.pop("id")
+        
+        # Default kwargs to empty dict if None
+        if kwargs is None:
+            kwargs = {}
 
         if track is None:
             track = self.track
 
         if track:
-            id = id if id is not None else self.id
+            # If no ID was provided, generate one using method_name + counter
+            if id is None:
+                # Initialize method counters if not exist
+                if not hasattr(self, '_method_counters'):
+                    self._method_counters = {}
+                
+                # Get current counter value for this method and increment it
+                counter = self._method_counters.get(method_name, 0)
+                self._method_counters[method_name] = counter + 1
+                
+                # Format ID as method_name_counter (e.g., bar_1, plot_3)
+                id = f"{method_name}_{counter}"
+            
+            # For backward compatibility
             self.id += 1
-            self._ax_history[id] = (id, method_name, args, kwargs)
+            
+            # Store the tracking record
+            self._ax_history[id] = (id, method_name, tracked_dict, kwargs)
 
     @contextmanager
     def _no_tracking(self):
@@ -119,7 +147,7 @@ class TrackingMixin:
     #     track: Optional[bool],
     #     plot_id: Optional[str],
     #     method_name: str,
-    #     args: Any,
+    #     tracked_dict: Any,
     #     kwargs: Dict[str, Any]
     # ) -> None:
     #     """Tracks plotting operation if tracking is enabled."""
@@ -128,7 +156,7 @@ class TrackingMixin:
     #     if track:
     #         plot_id = plot_id if plot_id is not None else self.id
     #         self.id += 1
-    #         self._ax_history[plot_id] = (plot_id, method_name, args, kwargs)
+    #         self._ax_history[plot_id] = (plot_id, method_name, tracked_dict, kwargs)
 
     # @contextmanager
     # def _no_tracking(self) -> None:

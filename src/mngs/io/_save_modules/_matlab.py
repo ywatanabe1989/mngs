@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+<<<<<<< HEAD
 # Timestamp: "2025-06-12 13:45:00 (ywatanabe)"
 # File: /ssh:sp:/home/ywatanabe/proj/.claude-worktree/mngs_repo/src/mngs/io/_save_modules/_matlab.py
 # ----------------------------------------
@@ -12,16 +13,27 @@ __DIR__ = os.path.dirname(__FILE__)
 """
 MATLAB .mat file saving functionality for mngs.io.save
 """
+=======
+# Timestamp: "2025-05-16 12:28:15 (ywatanabe)"
+# File: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/io/_save_modules/_matlab.py
+>>>>>>> origin/main
 
 import scipy.io
 
 
+<<<<<<< HEAD
 def save_matlab(obj, spath, **kwargs):
     """Handle MATLAB .mat file saving.
+=======
+def _save_matlab(obj, spath):
+    """
+    Save a Python dictionary to a MATLAB .mat file.
+>>>>>>> origin/main
     
     Parameters
     ----------
     obj : dict
+<<<<<<< HEAD
         Dictionary where keys are variable names and values are data
     spath : str
         Path where .mat file will be saved
@@ -43,3 +55,14 @@ def save_matlab(obj, spath, **kwargs):
 
 
 # EOF
+=======
+        Dictionary of arrays to save in MATLAB format.
+    spath : str
+        Path where the MATLAB file will be saved.
+        
+    Returns
+    -------
+    None
+    """
+    scipy.io.savemat(spath, obj)
+>>>>>>> origin/main

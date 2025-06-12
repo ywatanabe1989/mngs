@@ -1,4 +1,5 @@
 <!-- ---
+<<<<<<< HEAD
 !-- Timestamp: 2025-06-04 10:33:57
 !-- Author: ywatanabe
 !-- File: /ssh:ywatanabe@sp:/home/ywatanabe/proj/.claude-worktree/mngs_repo/src/mngs/plt/TODO.md
@@ -312,4 +313,11 @@ mngs/plt/
 
 12 directories, 162 files
 
+=======
+!-- Timestamp: 2025-05-18 00:17:09
+!-- Author: ywatanabe
+!-- File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/plt/TODO.md
+!-- --- -->
+
+>>>>>>> origin/main
 <!-- EOF -->

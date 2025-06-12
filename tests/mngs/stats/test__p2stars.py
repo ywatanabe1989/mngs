@@ -264,7 +264,7 @@ if __name__ == "__main__":
     pytest.main([os.path.abspath(__file__), "-v"])
 
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/stats/_p2stars.py
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/stats/_p2stars.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -319,5 +319,10 @@ if __name__ == "__main__":
 # ... (truncated for brevity)
 
 # --------------------------------------------------------------------------------
+<<<<<<< HEAD
 # End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/stats/_p2stars.py
 # --------------------------------------------------------------------------------
+=======
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/stats/_p2stars.py
+# --------------------------------------------------------------------------------
+>>>>>>> origin/main

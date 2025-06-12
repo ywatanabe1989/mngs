@@ -346,7 +346,7 @@ if __name__ == "__main__":
     pytest.main([os.path.abspath(__file__)])
 
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/stats/multiple/_fdr_correction.py
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/stats/multiple/_fdr_correction.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -748,5 +748,12 @@ if __name__ == "__main__":
 # #     arr = pvals_corrected.astype(float)
 # #     tor = pvals_corrected_torch.numpy().astype(float)
 # #     print(mngs.gen.isclose(arr, tor))
+<<<<<<< HEAD
 #
 # # EOF
+=======
+
+# --------------------------------------------------------------------------------
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/stats/multiple/_fdr_correction.py
+# --------------------------------------------------------------------------------
+>>>>>>> origin/main

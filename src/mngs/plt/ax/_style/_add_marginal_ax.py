@@ -11,9 +11,11 @@ __DIR__ = os.path.dirname(__FILE__)
 
 import matplotlib
 from mpl_toolkits.axes_grid1 import make_axes_locatable
+from ....plt.utils import assert_valid_axis
 
 
 def add_marginal_ax(axis, place, size=0.2, pad=0.1):
+<<<<<<< HEAD
     """Add a marginal axis to an existing axis.
 
     Creates a new axis adjacent to an existing one, useful for adding
@@ -66,6 +68,21 @@ def add_marginal_ax(axis, place, size=0.2, pad=0.1):
     assert isinstance(
         axis, matplotlib.axes._axes.Axes
     ), "First argument must be a matplotlib axis"
+=======
+    """
+    Add a marginal axis to the specified side of an existing axis.
+    
+    Arguments:
+        axis (matplotlib.axes.Axes or mngs.plt._subplots.AxisWrapper): The axis to which a marginal axis will be added.
+        place (str): Where to place the marginal axis ('top', 'right', 'bottom', or 'left').
+        size (float, optional): Fractional size of the marginal axis relative to the main axis. Defaults to 0.2.
+        pad (float, optional): Padding between the axes. Defaults to 0.1.
+        
+    Returns:
+        matplotlib.axes.Axes: The newly created marginal axis.
+    """
+    assert_valid_axis(axis, "First argument must be a matplotlib axis or mngs axis wrapper")
+>>>>>>> origin/main
 
     divider = make_axes_locatable(axis)
 

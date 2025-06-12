@@ -296,7 +296,7 @@ if __name__ == "__main__":
     pytest.main([os.path.abspath(__file__)])
 
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/stats/tests/_nocorrelation_test.py
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/stats/tests/_nocorrelation_test.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 #
@@ -328,5 +328,5 @@ if __name__ == "__main__":
 #     return r, t, p_value
 
 # --------------------------------------------------------------------------------
-# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/stats/tests/_nocorrelation_test.py
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/stats/tests/_nocorrelation_test.py
 # --------------------------------------------------------------------------------

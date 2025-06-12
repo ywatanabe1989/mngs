@@ -11,12 +11,9 @@ def _load_csv(lpath, **kwargs):
     if not lpath.endswith(".csv"):
         raise ValueError("File must have .csv extension")
 
-    # Handle index column
-    index_col = kwargs.pop("index_col", 0)
-    if index_col is not None:
-        obj = pd.read_csv(lpath, index_col=index_col, **kwargs)
-    else:
-        obj = pd.read_csv(lpath, **kwargs)
+    # Handle index column - default to None to match default index=False in saving
+    index_col = kwargs.pop("index_col", None)
+    obj = pd.read_csv(lpath, index_col=index_col, **kwargs)
 
     # Remove unnamed columns only if they exist
     unnamed_cols = obj.columns.str.contains("^Unnamed")

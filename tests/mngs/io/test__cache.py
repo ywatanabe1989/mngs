@@ -299,6 +299,21 @@ if __name__ == "__main__":
     import pytest
 
     pytest.main([os.path.abspath(__file__)])
+<<<<<<< HEAD
+=======
+
+# --------------------------------------------------------------------------------
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/io/_cache.py
+# --------------------------------------------------------------------------------
+# #!./env/bin/python3
+# # -*- coding: utf-8 -*-
+# # Time-stamp: "2024-08-20 19:42:38 (ywatanabe)"
+# # ./src/mngs/io/_cache.py
+# 
+# 
+# import os
+# import pickle
+>>>>>>> origin/main
 # import sys
 # from pathlib import Path
 #
@@ -397,5 +412,5 @@ if __name__ == "__main__":
 #
 
 # --------------------------------------------------------------------------------
-# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/io/_cache.py
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/io/_cache.py
 # --------------------------------------------------------------------------------

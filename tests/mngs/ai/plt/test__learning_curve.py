@@ -399,7 +399,7 @@ if __name__ == "__main__":
     pytest.main([os.path.abspath(__file__), "-v"])
 
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/plt/_learning_curve.py
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/plt/_learning_curve.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -609,5 +609,5 @@ if __name__ == "__main__":
 #     mngs.io.save(fig, sdir + "learning_curve.png")
 
 # --------------------------------------------------------------------------------
-# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/plt/_learning_curve.py
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/plt/_learning_curve.py
 # --------------------------------------------------------------------------------

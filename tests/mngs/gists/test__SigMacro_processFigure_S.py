@@ -240,7 +240,7 @@ if __name__ == "__main__":
     pytest.main([os.path.abspath(__file__)])
 
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/gists/_SigMacro_processFigure_S.py
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/gists/_SigMacro_processFigure_S.py
 # --------------------------------------------------------------------------------
 # def SigMacro_processFigure_S():
 #     """Print a macro for SigmaPlot (v12.0) to format a panel. Please refer to the 'Automating Routine Tasks' section of the official documentation."""
@@ -356,5 +356,5 @@ if __name__ == "__main__":
 #     )
 
 # --------------------------------------------------------------------------------
-# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/gists/_SigMacro_processFigure_S.py
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/gists/_SigMacro_processFigure_S.py
 # --------------------------------------------------------------------------------

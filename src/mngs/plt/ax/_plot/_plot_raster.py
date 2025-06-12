@@ -10,12 +10,12 @@ __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
 import matplotlib
-
 from bisect import bisect_left
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from ....plt.utils import assert_valid_axis
 
 
 def plot_raster(
@@ -37,7 +37,7 @@ def plot_raster(
 
     Parameters
     ----------
-    ax : matplotlib.axes.Axes
+    ax : matplotlib.axes.Axes or mngs.plt._subplots.AxisWrapper
         The axes on which to draw the raster plot.
     event_times : Array-like or list of lists
         Time points of events by channels/trials
@@ -64,14 +64,12 @@ def plot_raster(
 
     Returns
     -------
-    ax : matplotlib.axes.Axes
+    ax : matplotlib.axes.Axes or mngs.plt._subplots.AxisWrapper
         The axes with the raster plot.
     df : pandas.DataFrame
         DataFrame with time indices and channel events.
     """
-    assert isinstance(
-        ax, matplotlib.axes._axes.Axes
-    ), "First argument must be a matplotlib axis"
+    assert_valid_axis(ax, "First argument must be a matplotlib axis or mngs axis wrapper")
 
     # Format event_times data
     event_times_list = _ensure_list(event_times)

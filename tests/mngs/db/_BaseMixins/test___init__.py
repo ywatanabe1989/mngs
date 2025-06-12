@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Timestamp: "2025-06-03 07:57:00 (ywatanabe)"
@@ -169,3 +170,21 @@ def test_mixin_module_file_attributes():
 if __name__ == "__main__":
     import os
     pytest.main([os.path.abspath(__file__)])
+=======
+# Add your tests here
+
+if __name__ == "__main__":
+    import os
+
+    import pytest
+
+    pytest.main([os.path.abspath(__file__)])
+
+# --------------------------------------------------------------------------------
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/db/_BaseMixins/__init__.py
+# --------------------------------------------------------------------------------
+
+# --------------------------------------------------------------------------------
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/db/_BaseMixins/__init__.py
+# --------------------------------------------------------------------------------
+>>>>>>> origin/main

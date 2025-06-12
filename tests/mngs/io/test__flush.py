@@ -296,8 +296,25 @@ if __name__ == "__main__":
     import pytest
 
     pytest.main([os.path.abspath(__file__)])
+<<<<<<< HEAD
 #
 #
+=======
+
+# --------------------------------------------------------------------------------
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/io/_flush.py
+# --------------------------------------------------------------------------------
+# #!/usr/bin/env python3
+# # -*- coding: utf-8 -*-
+# # Time-stamp: "2024-11-02 03:23:44 (ywatanabe)"
+# # File: ./mngs_repo/src/mngs/io/_flush.py
+# 
+# import os
+# import sys
+# import warnings
+# 
+# 
+>>>>>>> origin/main
 # def flush(sys=sys):
 #     """
 #     Flushes the system's stdout and stderr, and syncs the file system.
@@ -314,5 +331,5 @@ if __name__ == "__main__":
 # # EOF
 
 # --------------------------------------------------------------------------------
-# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/io/_flush.py
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/io/_flush.py
 # --------------------------------------------------------------------------------

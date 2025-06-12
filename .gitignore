@@ -798,3 +798,4 @@ flycheck_*.el
 
 # SigMacro - embedded git repository
 SigMacro/
+**/.claude/settings.local.json

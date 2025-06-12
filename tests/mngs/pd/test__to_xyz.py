@@ -270,7 +270,7 @@ if __name__ == "__main__":
     pytest.main([os.path.abspath(__file__)])
 
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/pd/_to_xyz.py
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/pd/_to_xyz.py
 # --------------------------------------------------------------------------------
 # #!/./env/bin/python3
 # # -*- coding: utf-8 -*-
@@ -385,5 +385,5 @@ if __name__ == "__main__":
 # #     return pd.concat(formatted_data_frames, ignore_index=True)
 
 # --------------------------------------------------------------------------------
-# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/pd/_to_xyz.py
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/pd/_to_xyz.py
 # --------------------------------------------------------------------------------

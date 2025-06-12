@@ -10,27 +10,26 @@ __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
 import matplotlib
+from ....plt.utils import assert_valid_axis
 
 
 def extend(axis, x_ratio=1.0, y_ratio=1.0):
     """
-    Extend or shrink a matplotlib axis while maintaining its center position.
+    Extend or shrink a matplotlib axis or mngs axis wrapper while maintaining its center position.
 
     Args:
-        axis (matplotlib.axes._axes.Axes): The matplotlib axis to be modified.
+        axis (matplotlib.axes._axes.Axes or mngs.plt._subplots.AxisWrapper): The axis to be modified.
         x_ratio (float, optional): The ratio to scale the width. Default is 1.0.
         y_ratio (float, optional): The ratio to scale the height. Default is 1.0.
 
     Returns:
-        matplotlib.axes._axes.Axes: The modified matplotlib axis.
+        matplotlib.axes._axes.Axes or mngs.plt._subplots.AxisWrapper: The modified axis.
 
     Raises:
-        AssertionError: If the first argument is not a matplotlib axis.
+        AssertionError: If the first argument is not a valid axis.
     """
 
-    assert isinstance(
-        axis, matplotlib.axes._axes.Axes
-    ), "First argument must be a matplotlib axis"
+    assert_valid_axis(axis, "First argument must be a matplotlib axis or mngs axis wrapper")
 
     assert x_ratio != 0, "x_ratio must not be 0."
     assert y_ratio != 0, "y_ratio must not be 0."

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-02 09:20:23 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_plot/_plot_conf_mat.py
+# Timestamp: "2025-05-18 15:08:16 (ywatanabe)"
+# File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/plt/ax/_plot/_plot_conf_mat.py
 # ----------------------------------------
 import os
 
@@ -18,6 +18,7 @@ import pandas as pd
 import seaborn as sns
 
 from ...utils._calc_bacc_from_conf_mat import calc_bacc_from_conf_mat
+from ...utils import assert_valid_axis
 from .._style._extend import extend as mngs_plt_extend
 
 
@@ -40,8 +41,8 @@ def plot_conf_mat(
 
     Parameters
     ----------
-    axis : plt.Axes
-        Matplotlib axes to plot on
+    axis : plt.Axes or mngs.plt._subplots._AxisWrapper.AxisWrapper
+        Matplotlib axes or mngs axis wrapper to plot on
     data : Union[np.ndarray, pd.DataFrame]
         Confusion matrix data
     x_labels : Optional[List[str]], optional
@@ -67,7 +68,7 @@ def plot_conf_mat(
 
     Returns
     -------
-    Union[plt.Axes, Tuple[plt.Axes, float]]
+    Union[plt.Axes, Tuple[plt.Axes, float]] or Union[mngs.plt._subplots._AxisWrapper.AxisWrapper, Tuple[mngs.plt._subplots._AxisWrapper.AxisWrapper, float]]
         Axes object and optionally balanced accuracy
 
     Example
@@ -80,9 +81,7 @@ def plot_conf_mat(
     Balanced Accuracy: 0.889
     """
 
-    assert isinstance(
-        axis, matplotlib.axes._axes.Axes
-    ), "First argument must be a matplotlib axis"
+    assert_valid_axis(axis, "First argument must be a matplotlib axis or mngs axis wrapper")
 
     if not isinstance(data, pd.DataFrame):
         data = pd.DataFrame(data)
@@ -134,5 +133,8 @@ def plot_conf_mat(
     else:
         return axis, None
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/main
 # EOF

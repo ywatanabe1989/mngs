@@ -195,7 +195,7 @@ if __name__ == "__main__":
     pytest.main([__file__, "-v"])
 
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/ClassifierServer.py
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/ClassifierServer.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -332,5 +332,5 @@ if __name__ == "__main__":
 #     clf = clf_server("SVC", scaler=_StandardScaler())
 
 # --------------------------------------------------------------------------------
-# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/ai/ClassifierServer.py
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/ClassifierServer.py
 # --------------------------------------------------------------------------------

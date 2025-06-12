@@ -436,4 +436,26 @@ class TestClusteringCompatibility:
 
 
 if __name__ == "__main__":
+<<<<<<< HEAD
     pytest.main([__file__, "-v"])
+=======
+    import os
+
+    import pytest
+
+    pytest.main([os.path.abspath(__file__)])
+
+# --------------------------------------------------------------------------------
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/clustering/__init__.py
+# --------------------------------------------------------------------------------
+# #!/usr/bin/env python3
+# # -*- coding: utf-8 -*-
+# # Time-stamp: "2024-05-13 16:03:12 (ywatanabe)"
+# 
+# from ._pca import pca
+# from ._umap import umap
+
+# --------------------------------------------------------------------------------
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/clustering/__init__.py
+# --------------------------------------------------------------------------------
+>>>>>>> origin/main

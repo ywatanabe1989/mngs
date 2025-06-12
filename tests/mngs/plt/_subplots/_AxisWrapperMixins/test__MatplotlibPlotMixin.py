@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-02 21:43:16 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py
+# Timestamp: "2025-05-18 16:32:43 (ywatanabe)"
+# File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/tests/mngs/plt/_subplots/_AxisWrapperMixins/test__MatplotlibPlotMixin.py
 # ----------------------------------------
 import os
 
@@ -12,20 +12,24 @@ __DIR__ = os.path.dirname(__FILE__)
 import matplotlib
 import mngs
 import numpy as np
+from mngs.plt import subplots  # Import from the public API
 
 matplotlib.use("agg")
 
 ACTUAL_SAVE_DIR = __file__.replace(".py", "_out")
+os.makedirs(ACTUAL_SAVE_DIR, exist_ok=True)
 
 
 def test_plot_image():
     """Test plot_image function"""
     # Figure
-    fig, ax = mngs.plt.subplots()
+    fig, ax = subplots()
     # Data
     data = np.random.randn(20, 20)
-    # Plot
-    ax.plot_image(data, cmap="viridis", interpolation="nearest")
+    # Plot - add ID for tracking
+    ax.plot_image(
+        data, cmap="viridis", interpolation="nearest", id="image_test"
+    )
     # Visualization
     ax.set_xyt("X", "Y", "Plot_Image Test")
     # Saving
@@ -33,19 +37,22 @@ def test_plot_image():
     mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
-    # Assertion
+    # Assertion for PNG
     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+    # Assertion for CSV
+    csv_spath = actual_spath.replace(".png", ".csv")
+    assert os.path.exists(csv_spath), f"Failed to save CSV data to {csv_spath}"
 
 
 def test_plot_image_xyz():
     """Test plot_image with xyz=True"""
     # Figure
-    fig, ax = mngs.plt.subplots()
+    fig, ax = subplots()
     # Data
     data = np.random.randn(20, 20)
-    # Plot
-    ax.plot_image(data, xyz=True, cmap="plasma")
+    # Plot - add ID for tracking
+    ax.plot_image(data, xyz=True, cmap="plasma", id="image_xyz_test")
     # Visualization
     ax.set_xyt("X", "Y", "Plot_Image with XYZ Test")
     # Saving
@@ -53,19 +60,30 @@ def test_plot_image_xyz():
     mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
-    # Assertion
+    # Assertion for PNG
     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+    # Assertion for CSV
+    csv_spath = actual_spath.replace(".png", ".csv")
+    assert os.path.exists(csv_spath), f"Failed to save CSV data to {csv_spath}"
 
 
 def test_plot_kde():
     """Test plot_kde function"""
     # Figure
-    fig, ax = mngs.plt.subplots()
+    fig, ax = subplots()
     # Data
+<<<<<<< HEAD
     data = np.concatenate([np.random.normal(0, 1, 500), np.random.normal(5, 1, 300)])
     # Plot
     ax.plot_kde(data, label="Bimodal Distribution", fill=True)
+=======
+    data = np.concatenate(
+        [np.random.normal(0, 1, 500), np.random.normal(5, 1, 300)]
+    )
+    # Plot - add ID for tracking
+    ax.plot_kde(data, label="Bimodal Distribution", fill=True, id="kde_test")
+>>>>>>> origin/main
     # Visualization
     ax.set_xyt("Value", "Density", "PLOT_KDE Test")
     ax.legend()
@@ -74,19 +92,27 @@ def test_plot_kde():
     mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
-    # Assertion
+    # Assertion for PNG
     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+    # Assertion for CSV
+    csv_spath = actual_spath.replace(".png", ".csv")
+    assert os.path.exists(csv_spath), f"Failed to save CSV data to {csv_spath}"
 
 
 def test_plot_kde_cumulative():
     """Test plot_kde function with cumulative=True"""
     # Figure
-    fig, ax = mngs.plt.subplots()
+    fig, ax = subplots()
     # Data
     data = np.random.normal(0, 1, 1000)
-    # Plot
-    ax.plot_kde(data, label="Normal Distribution", cumulative=True)
+    # Plot - add ID for tracking
+    ax.plot_kde(
+        data,
+        label="Normal Distribution",
+        cumulative=True,
+        id="kde_cumulative_test",
+    )
     # Visualization
     ax.set_xyt("Value", "Cumulative Density", "Cumulative PLOT_KDE Test")
     ax.legend()
@@ -95,46 +121,74 @@ def test_plot_kde_cumulative():
     mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
-    # Assertion
+    # Assertion for PNG
     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+    # Assertion for CSV
+    csv_spath = actual_spath.replace(".png", ".csv")
+    assert os.path.exists(csv_spath), f"Failed to save CSV data to {csv_spath}"
 
 
 def test_plot_conf_mat():
     """Test plot_conf_mat function"""
     # Figure
-    fig, ax = mngs.plt.subplots()
+    fig, ax = subplots()
     # Data
     cm = np.array([[85, 10, 5], [15, 70, 15], [10, 20, 70]])
     class_labels = ["Class A", "Class B", "Class C"]
-    # Plot
+    # Plot - add ID for tracking
     ax.plot_conf_mat(
         cm,
         x_labels=class_labels,
         y_labels=class_labels,
         title="Confusion Matrix Test",
         calc_bacc=True,
+        id="conf_mat_test",
     )
     # Saving
     spath = f"./plot_conf_mat_test.png"
     mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
-    # Assertion
+    # Assertion for PNG
     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+    # Assertion for CSV
+    csv_spath = actual_spath.replace(".png", ".csv")
+    assert os.path.exists(csv_spath), f"Failed to save CSV data to {csv_spath}"
 
 
 def test_plot_rectangle():
     """Test plot_rectangle function"""
     # Figure
-    fig, ax = mngs.plt.subplots()
+    fig, ax = subplots()
     # Data
     x = np.linspace(0, 10, 100)
+<<<<<<< HEAD
     # Add rectangles
     ax.plot_rectangle(2, 0, 2, 0.5, color="red", alpha=0.3, label="Highlight Region 1")
+=======
+    # Add rectangles - add IDs for tracking
     ax.plot_rectangle(
-        6, -0.5, 2, 0.5, color="blue", alpha=0.3, label="Highlight Region 2"
+        2,
+        0,
+        2,
+        0.5,
+        color="red",
+        alpha=0.3,
+        label="Highlight Region 1",
+        id="rectangle_1_test",
+    )
+>>>>>>> origin/main
+    ax.plot_rectangle(
+        6,
+        -0.5,
+        2,
+        0.5,
+        color="blue",
+        alpha=0.3,
+        label="Highlight Region 2",
+        id="rectangle_2_test",
     )
     # Visualization
     ax.set_xyt("X axis", "Y axis", "Plot_Rectangle Test")
@@ -144,20 +198,23 @@ def test_plot_rectangle():
     mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
-    # Assertion
+    # Assertion for PNG
     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+    # Assertion for CSV
+    csv_spath = actual_spath.replace(".png", ".csv")
+    assert os.path.exists(csv_spath), f"Failed to save CSV data to {csv_spath}"
 
 
 def test_plot_fillv():
     """Test plot_fillv function"""
     # Figure
-    fig, ax = mngs.plt.subplots()
+    fig, ax = subplots()
     # Data
     x = np.linspace(0, 10, 100)
     y = np.sin(x)
-    # Add vertical shaded regions
-    ax.plot_fillv([2, 6], [4, 8], color="green", alpha=0.3)
+    # Add vertical shaded regions - add ID for tracking
+    ax.plot_fillv([2, 6], [4, 8], color="green", alpha=0.3, id="fillv_test")
     # Visualization
     ax.set_xyt("X axis", "Y axis", "Plot_Fillv Test")
     # Saving
@@ -165,23 +222,26 @@ def test_plot_fillv():
     mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
-    # Assertion
+    # Assertion for PNG
     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+    # Assertion for CSV
+    csv_spath = actual_spath.replace(".png", ".csv")
+    assert os.path.exists(csv_spath), f"Failed to save CSV data to {csv_spath}"
 
 
 def test_plot_box():
     """Test plot_box function"""
     # Figure
-    fig, ax = mngs.plt.subplots()
+    fig, ax = subplots()
     # Data
     data = [
         np.random.normal(0, 1, 100),
         np.random.normal(2, 1.5, 100),
         np.random.normal(5, 0.8, 100),
     ]
-    # Plot
-    ax.plot_box(data, labels=["Group A", "Group B", "Group C"])
+    # Plot - add ID for tracking
+    ax.plot_box(data, labels=["Group A", "Group B", "Group C"], id="box_test")
     # Visualization
     ax.set_xyt("Groups", "Values", "Plot_Box Test")
     # Saving
@@ -189,15 +249,18 @@ def test_plot_box():
     mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
-    # Assertion
+    # Assertion for PNG
     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+    # Assertion for CSV
+    csv_spath = actual_spath.replace(".png", ".csv")
+    assert os.path.exists(csv_spath), f"Failed to save CSV data to {csv_spath}"
 
 
 def test_plot_raster():
     """Test plot_raster function"""
     # Figure
-    fig, ax = mngs.plt.subplots()
+    fig, ax = subplots()
     # Data - sample spike train data
     n_neurons = 5
     t_max = 100
@@ -207,8 +270,8 @@ def test_plot_raster():
         for _ in range(n_neurons)
     ]
     labels = [f"Neuron {ii+1}" for ii in range(n_neurons)]
-    # Plot
-    ax.plot_raster(positions, labels=labels)
+    # Plot - add ID for tracking
+    ax.plot_raster(positions, labels=labels, id="raster_test")
     # Visualization
     ax.set_xyt("Time (ms)", "Neuron", "Plot_Raster Plot Test")
     # Saving
@@ -216,19 +279,24 @@ def test_plot_raster():
     mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
-    # Assertion
+    # Assertion for PNG
     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+    # Assertion for CSV
+    csv_spath = actual_spath.replace(".png", ".csv")
+    assert os.path.exists(csv_spath), f"Failed to save CSV data to {csv_spath}"
 
 
 def test_plot_ecdf():
     """Test plot_ecdf function"""
     # Figure
-    fig, ax = mngs.plt.subplots()
+    fig, ax = subplots()
     # Data
     data = np.random.normal(0, 1, 1000)
     # Plot
-    ax.plot_ecdf(data, label="Normal Distribution PLOT_ECDF")
+    ax.plot_ecdf(
+        data, label="Normal Distribution PLOT_ECDF", id="plot_ecdf_id"
+    )
     # Visualization
     ax.set_xyt("Value", "Cumulative Probability", "PLOT_ECDF Test")
     ax.legend()
@@ -237,15 +305,18 @@ def test_plot_ecdf():
     mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
-    # Assertion
+    # Assertion for PNG
     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+    # Assertion for CSV
+    csv_spath = actual_spath.replace(".png", ".csv")
+    assert os.path.exists(csv_spath), f"Failed to save CSV data to {csv_spath}"
 
 
 def test_plot_joyplot():
     """Test plot_joyplot function"""
     # Figure
-    fig, ax = mngs.plt.subplots()
+    fig, ax = subplots()
     # Data for multiple distributions
     data = {
         "Group A": np.random.normal(0, 1, 500),
@@ -254,7 +325,7 @@ def test_plot_joyplot():
         "Group D": np.random.normal(8, 2, 500),
     }
     # Plot
-    ax.plot_joyplot(data)
+    ax.plot_joyplot(data, id="plot_joyplot_id")
     # Visualization
     ax.set_xyt("Value", "", "Plot_Joyplot Test")
     # Saving
@@ -262,22 +333,25 @@ def test_plot_joyplot():
     mngs.io.save(fig, spath, symlink_from_cwd=False)
     # Closing
     mngs.plt.close(fig)
-    # Assertion
+    # Assertion for PNG
     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+    # Assertion for CSV
+    csv_spath = actual_spath.replace(".png", ".csv")
+    assert os.path.exists(csv_spath), f"Failed to save CSV data to {csv_spath}"
 
 
 def test_plot_line():
     """Test plot_line function"""
     # Figure
-    fig, ax = mngs.plt.subplots()
+    fig, ax = subplots()
 
     # Data
     x = np.linspace(0, 10, 100)
     y = np.sin(x)
 
     # Plot
-    ax.plot_line(y, label="Sine Wave")
+    ax.plot_line(y, label="Sine Wave", id="plot_line_id")
 
     # Visualization
     ax.set_xyt("X", "Y", "Plot_Line Test")
@@ -290,9 +364,12 @@ def test_plot_line():
     # Closing
     mngs.plt.close(fig)
 
-    # Assertion
+    # Assertion for PNG
     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+    # Assertion for CSV
+    csv_spath = actual_spath.replace(".png", ".csv")
+    assert os.path.exists(csv_spath), f"Failed to save CSV data to {csv_spath}"
 
 
 def test_plot_scatter_hist():
@@ -305,7 +382,9 @@ def test_plot_scatter_hist():
     y = x + np.random.normal(0, 0.5, 500)
 
     # Plot
-    ax.plot_scatter_hist(x, y, hist_bins=30, scatter_alpha=0.7)
+    ax.plot_scatter_hist(
+        x, y, hist_bins=30, scatter_alpha=0.7, id="plot_scatter_hist_id"
+    )
 
     # Visualization
     ax.set_xyt("X Values", "Y Values", "Plot_Scatter_Hist Test")
@@ -317,15 +396,18 @@ def test_plot_scatter_hist():
     # Closing
     mngs.plt.close(fig)
 
-    # Assertion
+    # Assertion for PNG
     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+    # Assertion for CSV
+    csv_spath = actual_spath.replace(".png", ".csv")
+    assert os.path.exists(csv_spath), f"Failed to save CSV data to {csv_spath}"
 
 
 def test_plot_heatmap():
     """Test plot_heatmap function"""
     # Figure
-    fig, ax = mngs.plt.subplots()
+    fig, ax = subplots()
 
     # Data
     data = np.random.rand(5, 10)
@@ -343,6 +425,7 @@ def test_plot_heatmap():
         cmap="viridis",
         annot_color_lighter="white",
         annot_color_darker="dimgray",
+        id="plot_heatmap_id",
     )
 
     # Visualization
@@ -355,15 +438,18 @@ def test_plot_heatmap():
     # Closing
     mngs.plt.close(fig)
 
-    # Assertion
+    # Assertion for PNG
     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+    # Assertion for CSV
+    csv_spath = actual_spath.replace(".png", ".csv")
+    assert os.path.exists(csv_spath), f"Failed to save CSV data to {csv_spath}"
 
 
 def test_plot_violin():
     """Test plot_violin function"""
     # Figure
-    fig, ax = mngs.plt.subplots()
+    fig, ax = subplots()
 
     # Test with list data
     data_list = [
@@ -374,7 +460,17 @@ def test_plot_violin():
     labels = ["Group A", "Group B", "Group C"]
 
     # Plot traditional violin
+<<<<<<< HEAD
     ax.plot_violin(data_list, labels=labels, colors=["red", "blue", "green"], half=True)
+=======
+    ax.plot_violin(
+        data_list,
+        labels=labels,
+        colors=["red", "blue", "green"],
+        half=True,
+        id="plot_violin_id",
+    )
+>>>>>>> origin/main
 
     # Visualization
     ax.set_xyt("Groups", "Values", "Plot_Violin Test (Traditional)")
@@ -386,22 +482,25 @@ def test_plot_violin():
     # Closing
     mngs.plt.close(fig)
 
-    # Assertion
+    # Assertion for PNG
     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+    # Assertion for CSV
+    csv_spath = actual_spath.replace(".png", ".csv")
+    assert os.path.exists(csv_spath), f"Failed to save CSV data to {csv_spath}"
 
 
 def test_plot_mean_std():
     """Test plot_mean_std function"""
     # Figure
-    fig, ax = mngs.plt.subplots()
+    fig, ax = subplots()
 
     # Data
     np.random.seed(42)
     data = np.random.normal(0, 1, (20, 100))  # 20 samples, 100 time points
 
     # Plot
-    ax.plot_mean_std(data, label="Mean±SD", sd=1)
+    ax.plot_mean_std(data, label="Mean±SD", sd=1, id="plot_mean_std_id")
 
     # Visualization
     ax.set_xyt("Time", "Value", "Plot_Mean_Std Test")
@@ -414,22 +513,25 @@ def test_plot_mean_std():
     # Closing
     mngs.plt.close(fig)
 
-    # Assertion
+    # Assertion for PNG
     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+    # Assertion for CSV
+    csv_spath = actual_spath.replace(".png", ".csv")
+    assert os.path.exists(csv_spath), f"Failed to save CSV data to {csv_spath}"
 
 
 def test_plot_mean_ci():
     """Test plot_mean_ci function"""
     # Figure
-    fig, ax = mngs.plt.subplots()
+    fig, ax = subplots()
 
     # Data
     np.random.seed(42)
     data = np.random.normal(0, 1, (20, 100))  # 20 samples, 100 time points
 
     # Plot
-    ax.plot_mean_ci(data, label="Mean with CI", perc=95)
+    ax.plot_mean_ci(data, label="Mean with CI", perc=95, id="plot_mean_ci_id")
 
     # Visualization
     ax.set_xyt("Time", "Value", "Plot_Mean_CI Test")
@@ -442,22 +544,25 @@ def test_plot_mean_ci():
     # Closing
     mngs.plt.close(fig)
 
-    # Assertion
+    # Assertion for PNG
     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+    # Assertion for CSV
+    csv_spath = actual_spath.replace(".png", ".csv")
+    assert os.path.exists(csv_spath), f"Failed to save CSV data to {csv_spath}"
 
 
 def test_plot_median_iqr():
     """Test plot_median_iqr function"""
     # Figure
-    fig, ax = mngs.plt.subplots()
+    fig, ax = subplots()
 
     # Data
     np.random.seed(42)
     data = np.random.normal(0, 1, (20, 100))  # 20 samples, 100 time points
 
     # Plot
-    ax.plot_median_iqr(data, label="Median with IQR")
+    ax.plot_median_iqr(data, label="Median with IQR", id="plot_median_iqr_id")
 
     # Visualization
     ax.set_xyt("Time", "Value", "Plot_Median_IQR Test")
@@ -470,15 +575,18 @@ def test_plot_median_iqr():
     # Closing
     mngs.plt.close(fig)
 
-    # Assertion
+    # Assertion for PNG
     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+    # Assertion for CSV
+    csv_spath = actual_spath.replace(".png", ".csv")
+    assert os.path.exists(csv_spath), f"Failed to save CSV data to {csv_spath}"
 
 
 def test_plot_shaded_line():
     """Test plot_shaded_line function"""
     # Figure
-    fig, ax = mngs.plt.subplots()
+    fig, ax = subplots()
 
     # Data
     x = np.linspace(0, 10, 100)
@@ -487,7 +595,14 @@ def test_plot_shaded_line():
     y_upper = y_middle + 0.2
 
     # Plot
-    ax.plot_shaded_line(x, y_lower, y_middle, y_upper, label="Sine with error")
+    ax.plot_shaded_line(
+        x,
+        y_lower,
+        y_middle,
+        y_upper,
+        label="Sine with error",
+        id="plot_shaded_line_id",
+    )
 
     # Visualization
     ax.set_xyt("X", "Y", "Plot_Shaded_Line Test")
@@ -500,9 +615,12 @@ def test_plot_shaded_line():
     # Closing
     mngs.plt.close(fig)
 
-    # Assertion
+    # Assertion for PNG
     actual_spath = os.path.join(ACTUAL_SAVE_DIR, spath)
     assert os.path.exists(actual_spath), f"Failed to save figure to {spath}"
+    # Assertion for CSV
+    csv_spath = actual_spath.replace(".png", ".csv")
+    assert os.path.exists(csv_spath), f"Failed to save CSV data to {csv_spath}"
 
 
 # def test_plot_area():
@@ -676,7 +794,7 @@ if __name__ == "__main__":
     pytest.main([os.path.abspath(__file__)])
 
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_MatplotlibPlotMixin.py
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_MatplotlibPlotMixin.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -1519,5 +1637,7 @@ if __name__ == "__main__":
 #
 # # EOF
 # --------------------------------------------------------------------------------
-# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_MatplotlibPlotMixin.py
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/plt/_subplots/_AxisWrapperMixins/_MatplotlibPlotMixin.py
 # --------------------------------------------------------------------------------
+
+# EOF

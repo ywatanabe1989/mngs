@@ -35,9 +35,9 @@ from ._image import save_image
 from ._mp4 import save_mp4
 
 # Import additional save utilities
-from ._save_listed_dfs_as_csv import save_listed_dfs_as_csv
-from ._save_listed_scalars_as_csv import save_listed_scalars_as_csv
-from ._save_optuna_study_as_csv_and_pngs import save_optuna_study_as_csv_and_pngs
+from ._listed_dfs_as_csv import _save_listed_dfs_as_csv as save_listed_dfs_as_csv
+from ._listed_scalars_as_csv import _save_listed_scalars_as_csv as save_listed_scalars_as_csv
+from ._optuna_study_as_csv_and_pngs import _save_optuna_study_as_csv_and_pngs as save_optuna_study_as_csv_and_pngs
 
 # Define what gets imported with "from mngs.io._save_modules import *"
 __all__ = [

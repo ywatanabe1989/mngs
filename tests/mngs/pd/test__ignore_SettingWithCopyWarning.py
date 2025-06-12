@@ -389,4 +389,36 @@ class TestDocstringExample:
 
 
 if __name__ == "__main__":
+<<<<<<< HEAD
     pytest.main([__file__, "-v"])
+=======
+    import os
+
+    import pytest
+
+    pytest.main([os.path.abspath(__file__)])
+
+# --------------------------------------------------------------------------------
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/pd/_ignore_SettingWithCopyWarning.py
+# --------------------------------------------------------------------------------
+# #!/usr/bin/env python3
+# # -*- coding: utf-8 -*-
+# # Time-stamp: "2024-11-05 07:35:30 (ywatanabe)"
+# # File: ./mngs_repo/src/mngs/pd/_ignore_.py
+# 
+# def ignore_SettingWithCopyWarning():
+#     import warnings
+#     try:
+#         from pandas.errors import SettingWithCopyWarning
+#     except:
+#         from pandas.core.common import SettingWithCopyWarning
+#     warnings.simplefilter(action="ignore", category=SettingWithCopyWarning)
+#     # return SettingWithCopyWarning
+# 
+# 
+# # EOF
+
+# --------------------------------------------------------------------------------
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/pd/_ignore_SettingWithCopyWarning.py
+# --------------------------------------------------------------------------------
+>>>>>>> origin/main

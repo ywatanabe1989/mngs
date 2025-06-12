@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-01 17:01:32 (ywatanabe)"
-# File: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/_export_as_csv.py
+# Timestamp: "2025-05-18 18:14:08 (ywatanabe)"
+# File: /ssh:sp:/home/ywatanabe/proj/mngs_repo/src/mngs/plt/_subplots/_export_as_csv.py
 # ----------------------------------------
 import os
 
@@ -9,14 +9,44 @@ __FILE__ = "./src/mngs/plt/_subplots/_export_as_csv.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
-import sys
 import warnings
 
-import matplotlib.pyplot as plt
-import mngs
-import numpy as np
 import pandas as pd
-import xarray as xr
+
+from ._export_as_csv_formatters import (_format_bar, _format_barh,
+                                        _format_boxplot, _format_contour,
+                                        _format_errorbar, _format_eventplot,
+                                        _format_fill, _format_fill_between,
+                                        _format_hist, _format_imshow,
+                                        _format_imshow2d, _format_plot,
+                                        _format_plot_box,
+                                        _format_plot_conf_mat,
+                                        _format_plot_ecdf, _format_plot_fillv,
+                                        _format_plot_heatmap,
+                                        _format_plot_image,
+                                        _format_plot_joyplot, _format_plot_kde,
+                                        _format_plot_line,
+                                        _format_plot_mean_ci,
+                                        _format_plot_mean_std,
+                                        _format_plot_median_iqr,
+                                        _format_plot_raster,
+                                        _format_plot_rectangle,
+                                        _format_plot_scatter_hist,
+                                        _format_plot_shaded_line,
+                                        _format_plot_violin, _format_scatter,
+                                        _format_sns_barplot,
+                                        _format_sns_boxplot,
+                                        _format_sns_heatmap,
+                                        _format_sns_histplot,
+                                        _format_sns_jointplot,
+                                        _format_sns_kdeplot,
+                                        _format_sns_lineplot,
+                                        _format_sns_pairplot,
+                                        _format_sns_scatterplot,
+                                        _format_sns_stripplot,
+                                        _format_sns_swarmplot,
+                                        _format_sns_violinplot, _format_violin,
+                                        _format_violinplot)
 
 from mngs.pd import to_xyz
 
@@ -45,6 +75,7 @@ def _to_numpy(data):
 
 
 def export_as_csv(history_records):
+<<<<<<< HEAD
     """Export plotting history records as a pandas DataFrame.
 
     Converts the plotting history records maintained by MNGS plotting
@@ -141,17 +172,53 @@ def export_as_csv(history_records):
                 f"Records: {[f'id={r[0]}, method={r[1]}' for r in history_records.values() if r and len(r) >= 2]}"
             )
             return pd.DataFrame()
+=======
+    """Convert plotting history records to a combined DataFrame suitable for CSV export.
 
+    Args:
+        history_records (dict): Dictionary of plotting records.
 
-def _format_imshow2d(record):
-    id, method, args, kwargs = record
-    df = args
-    # df.columns = [f"{id}_{method}_{col}" for col in df.columns]
-    # df.index = [f"{id}_{method}_{idx}" for idx in df.index]
-    return df
+    Returns:
+        pd.DataFrame: Combined DataFrame containing all plotting data.
+
+    Raises:
+        ValueError: If no plotting records are found or they cannot be combined.
+    """
+    if len(history_records) <= 0:
+        warnings.warn("Plotting records not found. Cannot export empty data.")
+        return pd.DataFrame()  # Return empty DataFrame instead of None
+
+    dfs = []
+    for record in list(history_records.values()):
+        try:
+            formatted_df = format_record(record)
+            if formatted_df is not None and not formatted_df.empty:
+                dfs.append(formatted_df)
+        except Exception as e:
+            warnings.warn(f"Failed to format record {record[0]}: {e}")
+    
+    # If no valid dataframes were created, return an empty one
+    if not dfs:
+        warnings.warn("No valid data found to export.")
+        return pd.DataFrame()
+>>>>>>> origin/main
+
+    try:
+        df = pd.concat(dfs, axis=1)
+        return df
+    except Exception as e:
+        warnings.warn(f"Failed to combine plotting records: {e}")
+        # Return a DataFrame with metadata about what records were attempted
+        meta_df = pd.DataFrame({
+            "record_id": [r[0] for r in history_records.values()],
+            "method": [r[1] for r in history_records.values()],
+            "has_data": ["Yes" if r[2] and r[2] != {} else "No" for r in history_records.values()]
+        })
+        return meta_df
 
 
 def format_record(record):
+<<<<<<< HEAD
     """Format a single plotting record for CSV export.
     
     Returns None if the record cannot be formatted.
@@ -161,10 +228,14 @@ def format_record(record):
     except ValueError as e:
         warnings.warn(f"Invalid record format: {record}. Error: {e}")
         return None
+=======
+    """Route record to the appropriate formatting function based on plot method.
+>>>>>>> origin/main
 
-    if method == "imshow2d":
-        return _format_imshow2d(record)
+    Args:
+        record (tuple): Plotting record tuple (id, method, tracked_dict, kwargs).
 
+<<<<<<< HEAD
     elif method in ["plot"]:
         # Convert torch tensors to numpy arrays if needed
         # Using module-level _to_numpy function
@@ -241,8 +312,18 @@ def format_record(record):
                 except:
                     return None
             return None
+=======
+    Returns:
+        pd.DataFrame: Formatted data for the plot record.
+    """
+    id, method, tracked_dict, kwargs = record
+>>>>>>> origin/main
 
+    # Basic Matplotlib functions
+    if method == "plot":
+        return _format_plot(id, tracked_dict, kwargs)
     elif method == "scatter":
+<<<<<<< HEAD
         # Using module-level _to_numpy function
         x, y = args[:2]  # Handle additional args like 's', 'c', etc.
         df_data = {f"{id}_{method}_x": _to_numpy(x), f"{id}_{method}_y": _to_numpy(y)}
@@ -372,18 +453,75 @@ def format_record(record):
     elif method == "plot_raster":
         df = args
         return df
+=======
+        return _format_scatter(id, tracked_dict, kwargs)
+    elif method == "bar":
+        return _format_bar(id, tracked_dict, kwargs)
+    elif method == "barh":
+        return _format_barh(id, tracked_dict, kwargs)
+    elif method == "hist":
+        return _format_hist(id, tracked_dict, kwargs)
+    elif method == "boxplot":
+        return _format_boxplot(id, tracked_dict, kwargs)
+    elif method == "contour":
+        return _format_contour(id, tracked_dict, kwargs)
+    elif method == "errorbar":
+        return _format_errorbar(id, tracked_dict, kwargs)
+    elif method == "eventplot":
+        return _format_eventplot(id, tracked_dict, kwargs)
+    elif method == "fill":
+        return _format_fill(id, tracked_dict, kwargs)
+    elif method == "fill_between":
+        return _format_fill_between(id, tracked_dict, kwargs)
+    elif method == "imshow":
+        return _format_imshow(id, tracked_dict, kwargs)
+    elif method == "imshow2d":
+        return _format_imshow2d(id, tracked_dict, kwargs)
+    elif method == "violin":
+        return _format_violin(id, tracked_dict, kwargs)
+    elif method == "violinplot":
+        return _format_violinplot(id, tracked_dict, kwargs)
+>>>>>>> origin/main
 
+    # Custom plotting functions
+    elif method == "plot_box":
+        return _format_plot_box(id, tracked_dict, kwargs)
+    elif method == "plot_conf_mat":
+        return _format_plot_conf_mat(id, tracked_dict, kwargs)
     elif method == "plot_ecdf":
-        df = args
-        return df
-
+        return _format_plot_ecdf(id, tracked_dict, kwargs)
+    elif method == "plot_fillv":
+        return _format_plot_fillv(id, tracked_dict, kwargs)
+    elif method == "plot_heatmap":
+        return _format_plot_heatmap(id, tracked_dict, kwargs)
+    elif method == "plot_image":
+        return _format_plot_image(id, tracked_dict, kwargs)
+    elif method == "plot_joyplot":
+        return _format_plot_joyplot(id, tracked_dict, kwargs)
     elif method == "plot_kde":
-        df = args
-        if id is not None:
-            df.columns = [f"{id}_{method}_{col}" for col in df.columns]
-        return df
+        return _format_plot_kde(id, tracked_dict, kwargs)
+    elif method == "plot_line":
+        return _format_plot_line(id, tracked_dict, kwargs)
+    elif method == "plot_mean_ci":
+        return _format_plot_mean_ci(id, tracked_dict, kwargs)
+    elif method == "plot_mean_std":
+        return _format_plot_mean_std(id, tracked_dict, kwargs)
+    elif method == "plot_median_iqr":
+        return _format_plot_median_iqr(id, tracked_dict, kwargs)
+    elif method == "plot_raster":
+        return _format_plot_raster(id, tracked_dict, kwargs)
+    elif method == "plot_rectangle":
+        return _format_plot_rectangle(id, tracked_dict, kwargs)
+    elif method == "plot_scatter_hist":
+        return _format_plot_scatter_hist(id, tracked_dict, kwargs)
+    elif method == "plot_shaded_line":
+        return _format_plot_shaded_line(id, tracked_dict, kwargs)
+    elif method == "plot_violin":
+        return _format_plot_violin(id, tracked_dict, kwargs)
 
+    # Seaborn functions
     elif method == "sns_barplot":
+<<<<<<< HEAD
         # Similar handling as sns_lineplot
         if isinstance(args, pd.DataFrame):
             df = args.copy()
@@ -461,11 +599,15 @@ def format_record(record):
             return df
         return None
 
+=======
+        return _format_sns_barplot(id, tracked_dict, kwargs)
+    elif method == "sns_boxplot":
+        return _format_sns_boxplot(id, tracked_dict, kwargs)
+>>>>>>> origin/main
     elif method == "sns_heatmap":
-        df = args
-        return df
-
+        return _format_sns_heatmap(id, tracked_dict, kwargs)
     elif method == "sns_histplot":
+<<<<<<< HEAD
         df = args
         return df
 
@@ -1094,4 +1236,30 @@ if __name__ == "__main__":
     main()
     mngs.gen.close(CONFIG, verbose=False, notify=False)
 
+=======
+        return _format_sns_histplot(id, tracked_dict, kwargs)
+    elif method == "sns_jointplot":
+        return _format_sns_jointplot(id, tracked_dict, kwargs)
+    elif method == "sns_kdeplot":
+        return _format_sns_kdeplot(id, tracked_dict, kwargs)
+    elif method == "sns_lineplot":
+        return _format_sns_lineplot(id, tracked_dict, kwargs)
+    elif method == "sns_pairplot":
+        return _format_sns_pairplot(id, tracked_dict, kwargs)
+    elif method == "sns_scatterplot":
+        return _format_sns_scatterplot(id, tracked_dict, kwargs)
+    elif method == "sns_stripplot":
+        return _format_sns_stripplot(id, tracked_dict, kwargs)
+    elif method == "sns_swarmplot":
+        return _format_sns_swarmplot(id, tracked_dict, kwargs)
+    elif method == "sns_violinplot":
+        return _format_sns_violinplot(id, tracked_dict, kwargs)
+    else:
+        # Unknown or unimplemented method
+        raise NotImplementedError(
+            f"CSV export for plot method '{method}' is not yet implemented in the mngs.plt module. "
+            f"Check the feature-request-export-as-csv-functions.md for implementation status."
+        )
+
+>>>>>>> origin/main
 # EOF

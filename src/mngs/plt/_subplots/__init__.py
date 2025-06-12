@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-01 16:48:40 (ywatanabe)"
+# Timestamp: "2025-05-18 05:22:40 (ywatanabe)"
 # File: /home/ywatanabe/proj/_mngs_repo/src/mngs/plt/_subplots/__init__.py
 # ----------------------------------------
 import os
@@ -8,6 +8,9 @@ import os
 __FILE__ = "./src/mngs/plt/_subplots/__init__.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
+
+# Import export_as_csv module functions
+from ._export_as_csv import export_as_csv, format_record
 
 # import importlib
 # import inspect

@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
+from ....plt.utils import assert_valid_axis
 
 
 def plot_violin(
@@ -29,7 +30,7 @@ def plot_violin(
 
     Parameters
     ----------
-    ax : matplotlib.axes.Axes
+    ax : matplotlib.axes.Axes or mngs.plt._subplots.AxisWrapper
         The axes to plot on
     data_list : list
         List of arrays to plot as violins
@@ -44,7 +45,7 @@ def plot_violin(
 
     Returns
     -------
-    ax : matplotlib.axes.Axes
+    ax : matplotlib.axes.Axes or mngs.plt._subplots.AxisWrapper
         The axes object with the plot
     """
     # Convert list-style data to DataFrame
@@ -78,7 +79,7 @@ def sns_plot_violin(ax, data=None, x=None, y=None, hue=None, half=False, **kwarg
     Plot a violin plot with option for half violins.
     Parameters
     ----------
-    ax : matplotlib.axes.Axes
+    ax : matplotlib.axes.Axes or mngs.plt._subplots.AxisWrapper
         The axes to plot on
     data : DataFrame
         The dataframe containing the data
@@ -94,12 +95,10 @@ def sns_plot_violin(ax, data=None, x=None, y=None, hue=None, half=False, **kwarg
         Additional keyword arguments passed to seaborn.violinplot
     Returns
     -------
-    ax : matplotlib.axes.Axes
+    ax : matplotlib.axes.Axes or mngs.plt._subplots.AxisWrapper
         The axes object with the plot
     """
-    assert isinstance(
-        ax, matplotlib.axes._axes.Axes
-    ), "First argument must be a matplotlib axis"
+    assert_valid_axis(ax, "First argument must be a matplotlib axis or mngs axis wrapper")
 
     if not half:
         # Standard violin plot

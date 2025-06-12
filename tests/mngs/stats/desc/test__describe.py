@@ -314,7 +314,7 @@ if __name__ == "__main__":
     pytest.main([os.path.abspath(__file__)])
 
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/stats/desc/_describe.py
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/stats/desc/_describe.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -503,5 +503,14 @@ if __name__ == "__main__":
 # python ./mngs_repo/src/mngs/stats/desc/_describe.py
 # python -m src.mngs.stats.desc._describe
 # """
+<<<<<<< HEAD
 #
 # # EOF
+=======
+# 
+# # EOF
+
+# --------------------------------------------------------------------------------
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/stats/desc/_describe.py
+# --------------------------------------------------------------------------------
+>>>>>>> origin/main

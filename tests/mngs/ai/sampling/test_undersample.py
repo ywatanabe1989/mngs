@@ -256,4 +256,45 @@ class TestUndersample:
 
 
 if __name__ == "__main__":
+<<<<<<< HEAD
     pytest.main([__file__, "-v"])
+=======
+    import os
+
+    import pytest
+
+    pytest.main([os.path.abspath(__file__)])
+
+# --------------------------------------------------------------------------------
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/sampling/undersample.py
+# --------------------------------------------------------------------------------
+# #!/usr/bin/env python3
+# # -*- coding: utf-8 -*-
+# # Time-stamp: "2024-11-24 10:13:17 (ywatanabe)"
+# # File: ./mngs_repo/src/mngs/ai/sampling/undersample.py
+# 
+# THIS_FILE = "/home/ywatanabe/proj/mngs_repo/src/mngs/ai/sampling/undersample.py"
+# 
+# from ...types import ArrayLike
+# from imblearn.under_sampling import RandomUnderSampler
+# 
+# def undersample(X: ArrayLike, y: ArrayLike, random_state: int = 42) -> Tuple[ArrayLike, ArrayLike]:
+#     """Undersample data preserving input type.
+# 
+#     Args:
+#         X: Features array-like of shape (n_samples, n_features)
+#         y: Labels array-like of shape (n_samples,)
+#     Returns:
+#         Resampled X, y of same type as input
+#     """
+#     rus = RandomUnderSampler(random_state=random_state)
+#     X_resampled, y_resampled = rus.fit_resample(X, y)
+#     return X_resampled, y_resampled
+# 
+# 
+# # EOF
+
+# --------------------------------------------------------------------------------
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/sampling/undersample.py
+# --------------------------------------------------------------------------------
+>>>>>>> origin/main

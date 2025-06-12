@@ -412,7 +412,7 @@ if __name__ == "__main__":
     pytest.main([os.path.abspath(__file__)])
 
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/stats/desc/_nan.py
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/stats/desc/_nan.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -617,7 +617,26 @@ if __name__ == "__main__":
 # @batch_fn
 # def nancount(x, axis=-1, dim=None, batch_size=None, keepdims=False):
 #     dim = axis if dim is None else dim
+<<<<<<< HEAD
 #     return (~torch.isnan(x)).sum(dim=dim, keepdims=keepdims).to(x.dtype)
 #
 #
 # # EOF
+=======
+#     mask = ~torch.isnan(x)
+# 
+#     if isinstance(dim, (tuple, list)):
+#         for d in sorted(dim, reverse=True):
+#             mask = mask.sum(dim=d, keepdims=keepdims)
+#     else:
+#         mask = mask.sum(dim=dim, keepdims=keepdims)
+# 
+#     return mask
+# 
+# 
+# # EOF
+
+# --------------------------------------------------------------------------------
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/stats/desc/_nan.py
+# --------------------------------------------------------------------------------
+>>>>>>> origin/main

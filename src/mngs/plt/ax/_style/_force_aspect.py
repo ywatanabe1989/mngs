@@ -10,9 +10,11 @@ __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
 import matplotlib
+from ....plt.utils import assert_valid_axis
 
 
 def force_aspect(axis, aspect=1):
+<<<<<<< HEAD
     """Force a specific aspect ratio on axes containing images.
 
     Adjusts the aspect ratio of axes to ensure images are displayed with
@@ -55,6 +57,19 @@ def force_aspect(axis, aspect=1):
     assert isinstance(
         axis, matplotlib.axes._axes.Axes
     ), "First argument must be a matplotlib axes"
+=======
+    """
+    Forces aspect ratio of an axis based on the extent of the image.
+    
+    Arguments:
+        axis (matplotlib.axes.Axes or mngs.plt._subplots.AxisWrapper): The axis to adjust.
+        aspect (float, optional): The aspect ratio to apply. Defaults to 1.
+        
+    Returns:
+        matplotlib.axes.Axes or mngs.plt._subplots.AxisWrapper: The axis with adjusted aspect ratio.
+    """
+    assert_valid_axis(axis, "First argument must be a matplotlib axis or mngs axis wrapper")
+>>>>>>> origin/main
 
     im = axis.get_images()
 

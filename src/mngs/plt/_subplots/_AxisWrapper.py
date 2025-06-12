@@ -24,7 +24,13 @@ from ._AxisWrapperMixins import (
 
 class AxisWrapper(MatplotlibPlotMixin, SeabornMixin, AdjustmentMixin, TrackingMixin):
     def __init__(self, fig_mngs, axis_mpl, track):
-
+        """Initialize the AxisWrapper.
+        
+        Args:
+            fig_mngs: Parent figure wrapper
+            axis_mpl: Matplotlib axis to wrap
+            track: Whether to track plotting operations
+        """
         self._fig_mpl = fig_mngs._fig_mpl
         # Axis Properties
         # self.axis = axis_mpl
@@ -38,7 +44,9 @@ class AxisWrapper(MatplotlibPlotMixin, SeabornMixin, AdjustmentMixin, TrackingMi
         self._axes_mpl = axis_mpl
         # self._axes_mngs = self
 
+        # Tracking properties
         self._ax_history = {}
+        self._method_counters = {}  # Track method counts for auto-generated IDs
         self.track = track
         self.id = 0
         self._counter_part = matplotlib.axes.Axes
@@ -117,7 +125,15 @@ class AxisWrapper(MatplotlibPlotMixin, SeabornMixin, AdjustmentMixin, TrackingMi
                         # Use the _track method from TrackingMixin
                         # If no id provided, it will auto-generate one
                         try:
+<<<<<<< HEAD
                             self._track(should_track, id_value, name, args, kwargs)
+=======
+                            # Convert args to tracked_dict for consistency with other tracking
+                            tracked_dict = {"args": args}
+                            self._track(
+                                should_track, id_value, name, tracked_dict, kwargs
+                            )
+>>>>>>> origin/main
                         except AttributeError:
                             warnings.warn(
                                 f"Tracking setup incomplete for AxisWrapper ({name}).",
@@ -199,6 +215,22 @@ class AxisWrapper(MatplotlibPlotMixin, SeabornMixin, AdjustmentMixin, TrackingMi
         attrs = {attr for attr in attrs if not attr.startswith('_')}
         
         return sorted(attrs)
+        
+    def flatten(self):
+        """Return a list containing just this axis.
+        
+        This method makes AxisWrapper compatible with code that calls flatten()
+        on an axes collection. It returns a list containing just this single axis
+        to maintain consistency with AxesWrapper.flatten().
+        
+        Returns:
+            list: A list containing this axis wrapper
+            
+        Example:
+            # When working with either AxesWrapper or AxisWrapper, this works:
+            axes_list = list(axes.flatten())
+        """
+        return [self]
 
 
 """

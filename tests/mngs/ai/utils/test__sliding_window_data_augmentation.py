@@ -786,7 +786,11 @@ if __name__ == "__main__":
     pytest.main([__file__, "-v", "-s"])
 
 # --------------------------------------------------------------------------------
+<<<<<<< HEAD
 # Source Code Reference:
+=======
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/utils/_sliding_window_data_augmentation.py
+>>>>>>> origin/main
 # --------------------------------------------------------------------------------
 # Function: sliding_window_data_augmentation(x, window_size_pts)
 # 
@@ -797,6 +801,17 @@ if __name__ == "__main__":
 # Returns:
 #   - Sliced array with shape (..., window_size_pts)
 # 
+<<<<<<< HEAD
 # The function randomly selects a starting position and extracts a window
 # of the specified size from the last dimension of the input array.
 # --------------------------------------------------------------------------------
+=======
+# def sliding_window_data_augmentation(x, window_size_pts):
+#     start = random.randint(0, x.shape[-1] - window_size_pts)
+#     end = start + window_size_pts
+#     return x[..., start:end]
+
+# --------------------------------------------------------------------------------
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/utils/_sliding_window_data_augmentation.py
+# --------------------------------------------------------------------------------
+>>>>>>> origin/main

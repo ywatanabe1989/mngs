@@ -137,7 +137,22 @@ class TestLossModuleInit:
 
 if __name__ == "__main__":
     import os
+<<<<<<< HEAD
     import sys
     sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../..")))
     
     pytest.main([os.path.abspath(__file__), "-v"])
+=======
+
+    import pytest
+
+    pytest.main([os.path.abspath(__file__)])
+
+# --------------------------------------------------------------------------------
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/loss/__init__.py
+# --------------------------------------------------------------------------------
+
+# --------------------------------------------------------------------------------
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/ai/loss/__init__.py
+# --------------------------------------------------------------------------------
+>>>>>>> origin/main

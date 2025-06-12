@@ -141,7 +141,18 @@ def main():
 
 
 if __name__ == "__main__":
+<<<<<<< HEAD
     main()\n\n# --------------------------------------------------------------------------------\n# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/db/_SQLite3Mixins/_BatchMixin.py
+=======
+    import os
+
+    import pytest
+
+    pytest.main([os.path.abspath(__file__)])
+
+# --------------------------------------------------------------------------------
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/db/_SQLite3Mixins/_BatchMixin.py
+>>>>>>> origin/main
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -385,5 +396,5 @@ if __name__ == "__main__":
 # # EOF
 
 # --------------------------------------------------------------------------------
-# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/db/_SQLite3Mixins/_BatchMixin.py
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/db/_SQLite3Mixins/_BatchMixin.py
 # --------------------------------------------------------------------------------

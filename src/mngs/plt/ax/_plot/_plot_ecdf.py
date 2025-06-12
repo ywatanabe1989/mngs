@@ -15,6 +15,7 @@ import matplotlib
 import numpy as np
 
 from ....pd._force_df import force_df as mngs_pd_force_df
+from ....plt.utils import assert_valid_axis
 
 
 def plot_ecdf(axis, data, **kwargs):
@@ -25,8 +26,8 @@ def plot_ecdf(axis, data, **kwargs):
 
     Parameters
     ----------
-    axis : matplotlib.axes.Axes
-        Matplotlib axis to plot on
+    axis : matplotlib.axes.Axes or mngs.plt._subplots.AxisWrapper
+        Matplotlib axis or mngs axis wrapper to plot on
     data : array-like
         Data to compute and plot ECDF for. NaN values are ignored.
     **kwargs : dict
@@ -37,9 +38,7 @@ def plot_ecdf(axis, data, **kwargs):
     tuple
         (axis, DataFrame) containing the plot and data
     """
-    assert isinstance(
-        axis, matplotlib.axes._axes.Axes
-    ), "First argument must be a matplotlib axis"
+    assert_valid_axis(axis, "First argument must be a matplotlib axis or mngs axis wrapper")
 
     # Flatten and remove NaN values
     data = np.hstack(data)

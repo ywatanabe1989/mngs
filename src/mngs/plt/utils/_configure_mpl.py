@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Timestamp: "2025-05-02 17:42:18 (ywatanabe)"
-# File: /home/ywatanabe/proj/mngs_repo/src/mngs/plt/utils/_configure_mpl.py
+# Timestamp: "2025-05-19 08:49:35 (ywatanabe)"
+# File: /ssh:ywatanabe@sp:/home/ywatanabe/proj/mngs_repo/src/mngs/plt/utils/_configure_mpl.py
 # ----------------------------------------
 import os
 
@@ -24,6 +24,7 @@ def configure_mpl(
     dpi_save=300,
     fontsize="medium",
     autolayout=True,
+    n_ticks=4,
     hide_top_right_spines=True,
     line_width=1.0,  # Increased from 0.5 for better visibility
     alpha=0.85,  # Adjusted for better contrast
@@ -60,10 +61,15 @@ def configure_mpl(
         Default line width, by default 1.0
     alpha : float, optional
         Color transparency, by default 0.85
+<<<<<<< HEAD
     enable_latex : bool, optional
         Whether to enable LaTeX text rendering, by default True
     latex_preamble : str, optional
         Custom LaTeX preamble for additional packages, by default None
+=======
+    n_ticks : int, optional
+        Number of ticks on each axis, by default 4
+>>>>>>> origin/main
     verbose : bool, optional
         Whether to print configuration details, by default False
 
@@ -227,10 +233,23 @@ def configure_mpl(
         print(f"  Legend: {small_size:.1f}pt (85% of base, min 8pt)")
         print(f"\nHide Top and Right Axes: {hide_top_right_spines}")
         print(f"Line Width: {line_width}")
+        # print(f"Number of Ticks: {n_ticks}")
         print(f"\nCustom Colors (RGBA):")
         for color_str, rgba in RGBA.items():
             print(f"  {color_str}: {rgba}")
         print("-" * 40)
+
+    # Store n_ticks for later use
+    plt._n_ticks = n_ticks
+
+    # Add a utility function to plt
+    def set_n_ticks(ax, n=None):
+        if n is None:
+            n = plt._n_ticks
+        ax.xaxis.set_major_locator(plt.MaxNLocator(n))
+        ax.yaxis.set_major_locator(plt.MaxNLocator(n))
+
+    plt.set_n_ticks = set_n_ticks
 
     return plt, RGBA_NORM
 

@@ -125,7 +125,7 @@ if __name__ == "__main__":
     pytest.main([os.path.abspath(__file__)])
 
 # --------------------------------------------------------------------------------
-# Start of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/path/__init__.py
+# Start of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/path/__init__.py
 # --------------------------------------------------------------------------------
 # #!/usr/bin/env python3
 # # -*- coding: utf-8 -*-
@@ -157,11 +157,17 @@ if __name__ == "__main__":
 # # from ._find import find_dir, find_file, find_git_root
 # # from ._path import file_size, spath, split, this_path
 # # from ._version import find_latest, increment_version
+<<<<<<< HEAD
 # # from ._clean import clean
 #
 #
+=======
+# from ._clean import clean
+# 
+# 
+>>>>>>> origin/main
 # # EOF
 
 # --------------------------------------------------------------------------------
-# End of Source Code from: /home/ywatanabe/proj/_mngs_repo/src/mngs/path/__init__.py
+# End of Source Code from: /data/gpfs/projects/punim2354/ywatanabe/mngs_repo/src/mngs/path/__init__.py
 # --------------------------------------------------------------------------------
